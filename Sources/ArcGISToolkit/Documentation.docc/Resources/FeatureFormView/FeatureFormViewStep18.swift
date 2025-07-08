@@ -87,7 +87,7 @@ struct FeatureFormExampleView: View {
                             }
                             .padding()
                             .background(.thinMaterial)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .clipShape(.rect(cornerRadius: 10))
                         default:
                             EmptyView()
                         }
@@ -133,7 +133,7 @@ extension FeatureFormExampleView {
 }
 
 @MainActor
-class Model: ObservableObject {
+private class Model: ObservableObject {
     enum State {
         case applyingEdits(FeatureForm)
         case cancellationPending(FeatureForm)
@@ -259,7 +259,7 @@ class Model: ObservableObject {
         do {
             if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
                 let featureTableEditResults = try await database.applyEdits()
-                resultErrors = featureTableEditResults.flatMap { $0.editResults.errors }
+                resultErrors = featureTableEditResults.flatMap(\.editResults.errors)
             } else {
                 let featureEditResults = try await table.applyEdits()
                 resultErrors = featureEditResults.errors
@@ -301,6 +301,6 @@ private extension FeatureForm {
 private extension Array where Element == FeatureEditResult {
     ///  Any errors from the edit results and their inner attachment results.
     var errors: [Error] {
-        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
+        compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) }
     }
 }

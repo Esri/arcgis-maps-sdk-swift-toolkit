@@ -18,7 +18,7 @@ public extension PopupView {
     /// Specifies the visibility of the popup header.
     /// - Parameter visibility: The preferred visibility of the popup header.
     /// - Since: 200.7
-    func popupHeader(_ visibility: Visibility) -> Self {
+    func header(_ visibility: Visibility) -> Self {
         var copy = self
         copy.headerVisibility = visibility
         return copy

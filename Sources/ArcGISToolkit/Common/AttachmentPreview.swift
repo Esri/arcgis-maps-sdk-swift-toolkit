@@ -37,7 +37,7 @@ struct AttachmentPreview: View {
     
     /// The maximum attachment download size limit.
     private let attachmentDownloadSizeLimit = Measurement(
-        value: 50,
+        value: 999,
         unit: UnitInformationStorage.megabytes
     )
     
@@ -106,11 +106,7 @@ struct AttachmentPreview: View {
                                 }
                             } label: {
                                 Label {
-                                    Text(
-                                        "Rename",
-                                        bundle: .toolkitModule,
-                                        comment: "A label for a button to rename an attachment."
-                                    )
+                                    Text.rename
                                 } icon: {
                                     Image(systemName: "pencil")
                                 }
@@ -204,7 +200,7 @@ struct AttachmentPreview: View {
                             .padding(8)
                     }
                 }
-                if attachmentModel.attachment.loadStatus != .loaded {
+                if attachmentModel.loadStatus != .loaded {
                     Text(attachmentModel.name)
                         .lineLimit(1)
                         .truncationMode(.middle)
@@ -215,29 +211,33 @@ struct AttachmentPreview: View {
                         Image(systemName: "square.and.arrow.down")
                         Spacer()
                     }
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 }
             }
             .font(.caption)
             .frame(width: cellSize.width, height: cellSize.height)
             .background(Color.gray.opacity(0.2))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(.rect(cornerRadius: 8))
             .onTapGesture {
-                if attachmentModel.attachment.loadStatus == .loaded {
+                if attachmentModel.loadStatus == .loaded {
                     // Set the url to trigger `.quickLookPreview`.
                     url = attachmentModel.attachment.fileURL
                 } else if attachmentModel.attachment.measuredSize.value.isZero {
                     emptyDownloadAlertIsPresented = true
                 } else if attachmentModel.attachment.measuredSize > attachmentDownloadSizeLimit {
                     maximumSizeDownloadExceededAlertIsPresented = true
-                } else if attachmentModel.attachment.loadStatus == .notLoaded {
+                } else if attachmentModel.loadStatus == .notLoaded {
                     // Load the attachment model with the given size.
                     attachmentModel.load()
                 }
             }
+            // On visionOS, quick look preview will close (sometimes it comes back) a sheet presenting
+            // the feature form.
+            // See thread here: https://developer.apple.com/forums/thread/773599
             .quickLookPreview($url)
             .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $emptyDownloadAlertIsPresented) { }
             .alert(maximumSizeDownloadExceededErrorMessage, isPresented: $maximumSizeDownloadExceededAlertIsPresented) { }
+            .hoverEffect()
         }
     }
 }
@@ -254,14 +254,12 @@ struct ThumbnailViewFooter: View {
         ZStack {
             let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
             Rectangle()
-                .fill(
-                    LinearGradient(gradient: gradient, startPoint: .bottom, endPoint: .top)
-                )
+                .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
                 .frame(height: size.height * 0.25)
             HStack {
                 if !attachmentModel.name.isEmpty {
                     Text(attachmentModel.name)
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                         .font(.caption)
                         .lineLimit(1)
                 }

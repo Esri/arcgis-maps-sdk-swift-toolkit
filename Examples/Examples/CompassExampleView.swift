@@ -30,6 +30,7 @@ struct CompassExampleView: View {
                 .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
                 .overlay(alignment: .topTrailing) {
                     Compass(rotation: viewpoint?.rotation, mapViewProxy: proxy)
+                        .snapToZeroSensoryFeedback()
                         .padding()
                 }
         }

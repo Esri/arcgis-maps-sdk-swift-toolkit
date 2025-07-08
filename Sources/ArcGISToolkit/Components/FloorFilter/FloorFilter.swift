@@ -62,7 +62,6 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [FloorFilterExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
 /// in the project. To learn more about using the `FloorFilter` see the <doc:FloorFilterTutorial>.
-@available(visionOS, unavailable)
 public struct FloorFilter: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -133,11 +132,14 @@ public struct FloorFilter: View {
             } label: {
                 Image(systemName: "building.2")
                     .padding(.toolkitDefault)
-                    .contentShape(Rectangle())
+                    .contentShape(.rect(cornerRadius: 5))
+                    .hoverEffect()
             }
             .accessibilityIdentifier("Floor Filter button")
             .buttonStyle(.plain)
+#if !os(visionOS)
             .foregroundStyle(.tint)
+#endif
         } else {
             Image(systemName: "exclamationmark.circle")
                 .padding(.toolkitDefault)
@@ -219,7 +221,8 @@ public struct FloorFilter: View {
         .frame(minHeight: 100)
         .environmentObject(viewModel)
         .disabled(viewModel.loadStatus != .loaded)
-        .onChange(selection?.wrappedValue) { newValue in
+        .onChange(of: selection?.wrappedValue) {
+            let newValue = selection?.wrappedValue
             // Prevent a double-set if the view model triggered the original change.
             guard newValue != viewModel.selection else { return }
             switch newValue {
@@ -229,8 +232,8 @@ public struct FloorFilter: View {
             case .none: viewModel.clearSelection()
             }
         }
-        .onChange(viewModel.loadStatus) { newLoadStatus in
-            if newLoadStatus == .loaded,
+        .onChange(of: viewModel.loadStatus) {
+            if viewModel.loadStatus == .loaded,
                !automaticSingleSiteSelectionDisabled,
                viewModel.sites.count == 1,
                let firstSite = viewModel.sites.first {
@@ -238,21 +241,21 @@ public struct FloorFilter: View {
                 viewModel.setSite(firstSite, zoomTo: true)
             }
         }
-        .onChange(viewModel.selection) { newValue in
+        .onChange(of: viewModel.selection) {
+            let newValue = viewModel.selection
             // Prevent a double-set if the user triggered the original change.
             guard selection?.wrappedValue != newValue else { return }
             selection?.wrappedValue = newValue
         }
-        .onChange(viewpoint.wrappedValue) { newViewpoint in
+        .onChange(of: viewpoint.wrappedValue) {
             guard isNavigating.wrappedValue else { return }
-            if let newViewpoint {
+            if let newViewpoint = viewpoint.wrappedValue {
                 viewModel.onViewpointChanged(newViewpoint)
             }
         }
     }
 }
 
-@available(visionOS, unavailable)
 public extension FloorFilter {
     /// Adds a condition that controls whether a site in the Floor Manager
     /// is automatically selected upon loading.

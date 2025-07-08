@@ -1,4 +1,4 @@
-// Copyright 2021 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,18 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+import ArcGIS
 
-struct AnyExample<Content: View> {
-    var name: String
-    var content: () -> Content
-    
-    init(_ name: String, content: @autoclosure @escaping () -> Content) {
-        self.name = name
-        self.content = content
+extension Basemap {
+    /// A Boolean value indicating whether the basemap supports 3D visualization.
+    var is3D: Bool {
+        baseLayers.contains(where: { $0 is ArcGISSceneLayer })
     }
-}
-
-extension AnyExample: Example {
-    func makeBody() -> AnyView { AnyView(content()) }
 }

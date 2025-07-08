@@ -28,14 +28,14 @@ struct PopupElementHeader: View {
                 Text(title)
                     .multilineTextAlignment(.leading)
                     .font(.title2)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
             }
             
             if !description.isEmpty {
                 Text(description)
                     .multilineTextAlignment(.leading)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
 #if targetEnvironment(macCatalyst) || os(visionOS)

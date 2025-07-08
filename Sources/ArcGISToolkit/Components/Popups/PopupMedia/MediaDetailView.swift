@@ -26,11 +26,8 @@ struct MediaDetailView : View {
         VStack {
             HStack {
                 Spacer()
-                Button {
+                Button.done {
                     isShowingDetailView.wrappedValue = false
-                } label: {
-                    Text.done
-                        .fontWeight(.semibold)
                 }
                 .padding([.bottom], 4)
             }
@@ -40,7 +37,7 @@ struct MediaDetailView : View {
                         .font(.title2)
                     Text(popupMedia.caption)
                         .font(.title3)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 Spacer()
             }
@@ -69,7 +66,7 @@ struct MediaDetailView : View {
                                          """
                             )
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                             Spacer()
                         }
                     }

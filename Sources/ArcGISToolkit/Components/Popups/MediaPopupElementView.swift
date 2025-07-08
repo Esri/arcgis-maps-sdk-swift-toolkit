@@ -78,12 +78,14 @@ struct MediaPopupElementView: View {
                             }
                         }
                         .frame(width: mediaSize.width, height: mediaSize.height)
-                        .contentShape(RoundedRectangle(cornerRadius: 8))
+                        .contentShape(.rect(cornerRadius: 8))
                     }
                 }
             }
-            .onSizeChange {
-                width = $0.width * widthScaleFactor
+            .onGeometryChange(for: CGFloat.self) { proxy in
+                proxy.frame(in: .global).width
+            } action: { newValue in
+                width = newValue * widthScaleFactor
             }
         }
         

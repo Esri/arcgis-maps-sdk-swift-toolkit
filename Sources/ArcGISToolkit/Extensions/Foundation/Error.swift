@@ -1,4 +1,4 @@
-// Copyright 2021 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,24 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+import Foundation
 
-struct ExampleList: View {
-    /// The name of the list of examples.
-    let name: String
-    
-    /// The list of examples to display.
-    var examples: [Example]
-    
-    var body: some View {
-        List(examples, id: \.name) { (example) in
-            NavigationLink(example.name, destination: ExampleView(example: example))
+extension Error {
+    /// A Boolean value indicating if the error represents an error signifying
+    /// that no internet connection is available.
+    var isNoInternetConnectionError: Bool {
+        switch self {
+        case let urlError as URLError:
+            urlError.code == .notConnectedToInternet
+        default:
+            false
         }
-        .navigationTitle(name)
-        .navigationBarTitleDisplayMode(.inline)
     }
-}
-
-extension ExampleList: Identifiable {
-    nonisolated var id: String { name }
 }

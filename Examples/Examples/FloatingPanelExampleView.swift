@@ -179,8 +179,8 @@ private struct FloatingPanelTextFieldDemoContent: View {
             Spacer()
         }
         .padding()
-        .onChange(of: selectedDetent) { newDetent in
-            if newDetent != .full {
+        .onChange(of: selectedDetent) {
+            if selectedDetent != .full {
                 isFocused = false
             }
         }

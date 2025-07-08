@@ -40,10 +40,12 @@ struct LineChart: View {
                 x: .value(String.field, $0.label),
                 y: .value(String.value, $0.value)
             )
+            .foregroundStyle(Color($0.color))
             PointMark(
                 x: .value(String.field, $0.label),
                 y: .value(String.value, $0.value)
             )
+            .foregroundStyle(Color($0.color))
         }
         .chartXAxis {
             AxisMarks { _ in

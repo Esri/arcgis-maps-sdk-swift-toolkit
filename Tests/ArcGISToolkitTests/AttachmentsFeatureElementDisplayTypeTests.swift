@@ -16,7 +16,6 @@ import ArcGIS
 @testable import ArcGISToolkit
 import XCTest
 
-#if !os(visionOS)
 final class AttachmentsFeatureElementDisplayTypeTests: XCTestCase {
     func testInitWithAttachmentsPopupElementDisplayType() {
         XCTAssertEqual(AttachmentsFeatureElementDisplayType(kind: .list), .list)
@@ -24,4 +23,3 @@ final class AttachmentsFeatureElementDisplayTypeTests: XCTestCase {
         XCTAssertEqual(AttachmentsFeatureElementDisplayType(kind: .auto), .auto)
     }
 }
-#endif

@@ -16,7 +16,7 @@ import ArcGIS
 import UIKit
 
 /// The type of an attachment in a FeatureAttachment.
-public enum FeatureAttachmentKind: Sendable {
+enum FeatureAttachmentKind: Sendable {
     /// An attachment of another type.
     case other
     /// An image.
@@ -29,7 +29,7 @@ public enum FeatureAttachmentKind: Sendable {
     case audio
 }
 
-public protocol FeatureAttachment: Loadable {
+protocol FeatureAttachment: Loadable {
     /// The type of the attachment.
     var featureAttachmentKind: FeatureAttachmentKind { get }
     
@@ -64,6 +64,18 @@ public protocol FeatureAttachment: Loadable {
     ///   - height: Height of the thumbnail.
     /// - Returns: A task that represents the asynchronous operation. The task result contains the thumbnail as an `UIImage`.
     func makeThumbnail(width: Int, height: Int) async throws -> UIImage
+    
+    /// Loads the metadata for the instance asynchronously.
+    ///
+    /// A workaround providing conforming types an opportunity to call their load method directly.
+    /// - Bug: Apollo #1058
+    func _load() async throws
+    
+    /// The load status.
+    ///
+    /// A workaround providing conforming types an opportunity to access their load status directly.
+    /// - Bug: Apollo #1058
+    var _loadStatus: LoadStatus { get }
 }
 
 extension FeatureAttachmentKind {

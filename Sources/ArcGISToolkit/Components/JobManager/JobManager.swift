@@ -23,7 +23,7 @@ internal import os
 /// An object that manages saving and loading jobs so that they can continue to run if the
 /// app is backgrounded or even terminated.
 ///
-/// The job manager is not instantiable, you must use the ``shared`` instance.
+/// The job manager is instantiable, but the ``shared`` instance is suitable for most applications.
 ///
 /// **Background**
 ///
@@ -90,15 +90,19 @@ internal import os
 @MainActor
 public class JobManager: ObservableObject {
     /// The shared job manager.
-    public static let `shared` = JobManager()
+    public static let shared = JobManager(id: nil)
     
     /// The jobs being managed by the job manager.
     @Published
     public var jobs: [any JobProtocol] = []
     
     /// The key for which state will be serialized under the user defaults.
-    private var defaultsKey: String {
-        return "com.esri.ArcGISToolkit.jobManager.jobs"
+    var defaultsKey: String {
+        if let id {
+            "com.esri.ArcGISToolkit.jobManager.\(id).jobs"
+        } else {
+            "com.esri.ArcGISToolkit.jobManager.jobs"
+        }
     }
     
     /// The preferred schedule for performing status checks while the application is in the
@@ -108,20 +112,37 @@ public class JobManager: ObservableObject {
     /// The operating system ultimately decides when to allow a background task to run.
     /// If you enable background status checks then you must also make sure to have enabled
     /// the "Background fetch" background mode in your application settings.
-    /// - Note: You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted
-    /// background task scheduler identifiers" in your application's plist file. This only works on
-    /// device and not on the simulator.
+    ///
+    /// - Note: You must also add the ``statusChecksTaskIdentifier`` to the "Permitted
+    /// background task scheduler identifiers" in your application's plist file.
+    /// The status checks task identifier will be "com.esri.ArcGISToolkit.jobManager.statusCheck" if using the shared instance.
+    /// If you are using a job manager instance that you created with a specific ID, then the
+    /// identifier will be "com.esri.ArcGISToolkit.jobManager.<id>.statusCheck".
+    ///
+    /// Background checks only work on device and not on the simulator.
     /// More information can be found [here](https://developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks).
     public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
     
     /// The background task identifier for status checks.
-    private let statusChecksTaskIdentifier = "com.esri.ArcGISToolkit.jobManager.statusCheck"
+    /// - SeeAlso ``preferredBackgroundStatusCheckSchedule``
+    public var statusChecksTaskIdentifier: String {
+        if let id {
+            "com.esri.ArcGISToolkit.jobManager.\(id).statusCheck"
+        } else {
+            "com.esri.ArcGISToolkit.jobManager.statusCheck"
+        }
+    }
     
-    // A Boolean value indicating whether a background status check is scheduled.
+    /// A Boolean value indicating whether a background status check is scheduled.
     private var isBackgroundStatusChecksScheduled = false
     
+    /// The id of the job manager. The shared instance does not have an id.
+    var id: String?
+    
     /// An initializer for the job manager.
-    private init() {
+    private init(id: String?) {
+        self.id = id
+        
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillTerminate), name: UIApplication.willTerminateNotification, object: nil)
@@ -141,6 +162,20 @@ public class JobManager: ObservableObject {
         
         // Load jobs from the saved state.
         loadState()
+    }
+    
+    /// Creates a job manager with a unique id.
+    /// This initializer allows you to create a specific instance of a job manager
+    /// for cases when you don't want to take over the shared job manager instance.
+    ///
+    /// The provided ID should be unique to a specific purpose in your application.
+    /// On each successive run of the app, you must re-use the same id when you initialize
+    /// your job manager for it to be able to properly reload its state.
+    ///
+    /// If you create multiple instances with the same id the behavior is undefined.
+    /// - Parameter id: The unique ID of the job manager.
+    public convenience init(uniqueID id: String) {
+        self.init(id: id)
     }
     
     /// Schedules a status check in the background if one is not already scheduled.

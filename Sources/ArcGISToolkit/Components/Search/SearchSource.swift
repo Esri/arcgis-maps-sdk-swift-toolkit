@@ -17,7 +17,6 @@ import ArcGIS
 /// Defines the contract for a search result provider.
 @MainActor
 @preconcurrency
-@available(visionOS, unavailable)
 public protocol SearchSource {
     /// Name to show when presenting this source in the UI.
     var name: String { get set }

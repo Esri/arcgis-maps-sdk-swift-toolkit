@@ -23,18 +23,17 @@ import SwiftUI
     
     var onAccessDenied: (() -> Void)?
     
-    func request(onAccessGranted: @escaping () -> Void, onAccessDenied: @escaping () -> Void) {
+    func request(onAccessGranted: @escaping () -> Void, onAccessDenied: @escaping () -> Void) async {
         self.onAccessDenied = onAccessDenied
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
             onAccessGranted()
         case .notDetermined:
-            AVCaptureDevice.requestAccess(for: .video) { granted in
-                if granted {
-                    onAccessGranted()
-                } else {
-                    onAccessDenied()
-                }
+            let isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
+            if isAuthorized {
+                onAccessGranted()
+            } else {
+                onAccessDenied()
             }
         default:
             alertIsPresented = true
@@ -53,7 +52,7 @@ private struct CameraRequesterModifier: ViewModifier {
                     Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
                 }
 #endif
-                Button(String.cancel, role: .cancel) {
+                Button.cancel {
                     requester.onAccessDenied?()
                 }
             } message: {

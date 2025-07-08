@@ -176,13 +176,13 @@ private struct JobView: View {
             if let error {
                 Text(error.localizedDescription)
                     .font(.footnote)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .lineLimit(1)
             } else {
                 if let message {
                     Text(message.text)
                         .font(.footnote)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
                 if isShowingProgress {
@@ -221,7 +221,7 @@ private struct JobView: View {
             }
         }
         .onReceive(job.messages) {
-            Logger.jobManagerExample.debug("Job Message: \($0.text, privacy: .public)")
+            Logger.jobManagerExample.debug("Job Message: \($0.text)")
             message = $0
         }
     }

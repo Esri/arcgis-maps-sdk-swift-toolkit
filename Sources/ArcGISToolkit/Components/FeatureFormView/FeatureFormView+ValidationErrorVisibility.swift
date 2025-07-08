@@ -14,7 +14,6 @@
 
 import SwiftUI
 
-@available(visionOS, unavailable)
 public extension FeatureFormView {
     /// The validation error visibility configuration of a form.
     enum ValidationErrorVisibility: Sendable {
@@ -33,7 +32,6 @@ public extension FeatureFormView {
     }
 }
 
-@available(visionOS, unavailable)
 extension EnvironmentValues {
     /// The validation error visibility configuration of a form.
     var validationErrorVisibility: FeatureFormView.ValidationErrorVisibility {
@@ -43,7 +41,6 @@ extension EnvironmentValues {
 }
 
 /// The validation error visibility configuration of a form.
-@available(visionOS, unavailable)
 struct FormViewValidationErrorVisibility: EnvironmentKey {
     static let defaultValue: FeatureFormView.ValidationErrorVisibility = .automatic
 }

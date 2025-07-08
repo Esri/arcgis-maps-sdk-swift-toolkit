@@ -13,7 +13,6 @@
 // limitations under the License.
 
 /// Defines automatic selection behavior.
-@available(visionOS, unavailable)
 public enum FloorFilterAutomaticSelectionMode: Sendable {
     /// Always update selection based on the current viewpoint; clear the selection when the user
     /// navigates away.

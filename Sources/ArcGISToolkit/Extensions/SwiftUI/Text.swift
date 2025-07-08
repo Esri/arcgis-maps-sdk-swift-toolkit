@@ -15,6 +15,11 @@
 import SwiftUI
 
 extension Text {
+    /// Localized text for the word "Cancel".
+    static var cancel: Self {
+        .init(LocalizedStringResource.cancel)
+    }
+    
     /// Localized text for the word "Done".
     static var done: Self {
         .init(
@@ -24,12 +29,30 @@ extension Text {
         )
     }
     
+    /// Localized text for the word "Rename".
+    static var rename: Self {
+        Text(
+            "Rename",
+            bundle: .toolkitModule,
+            comment: "A label for a button to rename an attachment."
+        )
+    }
+    
     /// Localized text for the word "Required".
     static var required: Self {
         Text(
             "Required",
             bundle: .toolkitModule,
             comment: "A label indicating a field is required"
+        )
+    }
+    
+    /// Localized text for the phrase "Try Again".
+    static var tryAgain: Self {
+        .init(
+            "Try Again",
+            bundle: .toolkitModule,
+            comment: "A label for a button allowing the user to retry an operation."
         )
     }
 }

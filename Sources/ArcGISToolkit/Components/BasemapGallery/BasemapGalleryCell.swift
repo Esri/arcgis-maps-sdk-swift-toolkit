@@ -26,10 +26,9 @@ struct BasemapGalleryCell: View {
     let onSelection: () -> Void
     
     var body: some View {
-        let roundedRect = RoundedRectangle(cornerRadius: 8)
-        Button(action: {
+        Button {
             onSelection()
-        }, label: {
+        } label: {
             VStack {
                 ZStack(alignment: .center) {
                     // Display the thumbnail, if available.
@@ -38,10 +37,9 @@ struct BasemapGalleryCell: View {
                             Image(uiImage: thumbnailImage)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .clipShape(roundedRect)
-                                .overlay(
-                                    makeOverlay()
-                                )
+                                .clipShape(.rect(cornerRadius: 8))
+                                .overlay(make3DBadge(), alignment: .topLeading)
+                                .overlay(makeOverlay())
                         }
                         .padding(.all, 4)
                     }
@@ -54,45 +52,61 @@ struct BasemapGalleryCell: View {
                 
                 // Display the name of the item.
                 Text(item.name ?? "")
-                    .font(Font.custom("AvenirNext-Regular", fixedSize: 12))
+                    .font(.basemapGallery)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(item.hasError ? .secondary : .primary)
+                    .foregroundStyle(item.hasError ? .secondary : .primary)
             }
 #if os(visionOS)
             .contentShape(.hoverEffect, .rect(cornerRadius: 12))
             .hoverEffect()
 #endif
-        })
+        }
         .buttonStyle(.plain)
         .disabled(item.isBasemapLoading)
     }
     
+    /// Creates a badge which indicates the basemap supports 3D visualization.
+    /// - Returns: A 3D badge overlay view.
+    @ViewBuilder private func make3DBadge() -> some View {
+        if item.basemap.is3D {
+            Text(
+                "3D",
+                bundle: .toolkitModule,
+                comment: "A reference to 3D content."
+            )
+            .font(.basemapGallery)
+            .foregroundStyle(item.hasError ? .secondary : .primary)
+            .padding(2.5)
+            .background(Material.regular)
+            .cornerRadius(5)
+            .padding(2.5)
+        }
+    }
+    
     /// Creates an overlay which is either a selection outline or an error icon.
     /// - Returns: A thumbnail overlay view.
-    private func makeOverlay() -> some View {
-        Group {
-            if item.hasError {
-                HStack {
-                    Spacer()
-                    VStack {
-                        ZStack {
-                            // For a white background behind the exclamation mark.
-                            Circle()
-                                .foregroundColor(.white)
-                                .frame(width: 16, height: 16)
-                            Image(systemName: "exclamationmark.circle.fill")
-                                .foregroundColor(.red)
-                                .frame(width: 32, height: 32)
-                        }
-                        Spacer()
+    @ViewBuilder private func makeOverlay() -> some View {
+        if item.hasError {
+            HStack {
+                Spacer()
+                VStack {
+                    ZStack {
+                        // For a white background behind the exclamation mark.
+                        Circle()
+                            .foregroundStyle(.white)
+                            .frame(width: 16, height: 16)
+                        Image(systemName: "exclamationmark.circle.fill")
+                            .foregroundStyle(.red)
+                            .frame(width: 32, height: 32)
                     }
+                    Spacer()
                 }
-                .padding(.all, -10)
-            } else {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(lineWidth: isSelected ? 2 : 0)
-                    .foregroundColor(Color.accentColor)
             }
+            .padding(.all, -10)
+        } else {
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(lineWidth: isSelected ? 2 : 0)
+                .foregroundStyle(Color.accentColor)
         }
     }
     
@@ -108,7 +122,7 @@ struct BasemapGalleryCell: View {
                 trailing: 12)
             )
             .background(Color(uiColor: .systemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(.rect(cornerRadius: 8))
     }
 }
 
@@ -117,5 +131,11 @@ extension BasemapGalleryItem {
     var hasError: Bool {
         loadBasemapError != nil ||
         spatialReferenceStatus == .noMatch
+    }
+}
+
+private extension Font {
+    static var basemapGallery: Self {
+        custom("AvenirNext-Regular", fixedSize: 12)
     }
 }

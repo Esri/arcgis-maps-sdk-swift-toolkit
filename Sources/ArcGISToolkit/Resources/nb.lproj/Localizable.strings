@@ -1,9 +1,18 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld valgt";
 
+/* A label indicating the number of results of a utility network trace. */
+"^[%lld Results](inflect: true)" = "^[%lld resultater](inflect: true)";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Det kreves et sertifikat for tilgang til innhold på %@.";
+
+/* A message explaining that a map area cannot be downloaded at this time. */
+"A map area cannot be downloaded at this time." = "Et kartområde kan ikke lastes ned akkurat nå.";
+
+/* A label for a button to add a map area. */
+"Add Map Area" = "Legg til kartområde";
 
 /* A button to add new utility trace starting points. */
 "Add New" = "Legg til ny";
@@ -12,13 +21,22 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Advanced Options" = "Avanserte alternativer";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "Alle nettsteder";
+"All Sites" = "Alle nettsteder";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Alle inndata og resultater knyttet til sporing vil gå tapt.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Tillat";
+
+/* An error message for when fetching map areas fails. */
+"An error occurred while fetching map areas." = "Det oppstod en feil ved henting av kartområder.";
+
+/* The title for a map area. */
+"Area %lld" = "Område %lld";
+
+/* A hint for the user to enter an area name in the text field. */
+"Area Name" = "Områdenavn";
 
 /* A label in reference to attachments. */
 "Attachments" = "Vedlegg";
@@ -38,6 +56,12 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Bla gjennom";
 
+/* Building (Level of Detail) */
+"Building" = "Bygning";
+
+/* Buildings (Level of Detail) */
+"Buildings" = "Bygninger";
+
 /* A label for a button to show the calibration view. */
 "Calibrate" = "Kalibrer";
 
@@ -48,11 +72,15 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Kameratilgang deaktivert";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Title for a button that cancels an action. */
 "Cancel" = "Avbryt";
 
 /* A label for a button to cancel the starting point selection operation. */
 "Cancel Starting Point Selection" = "Avbryt startpunktvalg";
+
+/* The status text when a map area download is cancelled. */
+"Cancelled" = "Avbrutt";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Sertifikat kreves";
@@ -66,7 +94,13 @@ for the AR experience. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Velg fra Bibliotek";
 
-/* The label of a button that clears a form's input. */
+/* Cities (Level of Detail) */
+"Cities" = "Steder";
+
+/* City (Level of Detail) */
+"City" = "Sted";
+
+/* E.g. Remove text from a text field. */
 "Clear" = "Fjern";
 
 /* A directive to clear all of the completed utility network traces. */
@@ -81,8 +115,29 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompass, med kurs %lld grader %@";
 
+/* Continent (Level of Detail) */
+"Continent" = "Kontinent";
+
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Fortsett";
+
+/* An error message explaining that map areas could not be retrieved for this map. */
+"Could not retrieve map areas for this map." = "Kan ikke hente kartområder for dette kartet.";
+
+/* Counties (Level of Detail) */
+"Counties" = "Fylker";
+
+/* Countries (Big) (Level of Detail) */
+"Countries (Big)" = "Land (store)";
+
+/* Countries (Small) (Level of Detail) */
+"Countries (Small)" = "Land (små)";
+
+/* County (Level of Detail) */
+"County" = "Fylke";
+
+/* The status text for an opened map area. */
+"Currently open" = "Åpne nå";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Fare: Sertifikatet som er utstedt av \"%@\", er ikke signert av en klarert sertifiseringsinstans.";
@@ -102,8 +157,38 @@ east, etc.). */
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Slett";
 
+/* A label for a button used to delete all starting points on a pending utility network trace. */
+"Delete All Starting Points" = "Slett alle startpunkter";
+
+/* The title of the dialogue confirming deletion of all points. */
+"Delete all starting points?" = "Slette alle startpunkter?";
+
+/* A label for a button to delete a map area. */
+"Delete Map Area" = "Slett kartområde";
+
+/* A label for the description of the map area. */
+"Description" = "Beskrivelse";
+
+/* E.g. Close/hide a sheet or pop-up. */
+"Dismiss" = "Lukk";
+
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Ferdig";
+
+/* A label for a button to download a map area. */
+"Download" = "Last ned";
+
+/* The status text when a map area failed to download. */
+"Download failed" = "Nedlastingen mislyktes";
+
+/* A label for a button to download a map area. */
+"Download Map Area" = "Last ned kartområde";
+
+/* The status text when a map area is downloaded. */
+"Downloaded" = "Lastet ned";
+
+/* The status text when a map area is downloading. */
+"Downloading" = "Laster ned";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -131,6 +216,9 @@ hold the minimum and maximum length respectively. */
 /* Text indicating the user should enter a field's exact number of characters. */
 "Enter ^[%lld characters](inflect: true)" = "Skriv inn ^[%lld tegn](inflect: true)";
 
+/* An instruction to enter a name. */
+"Enter a name" = "Angi et navn";
+
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Angi verdi";
 
@@ -140,6 +228,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Feil";
+
+/* A label indicating that an error occurred while fetching map areas. */
+"Error Fetching Map Areas" = "Feil ved henting av kartområder";
 
 /* A title for an alert that the selected file was not able to be
 imported as an attachment. */
@@ -204,8 +295,26 @@ trace operation. */
 AR experience. */
 "heading" = "kurs";
 
+/* House Property (Level of Detail) */
+"House Property" = "Huseiendom";
+
+/* Houses (Level of Detail) */
+"Houses" = "Hus";
+
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Mindre enn minimumsverdi";
+
+/* A label for the level of detail picker view. */
+"Level of Detail" = "Detaljnivå";
+
+/* The status text when a map area is loading. */
+"Loading" = "Laster inn";
+
+/* The status text when a map area failed to load. */
+"Loading failed" = "Lasting mislyktes";
+
+/* A title for the offline map areas view. */
+"Map Areas" = "Kartområder";
 
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum ^[%lld characters](inflect: true)" = "Maksimalt ^[%lld tegn](inflect: true)";
@@ -215,6 +324,9 @@ AR experience. */
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
+
+/* Metropolitan Area (Level of Detail) */
+"Metropolitan Area" = "Storbyområde";
 
 /* A warning message indicating microphone access has been disabled for the current application in the system settings. */
 "Microphone access has been disabled in Settings." = "Mikrofontilgang er deaktivert i innstillingene.";
@@ -227,6 +339,9 @@ AR experience. */
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Navn";
+
+/* Neighborhood (Level of Detail) */
+"Neighborhood" = "Nabolag";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Nettverk";
@@ -242,6 +357,15 @@ AR experience. */
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Ingen konfigurasjoner tilgjengelig.";
+
+/* An error message explaining that there is no internet connection. */
+"No Internet Connection" = "Ingen internettilkobling";
+
+/* An error message explaining that there is no internet connection and only downloaded areas are shown. */
+"No internet connection. Showing downloaded areas only." = "Ingen Internettilkobling. Viser bare nedlastede områder.";
+
+/* A label indicating that there are no map areas. */
+"No Map Areas" = "Ingen kartområder";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found." = "Ingen matcher funnet.";
@@ -267,8 +391,26 @@ AR experience. */
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Objekt-ID: %@";
 
+/* A label indicating that the map is offline disabled. */
+"Offline Disabled" = "Frakoblet modus deaktivert";
+
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
+
+/* A message explaining that the online map failed to load. */
+"Online Map Failed to Load" = "Kunne ikke laste inn det nettbaserte kartet";
+
+/* A label for a button to open a map area. */
+"Open" = "Åpne";
+
+/* The status text when a map area is packaging. */
+"Packaging" = "Pakker";
+
+/* The status text when a map area packaging failed. */
+"Packaging failed" = "Pakking mislyktes";
+
+/* A label instructing to pan and zoom the map to define an area. */
+"Pan and zoom to define the area" = "Panorer og zoom for å definere området";
 
 /* A label in reference to a credential password. */
 "Password" = "Passord";
@@ -294,8 +436,14 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup-evaluering mislyktes: %@";
 
+/* The status text when a map area is ready to download. */
+"Ready to download" = "Klar til å laste ned";
+
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Ta opp bare video";
+
+/* A label for a button to refresh map area content. */
+"Refresh" = "Oppdater";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Gi nytt navn";
@@ -314,6 +462,12 @@ current visible extent of the map or scene. */
 /* A label for a button to show utility network trace results. */
 "Results" = "Resultater";
 
+/* Room (Level of Detail) */
+"Room" = "Rom";
+
+/* Rooms (Level of Detail) */
+"Rooms" = "Rom";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Søkespørring";
 
@@ -323,6 +477,9 @@ current visible extent of the map or scene. */
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Velg en fasilitet";
+
+/* A title for the on demand configuration view. */
+"Select Area" = "Velg område";
 
 /* A label for button to select a utility network. */
 "Select Network" = "Velg nettverk";
@@ -336,6 +493,12 @@ or more levels in a floor-aware map or scene. */
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Nettsteder";
 
+/* A label for the file size of the map area. */
+"Size: %@" = "Størrelse: %@";
+
+/* Small Building (Level of Detail) */
+"Small Building" = "Liten bygning";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Manglende samsvar i romlig referanse.";
@@ -343,6 +506,18 @@ match the spatial reference of the map or scene. */
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Startpunkter";
+
+/* State/Province (Level of Detail) */
+"State/Province" = "Delstat/provins";
+
+/* States/Provinces (Level of Detail) */
+"States/Provinces" = "Delstater/provinser";
+
+/* Street (Level of Detail) */
+"Street" = "Gate";
+
+/* Streets (Level of Detail) */
+"Streets" = "Gater";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Ta bilde eller video";
@@ -378,6 +553,12 @@ match the spatial reference of the map. */
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Kartet har ingen romlig referanse.";
 
+/* A message indicating that the map is not offline enabled. */
+"The map is not enabled for offline use." = "Kartet er ikke aktivert for bruk i frakoblet modus.";
+
+/* A message explaining that the map area name must be unique. */
+"The name for the map area must be unique." = "Navnet på kartområdet må være unikt.";
+
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "Passordet var ugyldig.";
 
@@ -391,8 +572,17 @@ to be imported as an attachment. */
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL-en kunne ikke nås eller inneholdt ingen bildedata.";
 
+/* A message explaining that there are no map areas for this map. */
+"There are no map areas for this map." = "Det er ingen kartområder for dette kartet.";
+
+/* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
+"There are no map areas for this map. Tap the button below to get started." = "Det er ingen kartområder for dette kartet. Trykk på knappen nedenfor for å komme i gang.";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "I dag";
+
+/* Town (Level of Detail) */
+"Town" = "By";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Spor";
@@ -406,11 +596,17 @@ to be imported as an attachment. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Prøv på nytt";
 
+/* The default title of a map area with an unknown title. */
+"Unknown" = "Ukjent";
+
 /* Text indicating a field has an unknown validation error. */
 "Unknown validation error" = "Ukjent valideringsfeil";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Ressurstype uten navn";
+
+/* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
+"Unsupported Value" = "Verdien støttes ikke";
 
 /* A label in reference to a credential username. */
 "Username" = "Brukernavn";
@@ -444,6 +640,18 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "Verdien kan ikke være tom";
+
+/* E.g. Open a hyperlink. */
+"View" = "Vis";
+
+/* World (Level of Detail) */
+"World" = "Verden";
+
+/* World (Big) (Level of Detail) */
+"World (Big)" = "Verden (store)";
+
+/* World (Small) (Level of Detail) */
+"World (Small)" = "Verden (små)";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

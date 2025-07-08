@@ -218,7 +218,7 @@ struct CredentialInputSheetView: View {
                         .multilineTextAlignment(.center)
                     Text(message)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.vertical)
@@ -291,7 +291,7 @@ extension CredentialInputSheetView {
     /// A configuration for an alert action.
     struct Action {
         /// The title of the action.
-        let title: String
+        let title: LocalizedStringResource
         
         /// The block to execute when the action is triggered.
         /// The parameters are the username and the password.

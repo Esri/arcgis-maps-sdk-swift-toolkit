@@ -15,29 +15,76 @@
 import SwiftUI
 
 struct Examples: View {
-    /// The list of example lists.  Allows for a hierarchical navigation model for examples.
-    let lists = makeExamples()
+    /// The list items to display.
+    let listItems = makeListItems()
+    
+    /// The visibility of the navigation split view's column.
+    @State private var columnVisibility: NavigationSplitViewVisibility = .all
+    /// The example selected by the user.
+    @State private var selectedExample: Example?
     
     var body: some View {
-        NavigationStack {
-            List(lists) { (list) in
-                NavigationLink(list.name, destination: list)
+        NavigationSplitView(columnVisibility: $columnVisibility) {
+            List(listItems, id: \.name, selection: $selectedExample) { item in
+                switch item {
+                case .category(let name, let examples):
+                    DisclosureGroup(name) {
+                        ForEach(examples, id: \.name) { example in
+                            Text(example.name)
+                                .tag(example)
+                        }
+                    }
+                case .example(let example):
+                    Text(example.name)
+                        .tag(example)
+                }
             }
             .navigationTitle("Toolkit Examples")
-            .navigationBarTitleDisplayMode(.inline)
+        } detail: {
+            if let selectedExample {
+                selectedExample.view
+                    .navigationTitle(selectedExample.name)
+                    .navigationBarTitleDisplayMode(.inline)
+            } else {
+                Text("Select an example")
+            }
         }
+        // visionOS doesn't provide the column visibility toggle like
+        // iPadOS and Mac Catalyst so conditionally hide the column.
+#if !os(visionOS)
+        .onChange(of: selectedExample) {
+            columnVisibility = .detailOnly
+        }
+#endif
     }
     
-    static func makeExamples() -> [ExampleList] {
-        let common: [ExampleList] = [
-            .geoview,
-            .views
-        ]
-#if !targetEnvironment(macCatalyst)
-        return [.augmentedReality] + common
+    static func makeCategories() -> [ListItem] {
+#if os(iOS) && !targetEnvironment(macCatalyst)
+        return [.augmentedRealityCategory]
 #else
-        return common
+        return []
 #endif
+    }
+    
+    static func makeListItems() -> [ListItem] {
+        (makeCategories() + makeUncategorizedExamples())
+            .sorted(by: { $0.name < $1.name })
+    }
+    
+    static func makeUncategorizedExamples() -> [ListItem] {
+        return [
+            .example("Basemap Gallery", content: BasemapGalleryExampleView()),
+            .example("Bookmarks", content: BookmarksExampleView()),
+            .example("Compass", content: CompassExampleView()),
+            .example("Feature Form", content: FeatureFormExampleView()),
+            .example("Floating Panel", content: FloatingPanelExampleView()),
+            .example("Floor Filter", content: FloorFilterExampleView()),
+            .example("Overview Map", content: OverviewMapExampleView()),
+            .example("Popup", content: PopupExampleView()),
+            .example("Scalebar", content: ScalebarExampleView()),
+            .example("Search", content: SearchExampleView()),
+            .example("Utility Network Trace", content: UtilityNetworkTraceExampleView())
+        ]
     }
 }
 
@@ -75,4 +122,17 @@ extension ExampleList {
             AnyExample("Floating Panel", content: FloatingPanelExampleView())
         ]
     )
+#if os(iOS) && !targetEnvironment(macCatalyst)
+extension Examples.ListItem {
+    static var augmentedRealityCategory: Self {
+        .category(
+            "Augmented Reality",
+            examples: [
+                Example("Flyover", content: FlyoverExampleView()),
+                Example("Tabletop", content: TableTopExampleView()),
+                Example("World Scale", content: WorldScaleExampleView())
+            ]
+        )
+    }
 }
+#endif

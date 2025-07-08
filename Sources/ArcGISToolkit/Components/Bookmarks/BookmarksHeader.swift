@@ -41,18 +41,15 @@ struct BookmarksHeader: View {
                     comment: "A label prompting the user to make a selection from the available bookmarks."
                 )
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
             }
             .frame(
                 maxWidth: .infinity,
                 alignment: .leading
             )
             Spacer()
-            Button {
+            Button.done {
                 isPresented = false
-            } label: {
-                Text.done
-                    .fontWeight(.semibold)
             }
 #if !os(visionOS)
             .buttonStyle(.plain)

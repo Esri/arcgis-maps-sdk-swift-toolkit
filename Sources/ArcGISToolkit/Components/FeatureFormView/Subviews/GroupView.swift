@@ -89,7 +89,7 @@ extension GroupView {
                         .accessibilityIdentifier("\(element.label)")
                         .multilineTextAlignment(.leading)
                         .font(.title2)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                 }
                 
                 if !element.description.isEmpty {
@@ -97,7 +97,7 @@ extension GroupView {
                         .accessibilityIdentifier("\(element.label) Description")
                         .multilineTextAlignment(.leading)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 #if targetEnvironment(macCatalyst)

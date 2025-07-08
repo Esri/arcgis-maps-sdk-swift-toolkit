@@ -1,4 +1,4 @@
-// Copyright 2022 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,8 +14,18 @@
 
 import SwiftUI
 
-/// A `PreferenceKey` that specifies a size.
-struct SizePreferenceKey: PreferenceKey {
-    static let defaultValue: CGSize = .zero
-    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
+extension AnyTransition {
+    static var push: Self {
+        asymmetric(
+            insertion: .move(edge: .trailing),
+            removal: .move(edge: .leading)
+        )
+    }
+    
+    static var pop: Self {
+        asymmetric(
+            insertion: .move(edge: .leading),
+            removal: .move(edge: .trailing)
+        )
+    }
 }

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !os(visionOS)
 import XCTest
 import ArcGIS
 import ArcGISToolkit
@@ -70,4 +69,3 @@ private extension Envelope {
         yRange: 7536778.456812576...7559866.706991681
     )
 }
-#endif

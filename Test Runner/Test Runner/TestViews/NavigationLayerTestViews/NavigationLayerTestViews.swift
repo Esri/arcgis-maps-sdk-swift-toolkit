@@ -1,4 +1,4 @@
-// Copyright 2024 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,14 +14,12 @@
 
 import SwiftUI
 
-@available(visionOS, unavailable)
-public extension FeatureFormView {
-    /// Specifies the visibility of the form header.
-    /// - Parameter visibility: The preferred visibility of the form header.
-    /// - Since: 200.7
-    func formHeader(_ visibility: Visibility) -> Self {
-        var copy = self
-        copy.headerVisibility = visibility
-        return copy
+struct NavigationLayerTestViews: View {
+    var body: some View {
+        List {
+            NavigationLink("NavigationLayer Test Case 1", destination: NavigationLayerTestCase1View())
+            NavigationLink("NavigationLayer Test Case 2", destination: NavigationLayerTestCase2View())
+            NavigationLink("NavigationLayer Test Case 3", destination: NavigationLayerTestCase3View())
+        }
     }
 }

@@ -65,7 +65,6 @@ import SwiftUI
 /// `Info.plist` file.
 ///
 /// - Since: 200.4
-@available(visionOS, unavailable)
 public struct FeatureFormView: View {
     /// The view model for the form.
     @StateObject private var model: FormViewModel
@@ -75,9 +74,6 @@ public struct FeatureFormView: View {
     
     /// The title of the feature form view.
     @State private var title = ""
-    
-    /// The visibility of the form header.
-    var headerVisibility: Visibility = .automatic
     
     /// The validation error visibility configuration of the form.
     var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
@@ -101,7 +97,7 @@ public struct FeatureFormView: View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if !title.isEmpty && headerVisibility != .hidden {
+                    if !title.isEmpty {
                         FormHeader(title: title)
                         Divider()
                     }
@@ -117,7 +113,7 @@ public struct FeatureFormView: View {
                     }
                 }
             }
-            .onChange(model.focusedElement) { _ in
+            .onChange(of: model.focusedElement) {
                 if let focusedElement = model.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
@@ -134,7 +130,6 @@ public struct FeatureFormView: View {
     }
 }
 
-@available(visionOS, unavailable)
 extension FeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.

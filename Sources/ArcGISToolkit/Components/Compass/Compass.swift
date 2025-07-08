@@ -30,12 +30,14 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [CompassExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/CompassExampleView.swift)
 /// in the project. To learn more about using the `Compass` see the <doc:CompassTutorial>.
-@available(visionOS, unavailable)
 public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
     
-    /// A Boolean value indicating whether  the compass should automatically
+    /// An action to perform when the compass is tapped.
+    private var action: (() -> Void)?
+    
+    /// A Boolean value indicating whether the compass should automatically
     /// hide/show itself when the heading is `0`.
     private var autoHide: Bool = true
     
@@ -48,8 +50,9 @@ public struct Compass: View {
     /// The width and height of the compass.
     private var size: CGFloat = 44
     
-    /// An action to perform when the compass is tapped.
-    private var action: (() -> Void)?
+    /// A Boolean value indicating whether sensory feedback is enabled
+    /// when the heading snaps to zero.
+    private var snapToZeroSensoryFeedbackEnabled: Bool = false
     
     /// Creates a compass with a heading based on compass directions (0° indicates a direction
     /// toward true North, 90° indicates a direction toward true East, etc.).
@@ -84,10 +87,10 @@ public struct Compass: View {
                 .opacity(opacity)
                 .frame(width: size, height: size)
                 .onAppear { opacity = shouldHide(forHeading: heading) ? 0 : 1 }
-                .onChange(heading) { newHeading in
-                    let newOpacity: Double = shouldHide(forHeading: newHeading) ? .zero : 1
+                .onChange(of: heading) {
+                    let newOpacity: Double = shouldHide(forHeading: heading) ? .zero : 1
                     guard opacity != newOpacity else { return }
-                    withAnimation(.default.delay(shouldHide(forHeading: newHeading) ? 0.25 : 0)) {
+                    withAnimation(.default.delay(shouldHide(forHeading: heading) ? 0.25 : 0)) {
                         opacity = newOpacity
                     }
                 }
@@ -110,11 +113,35 @@ public struct Compass: View {
                                  """
                     )
                 )
+#if os(visionOS)
+                .hoverEffect()
+                .hoverEffect { effect, isActive, _ in
+                    effect.scaleEffect(isActive ? 1.05 : 1.0)
+                }
+#else
+                .snapToZeroSensoryFeedback(enabled: snapToZeroSensoryFeedbackEnabled, heading: heading)
+#endif
         }
     }
 }
 
-@available(visionOS, unavailable)
+private extension View {
+    /// Enables the snap to zero sensory feedback
+    /// when it is available.
+    @available(visionOS, unavailable)
+    @ViewBuilder
+    func snapToZeroSensoryFeedback(enabled: Bool, heading: Double) -> some View {
+        if enabled {
+            sensoryFeedback(.selection, trigger: heading) { oldValue, newValue in
+                (!oldValue.isZero && newValue.isZero) ||
+                (oldValue.isZero && !newValue.isZero)
+            }
+        } else {
+            self
+        }
+    }
+}
+
 extension Compass {
     /// Returns a Boolean value indicating whether the compass should hide based on the
     /// provided heading and whether the compass has been configured to automatically hide.
@@ -125,7 +152,6 @@ extension Compass {
     }
 }
 
-@available(visionOS, unavailable)
 public extension Compass {
     /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
     /// a direction toward true West, etc.).
@@ -167,9 +193,15 @@ public extension Compass {
         copy.autoHide = !disable
         return copy
     }
+    
+    /// Enables sensory feedback when the heading snaps to `zero`.
+    func snapToZeroSensoryFeedback() -> Self {
+        var copy = self
+        copy.snapToZeroSensoryFeedbackEnabled = true
+        return copy
+    }
 }
 
-#if !os(visionOS)
 #Preview("Compass") {
     Compass(rotation: .zero) { }
         .autoHideDisabled()
@@ -182,4 +214,3 @@ public extension Compass {
         .compassSize(size: 100)
         .environment(\.layoutDirection, .rightToLeft)
 }
-#endif

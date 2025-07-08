@@ -23,22 +23,51 @@ struct Needle: View {
                     HStack(spacing: 0) {
                         NeedleQuadrant(color: .lightRed)
                         NeedleQuadrant(color: .darkRed)
+#if os(visionOS)
+                            .perspectiveRotationEffect(
+                                .degrees(180),
+                                axis: (x: 0, y: 1, z: 0)
+                            )
+#else
                             .rotation3DEffect(
-                                Angle(degrees: 180),
-                                axis: (x: 0, y: 1, z: 0))
+                                .degrees(180),
+                                axis: (x: 0, y: 1, z: 0)
+                            )
+#endif
                     }
                     HStack(spacing: 0) {
                         NeedleQuadrant(color: .lightGray)
+#if os(visionOS)
+                            .perspectiveRotationEffect(
+                                .degrees(180),
+                                axis: (x: 1, y: 0, z: 0)
+                            )
+#else
                             .rotation3DEffect(
-                                Angle(degrees: 180),
-                                axis: (x: 1, y: 0, z: 0))
+                                .degrees(180),
+                                axis: (x: 1, y: 0, z: 0)
+                            )
+#endif
                         NeedleQuadrant(color: .darkGray)
+#if os(visionOS)
+                            .perspectiveRotationEffect(
+                                .degrees(180),
+                                axis: (x: 0, y: 1, z: 0)
+                            )
+                            .perspectiveRotationEffect(
+                                .degrees(180),
+                                axis: (x: 1, y: 0, z: 0)
+                            )
+#else
                             .rotation3DEffect(
-                                Angle(degrees: 180),
-                                axis: (x: 0, y: 1, z: 0))
+                                .degrees(180),
+                                axis: (x: 0, y: 1, z: 0)
+                            )
                             .rotation3DEffect(
-                                Angle(degrees: 180),
-                                axis: (x: 1, y: 0, z: 0))
+                                .degrees(180),
+                                axis: (x: 1, y: 0, z: 0)
+                            )
+#endif
                     }
                 }
                 NeedleCenter()
@@ -59,7 +88,7 @@ struct NeedleCenter: View {
     var body: some View {
         Circle()
             .scale(0.25)
-            .foregroundColor(.bronze)
+            .foregroundStyle(Color.bronze)
     }
 }
 

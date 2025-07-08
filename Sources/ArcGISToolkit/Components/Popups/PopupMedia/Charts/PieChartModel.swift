@@ -24,47 +24,18 @@ final class PieChartModel: ObservableObject {
     /// - Parameter chartData: The data used for the pie chart.
     init(chartData: [ChartData]) {
         var slices = [PieSlice]()
-        var dataTotal: Double = 0
-        _ = chartData.map { dataTotal += $0.value }
+        let dataTotal = chartData.reduce(0) { $0 + $1.value }
         for i in 0..<chartData.count {
+            let data = chartData[i]
             slices.append(
                 PieSlice(
-                    fraction: chartData[i].value / dataTotal,
-                    color: PieChartModel.color(for: i),
-                    name: chartData[i].label
+                    fraction: data.value / dataTotal,
+                    color: Color(data.color),
+                    name: data.label
                 )
             )
         }
         pieSlices = slices
-    }
-    
-    /// The pre-defined colors for the pie slices.
-    static let sliceColors: [Color] = [
-        .mint,
-        .teal,
-        .green,
-        .cyan,
-        .yellow,
-        .blue,
-        .orange,
-        .indigo,
-        .red,
-        .purple,
-        .pink,
-        .brown
-    ]
-    
-    /// Calculates a slice color for the given slice index.
-    /// - Parameter index: The index of the slice.
-    /// - Returns: The color for the slice at `index`.
-    static func color(for index: Int) -> Color {
-        // We don't want to just wrap color indices because we don't want
-        // two adjacent slices to have the same color. "extra" will skip the
-        // the 1st color for the second time through the list, skip the 2nd
-        // color the third time through the list, etc., ensuring that we
-        // don't get adjacent colors.
-        let extra = index / sliceColors.count
-        return sliceColors[(index + extra) % sliceColors.count].opacity(0.75)
     }
 }
 

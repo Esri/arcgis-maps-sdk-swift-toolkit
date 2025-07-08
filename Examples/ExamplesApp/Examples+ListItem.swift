@@ -1,4 +1,4 @@
-// Copyright 2021 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,20 @@
 
 import SwiftUI
 
-struct ExampleView: View {
-    /// The example to display in the view.
-    var example: Example
-    
-    var body: some View {
-        example.makeBody()
-            .navigationTitle(example.name)
-            .navigationBarTitleDisplayMode(.inline)
+extension Examples {
+    enum ListItem {
+        case category(_ name: String, examples: [Example])
+        case example(Example)
+        
+        var name: String {
+            switch self {
+            case .category(let name, _): name
+            case .example(let example): example.name
+            }
+        }
+        
+        static func example<Content: View>(_ name: String, content: @autoclosure @escaping () -> Content) -> Self {
+            return .example(.init(name, content: content()))
+        }
     }
 }
