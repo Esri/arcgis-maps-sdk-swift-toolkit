@@ -130,10 +130,6 @@ east, etc.). */
 containment is not visible. */
 "content" = "content";
 
-/* A label indicating a utility association's 
-containment is visible. */
-"content visible" = "content visible";
-
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
 
@@ -718,6 +714,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* E.g. Open a hyperlink. */
 "View" = "View";
+
+/* A label indicating a utility association's 
+containment is visible. */
+"visible content" = "visible content";
 
 /* World (Level of Detail) */
 "World" = "World";

@@ -72,7 +72,7 @@ private extension UtilityAssociationResult {
             if associatedFeatureIsToElement {
                 if association.containmentIsVisible {
                     return Text(
-                        "content visible",
+                        "visible content",
                         bundle: .toolkitModule,
                         comment:
                             """
