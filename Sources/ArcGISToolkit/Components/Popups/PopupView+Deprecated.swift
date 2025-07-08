@@ -16,12 +16,31 @@ import ArcGIS
 import SwiftUI
 
 public extension PopupView /* Deprecated */ {
+    /// Creates a `PopupView` with the given popup.
+    ///
+    /// - Important: This initializer has been deprecated and replaced with a new version that
+    /// supports UtilityAssociationsPopupElement. UtilityAssociationsPopupElements will not render
+    /// when this initializer is used.
+    ///
+    /// - Parameters:
+    ///   - popup: The popup to display.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    /// - Attention: Deprecated at 200.8.
+    @available(*, deprecated, message: "Use 'init(root:isPresented:)' instead.")
+    init(popup: Popup, isPresented: Binding<Bool>? = nil) {
+        self.popup = popup
+        self.isPresented = isPresented
+        deprecatedProperties.initializerWasUsed = true
+    }
+    
     /// Specifies the visibility of the popup header.
     /// - Parameter visibility: The preferred visibility of the popup header.
     /// - Attention: Deprecated at 200.8.
     @available(*, deprecated, message: "Use 'init(root:isPresented:)' to control the close button visibility instead.")
     func header(_ visibility: Visibility) -> Self {
-        return self
+        var copy = self
+        copy.deprecatedProperties.headerVisibility = visibility
+        return copy
     }
     
     /// Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
@@ -33,6 +52,32 @@ public extension PopupView /* Deprecated */ {
     /// - Attention: Deprecated at 200.7.
     @available(*, deprecated, message: "Use 'init(root:isPresented:)' to control the close button visibility instead.")
     func showCloseButton(_ newShowCloseButton: Bool) -> Self {
-        return self
+        var copy = self
+        copy.deprecatedProperties.showCloseButton = newShowCloseButton
+        return copy
     }
+}
+
+// MARK: - DeprecatedProperties
+
+extension PopupView {
+    /// The properties used by the PopupView's deprecated members.
+    struct DeprecatedProperties {
+        /// A Boolean value indicating whether the deprecated PopupView initializer was used.
+        /// - Note: This can be removed when `PopupView.init(popup:isPresented:)` is removed.
+        fileprivate(set) var initializerWasUsed = false
+        
+        /// The visibility of the popup header.
+        /// - Note: This can be removed when `PopupView.header(_:)` is removed.
+        fileprivate(set) var headerVisibility: Visibility = .automatic
+        
+        /// A Boolean value indicating whether a "close" button should be shown.
+        /// - Note: This can be removed when `PopupView.showCloseButton(_:)` is removed.
+        fileprivate(set) var showCloseButton: Bool? = nil
+    }
+}
+
+extension EnvironmentValues {
+    /// The properties used by the PopupView's deprecated members.
+    @Entry var deprecatedProperties = PopupView.DeprecatedProperties()
 }

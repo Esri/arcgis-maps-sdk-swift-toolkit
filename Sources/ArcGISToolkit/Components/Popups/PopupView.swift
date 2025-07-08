@@ -62,13 +62,13 @@ import ArcGIS
 /// in the project. To learn more about using the `PopupView`, see the <doc:PopupViewTutorial>.
 public struct PopupView: View {
     /// The `Popup` to display in the root `EmbeddedPopupView`.
-    private let popup: Popup
+    let popup: Popup
     
     /// A binding to a Boolean value that determines whether the view is presented.
-    private let isPresented: Binding<Bool>?
+    let isPresented: Binding<Bool>?
     
-    /// A Boolean value indicating whether the deprecated Popup View initializer was used.
-    private let deprecatedInitializerWasUsed: Bool
+    /// The properties used by the view's deprecated members.
+    var deprecatedProperties = DeprecatedProperties()
     
     /// The closure to perform when a new popup is shown in the navigation stack.
     var onPopupChanged: ((Popup) -> Void)?
@@ -76,11 +76,11 @@ public struct PopupView: View {
     /// Creates a `PopupView` with the given popup.
     /// - Parameters:
     ///   - root: The popup to display.
-    ///   - isPresented: A Boolean value indicating if the view is presented.
+    ///   - isPresented: A Boolean value indicating whether the view is presented. The close button
+    ///   is displayed when this is non-`nil`.
     public init(root: Popup, isPresented: Binding<Bool>? = nil) {
         self.popup = root
         self.isPresented = isPresented
-        self.deprecatedInitializerWasUsed = false
     }
     
     public var body: some View {
@@ -88,17 +88,12 @@ public struct PopupView: View {
             EmbeddedPopupView(popup: popup)
         }
         .environment(\.isPresented, isPresented)
-        .environment(\.popupDeprecatedInitializerWasUsed, deprecatedInitializerWasUsed)
+        .environment(\.deprecatedProperties, deprecatedProperties)
         .onPreferenceChange(PresentedPopupPreferenceKey.self) { wrappedPopup in
             guard let wrappedPopup else { return }
             onPopupChanged?(wrappedPopup.popup)
         }
     }
-}
-
-extension EnvironmentValues {
-    /// A Boolean value indicating whether the deprecated Popup View initializer was used.
-    @Entry var popupDeprecatedInitializerWasUsed = false
 }
 
 public extension PopupView {
@@ -111,22 +106,6 @@ public extension PopupView {
         var copy = self
         copy.onPopupChanged = action
         return copy
-    }
-    
-    /// Creates a `PopupView` with the given popup.
-    ///
-    /// - Important: This initializer has been deprecated and replaced with a new version that
-    /// supports UtilityAssociationsPopupElement. UtilityAssociationsPopupElements will not render
-    /// when this initializer is used.
-    ///
-    /// - Parameters:
-    ///   - popup: The popup to display.
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    @available(*, deprecated, message: "Use 'init(root:isPresented:)' instead.")
-    init(popup: Popup, isPresented: Binding<Bool>? = nil) {
-        self.popup = popup
-        self.isPresented = isPresented
-        self.deprecatedInitializerWasUsed = true
     }
 }
 
