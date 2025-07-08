@@ -239,10 +239,9 @@ private extension TextInput {
 #endif
             }
             RepresentedUITextView(initialText: text) { text in
-                if element.formattedValue != text {
-                    element.convertAndUpdateValue(text)
-                    internalFeatureFormViewModel.evaluateExpressions()
-                }
+                guard text != element.formattedValue else { return }
+                element.convertAndUpdateValue(text)
+                internalFeatureFormViewModel.evaluateExpressions()
             } onTextViewDidEndEditing: { text in
                 self.text = text
             }
