@@ -4,12 +4,18 @@
 /* A label indicating the number of results of a utility network trace. */
 "^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
+/* A reference to 3D content. */
+"3D" = "بيت_3D_____لاحقة";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "مطلوب شهادة للوصول إلى المحتوى الموجود على %@.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "يتعذر تنزيل منطقة الخريطة في هذا الوقت.";
+
+/* A label for an option to add a new utility association. */
+"Add Association" = "بيت_Add Association________________لاحقة";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "إضافة منطقة خريطة";
@@ -38,6 +44,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "اسم المنطقة";
 
+/* A label in reference to utility associations elements contained within a popup. */
+"Associations" = "بيت_Associations_____________لاحقة";
+
 /* A label in reference to attachments. */
 "Attachments" = "المرفقات";
 
@@ -49,6 +58,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "المصادقة مطلوبة";
+
+/* A generic label for navigating to the previous screen or returning to the previous context. */
+"Back" = "بيت_Back_________لاحقة";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "إشارات مرجعية";
@@ -72,8 +84,7 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "تم رفض الوصول إلى الكاميرا";
 
-/* A label for a button to cancel an operation.
-Title for a button that cancels an action. */
+/* A label for a button to cancel an operation. */
 "Cancel" = "إلغاء الأمر";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -115,11 +126,18 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "البوصلة، تتجه %lld درجة/درجات %@";
 
+/* A label indicating whether a utility association's 
+containment is visible or not. */
+"Containment Visible: %@" = "بيت_Containment Visible: %@________________________لاحقة";
+
 /* Continent (Level of Detail) */
 "Continent" = "قارة";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "متابعة";
+
+/* A label for a button to continue editing the feature form. */
+"Continue Editing" = "بيت_Continue Editing_________________لاحقة";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "يتعذر استرداد مناطق الخريطة لهذه الخريطة.";
@@ -163,11 +181,20 @@ east, etc.). */
 /* The title of the dialogue confirming deletion of all points. */
 "Delete all starting points?" = "هل ترغب في حذف جميع نقاط البدء؟";
 
-/* A label for a button to delete a map area. */
-"Delete Map Area" = "حذف منطقة الخريطة";
+/* A label for a button to delete a map area download. */
+"Delete Download" = "بيت_Delete Download________________لاحقة";
 
 /* A label for the description of the map area. */
 "Description" = "الوصف";
+
+/* Discard edits on the feature form. */
+"Discard" = "بيت_Discard_______________لاحقة";
+
+/* A label for a button to discard unsaved edits. */
+"Discard Edits" = "بيت_Discard Edits______________لاحقة";
+
+/* A question asking if the user would like to discard their unsaved edits. */
+"Discard Edits?" = "بيت_Discard Edits_______________لاحقة?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "تجاهل";
@@ -229,6 +256,11 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "خطأ";
 
+/* An error message shown when the element's
+associations filter results cannot be displayed.
+The variable provides additional data. */
+"Error fetching filter results: %@" = "بيت_Error fetching filter results: %@__________________لاحقة";
+
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "حدث خطأ في أثناء جلب مناطق الخريطة";
 
@@ -283,6 +315,13 @@ contains one or more facilities in a floor-aware map or scene. */
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "العثور على مكان أو عنوان";
+
+/* The message shown when a form could not be submitted. */
+"Finish editing failed." = "بيت_Finish editing failed_______________________لاحقة.";
+
+/* The message shown when a form could not be 
+submitted with additional details. */
+"Finish editing failed.\n%@" = "بيت_Finish editing failed_______________________لاحقة.\nبيت_%@_____لاحقة";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "كسر بامتداد Edge";
@@ -351,6 +390,9 @@ AR experience. */
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "تتبع جديد";
+
+/* A label indicating that no associations are available for the popup element. */
+"No Associations" = "بيت_No Associations________________لاحقة";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "لا توجد إشارات مرجعية";
@@ -432,8 +474,8 @@ chosen utility network trace configuration. */
 chosen utility network trace configuration. */
 "Please set at least 2 starting locations." = "يرجى تعيين موقعي بدء على الأقل.";
 
-/* An error message shown when a popup cannot be displayed. The
-variable provides additional data. */
+/* An error message shown when a popup cannot be displayed.
+The variable provides additional data. */
 "Popup evaluation failed: %@" = "فشل تقييم النافذة المنبثقة: %@";
 
 /* The status text when a map area is ready to download. */
@@ -444,6 +486,9 @@ variable provides additional data. */
 
 /* A label for a button to refresh map area content. */
 "Refresh" = "تحديث";
+
+/* A label for a button to remove a map area download. */
+"Remove Download" = "بيت_Remove Download________________لاحقة";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "إعادة تسمية";
@@ -468,6 +513,12 @@ current visible extent of the map or scene. */
 /* Rooms (Level of Detail) */
 "Rooms" = "غرف";
 
+/* Finish editing the feature form. */
+"Save" = "بيت_Save_________لاحقة";
+
+/* A label for a button to save edits. */
+"Save Edits" = "بيت_Save Edits_____________________لاحقة";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "استعلام البحث";
 
@@ -489,6 +540,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "الإعدادات";
+
+/* A label for a button to show all the association results. */
+"Show all" = "بيت_Show all_________________لاحقة";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "المواقع";
@@ -550,6 +604,9 @@ match the spatial reference of the map. */
 /* A label indicating the chosen file was invalid. */
 "The certificate file was invalid." = "لقد كان ملف الشهادة غير صالح.";
 
+/* The title shown when the feature form failed to save. */
+"The form wasn't submitted" = "بيت_The form wasn't submitted__________________________لاحقة";
+
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "لا تحتوي الخريطة على إسناد مكاني.";
 
@@ -578,8 +635,14 @@ to be imported as an attachment. */
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "لا توجد مناطق خريطة لهذه الخريطة. اضغط على الزر أدناه للبدء.";
 
+/* A label for a text entry field that allows the user to filter a list of association results by title. */
+"Title" = "بيت_Title___________لاحقة";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "اليوم";
+
+/* Text indicating the total count of association results. */
+"Total: %lld" = "بيت_Total: %lld____________لاحقة";
 
 /* Town (Level of Detail) */
 "Town" = "بلدة";
@@ -608,8 +671,16 @@ to be imported as an attachment. */
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
 "Unsupported Value" = "قيمة غير مدعومة";
 
+/* A message explaining that unsaved edits will be
+lost if the user continues to dismiss the form
+without saving. */
+"Updates to the form will be lost." = "بيت_Updates to the form will be lost__________________لاحقة.";
+
 /* A label in reference to a credential username. */
 "Username" = "اسم المستخدم";
+
+/* A label indicating the feature form has validation errors. */
+"Validation Errors" = "بيت_Validation Errors__________________لاحقة";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "القيمة";
@@ -652,6 +723,11 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* World (Small) (Level of Detail) */
 "World (Small)" = "العالم (صغير)";
+
+/* A message explaining that the indicated number
+of validation errors must be resolved before
+saving the feature form. */
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "بيت_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________لاحقة.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

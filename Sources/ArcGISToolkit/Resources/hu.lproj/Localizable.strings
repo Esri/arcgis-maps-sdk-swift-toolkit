@@ -4,12 +4,18 @@
 /* A label indicating the number of results of a utility network trace. */
 "^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
+/* A reference to 3D content. */
+"3D" = "í_3D_____ő";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "A(z) %@ helyen lévő tartalom eléréséhez tanúsítványra van szükség.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "A térképterület jelenleg nem tölthető le.";
+
+/* A label for an option to add a new utility association. */
+"Add Association" = "í_Add Association________________ő";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Térképterület hozzáadása";
@@ -38,6 +44,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "Terület neve";
 
+/* A label in reference to utility associations elements contained within a popup. */
+"Associations" = "í_Associations_____________ő";
+
 /* A label in reference to attachments. */
 "Attachments" = "Csatolmányok";
 
@@ -49,6 +58,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Hitelesítés szükséges";
+
+/* A generic label for navigating to the previous screen or returning to the previous context. */
+"Back" = "í_Back_________ő";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Könyvjelzők";
@@ -72,8 +84,7 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "A kamera hozzáférése le van tiltva";
 
-/* A label for a button to cancel an operation.
-Title for a button that cancels an action. */
+/* A label for a button to cancel an operation. */
 "Cancel" = "Mégse";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -115,11 +126,18 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Iránytű, irány %lld fok %@";
 
+/* A label indicating whether a utility association's 
+containment is visible or not. */
+"Containment Visible: %@" = "í_Containment Visible: %@________________________ő";
+
 /* Continent (Level of Detail) */
 "Continent" = "Földrész";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Folytatás";
+
+/* A label for a button to continue editing the feature form. */
+"Continue Editing" = "í_Continue Editing_________________ő";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Ehhez a térképhez nem sikerült lekérni a térképterületeket.";
@@ -163,11 +181,20 @@ east, etc.). */
 /* The title of the dialogue confirming deletion of all points. */
 "Delete all starting points?" = "Törli az összes kiindulási pontot?";
 
-/* A label for a button to delete a map area. */
-"Delete Map Area" = "Térképterület törlése";
+/* A label for a button to delete a map area download. */
+"Delete Download" = "í_Delete Download________________ő";
 
 /* A label for the description of the map area. */
 "Description" = "Leírás";
+
+/* Discard edits on the feature form. */
+"Discard" = "í_Discard_______________ő";
+
+/* A label for a button to discard unsaved edits. */
+"Discard Edits" = "í_Discard Edits______________ő";
+
+/* A question asking if the user would like to discard their unsaved edits. */
+"Discard Edits?" = "í_Discard Edits_______________ő?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Elrejtés";
@@ -229,6 +256,11 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Hiba";
 
+/* An error message shown when the element's
+associations filter results cannot be displayed.
+The variable provides additional data. */
+"Error fetching filter results: %@" = "í_Error fetching filter results: %@__________________ő";
+
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Hiba a térképterületek lekérdezése közben";
 
@@ -283,6 +315,13 @@ contains one or more facilities in a floor-aware map or scene. */
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Hely vagy cím keresése";
+
+/* The message shown when a form could not be submitted. */
+"Finish editing failed." = "í_Finish editing failed_______________________ő.";
+
+/* The message shown when a form could not be 
+submitted with additional details. */
+"Finish editing failed.\n%@" = "í_Finish editing failed_______________________ő.\ní_%@_____ő";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Részarány az él mentén";
@@ -351,6 +390,9 @@ AR experience. */
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "Új nyomkövetés";
+
+/* A label indicating that no associations are available for the popup element. */
+"No Associations" = "í_No Associations________________ő";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Nincsenek könyvjelzők";
@@ -432,8 +474,8 @@ chosen utility network trace configuration. */
 chosen utility network trace configuration. */
 "Please set at least 2 starting locations." = "Kérjük, állítson be legalább 2 kezdőpontot.";
 
-/* An error message shown when a popup cannot be displayed. The
-variable provides additional data. */
+/* An error message shown when a popup cannot be displayed.
+The variable provides additional data. */
 "Popup evaluation failed: %@" = "A felugró ablak kiértékelése sikertelen: %@";
 
 /* The status text when a map area is ready to download. */
@@ -444,6 +486,9 @@ variable provides additional data. */
 
 /* A label for a button to refresh map area content. */
 "Refresh" = "Frissítés";
+
+/* A label for a button to remove a map area download. */
+"Remove Download" = "í_Remove Download________________ő";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Átnevezés";
@@ -468,6 +513,12 @@ current visible extent of the map or scene. */
 /* Rooms (Level of Detail) */
 "Rooms" = "Szobák";
 
+/* Finish editing the feature form. */
+"Save" = "í_Save_________ő";
+
+/* A label for a button to save edits. */
+"Save Edits" = "í_Save Edits_____________________ő";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Keresési lekérdezés";
 
@@ -489,6 +540,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "Beállítások";
+
+/* A label for a button to show all the association results. */
+"Show all" = "í_Show all_________________ő";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Webhelyek";
@@ -550,6 +604,9 @@ match the spatial reference of the map. */
 /* A label indicating the chosen file was invalid. */
 "The certificate file was invalid." = "A tanúsítványfájl érvénytelen.";
 
+/* The title shown when the feature form failed to save. */
+"The form wasn't submitted" = "í_The form wasn't submitted__________________________ő";
+
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "A térkép nem rendelkezik térbeli referenciával.";
 
@@ -578,8 +635,14 @@ to be imported as an attachment. */
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "Ehhez a térképhez nincsenek térképterületek. A kezdéshez koppintson az alábbi gombra.";
 
+/* A label for a text entry field that allows the user to filter a list of association results by title. */
+"Title" = "í_Title___________ő";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "Ma";
+
+/* Text indicating the total count of association results. */
+"Total: %lld" = "í_Total: %lld____________ő";
 
 /* Town (Level of Detail) */
 "Town" = "Kisváros";
@@ -608,8 +671,16 @@ to be imported as an attachment. */
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
 "Unsupported Value" = "Nem támogatott érték";
 
+/* A message explaining that unsaved edits will be
+lost if the user continues to dismiss the form
+without saving. */
+"Updates to the form will be lost." = "í_Updates to the form will be lost__________________ő.";
+
 /* A label in reference to a credential username. */
 "Username" = "Felhasználónév";
+
+/* A label indicating the feature form has validation errors. */
+"Validation Errors" = "í_Validation Errors__________________ő";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Érték";
@@ -652,6 +723,11 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* World (Small) (Level of Detail) */
 "World (Small)" = "Világ (kicsi)";
+
+/* A message explaining that the indicated number
+of validation errors must be resolved before
+saving the feature form. */
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "í_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________ő.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
