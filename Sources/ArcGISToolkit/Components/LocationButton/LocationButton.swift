@@ -56,7 +56,7 @@ extension LocationButton {
         let autoPanOptions: Array<LocationDisplay.AutoPanMode>
         
         /// A Boolean value indicating if we cycle through the auto pan modes on tap.
-        var cycleThroughAutoPanOnTapIsEnabled = true
+        var tapBehavior: TapBehavior = .cycleThroughAutoPanModes
         
         /// The next auto pan mode to be used when cycling through auto pan modes.
         var nextCycledAutoPanMode: LocationDisplay.AutoPanMode {
@@ -124,18 +124,21 @@ extension LocationButton {
                     // If there were no options specified then set it to off
                     // if the status is started.
                     .stop
-                } else if cycleThroughAutoPanOnTapIsEnabled {
-                    .autoPanCycle
                 } else {
-                    // If the datasource is started then decide what to do based
-                    // on the autopan mode.
-                    switch autoPanMode {
-                    case .off:
-                        // If autopan is off, then set it to the last selected autopan mode.
-                        .autoPanOn
-                    default:
-                        // Otherwise set it to off.
-                        .autoPanOff
+                    switch tapBehavior {
+                    case .cycleThroughAutoPanModes:
+                        .autoPanCycle
+                    case .toggleLastSelectedAutoPanMode:
+                        // If the datasource is started then decide what to do based
+                        // on the autopan mode.
+                        switch autoPanMode {
+                        case .off:
+                            // If autopan is off, then set it to the last selected autopan mode.
+                            .autoPanOn
+                        default:
+                            // Otherwise set it to off.
+                            .autoPanOff
+                        }
                     }
                 }
             case .starting, .stopping:
@@ -250,6 +253,8 @@ public struct LocationButton: View {
     @MainActor
     @ViewBuilder
     private func contextMenuContent() -> some View {
+        // Only show context menu if autopan options are not empty and the
+        // status of the location display is started.
         if !model.autoPanOptions.isEmpty && model.status == .started {
             if model.autoPanOptions.count > 1 {
                 Section("Autopan") {
@@ -271,6 +276,32 @@ public struct LocationButton: View {
                 Label("Hide Location", systemImage: "location.slash")
             }
         }
+    }
+}
+
+extension LocationButton {
+    /// The method by which auto-pan mode can be selected.
+    public enum TapBehavior {
+        /// Cycle through the specified auto-pan modes on tap of the button.
+        /// The user can also access the context menu to select the auto-pan mode.
+        /// If there are no auto-pan options then the location display is
+        /// toggled on/off with a tap and the context menu is not shown on a
+        /// long press.
+        /// This is the default.
+        case cycleThroughAutoPanModes
+        /// A tap will toggle auto-pan mode between off and the last selected
+        /// auto-pan mode.
+        /// The user can only change the auto-pan mode through the context menu.
+        /// If there are no auto-pan options then the location display is
+        /// toggled on/off with a tap and the context menu is not shown on a
+        /// long press.
+        case toggleLastSelectedAutoPanMode
+    }
+    
+    /// Sets the tap behavior on the location button.
+    public func tapBehavior(_ tapBehavior: TapBehavior) -> LocationButton {
+        model.tapBehavior = tapBehavior
+        return self
     }
 }
 
