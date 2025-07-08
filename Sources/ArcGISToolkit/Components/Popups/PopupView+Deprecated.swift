@@ -19,7 +19,7 @@ public extension PopupView /* Deprecated */ {
     /// Specifies the visibility of the popup header.
     /// - Parameter visibility: The preferred visibility of the popup header.
     /// - Attention: Deprecated at 200.8.
-    @available(*, deprecated, message: "Use 'closeButton(_:)' to specify the close button visibility instead.")
+    @available(*, deprecated, message: "Use 'init(root:isPresented:)' to control the close button visibility instead.")
     func header(_ visibility: Visibility) -> Self {
         return self
     }
@@ -31,10 +31,8 @@ public extension PopupView /* Deprecated */ {
     /// - Parameter newShowCloseButton: The new value.
     /// - Returns: A new `PopupView`.
     /// - Attention: Deprecated at 200.7.
-    @available(*, deprecated, message: "Use 'closeButton(_:)' instead.")
+    @available(*, deprecated, message: "Use 'init(root:isPresented:)' to control the close button visibility instead.")
     func showCloseButton(_ newShowCloseButton: Bool) -> Self {
-        var copy = self
-        copy.closeButtonVisibility = newShowCloseButton ? .visible : .hidden
-        return copy
+        return self
     }
 }

@@ -67,9 +67,6 @@ public struct PopupView: View {
     /// A binding to a Boolean value that determines whether the view is presented.
     private let isPresented: Binding<Bool>?
     
-    /// The visibility of the close button.
-    var closeButtonVisibility: Visibility = .automatic
-    
     /// The closure to perform when a new popup is shown in the navigation stack.
     var onPopupChanged: ((Popup) -> Void)?
     
@@ -86,7 +83,6 @@ public struct PopupView: View {
         NavigationStack {
             EmbeddedPopupView(popup: popup)
         }
-        .environment(\.popupCloseButtonVisibility, closeButtonVisibility)
         .environment(\.isPresented, isPresented)
         .onPreferenceChange(PresentedPopupPreferenceKey.self) { wrappedPopup in
             guard let wrappedPopup else { return }
@@ -95,21 +91,7 @@ public struct PopupView: View {
     }
 }
 
-extension EnvironmentValues {
-    /// The visibility of the popup view's close button.
-    @Entry var popupCloseButtonVisibility: Visibility = .automatic
-}
-
 public extension PopupView {
-    /// Sets the visibility of the close button on the popup view.
-    /// - Parameter visibility: The visibility of the close button.
-    /// - Since: 200.8
-    func closeButton(_ visibility: Visibility) -> Self {
-        var copy = self
-        copy.closeButtonVisibility = visibility
-        return copy
-    }
-    
     /// Sets a closure to perform when a new popup is shown in the view.
     ///
     /// This can happen when navigating through the associations in a `UtilityAssociationsPopupElement`.
