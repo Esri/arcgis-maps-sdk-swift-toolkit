@@ -234,10 +234,9 @@ extension ComboBoxInput {
     }
     
     private func updateValueAndEvaluateExpressions(_ value: CodedValue?) {
-        if element.formattedValue != value?.name {
-            element.updateValue(value?.code)
-            internalFeatureFormViewModel.evaluateExpressions()
-        }
+        guard value?.name != element.formattedValue else { return }
+        element.updateValue(value?.code)
+        internalFeatureFormViewModel.evaluateExpressions()
     }
 }
 
