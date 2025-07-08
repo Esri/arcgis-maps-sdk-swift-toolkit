@@ -60,10 +60,9 @@ struct TextInput: View {
     var body: some View {
         textWriter
             .onChange(of: text) {
-                if element.formattedValue != text {
-                    element.convertAndUpdateValue(text)
-                    internalFeatureFormViewModel.evaluateExpressions()
-                }
+                guard text != element.formattedValue else { return }
+                element.convertAndUpdateValue(text)
+                internalFeatureFormViewModel.evaluateExpressions()
             }
             .onTapGesture {
                 if element.isMultiline {
