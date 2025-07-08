@@ -24,7 +24,6 @@ struct ExamplesApp: App {
     }
     
     init() {
-        #warning("You must set your API Key or request that the user signs in with an ArcGIS account")
         /*
          Use of ArcGIS location services, such as basemap styles, geocoding, and routing services, requires either user authentication or API key authentication. For more information see https://developers.arcgis.com/documentation/security-and-authentication/types-of-authentication/ or https://developers.arcgis.com/swift/security-and-authentication/.
          1) User authentication: Allows users with an ArcGIS account to sign into an application and access secure services.
@@ -35,7 +34,6 @@ struct ExamplesApp: App {
          
         Production deployment of applications built with the ArcGIS Maps SDK for Swift requires that you license your app. For more information see https://developers.arcgis.com/swift/license-and-deployment/.
          */
-        // Uncomment the following line to access ArcGIS location services using an API key.
-//         ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
+        ArcGISEnvironment.apiKey = .development
     }
 }

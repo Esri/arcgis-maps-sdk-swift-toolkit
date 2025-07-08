@@ -104,6 +104,7 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
     var isDownloaded: Bool { status.isDownloaded }
     var allowsDownload: Bool { status.allowsDownload }
     var dismissMetadataViewOnDelete: Bool { false }
+    var removeDownloadButtonText: LocalizedStringResource { .removeDownload }
     
     func startDownload() {
         Task { await downloadPreplannedMapArea() }
@@ -130,12 +131,10 @@ extension PreplannedMapModel: OfflineMapAreaListItemInfo {
         switch status {
         case .notLoaded, .loading, .packaged, .downloaded, .downloading:
             ""
-        case .loadFailure, .mmpkLoadFailure, .downloadFailure:
+        case .loadFailure, .packageFailure, .mmpkLoadFailure, .downloadFailure:
             "exclamationmark.circle"
         case .packaging:
             "clock.badge.xmark"
-        case .packageFailure:
-            "exclamationmark.circle"
         }
     }
     

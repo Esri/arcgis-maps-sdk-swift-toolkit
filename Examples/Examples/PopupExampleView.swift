@@ -25,9 +25,6 @@ struct PopupExampleView: View {
         return Map(item: portalItem)
     }
     
-    /// The height of the map view's attribution bar.
-    @State private var attributionBarHeight: CGFloat = 0
-    
     /// The `Map` displayed in the `MapView`.
     @State private var map = makeMap()
     
@@ -42,15 +39,9 @@ struct PopupExampleView: View {
     /// A Boolean value specifying whether the popup view should be shown or not.
     @State private var showPopup = false
     
-    /// The detent value specifying the initial `FloatingPanelDetent`.  Defaults to "full".
-    @State private var floatingPanelDetent: FloatingPanelDetent = .full
-    
     var body: some View {
         MapViewReader { proxy in
             MapView(map: map)
-                .onAttributionBarHeightChanged {
-                    attributionBarHeight = $0
-                }
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
@@ -63,15 +54,13 @@ struct PopupExampleView: View {
                     ).first
                     popup = identifyResult?.popups.first
                 }
-                .floatingPanel(
-                    attributionBarHeight: attributionBarHeight,
-                    selectedDetent: $floatingPanelDetent,
-                    horizontalAlignment: .leading,
-                    isPresented: $showPopup
-                ) { [popup] in
+                .sheet(isPresented: $showPopup) { [popup] in
                     PopupView(popup: popup!, isPresented: $showPopup)
-                        .padding()
                 }
         }
     }
+}
+
+#Preview {
+    PopupExampleView()
 }
