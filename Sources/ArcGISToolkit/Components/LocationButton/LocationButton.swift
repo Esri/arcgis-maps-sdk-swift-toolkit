@@ -49,6 +49,7 @@ extension LocationButton {
         @Published var buttonIsDisabled: Bool = true
         
         /// The last selected autopan mode by the user.
+        /// This is used when not cycling through auto pan on tap.
         var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode
         
         /// The auto pan options that the user can choose from the context menu of the button.
@@ -221,13 +222,7 @@ public struct LocationButton: View {
             buttonLabel()
                 .padding(8)
         }
-        .contextMenu(
-            ContextMenu {
-                if !model.autoPanOptions.isEmpty {
-                    contextMenuContent()
-                }
-            }
-        )
+        .contextMenu(ContextMenu { contextMenuContent() })
         .disabled(model.buttonIsDisabled)
         .task { await model.observeStatus() }
         .task { await model.observeAutoPanMode() }
@@ -255,7 +250,7 @@ public struct LocationButton: View {
     @MainActor
     @ViewBuilder
     private func contextMenuContent() -> some View {
-        if model.status == .started {
+        if !model.autoPanOptions.isEmpty && model.status == .started {
             if model.autoPanOptions.count > 1 {
                 Section("Autopan") {
                     ForEach(model.autoPanOptions, id: \.self) { autoPanMode in
@@ -345,8 +340,6 @@ private extension CLLocationManager {
 
 private extension Map {
    static func openStreetMap() -> Map {
-       let map = Map(spatialReference: .webMercator)
-       map.addOperationalLayer(OpenStreetMapLayer())
-       return map
+       Map(basemap: .init(baseLayer: OpenStreetMapLayer()))
     }
 }
