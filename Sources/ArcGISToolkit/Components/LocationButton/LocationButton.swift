@@ -70,38 +70,19 @@ extension LocationButton {
             return autoPanOptions[nextIndex]
         }
         
-//        /// Creates a location button model with a location display.
-//        /// - Parameter locationDisplay: The location display that the button will control.
-//        /// - Parameter autoPanOptions: The auto pan options that will be selectable by the user.
-//        init(
-//            locationDisplay: LocationDisplay,
-//            autoPanOptions: Set<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
-//        ) {
-//            self.locationDisplay = locationDisplay
-//            self.autoPanMode = locationDisplay.autoPanMode
-//            self.autoPanOptions = LocationDisplay.AutoPanMode.orderedOptions.filter { autoPanOptions.contains($0) }
-//            if autoPanOptions.isEmpty || (autoPanOptions.count == 1 && autoPanOptions.first == .off) {
-//                lastSelectedAutoPanMode = .off
-//            } else {
-//                lastSelectedAutoPanMode = self.autoPanOptions
-//                    .filter { $0 != .off }
-//                    .first
-//                ?? .recenter
-//            }
-//        }
-        
         /// Creates a location button model with a location display.
         /// - Parameter locationDisplay: The location display that the button will control.
         /// - Parameter autoPanOptions: The auto pan options that will be selectable by the user.
         init(
             locationDisplay: LocationDisplay,
-            autoPanOptions: Array<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
+            autoPanOptions: Array<LocationDisplay.AutoPanMode> = [.recenter, .compassNavigation, .navigation, .off]
         ) {
             self.locationDisplay = locationDisplay
             self.autoPanMode = locationDisplay.autoPanMode
-            self.autoPanOptions = autoPanOptions.unique() // LocationDisplay.AutoPanMode.orderedOptions.filter { autoPanOptions.contains($0) }
-            let nonOffAutoPanOptions = autoPanOptions.filter { $0 != .off }
-            lastSelectedAutoPanMode = nonOffAutoPanOptions.first ?? .off
+            self.autoPanOptions = autoPanOptions.unique()
+//            let nonOffAutoPanOptions = autoPanOptions.filter { $0 != .off }
+//            lastSelectedAutoPanMode = nonOffAutoPanOptions.first ?? .off
+            lastSelectedAutoPanMode = autoPanOptions.first ?? .off
         }
         
         /// Observe the status of the location display datasource.
@@ -140,7 +121,7 @@ extension LocationButton {
                 .start
             case .started:
                 if nonOffAutoPanOptions.isEmpty {
-                    // If there were no options specified then set it to off
+                    // If there were no non-off options specified then set it to off
                     // if the status is started.
                     .stop
                 } else {
@@ -234,7 +215,7 @@ public struct LocationButton: View {
     /// - Parameter autoPanOptions: The auto pan options that are available for the user to choose.
     public init(
         locationDisplay: LocationDisplay,
-        autoPanOptions: Array<LocationDisplay.AutoPanMode> = [.off, .recenter, .compassNavigation, .navigation]
+        autoPanOptions: Array<LocationDisplay.AutoPanMode> = [.recenter, .compassNavigation, .navigation, .off]
     ) {
         _model = .init(wrappedValue: .init(locationDisplay: locationDisplay, autoPanOptions: autoPanOptions))
     }
@@ -274,10 +255,11 @@ public struct LocationButton: View {
     @MainActor
     @ViewBuilder
     private func contextMenuContent() -> some View {
-        // Only show context menu if autopan options are not empty and the
+        // Only show context menu if non-off autopan options are not empty and the
         // status of the location display is started.
         if !model.nonOffAutoPanOptions.isEmpty && model.status == .started {
             Section("Autopan") {
+                // Show auto-pan off button at the top of the menu.
                 if model.autoPanOptions.contains(.off) {
                     Button {
                         model.select(autoPanMode: .off)
@@ -288,6 +270,7 @@ public struct LocationButton: View {
                         )
                     }
                 }
+                // Show the rest of the auto-pan options.
                 ForEach(model.nonOffAutoPanOptions, id: \.self) { autoPanMode in
                     Button {
                         model.select(autoPanMode: autoPanMode)
@@ -335,9 +318,6 @@ extension LocationButton {
 }
 
 private extension LocationDisplay.AutoPanMode {
-    /// The options that will appear in the picker, in order.
-    static let orderedOptions: [Self] = [.off, .recenter, .compassNavigation, .navigation]
-    
     /// The label that should appear in the picker.
     var pickerText: String {
         switch self {
