@@ -23,9 +23,6 @@ struct DateTimeInput: View {
     /// The current date selection.
     @State private var date: Date?
     
-    /// The formatted version of the element's current value.
-    @State private var formattedValue = ""
-    
     /// A Boolean value indicating whether a new date (or time is being set).
     @State private var isEditing = false
     
@@ -58,16 +55,10 @@ struct DateTimeInput: View {
             .onChange(of: date) {
                 guard date != element.value as? Date else { return }
                 element.updateValue(date)
-                formattedValue = element.formattedValue
                 internalFeatureFormViewModel.evaluateExpressions()
             }
-            .onValueChange(of: element) { newValue, newFormattedValue in
-                if newFormattedValue.isEmpty {
-                    date = nil
-                } else {
-                    date = newValue as? Date
-                }
-                formattedValue = newFormattedValue
+            .onValueChange(of: element) { newValue, _ in
+                date = newValue as? Date
             }
             .onIsRequiredChange(of: element) { newIsRequired in
                 isRequired = newIsRequired
@@ -91,9 +82,19 @@ struct DateTimeInput: View {
     /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
-            Text(!formattedValue.isEmpty ? formattedValue : .noValue)
-                .accessibilityIdentifier("\(element.label) Value")
-                .foregroundStyle(displayColor)
+            Group {
+                if let date {
+                    if input.includesTime {
+                        Text(date, format: .dateTime)
+                    } else {
+                        Text(date, format: .dateTime.day().month().year())
+                    }
+                } else {
+                    Text(String.noValue)
+                }
+            }
+            .accessibilityIdentifier("\(element.label) Value")
+            .foregroundStyle(displayColor)
             
             Spacer()
             
