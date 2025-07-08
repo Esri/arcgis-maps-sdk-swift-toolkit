@@ -95,42 +95,4 @@ class InternalFeatureFormViewModel {
             _ = try? await featureForm.evaluateExpressions()
         }
     }
-    
-    /// Updates the value of a field in the feature associated with the given
-    /// field form element to the given value. Expressions are then evaluated
-    /// when the update is not suppressed.
-    ///
-    /// The update is suppressed when the provided value matches the element's
-    /// current value. This can happen when edits are discarded and the element
-    /// receives the original value and attempts to send it back to core.
-    /// - Parameters:
-    ///   - element: The field form element to update.
-    ///   - value: The new value of the element.
-    @MainActor
-    func updateValueAndEvaluateExpressions(_ element: FieldFormElement, _ value: (any Sendable)?) {
-        switch element.input {
-        case is ComboBoxFormInput,
-            is RadioButtonsFormInput where element.formattedValue != (value as? CodedValue)?.name:
-            element.updateValue((value as? CodedValue)?.code)
-        case is DateTimePickerFormInput where element.value as? Date != value as? Date:
-            element.updateValue(value)
-        case let switchInput as SwitchFormInput:
-            if let isOn = value as? Bool,
-               (isOn && element.formattedValue == switchInput.offValue.name)
-                || (!isOn && element.formattedValue == switchInput.onValue.name) {
-                element.updateValue(isOn ? switchInput.onValue.code : switchInput.offValue.code)
-            } else {
-                return
-            }
-        default:
-            if element.input.supportsKeyboard,
-               let stringValue = value as? String,
-               element.formattedValue != stringValue {
-                element.convertAndUpdateValue(stringValue)
-            } else {
-                return
-            }
-        }
-        evaluateExpressions()
-    }
 }

@@ -81,7 +81,11 @@ struct SwitchInput: View {
             // loads, depending if the initial value matches the default value
             // defined for `isOn`.
             .onChange(of: isOn) {
-                internalFeatureFormViewModel.updateValueAndEvaluateExpressions(element, isOn)
+                if (isOn && element.formattedValue == input.offValue.name)
+                    || (!isOn && element.formattedValue == input.onValue.name) {
+                    element.updateValue(isOn ? input.onValue.code : input.offValue.code)
+                    internalFeatureFormViewModel.evaluateExpressions()
+                }
             }
             // onValueChange(of:action:) is a good signal for user interaction
             // because it will reliably run when the view first loads and each

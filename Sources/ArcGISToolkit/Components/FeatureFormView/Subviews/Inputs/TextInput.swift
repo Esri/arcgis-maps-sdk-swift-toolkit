@@ -49,7 +49,9 @@ struct TextInput: View {
     ///   - element: The input's parent element.
     init(element: FieldFormElement) {
         precondition(
-            element.input.supportsKeyboard,
+            element.input is TextAreaFormInput
+            || element.input is TextBoxFormInput
+            || element.input is BarcodeScannerFormInput,
             "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self), \(TextBoxFormInput.self) or \(BarcodeScannerFormInput.self)."
         )
         self.element = element
@@ -58,7 +60,10 @@ struct TextInput: View {
     var body: some View {
         textWriter
             .onChange(of: text) {
-                internalFeatureFormViewModel.updateValueAndEvaluateExpressions(element, text)
+                if element.formattedValue != text {
+                    element.convertAndUpdateValue(text)
+                    internalFeatureFormViewModel.evaluateExpressions()
+                }
             }
             .onTapGesture {
                 if element.isMultiline {
@@ -234,7 +239,10 @@ private extension TextInput {
 #endif
             }
             RepresentedUITextView(initialText: text) { text in
-                internalFeatureFormViewModel.updateValueAndEvaluateExpressions(element, text)
+                if element.formattedValue != text {
+                    element.convertAndUpdateValue(text)
+                    internalFeatureFormViewModel.evaluateExpressions()
+                }
             } onTextViewDidEndEditing: { text in
                 self.text = text
             }
