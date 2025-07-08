@@ -528,7 +528,7 @@ final class PopupViewTests: XCTestCase {
             associationResultDescription.exists,
             "The result description doesn't exist."
         )
-        XCTAssertEqual(associationResultDescription.firstMatch.label, "Containment Visible: False")
+        XCTAssertEqual(associationResultDescription.firstMatch.label, "Content")
     }
     
     /// Verifies that the `UtilityAssociationsPopupElement.displayCount` is respected.
