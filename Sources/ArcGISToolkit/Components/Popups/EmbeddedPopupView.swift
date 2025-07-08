@@ -92,6 +92,9 @@ extension EmbeddedPopupView {
     private struct PopupElementList: View {
         let popupElements: [PopupElement]
         
+        /// A Boolean value indicating whether the deprecated Popup View initializer was used.
+        @Environment(\.popupDeprecatedInitializerWasUsed) private var deprecatedInitializerWasUsed
+        
         var body: some View {
             List(popupElements) { popupElement in
                 Group {
@@ -105,7 +108,9 @@ extension EmbeddedPopupView {
                     case let popupElement as TextPopupElement:
                         TextPopupElementView(popupElement: popupElement)
                     case let popupElement as UtilityAssociationsPopupElement:
-                        UtilityAssociationsPopupElementView(popupElement: popupElement)
+                        if !deprecatedInitializerWasUsed {
+                            UtilityAssociationsPopupElementView(popupElement: popupElement)
+                        }
                     default:
                         EmptyView()
                     }
