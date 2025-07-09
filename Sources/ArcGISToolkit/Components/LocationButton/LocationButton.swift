@@ -65,6 +65,7 @@ public struct LocationButton: View {
         .disabled(model.buttonIsDisabled)
         .task { await model.observeStatus() }
         .task { await model.observeAutoPanMode() }
+        .animation(.default, value: model.autoPanMode)
     }
     
     @ViewBuilder
