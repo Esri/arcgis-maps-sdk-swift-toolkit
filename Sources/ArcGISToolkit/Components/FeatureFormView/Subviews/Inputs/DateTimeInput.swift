@@ -82,19 +82,9 @@ struct DateTimeInput: View {
     /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
-            Group {
-                if let date {
-                    if input.includesTime {
-                        Text(date, format: .dateTime)
-                    } else {
-                        Text(date, format: .dateTime.day().month().year())
-                    }
-                } else {
-                    Text(String.noValue)
-                }
-            }
-            .accessibilityIdentifier("\(element.label) Value")
-            .foregroundStyle(displayColor)
+            formattedDate
+                .accessibilityIdentifier("\(element.label) Value")
+                .foregroundStyle(displayColor)
             
             Spacer()
             
@@ -132,6 +122,19 @@ struct DateTimeInput: View {
                 isEditing.toggle()
                 internalFeatureFormViewModel.focusedElement = isEditing ? element : nil
             }
+        }
+    }
+    
+    /// The system formatted version of the element's current date.
+    var formattedDate: Text {
+        if let date {
+            if input.includesTime {
+                Text(date, format: .dateTime)
+            } else {
+                Text(date, format: .dateTime.day().month().year())
+            }
+        } else {
+            Text(String.noValue)
         }
     }
     
