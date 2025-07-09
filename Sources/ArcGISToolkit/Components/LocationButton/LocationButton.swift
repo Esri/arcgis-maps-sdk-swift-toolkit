@@ -31,28 +31,10 @@ extension LocationButton {
         }
         
         /// The autopan mode of the location display.
-        @Published private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off {
-            didSet {
-                // Update last selected auto pan mode if it changes out from under
-                // us.
-                if autoPanMode != locationDisplay.autoPanMode {
-                    locationDisplay.autoPanMode = autoPanMode
-                    if autoPanMode != .off {
-                        // Do not update the last selected autopan mode here if
-                        // `off` was selected by the user.
-                        lastSelectedAutoPanMode = autoPanMode
-                    }
-                }
-            }
-        }
+        @Published private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off
         
         /// A value indicating whether the button is disabled.
         @Published var buttonIsDisabled: Bool = true
-        
-        /// The last selected autopan mode by the user.
-        /// This is used when not cycling through auto pan on tap.
-        private(set) var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode = .off
-        
         
         /// Backing variable for the auto pan options that are selectable by the user.
         @Published private var _autoPanOptions: [LocationDisplay.AutoPanMode] = [
@@ -62,14 +44,7 @@ extension LocationButton {
         /// The auto pan options that are selectable by the user.
         var autoPanOptions: [LocationDisplay.AutoPanMode] {
             get { _autoPanOptions }
-            set {
-                _autoPanOptions = newValue.unique()
-                // Update last selected auto pan mode if the options change.
-                if !_autoPanOptions.contains(lastSelectedAutoPanMode) {
-                    lastSelectedAutoPanMode = _autoPanOptions.first ?? .off
-                    print("-- lsap: \(lastSelectedAutoPanMode)")
-                }
-            }
+            set { _autoPanOptions = newValue.unique() }
         }
         
         /// The auto-pan options that are not "off".
@@ -125,11 +100,6 @@ extension LocationButton {
                 return
             }
             locationDisplay.autoPanMode = autoPanMode
-            if autoPanMode != .off {
-                // Do not update the last selected autopan mode here if
-                // `off` was selected by the user.
-                lastSelectedAutoPanMode = autoPanMode
-            }
         }
         
         /// The action that should occur if the button is pressed.
@@ -165,7 +135,7 @@ extension LocationButton {
                 Task {
                     // Start the datasource, set initial auto pan mode.
                     do {
-                        locationDisplay.autoPanMode = lastSelectedAutoPanMode
+                        locationDisplay.autoPanMode = autoPanOptions.first ?? .off
                         try await locationDisplay.dataSource.start()
                     } catch {
                         print("Error starting location display: \(error)")
