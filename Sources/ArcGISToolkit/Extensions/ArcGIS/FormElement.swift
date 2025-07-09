@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import ArcGIS
-import SwiftUI
 
 extension FormElement {
     /// The id of the element.
