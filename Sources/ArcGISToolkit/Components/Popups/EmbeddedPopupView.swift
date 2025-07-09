@@ -131,7 +131,7 @@ extension EmbeddedPopupView {
                 .listRowInsets(.toolkitDefault)
 #endif
             }
-            .listStyle(.plain)
+            .listStyle(.inset)
         }
     }
 }
