@@ -472,8 +472,6 @@ final class FeatureFormViewTests: XCTestCase {
             )
         )
         
-        XCTExpectFailure("Time should not be included. Apollo #355")
-        
         XCTAssertEqual(
             fieldValue.label,
             localDate?.formatted(.dateTime.day().month().year())
