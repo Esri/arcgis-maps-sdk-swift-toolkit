@@ -24,18 +24,13 @@ struct ReadOnlyInput: View {
     let element: FieldFormElement
     
     var body: some View {
-        Group {
-            if element.isMultiline {
+        if element.isMultiline {
+            modifiedText
+                .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+            ScrollView(.horizontal) {
                 modifiedText
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                ScrollView(.horizontal) {
-                    modifiedText
-                }
             }
-        }
-        .onValueChange(of: element) { _, _ in
-            id = UUID()
         }
     }
     
@@ -49,6 +44,9 @@ struct ReadOnlyInput: View {
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .textSelection(.enabled)
+            .onValueChange(of: element) { _, _ in
+                id = UUID()
+            }
     }
     
     /// The text to display for the element's current value.
