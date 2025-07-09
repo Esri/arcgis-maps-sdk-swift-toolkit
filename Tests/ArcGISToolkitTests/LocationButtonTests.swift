@@ -37,7 +37,7 @@ struct LocationButtonTests {
     
     @Test
     @MainActor
-    func testAutoPanOptions() async throws {
+    func testAutoPanOptions() {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
         let model = LocationButton.Model(locationDisplay: locationDisplay)
         
@@ -69,6 +69,28 @@ struct LocationButtonTests {
         // Still `.recenter` because the location display hasn't been started.
         #expect(model.nextAutoPanMode == .recenter)
     }
+    
+    @Test
+    @MainActor
+    func testNextAutoPanMode() async throws {
+        let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
+        let model = LocationButton.Model(locationDisplay: locationDisplay)
+        
+        model.autoPanOptions = [.off]
+        model.select(autoPanMode: .off)
+        #expect(model.nextAutoPanMode == .off)
+        
+        // Test circular cycle.
+        model.autoPanOptions = [.off, .off, .recenter, .off]
+        model.select(autoPanMode: .recenter)
+        #expect(model.nextAutoPanMode == .off)
+        
+        // Test when `.off` is last
+        model.autoPanOptions = [.recenter, .compassNavigation, .navigation, .off]
+        model.select(autoPanMode: .compassNavigation)
+        #expect(model.nextAutoPanMode == .navigation)
+    }
+    
 //    @Test
 //    @MainActor
 //    func testSelectAutoPanMode() {
