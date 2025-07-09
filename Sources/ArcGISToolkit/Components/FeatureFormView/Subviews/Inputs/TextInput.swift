@@ -203,15 +203,15 @@ private extension TextInput {
     var positiveNegativeButton: some View {
         Button {
             switch value {
-            case var value as Float16:
+            case let value as Float16:
                 updateValueAndEvaluateExpressions(value * -1)
-            case var value as Float32:
+            case let value as Float32:
                 updateValueAndEvaluateExpressions(value * -1)
-            case var value as Int16:
+            case let value as Int16:
                 updateValueAndEvaluateExpressions(value * -1)
-            case var value as Int32:
+            case let value as Int32:
                 updateValueAndEvaluateExpressions(value * -1)
-            case var value as Int64:
+            case let value as Int64:
                 updateValueAndEvaluateExpressions(value * -1)
             default:
                 break
