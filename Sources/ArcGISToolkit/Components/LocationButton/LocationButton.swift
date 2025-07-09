@@ -16,161 +16,6 @@ import ArcGIS
 import CoreLocation
 import SwiftUI
 
-extension LocationButton {
-    /// The model for the location button.
-    @MainActor
-    class Model: ObservableObject {
-        /// The location display which the button controls.
-        let locationDisplay: LocationDisplay
-        
-        /// The current status of the location display's datasource.
-        @Published var status: LocationDataSource.Status = .stopped {
-            didSet {
-                buttonIsDisabled = status == .starting || status == .stopping
-            }
-        }
-        
-        /// The autopan mode of the location display.
-        @Published private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off
-        
-        /// A value indicating whether the button is disabled.
-        @Published var buttonIsDisabled: Bool = true
-        
-        /// Backing variable for the auto pan options that are selectable by the user.
-        @Published private var _autoPanOptions: [LocationDisplay.AutoPanMode] = [
-            .recenter, .compassNavigation, .navigation, .off
-        ]
-        
-        /// The auto pan options that are selectable by the user.
-        var autoPanOptions: [LocationDisplay.AutoPanMode] {
-            get { _autoPanOptions }
-            set { _autoPanOptions = newValue.unique() }
-        }
-        
-        /// The auto-pan options that are not "off".
-        var nonOffAutoPanOptions: Array<LocationDisplay.AutoPanMode> {
-            autoPanOptions.filter { $0 != .off }
-        }
-        
-        /// The context menu auto-pan mode options.
-        /// The context menu options will be in the order the user specifies
-        /// except the off option will be first.
-        var contextMenuAutoPanOptions: [LocationDisplay.AutoPanMode] {
-            return if autoPanOptions.contains(.off) {
-                [.off] + nonOffAutoPanOptions
-            } else {
-                autoPanOptions
-            }
-        }
-        
-        /// The next auto pan mode to be used when cycling through auto pan modes.
-        private var nextCycledAutoPanMode: LocationDisplay.AutoPanMode {
-            guard let index = autoPanOptions.firstIndex(of: autoPanMode) else { return autoPanOptions.first ?? .off }
-            let nextIndex = index.advanced(by: 1) == autoPanOptions.endIndex ? autoPanOptions.startIndex : index.advanced(by: 1)
-            return autoPanOptions[nextIndex]
-        }
-        
-        /// Creates a location button model with a location display.
-        /// - Parameter locationDisplay: The location display that the button will control.
-        init(
-            locationDisplay: LocationDisplay
-        ) {
-            self.locationDisplay = locationDisplay
-            self.autoPanMode = locationDisplay.autoPanMode
-        }
-        
-        /// Observe the status of the location display datasource.
-        func observeStatus() async {
-            for await status in locationDisplay.dataSource.$status {
-                self.status = status
-            }
-        }
-        
-        /// Observe the auto pan mode of the location display.
-        func observeAutoPanMode() async {
-            for await autoPanMode in locationDisplay.$autoPanMode {
-                self.autoPanMode = autoPanMode
-            }
-        }
-        
-        /// Selects a new auto pan mode.
-        /// - Parameter autoPanMode: The new auto pan mode.
-        func select(autoPanMode: LocationDisplay.AutoPanMode) {
-            guard autoPanMode != locationDisplay.autoPanMode else {
-                return
-            }
-            locationDisplay.autoPanMode = autoPanMode
-        }
-        
-        /// The action that should occur if the button is pressed.
-        var actionForButtonPress: ButtonAction? {
-            // Decide the button behavior based on the status.
-            switch status {
-            case .stopped, .failedToStart:
-                .start
-            case .started:
-                if nonOffAutoPanOptions.isEmpty {
-                    // If there were no non-off options specified then set it to off
-                    // if the status is started.
-                    .stop
-                } else {
-                    .autoPanCycle
-                }
-            case .starting, .stopping:
-                nil
-            @unknown default:
-                fatalError()
-            }
-        }
-        
-        /// This should be called when the button is pressed.
-        func buttonAction() {
-            switch actionForButtonPress {
-            case .start:
-                // If the datasource is a system location datasource, then request authorization.
-                if locationDisplay.dataSource is SystemLocationDataSource,
-                   CLLocationManager.shared.authorizationStatus == .notDetermined {
-                    CLLocationManager.shared.requestWhenInUseAuthorization()
-                }
-                Task {
-                    // Start the datasource, set initial auto pan mode.
-                    do {
-                        locationDisplay.autoPanMode = autoPanOptions.first ?? .off
-                        try await locationDisplay.dataSource.start()
-                    } catch {
-                        print("Error starting location display: \(error)")
-                    }
-                }
-            case .stop:
-                Task { await hideLocation() }
-            case .autoPanCycle:
-                // Need to use the select method here so that last selected mode
-                // gets set.
-                select(autoPanMode: nextCycledAutoPanMode)
-            case .none:
-                return
-            }
-        }
-        
-        /// Hides the location.
-        func hideLocation() async {
-            await locationDisplay.dataSource.stop()
-        }
-    }
-}
-
-extension LocationButton.Model {
-    /// The type of actions that can take place when the button is pressed.
-    enum ButtonAction {
-        /// Start the location display.
-        case start
-        /// Stop the location display.
-        case stop
-        /// Set the next auto pan mode for cycling through.
-        case autoPanCycle
-    }
-}
-
 /// A button that allows a user to show their location on a map view.
 /// Gives the user a variety of options to set the auto pan mode or stop the
 /// location datasource.
@@ -260,12 +105,180 @@ public struct LocationButton: View {
             
             Button {
                 Task {
-                    await model.hideLocation()
+                    await model.hideLocationDisplay()
                 }
             } label: {
                 Label("Hide Location", systemImage: "location.slash")
             }
         }
+    }
+}
+
+extension LocationButton {
+    /// The model for the location button.
+    @MainActor
+    class Model: ObservableObject {
+        /// The location display which the button controls.
+        let locationDisplay: LocationDisplay
+        
+        /// The current status of the location display's datasource.
+        @Published var status: LocationDataSource.Status = .stopped {
+            didSet {
+                buttonIsDisabled = status == .starting || status == .stopping
+            }
+        }
+        
+        /// The autopan mode of the location display.
+        @Published private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off
+        
+        /// A value indicating whether the button is disabled.
+        @Published var buttonIsDisabled: Bool = true
+        
+        /// Backing variable for the auto pan options that are selectable by the user.
+        @Published private var _autoPanOptions: [LocationDisplay.AutoPanMode] = [
+            .recenter, .compassNavigation, .navigation, .off
+        ]
+        
+        /// The auto pan options that are selectable by the user.
+        var autoPanOptions: [LocationDisplay.AutoPanMode] {
+            get { _autoPanOptions }
+            set {
+                _autoPanOptions = newValue.unique()
+                // TODO: if current mode not in new options, then switch it out
+                if !_autoPanOptions.contains(autoPanMode) {
+                    select(autoPanMode: initialAutoPanMode)
+                }
+            }
+        }
+        
+        /// The auto-pan options that are not `.off`.
+        var nonOffAutoPanOptions: [LocationDisplay.AutoPanMode] {
+            autoPanOptions.filter { $0 != .off }
+        }
+        
+        /// The initail auto-pan mode to be used.
+        var initialAutoPanMode: LocationDisplay.AutoPanMode {
+            autoPanOptions.first ?? .off
+        }
+        
+        /// The context menu auto-pan mode options.
+        /// The context menu options will be in the order the user specifies
+        /// except the off option will be first.
+        var contextMenuAutoPanOptions: [LocationDisplay.AutoPanMode] {
+            return if autoPanOptions.contains(.off) {
+                [.off] + nonOffAutoPanOptions
+            } else {
+                autoPanOptions
+            }
+        }
+        
+        /// The next auto pan mode to be used when cycling through auto pan modes.
+        private var nextAutoPanMode: LocationDisplay.AutoPanMode {
+            guard let index = autoPanOptions.firstIndex(of: autoPanMode) else { return initialAutoPanMode }
+            let nextIndex = index.advanced(by: 1) == autoPanOptions.endIndex ? autoPanOptions.startIndex : index.advanced(by: 1)
+            return autoPanOptions[nextIndex]
+        }
+        
+        /// Creates a location button model with a location display.
+        /// - Parameter locationDisplay: The location display that the button will control.
+        init(
+            locationDisplay: LocationDisplay
+        ) {
+            self.locationDisplay = locationDisplay
+            self.autoPanMode = locationDisplay.autoPanMode
+        }
+        
+        /// Observe the status of the location display datasource.
+        func observeStatus() async {
+            for await status in locationDisplay.dataSource.$status {
+                self.status = status
+            }
+        }
+        
+        /// Observe the auto pan mode of the location display.
+        func observeAutoPanMode() async {
+            for await autoPanMode in locationDisplay.$autoPanMode {
+                self.autoPanMode = autoPanMode
+            }
+        }
+        
+        /// Selects a new auto pan mode.
+        /// - Parameter autoPanMode: The new auto pan mode.
+        func select(autoPanMode: LocationDisplay.AutoPanMode) {
+            guard autoPanMode != locationDisplay.autoPanMode else {
+                return
+            }
+            // Set the mode on the location display, the model observes changes
+            // on the location display and will update accordingly.
+            locationDisplay.autoPanMode = autoPanMode
+        }
+        
+        /// The action that should occur if the button is pressed.
+        var actionForButtonPress: ButtonAction? {
+            // Decide the button behavior based on the status.
+            switch status {
+            case .stopped, .failedToStart:
+                .start
+            case .started:
+                if nonOffAutoPanOptions.isEmpty {
+                    // If there were no non-off options specified then set it to off
+                    // if the status is started.
+                    .stop
+                } else {
+                    .autoPanCycle
+                }
+            case .starting, .stopping:
+                nil
+            @unknown default:
+                fatalError()
+            }
+        }
+        
+        /// This should be called when the button is pressed.
+        func buttonAction() {
+            switch actionForButtonPress {
+            case .start:
+                // If the datasource is a system location datasource, then request authorization.
+                if locationDisplay.dataSource is SystemLocationDataSource,
+                   CLLocationManager.shared.authorizationStatus == .notDetermined {
+                    CLLocationManager.shared.requestWhenInUseAuthorization()
+                }
+                Task {
+                    // Start the datasource, set initial auto pan mode.
+                    do {
+                        locationDisplay.autoPanMode = initialAutoPanMode
+                        try await locationDisplay.dataSource.start()
+                    } catch {
+                        print("Error starting location display: \(error)")
+                    }
+                }
+            case .stop:
+                Task { await hideLocationDisplay() }
+            case .autoPanCycle:
+                // Need to use the select method here so that last selected mode
+                // gets set.
+                select(autoPanMode: nextAutoPanMode)
+            case .none:
+                return
+            }
+        }
+        
+        /// Hides the location display.
+        func hideLocationDisplay() async {
+            await locationDisplay.dataSource.stop()
+        }
+    }
+}
+
+extension LocationButton.Model {
+    /// The type of actions that can take place when the button is pressed.
+    enum ButtonAction {
+        /// Start the location display.
+        case start
+        /// Stop the location display.
+        case stop
+        /// Set the next auto pan mode for cycling through.
+        case autoPanCycle
     }
 }
 
