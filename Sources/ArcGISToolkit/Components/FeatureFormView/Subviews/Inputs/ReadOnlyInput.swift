@@ -20,36 +20,53 @@ struct ReadOnlyInput: View {
     /// The formatted version of the element's current value.
     @State private var formattedValue = ""
     
+    /// The element's current value.
+    @State private var value: Any?
+    
     /// The element the input belongs to.
     let element: FieldFormElement
     
     var body: some View {
         Group {
             if element.isMultiline {
-                textReader
+                modifiedText
                     .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 ScrollView(.horizontal) {
-                    textReader
+                    modifiedText
                 }
             }
         }
-        .onAppear {
-            formattedValue = element.formattedValue
-        }
-        .onValueChange(of: element) { _, newFormattedValue in
+        .onValueChange(of: element) { newValue, newFormattedValue in
             formattedValue = newFormattedValue
+            value = newValue
         }
     }
     
-    /// The body of the text input when the element is non-editable.
-    var textReader: some View {
-        Text(formattedValue.isEmpty ? "--" : formattedValue)
+    /// The text to display for the element's current value with read-only modifiers.
+    var modifiedText: some View {
+        text
             .accessibilityIdentifier("\(element.label) Read Only Input")
             .fixedSize(horizontal: false, vertical: true)
             .lineLimit(element.isMultiline ? nil : 1)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .textSelection(.enabled)
+    }
+    
+    /// The text to display for the element's current value.
+    var text: Text {
+        switch value {
+        case nil:
+            Text(verbatim: "--")
+        case let value as Date:
+            if let input = element.input as? DateTimePickerFormInput, input.includesTime {
+                Text(value, format: .dateTime)
+            } else {
+                Text(value, format: .dateTime.day().month().year())
+            }
+        default:
+            Text(formattedValue)
+        }
     }
 }
