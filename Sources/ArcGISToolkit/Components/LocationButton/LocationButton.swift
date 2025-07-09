@@ -141,7 +141,7 @@ extension LocationButton {
             get { _autoPanOptions }
             set {
                 _autoPanOptions = newValue.unique()
-                // TODO: if current mode not in new options, then switch it out
+                // If current mode not in new options, then switch it out.
                 if !_autoPanOptions.contains(autoPanMode) {
                     select(autoPanMode: initialAutoPanMode)
                 }
@@ -170,7 +170,7 @@ extension LocationButton {
         }
         
         /// The next auto pan mode to be used when cycling through auto pan modes.
-        private var nextAutoPanMode: LocationDisplay.AutoPanMode {
+        var nextAutoPanMode: LocationDisplay.AutoPanMode {
             guard let index = autoPanOptions.firstIndex(of: autoPanMode) else { return initialAutoPanMode }
             let nextIndex = index.advanced(by: 1) == autoPanOptions.endIndex ? autoPanOptions.startIndex : index.advanced(by: 1)
             return autoPanOptions[nextIndex]

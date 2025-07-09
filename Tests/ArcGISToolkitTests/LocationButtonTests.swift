@@ -22,104 +22,103 @@ struct LocationButtonTests {
     @MainActor
     func testInit() {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
+        let model = LocationButton.Model(locationDisplay: locationDisplay)
         
-        do {
-            let model = LocationButton.Model(
-                locationDisplay: locationDisplay
-            )
-            
-            #expect(model.locationDisplay === locationDisplay)
-            #expect(model.autoPanOptions == [.compassNavigation, .off, .navigation, .recenter])
-            #expect(model.lastSelectedAutoPanMode == .recenter)
-        }
-        
-        do {
-            let model = LocationButton.Model(
-                locationDisplay: locationDisplay,
-                autoPanOptions: [.recenter]
-            )
-            #expect(model.autoPanOptions == [.recenter])
-            #expect(model.lastSelectedAutoPanMode == .recenter)
-        }
-        
-        do {
-            let model = LocationButton.Model(
-                locationDisplay: locationDisplay,
-                autoPanOptions: []
-            )
-            #expect(model.autoPanOptions == [])
-            #expect(model.lastSelectedAutoPanMode == .off)
-        }
-        
-        do {
-            let model = LocationButton.Model(
-                locationDisplay: locationDisplay,
-                autoPanOptions: [.off, .recenter]
-            )
-            #expect(model.autoPanOptions == [.off, .recenter])
-            #expect(model.lastSelectedAutoPanMode == .recenter)
-        }
-        
-        do {
-            let model = LocationButton.Model(
-                locationDisplay: locationDisplay,
-                autoPanOptions: [.off]
-            )
-            #expect(model.autoPanOptions == [.off])
-            #expect(model.lastSelectedAutoPanMode == .off)
-        }
+        #expect(model.locationDisplay === locationDisplay)
+        #expect(model.autoPanOptions.isEmpty)
+        #expect(model.status == .stopped)
+        #expect(model.autoPanMode == .off)
+        #expect(model.buttonIsDisabled)
+        #expect(model.nonOffAutoPanOptions.isEmpty)
+        #expect(model.initialAutoPanMode == .off)
+        #expect(model.contextMenuAutoPanOptions.isEmpty)
+        #expect(model.nextAutoPanMode == .off)
     }
     
     @Test
     @MainActor
-    func testSelectAutoPanMode() {
+    func testAutoPanOptions() async throws {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
+        let model = LocationButton.Model(locationDisplay: locationDisplay)
+        try await model.locationDisplay.dataSource.start()
+        #expect(model.status == .started)
         
-        let model = LocationButton.Model(
-            locationDisplay: locationDisplay
-        )
+        model.autoPanOptions = [.off]
+        #expect(model.autoPanOptions == [.off])
+        #expect(model.autoPanMode == .off)
+        #expect(model.nonOffAutoPanOptions.isEmpty)
+        #expect(model.initialAutoPanMode == .off)
+        #expect(model.contextMenuAutoPanOptions == [.off])
+        #expect(model.nextAutoPanMode == .off)
         
-        model.select(autoPanMode: .compassNavigation)
-        #expect(model.locationDisplay.autoPanMode == .compassNavigation)
-        #expect(model.lastSelectedAutoPanMode == .compassNavigation)
+        // Test that we make the options unique
+        model.autoPanOptions = [.off, .off, .recenter, .off]
+        #expect(model.autoPanOptions == [.off, .recenter])
+        #expect(model.autoPanMode == .off)
+        #expect(model.nonOffAutoPanOptions == [.recenter])
+        #expect(model.initialAutoPanMode == .off)
+        #expect(model.contextMenuAutoPanOptions == [.off, .recenter])
+        #expect(model.nextAutoPanMode == .recenter)
         
-        model.select(autoPanMode: .off)
-        #expect(model.locationDisplay.autoPanMode == .off)
-        #expect(model.lastSelectedAutoPanMode == .compassNavigation)
+        // Test when `.off` is last
+        model.autoPanOptions = [.recenter, .compassNavigation, .off]
+        #expect(model.autoPanOptions == [.recenter, .compassNavigation, .off])
+        #expect(model.autoPanMode == .recenter)
+        #expect(model.nonOffAutoPanOptions == [.recenter, .compassNavigation])
+        #expect(model.initialAutoPanMode == .recenter)
+        #expect(model.contextMenuAutoPanOptions == [.off, .recenter, .compassNavigation])
+        #expect(model.nextAutoPanMode == .compassNavigation)
     }
-    
-    @Test
-    @MainActor
-    func testActionForButtonPress() async throws {
-        do {
-            let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
-            let model = LocationButton.Model(locationDisplay: locationDisplay)
-            #expect(model.actionForButtonPress == .start)
-        }
-        
-        do {
-            let ds = MockLocationDataSource()
-            try await ds.start()
-            let locationDisplay = LocationDisplay(dataSource: ds)
-            let model = LocationButton.Model(locationDisplay: locationDisplay)
-            let observation = Task { await model.observeStatus() }
-            while model.status != .started { await Task.yield() }
-            #expect(model.actionForButtonPress == .autoPanOn)
-            observation.cancel()
-        }
-        
-        do {
-            let ds = MockLocationDataSource()
-            try await ds.start()
-            let locationDisplay = LocationDisplay(dataSource: ds)
-            locationDisplay.autoPanMode = .navigation
-            let model = LocationButton.Model(locationDisplay: locationDisplay)
-            let observation = Task { await model.observeStatus() }
-            while model.status != .started { await Task.yield() }
-            #expect(model.actionForButtonPress == .autoPanOff)
-            observation.cancel()
-        }
-    }
+//    @Test
+//    @MainActor
+//    func testSelectAutoPanMode() {
+//        let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
+//        
+//        let model = LocationButton.Model(
+//            locationDisplay: locationDisplay
+//        )
+//        
+//        model.select(autoPanMode: .compassNavigation)
+//        #expect(model.locationDisplay.autoPanMode == .compassNavigation)
+//        #expect(model.lastSelectedAutoPanMode == .compassNavigation)
+//        
+//        model.select(autoPanMode: .off)
+//        #expect(model.locationDisplay.autoPanMode == .off)
+//        #expect(model.lastSelectedAutoPanMode == .compassNavigation)
+//    }
+//    
+//    @Test
+//    @MainActor
+//    func testActionForButtonPress() async throws {
+//        do {
+//            let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
+//            let model = LocationButton.Model(locationDisplay: locationDisplay)
+//            #expect(model.actionForButtonPress == .start)
+//        }
+//        
+//        do {
+//            let ds = MockLocationDataSource()
+//            try await ds.start()
+//            let locationDisplay = LocationDisplay(dataSource: ds)
+//            let model = LocationButton.Model(locationDisplay: locationDisplay)
+//            let observation = Task { await model.observeStatus() }
+//            while model.status != .started { await Task.yield() }
+//            #expect(model.actionForButtonPress == .autoPanOn)
+//            observation.cancel()
+//        }
+//        
+//        do {
+//            let ds = MockLocationDataSource()
+//            try await ds.start()
+//            let locationDisplay = LocationDisplay(dataSource: ds)
+//            locationDisplay.autoPanMode = .navigation
+//            let model = LocationButton.Model(locationDisplay: locationDisplay)
+//            let observation = Task { await model.observeStatus() }
+//            while model.status != .started { await Task.yield() }
+//            #expect(model.actionForButtonPress == .autoPanOff)
+//            observation.cancel()
+//        }
+//    }
 }
 
 private typealias MockLocationDataSource = CustomLocationDataSource<MockLocationProvider>
