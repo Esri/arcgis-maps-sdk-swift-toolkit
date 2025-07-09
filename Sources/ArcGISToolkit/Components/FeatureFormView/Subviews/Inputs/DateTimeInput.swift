@@ -130,13 +130,14 @@ struct DateTimeInput: View {
     /// The system formatted version of the element's current date.
     var formattedDate: Text {
         if let date {
-            if input.includesTime {
-                Text(date, format: .dateTime)
+            let format: Date.FormatStyle = if input.includesTime {
+                .dateTime
             } else {
-                Text(date, format: .dateTime.day().month().year())
+                .dateTime.day().month().year()
             }
+            return Text(date, format: format)
         } else {
-            Text(String.noValue)
+            return Text(String.noValue)
         }
     }
     
