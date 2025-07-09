@@ -58,7 +58,9 @@ struct DateTimeInput: View {
                 internalFeatureFormViewModel.evaluateExpressions()
             }
             .onValueChange(of: element) { newValue, _ in
-                date = newValue as? Date
+                let newDate = newValue as? Date
+                guard newDate != date else { return }
+                date = newDate
             }
             .onIsRequiredChange(of: element) { newIsRequired in
                 isRequired = newIsRequired
