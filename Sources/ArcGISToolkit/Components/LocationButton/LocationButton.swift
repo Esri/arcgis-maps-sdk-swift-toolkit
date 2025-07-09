@@ -335,14 +335,12 @@ private extension CLLocationManager {
                     .background(.thinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 
-                if #available(iOS 17.0, *) {
-                    LocationButton(locationDisplay: LocationDisplay(dataSource: SystemLocationDataSource()))
-                        .imageScale(.large)
-                        .bold()
-                        .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.circle)
-                        .shadow(radius: 8)
-                }
+                LocationButton(locationDisplay: LocationDisplay(dataSource: SystemLocationDataSource()))
+                    .imageScale(.large)
+                    .bold()
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.circle)
+                    .shadow(radius: 8)
             }
             .padding()
         }
