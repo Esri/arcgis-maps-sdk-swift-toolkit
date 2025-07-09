@@ -33,7 +33,8 @@ extension LocationButton {
         /// The autopan mode of the location display.
         @Published var autoPanMode: LocationDisplay.AutoPanMode = .off {
             didSet {
-                // Update last selected auto pan mode if the user selected one.
+                // Update last selected auto pan mode if it changes out from under
+                // us.
                 if autoPanMode != locationDisplay.autoPanMode {
                     locationDisplay.autoPanMode = autoPanMode
                     if autoPanMode != .off {
