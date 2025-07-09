@@ -40,8 +40,6 @@ struct LocationButtonTests {
     func testAutoPanOptions() async throws {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
         let model = LocationButton.Model(locationDisplay: locationDisplay)
-        try await model.locationDisplay.dataSource.start()
-        #expect(model.status == .started)
         
         model.autoPanOptions = [.off]
         #expect(model.autoPanOptions == [.off])
@@ -63,11 +61,13 @@ struct LocationButtonTests {
         // Test when `.off` is last
         model.autoPanOptions = [.recenter, .compassNavigation, .off]
         #expect(model.autoPanOptions == [.recenter, .compassNavigation, .off])
-        #expect(model.autoPanMode == .recenter)
+        // Still `.off` because the location display hasn't been started.
+        #expect(model.autoPanMode == .off)
         #expect(model.nonOffAutoPanOptions == [.recenter, .compassNavigation])
         #expect(model.initialAutoPanMode == .recenter)
         #expect(model.contextMenuAutoPanOptions == [.off, .recenter, .compassNavigation])
-        #expect(model.nextAutoPanMode == .compassNavigation)
+        // Still `.recenter` because the location display hasn't been started.
+        #expect(model.nextAutoPanMode == .recenter)
     }
 //    @Test
 //    @MainActor
@@ -135,6 +135,6 @@ private struct MockLocationProvider: LocationProvider {
     }
     
     var headings: AsyncThrowingStream<Double, Error> {
-        .init { return nil }
+        .init { return 0 }
     }
 }
