@@ -60,8 +60,7 @@ public struct LocationButton: View {
             buttonLabel()
                 .padding(8)
         }
-        .onAppear { model.autoPanOptions = autoPanOptions }
-        .onChange(of: autoPanOptions) { model.autoPanOptions = autoPanOptions }
+        .onChange(of: autoPanOptions, initial: true) { model.autoPanOptions = autoPanOptions }
         .contextMenu(ContextMenu { contextMenuContent() })
         .disabled(model.buttonIsDisabled)
         .task { await model.observeStatus() }
@@ -135,9 +134,7 @@ extension LocationButton {
         @Published var buttonIsDisabled: Bool = true
         
         /// Backing variable for the auto pan options that are selectable by the user.
-        @Published private var _autoPanOptions: [LocationDisplay.AutoPanMode] = [
-            .recenter, .compassNavigation, .navigation, .off
-        ]
+        @Published private var _autoPanOptions: [LocationDisplay.AutoPanMode] = []
         
         /// The auto pan options that are selectable by the user.
         var autoPanOptions: [LocationDisplay.AutoPanMode] {
