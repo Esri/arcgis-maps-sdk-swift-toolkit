@@ -204,15 +204,15 @@ private extension TextInput {
         Button {
             switch value {
             case var value as Float16:
-                value *= -1
+                updateValueAndEvaluateExpressions(value * -1)
             case var value as Float32:
-                value *= -1
+                updateValueAndEvaluateExpressions(value * -1)
             case var value as Int16:
-                value *= -1
+                updateValueAndEvaluateExpressions(value * -1)
             case var value as Int32:
-                value *= -1
+                updateValueAndEvaluateExpressions(value * -1)
             case var value as Int64:
-                value *= -1
+                updateValueAndEvaluateExpressions(value * -1)
             default:
                 break
             }
@@ -309,7 +309,7 @@ private extension TextInput {
         Binding {
             value as? String ?? element.formattedValue
         } set: { newValue in
-            value = newValue
+            updateValueAndEvaluateExpressions(newValue)
         }
     }
 }
