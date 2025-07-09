@@ -29,7 +29,7 @@ import SwiftUI
 /// the context menu is not shown on a long press.
 public struct LocationButton: View {
     /// The model backing this view.
-    @StateObject private var model: Model
+    @State private var model: Model
     
     /// The auto-pan options available for the user to set.
     private var autoPanOptions: [LocationDisplay.AutoPanMode] = [
@@ -38,10 +38,8 @@ public struct LocationButton: View {
     
     /// Creates a location button with a location display.
     /// - Parameter locationDisplay: The location display that the button will control.
-    public init(
-        locationDisplay: LocationDisplay
-    ) {
-        _model = .init(wrappedValue: .init(locationDisplay: locationDisplay))
+    public init(locationDisplay: LocationDisplay) {
+        _model = .init(initialValue: Model(locationDisplay: locationDisplay))
     }
     
     /// Sets the auto-pan options that are available for the user to select.
@@ -117,25 +115,26 @@ public struct LocationButton: View {
 extension LocationButton {
     /// The model for the location button.
     @MainActor
-    class Model: ObservableObject {
+    @Observable
+    class Model {
         /// The location display which the button controls.
         let locationDisplay: LocationDisplay
         
         /// The current status of the location display's datasource.
-        @Published var status: LocationDataSource.Status = .stopped {
+        var status: LocationDataSource.Status = .stopped {
             didSet {
                 buttonIsDisabled = status == .starting || status == .stopping
             }
         }
         
         /// The autopan mode of the location display.
-        @Published private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off
+        private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off
         
         /// A value indicating whether the button is disabled.
-        @Published var buttonIsDisabled: Bool = true
+        var buttonIsDisabled: Bool = true
         
         /// Backing variable for the auto pan options that are selectable by the user.
-        @Published private var _autoPanOptions: [LocationDisplay.AutoPanMode] = []
+        private var _autoPanOptions: [LocationDisplay.AutoPanMode] = []
         
         /// The auto pan options that are selectable by the user.
         var autoPanOptions: [LocationDisplay.AutoPanMode] {
