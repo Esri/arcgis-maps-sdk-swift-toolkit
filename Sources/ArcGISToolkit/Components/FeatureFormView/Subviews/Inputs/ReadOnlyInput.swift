@@ -17,11 +17,8 @@ import SwiftUI
 
 /// A view for a read only field form element.
 struct ReadOnlyInput: View {
-    /// The formatted version of the element's current value.
-    @State private var formattedValue = ""
-    
-    /// The element's current value.
-    @State private var value: Any?
+    /// An identity for the displayed text. A new identity is generated when the element's value changes.
+    @State private var id = UUID()
     
     /// The element the input belongs to.
     let element: FieldFormElement
@@ -37,9 +34,8 @@ struct ReadOnlyInput: View {
                 }
             }
         }
-        .onValueChange(of: element) { newValue, newFormattedValue in
-            formattedValue = newFormattedValue
-            value = newValue
+        .onValueChange(of: element) { _, _ in
+            id = UUID()
         }
     }
     
@@ -48,6 +44,7 @@ struct ReadOnlyInput: View {
         text
             .accessibilityIdentifier("\(element.label) Read Only Input")
             .fixedSize(horizontal: false, vertical: true)
+            .id(id)
             .lineLimit(element.isMultiline ? nil : 1)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
@@ -56,17 +53,17 @@ struct ReadOnlyInput: View {
     
     /// The text to display for the element's current value.
     var text: Text {
-        switch value {
+        switch element.value {
         case nil:
             Text(verbatim: "--")
-        case let value as Date:
+        case let date as Date:
             if let input = element.input as? DateTimePickerFormInput, input.includesTime {
-                Text(value, format: .dateTime)
+                Text(date, format: .dateTime)
             } else {
-                Text(value, format: .dateTime.day().month().year())
+                Text(date, format: .dateTime.day().month().year())
             }
         default:
-            Text(formattedValue)
+            Text(element.formattedValue)
         }
     }
 }
