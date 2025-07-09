@@ -31,7 +31,7 @@ extension LocationButton {
         }
         
         /// The autopan mode of the location display.
-        @Published var autoPanMode: LocationDisplay.AutoPanMode = .off {
+        @Published private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off {
             didSet {
                 // Update last selected auto pan mode if it changes out from under
                 // us.
@@ -51,10 +51,26 @@ extension LocationButton {
         
         /// The last selected autopan mode by the user.
         /// This is used when not cycling through auto pan on tap.
-        private(set) var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode
+        private(set) var lastSelectedAutoPanMode: LocationDisplay.AutoPanMode = .off
         
-        /// The auto pan options that the user can choose from the context menu of the button.
-        let autoPanOptions: Array<LocationDisplay.AutoPanMode>
+        
+        /// Backing variable for the auto pan options that are selectable by the user.
+        @Published private var _autoPanOptions: [LocationDisplay.AutoPanMode] = [
+            .recenter, .compassNavigation, .navigation, .off
+        ]
+        
+        /// The auto pan options that are selectable by the user.
+        var autoPanOptions: [LocationDisplay.AutoPanMode] {
+            get { _autoPanOptions }
+            set {
+                _autoPanOptions = newValue.unique()
+                // Update last selected auto pan mode if the options change.
+                if !_autoPanOptions.contains(lastSelectedAutoPanMode) {
+                    lastSelectedAutoPanMode = _autoPanOptions.first ?? .off
+                    print("-- lsap: \(lastSelectedAutoPanMode)")
+                }
+            }
+        }
         
         /// The auto-pan options that are not "off".
         var nonOffAutoPanOptions: Array<LocationDisplay.AutoPanMode> {
@@ -74,22 +90,18 @@ extension LocationButton {
         
         /// The next auto pan mode to be used when cycling through auto pan modes.
         private var nextCycledAutoPanMode: LocationDisplay.AutoPanMode {
-            guard let index = autoPanOptions.firstIndex(of: autoPanMode) else { return .off }
+            guard let index = autoPanOptions.firstIndex(of: autoPanMode) else { return autoPanOptions.first ?? .off }
             let nextIndex = index.advanced(by: 1) == autoPanOptions.endIndex ? autoPanOptions.startIndex : index.advanced(by: 1)
             return autoPanOptions[nextIndex]
         }
         
         /// Creates a location button model with a location display.
         /// - Parameter locationDisplay: The location display that the button will control.
-        /// - Parameter autoPanOptions: The auto pan options that will be selectable by the user.
         init(
-            locationDisplay: LocationDisplay,
-            autoPanOptions: Array<LocationDisplay.AutoPanMode> = [.recenter, .compassNavigation, .navigation, .off]
+            locationDisplay: LocationDisplay
         ) {
             self.locationDisplay = locationDisplay
             self.autoPanMode = locationDisplay.autoPanMode
-            self.autoPanOptions = autoPanOptions.unique()
-            lastSelectedAutoPanMode = autoPanOptions.first ?? .off
         }
         
         /// Observe the status of the location display datasource.
@@ -161,10 +173,6 @@ extension LocationButton {
                 }
             case .stop:
                 Task { await hideLocation() }
-            case .autoPanOn:
-                locationDisplay.autoPanMode = lastSelectedAutoPanMode
-            case .autoPanOff:
-                locationDisplay.autoPanMode = .off
             case .autoPanCycle:
                 // Need to use the select method here so that last selected mode
                 // gets set.
@@ -188,10 +196,6 @@ extension LocationButton.Model {
         case start
         /// Stop the location display.
         case stop
-        /// Stop the auto pan of location display.
-        case autoPanOff
-        /// Set the last selected auto pan mode.
-        case autoPanOn
         /// Set the next auto pan mode for cycling through.
         case autoPanCycle
     }
@@ -209,16 +213,29 @@ extension LocationButton.Model {
 /// is `.off`, then the location display is toggled on/off with upon tap, and
 /// the context menu is not shown on a long press.
 public struct LocationButton: View {
+    /// The model backing this view.
     @StateObject private var model: Model
+    
+    /// The auto-pan options available for the user to set.
+    private var autoPanOptions: [LocationDisplay.AutoPanMode] = [
+        .recenter, .compassNavigation, .navigation, .off
+    ]
     
     /// Creates a location button with a location display.
     /// - Parameter locationDisplay: The location display that the button will control.
-    /// - Parameter autoPanOptions: The auto pan options that are available for the user to choose.
     public init(
-        locationDisplay: LocationDisplay,
-        autoPanOptions: Array<LocationDisplay.AutoPanMode> = [.recenter, .compassNavigation, .navigation, .off]
+        locationDisplay: LocationDisplay
     ) {
-        _model = .init(wrappedValue: .init(locationDisplay: locationDisplay, autoPanOptions: autoPanOptions))
+        _model = .init(wrappedValue: .init(locationDisplay: locationDisplay))
+    }
+    
+    /// Sets the auto-pan options that are available for the user to select.
+    /// - Parameter options: The auto-pan options that the user can cycle through.
+    /// - Returns: A new location button with the auto-pan options set.
+    public func autoPanOptions(_ options: [LocationDisplay.AutoPanMode]) -> Self {
+        var copy = self
+        copy.autoPanOptions = options
+        return copy
     }
     
     public var body: some View {
@@ -228,6 +245,8 @@ public struct LocationButton: View {
             buttonLabel()
                 .padding(8)
         }
+        .onAppear { model.autoPanOptions = autoPanOptions }
+        .onChange(of: autoPanOptions) { model.autoPanOptions = autoPanOptions }
         .contextMenu(ContextMenu { contextMenuContent() })
         .disabled(model.buttonIsDisabled)
         .task { await model.observeStatus() }
