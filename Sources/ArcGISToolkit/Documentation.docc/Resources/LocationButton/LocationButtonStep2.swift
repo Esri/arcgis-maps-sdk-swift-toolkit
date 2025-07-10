@@ -7,7 +7,6 @@ struct LocationButtonExampleView: View {
     
     @State private var locationDisplay = {
         let locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
-        locationDisplay.autoPanMode = .recenter
         locationDisplay.initialZoomScale = 40_000
         return locationDisplay
     }()
@@ -15,5 +14,6 @@ struct LocationButtonExampleView: View {
     var body: some View {
         MapView(map: map)
             .locationDisplay(locationDisplay)
+            .autoPanOptions([.recenter, .compassNavigation, .off])
     }
 }
