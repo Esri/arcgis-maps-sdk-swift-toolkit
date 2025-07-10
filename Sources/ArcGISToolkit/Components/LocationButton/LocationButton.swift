@@ -29,17 +29,20 @@ import SwiftUI
 /// the context menu is not shown on a long press.
 public struct LocationButton: View {
     /// The model backing this view.
-    @State private var model: Model
+    @State private var model = Model()
     
     /// The auto-pan options available for the user to set.
     private var autoPanOptions: [LocationDisplay.AutoPanMode] = [
         .recenter, .compassNavigation, .navigation, .off
     ]
     
+    /// The location display that the button controls.
+    let locationDisplay: LocationDisplay
+    
     /// Creates a location button with a location display.
     /// - Parameter locationDisplay: The location display that the button will control.
     public init(locationDisplay: LocationDisplay) {
-        _model = .init(initialValue: Model(locationDisplay: locationDisplay))
+        self.locationDisplay = locationDisplay
     }
     
     /// Sets the auto-pan options that are available for the user to select.
@@ -118,7 +121,15 @@ extension LocationButton {
     @Observable
     class Model {
         /// The location display which the button controls.
-        let locationDisplay: LocationDisplay
+        var locationDisplay: LocationDisplay? {
+            didSet {
+                guard let locationDisplay else { return }
+                autoPanMode = locationDisplay.autoPanMode
+            }
+        }
+        
+        init() {
+        }
         
         /// The current status of the location display's datasource.
         var status: LocationDataSource.Status = .stopped {
@@ -176,17 +187,9 @@ extension LocationButton {
             return autoPanOptions[nextIndex]
         }
         
-        /// Creates a location button model with a location display.
-        /// - Parameter locationDisplay: The location display that the button will control.
-        init(
-            locationDisplay: LocationDisplay
-        ) {
-            self.locationDisplay = locationDisplay
-            self.autoPanMode = locationDisplay.autoPanMode
-        }
-        
         /// Observe the status of the location display datasource.
         func observeStatus() async {
+            guard let locationDisplay else { return }
             for await status in locationDisplay.dataSource.$status {
                 self.status = status
             }
@@ -194,6 +197,7 @@ extension LocationButton {
         
         /// Observe the auto pan mode of the location display.
         func observeAutoPanMode() async {
+            guard let locationDisplay else { return }
             for await autoPanMode in locationDisplay.$autoPanMode {
                 self.autoPanMode = autoPanMode
             }
@@ -202,6 +206,8 @@ extension LocationButton {
         /// Selects a new auto pan mode.
         /// - Parameter autoPanMode: The new auto pan mode.
         func select(autoPanMode: LocationDisplay.AutoPanMode) {
+            guard let locationDisplay else { return }
+            
             guard autoPanMode != locationDisplay.autoPanMode else {
                 return
             }
@@ -233,6 +239,8 @@ extension LocationButton {
         
         /// This should be called when the button is pressed.
         func buttonAction() {
+            guard let locationDisplay else { return }
+            
             switch actionForButtonPress {
             case .start:
                 // If the datasource is a system location datasource, then request authorization.
@@ -262,6 +270,7 @@ extension LocationButton {
         
         /// Hides the location display.
         func hideLocationDisplay() async {
+            guard let locationDisplay else { return }
             await locationDisplay.dataSource.stop()
         }
     }
