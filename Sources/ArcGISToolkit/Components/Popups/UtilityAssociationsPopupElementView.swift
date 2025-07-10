@@ -140,7 +140,7 @@ private struct UtilityAssociationsFilterResultLink: View {
             List(filterResult.groupResults, id: \.id) { groupResult in
                 UtilityAssociationGroupResultView(groupResult: groupResult)
 #if targetEnvironment(macCatalyst)
-                    .listRowInsets(.toolkitDefault)
+                    .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
 #endif
             }
             .listStyle(.inset)
@@ -251,7 +251,7 @@ private struct SearchUtilityAssociationResultsView: View {
                 UtilityAssociationResultLabel(result: result)
             }
 #if targetEnvironment(macCatalyst)
-            .listRowInsets(.toolkitDefault)
+            .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
 #endif
         }
         .listStyle(.inset)

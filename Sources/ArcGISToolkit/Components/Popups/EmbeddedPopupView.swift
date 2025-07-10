@@ -128,7 +128,7 @@ extension EmbeddedPopupView {
                     }
                 }
 #if targetEnvironment(macCatalyst)
-                .listRowInsets(.toolkitDefault)
+                .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
 #endif
             }
             .listStyle(.inset)
