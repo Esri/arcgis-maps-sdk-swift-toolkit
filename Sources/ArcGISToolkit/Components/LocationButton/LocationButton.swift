@@ -146,13 +146,6 @@ extension LocationButton {
         }
     }
     
-    /// The next auto pan mode to be used when cycling through auto pan modes.
-    var nextAutoPanMode: LocationDisplay.AutoPanMode {
-        guard let index = autoPanOptions.firstIndex(of: autoPanMode) else { return initialAutoPanMode }
-        let nextIndex = index.advanced(by: 1) == autoPanOptions.endIndex ? autoPanOptions.startIndex : index.advanced(by: 1)
-        return autoPanOptions[nextIndex]
-    }
-    
     /// Observe the status of the location display datasource.
     func observeStatus() async {
         for await status in locationDisplay.dataSource.$status {
@@ -201,10 +194,17 @@ extension LocationButton {
         case .autoPanCycle:
             // Need to use the select method here so that last selected mode
             // gets set.
-            select(autoPanMode: nextAutoPanMode)
+            select(autoPanMode: nextAutoPanMode(current: autoPanMode, initial: initialAutoPanMode))
         case .none:
             return
         }
+    }
+    
+    /// The next auto pan mode to be used when cycling through auto pan modes.
+    func nextAutoPanMode(current: LocationDisplay.AutoPanMode, initial: LocationDisplay.AutoPanMode) -> LocationDisplay.AutoPanMode {
+        guard let index = autoPanOptions.firstIndex(of: current) else { return initial }
+        let nextIndex = index.advanced(by: 1) == autoPanOptions.endIndex ? autoPanOptions.startIndex : index.advanced(by: 1)
+        return autoPanOptions[nextIndex]
     }
     
     /// Hides the location display.
