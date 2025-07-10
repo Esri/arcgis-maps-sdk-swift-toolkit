@@ -29,7 +29,7 @@ struct LocationButtonTests {
         #expect(button.autoPanOptions == [.recenter, .compassNavigation, .navigation, .off])
         #expect(button.status == .stopped)
         #expect(button.autoPanMode == .off)
-        #expect(button.buttonIsDisabled)
+        #expect(!button.buttonIsDisabled)
         #expect(button.initialAutoPanMode == .recenter)
         #expect(button.contextMenuAutoPanOptions == [.off, .recenter, .compassNavigation, .navigation])
     }

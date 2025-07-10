@@ -31,17 +31,15 @@ public struct LocationButton: View {
     let locationDisplay: LocationDisplay
     
     /// The current status of the location display's datasource.
-    @State var status: LocationDataSource.Status = .stopped {
-        didSet {
-            buttonIsDisabled = status == .starting || status == .stopping
-        }
-    }
+    @State var status: LocationDataSource.Status = .stopped
     
     /// The autopan mode of the location display.
     @State var autoPanMode: LocationDisplay.AutoPanMode = .off
     
     /// A value indicating whether the button is disabled.
-    @State var buttonIsDisabled: Bool = true
+    var buttonIsDisabled: Bool {
+        status == .starting || status == .stopping
+    }
     
     /// Backing variable for the auto pan options that are selectable by the user.
     var autoPanOptions: [LocationDisplay.AutoPanMode] = [
