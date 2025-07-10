@@ -30,7 +30,6 @@ struct LocationButtonTests {
         #expect(button.status == .stopped)
         #expect(button.autoPanMode == .off)
         #expect(button.buttonIsDisabled)
-        #expect(button.nonOffAutoPanOptions == [.recenter, .compassNavigation, .navigation])
         #expect(button.initialAutoPanMode == .recenter)
         #expect(button.contextMenuAutoPanOptions == [.off, .recenter, .compassNavigation, .navigation])
         #expect(button.nextAutoPanMode == .recenter)
@@ -44,7 +43,6 @@ struct LocationButtonTests {
         
         button = button.autoPanOptions([.off])
         #expect(button.autoPanMode == .off)
-        #expect(button.nonOffAutoPanOptions.isEmpty)
         #expect(button.initialAutoPanMode == .off)
         #expect(button.contextMenuAutoPanOptions == [.off])
         #expect(button.nextAutoPanMode == .off)
@@ -53,7 +51,6 @@ struct LocationButtonTests {
         button = button.autoPanOptions([.off, .off, .recenter, .off])
         #expect(button.autoPanOptions == [.off, .recenter])
         #expect(button.autoPanMode == .off)
-        #expect(button.nonOffAutoPanOptions == [.recenter])
         #expect(button.initialAutoPanMode == .off)
         #expect(button.contextMenuAutoPanOptions == [.off, .recenter])
         #expect(button.nextAutoPanMode == .recenter)
@@ -63,7 +60,6 @@ struct LocationButtonTests {
         #expect(button.autoPanOptions == [.recenter, .compassNavigation, .off])
         // Still `.off` because the location display hasn't been started.
         #expect(button.autoPanMode == .off)
-        #expect(button.nonOffAutoPanOptions == [.recenter, .compassNavigation])
         #expect(button.initialAutoPanMode == .recenter)
         #expect(button.contextMenuAutoPanOptions == [.off, .recenter, .compassNavigation])
         // Still `.recenter` because the location display hasn't been started.

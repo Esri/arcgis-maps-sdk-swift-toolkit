@@ -43,7 +43,7 @@ struct LocationButtonExampleView: View {
             .overlay(alignment: .topTrailing) {
                 LocationButton(locationDisplay: locationDisplay)
                     //.autoPanOptions(autoPanOptions)
-                    .autoPanOptions([.recenter])
+                    .autoPanOptions([])
                     .padding(8)
                     .background(.thinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))

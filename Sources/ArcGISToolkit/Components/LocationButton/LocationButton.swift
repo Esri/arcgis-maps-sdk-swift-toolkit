@@ -105,9 +105,9 @@ public struct LocationButton: View {
     @MainActor
     @ViewBuilder
     private func contextMenuContent() -> some View {
-        // Only show context menu if non-off autopan options are not empty and the
+        // Only show context menu if there are 2 or more auto-pan options and
         // status of the location display is started.
-        if !nonOffAutoPanOptions.isEmpty && status == .started {
+        if autoPanOptions.count >= 2 && status == .started {
             Section("Autopan") {
                 ForEach(contextMenuAutoPanOptions, id: \.self) { autoPanMode in
                     Button {
@@ -130,11 +130,6 @@ public struct LocationButton: View {
 }
 
 extension LocationButton {
-    /// The auto-pan options that are not `.off`.
-    var nonOffAutoPanOptions: [LocationDisplay.AutoPanMode] {
-        autoPanOptions.filter { $0 != .off }
-    }
-    
     /// The initail auto-pan mode to be used.
     var initialAutoPanMode: LocationDisplay.AutoPanMode {
         autoPanOptions.first ?? .off
@@ -145,7 +140,7 @@ extension LocationButton {
     /// except the off option will be first.
     var contextMenuAutoPanOptions: [LocationDisplay.AutoPanMode] {
         return if autoPanOptions.contains(.off) {
-            [.off] + nonOffAutoPanOptions
+            [.off] + autoPanOptions.filter { $0 != .off }
         } else {
             autoPanOptions
         }
