@@ -21,7 +21,7 @@
             }
             
             @Step {
-                Add an overlay to the `MapView` with `LocationButton` as the content.
+                Add an overlay to the `MapView` with `LocationButton` as the content. Notice the view modifier that sets the auto-pan mode options you want the user to be able to select.
                 @Code(name: "LocationButtonExampleView.swift", file: LocationButtonStep3.swift) {
                     @Image(
                         source: LocationButtonComplete, 

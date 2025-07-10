@@ -14,9 +14,9 @@ struct LocationButtonExampleView: View {
     var body: some View {
         MapView(map: map)
             .locationDisplay(locationDisplay)
-            .autoPanOptions([.recenter, .compassNavigation, .off])
             .overlay(alignment: .topTrailing) {
                 LocationButton(locationDisplay: locationDisplay)
+                    .autoPanOptions([.recenter, .compassNavigation, .off])
                     .padding(8)
                     .background(.thinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))

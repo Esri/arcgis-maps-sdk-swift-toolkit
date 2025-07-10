@@ -14,6 +14,5 @@ struct LocationButtonExampleView: View {
     var body: some View {
         MapView(map: map)
             .locationDisplay(locationDisplay)
-            .autoPanOptions([.recenter, .compassNavigation, .off])
     }
 }
