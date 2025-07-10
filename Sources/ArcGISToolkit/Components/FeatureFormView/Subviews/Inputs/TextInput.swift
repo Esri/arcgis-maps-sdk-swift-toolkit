@@ -75,18 +75,51 @@ struct TextInput: View {
     }
 }
 
-private extension Formatter {
-    /// A number formatter which applies the decimal number style.
-    static var decimal: NumberFormatter {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .decimal
-        return numberFormatter
-    }
-}
-
 private extension TextInput {
-    func updateValueAndEvaluateExpressions<V>(_ newValue: V?) where V: Equatable, V: Sendable {
-        guard newValue != element.value as? V else { return }
+    func clearValueAndEvaluateExpressions() {
+        guard element.value != nil else { return }
+        element.updateValue(nil)
+        internalFeatureFormViewModel.evaluateExpressions()
+    }
+    
+    func updateValueAndEvaluateExpressions<T>(_ newValue: T?) where T: Numeric {
+        guard let newValue else {
+            clearValueAndEvaluateExpressions()
+            return
+        }
+        switch (element.fieldType, newValue) {
+        case (.float32, let newValue as Double):
+            guard let newValue = Float32(exactly: newValue),
+                  newValue != element.value as? Float32 else { return }
+            element.updateValue(newValue)
+        case (.float64, let newValue as Double):
+            guard let newValue = Float64(exactly: newValue),
+                  newValue != element.value as? Float64 else { return }
+            element.updateValue(newValue)
+        case (.int16, let newValue as Int):
+            guard let newValue = Int16(exactly: newValue),
+                  newValue != element.value as? Int16 else { return }
+            element.updateValue(newValue)
+        case (.int32, let newValue as Int):
+            guard let newValue = Int32(exactly: newValue),
+                  newValue != element.value as? Int32 else { return }
+            element.updateValue(newValue)
+        case (.int64, let newValue as Int):
+            guard let newValue = Int64(exactly: newValue),
+                  newValue != element.value as? Int64 else { return }
+            element.updateValue(newValue)
+        default:
+            return
+        }
+        internalFeatureFormViewModel.evaluateExpressions()
+    }
+    
+    func updateValueAndEvaluateExpressions(_ newValue: String?) {
+        guard let newValue else {
+            clearValueAndEvaluateExpressions()
+            return
+        }
+        guard newValue != element.value as? String else { return }
         element.updateValue(newValue)
         internalFeatureFormViewModel.evaluateExpressions()
     }
@@ -157,8 +190,7 @@ private extension TextInput {
                         internalFeatureFormViewModel.focusedElement = element
                         internalFeatureFormViewModel.focusedElement = nil
                     }
-                    element.updateValue(nil)
-                    internalFeatureFormViewModel.evaluateExpressions()
+                    clearValueAndEvaluateExpressions()
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
             }
@@ -203,16 +235,10 @@ private extension TextInput {
     var positiveNegativeButton: some View {
         Button {
             switch value {
-            case let value as Float16:
-                updateValueAndEvaluateExpressions(value * -1)
-            case let value as Float32:
-                updateValueAndEvaluateExpressions(value * -1)
-            case let value as Int16:
-                updateValueAndEvaluateExpressions(value * -1)
-            case let value as Int32:
-                updateValueAndEvaluateExpressions(value * -1)
-            case let value as Int64:
-                updateValueAndEvaluateExpressions(value * -1)
+            case let value as Double:
+                updateValueAndEvaluateExpressions(-value)
+            case let value as Int:
+                updateValueAndEvaluateExpressions(-value)
             default:
                 break
             }
@@ -225,53 +251,30 @@ private extension TextInput {
     @ViewBuilder
     var textField: some View {
         switch element.fieldType {
-        case .float32:
+        case .float32, .float64:
             TextField(
                 element.label,
-                value: Binding { element.value as? Float32 } set: { updateValueAndEvaluateExpressions($0) },
-                formatter: .decimal,
+                value: Binding { value as? Double } set: { updateValueAndEvaluateExpressions($0) },
+                format: .number.grouping(.never),
                 prompt: textFieldPrompt
             )
             .keyboardType(.decimalPad)
-        case .float64:
+        case .int16, .int32, .int64:
             TextField(
                 element.label,
-                value: Binding { element.value as? Float64 } set: { updateValueAndEvaluateExpressions($0) },
-                formatter: .decimal,
-                prompt: textFieldPrompt
-            )
-            .keyboardType(.decimalPad)
-        case .int16:
-            TextField(
-                element.label,
-                value: Binding { element.value as? Int16 } set: { updateValueAndEvaluateExpressions($0) },
-                formatter: .decimal,
-                prompt: textFieldPrompt
-            )
-            .keyboardType(.numberPad)
-        case .int32:
-            TextField(
-                element.label,
-                value: Binding { element.value as? Int32 } set: { updateValueAndEvaluateExpressions($0) },
-                formatter: .decimal,
-                prompt: textFieldPrompt
-            )
-            .keyboardType(.numberPad)
-        case .int64:
-            TextField(
-                element.label,
-                value: Binding { element.value as? Int64 } set: { updateValueAndEvaluateExpressions($0) },
-                formatter: .decimal,
+                value: Binding { value as? Int } set: { updateValueAndEvaluateExpressions($0) },
+                format: .number.grouping(.never),
                 prompt: textFieldPrompt
             )
             .keyboardType(.numberPad)
         default:
             TextField(
                 element.label,
-                text: Binding { element.value as? String ?? element.formattedValue } set: { updateValueAndEvaluateExpressions($0) },
+                text: Binding { value as? String ?? element.formattedValue } set: { updateValueAndEvaluateExpressions($0) },
                 prompt: textFieldPrompt,
                 axis: .horizontal
             )
+            .keyboardType(.default)
         }
     }
     
@@ -288,16 +291,10 @@ private extension TextInput {
             valueAsString.wrappedValue
         } set: {
             switch element.fieldType {
-            case .float32:
-                updateValueAndEvaluateExpressions(Float32($0))
-            case .float64:
-                updateValueAndEvaluateExpressions(Float64($0))
-            case .int16:
-                updateValueAndEvaluateExpressions(Int16($0))
-            case .int32:
-                updateValueAndEvaluateExpressions(Int32($0))
-            case .int64:
-                updateValueAndEvaluateExpressions(Int64($0))
+            case .float32, .float64:
+                updateValueAndEvaluateExpressions(Double($0))
+            case .int16, .int32, .int64:
+                updateValueAndEvaluateExpressions(Int($0))
             default:
                 updateValueAndEvaluateExpressions($0)
             }
