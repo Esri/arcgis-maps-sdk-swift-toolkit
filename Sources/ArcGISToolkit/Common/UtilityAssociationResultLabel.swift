@@ -20,6 +20,12 @@ struct UtilityAssociationResultLabel: View {
     /// The utility association result to display.
     let result: UtilityAssociationResult
     
+    /// A scaled ideal frame height that allows for two lines of title text.
+    ///
+    /// At standard (non-accessible) system sizing, labels with two lines of title text in the body font and
+    /// a single line of detail text in the caption2 font have a height of 55.666.
+    @ScaledMetric(relativeTo: .body) private var frameHeight = 56
+    
     var body: some View {
         HStack {
             result.association.kind.icon
@@ -27,14 +33,17 @@ struct UtilityAssociationResultLabel: View {
             
             VStack(alignment: .leading) {
                 Text(result.title)
+                    .font(.body)
+                    .lineLimit(2)
+                    .truncationMode(.middle)
                 if let details = result.details {
                     details
+                        .accessibilityIdentifier("Association Result Description")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
-                        .accessibilityIdentifier("Association Result Description")
+                        .lineLimit(1)
                 }
             }
-            .lineLimit(1)
             
             Spacer()
             
@@ -44,6 +53,7 @@ struct UtilityAssociationResultLabel: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("Association Result")
+        .frame(idealHeight: frameHeight)
     }
 }
 
