@@ -139,9 +139,7 @@ private struct UtilityAssociationsFilterResultLink: View {
         NavigationLink {
             List(filterResult.groupResults, id: \.id) { groupResult in
                 UtilityAssociationGroupResultView(groupResult: groupResult)
-#if targetEnvironment(macCatalyst)
-                    .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
-#endif
+                    .popupListRowStyle()
             }
             .listStyle(.inset)
             .navigationTitle(filterResult.filter.displayTitle, subtitle: popupTitle)
@@ -250,9 +248,7 @@ private struct SearchUtilityAssociationResultsView: View {
             } label: {
                 UtilityAssociationResultLabel(result: result)
             }
-#if targetEnvironment(macCatalyst)
-            .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
-#endif
+            .popupListRowStyle()
         }
         .listStyle(.inset)
         .searchable(

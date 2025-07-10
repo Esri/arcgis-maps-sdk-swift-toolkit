@@ -127,9 +127,7 @@ extension EmbeddedPopupView {
                         EmptyView()
                     }
                 }
-#if targetEnvironment(macCatalyst)
-                .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
-#endif
+                .popupListRowStyle()
             }
             .listStyle(.inset)
         }
@@ -139,6 +137,19 @@ extension EmbeddedPopupView {
 extension EnvironmentValues {
     /// The title of the popup associated with the view.
     @Entry var popupTitle = ""
+}
+
+extension View {
+    /// Adds the list row style for the PopupView. This only affects Mac Catalyst.
+    @ViewBuilder
+    func popupListRowStyle() -> some View {
+#if targetEnvironment(macCatalyst)
+        self.listRowBackground(Color(.systemBackground))
+            .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
+#else
+        self
+#endif
+    }
 }
 
 private extension Logger {
