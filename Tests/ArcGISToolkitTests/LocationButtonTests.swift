@@ -76,7 +76,7 @@ struct LocationButtonTests {
     
     @Test
     @MainActor
-    func testNextAutoPanMode() async throws {
+    func testNextAutoPanMode() {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
         var button = LocationButton(locationDisplay: locationDisplay)
         
@@ -94,7 +94,7 @@ struct LocationButtonTests {
     
     @Test
     @MainActor
-    func testButtonAction() async throws {
+    func testButtonAction() {
         #expect(
             LocationButton.Action(status: .stopped, autoPanOptions: []) == .start
         )
