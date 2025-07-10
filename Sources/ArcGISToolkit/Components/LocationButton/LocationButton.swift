@@ -183,30 +183,9 @@ extension LocationButton {
         locationDisplay.autoPanMode = autoPanMode
     }
     
-    /// The action that should occur if the button is pressed.
-    var actionForButtonPress: ButtonAction? {
-        // Decide the button behavior based on the status.
-        switch status {
-        case .stopped, .failedToStart:
-                .start
-        case .started:
-            if nonOffAutoPanOptions.isEmpty {
-                // If there were no non-off options specified then set it to off
-                // if the status is started.
-                .stop
-            } else {
-                .autoPanCycle
-            }
-        case .starting, .stopping:
-            nil
-        @unknown default:
-            fatalError()
-        }
-    }
-    
     /// This should be called when the button is pressed.
     func buttonAction() {
-        switch actionForButtonPress {
+        switch Action(status: status, autoPanOptions: autoPanOptions) {
         case .start:
             // If the datasource is a system location datasource, then request authorization.
             if locationDisplay.dataSource is SystemLocationDataSource,
@@ -241,13 +220,37 @@ extension LocationButton {
 
 extension LocationButton {
     /// The type of actions that can take place when the button is pressed.
-    enum ButtonAction {
+    enum Action {
         /// Start the location display.
         case start
         /// Stop the location display.
         case stop
         /// Set the next auto pan mode for cycling through.
         case autoPanCycle
+        
+        /// The action that should occur for the specified state.
+        init?(
+            status: LocationDataSource.Status,
+            autoPanOptions: [LocationDisplay.AutoPanMode]
+        ) {
+            // Decide the button behavior based on the status.
+            switch status {
+            case .stopped, .failedToStart:
+                self = .start
+            case .started:
+                if autoPanOptions.count < 2 {
+                    // If there were no non-off options specified then set it to off
+                    // if the status is started.
+                    self = .stop
+                } else {
+                    self = .autoPanCycle
+                }
+            case .starting, .stopping:
+                return nil
+            @unknown default:
+                fatalError()
+            }
+        }
     }
 }
 
