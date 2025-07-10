@@ -19,25 +19,40 @@ import SwiftUI
 /// An example demonstrating how to use the location button with a map view.
 struct LocationButtonExampleView: View {
     /// The `Map` displayed in the `MapView`.
-    @State private var map = Map(basemapStyle: .arcGISImagery)
+    @State private var map = Map(basemap: .init(baseLayer: OpenStreetMapLayer())) // Map(basemapStyle: .arcGISImagery)
     
     /// The location display to set on the map view.
     @State private var locationDisplay = {
         let locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
-        locationDisplay.autoPanMode = .recenter
         locationDisplay.initialZoomScale = 40_000
         return locationDisplay
     }()
     
+    @State private var navModeEnabled = false
+    
     var body: some View {
+        Toggle("Nav mode", isOn: $navModeEnabled)
+        Button {
+            locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
+            locationDisplay.initialZoomScale = 1_000
+        } label: {
+            Text("Switch LD")
+        }
         MapView(map: map)
             .locationDisplay(locationDisplay)
             .overlay(alignment: .topTrailing) {
                 LocationButton(locationDisplay: locationDisplay)
+                    .autoPanOptions(autoPanOptions)
                     .padding(8)
                     .background(.thinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .padding()
             }
+    }
+    
+    var autoPanOptions: [LocationDisplay.AutoPanMode] {
+        navModeEnabled
+        ? [.navigation, .recenter]
+        : [.compassNavigation, .recenter, .off]
     }
 }

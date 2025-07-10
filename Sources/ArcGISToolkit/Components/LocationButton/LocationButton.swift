@@ -78,8 +78,8 @@ public struct LocationButton: View {
         }
         .contextMenu(ContextMenu { contextMenuContent() })
         .disabled(buttonIsDisabled)
-        .task { await observeStatus() }
-        .task { await observeAutoPanMode() }
+        .task(id: ObjectIdentifier(locationDisplay)) { await observeStatus() }
+        .task(id: ObjectIdentifier(locationDisplay)) { await observeAutoPanMode() }
         .animation(.default, value: autoPanMode)
     }
     
