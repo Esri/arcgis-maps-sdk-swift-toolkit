@@ -15,7 +15,6 @@
 import Testing
 import ArcGIS
 @testable import ArcGISToolkit
-import os
 
 @Suite("LocationButton Tests")
 struct LocationButtonTests {
