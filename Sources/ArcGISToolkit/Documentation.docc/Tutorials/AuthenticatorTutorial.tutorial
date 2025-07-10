@@ -29,7 +29,9 @@
             }
             
             @Step {
-                During sign-out, use these `AuthenticationManager` methods.
+                During sign-out, use the `AuthenticationManager` method. 
+                It signs the user out of the application by revoking OAuth tokens,
+                invalidating IAP credentials, and clearing credential stores.
                 @Code(name: "SignOutView.swift", file: AuthenticatorStep4.swift)
             }
         }
