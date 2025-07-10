@@ -39,7 +39,7 @@ public struct LocationButton: View {
     /// Creates a location button with a location display.
     /// - Parameter locationDisplay: The location display that the button will control.
     public init(locationDisplay: LocationDisplay) {
-        _model = .init(initialValue: Model(locationDisplay: locationDisplay))
+        model = Model(locationDisplay: locationDisplay)
     }
     
     /// Sets the auto-pan options that are available for the user to select.
