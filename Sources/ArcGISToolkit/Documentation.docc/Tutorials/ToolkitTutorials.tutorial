@@ -69,7 +69,7 @@
     }
     
     @Chapter(name: "LocationButton") {
-        A `LocationButton` is a SwiftUI button that allows the user to manage viewing their location on a `MapView`.
+        Learn how to use the `LocationButton` component.
         @Image(source: LocationButton, alt: "The LocationButton component")
         @TutorialReference(tutorial: "doc:LocationButtonTutorial")
     }

@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Testing
 import ArcGIS
 @testable import ArcGISToolkit
+import Testing
 
 @Suite("LocationButton Tests")
 struct LocationButtonTests {
@@ -91,36 +91,41 @@ struct LocationButtonTests {
         #expect(button.nextAutoPanMode(current: .compassNavigation, initial: .recenter) == .navigation)
     }
     
-    @Test
-    @MainActor
-    func testButtonAction() {
-        #expect(
-            LocationButton.Action(status: .stopped, autoPanOptions: []) == .start
-        )
-        #expect(
-            LocationButton.Action(status: .failedToStart, autoPanOptions: []) == .start
-        )
-        #expect(
-            LocationButton.Action(status: .started, autoPanOptions: []) == .stop
-        )
-        #expect(
-            LocationButton.Action(status: .started, autoPanOptions: [.off]) == .stop
-        )
-        #expect(
-            LocationButton.Action(status: .started, autoPanOptions: [.recenter]) == .stop
-        )
-        #expect(
-            LocationButton.Action(status: .started, autoPanOptions: [.off, .recenter]) == .autoPanCycle
-        )
-        #expect(
-            LocationButton.Action(status: .started, autoPanOptions: [.off, .recenter, .compassNavigation]) == .autoPanCycle
-        )
-        #expect(
-            LocationButton.Action(status: .starting, autoPanOptions: []) == nil
-        )
-        #expect(
-            LocationButton.Action(status: .stopping, autoPanOptions: []) == nil
-        )
+    @Suite
+    struct ActionTests {
+        typealias Action = LocationButton.Action
+        
+        @Test
+        @MainActor
+        func testInit() {
+            #expect(
+                Action(status: .stopped, autoPanOptions: []) == .start
+            )
+            #expect(
+                Action(status: .failedToStart, autoPanOptions: []) == .start
+            )
+            #expect(
+                Action(status: .started, autoPanOptions: []) == .stop
+            )
+            #expect(
+                Action(status: .started, autoPanOptions: [.off]) == .stop
+            )
+            #expect(
+                Action(status: .started, autoPanOptions: [.recenter]) == .stop
+            )
+            #expect(
+                Action(status: .started, autoPanOptions: [.off, .recenter]) == .autoPanCycle
+            )
+            #expect(
+                Action(status: .started, autoPanOptions: [.off, .recenter, .compassNavigation]) == .autoPanCycle
+            )
+            #expect(
+                Action(status: .starting, autoPanOptions: []) == nil
+            )
+            #expect(
+                Action(status: .stopping, autoPanOptions: []) == nil
+            )
+        }
     }
 }
 
