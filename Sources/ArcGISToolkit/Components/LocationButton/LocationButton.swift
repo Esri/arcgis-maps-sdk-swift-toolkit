@@ -14,6 +14,7 @@
 
 import ArcGIS
 import CoreLocation
+import Algorithms
 import SwiftUI
 
 /// A button that allows a user to show their location on a map view.
@@ -65,7 +66,7 @@ public struct LocationButton: View {
     /// - Returns: A new location button with the auto-pan options set.
     public func autoPanModes(_ autoPanModes: [LocationDisplay.AutoPanMode]) -> Self {
         var copy = self
-        copy.autoPanModes = autoPanModes.unique()
+        copy.autoPanModes = Array(autoPanModes.uniqued())
         return copy
     }
     
@@ -275,14 +276,6 @@ private extension LocationDisplay.AutoPanMode {
         @unknown default:
             fatalError()
         }
-    }
-}
-
-private extension Sequence where Iterator.Element: Hashable {
-    /// Returns the unique values of the sequence with the order preserved.
-    func unique() -> [Iterator.Element] {
-        var seen: Set<Iterator.Element> = []
-        return filter { seen.insert($0).inserted }
     }
 }
 

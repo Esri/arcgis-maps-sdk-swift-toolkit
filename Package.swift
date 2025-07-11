@@ -32,14 +32,16 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.7.0")),
-        .package(url: "https://github.com/swiftlang/swift-markdown.git", .upToNextMinor(from: "0.4.0"))
+        .package(url: "https://github.com/swiftlang/swift-markdown.git", .upToNextMinor(from: "0.4.0")),
+        .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0")
     ],
     targets: [
         .target(
             name: "ArcGISToolkit",
             dependencies: [
                 .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift"),
-                .product(name: "Markdown", package: "swift-markdown")
+                .product(name: "Markdown", package: "swift-markdown"),
+                .product(name: "Algorithms", package: "swift-algorithms")
             ]
         ),
         .testTarget(
