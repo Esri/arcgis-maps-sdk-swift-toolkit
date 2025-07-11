@@ -27,14 +27,16 @@ struct UtilityAssociationResultLabel: View {
             
             VStack(alignment: .leading) {
                 Text(result.title)
+                    .lineLimit(4)
+                    .truncationMode(.middle)
                 if let details = result.details {
                     details
+                        .accessibilityIdentifier("Association Result Description")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
-                        .accessibilityIdentifier("Association Result Description")
+                        .lineLimit(1)
                 }
             }
-            .lineLimit(1)
             
             Spacer()
             
