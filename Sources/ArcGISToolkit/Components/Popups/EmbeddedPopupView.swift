@@ -54,9 +54,12 @@ struct EmbeddedPopupView: View {
                     )
                     ProgressView()
                 }
-                .frame(maxWidth: .infinity)
             }
         }
+#if targetEnvironment(macCatalyst)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground))
+#endif
         .preference(key: PresentedPopupPreferenceKey.self, value: .init(popup: popup))
         .popupViewHeader(title: popup.title)
         .task(id: ObjectIdentifier(popup)) {
