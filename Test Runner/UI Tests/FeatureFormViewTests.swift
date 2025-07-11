@@ -1487,7 +1487,7 @@ final class FeatureFormViewTests: XCTestCase {
         let filterResults = app.staticTexts["Content"]
         let formTitle = app.staticTexts["Structure Boundary"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let utilityElementButton = app.buttons["Circuit Breaker, Containment Visible: False"]
+        let utilityElementButton = app.buttons["Circuit Breaker, Content"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -1511,7 +1511,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         networkSourceGroupButton.tap()
         
-        // Expectation: a list of one utility elements with "Containment Visible: False"
+        // Expectation: a list of one utility elements with "Content"
         XCTAssertTrue(
             utilityElementButton.exists,
             "The utility element \"Circuit Breaker\" doesn't exist."

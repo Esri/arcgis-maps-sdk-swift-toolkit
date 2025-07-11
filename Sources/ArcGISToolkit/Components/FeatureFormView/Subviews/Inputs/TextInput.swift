@@ -44,7 +44,7 @@ struct TextInput: View {
     /// The element the input belongs to.
     private let element: FieldFormElement
     
-    /// Creates a view for text input spanning multiple lines.
+    /// Creates a view for text based input.
     /// - Parameters:
     ///   - element: The input's parent element.
     init(element: FieldFormElement) {
@@ -60,6 +60,7 @@ struct TextInput: View {
     var body: some View {
         textWriter
             .onChange(of: text) {
+                guard text != element.formattedValue else { return }
                 element.convertAndUpdateValue(text)
                 internalFeatureFormViewModel.evaluateExpressions()
             }
@@ -237,6 +238,7 @@ private extension TextInput {
 #endif
             }
             RepresentedUITextView(initialText: text) { text in
+                guard text != element.formattedValue else { return }
                 element.convertAndUpdateValue(text)
                 internalFeatureFormViewModel.evaluateExpressions()
             } onTextViewDidEndEditing: { text in

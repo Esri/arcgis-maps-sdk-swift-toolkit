@@ -81,6 +81,10 @@ struct SwitchInput: View {
             // loads, depending if the initial value matches the default value
             // defined for `isOn`.
             .onChange(of: isOn) {
+                guard (isOn && element.formattedValue == input.offValue.name)
+                        || (!isOn && element.formattedValue == input.onValue.name) else {
+                    return
+                }
                 element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 internalFeatureFormViewModel.evaluateExpressions()
             }

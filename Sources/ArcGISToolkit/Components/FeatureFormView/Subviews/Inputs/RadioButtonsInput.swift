@@ -96,6 +96,7 @@ struct RadioButtonsInput: View {
                 }
             }
             .onChange(of: selectedValue) {
+                guard selectedValue?.name != element.formattedValue else { return }
                 element.updateValue(selectedValue?.code)
                 internalFeatureFormViewModel.evaluateExpressions()
             }

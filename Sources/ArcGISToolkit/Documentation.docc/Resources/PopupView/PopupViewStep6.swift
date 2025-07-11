@@ -21,8 +21,6 @@ struct PopupExampleView: View {
     
     @State private var showPopup = false
     
-    @State private var floatingPanelDetent: FloatingPanelDetent = .full
-    
     var body: some View {
         MapViewReader { proxy in
             MapView(map: map)
@@ -38,12 +36,8 @@ struct PopupExampleView: View {
                     ).first
                     popup = identifyResult?.popups.first
                 }
-                .floatingPanel(
-                    selectedDetent: $floatingPanelDetent,
-                    horizontalAlignment: .leading,
-                    isPresented: $showPopup
-                ) { [popup] in
-                    PopupView(popup: popup!, isPresented: $showPopup)
+                .sheet(isPresented: $showPopup) { [popup] in
+                    PopupView(root: popup!, isPresented: $showPopup)
                 }
         }
     }
