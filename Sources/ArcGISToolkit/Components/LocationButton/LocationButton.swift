@@ -66,7 +66,6 @@ public struct LocationButton: View {
             buttonAction()
         } label: {
             buttonLabel()
-                .padding(8)
         }
         .onChange(of: autoPanOptions) {
             // If current mode not in new options, then switch it out.
@@ -268,11 +267,11 @@ private extension LocationDisplay.AutoPanMode {
     var imageSystemName: String {
         switch self {
         case .compassNavigation:
-            "location.north.circle"
+            "field.of.view.wide.fill"
         case .navigation:
             "location.north.fill"
         case .recenter:
-            "location.fill"
+            "location.fill.viewfinder"
         case .off:
             "location"
         @unknown default:
@@ -295,22 +294,44 @@ private extension CLLocationManager {
 }
 
 #Preview {
+    @Previewable @State var locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
+    
     MapView(map: Map.openStreetMap())
         .overlay(alignment: .topTrailing) {
-            VStack {
-                LocationButton(locationDisplay: LocationDisplay(dataSource: SystemLocationDataSource()))
-                    .padding(8)
+            VStack(spacing: 18) {
+                LocationButton(locationDisplay: locationDisplay)
+                    .padding(12)
                     .background(.thinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .shadow(radius: 8)
                 
-                LocationButton(locationDisplay: LocationDisplay(dataSource: SystemLocationDataSource()))
-                    .imageScale(.large)
-                    .bold()
+                LocationButton(locationDisplay: locationDisplay)
                     .buttonStyle(.borderedProminent)
                     .buttonBorderShape(.circle)
+                
+                LocationButton(locationDisplay: locationDisplay)
+                    .imageScale(.large)
+                    .frame(minWidth: 50, minHeight: 50)
+                    .background(.thinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .shadow(radius: 8)
+                
+                LocationButton(locationDisplay: locationDisplay)
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.white)
+                    .imageScale(.large)
+                    .bold()
+                    .frame(minWidth: 50, minHeight: 50)
+                    .background(.tint)
+                    .clipShape(.circle)
                     .shadow(radius: 8)
             }
             .padding()
+        }
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                LocationButton(locationDisplay: locationDisplay)
+            }
         }
 }
 
