@@ -18,7 +18,7 @@ import SwiftUI
 
 /// A button that allows a user to show their location on a map view.
 /// Gives the user a variety of options to set the auto pan mode or stop the
-/// location datasource.
+/// location data source.
 ///
 /// The button will cycle through the specified auto-pan modes on tap. The user
 /// can also hide the location display or select the auto-pan mode through a
@@ -31,18 +31,18 @@ public struct LocationButton: View {
     let locationDisplay: LocationDisplay
     
     /// The current status of the location display's datasource.
-    @State var status: LocationDataSource.Status = .stopped
+    @State private(set) var status: LocationDataSource.Status = .stopped
     
     /// The autopan mode of the location display.
-    @State var autoPanMode: LocationDisplay.AutoPanMode = .off
+    @State private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off
     
     /// A value indicating whether the button is disabled.
     var buttonIsDisabled: Bool {
         status == .starting || status == .stopping
     }
     
-    /// Backing variable for the auto pan options that are selectable by the user.
-    var autoPanModes: [LocationDisplay.AutoPanMode] = [
+    /// The auto pan modes that are selectable by the user.
+    private(set) var autoPanModes: [LocationDisplay.AutoPanMode] = [
         .recenter, .compassNavigation, .navigation, .off
     ]
     
@@ -82,7 +82,7 @@ public struct LocationButton: View {
     
     @ViewBuilder
     private func buttonLabel() -> some View {
-        // Decide what what image is in the button based on the status
+        // Decide what image is in the button based on the status
         // and autopan mode.
         switch status {
         case .stopped:
@@ -127,25 +127,23 @@ public struct LocationButton: View {
 }
 
 extension LocationButton {
-    /// The initail auto-pan mode to be used.
+    /// The initial auto-pan mode to be used.
     var initialAutoPanMode: LocationDisplay.AutoPanMode {
         autoPanModes.first ?? .off
     }
     
     /// The context menu auto-pan mode options.
+    ///
     /// The context menu options will be in the order the user specifies
     /// except the off option will be first.
     var contextMenuAutoPanOptions: [LocationDisplay.AutoPanMode] {
-        return if autoPanModes.contains(.off) {
-            [.off] + autoPanModes.filter { $0 != .off }
-        } else {
-            autoPanModes
-        }
+        [.off] + autoPanModes.filter { $0 != .off }
     }
     
     /// Observe the status of the location display datasource.
     func observeStatus() async {
         for await status in locationDisplay.dataSource.$status {
+            guard status != self.status else { continue }
             self.status = status
         }
     }
@@ -200,7 +198,10 @@ extension LocationButton {
     /// The next auto pan mode to be used when cycling through auto pan modes.
     func nextAutoPanMode(current: LocationDisplay.AutoPanMode, initial: LocationDisplay.AutoPanMode) -> LocationDisplay.AutoPanMode {
         guard let index = autoPanModes.firstIndex(of: current) else { return initial }
-        let nextIndex = index.advanced(by: 1) == autoPanModes.endIndex ? autoPanModes.startIndex : index.advanced(by: 1)
+        var nextIndex = autoPanModes.index(after: index)
+        if nextIndex == autoPanModes.endIndex {
+            nextIndex = autoPanModes.startIndex
+        }
         return autoPanModes[nextIndex]
     }
     
@@ -230,12 +231,12 @@ extension LocationButton {
             case .stopped, .failedToStart:
                 self = .start
             case .started:
-                if autoPanOptions.count < 2 {
-                    // If there were no non-off options specified then set it to off
-                    // if the status is started.
-                    self = .stop
+                self = if autoPanOptions.count < 2 {
+                    // Since there were no non-off options specified then set it
+                    // to off since the status is started.
+                    .stop
                 } else {
-                    self = .autoPanCycle
+                    .autoPanCycle
                 }
             case .starting, .stopping:
                 return nil
