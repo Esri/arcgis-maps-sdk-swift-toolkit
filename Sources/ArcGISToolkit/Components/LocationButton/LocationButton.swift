@@ -42,7 +42,7 @@ public struct LocationButton: View {
     }
     
     /// Backing variable for the auto pan options that are selectable by the user.
-    var autoPanOptions: [LocationDisplay.AutoPanMode] = [
+    var autoPanModes: [LocationDisplay.AutoPanMode] = [
         .recenter, .compassNavigation, .navigation, .off
     ]
     
@@ -55,9 +55,9 @@ public struct LocationButton: View {
     /// Sets the auto-pan options that are available for the user to select.
     /// - Parameter options: The auto-pan options that the user can cycle through.
     /// - Returns: A new location button with the auto-pan options set.
-    public func autoPanOptions(_ options: [LocationDisplay.AutoPanMode]) -> Self {
+    public func autoPanModes(_ autoPanModes: [LocationDisplay.AutoPanMode]) -> Self {
         var copy = self
-        copy.autoPanOptions = options.unique()
+        copy.autoPanModes = autoPanModes.unique()
         return copy
     }
     
@@ -67,9 +67,9 @@ public struct LocationButton: View {
         } label: {
             buttonLabel()
         }
-        .onChange(of: autoPanOptions) {
+        .onChange(of: autoPanModes) {
             // If current mode not in new options, then switch it out.
-            if !autoPanOptions.contains(autoPanMode) {
+            if !autoPanModes.contains(autoPanMode) {
                 select(autoPanMode: initialAutoPanMode)
             }
         }
@@ -104,7 +104,7 @@ public struct LocationButton: View {
     private func contextMenuContent() -> some View {
         // Only show context menu if there are 2 or more auto-pan options and
         // status of the location display is started.
-        if autoPanOptions.count >= 2 && status == .started {
+        if autoPanModes.count >= 2 && status == .started {
             Section("Autopan") {
                 ForEach(contextMenuAutoPanOptions, id: \.self) { autoPanMode in
                     Button {
@@ -129,17 +129,17 @@ public struct LocationButton: View {
 extension LocationButton {
     /// The initail auto-pan mode to be used.
     var initialAutoPanMode: LocationDisplay.AutoPanMode {
-        autoPanOptions.first ?? .off
+        autoPanModes.first ?? .off
     }
     
     /// The context menu auto-pan mode options.
     /// The context menu options will be in the order the user specifies
     /// except the off option will be first.
     var contextMenuAutoPanOptions: [LocationDisplay.AutoPanMode] {
-        return if autoPanOptions.contains(.off) {
-            [.off] + autoPanOptions.filter { $0 != .off }
+        return if autoPanModes.contains(.off) {
+            [.off] + autoPanModes.filter { $0 != .off }
         } else {
-            autoPanOptions
+            autoPanModes
         }
     }
     
@@ -170,7 +170,7 @@ extension LocationButton {
     
     /// This should be called when the button is pressed.
     func buttonAction() {
-        switch Action(status: status, autoPanOptions: autoPanOptions) {
+        switch Action(status: status, autoPanOptions: autoPanModes) {
         case .start:
             // If the datasource is a system location datasource, then request authorization.
             if locationDisplay.dataSource is SystemLocationDataSource,
@@ -199,9 +199,9 @@ extension LocationButton {
     
     /// The next auto pan mode to be used when cycling through auto pan modes.
     func nextAutoPanMode(current: LocationDisplay.AutoPanMode, initial: LocationDisplay.AutoPanMode) -> LocationDisplay.AutoPanMode {
-        guard let index = autoPanOptions.firstIndex(of: current) else { return initial }
-        let nextIndex = index.advanced(by: 1) == autoPanOptions.endIndex ? autoPanOptions.startIndex : index.advanced(by: 1)
-        return autoPanOptions[nextIndex]
+        guard let index = autoPanModes.firstIndex(of: current) else { return initial }
+        let nextIndex = index.advanced(by: 1) == autoPanModes.endIndex ? autoPanModes.startIndex : index.advanced(by: 1)
+        return autoPanModes[nextIndex]
     }
     
     /// Hides the location display.
