@@ -143,7 +143,7 @@ private struct UtilityAssociationsFilterResultLink: View {
                     .listRowInsets(.toolkitDefault)
 #endif
             }
-            .listStyle(.inset)
+            .listStyle(.plain)
             .navigationTitle(filterResult.filter.displayTitle, subtitle: popupTitle)
             .navigationBarTitleDisplayMode(.inline)
             .popupViewToolbar()
@@ -254,7 +254,7 @@ private struct SearchUtilityAssociationResultsView: View {
             .listRowInsets(.toolkitDefault)
 #endif
         }
-        .listStyle(.inset)
+        .listStyle(.plain)
         .searchable(
             text: $text,
             placement: .navigationBarDrawer(displayMode: .always),
