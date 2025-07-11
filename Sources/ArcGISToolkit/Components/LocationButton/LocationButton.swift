@@ -270,7 +270,7 @@ private extension LocationDisplay.AutoPanMode {
         case .compassNavigation:
             "location.north.circle"
         case .navigation:
-            "location.north.line.fill"
+            "location.north.fill"
         case .recenter:
             "location.fill"
         case .off:
