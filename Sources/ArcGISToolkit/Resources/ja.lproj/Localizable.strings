@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
 /* A reference to 3D content. */
-"3D" = "須_3D_____鷗";
+"3D" = "3D";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "現時点では、マップ エリアはダウンロードできません。";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "須_Add Association________________鷗";
+"Add Association" = "関連付けの追加";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "マップ エリアの追加";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "エリア名";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "須_Associations_____________鷗";
+"Associations" = "関連付け";
 
 /* A label in reference to attachments. */
 "Attachments" = "添付ファイル";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "認証が必要です";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "須_Back_________鷗";
+"Back" = "戻る";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "ブックマーク";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "コンパス、方位角 %lld 度 %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "須_Containment Visible: %@________________________鷗";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "須_Content_______________鷗";
 
 /* Continent (Level of Detail) */
 "Continent" = "大陸";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "続行";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "須_Continue Editing_________________鷗";
+"Continue Editing" = "編集を続行";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "このマップのマップ エリアを取得できませんでした。";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "すべての始点を削除しますか？";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "須_Delete Download________________鷗";
+"Delete Download" = "ダウンロードの削除";
 
 /* A label for the description of the map area. */
 "Description" = "説明";
 
 /* Discard edits on the feature form. */
-"Discard" = "須_Discard_______________鷗";
+"Discard" = "破棄";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "須_Discard Edits______________鷗";
+"Discard Edits" = "編集の破棄";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "須_Discard Edits_______________鷗?";
+"Discard Edits?" = "編集を破棄しますか？";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "終了";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "須_Error fetching filter results: %@__________________鷗";
+"Error fetching filter results: %@" = "フィルター結果の取得エラー: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "マップ エリア取得エラー";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "場所または住所の検索";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "須_Finish editing failed_______________________鷗.";
+"Finish editing failed." = "編集の完了に失敗しました。";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "須_Finish editing failed_______________________鷗.\n須_%@_____鷗";
+"Finish editing failed.\n%@" = "編集の完了に失敗しました。 %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "エッジに沿った部分";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "新しいトレース";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "須_No Associations________________鷗";
+"No Associations" = "関連付けはありません";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "ブックマークがありません";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "更新";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "須_Remove Download________________鷗";
+"Remove Download" = "ダウンロードの削除";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "名前の変更";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "部屋 (複数)";
 
 /* Finish editing the feature form. */
-"Save" = "須_Save_________鷗";
+"Save" = "保存";
 
 /* A label for a button to save edits. */
-"Save Edits" = "須_Save Edits_____________________鷗";
+"Save Edits" = "編集内容の保存";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "検索クエリ";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "設定";
 
 /* A label for a button to show all the association results. */
-"Show all" = "須_Show all_________________鷗";
+"Show all" = "すべて表示";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "サイト";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "証明書ファイルが無効です。";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "須_The form wasn't submitted__________________________鷗";
+"The form wasn't submitted" = "フォームが送信されませんでした";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "マップに空間参照がありません。";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "このマップにはマップ エリアはありません。 以下のボタンをタップして開始します。";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "須_Title___________鷗";
+"Title" = "タイトル";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "今日";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "須_Total: %lld____________鷗";
+"Total: %lld" = "合計: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "町";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "須_Updates to the form will be lost__________________鷗.";
+"Updates to the form will be lost." = "フォームの更新は失われます。";
 
 /* A label in reference to a credential username. */
 "Username" = "ユーザー名";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "須_Validation Errors__________________鷗";
+"Validation Errors" = "整合チェック エラー";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "値";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "表示";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "須_Visible Content________________鷗";
+
 /* World (Level of Detail) */
 "World" = "世界";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "須_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________鷗.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "^[%lld error](inflect: true)があり、保存する前に修正する必要があります。";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

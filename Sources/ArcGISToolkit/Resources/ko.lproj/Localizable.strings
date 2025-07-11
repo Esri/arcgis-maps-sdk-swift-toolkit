@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld 결과](변화: true)";
 
 /* A reference to 3D content. */
-"3D" = "한_3D_____빠";
+"3D" = "3D";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "현재 맵 영역을 다운로드할 수 없습니다.";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "한_Add Association________________빠";
+"Add Association" = "연관 추가";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "맵 영역 추가";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "영역 이름";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "한_Associations_____________빠";
+"Associations" = "연관";
 
 /* A label in reference to attachments. */
 "Attachments" = "첨부 파일";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "인증 필요";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "한_Back_________빠";
+"Back" = "뒤로";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "북마크";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "나침반, 진행 방향 %lld도 %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "한_Containment Visible: %@________________________빠";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "한_Content_______________빠";
 
 /* Continent (Level of Detail) */
 "Continent" = "대륙";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "계속";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "한_Continue Editing_________________빠";
+"Continue Editing" = "계속 편집";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "이 맵에 대한 맵 영역을 검색할 수 없습니다.";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "모든 시작점을 삭제하시겠습니까?";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "한_Delete Download________________빠";
+"Delete Download" = "다운로드 삭제";
 
 /* A label for the description of the map area. */
 "Description" = "설명";
 
 /* Discard edits on the feature form. */
-"Discard" = "한_Discard_______________빠";
+"Discard" = "취소";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "한_Discard Edits______________빠";
+"Discard Edits" = "편집 내용 취소";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "한_Discard Edits_______________빠?";
+"Discard Edits?" = "편집 내용을 취소하시겠습니까?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "해제";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "한_Error fetching filter results: %@__________________빠";
+"Error fetching filter results: %@" = "필터 결과를 가져오는 중 오류 발생: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "맵 영역을 가져오는 동안 오류 발생";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "장소 또는 주소 찾기";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "한_Finish editing failed_______________________빠.";
+"Finish editing failed." = "편집을 완료하지 못했습니다.";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "한_Finish editing failed_______________________빠.\n한_%@_____빠";
+"Finish editing failed.\n%@" = "편집을 완료하지 못했습니다. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "새 추적";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "한_No Associations________________빠";
+"No Associations" = "연관 없음";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "북마크 없음";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "새로 고침";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "한_Remove Download________________빠";
+"Remove Download" = "다운로드 제거";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "이름 바꾸기";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "방";
 
 /* Finish editing the feature form. */
-"Save" = "한_Save_________빠";
+"Save" = "저장";
 
 /* A label for a button to save edits. */
-"Save Edits" = "한_Save Edits_____________________빠";
+"Save Edits" = "편집 내용 저장";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "검색 쿼리";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "설정";
 
 /* A label for a button to show all the association results. */
-"Show all" = "한_Show all_________________빠";
+"Show all" = "모두 보기";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "사이트";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "인증서 파일이 잘못되었습니다.";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "한_The form wasn't submitted__________________________빠";
+"The form wasn't submitted" = "양식이 제출되지 않았습니다.";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "맵에 공간 기준 체계가 없습니다.";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "이 맵에 대한 맵 영역이 없습니다. 시작하려면 아래 버튼을 누르세요.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "한_Title___________빠";
+"Title" = "제목";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "오늘";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "한_Total: %lld____________빠";
+"Total: %lld" = "총계: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "동";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "한_Updates to the form will be lost__________________빠.";
+"Updates to the form will be lost." = "양식에 대한 업데이트 내용이 저장되지 않습니다.";
 
 /* A label in reference to a credential username. */
 "Username" = "사용자 이름";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "한_Validation Errors__________________빠";
+"Validation Errors" = "유효성 검사 오류";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "값";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "보기";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "한_Visible Content________________빠";
+
 /* World (Level of Detail) */
 "World" = "전 세계";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "한_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________빠.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "저장하기 전에 ^[%lld개 오류](inflect: true)를 수정해야 합니다.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

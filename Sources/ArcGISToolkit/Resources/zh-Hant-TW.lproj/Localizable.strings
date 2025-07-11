@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld 個結果](inflect: true)";
 
 /* A reference to 3D content. */
-"3D" = "試_3D_____驗";
+"3D" = "3D";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "目前無法下載地圖區域。";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "試_Add Association________________驗";
+"Add Association" = "新增關聯";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "新增地圖區域";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "區域名稱";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "試_Associations_____________驗";
+"Associations" = "關聯";
 
 /* A label in reference to attachments. */
 "Attachments" = "附件(A)";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "需要驗證";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "試_Back_________驗";
+"Back" = "上一步";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "書籤";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "羅盤儀，航向 %lld 度 %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "試_Containment Visible: %@________________________驗";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "試_Content_______________驗";
 
 /* Continent (Level of Detail) */
 "Continent" = "大陸";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "繼續";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "試_Continue Editing_________________驗";
+"Continue Editing" = "正在繼續編輯";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "無法擷取此地圖的地圖區域。";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "是否要刪除所有起點?";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "試_Delete Download________________驗";
+"Delete Download" = "刪除下載";
 
 /* A label for the description of the map area. */
 "Description" = "描述";
 
 /* Discard edits on the feature form. */
-"Discard" = "試_Discard_______________驗";
+"Discard" = "放棄";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "試_Discard Edits______________驗";
+"Discard Edits" = "放棄編輯內容";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "試_Discard Edits_______________驗?";
+"Discard Edits?" = "放棄編輯內容?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "清除";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "試_Error fetching filter results: %@__________________驗";
+"Error fetching filter results: %@" = "擷取篩選器結果時發生錯誤: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "擷取地圖區域時發生錯誤";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "尋找地點或地址";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "試_Finish editing failed_______________________驗.";
+"Finish editing failed." = "完成編輯失敗。";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "試_Finish editing failed_______________________驗.\n試_%@_____驗";
+"Finish editing failed.\n%@" = "完成編輯失敗。 %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "沿邊緣分數";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "新增軌跡";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "試_No Associations________________驗";
+"No Associations" = "無關聯";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "無書籤";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "重新整理";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "試_Remove Download________________驗";
+"Remove Download" = "移除下載";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "重新命名";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "房間";
 
 /* Finish editing the feature form. */
-"Save" = "試_Save_________驗";
+"Save" = "儲存";
 
 /* A label for a button to save edits. */
-"Save Edits" = "試_Save Edits_____________________驗";
+"Save Edits" = "儲存編輯內容";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "搜尋查詢";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "設定";
 
 /* A label for a button to show all the association results. */
-"Show all" = "試_Show all_________________驗";
+"Show all" = "顯示全部";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "網站";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "憑證檔無效。";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "試_The form wasn't submitted__________________________驗";
+"The form wasn't submitted" = "未提交表格";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "地圖沒有空間參考。";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "此地圖沒有地圖區域。 點一下下方按鈕開始使用。";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "試_Title___________驗";
+"Title" = "標題";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "今天";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "試_Total: %lld____________驗";
+"Total: %lld" = "總計: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "鎮";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "試_Updates to the form will be lost__________________驗.";
+"Updates to the form will be lost." = "將遺失對表格的更新。";
 
 /* A label in reference to a credential username. */
 "Username" = "使用者名稱";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "試_Validation Errors__________________驗";
+"Validation Errors" = "驗證錯誤";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "值";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "查看";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "試_Visible Content________________驗";
+
 /* World (Level of Detail) */
 "World" = "世界";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "試_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________驗.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "您有 ^[%lld 錯誤](inflect: true)，必須在儲存前修正。";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

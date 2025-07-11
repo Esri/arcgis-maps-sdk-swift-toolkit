@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
 /* A reference to 3D content. */
-"3D" = "Å_3D_____ö";
+"3D" = "3D";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Kartta-aluetta ei voi ladata tällä kertaa.";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "Å_Add Association________________ö";
+"Add Association" = "Lisää liitos";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Lisää kartta-alue";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Alueen nimi";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "Å_Associations_____________ö";
+"Associations" = "Liitokset";
 
 /* A label in reference to attachments. */
 "Attachments" = "Liitteet";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "Todennus vaaditaan";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "Å_Back_________ö";
+"Back" = "Takaisin";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Kirjanmerkit";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompassi, suunta %lld astetta %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "Å_Containment Visible: %@________________________ö";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "Å_Content_______________ö";
 
 /* Continent (Level of Detail) */
 "Continent" = "Maanosa";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "Jatka";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "Å_Continue Editing_________________ö";
+"Continue Editing" = "Jatka muokkausta";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Kartta-alueita ei voi noutaa tälle kartalle.";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "Poistetaanko kaikki aloituspisteet?";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "Å_Delete Download________________ö";
+"Delete Download" = "Poista lataus";
 
 /* A label for the description of the map area. */
 "Description" = "Kuvaus";
 
 /* Discard edits on the feature form. */
-"Discard" = "Å_Discard_______________ö";
+"Discard" = "Hylkää";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "Å_Discard Edits______________ö";
+"Discard Edits" = "Hylkää muokkaukset";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "Å_Discard Edits_______________ö?";
+"Discard Edits?" = "Hylätäänkö muokkaukset?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Ohita";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "Å_Error fetching filter results: %@__________________ö";
+"Error fetching filter results: %@" = "Virhe noudettaessa suodatintuloksia: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Kartta-alueiden haussa tapahtui virhe";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "Etsi paikka tai osoite";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "Å_Finish editing failed_______________________ö.";
+"Finish editing failed." = "Muokkauksen viimeistely epännistui.";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "Å_Finish editing failed_______________________ö.\nÅ_%@_____ö";
+"Finish editing failed.\n%@" = "Muokkauksen viimeistely epäonnistui. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Osuus reunaa pitkin";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "Uusi jäljitys";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "Å_No Associations________________ö";
+"No Associations" = "Ei liitoksia";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Ei kirjanmerkkejä";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "Päivitä";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "Å_Remove Download________________ö";
+"Remove Download" = "Poista lataus";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Nimeä uudelleen";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "Huoneet";
 
 /* Finish editing the feature form. */
-"Save" = "Å_Save_________ö";
+"Save" = "Tallenna";
 
 /* A label for a button to save edits. */
-"Save Edits" = "Å_Save Edits_____________________ö";
+"Save Edits" = "Tallenna muokkaukset";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Hakukysely";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "Asetukset";
 
 /* A label for a button to show all the association results. */
-"Show all" = "Å_Show all_________________ö";
+"Show all" = "Näytä kaikki";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sivustot";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Varmennetiedosto oli virheellinen.";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "Å_The form wasn't submitted__________________________ö";
+"The form wasn't submitted" = "Lomaketta ei lähetetty";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Kartta ei sisällä koordinaatistotietoa.";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Tälle kartalle ei ole kartta-alueita. Aloita napauttamalla alla olevaa painiketta.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "Å_Title___________ö";
+"Title" = "Otsikko";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Tänään";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "Å_Total: %lld____________ö";
+"Total: %lld" = "Yhteensä: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "Pieni kaupunki";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "Å_Updates to the form will be lost__________________ö.";
+"Updates to the form will be lost." = "Lomakkeen päivitykset menetetään.";
 
 /* A label in reference to a credential username. */
 "Username" = "Käyttäjänimi:";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "Å_Validation Errors__________________ö";
+"Validation Errors" = "Validointivirheet";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Arvo";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Näytä";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "Å_Visible Content________________ö";
+
 /* World (Level of Detail) */
 "World" = "Maailma";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Å_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________ö.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Sinulla on ^[%lld error](inflect: true), joka on korjattava ennen tallennusta.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

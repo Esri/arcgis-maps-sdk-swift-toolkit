@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld Результати](зігнути: істина)";
 
 /* A reference to 3D content. */
-"3D" = "ґ_3D_____Ї";
+"3D" = "3D";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Карту цього разу не можна завантажити.";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "ґ_Add Association________________Ї";
+"Add Association" = "Додати зʼєднання";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Додати область карти";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Назва області";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "ґ_Associations_____________Ї";
+"Associations" = "З’єднання";
 
 /* A label in reference to attachments. */
 "Attachments" = "Прикріплення";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "Потрібна аутентифікація";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "ґ_Back_________Ї";
+"Back" = "Назад";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Закладки";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Компас, курс %lld градусів %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "ґ_Containment Visible: %@________________________Ї";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "ґ_Content_______________Ї";
 
 /* Continent (Level of Detail) */
 "Continent" = "Континент";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "Продовжити";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "ґ_Continue Editing_________________Ї";
+"Continue Editing" = "Продовжити редагування";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Не вдалося отримати області карти з цієї карти.";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "Видалити всі початкові точки?";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "ґ_Delete Download________________Ї";
+"Delete Download" = "Видалити завантаження";
 
 /* A label for the description of the map area. */
 "Description" = "Опис";
 
 /* Discard edits on the feature form. */
-"Discard" = "ґ_Discard_______________Ї";
+"Discard" = "Вилучити";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "ґ_Discard Edits______________Ї";
+"Discard Edits" = "Скасувати редагування";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "ґ_Discard Edits_______________Ї?";
+"Discard Edits?" = "Скасувати редагування?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Відхилити";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "ґ_Error fetching filter results: %@__________________Ї";
+"Error fetching filter results: %@" = "Помилка отримання результатів фільтра: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Помилка при отриманні областей карти";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "Знайти місце або адресу";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "ґ_Finish editing failed_______________________Ї.";
+"Finish editing failed." = "Не вдалося виконати редагування.";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "ґ_Finish editing failed_______________________Ї.\nґ_%@_____Ї";
+"Finish editing failed.\n%@" = "Не вдалося виконати редагування. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Частка уздовж ребра";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "Нове трасування";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "ґ_No Associations________________Ї";
+"No Associations" = "Немає з’єднань";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Закладок немає";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "Оновити";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "ґ_Remove Download________________Ї";
+"Remove Download" = "Видалити завантаження";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Змінити назву";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "Кімнати";
 
 /* Finish editing the feature form. */
-"Save" = "ґ_Save_________Ї";
+"Save" = "Зберегти";
 
 /* A label for a button to save edits. */
-"Save Edits" = "ґ_Save Edits_____________________Ї";
+"Save Edits" = "Зберегти редагування";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Пошуковий запит";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "Налаштування";
 
 /* A label for a button to show all the association results. */
-"Show all" = "ґ_Show all_________________Ї";
+"Show all" = "Показати всі";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Сайти";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Файл сертифіката недійсний.";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "ґ_The form wasn't submitted__________________________Ї";
+"The form wasn't submitted" = "Форму не було надіслано";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Карта не має просторової прив'язки.";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Для цієї карти немає областей карти. Натисніть кнопку нижче, щоб розпочати.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "ґ_Title___________Ї";
+"Title" = "Заголовок";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Сьогодні";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "ґ_Total: %lld____________Ї";
+"Total: %lld" = "Загалом: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "Містечко";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "ґ_Updates to the form will be lost__________________Ї.";
+"Updates to the form will be lost." = "Оновлення форми будуть втрачені.";
 
 /* A label in reference to a credential username. */
 "Username" = "Ім'я користувача";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "ґ_Validation Errors__________________Ї";
+"Validation Errors" = "Помилки перевірки";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Значення";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Переглянути";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "ґ_Visible Content________________Ї";
+
 /* World (Level of Detail) */
 "World" = "Світ";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "ґ_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________Ї.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "У вас є ^[%lld error](inflect: true), яку потрібно виправити перед збереженням.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld rezultate](inflecție: adevărat)";
 
 /* A reference to 3D content. */
-"3D" = "Ă_3D_____ș";
+"3D" = "3D";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Nu poate fi descărcată o zonă de hartă în acest moment.";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "Ă_Add Association________________ș";
+"Add Association" = "Adăugați o asociere";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Adăugați zona de hartă";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Nume zonă";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "Ă_Associations_____________ș";
+"Associations" = "Asocieri";
 
 /* A label in reference to attachments. */
 "Attachments" = "Fișiere atașate";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "Autentificare necesară";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "Ă_Back_________ș";
+"Back" = "Înapoi";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Semne de carte";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Busolă, direcție %lld grade %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "Ă_Containment Visible: %@________________________ș";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "Ă_Content_______________ș";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "Continuare";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "Ă_Continue Editing_________________ș";
+"Continue Editing" = "Continuați editarea";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Nu s-au putut recupera zonele de hartă pentru această hartă.";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "Ștergere toate punctele de început?";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "Ă_Delete Download________________ș";
+"Delete Download" = "Ștergeți descărcarea";
 
 /* A label for the description of the map area. */
 "Description" = "Descriere";
 
 /* Discard edits on the feature form. */
-"Discard" = "Ă_Discard_______________ș";
+"Discard" = "Eliminare";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "Ă_Discard Edits______________ș";
+"Discard Edits" = "Eliminare editări";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "Ă_Discard Edits_______________ș?";
+"Discard Edits?" = "Eliminați editările?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Închidere";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "Ă_Error fetching filter results: %@__________________ș";
+"Error fetching filter results: %@" = "Eroare la extragerea rezultatelor filtrelor: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Eroare la preluarea zonelor de hartă";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "Găsire loc sau adresă";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "Ă_Finish editing failed_______________________ș.";
+"Finish editing failed." = "Finalizarea editării a eșuat.";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "Ă_Finish editing failed_______________________ș.\nĂ_%@_____ș";
+"Finish editing failed.\n%@" = "Finalizarea editării a eșuat. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Fracție de-a lungul marginii";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "Urmărire nouă";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "Ă_No Associations________________ș";
+"No Associations" = "Nu există asocieri";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Fără semne de carte";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "Reîmprospătare";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "Ă_Remove Download________________ș";
+"Remove Download" = "Eliminare descărcare";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Redenumire";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "Camere";
 
 /* Finish editing the feature form. */
-"Save" = "Ă_Save_________ș";
+"Save" = "Salvare";
 
 /* A label for a button to save edits. */
-"Save Edits" = "Ă_Save Edits_____________________ș";
+"Save Edits" = "Salvare editări";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Interogare căutare";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "Setări";
 
 /* A label for a button to show all the association results. */
-"Show all" = "Ă_Show all_________________ș";
+"Show all" = "Afișare toate";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Site-uri";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Fișierul certificat a fost nevalid.";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "Ă_The form wasn't submitted__________________________ș";
+"The form wasn't submitted" = "Formularul nu a fost trimis";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Harta nu are o referință spațială.";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Nu există zone de hartă pentru această hartă. Atingeți butonul de mai jos pentru a începe.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "Ă_Title___________ș";
+"Title" = "Titlu";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Astăzi";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "Ă_Total: %lld____________ș";
+"Total: %lld" = "Total: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "Localitate";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "Ă_Updates to the form will be lost__________________ș.";
+"Updates to the form will be lost." = "Actualizările acestui formular vor fi pierdute.";
 
 /* A label in reference to a credential username. */
 "Username" = "Nume de utilizator";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "Ă_Validation Errors__________________ș";
+"Validation Errors" = "Erori de validare";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Valoare";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Vizualizează";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "Ă_Visible Content________________ș";
+
 /* World (Level of Detail) */
 "World" = "Glob";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Ă_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________ș.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Aveți ^[%lld eroare](inflecție: adevărat) care trebuie remediată înainte de a salva.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

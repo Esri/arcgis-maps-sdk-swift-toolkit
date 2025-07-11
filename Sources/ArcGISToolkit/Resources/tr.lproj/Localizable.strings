@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld Sonuç](çekim: doğru)";
 
 /* A reference to 3D content. */
-"3D" = "ı_3D_____İ";
+"3D" = "3B";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Şu anda bir harita alanı indirilemiyor.";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "ı_Add Association________________İ";
+"Add Association" = "İlişkilendirme Ekle";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Harita Alanı Ekle";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Alan Adı";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "ı_Associations_____________İ";
+"Associations" = "İlişkilendirmeler";
 
 /* A label in reference to attachments. */
 "Attachments" = "Ekler";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "Kimlik Doğrulama Gerekiyor";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "ı_Back_________İ";
+"Back" = "Geri";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Yer imleri";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Pusula, başlık %lld derece %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "ı_Containment Visible: %@________________________İ";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "ı_Content_______________İ";
 
 /* Continent (Level of Detail) */
 "Continent" = "Kıta";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "Devam et";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "ı_Continue Editing_________________İ";
+"Continue Editing" = "Düzenlemeye Devam Et";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Bu harita için harita alanları alınamadı.";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "Tüm başlangıç noktaları silinsin mi?";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "ı_Delete Download________________İ";
+"Delete Download" = "İndirmeyi Sil";
 
 /* A label for the description of the map area. */
 "Description" = "Açıklama";
 
 /* Discard edits on the feature form. */
-"Discard" = "ı_Discard_______________İ";
+"Discard" = "Çıkar";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "ı_Discard Edits______________İ";
+"Discard Edits" = "Düzenlemeleri At";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "ı_Discard Edits_______________İ?";
+"Discard Edits?" = "Düzenlemeler Atılsın Mı?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Vazgeç";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "ı_Error fetching filter results: %@__________________İ";
+"Error fetching filter results: %@" = "Filtre sonuçları getirilirken hata oluştu: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Harita Alanları Getirilirken Hata Oluştu";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "Bir yer veya adres bul";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "ı_Finish editing failed_______________________İ.";
+"Finish editing failed." = "Düzenleme tamamlanamadı.";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "ı_Finish editing failed_______________________İ.\nı_%@_____İ";
+"Finish editing failed.\n%@" = "Düzenleme tamamlanamadı. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Kenar Boyunca Kesir";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "Yeni İz";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "ı_No Associations________________İ";
+"No Associations" = "İlişkilendirme Yok";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Yer işareti yok";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "Yenile";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "ı_Remove Download________________İ";
+"Remove Download" = "İndirmeyi Kaldır";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Yeniden Adlandır";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "Odalar";
 
 /* Finish editing the feature form. */
-"Save" = "ı_Save_________İ";
+"Save" = "Kaydet";
 
 /* A label for a button to save edits. */
-"Save Edits" = "ı_Save Edits_____________________İ";
+"Save Edits" = "Düzenlemeleri Kaydet";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Arama Sorgusu";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "Ayarlar";
 
 /* A label for a button to show all the association results. */
-"Show all" = "ı_Show all_________________İ";
+"Show all" = "Tümünü göster";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Siteler";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Sertifika dosyası geçersiz.";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "ı_The form wasn't submitted__________________________İ";
+"The form wasn't submitted" = "Form gönderilmedi";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Haritada bir mekansal referans yok.";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Bu harita için herhangi bir harita alanı bulunmamaktadır. Başlamak için aşağıdaki butona dokunun.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "ı_Title___________İ";
+"Title" = "Başlık";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Bugün";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "ı_Total: %lld____________İ";
+"Total: %lld" = "Toplam: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "Kasaba";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "ı_Updates to the form will be lost__________________İ.";
+"Updates to the form will be lost." = "Formda yapılan güncellemeler kaybedilecek.";
 
 /* A label in reference to a credential username. */
 "Username" = "Kullanıcı adı";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "ı_Validation Errors__________________İ";
+"Validation Errors" = "Doğrulama Hataları";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Değer";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Görüntüle";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "ı_Visible Content________________İ";
+
 /* World (Level of Detail) */
 "World" = "Dünya";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "ı_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________İ.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Kaydetmeden önce düzeltilmesi gereken ^[%lld hatası]( çekim: true) var.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

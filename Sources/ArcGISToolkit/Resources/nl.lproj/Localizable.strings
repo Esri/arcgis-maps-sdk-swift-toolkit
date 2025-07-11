@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld resultaten](inflect: true)";
 
 /* A reference to 3D content. */
-"3D" = "Ĳ_3D_____ä";
+"3D" = "3D";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Er kan momenteel geen kaartgebied worden gedownload.";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "Ĳ_Add Association________________ä";
+"Add Association" = "Associatie toevoegen";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Kaartgebied toevoegen";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Naam gebied";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "Ĳ_Associations_____________ä";
+"Associations" = "Associaties";
 
 /* A label in reference to attachments. */
 "Attachments" = "Bijlagen";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "Authenticatie vereist";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "Ĳ_Back_________ä";
+"Back" = "Terug";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Bladwijzers";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompas, richting %lld graden %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "Ĳ_Containment Visible: %@________________________ä";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "Ĳ_Content_______________ä";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "Doorgaan";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "Ĳ_Continue Editing_________________ä";
+"Continue Editing" = "Doorgaan met bewerken";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Kan geen kaartgebieden ophalen voor deze kaart.";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "Alle startpunten verwijderen";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "Ĳ_Delete Download________________ä";
+"Delete Download" = "Download verwijderen";
 
 /* A label for the description of the map area. */
 "Description" = "Beschrijving";
 
 /* Discard edits on the feature form. */
-"Discard" = "Ĳ_Discard_______________ä";
+"Discard" = "Annuleren";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "Ĳ_Discard Edits______________ä";
+"Discard Edits" = "Bewerkingen annuleren";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "Ĳ_Discard Edits_______________ä?";
+"Discard Edits?" = "Bewerkingen annuleren?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Verwijderen";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "Ĳ_Error fetching filter results: %@__________________ä";
+"Error fetching filter results: %@" = "Fout bij ophalen filterresultaten: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Fout bij ophalen kaaartgebieden";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "Een plaats of adres zoeken";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "Ĳ_Finish editing failed_______________________ä.";
+"Finish editing failed." = "Kan bewerken niet voltooien.";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "Ĳ_Finish editing failed_______________________ä.\nĲ_%@_____ä";
+"Finish editing failed.\n%@" = "Kan bewerken niet voltooien. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Fractie langs rand";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "Nieuwe tracering";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "Ĳ_No Associations________________ä";
+"No Associations" = "Geen associaties";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Geen bladwijzers";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "Vernieuwen";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "Ĳ_Remove Download________________ä";
+"Remove Download" = "Download verwijderen";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Naam wijzigen";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "Ruimtes";
 
 /* Finish editing the feature form. */
-"Save" = "Ĳ_Save_________ä";
+"Save" = "Opslaan";
 
 /* A label for a button to save edits. */
-"Save Edits" = "Ĳ_Save Edits_____________________ä";
+"Save Edits" = "Bewerkingen opslaan";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Zoekopdracht";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "Instellingen";
 
 /* A label for a button to show all the association results. */
-"Show all" = "Ĳ_Show all_________________ä";
+"Show all" = "Alles weergeven";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Het certificaatbestand is ongeldig.";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "Ĳ_The form wasn't submitted__________________________ä";
+"The form wasn't submitted" = "Het formulier is niet ingediend";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "De kaart heeft geen ruimtelijke referentie.";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Er zijn geen kaartgebieden voor deze kaart. Tik op de onderstaande knop om aan de slag te gaan.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "Ĳ_Title___________ä";
+"Title" = "Titel";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Vandaag";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "Ĳ_Total: %lld____________ä";
+"Total: %lld" = "Totaal: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "Kleine stad";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "Ĳ_Updates to the form will be lost__________________ä.";
+"Updates to the form will be lost." = "Updates in het formulier zullen verloren gaan.";
 
 /* A label in reference to a credential username. */
 "Username" = "Gebruikersnaam";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "Ĳ_Validation Errors__________________ä";
+"Validation Errors" = "Validatiefouten";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Waarde";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Weergeven";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "Ĳ_Visible Content________________ä";
+
 /* World (Level of Detail) */
 "World" = "Wereld";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Ĳ_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________ä.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "U hebt een ^[%lld error](inflect: true) die moet worden hersteld voordat u opslaat.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

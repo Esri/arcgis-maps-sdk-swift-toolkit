@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld результатов](inflect: true)";
 
 /* A reference to 3D content. */
-"3D" = "Ж_3D_____Я";
+"3D" = "3D";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "В данное время область карты невозможно загрузить.";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "Ж_Add Association________________Я";
+"Add Association" = "Добавить связь";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Добавить область карты";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Имя области";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "Ж_Associations_____________Я";
+"Associations" = "Связи";
 
 /* A label in reference to attachments. */
 "Attachments" = "Вложения";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "Необходима аутентификация";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "Ж_Back_________Я";
+"Back" = "Назад";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Закладки";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Компас, направление %lld градусы %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "Ж_Containment Visible: %@________________________Я";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "Ж_Content_______________Я";
 
 /* Continent (Level of Detail) */
 "Continent" = "Континент";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "Продолжить";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "Ж_Continue Editing_________________Я";
+"Continue Editing" = "Продолжить редактирование";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Невозможно получить области карты для этой карты.";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "Удалить все начальные точки?";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "Ж_Delete Download________________Я";
+"Delete Download" = "Удалить загрузку";
 
 /* A label for the description of the map area. */
 "Description" = "Описание";
 
 /* Discard edits on the feature form. */
-"Discard" = "Ж_Discard_______________Я";
+"Discard" = "Да";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "Ж_Discard Edits______________Я";
+"Discard Edits" = "Отклонить изменения";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "Ж_Discard Edits_______________Я?";
+"Discard Edits?" = "Отклонить изменения?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Убрать";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "Ж_Error fetching filter results: %@__________________Я";
+"Error fetching filter results: %@" = "Ошибка при извлечении результатов фильтра: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Ошибка получения областей карт";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "Найти адрес или место";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "Ж_Finish editing failed_______________________Я.";
+"Finish editing failed." = "Завершить редактирование не удалось.";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "Ж_Finish editing failed_______________________Я.\nЖ_%@_____Я";
+"Finish editing failed.\n%@" = "Завершить редактирование не удалось. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Дробление вдоль ребра";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "Новая трассировка";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "Ж_No Associations________________Я";
+"No Associations" = "Связи отсутствуют";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Нет закладок";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "Обновить";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "Ж_Remove Download________________Я";
+"Remove Download" = "Удалить загрузку";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Переименовать";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "Комнаты";
 
 /* Finish editing the feature form. */
-"Save" = "Ж_Save_________Я";
+"Save" = "Сохранить";
 
 /* A label for a button to save edits. */
-"Save Edits" = "Ж_Save Edits_____________________Я";
+"Save Edits" = "Сохранить изменения";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Запрос поиска";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "Настройки";
 
 /* A label for a button to show all the association results. */
-"Show all" = "Ж_Show all_________________Я";
+"Show all" = "Показать все";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Сайты";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Файл сертификата недопустим.";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "Ж_The form wasn't submitted__________________________Я";
+"The form wasn't submitted" = "Форма не была отправлена";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Карта не имеет пространственной привязки.";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Для этой карты нет областей карты. Коснитесь кнопки ниже, чтобы начать.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "Ж_Title___________Я";
+"Title" = "Заголовок";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Сегодня";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "Ж_Total: %lld____________Я";
+"Total: %lld" = "Всего: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "Небольшой город";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "Ж_Updates to the form will be lost__________________Я.";
+"Updates to the form will be lost." = "Обновления этой формы будут потеряны.";
 
 /* A label in reference to a credential username. */
 "Username" = "Имя пользователя";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "Ж_Validation Errors__________________Я";
+"Validation Errors" = "Ошибки проверки";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Значение";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Просмотреть";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "Ж_Visible Content________________Я";
+
 /* World (Level of Detail) */
 "World" = "Весь мир";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Ж_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________Я.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "У вас возникла ошибка ^[%lld](inflect: true), которую необходимо исправить перед сохранением.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

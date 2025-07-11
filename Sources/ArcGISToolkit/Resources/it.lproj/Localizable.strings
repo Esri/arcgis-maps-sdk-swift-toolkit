@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
 /* A reference to 3D content. */
-"3D" = "é_3D_____È";
+"3D" = "3D";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Impossibile scaricare l'area della mappa in questo momento.";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "é_Add Association________________È";
+"Add Association" = "Aggiungi associazione";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Aggiungi area mappa";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Nome area";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "é_Associations_____________È";
+"Associations" = "Associazioni";
 
 /* A label in reference to attachments. */
 "Attachments" = "Allegati";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "Autenticazione richiesta";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "é_Back_________È";
+"Back" = "Indietro";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Segnalibri";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Bussola, intestazione %lld gradi%@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "é_Containment Visible: %@________________________È";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "é_Content_______________È";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continente";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "Continua";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "é_Continue Editing_________________È";
+"Continue Editing" = "Continua a modificare";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Impossibile recuperare le aree di questa mappa.";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "Eliminare tutti i punti di partenza?";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "é_Delete Download________________È";
+"Delete Download" = "Elimina download";
 
 /* A label for the description of the map area. */
 "Description" = "Descrizione";
 
 /* Discard edits on the feature form. */
-"Discard" = "é_Discard_______________È";
+"Discard" = "Conferma";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "é_Discard Edits______________È";
+"Discard Edits" = "Annulla modifiche";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "é_Discard Edits_______________È?";
+"Discard Edits?" = "Annullare modifiche?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Abbandona";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "é_Error fetching filter results: %@__________________È";
+"Error fetching filter results: %@" = "Errore nel recupero dei risultati del filtro: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Errore nel recupero aree mappa";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "Trova luogo o indirizzo";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "é_Finish editing failed_______________________È.";
+"Finish editing failed." = "Termina la modifica non riuscita.";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "é_Finish editing failed_______________________È.\né_%@_____È";
+"Finish editing failed.\n%@" = "Termina la modifica non riuscita. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Frazione lungo bordo";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "Nuova traccia";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "é_No Associations________________È";
+"No Associations" = "Nessuna associazione";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Nessun segnalibro";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "Aggiorna";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "é_Remove Download________________È";
+"Remove Download" = "Rimuovi download";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Rinomina";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "Stanze";
 
 /* Finish editing the feature form. */
-"Save" = "é_Save_________È";
+"Save" = "Salva";
 
 /* A label for a button to save edits. */
-"Save Edits" = "é_Save Edits_____________________È";
+"Save Edits" = "Salva modifiche";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Interrogazione di ricerca";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "Impostazioni";
 
 /* A label for a button to show all the association results. */
-"Show all" = "é_Show all_________________È";
+"Show all" = "Mostra tutto";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Siti";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Il file del certificato non era valido.";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "é_The form wasn't submitted__________________________È";
+"The form wasn't submitted" = "Il modulo non è stato inviato";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "La mappa non possiede un riferimento spaziale.";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Non ci sono aree di mappa per questa mappa. Premere il pulsante di seguito per iniziare.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "é_Title___________È";
+"Title" = "Titolo";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Oggi";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "é_Total: %lld____________È";
+"Total: %lld" = "Totale: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "Città";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "é_Updates to the form will be lost__________________È.";
+"Updates to the form will be lost." = "Gli aggiornamenti del modulo andranno persi.";
 
 /* A label in reference to a credential username. */
 "Username" = "Nome utente";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "é_Validation Errors__________________È";
+"Validation Errors" = "Errori di convalida";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Valore";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Visualizza";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "é_Visible Content________________È";
+
 /* World (Level of Detail) */
 "World" = "Mondo";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "é_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________È.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Si è verificato un ^[%lld error](inflect: true) che deve essere risolto prima di salvare.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

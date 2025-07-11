@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld Kết quả](inflect: true)";
 
 /* A reference to 3D content. */
-"3D" = "Đ_3D_____ớ";
+"3D" = "3D";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Không thể tải xuống khu vực bản đồ vào lúc này.";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "Đ_Add Association________________ớ";
+"Add Association" = "Thêm Liên kết";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Thêm Khu vực Bản đồ";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Tên Khu vực";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "Đ_Associations_____________ớ";
+"Associations" = "Liên kết";
 
 /* A label in reference to attachments. */
 "Attachments" = "Các tệp đính kèm";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "Yêu cầu Xác thực";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "Đ_Back_________ớ";
+"Back" = "Quay lại";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Các phạm vi đánh dấu";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "La bàn, góc %lld đầu mục %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "Đ_Containment Visible: %@________________________ớ";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "Đ_Content_______________ớ";
 
 /* Continent (Level of Detail) */
 "Continent" = "Lục địa";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "Tiếp";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "Đ_Continue Editing_________________ớ";
+"Continue Editing" = "Tiếp tục Chỉnh sửa";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Không thể truy xuất khu vực bản đồ cho bản đồ này.";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "Xóa tất cả điểm bắt đầu?";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "Đ_Delete Download________________ớ";
+"Delete Download" = "Xóa Tải xuống";
 
 /* A label for the description of the map area. */
 "Description" = "Thông tin mô tả";
 
 /* Discard edits on the feature form. */
-"Discard" = "Đ_Discard_______________ớ";
+"Discard" = "Hủy";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "Đ_Discard Edits______________ớ";
+"Discard Edits" = "Hủy Chỉnh sửa";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "Đ_Discard Edits_______________ớ?";
+"Discard Edits?" = "Hủy Chỉnh sửa?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Bỏ qua";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "Đ_Error fetching filter results: %@__________________ớ";
+"Error fetching filter results: %@" = "Lỗi truy xuất kết quả bộ lọc: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Lỗi Tìm nạp Khu vực Bản đồ";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "Tìm địa điểm hoặc địa chỉ";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "Đ_Finish editing failed_______________________ớ.";
+"Finish editing failed." = "Không thể hoàn tất chỉnh sửa.";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "Đ_Finish editing failed_______________________ớ.\nĐ_%@_____ớ";
+"Finish editing failed.\n%@" = "Không thể hoàn tất chỉnh sửa. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Phân số Dọc theo Cạnh";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "Theo dõi Mới";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "Đ_No Associations________________ớ";
+"No Associations" = "Không có Liên kết";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Không có đánh dấu phạm vi nào";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "Làm mới";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "Đ_Remove Download________________ớ";
+"Remove Download" = "Xóa Tải xuống";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Đổi tên";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "Phòng";
 
 /* Finish editing the feature form. */
-"Save" = "Đ_Save_________ớ";
+"Save" = "Lưu";
 
 /* A label for a button to save edits. */
-"Save Edits" = "Đ_Save Edits_____________________ớ";
+"Save Edits" = "Lưu Chỉnh sửa";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Truy vấn Tìm kiếm";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "Thiết lập";
 
 /* A label for a button to show all the association results. */
-"Show all" = "Đ_Show all_________________ớ";
+"Show all" = "Hiện tất cả";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Tệp chứng chỉ không hợp lệ.";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "Đ_The form wasn't submitted__________________________ớ";
+"The form wasn't submitted" = "Biểu mẫu chưa được gửi";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Bản đồ không có mục tham chiếu không gian.";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Không có khu vực bản đồ cho bản đồ này. Chạm vào nút bên dưới để bắt đầu.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "Đ_Title___________ớ";
+"Title" = "Tiêu đề";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Hôm nay";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "Đ_Total: %lld____________ớ";
+"Total: %lld" = "Tổng: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "Thị trấn/Thị xã";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "Đ_Updates to the form will be lost__________________ớ.";
+"Updates to the form will be lost." = "Các cập nhật đối với biểu mẫu sẽ bị mất.";
 
 /* A label in reference to a credential username. */
 "Username" = "Tên người dùng";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "Đ_Validation Errors__________________ớ";
+"Validation Errors" = "Lỗi Xác minh";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Giá trị";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Xem";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "Đ_Visible Content________________ớ";
+
 /* World (Level of Detail) */
 "World" = "Thế giới";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Đ_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________ớ.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Bạn có ^[%lld lỗi](inflect: true) cần sửa trước khi lưu.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

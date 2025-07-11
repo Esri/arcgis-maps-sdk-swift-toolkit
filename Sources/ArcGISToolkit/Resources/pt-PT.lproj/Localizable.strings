@@ -5,7 +5,7 @@
 "^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
 /* A reference to 3D content. */
-"3D" = "ã_3D_____Ç";
+"3D" = "3D";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
@@ -15,7 +15,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Neste momento, não é possível transferir uma área de mapa.";
 
 /* A label for an option to add a new utility association. */
-"Add Association" = "ã_Add Association________________Ç";
+"Add Association" = "Adicionar associação";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Adicionar área de mapa";
@@ -45,7 +45,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Nome da área";
 
 /* A label in reference to utility associations elements contained within a popup. */
-"Associations" = "ã_Associations_____________Ç";
+"Associations" = "Associações";
 
 /* A label in reference to attachments. */
 "Attachments" = "Anexos";
@@ -60,7 +60,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Authentication Required" = "Autenticação Necessária";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
-"Back" = "ã_Back_________Ç";
+"Back" = "Voltar";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Marcadores";
@@ -126,9 +126,9 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Bússola, direção %lld graus %@";
 
-/* A label indicating whether a utility association's 
-containment is visible or not. */
-"Containment Visible: %@" = "ã_Containment Visible: %@________________________Ç";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "ã_Content_______________Ç";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continente";
@@ -137,7 +137,7 @@ containment is visible or not. */
 "Continue" = "Continuar";
 
 /* A label for a button to continue editing the feature form. */
-"Continue Editing" = "ã_Continue Editing_________________Ç";
+"Continue Editing" = "Continuar a editar";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Não foi possível obter áreas de mapa para este mapa.";
@@ -182,19 +182,19 @@ containment is visible or not. */
 "Delete all starting points?" = "Eliminar todos os pontos de partida?";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "ã_Delete Download________________Ç";
+"Delete Download" = "Eliminar transferência";
 
 /* A label for the description of the map area. */
 "Description" = "Descrição";
 
 /* Discard edits on the feature form. */
-"Discard" = "ã_Discard_______________Ç";
+"Discard" = "Rejeitar";
 
 /* A label for a button to discard unsaved edits. */
-"Discard Edits" = "ã_Discard Edits______________Ç";
+"Discard Edits" = "Rejeitar edições";
 
 /* A question asking if the user would like to discard their unsaved edits. */
-"Discard Edits?" = "ã_Discard Edits_______________Ç?";
+"Discard Edits?" = "Rejeitar edições?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "dispensar";
@@ -259,7 +259,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* An error message shown when the element's
 associations filter results cannot be displayed.
 The variable provides additional data. */
-"Error fetching filter results: %@" = "ã_Error fetching filter results: %@__________________Ç";
+"Error fetching filter results: %@" = "Erro ao obter resultados de filtros: %@";
 
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Erro ao obter áreas de mapa";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "Encontrar um local ou endereço";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "ã_Finish editing failed_______________________Ç.";
+"Finish editing failed." = "Falha ao terminar a edição.";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "ã_Finish editing failed_______________________Ç.\nã_%@_____Ç";
+"Finish editing failed.\n%@" = "Falha ao terminar a edição. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Fração ao Longo da Aresta";
@@ -392,7 +392,7 @@ AR experience. */
 "New Trace" = "Novo rastreio";
 
 /* A label indicating that no associations are available for the popup element. */
-"No Associations" = "ã_No Associations________________Ç";
+"No Associations" = "Sem associações";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Sem marcadores";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "Atualizar";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "ã_Remove Download________________Ç";
+"Remove Download" = "Remover transferência";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Mudar o nome";
@@ -514,10 +514,10 @@ current visible extent of the map or scene. */
 "Rooms" = "Divisões";
 
 /* Finish editing the feature form. */
-"Save" = "ã_Save_________Ç";
+"Save" = "Guardar";
 
 /* A label for a button to save edits. */
-"Save Edits" = "ã_Save Edits_____________________Ç";
+"Save Edits" = "Guardar edições";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Consulta de Pesquisa";
@@ -542,7 +542,7 @@ or more levels in a floor-aware map or scene. */
 "Settings" = "Definições";
 
 /* A label for a button to show all the association results. */
-"Show all" = "ã_Show all_________________Ç";
+"Show all" = "Exibir tudo";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
@@ -605,7 +605,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "O ficheiro de certificado era inválido.";
 
 /* The title shown when the feature form failed to save. */
-"The form wasn't submitted" = "ã_The form wasn't submitted__________________________Ç";
+"The form wasn't submitted" = "O formulário não foi submetido";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "O mapa não tem uma referência espacial.";
@@ -636,13 +636,13 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Não existem áreas de mapa para este mapa. Toque no botão abaixo para começar.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
-"Title" = "ã_Title___________Ç";
+"Title" = "Título";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Hoje";
 
 /* Text indicating the total count of association results. */
-"Total: %lld" = "ã_Total: %lld____________Ç";
+"Total: %lld" = "Total: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "Vila";
@@ -674,13 +674,13 @@ to be imported as an attachment. */
 /* A message explaining that unsaved edits will be
 lost if the user continues to dismiss the form
 without saving. */
-"Updates to the form will be lost." = "ã_Updates to the form will be lost__________________Ç.";
+"Updates to the form will be lost." = "As atualizações do formulário serão perdidas.";
 
 /* A label in reference to a credential username. */
 "Username" = "Nome de utilizador";
 
 /* A label indicating the feature form has validation errors. */
-"Validation Errors" = "ã_Validation Errors__________________Ç";
+"Validation Errors" = "Erros de validação";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Valor";
@@ -715,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Ver";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "ã_Visible Content________________Ç";
+
 /* World (Level of Detail) */
 "World" = "Mundo";
 
@@ -727,7 +731,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "ã_You have ^[%lld error](inflect: true) that must be fixed before saving_____________________________________Ç.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Tem ^[%lld error](inflect: true) que tem de ser corrigido antes de guardar.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
