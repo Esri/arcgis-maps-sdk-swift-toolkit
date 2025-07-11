@@ -292,9 +292,10 @@ private extension CLLocationManager {
 }
 
 #Preview {
+    @Previewable @State var map = Map(basemap: .init(baseLayer: OpenStreetMapLayer()))
     @Previewable @State var locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
     
-    MapView(map: Map.openStreetMap())
+    MapView(map: map)
         .overlay(alignment: .topTrailing) {
             VStack(spacing: 18) {
                 LocationButton(locationDisplay: locationDisplay)
@@ -331,10 +332,4 @@ private extension CLLocationManager {
                 LocationButton(locationDisplay: locationDisplay)
             }
         }
-}
-
-private extension Map {
-   static func openStreetMap() -> Map {
-       Map(basemap: .init(baseLayer: OpenStreetMapLayer()))
-    }
 }
