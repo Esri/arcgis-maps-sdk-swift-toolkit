@@ -34,7 +34,15 @@ public struct LocationButton: View {
     @State private(set) var status: LocationDataSource.Status = .stopped
     
     /// The autopan mode of the location display.
-    @State private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off
+    @State private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off {
+        didSet {
+            guard autoPanMode != locationDisplay.autoPanMode else {
+                return
+            }
+            // Set the mode on the location display.
+            locationDisplay.autoPanMode = autoPanMode
+        }
+    }
     
     /// A value indicating whether the button is disabled.
     var buttonIsDisabled: Bool {
@@ -53,7 +61,7 @@ public struct LocationButton: View {
     }
     
     /// Sets the auto-pan options that are available for the user to select.
-    /// - Parameter options: The auto-pan options that the user can cycle through.
+    /// - Parameter autoPanModes: The auto-pan options that the user can cycle through.
     /// - Returns: A new location button with the auto-pan options set.
     public func autoPanModes(_ autoPanModes: [LocationDisplay.AutoPanMode]) -> Self {
         var copy = self
@@ -70,7 +78,7 @@ public struct LocationButton: View {
         .onChange(of: autoPanModes) {
             // If current mode not in new options, then switch it out.
             if !autoPanModes.contains(autoPanMode) {
-                select(autoPanMode: initialAutoPanMode)
+                autoPanMode = initialAutoPanMode
             }
         }
         .contextMenu { contextMenuItems }
@@ -107,7 +115,7 @@ public struct LocationButton: View {
             Section("Autopan") {
                 ForEach(contextMenuAutoPanOptions, id: \.self) { autoPanMode in
                     Button {
-                        select(autoPanMode: autoPanMode)
+                        self.autoPanMode = autoPanMode
                     } label: {
                         Label(autoPanMode.pickerText, systemImage: autoPanMode.imageSystemName)
                     }
@@ -150,19 +158,9 @@ extension LocationButton {
     /// Observe the auto pan mode of the location display.
     func observeAutoPanMode() async {
         for await autoPanMode in locationDisplay.$autoPanMode {
+            guard autoPanMode != self.autoPanMode else { continue }
             self.autoPanMode = autoPanMode
         }
-    }
-    
-    /// Selects a new auto pan mode.
-    /// - Parameter autoPanMode: The new auto pan mode.
-    func select(autoPanMode: LocationDisplay.AutoPanMode) {
-        guard autoPanMode != locationDisplay.autoPanMode else {
-            return
-        }
-        // Set the mode on the location display, the model observes changes
-        // on the location display and will update accordingly.
-        locationDisplay.autoPanMode = autoPanMode
     }
     
     /// This should be called when the button is pressed.
@@ -188,7 +186,7 @@ extension LocationButton {
         case .autoPanCycle:
             // Need to use the select method here so that last selected mode
             // gets set.
-            select(autoPanMode: nextAutoPanMode(current: autoPanMode, initial: initialAutoPanMode))
+            autoPanMode = nextAutoPanMode(current: autoPanMode, initial: initialAutoPanMode)
         case .none:
             return
         }
