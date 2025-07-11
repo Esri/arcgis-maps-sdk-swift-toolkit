@@ -118,7 +118,7 @@ public struct LocationButton: View {
                     Button {
                         self.autoPanMode = autoPanMode
                     } label: {
-                        Label(autoPanMode.pickerText, systemImage: autoPanMode.imageSystemName)
+                        Label(autoPanMode.label, systemImage: autoPanMode.imageSystemName)
                     }
                 }
             }
@@ -246,17 +246,33 @@ extension LocationButton {
 }
 
 private extension LocationDisplay.AutoPanMode {
-    /// The label that should appear in the picker.
-    var pickerText: String {
-        switch self {
+    /// The label text that should appear in the menu item.
+    var label: String {
+        return switch self {
         case .off:
-            "Auto Pan Off"
+            String(
+                localized: "Auto-pan Off",
+                bundle: .toolkitModule,
+                comment: "The label text for turning the auto-pan mode off in the location button context menu."
+            )
         case .recenter:
-            "Recenter"
+            String(
+                localized: "Recenter",
+                bundle: .toolkitModule,
+                comment: "The label text for choosing the 'recenter' auto-pan mode in the location button context menu."
+            )
         case .compassNavigation:
-            "Compass"
+            String(
+                localized: "Compass",
+                bundle: .toolkitModule,
+                comment: "The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu."
+            )
         case .navigation:
-            "Navigation"
+            String(
+                localized: "Navigation",
+                bundle: .toolkitModule,
+                comment: "The label text for choosing the 'navigation' auto-pan mode in the location button context menu."
+            )
         @unknown default:
             fatalError()
         }
