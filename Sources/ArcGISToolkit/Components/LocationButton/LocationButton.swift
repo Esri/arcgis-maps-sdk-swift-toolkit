@@ -65,7 +65,7 @@ public struct LocationButton: View {
         Button {
             buttonAction()
         } label: {
-            buttonLabel()
+            buttonLabel
         }
         .onChange(of: autoPanModes) {
             // If current mode not in new options, then switch it out.
@@ -73,7 +73,7 @@ public struct LocationButton: View {
                 select(autoPanMode: initialAutoPanMode)
             }
         }
-        .contextMenu(ContextMenu { contextMenuContent() })
+        .contextMenu { contextMenuItems }
         .disabled(buttonIsDisabled)
         .task(id: ObjectIdentifier(locationDisplay)) { await observeStatus() }
         .task(id: ObjectIdentifier(locationDisplay)) { await observeAutoPanMode() }
@@ -81,7 +81,7 @@ public struct LocationButton: View {
     }
     
     @ViewBuilder
-    private func buttonLabel() -> some View {
+    private var buttonLabel: some View {
         // Decide what image is in the button based on the status
         // and autopan mode.
         switch status {
@@ -99,9 +99,8 @@ public struct LocationButton: View {
         }
     }
     
-    @MainActor
     @ViewBuilder
-    private func contextMenuContent() -> some View {
+    private var contextMenuItems: some View {
         // Only show context menu if there are 2 or more auto-pan options and
         // status of the location display is started.
         if autoPanModes.count >= 2 && status == .started {
