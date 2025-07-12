@@ -113,7 +113,7 @@ public struct LocationButton: View {
         // Only show context menu if there are 2 or more auto-pan options and
         // status of the location display is started.
         if autoPanModes.count >= 2 && status == .started {
-            Section("Autopan") {
+            Section(autoPanSectionHeaderLabelText) {
                 ForEach(contextMenuAutoPanOptions, id: \.self) { autoPanMode in
                     Button {
                         self.autoPanMode = autoPanMode
@@ -128,9 +128,27 @@ public struct LocationButton: View {
                     await hideLocationDisplay()
                 }
             } label: {
-                Label("Hide Location", systemImage: "location.slash")
+                Label(hideLocationLabelText, systemImage: "location.slash")
             }
         }
+    }
+    
+    /// The text for the auto-pan section in the context menu.
+    private var autoPanSectionHeaderLabelText: String {
+        String(
+            localized: "Auto-pan",
+            bundle: .toolkitModule,
+            comment: "The section header for the auto-pan section in the location button context menu."
+        )
+    }
+    
+    /// The text for the hide location item in the context menu.
+    private var hideLocationLabelText: String {
+        String(
+            localized: "Hide Location",
+            bundle: .toolkitModule,
+            comment: "The section header for the auto-pan section in the location button context menu."
+        )
     }
 }
 
