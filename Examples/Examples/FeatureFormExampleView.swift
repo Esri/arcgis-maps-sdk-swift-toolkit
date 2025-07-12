@@ -18,10 +18,13 @@ import SwiftUI
 
 struct FeatureFormExampleView: View {
     /// The error to be presented in the alert.
-    @State private var alertError: String?
+    @State private var applyEditsError: ApplyEditsError?
     
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
+    
+    /// A Boolean value indicating whether edits are being applied.
+    @State private var editsAreBeingApplied = false
     
     /// The presented feature form.
     @State private var featureForm: FeatureForm?
@@ -29,67 +32,34 @@ struct FeatureFormExampleView: View {
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     
-    /// A Boolean value indicating whether edits are being applied.
-    @State private var isApplyingEdits = false
-    
-    /// The visibility of the submit button.
-    @State private var submitButtonVisibility = Visibility.hidden
-    
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
     
     var body: some View {
-        MapViewReader { mapViewProxy in
+        MapViewReader { mapView in
             MapView(map: map)
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
-                .task(id: identifyScreenPoint) {
-                    if let feature = await identifyFeature(with: mapViewProxy) {
-                        featureForm = FeatureForm(feature: feature)
-                    }
-                }
-                .ignoresSafeArea(.keyboard)
-                .sheet(isPresented: featureFormViewIsPresented) {
-                    FeatureFormView(root: featureForm!, isPresented: featureFormViewIsPresented)
-                        .onFormEditingEvent { editingEvent in
-                            if case .savedEdits = editingEvent,
-                               let table = featureForm?.feature.table as? ServiceFeatureTable,
-                               !editedTables.contains(where: { $0 === table }) {
-                                editedTables.append(table)
-                                updateSubmitButtonVisibility()
-                            }
-                        }
-                }
-                .alert("Error", isPresented: alertIsPresented) {
-                } message: {
-                    if let error = alertError {
-                        Text(error)
-                    }
-                }
+                .alert(
+                    isPresented: alertIsPresented,
+                    error: applyEditsError,
+                    actions: {}
+                )
                 .overlay {
-                    if isApplyingEdits {
-                        HStack(spacing: 5) {
-                            ProgressView()
-                                .progressViewStyle(.circular)
-                            Text("Applying edits")
-                        }
-                        .padding()
-                        .background(.thinMaterial)
-                        .clipShape(.rect(cornerRadius: 10))
-                    } else {
-                        EmptyView()
-                    }
+                    submittingOverlay
+                }
+                .sheet(isPresented: featureFormViewIsPresented) {
+                    featureFormView
+                }
+                .task(id: identifyScreenPoint) {
+                    guard !editsAreBeingApplied,
+                          let identifyScreenPoint else { return }
+                    await makeFeatureForm(point: identifyScreenPoint, map: mapView)
                 }
                 .toolbar {
-                    if submitButtonVisibility != .hidden {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Submit") {
-                                Task {
-                                    await applyEdits()
-                                }
-                            }
-                        }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        submitButton
                     }
                 }
         }
@@ -97,23 +67,35 @@ struct FeatureFormExampleView: View {
 }
 
 extension FeatureFormExampleView {
+    /// An error encountered while applying edits.
+    enum ApplyEditsError: LocalizedError {
+        case applyEditsThrew(any Error)
+        case other(String)
+        
+        var errorDescription: String? {
+            switch self {
+            case .applyEditsThrew(let error):
+                String(reflecting: error)
+            case .other(let message):
+                message
+            }
+        }
+    }
+    
     // MARK: Methods
     
-    /// Applies edits to the remote service.
+    /// Applies edits to the service feature table or geodatabase.
     private func applyEdits() async {
-        isApplyingEdits = true
-        defer {
-            isApplyingEdits = false
-            updateSubmitButtonVisibility()
-        }
+        editsAreBeingApplied = true
+        defer { editsAreBeingApplied = false }
         
         for table in editedTables {
             guard let database = table.serviceGeodatabase else {
-                alertError = "No geodatabase found."
+                applyEditsError = .other("No geodatabase found.")
                 return
             }
             guard database.hasLocalEdits else {
-                alertError = "No database edits found."
+                applyEditsError = .other("No database edits found.")
                 return
             }
             let resultErrors: [Error]
@@ -126,42 +108,31 @@ extension FeatureFormExampleView {
                     resultErrors = featureEditResults.errors
                 }
             } catch {
-                alertError = "The changes could not be applied to the database or table.\n\n\(error.localizedDescription)"
+                applyEditsError = .applyEditsThrew(error)
                 return
             }
             if !resultErrors.isEmpty {
-                alertError = "Apply edits failed with ^[\(resultErrors.count) error](inflect: true)."
+                applyEditsError = .other("Apply edits returned ^[\(resultErrors.count) error](inflect: true).")
             }
             editedTables.removeAll { $0.tableName == table.tableName }
         }
     }
     
-    /// Identifies features, if any, at the current screen point.
-    /// - Parameter proxy: The proxy to use for identification.
-    /// - Returns: The first identified feature in a layer.
-    private func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
-        guard let identifyScreenPoint else { return nil }
-        let identifyLayerResults = try? await proxy.identifyLayers(
+    /// Opens a form for the first feature found at the point on the map.
+    /// - Parameter point: The point to run identify at on the map.
+    /// - Parameter map: The map to identify on.
+    private func makeFeatureForm(point: CGPoint, map: MapViewProxy) async {
+        guard let identifyScreenPoint else { return }
+        let identifyLayerResults = try? await map.identifyLayers(
             screenPoint: identifyScreenPoint,
             tolerance: 10
         )
-        return identifyLayerResults?.compactMap { result in
+        if let feature = identifyLayerResults?.compactMap({ result in
             result.geoElements.compactMap { element in
                 element as? ArcGISFeature
             }.first
-        }.first
-    }
-    
-    private func updateSubmitButtonVisibility() {
-        guard featureForm == nil || !(featureForm?.hasEdits ?? false) else {
-            submitButtonVisibility = .hidden
-            return
-        }
-        let databases = editedTables.compactMap(\.serviceGeodatabase)
-        if databases.contains(where: \.hasLocalEdits) {
-            submitButtonVisibility = .visible
-        } else {
-            submitButtonVisibility = .hidden
+        }).first {
+            featureForm = FeatureForm(feature: feature)
         }
     }
     
@@ -170,12 +141,24 @@ extension FeatureFormExampleView {
     /// A Boolean value indicating whether general form workflow errors are presented.
     private var alertIsPresented: Binding<Bool> {
         Binding {
-            self.alertError != nil
+            applyEditsError != nil
         } set: { newAlertIsPresented in
             if !newAlertIsPresented {
-                self.alertError = nil
+                applyEditsError = nil
             }
         }
+    }
+    
+    /// The feature form view shown in the sheet over the map.
+    private var featureFormView: some View {
+        FeatureFormView(root: featureForm!, isPresented: featureFormViewIsPresented)
+            .onFormEditingEvent { editingEvent in
+                if case .savedEdits = editingEvent,
+                   let table = featureForm?.feature.table as? ServiceFeatureTable,
+                   !editedTables.contains(where: { $0 === table }) {
+                    editedTables.append(table)
+                }
+            }
     }
     
     /// A Boolean value indicating whether the form is presented.
@@ -186,6 +169,33 @@ extension FeatureFormExampleView {
             if !newValue {
                 featureForm = nil
             }
+        }
+    }
+    
+    /// The button used to apply edits made in forms.
+    @ViewBuilder private var submitButton: some View {
+        let databases = editedTables.compactMap(\.serviceGeodatabase)
+        let localEditsExist = databases.contains(where: \.hasLocalEdits)
+        if !featureFormViewIsPresented.wrappedValue, localEditsExist {
+            Button("Submit") {
+                Task {
+                    await applyEdits()
+                }
+            }
+        }
+    }
+    
+    /// Overlay content that indicates the form is being submitted to the user.
+    @ViewBuilder private var submittingOverlay: some View {
+        if editsAreBeingApplied {
+            HStack(spacing: 5) {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                Text("Submitting")
+            }
+            .padding()
+            .background(.thinMaterial)
+            .clipShape(.rect(cornerRadius: 10))
         }
     }
 }
