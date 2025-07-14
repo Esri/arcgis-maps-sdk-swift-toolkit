@@ -37,6 +37,7 @@ struct HomeView: View {
                             .sheet(isPresented: $showProfile) {
                                 ProfileView(portal: portal) {
                                     self.portal = nil
+                                    self.showProfile = false
                                 }
                             }
                         }
