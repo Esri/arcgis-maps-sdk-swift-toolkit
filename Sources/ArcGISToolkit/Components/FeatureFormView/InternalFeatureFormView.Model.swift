@@ -16,7 +16,7 @@ import ArcGIS
 import Observation
 
 @Observable
-class InternalFeatureFormViewModel {
+class EmbeddedFeatureFormViewModel {
     /// The current focused element, if one exists.
     var focusedElement: FormElement? {
         didSet {

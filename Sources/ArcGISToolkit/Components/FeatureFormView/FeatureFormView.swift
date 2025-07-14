@@ -130,32 +130,32 @@ public struct FeatureFormView: View {
     public var body: some View {
         if let rootFeatureForm {
             NavigationStack(path: $navigationPath) {
-                InternalFeatureFormView(featureForm: rootFeatureForm)
+                EmbeddedFeatureFormView(featureForm: rootFeatureForm)
                     .navigationDestination(for: NavigationPathItem.self) { itemType in
                         switch itemType {
                         case let .form(form):
-                            InternalFeatureFormView(featureForm: form)
-                        case let .utilityAssociationFilterResultView(result, internalFeatureFormViewModel):
+                            EmbeddedFeatureFormView(featureForm: form)
+                        case let .utilityAssociationFilterResultView(result, embeddedFeatureFormViewModel):
                             UtilityAssociationsFilterResultView(
-                                internalFeatureFormViewModel: internalFeatureFormViewModel,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
                                 utilityAssociationsFilterResult: result
                             )
-                            .featureFormToolbar(internalFeatureFormViewModel.featureForm)
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(result.filter.title, subtitle: internalFeatureFormViewModel.title)
+                            .navigationTitle(result.filter.title, subtitle: embeddedFeatureFormViewModel.title)
                             .onAppear {
-                                formChangedAction(internalFeatureFormViewModel.featureForm)
+                                formChangedAction(embeddedFeatureFormViewModel.featureForm)
                             }
-                        case let .utilityAssociationGroupResultView(result, internalFeatureFormViewModel):
+                        case let .utilityAssociationGroupResultView(result, embeddedFeatureFormViewModel):
                             UtilityAssociationGroupResultView(
-                                internalFeatureFormViewModel: internalFeatureFormViewModel,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
                                 utilityAssociationGroupResult: result
                             )
-                            .featureFormToolbar(internalFeatureFormViewModel.featureForm)
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(result.name, subtitle: internalFeatureFormViewModel.title)
+                            .navigationTitle(result.name, subtitle: embeddedFeatureFormViewModel.title)
                             .onAppear {
-                                formChangedAction(internalFeatureFormViewModel.featureForm)
+                                formChangedAction(embeddedFeatureFormViewModel.featureForm)
                             }
                         }
                     }
@@ -386,7 +386,7 @@ extension FeatureFormView {
     /// The closure to perform when the presented feature form changes.
     ///
     /// - Note: This action has the potential to be called under four scenarios. Whenever an
-    /// ``InternalFeatureFormView`` appears (which can happen during forward
+    /// ``EmbeddedFeatureFormView`` appears (which can happen during forward
     /// or reverse navigation) and whenever a ``UtilityAssociationGroupResultView`` appears
     /// (which can also happen during forward or reverse navigation). Because those two views (and the
     /// intermediate ``UtilityAssociationsFilterResultView`` are all considered to be apart of

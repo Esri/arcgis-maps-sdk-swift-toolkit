@@ -29,7 +29,7 @@ struct AttachmentsFeatureElementView: View {
     ///
     /// - Note: This property is only present when
     /// `featureElement` is an `AttachmentsFormElement`.
-    private var internalFeatureFormViewModel: InternalFeatureFormViewModel?
+    private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel?
     
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
@@ -60,16 +60,16 @@ struct AttachmentsFeatureElementView: View {
     /// Creates a new `AttachmentsFeatureElementView` for a Feature Form.
     /// - Parameter formElement: The `AttachmentsFeatureElement`.
     /// - Parameter formViewModel: The model for the feature form containing the element.
-    init(formElement: AttachmentsFormElement, formViewModel: InternalFeatureFormViewModel) {
+    init(formElement: AttachmentsFormElement, formViewModel: EmbeddedFeatureFormViewModel) {
         self.featureElement = formElement
-        self.internalFeatureFormViewModel = formViewModel
+        self.embeddedFeatureFormViewModel = formViewModel
     }
     
     /// Creates a new `AttachmentsFeatureElementView` for a Popup.
     /// - Parameter popupElement: The `AttachmentsFeatureElement`.
     init(popupElement: AttachmentsPopupElement) {
         self.featureElement = popupElement
-        self.internalFeatureFormViewModel = nil
+        self.embeddedFeatureFormViewModel = nil
     }
     
     /// A Boolean value denoting whether the Disclosure Group is expanded.
@@ -175,7 +175,7 @@ struct AttachmentsFeatureElementView: View {
         newModel.load()
         models.insert(newModel, at: 0)
         withAnimation { attachmentModelsState = .initialized(models) }
-        internalFeatureFormViewModel?.evaluateExpressions()
+        embeddedFeatureFormViewModel?.evaluateExpressions()
         scrollToNewAttachmentAction?()
     }
     
@@ -187,7 +187,7 @@ struct AttachmentsFeatureElementView: View {
         if let attachment = attachmentModel.attachment as? FormAttachment {
             attachment.name = newAttachmentName
             withAnimation { attachmentModel.sync() }
-            internalFeatureFormViewModel?.evaluateExpressions()
+            embeddedFeatureFormViewModel?.evaluateExpressions()
         }
     }
     
@@ -201,7 +201,7 @@ struct AttachmentsFeatureElementView: View {
             guard case .initialized(var models) = attachmentModelsState else { return }
             models.removeAll { $0 === attachmentModel }
             withAnimation { attachmentModelsState = .initialized(models) }
-            internalFeatureFormViewModel?.evaluateExpressions()
+            embeddedFeatureFormViewModel?.evaluateExpressions()
         }
     }
 }

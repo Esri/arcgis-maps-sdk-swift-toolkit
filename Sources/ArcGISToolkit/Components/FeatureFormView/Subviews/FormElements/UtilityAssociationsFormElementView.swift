@@ -19,7 +19,7 @@ extension FeatureFormView {
     /// A view for a utility associations form element.
     struct UtilityAssociationsFormElementView: View {
         /// The view model for the form.
-        @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
+        @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
         
         /// The set of utility associations filter results for the element.
         @State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
@@ -31,7 +31,7 @@ extension FeatureFormView {
             FeatureFormGroupedContentView(content: associationsFilterResults.compactMap {
                 if $0.resultCount > 0 {
                     UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
-                        .environment(internalFeatureFormViewModel)
+                        .environment(embeddedFeatureFormViewModel)
                 } else {
                     nil
                 }
@@ -57,7 +57,7 @@ extension FeatureFormView {
         @Environment(\.setAlertContinuation) var setAlertContinuation
         
         /// The view model for the form.
-        let internalFeatureFormViewModel: InternalFeatureFormViewModel
+        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
         /// The backing utility association group result.
         let utilityAssociationGroupResult: UtilityAssociationGroupResult
@@ -72,7 +72,7 @@ extension FeatureFormView {
                             )
                         )
                     }
-                    if internalFeatureFormViewModel.featureForm.hasEdits {
+                    if embeddedFeatureFormViewModel.featureForm.hasEdits {
                         setAlertContinuation?(true) {
                             navigationAction()
                         }
@@ -91,7 +91,7 @@ extension FeatureFormView {
     /// A view referencing a utility associations filter result.
     struct UtilityAssociationsFilterResultListRowView: View {
         /// The view model for the form.
-        @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
+        @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
         
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
@@ -104,7 +104,7 @@ extension FeatureFormView {
                 navigationPath?.wrappedValue.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
                         utilityAssociationsFilterResult,
-                        internalFeatureFormViewModel
+                        embeddedFeatureFormViewModel
                     )
                 )
             } label: {
@@ -141,7 +141,7 @@ extension FeatureFormView {
         let futureAddAssociationSupportIsEnabled = false
         
         /// The view model for the form.
-        let internalFeatureFormViewModel: InternalFeatureFormViewModel
+        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
         /// The backing utility associations filter result.
         let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
@@ -159,7 +159,7 @@ extension FeatureFormView {
                             navigationPath?.wrappedValue.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
                                     utilityAssociationGroupResult,
-                                    internalFeatureFormViewModel
+                                    embeddedFeatureFormViewModel
                                 )
                             )
                         } label: {
