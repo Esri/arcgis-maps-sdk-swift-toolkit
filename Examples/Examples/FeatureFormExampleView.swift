@@ -17,9 +17,6 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FeatureFormExampleView: View {
-    /// The error to be presented in the alert.
-    @State private var submissionError: SubmissionError?
-    
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     
@@ -34,6 +31,9 @@ struct FeatureFormExampleView: View {
     
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
+    
+    /// The error to be presented in the alert.
+    @State private var submissionError: SubmissionError?
     
     var body: some View {
         MapViewReader { mapView in
