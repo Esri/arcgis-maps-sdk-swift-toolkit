@@ -18,7 +18,7 @@ import SwiftUI
 
 struct FeatureFormExampleView: View {
     /// The error to be presented in the alert.
-    @State private var applyEditsError: ApplyEditsError?
+    @State private var submissionError: SubmissionError?
     
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
@@ -43,7 +43,7 @@ struct FeatureFormExampleView: View {
                 }
                 .alert(
                     isPresented: alertIsPresented,
-                    error: applyEditsError,
+                    error: submissionError,
                     actions: {}
                 )
                 .overlay {
@@ -67,14 +67,14 @@ struct FeatureFormExampleView: View {
 }
 
 extension FeatureFormExampleView {
-    /// An error encountered while applying edits.
-    enum ApplyEditsError: LocalizedError {
-        case applyEditsThrew(any Error)
+    /// An error encountered while submitting edits.
+    enum SubmissionError: LocalizedError {
+        case applyEdits(any Error)
         case other(String)
         
         var errorDescription: String? {
             switch self {
-            case .applyEditsThrew(let error):
+            case .applyEdits(let error):
                 String(reflecting: error)
             case .other(let message):
                 message
@@ -91,11 +91,11 @@ extension FeatureFormExampleView {
         
         for table in editedTables {
             guard let database = table.serviceGeodatabase else {
-                applyEditsError = .other("No geodatabase found.")
+                submissionError = .other("No geodatabase found.")
                 return
             }
             guard database.hasLocalEdits else {
-                applyEditsError = .other("No database edits found.")
+                submissionError = .other("No database edits found.")
                 return
             }
             let resultErrors: [Error]
@@ -108,11 +108,11 @@ extension FeatureFormExampleView {
                     resultErrors = featureEditResults.errors
                 }
             } catch {
-                applyEditsError = .applyEditsThrew(error)
+                submissionError = .applyEdits(error)
                 return
             }
             if !resultErrors.isEmpty {
-                applyEditsError = .other("Apply edits returned ^[\(resultErrors.count) error](inflect: true).")
+                submissionError = .other("Apply edits returned ^[\(resultErrors.count) error](inflect: true).")
             }
             editedTables.removeAll { $0.tableName == table.tableName }
         }
@@ -141,10 +141,10 @@ extension FeatureFormExampleView {
     /// A Boolean value indicating whether general form workflow errors are presented.
     private var alertIsPresented: Binding<Bool> {
         Binding {
-            applyEditsError != nil
+            submissionError != nil
         } set: { newAlertIsPresented in
             if !newAlertIsPresented {
-                applyEditsError = nil
+                submissionError = nil
             }
         }
     }
