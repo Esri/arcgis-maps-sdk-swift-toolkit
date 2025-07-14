@@ -163,7 +163,7 @@ extension FeatureFormExampleView {
     
     /// A Boolean value indicating whether the form is presented.
     private var featureFormViewIsPresented: Binding<Bool> {
-        .init {
+        Binding {
             featureForm != nil
         } set: { newValue in
             if !newValue {
