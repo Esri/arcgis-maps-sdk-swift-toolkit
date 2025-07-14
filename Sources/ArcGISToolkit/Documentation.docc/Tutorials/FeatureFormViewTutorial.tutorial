@@ -6,125 +6,160 @@
         @Image(source: FeatureFormView, alt: "An image of the FeatureFormView component.")
     }
     
-    @Section(title: "Using the FeatureFormView") {
+    @Section(title: "Building a simple editing workflow with FeatureFormView") {
         @ContentAndMedia {
             @Image(source: FeatureFormView, alt: "An image of the FeatureFormView component")
         }
         
         @Steps {
             @Step {
-                To begin, we initialize a map containing a feature form definition.
+                To begin, add some basic state properties and the base view.
                 
-                We place a `MapView` nested within a `MapViewReader` and `NavigationStack`.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep1.swift)
+                Nest the `MapView` within a `MapViewReader` in order to be able
+                to identify features in the map in later steps.
+                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep1.swift)
             }
             
             @Step {
-                Create a model class.
+                Add the view modifiers onto the `MapView` necessary to support a
+                form editing experience.
                 
-                Add an instance of the model to the view. Within the model, define a `State` enumeration. Each enumerated value represents a step in the form editing workflow.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep2.swift)
+                Identifying features that have been tapped on in the map is an
+                asynchronous operation. Tap locations on the map are captured 
+                with `onSingleTapGesture(perform:)` and the provided location is
+                used as an identifier to start the asynchronous identify operation.
+                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep2.swift)
             }
             
             @Step {
-                Extend `FeatureForm` with a `featureLayer` property.
+                After edits have been saved in the ``FeatureFormView``, they 
+                need to be applied to the appropriate service geodatabase or 
+                feature table.
                 
-                This small extension will help in multiple places in the upcoming steps.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep3.swift)
+                In order to capture and represent the various possibly different
+                points of failure, add `SubmissionError`.
+                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep3.swift)
             }
             
             @Step {
-                Add a `state` property to the model.
+                Add the `applyEdits()` method.
                 
-                When the state switches between editing and not editing, we select and deselect the corresponding feature in the map.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep4.swift)
+                The method sequentially applies edits to all modified tables.
+                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep4.swift)
             }
             
             @Step {
-                Create a group of helper properties.
+                Add the `makeFeatureForm(point:map:)` method.
                 
-                These properties (`alertIsPresented`, `cancelConfirmationIsPresented`, `featureForm`, `formControlsAreDisabled`, `formIsPresented`, `textForState`) allow for easy use of the enumerated state values within the view.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep5.swift)
+                The method performs the asynchronous feature identification
+                operation and then updates the `featureForm` state variable with
+                a feature form, constructed from the first identified feature.
+                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep5.swift)
             }
             
             @Step {
-                Add a `discardEdits` and `submitEdits` method to the model.
+                Add the remaining necessary computed properties.
                 
-                These methods will be used in buttons added later to the view.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep6.swift)
+                Note that in `featureFormView` the 
+                ``FeatureFormView/onFormEditingEvent(perform:)`` modifier is 
+                used to watch when edits are saved in the ``FeatureFormView``. 
+                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep6.swift)
             }
             
             @Step {
-                When a form is submitted, there are a few necessary steps.
+                Finally, add two more computed properties.
                 
-                First, check for any validation errors on the form.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep7.swift)
+                The first property combines errors from applying edits into a 
+                single array.
+                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep7.swift)
             }
-            
+        }
+    }
+    
+    @Section(title: "FeatureFormView customization") {
+        @ContentAndMedia {
+            FeatureFormView has various customizations available to support 
+            different use-cases.
+        }
+        
+        @Steps {
             @Step {
-                After checking for validation errors, finish editing the feature form.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep8.swift)
-            }
-            
-            @Step {
-                When edits are applied to the database, some errors may be returned.
+                The close button in the header of ``FeatureFormView`` can be 
+                hidden by simply omitting the `isPresented` parameter in the 
+                initializer.
                 
-                Extend arrays containing `FeatureEditResult`s with an `errors` property to check for the existence of any errors.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep9.swift)
+                Use this to retain programatic control over when the form view
+                is closed.
+                @Code(name: "FeatureFormViewCustomizationExample.swift", file: FeatureFormViewTutorialStep8.swift)
             }
             
             @Step {
-                After the table has been updated, apply edits to the database.
+                The "Save" and "Discard" buttons in the ``FeatureFormView`` can
+                be hidden with ``FeatureFormView/editingButtons(_:)``.
                 
-                Use the `errors` property from the previous step to collect any errors.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep10.swift)
+                Use this modifier when "Save" and "Discard" buttons are provided
+                at the application level.
+                @Code(name: "FeatureFormViewCustomizationExample.swift", file: FeatureFormViewTutorialStep9.swift)
             }
             
             @Step {
-                With the model complete, the view code can be completed.
+                ``FeatureFormView`` automatically handles showing validation 
+                errors at relevant times. To override this behavior and make 
+                validation errors always visible, use 
+                ``FeatureFormView/validationErrors(_:)``.
+                @Code(name: "FeatureFormViewCustomizationExample.swift", file: FeatureFormViewTutorialStep10.swift)
+            }
+        }
+    }
+        
+    @Section(title: "Browsing utility associations with FeatureFormView") {
+        @ContentAndMedia {
+            FeatureFormView supports browsing associated features via the
+            `UtilityAssociationsFormElement`.
+        }
+        
+        @Steps {
+            @Step {
+                FeatureFormView uses an internal `NavigationStack` to navigate 
+                between forms for utility associations.
                 
-                Add a method `identifyFeature` to extract a feature from the location selected on the map. The `identifyScreenPoint` property on the view will track the last selected location.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep11.swift)
+                To support browsing utility associations without conflicting
+                with app-level navigation, present the ``FeatureFormView`` 
+                outside of any app-level navigation context. An Inspector or 
+                <doc:FloatingPanel> can be used to present the 
+                ``FeatureFormView`` while keeping the map view visible and
+                interactive. An `@Observable` object can be used to synchronize
+                state between views within app-level navigation and the 
+                ``FeatureFormView``.
+                @Code(name: "FeatureFormViewUtilityAssociationsExample.swift", file: FeatureFormViewTutorialStep11.swift)
             }
             
             @Step {
-                Use the `onSingleTapGesture` modifier to detect selections in the map.
+                Edits can always be made to a feature outside of the feature 
+                form context.
                 
-                If the current model state is `idle`, use `identifyFeature` to produce the selected feature and instantiate a feature form.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep12.swift)
+                To temporarily prevent a user from navigating to a different
+                feature, use ``FeatureFormView/navigationDisabled(_:)``.
+                @Code(name: "FeatureFormViewUtilityAssociationsExample.swift", file: FeatureFormViewTutorialStep12.swift)
             }
             
             @Step {
-                Add the feature form view to the hierarchy.
+                Use ``FeatureFormView/onFeatureFormChanged(perform:)`` to track
+                when a user has navigated to a new feature.
+                @Code(name: "FeatureFormViewUtilityAssociationsExample.swift", file: FeatureFormViewTutorialStep13.swift)
+            }
+            
+            @Step {
+                Navigating to other features is blocked when the current feature
+                form has edits. Users will be given the option to save their
+                edits (if there are no validation errors), discard their edits
+                or continue editing (cancelling the navigation).
                 
-                Present the feature form view using a floating panel, sheet, or other container view.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep13.swift)
-            }
-            
-            @Step {
-                Support canceling and closing the form.
-                
-                Add an alert to confirm cancellation. Add a "Cancel" button to the toolbar to set the model's state to cancellation pending. 
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep14.swift)
-            }
-            
-            @Step {
-                Add a second button ("Submit") to the toolbar. 
-                
-                This button should also call `submitEdits` on the model.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep15.swift)
-            }
-            
-            @Step {
-                Add a second alert to indicate any errors.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep16.swift)
-            }
-            
-            @Step {
-                Add an overlay to display the current state to the user.
-                
-                Some operations, like applying edits to the database, can take an extended period of time. To keep users informed, indicate the current state of the model to them.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep17.swift)
+                To build an editing experience where the form is dismissed when
+                edits are saved or discarded, but only when the user wasn't 
+                navigating, interpret the value of `willNavigate`.
+                ``FeatureFormView/onFormEditingEvent(perform:)``.
+                @Code(name: "FeatureFormViewUtilityAssociationsExample.swift", file: FeatureFormViewTutorialStep14.swift)
             }
         }
     }
