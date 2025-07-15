@@ -176,14 +176,10 @@ extension FeatureFormViewExampleView {
     /// Overlay content that indicates the form is being submitted to the user.
     @ViewBuilder private var submittingOverlay: some View {
         if editsAreBeingApplied {
-            HStack(spacing: 5) {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                Text("Submitting")
-            }
-            .padding()
-            .background(.thinMaterial)
-            .clipShape(.rect(cornerRadius: 10))
+            ProgressView("Submitting")
+                .padding()
+                .background(.thinMaterial)
+                .clipShape(.rect(cornerRadius: 10))
         }
     }
 }
