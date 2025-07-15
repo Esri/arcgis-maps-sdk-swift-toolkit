@@ -67,18 +67,16 @@ extension FeatureFormViewExampleView {
     // MARK: Methods
     
     /// Applies edits to the service feature table or geodatabase.
-    private func applyEdits() async {
+    private func applyEdits() async throws(SubmissionError) {
         editsAreBeingApplied = true
         defer { editsAreBeingApplied = false }
         
         for table in editedTables {
             guard let database = table.serviceGeodatabase else {
-                submissionError = .other("No geodatabase found.")
-                return
+                throw .other("No geodatabase found.")
             }
             guard database.hasLocalEdits else {
-                submissionError = .other("No database edits found.")
-                return
+                throw .other("No database edits found.")
             }
             let resultErrors: [Error]
             do {
@@ -90,13 +88,14 @@ extension FeatureFormViewExampleView {
                     resultErrors = featureEditResults.errors
                 }
             } catch {
-                submissionError = .anyError(error)
-                return
-            }
-            if !resultErrors.isEmpty {
-                submissionError = .other("Apply edits returned ^[\(resultErrors.count) error](inflect: true).")
+                throw .anyError(error)
             }
             editedTables.removeAll { $0.tableName == table.tableName }
+            if !resultErrors.isEmpty {
+                throw .other(
+                    "Apply edits returned ^[\(resultErrors.count) error](inflect: true)."
+                )
+            }
         }
     }
     
