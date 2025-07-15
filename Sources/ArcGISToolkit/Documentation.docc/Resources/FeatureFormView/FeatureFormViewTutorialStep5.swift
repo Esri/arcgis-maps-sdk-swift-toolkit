@@ -51,13 +51,13 @@ struct FeatureFormViewExampleView: View {
 extension FeatureFormViewExampleView {
     /// An error encountered while submitting edits.
     enum SubmissionError: LocalizedError {
-        case applyEdits(any Error)
+        case anyError(any Error)
         case other(String)
         
         var errorDescription: String? {
             switch self {
-            case .applyEdits(let error):
-                String(reflecting: error)
+            case .anyError(let error):
+                error.localizedDescription
             case .other(let message):
                 message
             }
@@ -90,7 +90,7 @@ extension FeatureFormViewExampleView {
                     resultErrors = featureEditResults.errors
                 }
             } catch {
-                submissionError = .applyEdits(error)
+                submissionError = .anyError(error)
                 return
             }
             if !resultErrors.isEmpty {
