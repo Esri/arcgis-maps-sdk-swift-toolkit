@@ -1,7 +1,7 @@
 NavigationStack {
     // App-level navigation
-    …
+    ...
 }
-.inspector(isPresented: …) {
-    FeatureFormView(root: …)
+.inspector(isPresented: ...) {
+    FeatureFormView(root: ...)
 }

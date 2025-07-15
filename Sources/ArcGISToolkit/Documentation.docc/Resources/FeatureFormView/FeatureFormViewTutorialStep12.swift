@@ -1,2 +1,2 @@
 FeatureFormView(root: featureForm!, isPresented: featureFormViewIsPresented)
-    .navigationDisabled(…)
+    .navigationDisabled(...)
