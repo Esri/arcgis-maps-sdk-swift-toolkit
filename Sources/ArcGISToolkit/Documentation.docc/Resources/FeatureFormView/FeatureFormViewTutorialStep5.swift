@@ -109,4 +109,81 @@ extension FeatureFormExampleView {
             featureForm = FeatureForm(feature: feature)
         }
     }
+    
+    // MARK: Properties
+    
+    /// A Boolean value indicating whether general form workflow errors are presented.
+    private var alertIsPresented: Binding<Bool> {
+        Binding {
+            submissionError != nil
+        } set: { newAlertIsPresented in
+            if !newAlertIsPresented {
+                submissionError = nil
+            }
+        }
+    }
+    
+    /// The feature form view shown in the sheet over the map.
+    private var featureFormView: some View {
+        FeatureFormView(root: featureForm!, isPresented: featureFormViewIsPresented)
+            .onFormEditingEvent { editingEvent in
+                if case .savedEdits = editingEvent,
+                   let table = featureForm?.feature.table as? ServiceFeatureTable,
+                   !editedTables.contains(where: { $0 === table }) {
+                    editedTables.append(table)
+                }
+            }
+    }
+    
+    /// A Boolean value indicating whether the form is presented.
+    private var featureFormViewIsPresented: Binding<Bool> {
+        Binding {
+            featureForm != nil
+        } set: { newValue in
+            if !newValue {
+                featureForm = nil
+            }
+        }
+    }
+    
+    /// The button used to apply edits made in forms.
+    @ViewBuilder private var submitButton: some View {
+        let databases = editedTables.compactMap(\.serviceGeodatabase)
+        let localEditsExist = databases.contains(where: \.hasLocalEdits)
+        if !featureFormViewIsPresented.wrappedValue, localEditsExist {
+            Button("Submit") {
+                Task {
+                    do throws(SubmissionError) {
+                        try await applyEdits()
+                    } catch {
+                        submissionError = error
+                    }
+                }
+            }
+            .disabled(editsAreBeingApplied)
+        }
+    }
+    
+    /// Overlay content that indicates the form is being submitted to the user.
+    @ViewBuilder private var submittingOverlay: some View {
+        if editsAreBeingApplied {
+            ProgressView("Submitting")
+                .padding()
+                .background(.thinMaterial)
+                .clipShape(.rect(cornerRadius: 10))
+        }
+    }
+}
+
+private extension Array where Element == FeatureEditResult {
+    ///  Any errors from the edit results and their inner attachment results.
+    var errors: [Error] {
+        compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) }
+    }
+}
+
+private extension URL {
+    static var sampleData: Self {
+        .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
+    }
 }

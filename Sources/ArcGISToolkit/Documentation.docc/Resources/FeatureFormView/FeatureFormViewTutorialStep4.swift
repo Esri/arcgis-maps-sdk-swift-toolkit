@@ -9,22 +9,12 @@ struct FeatureFormExampleView: View {
     @State private var identifyScreenPoint: CGPoint?
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
-    /// The error to be presented in the alert.
-    @State private var submissionError: SubmissionError?
     
     var body: some View {
         MapViewReader { mapView in
             MapView(map: map)
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
-                }
-                .alert(
-                    isPresented: alertIsPresented,
-                    error: submissionError,
-                    actions: {}
-                )
-                .overlay {
-                    submittingOverlay
                 }
                 .sheet(isPresented: featureFormViewIsPresented) {
                     featureFormView
@@ -33,11 +23,6 @@ struct FeatureFormExampleView: View {
                     guard !editsAreBeingApplied,
                           let identifyScreenPoint else { return }
                     await makeFeatureForm(point: identifyScreenPoint, mapView: mapView)
-                }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        submitButton
-                    }
                 }
         }
     }
@@ -92,5 +77,59 @@ extension FeatureFormExampleView {
                 )
             }
         }
+    }
+    
+    /// Opens a form for the first feature found at the point on the map.
+    /// - Parameters:
+    ///   - point: The point to run identify at on the map view.
+    ///   - mapView: The map view to identify on.
+    private func makeFeatureForm(point: CGPoint, mapView: MapViewProxy) async {
+        guard let identifyScreenPoint else { return }
+        let identifyLayerResults = try? await mapView.identifyLayers(
+            screenPoint: identifyScreenPoint,
+            tolerance: 10
+        )
+        if let geoElements = identifyLayerResults?.first?.geoElements,
+           let feature = geoElements.first as? ArcGISFeature {
+            featureForm = FeatureForm(feature: feature)
+        }
+    }
+    
+    // MARK: Properties
+    
+    /// The feature form view shown in the sheet over the map.
+    private var featureFormView: some View {
+        FeatureFormView(root: featureForm!, isPresented: featureFormViewIsPresented)
+            .onFormEditingEvent { editingEvent in
+                if case .savedEdits = editingEvent,
+                   let table = featureForm?.feature.table as? ServiceFeatureTable,
+                   !editedTables.contains(where: { $0 === table }) {
+                    editedTables.append(table)
+                }
+            }
+    }
+    
+    /// A Boolean value indicating whether the form is presented.
+    private var featureFormViewIsPresented: Binding<Bool> {
+        Binding {
+            featureForm != nil
+        } set: { newValue in
+            if !newValue {
+                featureForm = nil
+            }
+        }
+    }
+}
+
+private extension Array where Element == FeatureEditResult {
+    ///  Any errors from the edit results and their inner attachment results.
+    var errors: [Error] {
+        compactMap(\.error) + flatMap { $0.attachmentResults.compactMap(\.error) }
+    }
+}
+
+private extension URL {
+    static var sampleData: Self {
+        .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
     }
 }

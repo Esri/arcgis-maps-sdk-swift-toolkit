@@ -1,6 +1,4 @@
 struct FeatureFormExampleView: View {
-    /// Tables with local edits that need to be applied.
-    @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
     @State private var editsAreBeingApplied = false
     /// The presented feature form.
@@ -9,8 +7,6 @@ struct FeatureFormExampleView: View {
     @State private var identifyScreenPoint: CGPoint?
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
-    /// The error to be presented in the alert.
-    @State private var submissionError: SubmissionError?
     
     var body: some View {
         MapViewReader { mapView in
@@ -18,27 +14,37 @@ struct FeatureFormExampleView: View {
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
-                .alert(
-                    isPresented: alertIsPresented,
-                    error: submissionError,
-                    actions: {}
-                )
-                .overlay {
-                    submittingOverlay
-                }
-                .sheet(isPresented: featureFormViewIsPresented) {
-                    featureFormView
-                }
                 .task(id: identifyScreenPoint) {
                     guard !editsAreBeingApplied,
                           let identifyScreenPoint else { return }
                     await makeFeatureForm(point: identifyScreenPoint, mapView: mapView)
                 }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        submitButton
-                    }
-                }
         }
+    }
+}
+
+extension FeatureFormExampleView {
+    // MARK: Methods
+    
+    /// Opens a form for the first feature found at the point on the map.
+    /// - Parameters:
+    ///   - point: The point to run identify at on the map view.
+    ///   - mapView: The map view to identify on.
+    private func makeFeatureForm(point: CGPoint, mapView: MapViewProxy) async {
+        guard let identifyScreenPoint else { return }
+        let identifyLayerResults = try? await mapView.identifyLayers(
+            screenPoint: identifyScreenPoint,
+            tolerance: 10
+        )
+        if let geoElements = identifyLayerResults?.first?.geoElements,
+           let feature = geoElements.first as? ArcGISFeature {
+            featureForm = FeatureForm(feature: feature)
+        }
+    }
+}
+
+private extension URL {
+    static var sampleData: Self {
+        .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
     }
 }
