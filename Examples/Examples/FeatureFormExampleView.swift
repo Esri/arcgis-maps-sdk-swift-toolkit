@@ -186,6 +186,7 @@ extension FeatureFormExampleView {
                     }
                 }
             }
+            .disabled(editsAreBeingApplied)
         }
     }
     

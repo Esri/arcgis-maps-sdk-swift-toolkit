@@ -165,6 +165,7 @@ extension FeatureFormViewExampleView {
                     await applyEdits()
                 }
             }
+            .disabled(editsAreBeingApplied)
         }
     }
     
