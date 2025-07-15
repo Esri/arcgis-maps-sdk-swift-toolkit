@@ -104,11 +104,8 @@ extension FeatureFormViewExampleView {
             screenPoint: identifyScreenPoint,
             tolerance: 10
         )
-        if let feature = identifyLayerResults?.compactMap({ result in
-            result.geoElements.compactMap { element in
-                element as? ArcGISFeature
-            }.first
-        }).first {
+        if let geoElements = identifyLayerResults?.first?.geoElements,
+           let feature = geoElements.first as? ArcGISFeature {
             featureForm = FeatureForm(feature: feature)
         }
     }
