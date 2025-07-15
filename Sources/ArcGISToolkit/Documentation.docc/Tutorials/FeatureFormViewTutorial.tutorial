@@ -17,7 +17,7 @@
                 
                 Nest the `MapView` within a `MapViewReader` in order to be able
                 to identify features in the map in later steps.
-                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep1.swift)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewTutorialStep1.swift)
             }
             
             @Step {
@@ -28,7 +28,7 @@
                 asynchronous operation. Tap locations on the map are captured 
                 with `onSingleTapGesture(perform:)` and the provided location is
                 used as an identifier to start the asynchronous identify operation.
-                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep2.swift)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewTutorialStep2.swift)
             }
             
             @Step {
@@ -38,14 +38,14 @@
                 
                 In order to capture and represent the various possibly different
                 points of failure, add `SubmissionError`.
-                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep3.swift)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewTutorialStep3.swift)
             }
             
             @Step {
                 Add the `applyEdits()` method.
                 
                 The method sequentially applies edits to all modified tables.
-                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep4.swift)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewTutorialStep4.swift)
             }
             
             @Step {
@@ -54,7 +54,7 @@
                 The method performs the asynchronous feature identification
                 operation and then updates the `featureForm` state variable with
                 a feature form, constructed from the first identified feature.
-                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep5.swift)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewTutorialStep5.swift)
             }
             
             @Step {
@@ -63,7 +63,7 @@
                 Note that in `featureFormView` the 
                 ``FeatureFormView/onFormEditingEvent(perform:)`` modifier is 
                 used to watch when edits are saved in the ``FeatureFormView``. 
-                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep6.swift)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewTutorialStep6.swift)
             }
             
             @Step {
@@ -71,7 +71,7 @@
                 
                 The first property combines errors from applying edits into a 
                 single array.
-                @Code(name: "FeatureFormViewExampleView.swift", file: FeatureFormViewTutorialStep7.swift)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewTutorialStep7.swift)
             }
         }
     }

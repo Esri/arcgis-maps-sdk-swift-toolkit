@@ -1,4 +1,4 @@
-struct FeatureFormViewExampleView: View {
+struct FeatureFormExampleView: View {
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
