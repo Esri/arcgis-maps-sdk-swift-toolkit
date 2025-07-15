@@ -37,7 +37,7 @@ struct FeatureFormViewExampleView: View {
                 .task(id: identifyScreenPoint) {
                     guard !editsAreBeingApplied,
                           let identifyScreenPoint else { return }
-                    await makeFeatureForm(point: identifyScreenPoint, map: mapView)
+                    await makeFeatureForm(point: identifyScreenPoint, mapView: mapView)
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {

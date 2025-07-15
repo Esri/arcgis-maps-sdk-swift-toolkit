@@ -37,7 +37,7 @@ struct FeatureFormViewExampleView: View {
                 .task(id: identifyScreenPoint) {
                     guard !editsAreBeingApplied,
                           let identifyScreenPoint else { return }
-                    await makeFeatureForm(point: identifyScreenPoint, map: mapView)
+                    await makeFeatureForm(point: identifyScreenPoint, mapView: mapView)
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -100,11 +100,12 @@ extension FeatureFormViewExampleView {
     }
     
     /// Opens a form for the first feature found at the point on the map.
-    /// - Parameter point: The point to run identify at on the map.
-    /// - Parameter map: The map to identify on.
-    private func makeFeatureForm(point: CGPoint, map: MapViewProxy) async {
+    /// - Parameters:
+    ///   - point: The point to run identify at on the map view.
+    ///   - mapView: The map view to identify on.
+    private func makeFeatureForm(point: CGPoint, mapView: MapViewProxy) async {
         guard let identifyScreenPoint else { return }
-        let identifyLayerResults = try? await map.identifyLayers(
+        let identifyLayerResults = try? await mapView.identifyLayers(
             screenPoint: identifyScreenPoint,
             tolerance: 10
         )
