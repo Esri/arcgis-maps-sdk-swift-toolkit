@@ -162,7 +162,11 @@ extension FeatureFormViewExampleView {
         if !featureFormViewIsPresented.wrappedValue, localEditsExist {
             Button("Submit") {
                 Task {
-                    await applyEdits()
+                    do throws(SubmissionError) {
+                        try await applyEdits()
+                    } catch {
+                        submissionError = error
+                    }
                 }
             }
             .disabled(editsAreBeingApplied)
