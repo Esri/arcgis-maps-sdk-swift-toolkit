@@ -103,9 +103,8 @@ extension FeatureFormExampleView {
     ///   - point: The point to run identify at on the map view.
     ///   - mapView: The map view to identify on.
     private func makeFeatureForm(point: CGPoint, mapView: MapViewProxy) async {
-        guard let identifyScreenPoint else { return }
         let identifyLayerResults = try? await mapView.identifyLayers(
-            screenPoint: identifyScreenPoint,
+            screenPoint: point,
             tolerance: 10
         )
         if let geoElements = identifyLayerResults?.first?.geoElements,
