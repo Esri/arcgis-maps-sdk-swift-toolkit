@@ -119,10 +119,11 @@ extension FeatureFormExampleView {
     
     /// The feature form view shown in the sheet over the map.
     private var featureFormView: some View {
-        FeatureFormView(root: featureForm!, isPresented: $featureFormViewIsPresented)
+        let featureForm = featureForm!
+        return FeatureFormView(root: featureForm, isPresented: $featureFormViewIsPresented)
             .onFormEditingEvent { editingEvent in
                 if case .savedEdits = editingEvent,
-                   let table = featureForm?.feature.table as? ServiceFeatureTable,
+                   let table = featureForm.feature.table as? ServiceFeatureTable,
                    !editedTables.contains(where: { $0 === table }) {
                     editedTables.append(table)
                 }
