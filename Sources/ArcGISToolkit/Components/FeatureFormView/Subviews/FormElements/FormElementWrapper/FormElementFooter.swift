@@ -44,7 +44,7 @@ struct FormElementFooter: View {
 extension FormElementFooter {
     struct FieldFormElementFooter: View {
         /// The view model for the form.
-        @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
+        @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
         
         /// The developer configurable validation error visibility.
         @Environment(\.validationErrorVisibilityExternal) private var validationErrorVisibilityExternal
@@ -66,7 +66,7 @@ extension FormElementFooter {
                         errorMessage
                     } else if !element.description.isEmpty {
                         Text(element.description)
-                    } else if internalFeatureFormViewModel.focusedElement == element {
+                    } else if embeddedFeatureFormViewModel.focusedElement == element {
                         if element.fieldType == .text, let lengthRange {
                             if lengthRange.lowerBound == lengthRange.upperBound {
                                 makeExactLengthMessage(lengthRange)
@@ -221,7 +221,7 @@ extension FormElementFooter {
         
         /// A Boolean value which indicates whether or not the character indicator is showing in the footer.
         var isShowingCharacterIndicator: Bool {
-            internalFeatureFormViewModel.focusedElement == element
+            embeddedFeatureFormViewModel.focusedElement == element
             && !(element.fieldType?.isNumeric ?? false)
             && (element.input is TextAreaFormInput || element.input is TextBoxFormInput)
             && (element.description.isEmpty || primaryError != nil)
@@ -233,7 +233,7 @@ extension FormElementFooter {
             && primaryError != nil
             &&
             (
-                internalFeatureFormViewModel.previouslyFocusedElements.contains(element)
+                embeddedFeatureFormViewModel.previouslyFocusedElements.contains(element)
                 || validationErrorVisibilityExternal == .visible
                 || validationErrorVisibilityInternal.wrappedValue == .visible
             )
@@ -273,7 +273,7 @@ extension FormElementFooter {
                 default:
                     return false
                 }
-            }), internalFeatureFormViewModel.focusedElement != element {
+            }), embeddedFeatureFormViewModel.focusedElement != element {
                 return requiredError
             } else {
                 return elementErrors?.first(where: {
