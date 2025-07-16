@@ -7,6 +7,8 @@ struct FeatureFormExampleView: View {
     @State private var editsAreBeingApplied = false
     /// The presented feature form.
     @State private var featureForm: FeatureForm?
+    /// A Boolean value indicating whether the form is presented.
+    @State private var featureFormViewIsPresented = false
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     /// The `Map` displayed in the `MapView`.
@@ -30,7 +32,9 @@ struct FeatureFormExampleView: View {
                 .overlay {
                     submittingOverlay
                 }
-                .sheet(isPresented: featureFormViewIsPresented) {
+                .sheet(isPresented: $featureFormViewIsPresented) {
+                    featureForm = nil
+                } content: {
                     featureFormView
                 }
                 .task(id: identifyScreenPoint) {
@@ -111,6 +115,7 @@ extension FeatureFormExampleView {
         if let geoElements = identifyLayerResults?.first?.geoElements,
            let feature = geoElements.first as? ArcGISFeature {
             featureForm = FeatureForm(feature: feature)
+            featureFormViewIsPresented = true
         }
     }
     
@@ -118,7 +123,7 @@ extension FeatureFormExampleView {
     
     /// The feature form view shown in the sheet over the map.
     private var featureFormView: some View {
-        FeatureFormView(root: featureForm!, isPresented: featureFormViewIsPresented)
+        FeatureFormView(root: featureForm!, isPresented: $featureFormViewIsPresented)
             .onFormEditingEvent { editingEvent in
                 if case .savedEdits = editingEvent,
                    let table = featureForm?.feature.table as? ServiceFeatureTable,
@@ -126,17 +131,6 @@ extension FeatureFormExampleView {
                     editedTables.append(table)
                 }
             }
-    }
-    
-    /// A Boolean value indicating whether the form is presented.
-    private var featureFormViewIsPresented: Binding<Bool> {
-        Binding {
-            featureForm != nil
-        } set: { newValue in
-            if !newValue {
-                featureForm = nil
-            }
-        }
     }
     
     /// The button used to dismiss the submission error alert.
@@ -151,7 +145,7 @@ extension FeatureFormExampleView {
     @ViewBuilder private var submitButton: some View {
         let databases = editedTables.compactMap(\.serviceGeodatabase)
         let localEditsExist = databases.contains(where: \.hasLocalEdits)
-        if !featureFormViewIsPresented.wrappedValue, localEditsExist {
+        if !$featureFormViewIsPresented.wrappedValue, localEditsExist {
             Button("Submit") {
                 Task {
                     do throws(SubmissionError) {
