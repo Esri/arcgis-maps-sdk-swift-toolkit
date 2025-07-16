@@ -40,13 +40,9 @@ struct FeatureFormExampleView: View {
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
-                .alert(
-                    isPresented: $alertIsPresented,
-                    error: submissionError,
-                    actions: {
-                        okButton
-                    }
-                )
+                .alert(isPresented: $alertIsPresented, error: submissionError) {
+                    okButton
+                }
                 .overlay {
                     submittingOverlay
                 }
