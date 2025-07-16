@@ -1,4 +1,6 @@
 struct FeatureFormExampleView: View {
+    /// A Boolean value indicating whether general form workflow errors are presented.
+    @State private var alertIsPresented = false
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
@@ -19,9 +21,11 @@ struct FeatureFormExampleView: View {
                     identifyScreenPoint = screenPoint
                 }
                 .alert(
-                    isPresented: alertIsPresented,
+                    isPresented: $alertIsPresented,
                     error: submissionError,
-                    actions: {}
+                    actions: {
+                        okButton
+                    }
                 )
                 .overlay {
                     submittingOverlay
@@ -112,17 +116,6 @@ extension FeatureFormExampleView {
     
     // MARK: Properties
     
-    /// A Boolean value indicating whether general form workflow errors are presented.
-    private var alertIsPresented: Binding<Bool> {
-        Binding {
-            submissionError != nil
-        } set: { newAlertIsPresented in
-            if !newAlertIsPresented {
-                submissionError = nil
-            }
-        }
-    }
-    
     /// The feature form view shown in the sheet over the map.
     private var featureFormView: some View {
         FeatureFormView(root: featureForm!, isPresented: featureFormViewIsPresented)
@@ -146,6 +139,14 @@ extension FeatureFormExampleView {
         }
     }
     
+    /// The button used to dismiss the submission error alert.
+    private var okButton: some View {
+        Button("OK") {
+            alertIsPresented = false
+            submissionError = nil
+        }
+    }
+    
     /// The button used to apply edits made in forms.
     @ViewBuilder private var submitButton: some View {
         let databases = editedTables.compactMap(\.serviceGeodatabase)
@@ -156,6 +157,7 @@ extension FeatureFormExampleView {
                     do throws(SubmissionError) {
                         try await applyEdits()
                     } catch {
+                        alertIsPresented = true
                         submissionError = error
                     }
                 }
