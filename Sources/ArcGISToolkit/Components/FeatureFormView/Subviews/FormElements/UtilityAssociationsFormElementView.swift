@@ -21,25 +21,32 @@ extension FeatureFormView {
         /// The view model for the form.
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
         
-        /// The set of utility associations filter results for the element.
-        @State private var associationsFilterResults = [UtilityAssociationsFilterResult]()
+        /// The model for fetching the form element's associations filter results.
+        @State private var associationsFilterResultModel: AssociationsFilterResultsModel
         
-        /// The backing utility associations form element.
-        let element: UtilityAssociationsFormElement
+        init(element: UtilityAssociationsFormElement) {
+            self._associationsFilterResultModel = .init(wrappedValue: .init(element: element))
+        }
         
         var body: some View {
-            FeatureFormGroupedContentView(content: associationsFilterResults.compactMap {
-                if $0.resultCount > 0 {
-                    UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
-                        .environment(embeddedFeatureFormViewModel)
+            switch associationsFilterResultModel.result {
+            case .success(let results):
+                if results.isEmpty {
+                    Text.noAssociations
                 } else {
-                    nil
+                    FeatureFormGroupedContentView(content: results.compactMap {
+                        if $0.resultCount > 0 {
+                            UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
+                                .environment(embeddedFeatureFormViewModel)
+                        } else {
+                            nil
+                        }
+                    })
                 }
-            })
-            .task {
-                if let results = try? await element.associationsFilterResults {
-                    associationsFilterResults = results
-                }
+            case .failure(let error):
+                Text.makeErrorFetchingFilterResultsMessage(error)
+            case nil:
+                ProgressView()
             }
         }
     }
