@@ -40,11 +40,7 @@ struct UtilityAssociationsPopupElementView: View {
             switch associationsFilterResultsModel.result {
             case .success(let associationsFilterResults):
                 if associationsFilterResults.isEmpty {
-                    Text(
-                        "No Associations",
-                        bundle: .toolkitModule,
-                        comment: "A label indicating that no associations are available for the popup element."
-                    )
+                    Text.noAssociations
                 } else {
                     ForEach(associationsFilterResults, id: \.id) {
                         UtilityAssociationsFilterResultLink(filterResult: $0)
@@ -52,15 +48,7 @@ struct UtilityAssociationsPopupElementView: View {
                     .environment(\.associationDisplayCount, popupElement.displayCount)
                 }
             case .failure(let error):
-                Text(
-                    "Error fetching filter results: \(error.localizedDescription)",
-                    bundle: .toolkitModule,
-                    comment: """
-                             An error message shown when the element's
-                             associations filter results cannot be displayed.
-                             The variable provides additional data.
-                             """
-                )
+                Text.makeErrorFetchingFilterResultsMessage(error)
             case nil:
                 VStack {
                     // This check and the enclosing stack/modifiers workaround an issue where the

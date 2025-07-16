@@ -29,6 +29,15 @@ extension Text {
         )
     }
     
+    /// Localized text for the phrase "No Associations".
+    static var noAssociations: Self {
+        .init(
+            "No Associations",
+            bundle: .toolkitModule,
+            comment: "A label indicating that no associations are available for the utility associations element."
+        )
+    }
+    
     /// Localized text for the word "Rename".
     static var rename: Self {
         Text(
@@ -53,6 +62,18 @@ extension Text {
             "Try Again",
             bundle: .toolkitModule,
             comment: "A label for a button allowing the user to retry an operation."
+        )
+    }
+    
+    static func makeErrorFetchingFilterResultsMessage(_ error: any Error) -> Self {
+        .init(
+            "Error fetching filter results: \(error.localizedDescription)",
+            bundle: .toolkitModule,
+            comment: """
+                     An error message shown when the element's
+                     associations filter results cannot be displayed.
+                     The variable provides additional data.
+                     """
         )
     }
 }
