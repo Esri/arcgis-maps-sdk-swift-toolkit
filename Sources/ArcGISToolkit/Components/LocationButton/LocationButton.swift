@@ -117,14 +117,21 @@ public struct LocationButton: View {
         // Only show context menu if there are 2 or more auto-pan options and
         // status of the location display is started.
         if autoPanModes.count >= 2 && status == .started {
-            Section(autoPanSectionHeaderLabelText) {
+            Section {
                 ForEach(contextMenuAutoPanOptions, id: \.self) { autoPanMode in
                     Button {
                         self.autoPanMode = autoPanMode
                     } label: {
-                        Label(autoPanMode.label, systemImage: autoPanMode.imageSystemName)
+                        Label {
+                            autoPanMode.label
+                        } icon: {
+                            Image(systemName: autoPanMode.imageSystemName)
+                        }
+
                     }
                 }
+            } header: {
+                autoPanSectionHeaderLabelText
             }
             
             Button {
@@ -132,24 +139,28 @@ public struct LocationButton: View {
                     await hideLocationDisplay()
                 }
             } label: {
-                Label(hideLocationLabelText, systemImage: "location.slash")
+                Label {
+                    hideLocationLabelText
+                } icon: {
+                    Image(systemName: "location.slash")
+                }
             }
         }
     }
     
     /// The text for the auto-pan section in the context menu.
-    private var autoPanSectionHeaderLabelText: String {
-        String(
-            localized: "Auto-pan",
+    private var autoPanSectionHeaderLabelText: Text {
+        Text(
+            "Auto-pan",
             bundle: .toolkitModule,
-            comment: "The section header for the auto-pan section in the location button context menu."
+            comment: "The header of the auto-pan section in the location button context menu."
         )
     }
     
     /// The text for the hide location item in the context menu.
-    private var hideLocationLabelText: String {
-        String(
-            localized: "Hide Location",
+    private var hideLocationLabelText: Text {
+        Text(
+            "Hide Location",
             bundle: .toolkitModule,
             comment: "The section header for the auto-pan section in the location button context menu."
         )
@@ -276,29 +287,29 @@ extension LocationButton {
 
 private extension LocationDisplay.AutoPanMode {
     /// The label text that should appear in the menu item.
-    var label: String {
+    var label: Text {
         return switch self {
         case .off:
-            String(
-                localized: "Auto-pan Off",
+            Text(
+                "Off",
                 bundle: .toolkitModule,
                 comment: "The label text for turning the auto-pan mode off in the location button context menu."
             )
         case .recenter:
-            String(
-                localized: "Recenter",
+            Text(
+                "Recenter",
                 bundle: .toolkitModule,
                 comment: "The label text for choosing the 'recenter' auto-pan mode in the location button context menu."
             )
         case .compassNavigation:
-            String(
-                localized: "Compass",
+            Text(
+                "Compass",
                 bundle: .toolkitModule,
                 comment: "The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu."
             )
         case .navigation:
-            String(
-                localized: "Navigation",
+            Text(
+                "Navigation",
                 bundle: .toolkitModule,
                 comment: "The label text for choosing the 'navigation' auto-pan mode in the location button context menu."
             )
