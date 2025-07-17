@@ -32,7 +32,9 @@ extension FeatureFormView {
             switch associationsFilterResultModel.result {
             case .success(let results):
                 if results.isEmpty {
-                    Text.noAssociations
+                    FeatureFormGroupedContentView(
+                        content: [Text.noAssociations]
+                    )
                 } else {
                     FeatureFormGroupedContentView(content: results.compactMap {
                         if $0.resultCount > 0 {
@@ -44,9 +46,11 @@ extension FeatureFormView {
                     })
                 }
             case .failure(let error):
-                Text.makeErrorFetchingFilterResultsMessage(error)
+                FeatureFormGroupedContentView(content: [
+                    Text.makeErrorFetchingFilterResultsMessage(error)
+                ])
             case nil:
-                ProgressView()
+                FeatureFormGroupedContentView(content: [ProgressView()])
             }
         }
     }
