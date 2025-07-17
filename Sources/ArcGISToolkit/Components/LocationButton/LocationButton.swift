@@ -62,9 +62,9 @@ public struct LocationButton: View {
         self.locationDisplay = locationDisplay
     }
     
-    /// Sets the auto-pan options that are available for the user to select.
-    /// - Parameter autoPanModes: The auto-pan options that the user can cycle through.
-    /// - Returns: A new location button with the auto-pan options set.
+    /// Sets the auto-pan modes that are available for the user to select.
+    /// - Parameter autoPanModes: The auto-pan modes that the user can cycle through.
+    /// - Returns: A new location button with the auto-pan modes set.
     public func autoPanModes(_ autoPanModes: [LocationDisplay.AutoPanMode]) -> Self {
         var copy = self
         copy.autoPanModes = Array(autoPanModes.uniqued())
@@ -93,7 +93,7 @@ public struct LocationButton: View {
     @ViewBuilder
     private var buttonLabel: some View {
         // Decide what image is in the button based on the status
-        // and autopan mode.
+        // and auto pan mode.
         switch status {
         case .stopped:
             Image(systemName: "location.slash")
