@@ -1,24 +1,4 @@
-// Copyright 2023 Esri
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//   https://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-import ArcGIS
-import ArcGISToolkit
-import SwiftUI
-
 struct FeatureFormExampleView: View {
-    /// A Boolean value indicating whether general form workflow errors are presented.
-    @State private var alertIsPresented = false
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
@@ -31,20 +11,12 @@ struct FeatureFormExampleView: View {
     @State private var identifyScreenPoint: CGPoint?
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
-    /// The error to be presented in the alert.
-    @State private var submissionError: SubmissionError?
     
     var body: some View {
         MapViewReader { mapView in
             MapView(map: map)
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
-                }
-                .alert(isPresented: $alertIsPresented, error: submissionError) {
-                    okButton
-                }
-                .overlay {
-                    submittingOverlay
                 }
                 .sheet(isPresented: $featureFormViewIsPresented) {
                     featureForm = nil
@@ -55,11 +27,6 @@ struct FeatureFormExampleView: View {
                     guard !editsAreBeingApplied,
                           let identifyScreenPoint else { return }
                     await makeFeatureForm(point: identifyScreenPoint, mapView: mapView)
-                }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        submitButton
-                    }
                 }
         }
     }
@@ -145,43 +112,6 @@ extension FeatureFormExampleView {
                     editedTables.append(table)
                 }
             }
-    }
-    
-    /// The button used to dismiss the submission error alert.
-    private var okButton: some View {
-        Button("OK") {
-            alertIsPresented = false
-            submissionError = nil
-        }
-    }
-    
-    /// The button used to apply edits made in forms.
-    @ViewBuilder private var submitButton: some View {
-        let databases = editedTables.compactMap(\.serviceGeodatabase)
-        let localEditsExist = databases.contains(where: \.hasLocalEdits)
-        if !$featureFormViewIsPresented.wrappedValue, localEditsExist {
-            Button("Submit") {
-                Task {
-                    do throws(SubmissionError) {
-                        try await applyEdits()
-                    } catch {
-                        alertIsPresented = true
-                        submissionError = error
-                    }
-                }
-            }
-            .disabled(editsAreBeingApplied)
-        }
-    }
-    
-    /// Overlay content that indicates the form is being submitted to the user.
-    @ViewBuilder private var submittingOverlay: some View {
-        if editsAreBeingApplied {
-            ProgressView("Submitting")
-                .padding()
-                .background(.thinMaterial)
-                .clipShape(.rect(cornerRadius: 10))
-        }
     }
 }
 
