@@ -86,6 +86,13 @@ public struct LocationButton: View {
                 autoPanMode = initialAutoPanMode
             }
         }
+        .accessibilityLabel(
+            Text("Location display", bundle: .toolkitModule, comment: "The accessibility label of the location button.")
+        )
+        .accessibilityHint(
+            Text("Change location display options", bundle: .toolkitModule, comment: "The accessibility hint of the location button.")
+        )
+        .accessibilityValue(autoPanMode.label)
         .contextMenu { contextMenuItems }
         .disabled(buttonIsDisabled)
         .task(id: ObjectIdentifier(locationDisplay)) { await observeStatus() }
@@ -129,6 +136,7 @@ public struct LocationButton: View {
                         }
 
                     }
+                    .accessibilityHint(autoPanMode.accessibilityHint)
                 }
             } header: {
                 autoPanSectionHeaderLabelText
@@ -145,6 +153,13 @@ public struct LocationButton: View {
                     Image(systemName: "location.slash")
                 }
             }
+            .accessibilityHint(
+                Text(
+                    "Hide location display",
+                    bundle: .toolkitModule,
+                    comment: "The accessibility hint of the hide location display context menu option."
+                )
+            )
         }
     }
     
@@ -312,6 +327,38 @@ private extension LocationDisplay.AutoPanMode {
                 "Navigation",
                 bundle: .toolkitModule,
                 comment: "The label text for choosing the 'navigation' auto-pan mode in the location button context menu."
+            )
+        @unknown default:
+            fatalError()
+        }
+    }
+    
+    /// The accessibility hint for the context menu option for this auto-pan mode.
+    var accessibilityHint: Text {
+        return switch self {
+        case .off:
+            Text(
+                "Turn off auto-pan",
+                bundle: .toolkitModule,
+                comment: "The accessibility hint for turning the auto-pan mode off in the location button context menu."
+            )
+        case .recenter:
+            Text(
+                "Change auto-pan mode to recenter",
+                bundle: .toolkitModule,
+                comment: "The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu."
+            )
+        case .compassNavigation:
+            Text(
+                "Change auto-pan mode to compass",
+                bundle: .toolkitModule,
+                comment: "The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu."
+            )
+        case .navigation:
+            Text(
+                "Change auto-pan mode to navigation",
+                bundle: .toolkitModule,
+                comment: "The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu."
             )
         @unknown default:
             fatalError()
