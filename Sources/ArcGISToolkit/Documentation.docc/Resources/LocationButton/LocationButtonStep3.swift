@@ -6,7 +6,7 @@ struct LocationButtonExampleView: View {
     @State private var map = Map(basemapStyle: .arcGISImagery)
     
     @State private var locationDisplay = {
-        let locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
+        let locationDisplay = LocationDisplay()
         locationDisplay.initialZoomScale = 40_000
         return locationDisplay
     }()
