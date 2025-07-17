@@ -324,7 +324,7 @@ private extension LocationDisplay.AutoPanMode {
         case .compassNavigation:
             "field.of.view.wide"
         case .navigation:
-            "location.north.fill"
+            "location.north.line.fill"
         case .recenter:
             "location.fill.viewfinder"
         case .off:
