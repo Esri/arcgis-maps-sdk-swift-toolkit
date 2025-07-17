@@ -18,7 +18,7 @@ import CoreLocation
 import SwiftUI
 
 /// A button that allows a user to show their location on a map view.
-/// Gives the user a variety of options to set the auto pan mode or stop the
+/// Gives the user a variety of options to set the auto-pan mode or stop the
 /// location data source.
 ///
 /// The button will cycle through the specified auto-pan modes on tap. The user
@@ -96,7 +96,7 @@ public struct LocationButton: View {
     @ViewBuilder
     private var buttonLabel: some View {
         // Decide what image is in the button based on the status
-        // and auto pan mode.
+        // and auto-pan mode.
         switch status {
         case .stopped:
             Image(systemName: "location.slash")
@@ -189,7 +189,7 @@ extension LocationButton {
         }
     }
     
-    /// Observe the auto pan mode of the location display.
+    /// Observe the auto-pan mode of the location display.
     func observeAutoPanMode() async {
         for await autoPanMode in locationDisplay.$autoPanMode {
             guard autoPanMode != self.autoPanMode else { continue }
@@ -209,7 +209,7 @@ extension LocationButton {
                 CLLocationManager.shared.requestWhenInUseAuthorization()
             }
             Task {
-                // Start the datasource, set initial auto pan mode.
+                // Start the datasource, set initial auto-pan mode.
                 do {
                     locationDisplay.autoPanMode = initialAutoPanMode
                     try await locationDisplay.dataSource.start()
@@ -233,7 +233,7 @@ extension LocationButton {
         }
     }
     
-    /// The next auto pan mode to be used when cycling through auto pan modes.
+    /// The next auto-pan mode to be used when cycling through auto-pan modes.
     func nextAutoPanMode(current: LocationDisplay.AutoPanMode, initial: LocationDisplay.AutoPanMode) -> LocationDisplay.AutoPanMode {
         guard let index = autoPanModes.firstIndex(of: current) else { return initial }
         var nextIndex = autoPanModes.index(after: index)
@@ -256,7 +256,7 @@ extension LocationButton {
         case start
         /// Stop the location display.
         case stop
-        /// Set the next auto pan mode for cycling through.
+        /// Set the next auto-pan mode for cycling through.
         case autoPanCycle
         
         /// The action that should occur for the specified state.
@@ -318,7 +318,7 @@ private extension LocationDisplay.AutoPanMode {
         }
     }
     
-    /// The image associated with the auto pan mode.
+    /// The image associated with the auto-pan mode.
     var imageSystemName: String {
         switch self {
         case .compassNavigation:
