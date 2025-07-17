@@ -322,11 +322,11 @@ private extension LocationDisplay.AutoPanMode {
     var imageSystemName: String {
         switch self {
         case .compassNavigation:
-            "field.of.view.wide"
-        case .navigation:
             "location.north.line.fill"
+        case .navigation:
+            "location.north.fill"
         case .recenter:
-            "location.fill.viewfinder"
+            "location.fill"
         case .off:
             "location"
         @unknown default:
