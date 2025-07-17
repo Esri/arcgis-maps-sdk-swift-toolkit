@@ -1493,7 +1493,7 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
-            elementTitle.exists,
+            elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
         )
         
@@ -1530,7 +1530,7 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
-            elementTitle.exists,
+            elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
         )
         
@@ -1574,7 +1574,7 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
-            elementTitle.exists,
+            elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
         )
         
