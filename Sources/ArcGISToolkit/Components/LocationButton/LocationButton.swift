@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import Algorithms
 import ArcGIS
 import CoreLocation
-import Algorithms
 import SwiftUI
 
 /// A button that allows a user to show their location on a map view.
@@ -25,16 +25,17 @@ import SwiftUI
 /// can also hide the location display or select the auto-pan mode through a
 /// context menu.
 ///
-/// If there are no auto-pan options specified, or if the only specified option
-/// is `.off`, then the location display is toggled on/off with upon tap, and
-/// the context menu is not shown on a long press.
+/// If there are no auto-pan modes specified, or if the only specified mode is
+/// `off`, then:
+/// - the location display is toggled on/off when pressed
+/// - the context menu is not shown when long pressed
 public struct LocationButton: View {
     let locationDisplay: LocationDisplay
     
     /// The current status of the location display's datasource.
     @State private(set) var status: LocationDataSource.Status = .stopped
     
-    /// The autopan mode of the location display.
+    /// The auto-pan mode of the location display.
     @State private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off {
         didSet {
             guard autoPanMode != locationDisplay.autoPanMode else {
@@ -50,7 +51,7 @@ public struct LocationButton: View {
         status == .starting || status == .stopping
     }
     
-    /// The auto pan modes that are selectable by the user.
+    /// The auto-pan modes that are selectable by the user.
     private(set) var autoPanModes: [LocationDisplay.AutoPanMode] = [
         .recenter, .compassNavigation, .navigation, .off
     ]
