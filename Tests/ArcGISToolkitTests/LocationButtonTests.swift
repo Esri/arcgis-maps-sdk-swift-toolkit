@@ -20,7 +20,7 @@ import Testing
 @MainActor
 struct LocationButtonTests {
     @Test
-    func init() {
+    func initializer() {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
         let button = LocationButton(locationDisplay: locationDisplay)
         
@@ -34,8 +34,7 @@ struct LocationButtonTests {
     }
     
     @Test
-    @MainActor
-    func testAutoPanOptions() {
+    func autoPanModes() {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
         var button = LocationButton(locationDisplay: locationDisplay)
         
@@ -51,10 +50,10 @@ struct LocationButtonTests {
         #expect(button.initialAutoPanMode == .off)
         #expect(button.contextMenuAutoPanOptions == [.off, .recenter])
         
-        // Test when `.off` is last
+        // Test when `off` is last
         button = button.autoPanModes([.recenter, .compassNavigation, .off])
         #expect(button.autoPanModes == [.recenter, .compassNavigation, .off])
-        // Still `.off` because the location display hasn't been started.
+        // Still `off` because the location display hasn't been started.
         #expect(button.autoPanMode == .off)
         #expect(button.initialAutoPanMode == .recenter)
         #expect(button.contextMenuAutoPanOptions == [.off, .recenter, .compassNavigation])
@@ -62,8 +61,7 @@ struct LocationButtonTests {
     }
     
     @Test
-    @MainActor
-    func testHideLocationDisplay() async throws {
+    func hideLocationDisplay() async throws {
         let datasource = MockLocationDataSource()
         let locationDisplay = LocationDisplay(dataSource: datasource)
         try await datasource.start()
@@ -74,8 +72,7 @@ struct LocationButtonTests {
     }
     
     @Test
-    @MainActor
-    func testNextAutoPanMode() {
+    func nextAutoPanMode() {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
         var button = LocationButton(locationDisplay: locationDisplay)
         
@@ -86,18 +83,18 @@ struct LocationButtonTests {
         button = button.autoPanModes([.off, .recenter])
         #expect(button.nextAutoPanMode(current: .off, initial: .off) == .recenter)
         
-        // Test when `.off` is last
+        // Test when `off` is last
         button = button.autoPanModes([.recenter, .compassNavigation, .navigation, .off])
         #expect(button.nextAutoPanMode(current: .compassNavigation, initial: .recenter) == .navigation)
     }
     
     @Suite
+    @MainActor
     struct ActionTests {
         typealias Action = LocationButton.Action
         
         @Test
-        @MainActor
-        func testInit() {
+        func initializer() {
             #expect(
                 Action(status: .stopped, autoPanOptions: []) == .start
             )
