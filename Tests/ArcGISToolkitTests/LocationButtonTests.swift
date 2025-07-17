@@ -17,9 +17,9 @@ import ArcGIS
 import Testing
 
 @Suite("LocationButton Tests")
+@MainActor
 struct LocationButtonTests {
     @Test
-    @MainActor
     func testInit() {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
         let button = LocationButton(locationDisplay: locationDisplay)
