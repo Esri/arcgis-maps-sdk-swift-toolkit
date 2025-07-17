@@ -36,13 +36,9 @@ extension FeatureFormView {
                         content: [Text.noAssociations]
                     )
                 } else {
-                    FeatureFormGroupedContentView(content: results.compactMap {
-                        if $0.resultCount > 0 {
-                            UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
-                                .environment(embeddedFeatureFormViewModel)
-                        } else {
-                            nil
-                        }
+                    FeatureFormGroupedContentView(content: results.map {
+                        UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
+                            .environment(embeddedFeatureFormViewModel)
                     })
                 }
             case .failure(let error):
