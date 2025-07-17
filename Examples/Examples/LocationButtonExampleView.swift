@@ -23,7 +23,7 @@ struct LocationButtonExampleView: View {
     
     /// The location display to set on the map view.
     @State private var locationDisplay = {
-        let locationDisplay = LocationDisplay(dataSource: SystemLocationDataSource())
+        let locationDisplay = LocationDisplay()
         locationDisplay.initialZoomScale = 40_000
         return locationDisplay
     }()
@@ -33,11 +33,11 @@ struct LocationButtonExampleView: View {
             .locationDisplay(locationDisplay)
             .overlay(alignment: .topTrailing) {
                 LocationButton(locationDisplay: locationDisplay)
-                    .autoPanOptions([.recenter, .compassNavigation, .off])
+                    .autoPanModes([.recenter, .compassNavigation, .off])
                     .imageScale(.large)
                     .frame(minWidth: 50, minHeight: 50)
                     .background(.thinMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .clipShape(.rect(cornerRadius: 10))
                     .shadow(radius: 8)
                     .padding()
             }
