@@ -35,42 +35,56 @@ struct FormFooter: View {
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     var body: some View {
+        // The buttons are tinted with static colors to override gray system
+        //coloring applied when the FeatureFormView is presented in an Inspector
+        // at the large detent height in compact-width environments as of iOS 16.
+        // Tinting with Color.accentColor was found to not successfully override
+        // the gray either. Additionally, the tint is only respected on iOS and
+        // not on Catalyst or visionOS. Ref Apollo #1308.
         HStack {
-            Button {
-                featureForm.discardEdits()
-                formHandlingEventAction?(.discardedEdits(willNavigate: false))
-                validationErrorVisibilityInternal.wrappedValue = .automatic
-            } label: {
-                Text(
-                    "Discard",
-                    bundle: .toolkitModule,
-                    comment: "Discard edits on the feature form."
-                )
-            }
-            
+            discardButton
+                .tint(.red)
             Spacer()
-            
-            Button {
-                    if featureForm.validationErrors.isEmpty {
-                        Task {
-                            do {
-                                try await featureForm.finishEditing()
-                                formHandlingEventAction?(.savedEdits(willNavigate: false))
-                            } catch {
-                                finishEditingError = error
-                            }
-                        }
-                    } else {
-                        validationErrorVisibilityInternal.wrappedValue = .visible
-                        setAlertContinuation?(false, {})
+            saveButton
+                .tint(.blue)
+        }
+    }
+    
+    var discardButton: some View {
+        Button {
+            featureForm.discardEdits()
+            formHandlingEventAction?(.discardedEdits(willNavigate: false))
+            validationErrorVisibilityInternal.wrappedValue = .automatic
+        } label: {
+            Text(
+                "Discard",
+                bundle: .toolkitModule,
+                comment: "Discard edits on the feature form."
+            )
+        }
+    }
+    
+    var saveButton: some View {
+        Button {
+            if featureForm.validationErrors.isEmpty {
+                Task {
+                    do {
+                        try await featureForm.finishEditing()
+                        formHandlingEventAction?(.savedEdits(willNavigate: false))
+                    } catch {
+                        finishEditingError = error
                     }
-            } label: {
-                Text(
-                    "Save",
-                    bundle: .toolkitModule,
-                    comment: "Finish editing the feature form."
-                )
+                }
+            } else {
+                validationErrorVisibilityInternal.wrappedValue = .visible
+                setAlertContinuation?(false, {})
             }
+        } label: {
+            Text(
+                "Save",
+                bundle: .toolkitModule,
+                comment: "Finish editing the feature form."
+            )
         }
     }
 }
