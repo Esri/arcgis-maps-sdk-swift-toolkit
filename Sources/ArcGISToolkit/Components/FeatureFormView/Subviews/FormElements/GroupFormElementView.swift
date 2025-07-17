@@ -67,6 +67,8 @@ struct GroupFormElementView<Content>: View where Content: View {
             }
             isVisibleTasks.removeAll()
         }
+        // Tints the disclosure triangle.
+        .inspectorTint(.blue)
     }
 }
 
