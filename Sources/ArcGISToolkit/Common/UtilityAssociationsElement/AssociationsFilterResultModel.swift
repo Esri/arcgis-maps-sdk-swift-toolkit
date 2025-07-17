@@ -29,16 +29,11 @@ final class AssociationsFilterResultsModel {
     @MainActor
     init(element: UtilityAssociationsElement) {
         task = Task { [weak self] in
-            guard !Task.isCancelled, let self else {
-                return
-            }
-            
+            guard !Task.isCancelled, let self else { return }
             let result = await Result {
                 try await element.associationsFilterResults.filter { $0.resultCount > 0 }
             }
-            withAnimation {
-                self.result = result
-            }
+            withAnimation { self.result = result }
         }
     }
     
