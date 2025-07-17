@@ -76,7 +76,7 @@ extension View {
     /// are recommended instead.
     /// - Note: The tint is only respected on iOS and not on Catalyst or visionOS.
     /// - SeeAlso: Apollo #1308
-    func overrideSystemTint<S>(_ tint: S) -> some View where S: ShapeStyle {
+    func inspectorTint<S>(_ tint: S) -> some View where S: ShapeStyle {
         self.tint(tint)
     }
 }

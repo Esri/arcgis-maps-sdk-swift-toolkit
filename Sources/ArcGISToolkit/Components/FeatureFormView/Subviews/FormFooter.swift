@@ -37,10 +37,10 @@ struct FormFooter: View {
     var body: some View {
         HStack {
             discardButton
-                .overrideSystemTint(.red)
+                .inspectorTint(.red)
             Spacer()
             saveButton
-                .overrideSystemTint(.blue)
+                .inspectorTint(.blue)
         }
     }
     
