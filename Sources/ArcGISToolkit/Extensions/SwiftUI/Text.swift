@@ -65,7 +65,9 @@ extension Text {
         )
     }
     
-    static func makeErrorFetchingFilterResultsMessage(_ error: any Error) -> Self {
+    /// An error message shown when a utility association element's filter results cannot be displayed.
+    /// - Parameter error: The error that occurred while fetching filter results.
+    static func errorFetchingFilterResults(_ error: any Error) -> Self {
         .init(
             "Error fetching filter results: \(error.localizedDescription)",
             bundle: .toolkitModule,

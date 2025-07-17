@@ -48,7 +48,7 @@ struct UtilityAssociationsPopupElementView: View {
                     .environment(\.associationDisplayCount, popupElement.displayCount)
                 }
             case .failure(let error):
-                Text.makeErrorFetchingFilterResultsMessage(error)
+                Text.errorFetchingFilterResults(error)
             case nil:
                 VStack {
                     // This check and the enclosing stack/modifiers workaround an issue where the

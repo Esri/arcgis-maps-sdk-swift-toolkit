@@ -43,7 +43,7 @@ extension FeatureFormView {
                 }
             case .failure(let error):
                 FeatureFormGroupedContentView(content: [
-                    Text.makeErrorFetchingFilterResultsMessage(error)
+                    Text.errorFetchingFilterResults(error)
                 ])
             case nil:
                 FeatureFormGroupedContentView(content: [ProgressView()])
