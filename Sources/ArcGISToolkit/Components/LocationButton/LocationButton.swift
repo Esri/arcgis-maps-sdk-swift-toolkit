@@ -73,6 +73,7 @@ public struct LocationButton: View {
         } label: {
             buttonLabel
         }
+        .contentTransition(.symbolEffect(.replace))
         .onChange(of: autoPanMode) {
             guard autoPanMode != locationDisplay.autoPanMode else {
                 return
@@ -174,7 +175,6 @@ public struct LocationButton: View {
             Image(systemName: autoPanMode.imageSystemName)
         case .failedToStart:
             Image(systemName: "exclamationmark.triangle")
-                .tint(.secondary)
         @unknown default:
             fatalError()
         }
