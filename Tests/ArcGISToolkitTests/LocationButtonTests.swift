@@ -20,7 +20,7 @@ import Testing
 @MainActor
 struct LocationButtonTests {
     @Test
-    func testInit() {
+    func init() {
         let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
         let button = LocationButton(locationDisplay: locationDisplay)
         
