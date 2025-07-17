@@ -202,6 +202,7 @@ private extension TextInput {
         } label: {
             Image(systemName: "plus.forwardslash.minus")
         }
+        .overrideSystemTint(.blue)
     }
 }
 

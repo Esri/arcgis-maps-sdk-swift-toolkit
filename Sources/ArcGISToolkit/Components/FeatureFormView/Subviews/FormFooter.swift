@@ -35,18 +35,12 @@ struct FormFooter: View {
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     var body: some View {
-        // The buttons are tinted with static colors to override gray system
-        //coloring applied when the FeatureFormView is presented in an Inspector
-        // at the large detent height in compact-width environments as of iOS 16.
-        // Tinting with Color.accentColor was found to not successfully override
-        // the gray either. Additionally, the tint is only respected on iOS and
-        // not on Catalyst or visionOS. Ref Apollo #1308.
         HStack {
             discardButton
-                .tint(.red)
+                .overrideSystemTint(.red)
             Spacer()
             saveButton
-                .tint(.blue)
+                .overrideSystemTint(.blue)
         }
     }
     

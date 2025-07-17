@@ -67,6 +67,18 @@ extension View {
             action()
         }
     }
+    
+    /// Sets the tint within this view to override system styling.
+    ///
+    /// As of iOS 16, buttons placed in toolbars within an Inspector are grayed out in compact-width
+    /// environments at the large presentation detent. Use this modifier to override that system styling.
+    /// - Important: Using `Color.accentColor` was found to not work so static colors, like blue,
+    /// are recommended instead.
+    /// - Note: The tint is only respected on iOS and not on Catalyst or visionOS.
+    /// - SeeAlso: Apollo #1308
+    func overrideSystemTint<S>(_ tint: S) -> some View where S: ShapeStyle {
+        self.tint(tint)
+    }
 }
 
 extension View {
