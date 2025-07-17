@@ -92,12 +92,73 @@ public struct LocationButton: View {
         .accessibilityHint(
             Text("Change location display options", bundle: .toolkitModule, comment: "The accessibility hint of the location button.")
         )
-        .accessibilityValue(autoPanMode.label)
+        .accessibilityValue(accessibilityValue)
         .contextMenu { contextMenuItems }
         .disabled(buttonIsDisabled)
         .task(id: ObjectIdentifier(locationDisplay)) { await observeStatus() }
         .task(id: ObjectIdentifier(locationDisplay)) { await observeAutoPanMode() }
         .animation(.default, value: autoPanMode)
+    }
+    
+    /// The accessibility value of the button.
+    private var accessibilityValue: Text {
+        return switch status {
+        case .stopped:
+            Text(
+                "Location display hidden",
+                bundle: .toolkitModule,
+                comment: "The accessibility value of the location button when the location display is not showing."
+            )
+        case .starting:
+            Text(
+                "Location display starting",
+                bundle: .toolkitModule,
+                comment: "The accessibility value of the location button when the location display is starting."
+            )
+        case .stopping:
+            Text(
+                "Location display stopping",
+                bundle: .toolkitModule,
+                comment: "The accessibility value of the location button when the location display is stopping."
+            )
+        case .started:
+            switch autoPanMode {
+            case .off:
+                Text(
+                    "Auto-pan off",
+                    bundle: .toolkitModule,
+                    comment: "The accessibility value of the location button when the auto-pan mode is off."
+                )
+            case .recenter:
+                Text(
+                    "Auto-pan recenter",
+                    bundle: .toolkitModule,
+                    comment: "The accessibility value of the location button when the auto-pan mode is recenter."
+                )
+            case .compassNavigation:
+                Text(
+                    "Auto-pan compass navigation",
+                    bundle: .toolkitModule,
+                    comment: "The accessibility value of the location button when the auto-pan mode is compass navigation."
+                )
+            case .navigation:
+                Text(
+                    "Auto-pan navigation",
+                    bundle: .toolkitModule,
+                    comment: "The accessibility value of the location button when the auto-pan mode is navigation."
+                )
+            @unknown default:
+                fatalError("Unknown case")
+            }
+        case .failedToStart:
+            Text(
+                "Location display failed to start",
+                bundle: .toolkitModule,
+                comment: "The accessibility value of the location button when the location display fails to start."
+            )
+        @unknown default:
+            fatalError()
+        }
     }
     
     @ViewBuilder
