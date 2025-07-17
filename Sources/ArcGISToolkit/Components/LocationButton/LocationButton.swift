@@ -37,19 +37,14 @@ public struct LocationButton: View {
     @State private(set) var status: LocationDataSource.Status = .stopped
     
     /// The auto-pan mode of the location display.
-    @State private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off {
-        didSet {
-            guard autoPanMode != locationDisplay.autoPanMode else {
-                return
-            }
-            // Set the mode on the location display.
-            locationDisplay.autoPanMode = autoPanMode
-        }
-    }
+    @State private(set) var autoPanMode: LocationDisplay.AutoPanMode = .off
+    
+    /// A Boolean value indicating that the button action is being performed.
+    @State private(set) var isPerformingButtonAction = false
     
     /// A value indicating whether the button is disabled.
     var buttonIsDisabled: Bool {
-        status == .starting || status == .stopping
+        status == .starting || status == .stopping || isPerformingButtonAction
     }
     
     /// The auto-pan modes that are selectable by the user.
@@ -77,6 +72,13 @@ public struct LocationButton: View {
             buttonAction()
         } label: {
             buttonLabel
+        }
+        .onChange(of: autoPanMode) {
+            guard autoPanMode != locationDisplay.autoPanMode else {
+                return
+            }
+            // Set the mode on the location display.
+            locationDisplay.autoPanMode = autoPanMode
         }
         .onChange(of: autoPanModes) {
             // If current mode not in new options, then switch it out.
@@ -186,6 +188,8 @@ extension LocationButton {
     
     /// This should be called when the button is pressed.
     func buttonAction() {
+        isPerformingButtonAction = true
+        
         switch Action(status: status, autoPanOptions: autoPanModes) {
         case .start:
             // If the datasource is a system location datasource, then request authorization.
@@ -201,13 +205,18 @@ extension LocationButton {
                 } catch {
                     print("Error starting location display: \(error)")
                 }
+                isPerformingButtonAction = false
             }
         case .stop:
-            Task { await hideLocationDisplay() }
+            Task {
+                await hideLocationDisplay()
+                isPerformingButtonAction = false
+            }
         case .autoPanCycle:
             // Need to use the select method here so that last selected mode
             // gets set.
             autoPanMode = nextAutoPanMode(current: autoPanMode, initial: initialAutoPanMode)
+            isPerformingButtonAction = false
         case .none:
             return
         }
