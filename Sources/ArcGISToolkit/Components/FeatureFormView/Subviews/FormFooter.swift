@@ -45,7 +45,7 @@ struct FormFooter: View {
     }
     
     var discardButton: some View {
-        Button {
+        Button(role: .destructive) {
             featureForm.discardEdits()
             formHandlingEventAction?(.discardedEdits(willNavigate: false))
             validationErrorVisibilityInternal.wrappedValue = .automatic
