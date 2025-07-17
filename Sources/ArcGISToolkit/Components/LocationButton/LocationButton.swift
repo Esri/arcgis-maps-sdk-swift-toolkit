@@ -103,7 +103,7 @@ public struct LocationButton: View {
     
     /// The accessibility value of the button.
     private var accessibilityValue: Text {
-        return switch status {
+        switch status {
         case .stopped:
             Text(
                 "Location display hidden",
