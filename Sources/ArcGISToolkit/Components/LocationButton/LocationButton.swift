@@ -30,6 +30,7 @@ import SwiftUI
 /// - the location display is toggled on/off when pressed
 /// - the context menu is not shown when long pressed
 public struct LocationButton: View {
+    /// The location display controlled by the location button.
     let locationDisplay: LocationDisplay
     
     /// The current status of the location display's datasource.
