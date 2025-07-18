@@ -17,7 +17,7 @@ import ArcGIS
 import CoreLocation
 import SwiftUI
 
-/// A button that allows a user to show their location on a map view.
+/// A button that allows a user to control their location display on a map view.
 /// Gives the user a variety of options to set the auto-pan mode or stop the
 /// location data source.
 ///
