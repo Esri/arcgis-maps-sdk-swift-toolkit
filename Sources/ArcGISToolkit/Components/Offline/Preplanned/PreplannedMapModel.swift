@@ -322,6 +322,7 @@ protocol PreplannedMapAreaProtocol: Sendable {
     var title: String { get }
     var description: String { get }
     var thumbnail: LoadableImage? { get }
+    var canDownload: Bool { get }
 }
 
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -349,6 +350,8 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
         // Remove HTML tags from description.
         portalItem.description.replacing(/<[^>]+>/, with: "")
     }
+    
+    var canDownload: Bool { true }
 }
 
 /// A value that contains the result of loading the preplanned map models for
@@ -475,6 +478,7 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     var id: Item.ID?
     var packagingStatus: PreplannedMapArea.PackagingStatus?
     var thumbnail: LoadableImage?
+    var canDownload: Bool { false }
     
     func retryLoad() async throws {}
     
