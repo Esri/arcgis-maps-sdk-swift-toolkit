@@ -206,7 +206,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: {}
+            onRemoveDownload: { _ in }
         )
         await model.load()
         XCTAssertEqual(model.status, .downloading)
@@ -231,7 +231,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: {}
+            onRemoveDownload: { _ in }
         )
         
         defer {
@@ -277,7 +277,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: {}
+            onRemoveDownload: { _ in }
         )
         await model2.load()
         XCTAssertEqual(model2.status, .downloaded)
@@ -299,7 +299,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: {}
+            onRemoveDownload: { _ in }
         )
         
         defer {
@@ -365,7 +365,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: {}
+            onRemoveDownload: { _ in }
         )
         
         var statuses: [PreplannedMapModel.Status] = []
@@ -408,7 +408,7 @@ class PreplannedMapModelTests: XCTestCase {
             mapArea: area,
             portalItemID: portalItemID,
             preplannedMapAreaID: areaID,
-            onRemoveDownload: {}
+            onRemoveDownload: { _ in }
         )
         
         // Verify description does not contain HTML tags.
@@ -446,7 +446,7 @@ private extension PreplannedMapModel {
             mapArea: mapArea,
             portalItemID: .init("test-item-id")!,
             preplannedMapAreaID: .init("test-preplanned-map-area-id")!,
-            onRemoveDownload: {}
+            onRemoveDownload: { _ in }
         )
     }
 }
