@@ -318,13 +318,14 @@ extension PreplannedMapModel: Hashable {
 /// A type that acts as a preplanned map area.
 protocol PreplannedMapAreaProtocol: Sendable {
     func retryLoad() async throws
+    // Only valid to call this when `supportsRedownloading` is `true`.
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters
     
     var packagingStatus: PreplannedMapArea.PackagingStatus? { get }
     var title: String { get }
     var description: String { get }
     var thumbnail: LoadableImage? { get }
-    // Whether this preplanned map area can be re-downloaded.
+    // A Boolean value indicating if this preplanned map area can be re-downloaded.
     var supportsRedownloading: Bool { get }
 }
 

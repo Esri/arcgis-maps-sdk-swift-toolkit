@@ -99,11 +99,12 @@ class OfflineMapViewModel: ObservableObject {
             OfflineManager.shared.removeMapInfo(for: portalItemID)
         }
         
-        // If the model that had it's area deleted cannot be downloaded,
+        // If we are only showing offline models,
+        // and the model that had it's area deleted cannot be re-downloaded,
         // then remove it from the list so it's not longer shown.
         if case.success(var preplannedModels) = preplannedMapModels,
-           !model.preplannedMapArea.supportsRedownloading,
-           preplannedModels.contains(where: { $0 === model })
+           isShowingOnlyOfflineModels,
+           !model.preplannedMapArea.supportsRedownloading
         {
             preplannedModels.removeAll { $0 === model }
             self.preplannedMapModels = .success(preplannedModels)
