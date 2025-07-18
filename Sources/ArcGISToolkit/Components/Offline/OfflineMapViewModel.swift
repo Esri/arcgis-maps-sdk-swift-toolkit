@@ -112,6 +112,15 @@ class OfflineMapViewModel: ObservableObject {
         
         // Note: We don't reset the mode once it is determined.
         
+        // Before loading models, check if the Internet is available.
+        do {
+            _ = try await offlineMapTask.preplannedMapAreas
+        } catch {
+            if error.isNoInternetConnectionError {
+                return
+            }
+        }
+        
         // First load preplanned map models.
         if mode == .undetermined || mode == .preplanned {
             await loadPreplannedMapModels()
@@ -126,9 +135,12 @@ class OfflineMapViewModel: ObservableObject {
         // undetermined.
         if mode == .undetermined || mode == .onDemand {
             await loadOnDemandMapModels()
-            // If there are any on-demand areas at all, and the mode is
-            // undetermined, then set mode to on-demand.
-            if mode == .undetermined, !onDemandMapModels.isEmpty {
+            // If the mode is undetermined, then set mode to on-demand.
+            // If there are on-demand map areas, the mode should be set to
+            // on-demand. If there are no on-demand map areas, we can assume
+            // that the user started with an empty map and want to add on-demand
+            // map areas.
+            if mode == .undetermined {
                 mode = .onDemand
             }
         }
