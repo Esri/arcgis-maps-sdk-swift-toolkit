@@ -156,10 +156,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Downloads the preplanned map area.
     /// - Precondition: `allowsDownload == true`
-    /// - Precondition: `preplannedMapArea.canDownload`
+    /// - Precondition: `preplannedMapArea.supportsRedownloading`
     func downloadPreplannedMapArea() async {
         precondition(status.allowsDownload)
-        precondition(preplannedMapArea.canDownload)
+        precondition(preplannedMapArea.supportsRedownloading)
         
         status = .downloading
         do {
@@ -324,7 +324,8 @@ protocol PreplannedMapAreaProtocol: Sendable {
     var title: String { get }
     var description: String { get }
     var thumbnail: LoadableImage? { get }
-    var canDownload: Bool { get }
+    // Whether this preplanned map area can be re-downloaded.
+    var supportsRedownloading: Bool { get }
 }
 
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -353,7 +354,7 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
         portalItem.description.replacing(/<[^>]+>/, with: "")
     }
     
-    var canDownload: Bool { true }
+    var supportsRedownloading: Bool { true }
 }
 
 /// A value that contains the result of loading the preplanned map models for
@@ -480,7 +481,7 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     var id: Item.ID?
     var packagingStatus: PreplannedMapArea.PackagingStatus?
     var thumbnail: LoadableImage?
-    var canDownload: Bool { false }
+    var supportsRedownloading: Bool { false }
     
     func retryLoad() async throws {}
     
