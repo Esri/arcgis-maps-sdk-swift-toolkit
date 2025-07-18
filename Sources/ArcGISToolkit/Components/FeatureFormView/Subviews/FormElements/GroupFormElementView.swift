@@ -38,17 +38,15 @@ struct GroupFormElementView<Content>: View where Content: View {
     }
     
     var body: some View {
-        Group {
-            DisclosureGroup(isExpanded: $isExpanded) {
-                ForEach(visibleElements, id: \.self) { element in
-                    viewCreator(element)
-                        .padding(.leading, 16)
-                }
-            } label: {
-                Header(element: element)
-                    .multilineTextAlignment(.leading)
-                    .tint(.primary)
+        DisclosureGroup(isExpanded: $isExpanded) {
+            ForEach(visibleElements, id: \.self) { element in
+                viewCreator(element)
+                    .padding(.leading, 16)
             }
+        } label: {
+            Header(element: element)
+                .multilineTextAlignment(.leading)
+                .tint(.primary)
         }
         .onAppear {
             isExpanded = element.initialState == .expanded
@@ -67,6 +65,8 @@ struct GroupFormElementView<Content>: View where Content: View {
             }
             isVisibleTasks.removeAll()
         }
+        // Tints the disclosure triangle.
+        .inspectorTint(.blue)
     }
 }
 
