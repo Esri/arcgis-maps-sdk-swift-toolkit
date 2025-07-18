@@ -215,7 +215,6 @@ public struct LocationButton: View {
                         } icon: {
                             Image(systemName: autoPanMode.imageSystemName)
                         }
-
                     }
                     .accessibilityHint(autoPanMode.accessibilityHint)
                 }
