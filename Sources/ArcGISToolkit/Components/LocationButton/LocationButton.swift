@@ -87,9 +87,7 @@ public struct LocationButton: View {
                 autoPanMode = initialAutoPanMode
             }
         }
-        .accessibilityLabel(
-            Text("Location display", bundle: .toolkitModule, comment: "The accessibility label of the location button.")
-        )
+        .accessibilityLabel(accessibilityLabel)
         .accessibilityHint(
             Text("Change location display options", bundle: .toolkitModule, comment: "The accessibility hint of the location button.")
         )
@@ -101,62 +99,84 @@ public struct LocationButton: View {
         .animation(.default, value: autoPanMode)
     }
     
+    /// The accessibility label of the button.
+    private var accessibilityLabel: Text {
+        switch status {
+        case .stopped, .starting, .stopping, .failedToStart:
+            Text(
+                "Location display",
+                bundle: .toolkitModule,
+                comment: "The accessibility label of the location button when the location display is not showing."
+            )
+        case .started:
+            Text(
+                "Auto-pan",
+                bundle: .toolkitModule,
+                comment:
+                    """
+                    The accessibility label of the location button when the location display is showing and the button cycles through auto-pan modes.
+                    """
+            )
+        @unknown default:
+            fatalError()
+        }
+    }
     /// The accessibility value of the button.
     private var accessibilityValue: Text {
         switch status {
         case .stopped:
             Text(
-                "Location display hidden",
+                "Stopped",
                 bundle: .toolkitModule,
                 comment: "The accessibility value of the location button when the location display is not showing."
             )
         case .starting:
             Text(
-                "Location display starting",
+                "Starting",
                 bundle: .toolkitModule,
                 comment: "The accessibility value of the location button when the location display is starting."
             )
         case .stopping:
             Text(
-                "Location display stopping",
+                "Stopping",
                 bundle: .toolkitModule,
                 comment: "The accessibility value of the location button when the location display is stopping."
+            )
+        case .failedToStart:
+            Text(
+                "Failed to start",
+                bundle: .toolkitModule,
+                comment: "The accessibility value of the location button when the location display fails to start."
             )
         case .started:
             switch autoPanMode {
             case .off:
                 Text(
-                    "Auto-pan off",
+                    "Off",
                     bundle: .toolkitModule,
                     comment: "The accessibility value of the location button when the auto-pan mode is off."
                 )
             case .recenter:
                 Text(
-                    "Auto-pan recenter",
+                    "Recenter",
                     bundle: .toolkitModule,
                     comment: "The accessibility value of the location button when the auto-pan mode is recenter."
                 )
             case .compassNavigation:
                 Text(
-                    "Auto-pan compass navigation",
+                    "Compass navigation",
                     bundle: .toolkitModule,
                     comment: "The accessibility value of the location button when the auto-pan mode is compass navigation."
                 )
             case .navigation:
                 Text(
-                    "Auto-pan navigation",
+                    "Navigation",
                     bundle: .toolkitModule,
                     comment: "The accessibility value of the location button when the auto-pan mode is navigation."
                 )
             @unknown default:
                 fatalError("Unknown case")
             }
-        case .failedToStart:
-            Text(
-                "Location display failed to start",
-                bundle: .toolkitModule,
-                comment: "The accessibility value of the location button when the location display fails to start."
-            )
         @unknown default:
             fatalError()
         }
