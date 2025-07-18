@@ -89,10 +89,6 @@ struct FeatureFormToolbar: ViewModifier {
                                 Image(systemName: "chevron.backward")
                             }
                         }
-#if targetEnvironment(macCatalyst)
-                        .buttonStyle(.plain)
-                        .tint(.accentColor)
-#endif
                         .disabled(navigationIsDisabled)
                     }
                 }
