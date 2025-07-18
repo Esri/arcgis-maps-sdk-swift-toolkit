@@ -130,9 +130,7 @@ extension EmbeddedPopupView {
                         EmptyView()
                     }
                 }
-#if targetEnvironment(macCatalyst)
-                .listRowInsets(.toolkitDefault)
-#endif
+                .popupListRowStyle()
             }
             .listStyle(.plain)
         }
@@ -148,5 +146,15 @@ private extension Logger {
     /// A logger for the popup view.
     static var popupView: Logger {
         Logger(subsystem: "com.esri.ArcGISToolkit", category: "PopupView")
+    }
+}
+
+extension View {
+    /// Adds the list row style for the PopupView.
+    func popupListRowStyle() -> some View {
+        self.listSectionSeparator(.hidden, edges: .top)
+#if targetEnvironment(macCatalyst)
+            .listRowInsets(.init(top: 8, leading: 19, bottom: 8, trailing: 19))
+#endif
     }
 }
