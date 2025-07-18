@@ -95,11 +95,9 @@ private struct UtilityAssociationsFilterResultLink: View {
         NavigationLink {
             List(filterResult.groupResults, id: \.id) { groupResult in
                 UtilityAssociationGroupResultView(groupResult: groupResult)
-#if targetEnvironment(macCatalyst)
-                    .listRowInsets(.toolkitDefault)
-#endif
+                    .popupListRowStyle()
             }
-            .listStyle(.inset)
+            .listStyle(.plain)
             .navigationTitle(filterResult.filter.displayTitle, subtitle: popupTitle)
             .navigationBarTitleDisplayMode(.inline)
             .popupViewToolbar()
@@ -206,11 +204,9 @@ private struct SearchUtilityAssociationResultsView: View {
             } label: {
                 UtilityAssociationResultLabel(result: result)
             }
-#if targetEnvironment(macCatalyst)
-            .listRowInsets(.toolkitDefault)
-#endif
+            .popupListRowStyle()
         }
-        .listStyle(.inset)
+        .listStyle(.plain)
         .searchable(
             text: $text,
             placement: .navigationBarDrawer(displayMode: .always),
