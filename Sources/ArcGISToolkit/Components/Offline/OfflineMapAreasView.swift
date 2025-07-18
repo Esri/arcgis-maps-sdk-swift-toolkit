@@ -158,8 +158,10 @@ public struct OfflineMapAreasView: View {
                         switch mapViewModel.mode {
                         case .preplanned:
                             preplannedMapAreasView
-                        case .onDemand, .undetermined:
+                        case .onDemand:
                             onDemandMapAreasView
+                        case .undetermined:
+                            noInternetNoAreasView
                         }
                     }
                 }
