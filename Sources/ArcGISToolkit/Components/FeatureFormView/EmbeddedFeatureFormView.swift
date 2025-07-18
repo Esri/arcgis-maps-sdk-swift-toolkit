@@ -16,9 +16,6 @@ import ArcGIS
 import SwiftUI
 
 struct EmbeddedFeatureFormView: View {
-    /// The environment value to access the closure to call when the presented feature form changes.
-    @Environment(\.formChangedAction) var formChangedAction
-    
     /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
     @Environment(\.formDeprecatedInitializerWasUsed) var deprecatedInitializerWasUsed
     
@@ -85,9 +82,6 @@ struct EmbeddedFeatureFormView: View {
         .padding([.horizontal])
         .task {
             await embeddedFeatureFormViewModel.initialEvaluation()
-        }
-        .onAppear {
-            formChangedAction?(embeddedFeatureFormViewModel.featureForm)
         }
         .featureFormToolbar(embeddedFeatureFormViewModel.featureForm, isAForm: true)
     }
