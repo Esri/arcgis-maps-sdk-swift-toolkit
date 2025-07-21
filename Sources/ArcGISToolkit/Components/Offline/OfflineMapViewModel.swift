@@ -92,6 +92,7 @@ class OfflineMapViewModel: ObservableObject {
     }
     
     /// The function called when a downloaded preplanned map area is removed.
+    /// - Parameter model: The preplanned map model.
     func onRemoveDownloadOfPreplannedArea(_ model: PreplannedMapModel) {
         // Delete the saved map info if there are no more downloads for the
         // represented online map.
