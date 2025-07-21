@@ -135,10 +135,6 @@ public struct FeatureFormView: View {
                         switch itemType {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
-                                .preference(
-                                    key: PresentedFeatureFormPreferenceKey.self,
-                                    value: .init(featureForm: form)
-                                )
                         case let .utilityAssociationFilterResultView(result, embeddedFeatureFormViewModel):
                             UtilityAssociationsFilterResultView(
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
@@ -161,10 +157,6 @@ public struct FeatureFormView: View {
                             .navigationTitle(result.name, subtitle: embeddedFeatureFormViewModel.title)
                         }
                     }
-                    .preference(
-                        key: PresentedFeatureFormPreferenceKey.self,
-                        value: .init(featureForm: rootFeatureForm)
-                    )
             }
             // Alert for abandoning unsaved edits
             .alert(
