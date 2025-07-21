@@ -143,9 +143,10 @@ public struct FeatureFormView: View {
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(result.filter.title, subtitle: embeddedFeatureFormViewModel.title)
-                            .onAppear {
-                                formChangedAction(embeddedFeatureFormViewModel.featureForm)
-                            }
+                            .preference(
+                                key: PresentedFeatureFormPreferenceKey.self,
+                                value: .init(object: embeddedFeatureFormViewModel.featureForm)
+                            )
                         case let .utilityAssociationGroupResultView(result, embeddedFeatureFormViewModel):
                             UtilityAssociationGroupResultView(
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
@@ -154,9 +155,6 @@ public struct FeatureFormView: View {
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(result.name, subtitle: embeddedFeatureFormViewModel.title)
-                            .onAppear {
-                                formChangedAction(embeddedFeatureFormViewModel.featureForm)
-                            }
                         }
                     }
             }
@@ -261,7 +259,6 @@ public struct FeatureFormView: View {
             )
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.finishEditingError, $finishEditingError)
-            .environment(\.formChangedAction, formChangedAction)
             .environment(\.formDeprecatedInitializerWasUsed, deprecatedInitializerWasUsed)
             .environment(\.isPresented, isPresented)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
@@ -270,6 +267,10 @@ public struct FeatureFormView: View {
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
             .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
+            .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) { wrappedFeatureForm in
+                guard let wrappedFeatureForm else { return }
+                formChangedAction(wrappedFeatureForm.object)
+            }
         }
     }
 }
