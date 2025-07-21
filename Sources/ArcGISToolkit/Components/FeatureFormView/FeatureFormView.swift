@@ -145,7 +145,7 @@ public struct FeatureFormView: View {
                             .navigationTitle(result.filter.title, subtitle: embeddedFeatureFormViewModel.title)
                             .preference(
                                 key: PresentedFeatureFormPreferenceKey.self,
-                                value: .init(featureForm: embeddedFeatureFormViewModel.featureForm)
+                                value: .init(object: embeddedFeatureFormViewModel.featureForm)
                             )
                         case let .utilityAssociationGroupResultView(result, embeddedFeatureFormViewModel):
                             UtilityAssociationGroupResultView(
@@ -269,7 +269,7 @@ public struct FeatureFormView: View {
             .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) { wrappedFeatureForm in
                 guard let wrappedFeatureForm else { return }
-                formChangedAction(wrappedFeatureForm.featureForm)
+                formChangedAction(wrappedFeatureForm.object)
             }
         }
     }

@@ -12,18 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-import SwiftUI
-
-/// A preference key that specifies the feature form currently presented in the `FeatureFormView` navigation stack.
-struct PresentedFeatureFormPreferenceKey: PreferenceKey {
-    static let defaultValue: EquatableObject<FeatureForm>? = nil
+/// An equatable wrapper for an object.
+///
+/// Equality is determined by object identity.
+struct EquatableObject<Object: AnyObject & Sendable>: Equatable {
+    let object: Object
     
-    static func reduce(
-        value: inout EquatableObject<FeatureForm>?,
-        nextValue: () -> EquatableObject<FeatureForm>?
-    ) {
-        guard let nextValue = nextValue() else { return }
-        value = nextValue
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.object === rhs.object
     }
 }

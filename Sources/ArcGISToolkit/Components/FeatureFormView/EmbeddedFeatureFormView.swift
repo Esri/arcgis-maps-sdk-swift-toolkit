@@ -82,7 +82,7 @@ struct EmbeddedFeatureFormView: View {
         .padding([.horizontal])
         .preference(
             key: PresentedFeatureFormPreferenceKey.self,
-            value: .init(featureForm: embeddedFeatureFormViewModel.featureForm)
+            value: .init(object: embeddedFeatureFormViewModel.featureForm)
         )
         .task {
             await embeddedFeatureFormViewModel.initialEvaluation()

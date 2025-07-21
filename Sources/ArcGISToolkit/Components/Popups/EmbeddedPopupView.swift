@@ -60,7 +60,7 @@ struct EmbeddedPopupView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
 #endif
-        .preference(key: PresentedPopupPreferenceKey.self, value: .init(popup: popup))
+        .preference(key: PresentedPopupPreferenceKey.self, value: .init(object: popup))
         .popupViewHeader(title: popup.title)
         .task(id: ObjectIdentifier(popup)) {
             // Initial evaluation for a newly assigned popup.
