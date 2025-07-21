@@ -75,7 +75,7 @@ final class PopupViewTests: XCTestCase {
     func testUNADefaultTitles() {
         let app = XCUIApplication()
         let associationsElement = app.staticTexts["Associations"]
-        let connectivityFilterResult = app.staticTexts["Connectivity"]
+        let connectedFilterResult = app.staticTexts["Connected"]
         let containerFilterResult = app.staticTexts["Container"]
         let filterResults = app.buttons.matching(identifier: "Associations Filter Result")
         let popupTitle = app.navigationBars["Electric Distribution Device: Arrester"]
@@ -93,8 +93,8 @@ final class PopupViewTests: XCTestCase {
         // Expectation: Filter elements use their type name as their default title.
         XCTAssertEqual(filterResults.count, 3)
         XCTAssertTrue(
-            connectivityFilterResult.exists,
-            "The filter result \"Connectivity\" doesn't exist."
+            connectedFilterResult.exists,
+            "The filter result \"Connected\" doesn't exist."
         )
         XCTAssertTrue(
             containerFilterResult.exists,
@@ -387,7 +387,7 @@ final class PopupViewTests: XCTestCase {
         let associationResults = app.staticTexts.matching(identifier: "Association Result")
         let associationResultIcons = app.images.matching(identifier: "Association Result Icon")
         let backButton = app.navigationBars.element(boundBy: 1).buttons.firstMatch
-        let connectivityFilterResult = app.buttons["Connectivity, 1"]
+        let connectedFilterResult = app.buttons["Connected, 1"]
         let containerFilterResult = app.buttons["Container, 1"]
         let popupTitle = app.navigationBars["Electric Distribution Device: Fuse"]
         let transformerBankResult = app.staticTexts["Electric Distribution Assembly: Transformer Bank"]
@@ -396,12 +396,12 @@ final class PopupViewTests: XCTestCase {
         openPopup(2672, on: .electricDistributionDevice)
         assertPopupOpened(popupTitle: popupTitle)
         
-        // Opens the "Connectivity" filter result.
+        // Opens the "Connected" filter result.
         XCTAssertTrue(
-            connectivityFilterResult.exists,
-            "The filter result \"Connectivity, 1\" doesn't exist."
+            connectedFilterResult.exists,
+            "The filter result \"Connected, 1\" doesn't exist."
         )
-        connectivityFilterResult.tap()
+        connectedFilterResult.tap()
         
         // Expectation: The one result has a "connection-to-connection" icon.
         XCTAssertTrue(
@@ -441,10 +441,10 @@ final class PopupViewTests: XCTestCase {
     /// Verifies that association results display the correct description when applicable.
     /// - Note: The fraction-along-edge description is not tested as the data does not have any
     /// `junctionEdgeObjectConnectivityMidspan` associations.
-    func testUNAAssociationDescriptions() async {
+    func testUNAAssociationDescriptions() {
         let app = XCUIApplication()
         let associationResultDescription = app.staticTexts["Association Result Description"]
-        let connectivityFilterResult = app.staticTexts["Connectivity"]
+        let connectedFilterResult = app.staticTexts["Connected"]
         let containerFilterResult = app.staticTexts["Container"]
         let contentFilterResult = app.staticTexts["Content"]
         let fusePopupTitle = app.staticTexts["Electric Distribution Device: Fuse"]
@@ -454,12 +454,12 @@ final class PopupViewTests: XCTestCase {
         openPopup(4567, on: .electricDistributionDevice)
         assertPopupOpened(popupTitle: fusePopupTitle)
         
-        // Opens the "Connectivity" filter result.
+        // Opens the "Connected" filter result.
         XCTAssertTrue(
-            connectivityFilterResult.exists,
-            "The filter result \"Connectivity\" doesn't exist."
+            connectedFilterResult.exists,
+            "The filter result \"Connected\" doesn't exist."
         )
-        connectivityFilterResult.tap()
+        connectedFilterResult.tap()
         
         // Expectations: The transformer result has a "High" description.
         XCTAssertTrue(
@@ -477,10 +477,10 @@ final class PopupViewTests: XCTestCase {
         assertPopupOpened(popupTitle: transformerPopupTitle)
         
         XCTAssertTrue(
-            connectivityFilterResult.exists,
-            "The filter result \"Connectivity\" doesn't exist."
+            connectedFilterResult.exists,
+            "The filter result \"Connected\" doesn't exist."
         )
-        connectivityFilterResult.tap()
+        connectedFilterResult.tap()
         
         // Expectation: The fuse results have a "Single Terminal" description.
         XCTAssertTrue(
