@@ -146,7 +146,6 @@ class OfflineMapViewModel: ObservableObject {
             // Try to load on-demand map models.
             await loadOnDemandMapModels()
             
-            // Try to load on-demand map models.
             // If there are on-demand areas on device, set mode to on-demand.
             if !onDemandMapModels.isEmpty {
                 mode = .onDemand
@@ -154,7 +153,7 @@ class OfflineMapViewModel: ObservableObject {
             }
             
             if !hasAnyPreplannedMapAreas, isShowingOnlyOfflineModels {
-                // In this case there are no preplanned map areas and we can
+                // In this case there are no preplanned or on-demand map areas and we can
                 // only show offline models (which there are none) because
                 // there is no internet. In that case we set the mode to
                 // `noInternetAvailable`.
