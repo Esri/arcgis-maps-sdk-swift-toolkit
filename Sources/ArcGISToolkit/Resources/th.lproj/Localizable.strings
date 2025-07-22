@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "ก้_Content_______________ษฺ";
+"Content" = "เนื้อหา";
 
 /* Continent (Level of Detail) */
 "Continent" = "ทวีป";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "ก้_Visible Content________________ษฺ";
+"Visible Content" = "เนื้อหาที่มองเห็น";
 
 /* World (Level of Detail) */
 "World" = "โลก";

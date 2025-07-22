@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "Į_Content_______________š";
+"Content" = "Turinys";
 
 /* Continent (Level of Detail) */
 "Continent" = "Žemynas";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "Į_Visible Content________________š";
+"Visible Content" = "Matomas turinys";
 
 /* World (Level of Detail) */
 "World" = "Pasaulis";

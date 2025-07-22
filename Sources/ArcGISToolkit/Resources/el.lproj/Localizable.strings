@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "Đ_Content_______________ớ";
+"Content" = "Περιεχόμενο";
 
 /* Continent (Level of Detail) */
 "Continent" = "Ήπειρος";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "Đ_Visible Content________________ớ";
+"Visible Content" = "Ορατό περιεχόμενο";
 
 /* World (Level of Detail) */
 "World" = "Κόσμος";

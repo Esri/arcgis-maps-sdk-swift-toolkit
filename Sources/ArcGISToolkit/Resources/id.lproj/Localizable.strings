@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "ng_Content_______________ny";
+"Content" = "Konten";
 
 /* Continent (Level of Detail) */
 "Continent" = "Benua";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "ng_Visible Content________________ny";
+"Visible Content" = "Konten yang Terlihat";
 
 /* World (Level of Detail) */
 "World" = "Dunia";

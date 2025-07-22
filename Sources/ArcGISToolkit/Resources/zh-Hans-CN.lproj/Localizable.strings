@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "试_Content_______________验";
+"Content" = "内容";
 
 /* Continent (Level of Detail) */
 "Continent" = "大洲";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "试_Visible Content________________验";
+"Visible Content" = "可见内容";
 
 /* World (Level of Detail) */
 "World" = "世界";

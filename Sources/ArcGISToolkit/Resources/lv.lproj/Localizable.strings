@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "ķ_Content_______________ū";
+"Content" = "Saturs";
 
 /* Continent (Level of Detail) */
 "Continent" = "Kontinents";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "ķ_Visible Content________________ū";
+"Visible Content" = "Redzamais saturs";
 
 /* World (Level of Detail) */
 "World" = "Pasaule";

@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "Š_Content_______________ä";
+"Content" = "Sisu";
 
 /* Continent (Level of Detail) */
 "Continent" = "Maailmajagu";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "Š_Visible Content________________ä";
+"Visible Content" = "Nähtav sisu";
 
 /* World (Level of Detail) */
 "World" = "Maailm";

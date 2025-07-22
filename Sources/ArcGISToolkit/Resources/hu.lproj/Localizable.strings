@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "í_Content_______________ő";
+"Content" = "Tartalom";
 
 /* Continent (Level of Detail) */
 "Continent" = "Földrész";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "í_Visible Content________________ő";
+"Visible Content" = "Látható tartalom";
 
 /* World (Level of Detail) */
 "World" = "Világ";
