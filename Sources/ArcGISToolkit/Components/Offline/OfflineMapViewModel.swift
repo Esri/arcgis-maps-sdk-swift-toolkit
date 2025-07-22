@@ -92,12 +92,24 @@ class OfflineMapViewModel: ObservableObject {
     }
     
     /// The function called when a downloaded preplanned map area is removed.
-    func onRemoveDownloadOfPreplannedArea() {
+    /// - Parameter model: The preplanned map model.
+    func onRemoveDownloadOfPreplannedArea(_ model: PreplannedMapModel) {
         // Delete the saved map info if there are no more downloads for the
         // represented online map.
-        guard !hasDownloadedMapAreas else { return }
+        if !hasDownloadedMapAreas {
+            OfflineManager.shared.removeMapInfo(for: portalItemID)
+        }
         
-        OfflineManager.shared.removeMapInfo(for: portalItemID)
+        // If we are only showing offline models,
+        // and the model that had it's area deleted cannot be re-downloaded,
+        // then remove it from the list so it's not longer shown.
+        if case .success(var preplannedModels) = preplannedMapModels,
+           isShowingOnlyOfflineModels,
+           !model.preplannedMapArea.supportsRedownloading
+        {
+            preplannedModels.removeAll { $0 === model }
+            self.preplannedMapModels = .success(preplannedModels)
+        }
     }
     
     /// Loads the preplanned and on-demand models.
