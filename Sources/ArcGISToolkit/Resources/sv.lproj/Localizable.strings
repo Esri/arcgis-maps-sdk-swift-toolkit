@@ -4,12 +4,18 @@
 /* A label indicating the number of results of a utility network trace. */
 "^[%lld Results](inflect: true)" = "^[%lld Results](böjning: sant)";
 
+/* A reference to 3D content. */
+"3D" = "3D";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Ett certifikat krävs för att komma åt innehållet på %@.";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "Ett kartområde kan inte hämtas just nu.";
+
+/* A label for an option to add a new utility association. */
+"Add Association" = "Lägg till association";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Lägg till kartområde";
@@ -38,6 +44,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "Områdesnamn";
 
+/* A label in reference to utility associations elements contained within a popup. */
+"Associations" = "Associationer";
+
 /* A label in reference to attachments. */
 "Attachments" = "Bilagor";
 
@@ -49,6 +58,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Autentisering krävs";
+
+/* A generic label for navigating to the previous screen or returning to the previous context. */
+"Back" = "Tillbaka";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Bokmärken";
@@ -72,8 +84,7 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Kameraåtkomst är inaktiverad";
 
-/* A label for a button to cancel an operation.
-Title for a button that cancels an action. */
+/* A label for a button to cancel an operation. */
 "Cancel" = "Avbryt";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -115,11 +126,18 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Kompass, riktning %lld grader %@";
 
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "Innehåll";
+
 /* Continent (Level of Detail) */
 "Continent" = "Kontinent";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Fortsätt";
+
+/* A label for a button to continue editing the feature form. */
+"Continue Editing" = "Fortsätt redigera";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Det gick inte att hämta kartområden för den här kartan.";
@@ -163,11 +181,20 @@ east, etc.). */
 /* The title of the dialogue confirming deletion of all points. */
 "Delete all starting points?" = "Ta bort alla startpunkter?";
 
-/* A label for a button to delete a map area. */
-"Delete Map Area" = "Ta bort kartområde";
+/* A label for a button to delete a map area download. */
+"Delete Download" = "Ta bort hämtning";
 
 /* A label for the description of the map area. */
 "Description" = "Beskrivning";
+
+/* Discard edits on the feature form. */
+"Discard" = "Ta bort";
+
+/* A label for a button to discard unsaved edits. */
+"Discard Edits" = "Avbryt ändringar";
+
+/* A question asking if the user would like to discard their unsaved edits. */
+"Discard Edits?" = "Avbryt ändringar?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Stäng";
@@ -229,6 +256,11 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Fel";
 
+/* An error message shown when the element's
+associations filter results cannot be displayed.
+The variable provides additional data. */
+"Error fetching filter results: %@" = "Fel vid hämtning av filterresultat: %@";
+
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Det uppstod ett fel vid hämtning av kartområden";
 
@@ -283,6 +315,13 @@ contains one or more facilities in a floor-aware map or scene. */
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Hitta en plats eller adress";
+
+/* The message shown when a form could not be submitted. */
+"Finish editing failed." = "Avsluta redigering misslyckades.";
+
+/* The message shown when a form could not be 
+submitted with additional details. */
+"Finish editing failed.\n%@" = "Avsluta redigering misslyckades. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Bråkdel längs kant";
@@ -351,6 +390,9 @@ AR experience. */
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "Nytt spår";
+
+/* A label indicating that no associations are available for the popup element. */
+"No Associations" = "Inga associationer";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Inga bokmärken";
@@ -432,8 +474,8 @@ chosen utility network trace configuration. */
 chosen utility network trace configuration. */
 "Please set at least 2 starting locations." = "Välj minst 2 startplatser.";
 
-/* An error message shown when a popup cannot be displayed. The
-variable provides additional data. */
+/* An error message shown when a popup cannot be displayed.
+The variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup-utvärdering misslyckades: %@";
 
 /* The status text when a map area is ready to download. */
@@ -444,6 +486,9 @@ variable provides additional data. */
 
 /* A label for a button to refresh map area content. */
 "Refresh" = "Uppdatera";
+
+/* A label for a button to remove a map area download. */
+"Remove Download" = "Ta bort hämtning";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Byt namn";
@@ -468,6 +513,12 @@ current visible extent of the map or scene. */
 /* Rooms (Level of Detail) */
 "Rooms" = "Rum";
 
+/* Finish editing the feature form. */
+"Save" = "Spara";
+
+/* A label for a button to save edits. */
+"Save Edits" = "Spara redigeringar";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Sökfråga";
 
@@ -489,6 +540,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "Inställningar";
+
+/* A label for a button to show all the association results. */
+"Show all" = "Visa alla";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Webbplatser";
@@ -550,6 +604,9 @@ match the spatial reference of the map. */
 /* A label indicating the chosen file was invalid. */
 "The certificate file was invalid." = "Certifikatfilen var ogiltig.";
 
+/* The title shown when the feature form failed to save. */
+"The form wasn't submitted" = "Formuläret skickades inte";
+
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Kartan saknar spatial referens.";
 
@@ -578,8 +635,14 @@ to be imported as an attachment. */
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "Det finns inga kartområden för den här kartan. Klicka på knappen nedan för att komma igång.";
 
+/* A label for a text entry field that allows the user to filter a list of association results by title. */
+"Title" = "Titel";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "Idag";
+
+/* Text indicating the total count of association results. */
+"Total: %lld" = "Totalt: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "Stad";
@@ -608,8 +671,16 @@ to be imported as an attachment. */
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
 "Unsupported Value" = "Värde stöds inte";
 
+/* A message explaining that unsaved edits will be
+lost if the user continues to dismiss the form
+without saving. */
+"Updates to the form will be lost." = "Uppdateringar av formuläret går förlorade.";
+
 /* A label in reference to a credential username. */
 "Username" = "Användarnamn";
+
+/* A label indicating the feature form has validation errors. */
+"Validation Errors" = "Valideringsfel";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Värde";
@@ -644,6 +715,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Visa";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "Synligt innehåll";
+
 /* World (Level of Detail) */
 "World" = "Världen";
 
@@ -652,6 +727,11 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* World (Small) (Level of Detail) */
 "World (Small)" = "Världen (liten)";
+
+/* A message explaining that the indicated number
+of validation errors must be resolved before
+saving the feature form. */
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Du har ^[%lld fel](böjning: sant) som måste korrigeras innan du sparar.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
