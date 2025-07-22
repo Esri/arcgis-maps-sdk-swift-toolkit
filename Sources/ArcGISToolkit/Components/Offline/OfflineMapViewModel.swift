@@ -20,9 +20,17 @@ import Foundation
 class OfflineMapViewModel: ObservableObject {
     /// The mode that we are displaying models in.
     enum Mode {
-        case undetermined
+        /// No preplanned areas defined, no on-demand areas downloaded yet.
+        /// In this case we will default to show on-demand mode, unless
+        /// preplanned areas are later defined on the web map.
+        case ambiguous
+        /// Preplanned map areas are defined, or have been downloaded.
         case preplanned
+        /// On-demand map areas have been downloaded.
         case onDemand
+        /// Cannot determine if there are preplanned areas because there is
+        /// no internet and no map area downloaded.
+        case noInternetAvailable
     }
     
     /// The portal item ID of the web map.
@@ -41,7 +49,7 @@ class OfflineMapViewModel: ObservableObject {
     @Published private(set) var onDemandMapModels: [OnDemandMapModel] = []
     
     /// The mode that we are displaying models in.
-    @Published private(set) var mode: Mode = .undetermined
+    @Published private(set) var mode: Mode = .ambiguous
     
     /// A Boolean value indicating whether the models are loading.
     @Published private(set) var isLoadingModels = false
@@ -112,37 +120,51 @@ class OfflineMapViewModel: ObservableObject {
         
         // Note: We don't reset the mode once it is determined.
         
-        // Before loading models, check if the Internet is available.
-        do {
-            _ = try await offlineMapTask.preplannedMapAreas
-        } catch {
-            if error.isNoInternetConnectionError {
-                return
-            }
+        switch mode {
+        case .preplanned:
+            await loadPreplannedMapModels()
+        case .onDemand:
+            await loadOnDemandMapModels()
+        case .noInternetAvailable, .ambiguous:
+            await determineMode()
         }
         
-        // First load preplanned map models.
-        if mode == .undetermined || mode == .preplanned {
+        /// Attempts to determine the mode.
+        /// - Precondition: `mode == .ambiguous || mode == .noInternetAvailable`
+        func determineMode() async {
+            precondition(mode == .ambiguous || mode == .noInternetAvailable)
+            
+            // Start by trying to load preplanned map models.
             await loadPreplannedMapModels()
-            if mode == .undetermined, hasAnyPreplannedMapAreas {
-                // If there are any preplanned map areas at all
-                // and the mode is undetermined, then set mode to preplanned.
+            
+            if hasAnyPreplannedMapAreas {
+                // If there are any preplanned map areas, set mode to preplanned.
                 mode = .preplanned
+                return
             }
-        }
-                
-        // Load on-demand map models if mode is on-demand or still
-        // undetermined.
-        if mode == .undetermined || mode == .onDemand {
+            
+            // Try to load on-demand map models.
             await loadOnDemandMapModels()
-            // If the mode is undetermined, then set mode to on-demand.
-            // If there are on-demand map areas, the mode should be set to
-            // on-demand. If there are no on-demand map areas, we can assume
-            // that the user started with an empty map and want to add on-demand
-            // map areas.
-            if mode == .undetermined {
+            
+            // Try to load on-demand map models.
+            // If there are on-demand areas on device, set mode to on-demand.
+            if !onDemandMapModels.isEmpty {
                 mode = .onDemand
+                return
             }
+            
+            if !hasAnyPreplannedMapAreas, isShowingOnlyOfflineModels {
+                // In this case there are no preplanned map areas and we can
+                // only show offline models (which there are none) because
+                // there is no internet. In that case we set the mode to
+                // `noInternetAvailable`.
+                mode = .noInternetAvailable
+                return
+            }
+            
+            // Connected to the Internet, no preplanned map area,
+            // no on-demand map area on device, the mode is ambiguous.
+            mode = .ambiguous
         }
     }
     
@@ -179,7 +201,7 @@ class OfflineMapViewModel: ObservableObject {
     /// Adds an on-demand map area, specifying the configuration for the area to take offline.
     /// - Parameter configuration: The configuration for the area to take offline.
     func addOnDemandMapArea(with configuration: OnDemandMapAreaConfiguration) {
-        guard mode == .onDemand || mode == .undetermined else { return }
+        guard mode == .onDemand || mode == .ambiguous else { return }
         
         let model = OnDemandMapModel(
             offlineMapTask: offlineMapTask,
