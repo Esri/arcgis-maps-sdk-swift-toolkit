@@ -103,7 +103,7 @@ class OfflineMapViewModel: ObservableObject {
         // If we are only showing offline models,
         // and the model that had it's area deleted cannot be re-downloaded,
         // then remove it from the list so it's not longer shown.
-        if case.success(var preplannedModels) = preplannedMapModels,
+        if case .success(var preplannedModels) = preplannedMapModels,
            isShowingOnlyOfflineModels,
            !model.preplannedMapArea.supportsRedownloading
         {
