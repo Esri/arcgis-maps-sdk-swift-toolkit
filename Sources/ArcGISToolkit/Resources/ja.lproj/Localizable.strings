@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "須_Content_______________鷗";
+"Content" = "コンテンツ";
 
 /* Continent (Level of Detail) */
 "Continent" = "大陸";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "須_Visible Content________________鷗";
+"Visible Content" = "表示コンテンツ";
 
 /* World (Level of Detail) */
 "World" = "世界";
@@ -731,7 +731,7 @@ containment is visible. */
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "^[%lld error](inflect: true)があり、保存する前に修正する必要があります。";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "^[%lld error](inflect: true) があり、保存する前に修正する必要があります。";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

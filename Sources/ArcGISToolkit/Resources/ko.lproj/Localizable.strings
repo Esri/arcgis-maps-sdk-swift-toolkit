@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "한_Content_______________빠";
+"Content" = "콘텐츠";
 
 /* Continent (Level of Detail) */
 "Continent" = "대륙";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "한_Visible Content________________빠";
+"Visible Content" = "표시 콘텐츠";
 
 /* World (Level of Detail) */
 "World" = "전 세계";

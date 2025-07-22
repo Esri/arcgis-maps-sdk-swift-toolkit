@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "ı_Content_______________İ";
+"Content" = "İçerik";
 
 /* Continent (Level of Detail) */
 "Continent" = "Kıta";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "ı_Visible Content________________İ";
+"Visible Content" = "Görünür İçerik";
 
 /* World (Level of Detail) */
 "World" = "Dünya";

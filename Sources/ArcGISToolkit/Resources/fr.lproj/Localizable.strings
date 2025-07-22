@@ -128,7 +128,7 @@ east, etc.). */
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Content" = "æ_Content_______________Â";
+"Content" = "Contenu";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -182,7 +182,7 @@ containment is not visible. */
 "Delete all starting points?" = "Supprimer tous les points de départ ?";
 
 /* A label for a button to delete a map area download. */
-"Delete Download" = "Effacer le téléchargement";
+"Delete Download" = "Supprimer le téléchargement";
 
 /* A label for the description of the map area. */
 "Description" = "Description";
@@ -317,11 +317,11 @@ contains one or more facilities in a floor-aware map or scene. */
 "Find a place or address" = "Rechercher un lieu ou une adresse";
 
 /* The message shown when a form could not be submitted. */
-"Finish editing failed." = "Impossible de terminer la modification.";
+"Finish editing failed." = "Impossible de mettre fin à la modification.";
 
 /* The message shown when a form could not be 
 submitted with additional details. */
-"Finish editing failed.\n%@" = "Impossible de terminer la modification. %@";
+"Finish editing failed.\n%@" = "Impossible de mettre fin à la modification. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Fraction sur un tronçon";
@@ -488,7 +488,7 @@ The variable provides additional data. */
 "Refresh" = "Actualiser";
 
 /* A label for a button to remove a map area download. */
-"Remove Download" = "Supprimer le téléchargement";
+"Remove Download" = "Effacer le téléchargement";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Renommer";
@@ -717,7 +717,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "æ_Visible Content________________Â";
+"Visible Content" = "Contenu visible";
 
 /* World (Level of Detail) */
 "World" = "Monde";
@@ -731,7 +731,7 @@ containment is visible. */
 /* A message explaining that the indicated number
 of validation errors must be resolved before
 saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Vous avez ^[%lld erreur](inflect: true) à corriger avant l’enregistrement.";
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "Vous devez corriger ^[%lld erreur](inflect: true) avant de pouvoir procéder à l’enregistrement.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
