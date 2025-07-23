@@ -152,7 +152,7 @@ class OfflineMapViewModel: ObservableObject {
                 return
             }
             
-            if !hasAnyPreplannedMapAreas, isShowingOnlyOfflineModels {
+            if isShowingOnlyOfflineModels {
                 // In this case there are no preplanned or on-demand map areas and we can
                 // only show offline models (which there are none) because
                 // there is no internet. In that case we set the mode to
