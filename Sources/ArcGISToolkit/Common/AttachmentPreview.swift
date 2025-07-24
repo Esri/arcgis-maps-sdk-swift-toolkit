@@ -17,9 +17,6 @@ import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-    /// An action which scrolls the Carousel to the front.
-    @Binding var scrollToNewAttachmentAction: (() -> Void)?
-    
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
     
@@ -47,6 +44,9 @@ struct AttachmentPreview: View {
     /// A Boolean value which determines if the attachment editing controls should be disabled.
     private let editControlsDisabled: Bool
     
+    /// The last locally added attachment.
+    private let lastAttachmentAdded: AttachmentModel?
+    
     /// The action to perform when the attachment is deleted.
     private let onDelete: (@MainActor (AttachmentModel) -> Void)?
     
@@ -59,30 +59,26 @@ struct AttachmentPreview: View {
     init(
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
+        lastAttachmentAdded: AttachmentModel? = nil,
         onRename: (@MainActor (AttachmentModel, String) -> Void)? = nil,
         onDelete: (@MainActor (AttachmentModel) -> Void)? = nil,
-        proposedCellSize: CGSize,
-        scrollToNewAttachmentAction: Binding<(() -> Void)?>
+        proposedCellSize: CGSize
     ) {
         self.attachmentModels = attachmentModels
         self.proposedCellSize = proposedCellSize
         self.editControlsDisabled = editControlsDisabled
+        self.lastAttachmentAdded = lastAttachmentAdded
         self.onRename = onRename
         self.onDelete = onDelete
-        _scrollToNewAttachmentAction = scrollToNewAttachmentAction
     }
     
     var body: some View {
-        Carousel { computedCellSize, scrollToLeftAction in
-            Group {
-                makeCarouselContent(for: computedCellSize)
-                    .transition(.asymmetric(insertion: .slide, removal: .scale))
-            }
-            .onAppear {
-                scrollToNewAttachmentAction = scrollToLeftAction
-            }
+        Carousel { computedCellSize in
+            makeCarouselContent(for: computedCellSize)
+                .transition(.asymmetric(insertion: .slide, removal: .scale))
         }
         .cellBaseWidth(proposedCellSize.width)
+        .leftScrollTrigger(lastAttachmentAdded?.id)
     }
     
     /// - Note: Contextual actions are disabled for empty attachments as deletion and rename

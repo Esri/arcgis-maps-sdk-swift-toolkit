@@ -34,10 +34,8 @@ struct AttachmentsFeatureElementView: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
-    /// Scrolls an ``AttachmentPreview`` to the front.
-    ///
-    /// Call this action when a new attachment is added to make it visible to the user.
-    @State private var scrollToNewAttachmentAction: (() -> Void)?
+    /// The last locally added attachment.
+    @State private var lastAttachmentAdded: AttachmentModel?
     
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
@@ -126,10 +124,10 @@ struct AttachmentsFeatureElementView: View {
             AttachmentPreview(
                 attachmentModels: attachmentModels,
                 editControlsDisabled: !isEditable,
+                lastAttachmentAdded: lastAttachmentAdded,
                 onRename: onRename,
                 onDelete: onDelete,
-                proposedCellSize: thumbnailSize,
-                scrollToNewAttachmentAction: $scrollToNewAttachmentAction
+                proposedCellSize: thumbnailSize
             )
         case .auto:
             Group {
@@ -137,10 +135,10 @@ struct AttachmentsFeatureElementView: View {
                     AttachmentPreview(
                         attachmentModels: attachmentModels,
                         editControlsDisabled: !isEditable,
+                        lastAttachmentAdded: lastAttachmentAdded,
                         onRename: onRename,
                         onDelete: onDelete,
-                        proposedCellSize: thumbnailSize,
-                        scrollToNewAttachmentAction: $scrollToNewAttachmentAction
+                        proposedCellSize: thumbnailSize
                     )
                 } else {
                     AttachmentList(attachmentModels: attachmentModels)
@@ -176,7 +174,7 @@ struct AttachmentsFeatureElementView: View {
         models.insert(newModel, at: 0)
         withAnimation { attachmentModelsState = .initialized(models) }
         embeddedFeatureFormViewModel?.evaluateExpressions()
-        scrollToNewAttachmentAction?()
+        lastAttachmentAdded = newModel
     }
     
     /// Renames the attachment associated with the given model.

@@ -39,12 +39,14 @@ class EmbeddedFeatureFormViewModel {
     var visibleElements = [FormElement]()
     
     /// The expression evaluation task.
+    @ObservationIgnored
     private var evaluateTask: Task<Void, Never>?
     
     /// The feature form.
     private(set) var featureForm: FeatureForm
     
     /// The group of visibility tasks.
+    @ObservationIgnored
     private var isVisibleTasks = [Task<Void, Never>]()
     
     /// Initializes a form view model.
@@ -64,10 +66,13 @@ class EmbeddedFeatureFormViewModel {
     /// Kick off tasks to monitor `isVisible` for each element.
     @MainActor
     private func initializeIsVisibleTasks() {
+        isVisibleTasks.forEach { $0.cancel() }
+        isVisibleTasks.removeAll()
         for element in featureForm.elements {
-            let newTask = Task {
+            let newTask = Task { [weak self] in
                 for await _ in element.$isVisible {
-                    updateVisibleElements()
+                    guard !Task.isCancelled else { return }
+                    self?.updateVisibleElements()
                 }
             }
             isVisibleTasks.append(newTask)
