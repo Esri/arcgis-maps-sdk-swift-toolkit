@@ -78,6 +78,7 @@ public struct PopupView: View {
     ///   - root: The popup to display.
     ///   - isPresented: A Boolean value indicating whether the view is presented. The close button
     ///   is displayed when this is non-`nil`.
+    /// - Since: 200.8
     public init(root: Popup, isPresented: Binding<Bool>? = nil) {
         self.popup = root
         self.isPresented = isPresented
