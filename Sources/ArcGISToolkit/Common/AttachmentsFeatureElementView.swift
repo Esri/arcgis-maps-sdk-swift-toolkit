@@ -123,22 +123,22 @@ struct AttachmentsFeatureElementView: View {
         case .preview:
             AttachmentPreview(
                 attachmentModels: attachmentModels,
-                proposedCellSize: thumbnailSize,
                 editControlsDisabled: !isEditable,
                 lastAttachmentAdded: lastAttachmentAdded,
                 onRename: onRename,
-                onDelete: onDelete
+                onDelete: onDelete,
+                proposedCellSize: thumbnailSize
             )
         case .auto:
             Group {
                 if isRegularWidth {
                     AttachmentPreview(
                         attachmentModels: attachmentModels,
-                        proposedCellSize: thumbnailSize,
                         editControlsDisabled: !isEditable,
                         lastAttachmentAdded: lastAttachmentAdded,
                         onRename: onRename,
-                        onDelete: onDelete
+                        onDelete: onDelete,
+                        proposedCellSize: thumbnailSize
                     )
                 } else {
                     AttachmentList(attachmentModels: attachmentModels)

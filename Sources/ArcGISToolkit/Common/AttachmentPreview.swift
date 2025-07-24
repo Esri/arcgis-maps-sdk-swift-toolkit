@@ -58,18 +58,18 @@ struct AttachmentPreview: View {
     
     init(
         attachmentModels: [AttachmentModel],
-        proposedCellSize: CGSize,
         editControlsDisabled: Bool = true,
         lastAttachmentAdded: AttachmentModel? = nil,
         onRename: (@MainActor (AttachmentModel, String) -> Void)? = nil,
-        onDelete: (@MainActor (AttachmentModel) -> Void)? = nil
+        onDelete: (@MainActor (AttachmentModel) -> Void)? = nil,
+        proposedCellSize: CGSize
     ) {
         self.attachmentModels = attachmentModels
+        self.proposedCellSize = proposedCellSize
         self.editControlsDisabled = editControlsDisabled
         self.lastAttachmentAdded = lastAttachmentAdded
         self.onRename = onRename
         self.onDelete = onDelete
-        self.proposedCellSize = proposedCellSize
     }
     
     var body: some View {
