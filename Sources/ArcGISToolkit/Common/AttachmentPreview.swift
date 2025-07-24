@@ -44,8 +44,8 @@ struct AttachmentPreview: View {
     /// A Boolean value which determines if the attachment editing controls should be disabled.
     private let editControlsDisabled: Bool
     
-    /// The last time an attachment was added locally.
-    private let lastAttachmentAdded: Date?
+    /// The last locally added attachment.
+    private let lastAttachmentAdded: AttachmentModel?
     
     /// The action to perform when the attachment is deleted.
     private let onDelete: (@MainActor (AttachmentModel) -> Void)?
@@ -59,7 +59,7 @@ struct AttachmentPreview: View {
     init(
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
-        lastAttachmentAdded: Date? = nil,
+        lastAttachmentAdded: AttachmentModel? = nil,
         onRename: (@MainActor (AttachmentModel, String) -> Void)? = nil,
         onDelete: (@MainActor (AttachmentModel) -> Void)? = nil,
         proposedCellSize: CGSize
@@ -73,11 +73,12 @@ struct AttachmentPreview: View {
     }
     
     var body: some View {
-        Carousel(lastScroll: lastAttachmentAdded) { computedCellSize in
+        Carousel { computedCellSize in
             makeCarouselContent(for: computedCellSize)
                 .transition(.asymmetric(insertion: .slide, removal: .scale))
         }
         .cellBaseWidth(proposedCellSize.width)
+        .leftScrollTrigger(lastAttachmentAdded?.id)
     }
     
     /// - Note: Contextual actions are disabled for empty attachments as deletion and rename

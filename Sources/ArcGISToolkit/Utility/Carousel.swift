@@ -22,13 +22,10 @@ struct Carousel<Content: View>: View {
     @State private var cellSize = CGSize.zero
     
     /// The identifier for the Carousel content.
-    @State private var contentIdentifier = UUID()
+    let contentIdentifier = UUID()
     
     /// The content shown in the Carousel.
     let content: (_: CGSize) -> Content
-    
-    /// The last time the Carousel scrolled left.
-    let lastScroll: Date?
     
     /// The amount to offset the scroll indicator.
     let scrollIndicatorOffset = 10.0
@@ -42,13 +39,13 @@ struct Carousel<Content: View>: View {
     /// The fractional width of the partially visible cell.
     var cellVisiblePortion = 0.25
     
+    /// The trigger used to scroll the scroll view to content's leading anchor.
+    var leftScrollTrigger: (any Equatable & Hashable)?
+    
     /// A horizontally scrolling container to display a set of content.
-    /// - Parameters:
-    ///   - lastScroll: The last time the Carousel scrolled left.
-    ///   - content: A view builder that creates the content of this Carousel.
-    init(lastScroll: Date? = nil, @ViewBuilder content: @escaping (_: CGSize) -> Content) {
+    /// - Parameter content: A view builder that creates the content of this Carousel.
+    init(@ViewBuilder content: @escaping (_: CGSize) -> Content) {
         self.content = content
-        self.lastScroll = lastScroll
     }
     
     var body: some View {
@@ -100,7 +97,7 @@ struct Carousel<Content: View>: View {
                 .frame(width: cellSize.width, height: cellSize.height)
                 .clipped()
                 .padding(.bottom, scrollIndicatorOffset)
-                .onChange(of: lastScroll) {
+                .onChange(of: leftScrollTrigger?.hashValue) {
                     withAnimation {
                         scrollViewProxy.scrollTo(contentIdentifier, anchor: .leading)
                     }
@@ -138,6 +135,12 @@ extension Carousel {
         copy.cellVisiblePortion = visiblePortion
         return copy
     }
+    
+    func leftScrollTrigger(_ trigger: (any Equatable & Hashable)?) -> Self {
+        var copy = self
+        copy.leftScrollTrigger = trigger
+        return copy
+    }
 }
 
 #Preview("cellBaseWidth(_:)") {
@@ -172,25 +175,22 @@ extension Carousel {
 }
 
 #Preview("Programmatically scroll to left") {
-    struct ScrollDemo: View {
-        @State var lastScroll: Date?
-        
-        var body: some View {
-            Carousel(lastScroll: lastScroll) { _ in
-                ForEach(1..<11) {
-                    Text($0.description)
-                        .id($0)
-                }
-            }
-            Button {
-                lastScroll = .now
-            } label: {
-                Text(verbatim: "Scroll to left")
-            }
+    @Previewable @State var items = [1]
+    
+    Carousel { _ in
+        ForEach(items, id: \.self) {
+            Text($0.description)
+                .id($0)
         }
     }
-    
-    return ScrollDemo()
+    .leftScrollTrigger(items)
+    Button {
+        items.insert(items.count + 1, at: 0)
+    } label: {
+        Text(verbatim: "Insert Item")
+    }
+    Text(verbatim: "The Carousel will scroll to the left to make the item visible, if needed.")
+        .foregroundStyle(.secondary)
 }
 
 private struct PreviewContent: View {

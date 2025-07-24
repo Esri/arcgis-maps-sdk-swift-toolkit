@@ -34,10 +34,8 @@ struct AttachmentsFeatureElementView: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
-    /// The last time an attachment was added locally.
-    ///
-    /// Set a new date when an attachment is added to make it visible to the user in the preview area.
-    @State private var lastAttachmentAdded: Date? = nil
+    /// The last locally added attachment.
+    @State private var lastAttachmentAdded: AttachmentModel?
     
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
@@ -176,7 +174,7 @@ struct AttachmentsFeatureElementView: View {
         models.insert(newModel, at: 0)
         withAnimation { attachmentModelsState = .initialized(models) }
         embeddedFeatureFormViewModel?.evaluateExpressions()
-        lastAttachmentAdded = .now
+        lastAttachmentAdded = newModel
     }
     
     /// Renames the attachment associated with the given model.
