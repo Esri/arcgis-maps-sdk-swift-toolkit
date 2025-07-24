@@ -25,7 +25,7 @@ struct LocationButtonTests {
         let button = LocationButton(locationDisplay: locationDisplay)
         
         #expect(button.locationDisplay === locationDisplay)
-        #expect(button.autoPanModes == [.recenter, .compassNavigation, .navigation, .off])
+        #expect(button.autoPanModes == [.recenter, .compassNavigation, .off])
         #expect(button.status == .stopped)
         #expect(button.autoPanMode == .off)
         #expect(button.buttonIsDisabled == false)

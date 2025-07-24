@@ -49,7 +49,7 @@ public struct LocationButton: View {
     
     /// The auto-pan modes that are selectable by the user.
     private(set) var autoPanModes: [LocationDisplay.AutoPanMode] = [
-        .recenter, .compassNavigation, .navigation, .off
+        .recenter, .compassNavigation, .off
     ]
     
     /// Creates a location button with a location display.
