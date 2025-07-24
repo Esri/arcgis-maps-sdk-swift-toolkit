@@ -25,7 +25,10 @@ struct Carousel<Content: View>: View {
     @State private var contentIdentifier = UUID()
     
     /// The content shown in the Carousel.
-    let content: (_: CGSize, _: (() -> Void)?) -> Content
+    let content: (_: CGSize) -> Content
+    
+    /// The last time the Carousel scrolled left.
+    let lastScroll: Date?
     
     /// The amount to offset the scroll indicator.
     let scrollIndicatorOffset = 10.0
@@ -40,9 +43,12 @@ struct Carousel<Content: View>: View {
     var cellVisiblePortion = 0.25
     
     /// A horizontally scrolling container to display a set of content.
-    /// - Parameter content: A view builder that creates the content of this Carousel.
-    init(@ViewBuilder content: @escaping (_: CGSize, _: (() -> Void)?) -> Content) {
+    /// - Parameters:
+    ///   - lastScroll: The last time the Carousel scrolled left.
+    ///   - content: A view builder that creates the content of this Carousel.
+    init(lastScroll: Date? = nil, @ViewBuilder content: @escaping (_: CGSize) -> Content) {
         self.content = content
+        self.lastScroll = lastScroll
     }
     
     var body: some View {
@@ -87,17 +93,18 @@ struct Carousel<Content: View>: View {
     
     func makeCommonScrollViewContent(_ scrollViewProxy: ScrollViewProxy) -> some View {
         HStack(spacing: cellSpacing) {
-            content(cellSize) {
-                withAnimation {
-                    scrollViewProxy.scrollTo(contentIdentifier, anchor: .leading)
-                }
-            }
-            .id(contentIdentifier)
-            .frame(width: cellSize.width, height: cellSize.height)
-            .clipped()
             // Pad the content such that the scroll indicator appears beneath it
-            // so that the content is not covered. 
-            .padding(.bottom, scrollIndicatorOffset)
+            // so that the content is not covered.
+            content(cellSize)
+                .id(contentIdentifier)
+                .frame(width: cellSize.width, height: cellSize.height)
+                .clipped()
+                .padding(.bottom, scrollIndicatorOffset)
+                .onChange(of: lastScroll) {
+                    withAnimation {
+                        scrollViewProxy.scrollTo(contentIdentifier, anchor: .leading)
+                    }
+                }
         }
     }
 }
@@ -134,21 +141,21 @@ extension Carousel {
 }
 
 #Preview("cellBaseWidth(_:)") {
-    Carousel { _, _ in
+    Carousel { _ in
         PreviewContent()
     }
     .cellBaseWidth(75)
 }
 
 #Preview("cellSpacing(_:)") {
-    Carousel { _, _ in
+    Carousel { _ in
         PreviewContent()
     }
     .cellSpacing(2)
 }
 
 #Preview("cellVisiblePortion(_:)") {
-    Carousel { _, _ in
+    Carousel { _ in
         PreviewContent()
     }
     .cellVisiblePortion(0.5)
@@ -157,31 +164,26 @@ extension Carousel {
 #Preview("In a List") {
     List {
         Text(verbatim: "Hello")
-        Carousel { _, _ in
+        Carousel { _ in
             PreviewContent()
         }
         Text(verbatim: "World!")
     }
 }
 
-#Preview("Scroll to left action") {
+#Preview("Programmatically scroll to left") {
     struct ScrollDemo: View {
-        @State var scrollToLeftAction: (() -> Void)?
+        @State var lastScroll: Date?
         
         var body: some View {
-            Carousel { _, scrollToLeftAction in
+            Carousel(lastScroll: lastScroll) { _ in
                 ForEach(1..<11) {
                     Text($0.description)
                         .id($0)
                 }
-                .onAppear {
-                    self.scrollToLeftAction = scrollToLeftAction
-                }
             }
             Button {
-                withAnimation {
-                    scrollToLeftAction?()
-                }
+                lastScroll = .now
             } label: {
                 Text(verbatim: "Scroll to left")
             }
