@@ -58,11 +58,11 @@ struct AttachmentPreview: View {
     
     init(
         attachmentModels: [AttachmentModel],
+        proposedCellSize: CGSize,
         editControlsDisabled: Bool = true,
         lastAttachmentAdded: AttachmentModel? = nil,
         onRename: (@MainActor (AttachmentModel, String) -> Void)? = nil,
-        onDelete: (@MainActor (AttachmentModel) -> Void)? = nil,
-        proposedCellSize: CGSize
+        onDelete: (@MainActor (AttachmentModel) -> Void)? = nil
     ) {
         self.attachmentModels = attachmentModels
         self.editControlsDisabled = editControlsDisabled
