@@ -74,19 +74,17 @@ extension FeatureFormExampleView {
                 if database.serviceInfo?.canUseServiceGeodatabaseApplyEdits ?? false {
                     let featureTableEditResults = try await database.applyEdits()
                     let resultErrors = featureTableEditResults.flatMap(\.editResults.errors)
-                    if resultErrors.isEmpty {
-                        editedTables.removeAll { $0.serviceGeodatabase === database }
-                    } else {
+                    guard resultErrors.isEmpty else {
                         throw makeSubmissionError(resultErrors)
                     }
+                    editedTables.removeAll { $0.serviceGeodatabase === database }
                 } else {
                     let featureEditResults = try await table.applyEdits()
                     let resultErrors = featureEditResults.errors
-                    if resultErrors.isEmpty {
-                        editedTables.removeAll { $0 === table }
-                    } else {
+                    guard resultErrors.isEmpty else {
                         throw makeSubmissionError(resultErrors)
                     }
+                    editedTables.removeAll { $0 === table }
                 }
             } catch {
                 throw .anyError(error)
