@@ -56,29 +56,40 @@ extension FeatureFormExampleView {
         defer { editsAreBeingApplied = false }
         
         for table in editedTables {
+            guard editedTables.contains(where: { $0 === table }) else {
+                // Edits to this table were already batch-applied to the
+                // geodatabase in a previous iteration.
+                break
+            }
             guard let database = table.serviceGeodatabase else {
                 throw .other("No geodatabase found.")
             }
             guard database.hasLocalEdits else {
                 throw .other("No database edits found.")
             }
-            let resultErrors: [Error]
             do {
-                if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
+                let makeSubmissionError: (_ errors: [Error]) -> SubmissionError = { errors in
+                    .other("Apply edits returned ^[\(errors.count) error](inflect: true).")
+                }
+                if database.serviceInfo?.canUseServiceGeodatabaseApplyEdits ?? false {
                     let featureTableEditResults = try await database.applyEdits()
-                    resultErrors = featureTableEditResults.flatMap(\.editResults.errors)
+                    let resultErrors = featureTableEditResults.flatMap(\.editResults.errors)
+                    if resultErrors.isEmpty {
+                        editedTables.removeAll { $0.serviceGeodatabase === database }
+                    } else {
+                        throw makeSubmissionError(resultErrors)
+                    }
                 } else {
                     let featureEditResults = try await table.applyEdits()
-                    resultErrors = featureEditResults.errors
+                    let resultErrors = featureEditResults.errors
+                    if resultErrors.isEmpty {
+                        editedTables.removeAll { $0 === table }
+                    } else {
+                        throw makeSubmissionError(resultErrors)
+                    }
                 }
             } catch {
                 throw .anyError(error)
-            }
-            editedTables.removeAll { $0.tableName == table.tableName }
-            if !resultErrors.isEmpty {
-                throw .other(
-                    "Apply edits returned ^[\(resultErrors.count) error](inflect: true)."
-                )
             }
         }
     }
