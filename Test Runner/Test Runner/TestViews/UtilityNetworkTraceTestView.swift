@@ -19,12 +19,16 @@ import SwiftUI
 /// A demonstration of the utility network trace tool which runs traces on a web map published with
 /// a utility network and trace configurations.
 struct UtilityNetworkTraceTestView: View {
+    /// A message describing an error thrown during test view setup.
+    @State private var errorDescription: String?
     /// The map with the utility networks.
     @State private var map = makeMap()
     /// Provides the ability to detect tap locations in the context of the map view.
     @State private var mapPoint: Point?
     /// A container for graphical trace results.
     @State private var resultGraphicsOverlay = GraphicsOverlay()
+    /// The set of programatic trace starting points.
+    @State private var startingPoints: [UtilityNetworkTraceStartingPoint] = []
     
     var body: some View {
         MapViewReader { mapViewProxy in
@@ -41,17 +45,14 @@ struct UtilityNetworkTraceTestView: View {
                         graphicsOverlay: $resultGraphicsOverlay,
                         map: map,
                         mapPoint: $mapPoint,
-                        mapViewProxy: mapViewProxy
+                        mapViewProxy: mapViewProxy,
+                        startingPoints: $startingPoints
                     )
                 }
-                .task {
-                    do {
-                        let publicSample = try await ArcGISCredential.publicSample
-                        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
-                    } catch {
-                        print("Error creating credential:", error.localizedDescription)
-                    }
+                .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {
+                    Text(errorDescription ?? "Unknown")
                 }
+                .task(setUpTest)
         }
     }
     
@@ -65,6 +66,74 @@ struct UtilityNetworkTraceTestView: View {
     }
 }
 
+private extension UtilityNetworkTraceTestView {
+    /// Identifies a feature with a given object ID and uses it to create and add a trace starting point.
+    /// - Parameters:
+    ///   - objectID: The object ID of the feature to use as a starting point.
+    ///   - featureLayer: The feature layer containing the feature.
+    func addStartingPoint(_ objectID: Int, on featureLayer: FeatureLayer) async throws {
+        // Gets the feature table from the layer.
+        try await featureLayer.load()
+        guard let featureTable = featureLayer.featureTable else {
+            errorDescription = "No table to query on layer \"\(featureLayer.name)\"."
+            return
+        }
+        
+        try await featureTable.load()
+        
+        // Queries the table using the object ID.
+        let parameters = QueryParameters()
+        parameters.addObjectID(objectID)
+        
+        let result = try await featureTable.queryFeatures(using: parameters)
+        guard let feature = result.features().makeIterator().next() as? ArcGISFeature else {
+            errorDescription = "No feature \"\(objectID)\" in feature table \"\(featureTable.tableName)\"."
+            return
+        }
+        
+        try await feature.load()
+        
+        // Creates and adds a utility network trace starting point.
+        let startingPoint = UtilityNetworkTraceStartingPoint(geoElement: feature)
+        startingPoints.append(startingPoint)
+    }
+    
+    /// Sets up the test.
+    func setUpTest() async {
+        do {
+            try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(.publicSample)
+            
+            guard let objectID = UserDefaults.standard.objectID,
+                  let layerName = UserDefaults.standard.layerName,
+                  let groupLayer = map.operationalLayers.first as? GroupLayer,
+                  let layer = groupLayer.layers.first(where: {$0.name == layerName }),
+                  let featureLayer = layer as? FeatureLayer else {
+                errorDescription = "Missing or invalid launch arguments."
+                return
+            }
+            
+            try await addStartingPoint(objectID, on: featureLayer)
+        } catch {
+            errorDescription = error.localizedDescription
+        }
+    }
+}
+
+private extension UserDefaults {
+    /// The value `-layerName`  launch argument.
+    var layerName: String? {
+        string(forKey: "layerName")
+    }
+    
+    /// The value `-objectID`  launch argument.
+    var objectID: Int? {
+        guard let objectIDString = string(forKey: "objectID") else {
+            return nil
+        }
+        return Int(objectIDString)
+    }
+}
+
 private extension ArcGISCredential {
     static var publicSample: ArcGISCredential {
         get async throws {
@@ -73,6 +142,21 @@ private extension ArcGISCredential {
                 username: "viewer01",
                 password: "I68VGU^nMurF"
             )
+        }
+    }
+}
+
+private extension Binding where Value == Bool {
+    /// Creates a Boolean binding that wraps a binding to an optional.
+    ///
+    /// `wrappedValue` is `true` when the given optional value is non-`nil`. The
+    /// optional value is set to `nil` when the parent binding is set.
+    /// - Parameter optionalValue: A binding to the optional value to wrap.
+    init<T: Sendable>(optionalValue: Binding<T?>) {
+        self.init {
+            optionalValue.wrappedValue != nil
+        } set: { _ in
+            optionalValue.wrappedValue = nil
         }
     }
 }
