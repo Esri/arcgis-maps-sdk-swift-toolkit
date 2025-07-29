@@ -99,6 +99,8 @@ public struct UtilityNetworkTrace: View {
     private enum UserActivity: Hashable {
         /// The user is creating a new trace.
         case creatingTrace(TraceCreationActivity?)
+        /// A trace is running.
+        case tracing
         /// The user is viewing traces that have been created.
         case viewingTraces(TraceViewingActivity?)
     }
@@ -145,7 +147,7 @@ public struct UtilityNetworkTrace: View {
             selection: Binding<UserActivity>(
                 get: {
                     switch currentActivity {
-                    case .creatingTrace(_):
+                    case .creatingTrace(_), .tracing:
                         return UserActivity.creatingTrace(nil)
                     case .viewingTraces:
                         return UserActivity.viewingTraces(nil)
@@ -364,12 +366,16 @@ public struct UtilityNetworkTrace: View {
         }
         Button(String.traceButtonLabel) {
             Task {
+                let previousActivity = currentActivity
+                currentActivity = .tracing
                 if await viewModel.trace() {
                     currentActivity = .viewingTraces(nil)
                     if shouldZoomOnTraceCompletion,
                        let extent = viewModel.selectedTrace?.resultExtent {
                         updateViewpoint(to: extent)
                     }
+                } else {
+                    currentActivity = previousActivity
                 }
             }
         }
@@ -716,6 +722,8 @@ public struct UtilityNetworkTrace: View {
                 default:
                     newTraceTab
                 }
+            case .tracing:
+                ProgressView("Tracing…")
             case .viewingTraces(let activity):
                 switch activity {
                 case .viewingElementGroup:
