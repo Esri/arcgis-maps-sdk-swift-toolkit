@@ -723,7 +723,13 @@ public struct UtilityNetworkTrace: View {
                     newTraceTab
                 }
             case .tracing:
-                ProgressView("Tracing…")
+                ProgressView {
+                    Text(
+                        "Tracing…",
+                        bundle: .toolkitModule,
+                        comment: "A label indicating that a utility network trace is running."
+                    )
+                }
             case .viewingTraces(let activity):
                 switch activity {
                 case .viewingElementGroup:
