@@ -56,12 +56,12 @@ struct LocationButtonTests {
         #expect(button.contextMenuAutoPanOptions == [.off, .recenter])
         
         // Test when `off` is last
-        button = button.autoPanModes([.recenter, .compassNavigation, .off])
-        #expect(button.autoPanModes == [.recenter, .compassNavigation, .off])
+        button = button.autoPanModes([.recenter, .off])
+        #expect(button.autoPanModes == [.recenter, .off])
         // Still `off` because the location display hasn't been started.
         #expect(button.autoPanMode == .off)
         #expect(button.initialAutoPanMode == .recenter)
-        #expect(button.contextMenuAutoPanOptions == [.off, .recenter, .compassNavigation])
+        #expect(button.contextMenuAutoPanOptions == [.off, .recenter])
         // Still `.recenter` because the location display hasn't been started.
     }
     
@@ -89,8 +89,8 @@ struct LocationButtonTests {
         #expect(button.nextAutoPanMode(current: .off, initial: .off) == .recenter)
         
         // Test when `off` is last
-        button = button.autoPanModes([.recenter, .compassNavigation, .navigation, .off])
-        #expect(button.nextAutoPanMode(current: .compassNavigation, initial: .recenter) == .navigation)
+        button = button.autoPanModes([.recenter, .navigation, .off])
+        #expect(button.nextAutoPanMode(current: .navigation, initial: .recenter) == .off)
     }
     
     @Suite
@@ -119,7 +119,7 @@ struct LocationButtonTests {
                 Action(status: .started, autoPanOptions: [.off, .recenter]) == .autoPanCycle
             )
             #expect(
-                Action(status: .started, autoPanOptions: [.off, .recenter, .compassNavigation]) == .autoPanCycle
+                Action(status: .started, autoPanOptions: [.off, .recenter, .navigation]) == .autoPanCycle
             )
             #expect(
                 Action(status: .starting, autoPanOptions: []) == nil
