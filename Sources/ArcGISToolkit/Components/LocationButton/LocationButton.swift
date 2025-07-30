@@ -46,11 +46,18 @@ public struct LocationButton: View {
     var buttonIsDisabled: Bool {
         status == .starting || status == .stopping || isPerformingButtonAction
     }
-    
+
+#if os(visionOS)
+    /// The auto-pan modes that are selectable by the user.
+    private(set) var autoPanModes: [LocationDisplay.AutoPanMode] = [
+        .recenter, .off
+    ]
+#else
     /// The auto-pan modes that are selectable by the user.
     private(set) var autoPanModes: [LocationDisplay.AutoPanMode] = [
         .recenter, .compassNavigation, .off
     ]
+#endif
     
     /// Creates a location button with a location display.
     /// - Parameter locationDisplay: The location display that the button will control.

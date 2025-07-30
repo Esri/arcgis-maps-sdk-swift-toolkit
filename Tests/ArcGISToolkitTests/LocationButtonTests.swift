@@ -25,12 +25,17 @@ struct LocationButtonTests {
         let button = LocationButton(locationDisplay: locationDisplay)
         
         #expect(button.locationDisplay === locationDisplay)
-        #expect(button.autoPanModes == [.recenter, .compassNavigation, .off])
         #expect(button.status == .stopped)
         #expect(button.autoPanMode == .off)
         #expect(button.buttonIsDisabled == false)
         #expect(button.initialAutoPanMode == .recenter)
+#if os(visionOS)
+        #expect(button.autoPanModes == [.recenter, .off])
+        #expect(button.contextMenuAutoPanOptions == [.off, .recenter])
+#else
+        #expect(button.autoPanModes == [.recenter, .compassNavigation, .off])
         #expect(button.contextMenuAutoPanOptions == [.off, .recenter, .compassNavigation])
+#endif
     }
     
     @Test
