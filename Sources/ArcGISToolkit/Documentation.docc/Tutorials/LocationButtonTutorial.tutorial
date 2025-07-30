@@ -1,0 +1,36 @@
+@Tutorial(time: 5) {
+    @Intro(title: "LocationButton Tutorial") {
+        This tutorial shows you how to use the `LocationButton` component.
+        @Image(source: LocationButton, alt: "The LocationButton component")
+    }
+    
+    @Section(title: "Create a view with a LocationButton overlaying a map view") {
+        @ContentAndMedia {
+            @Image(source: LocationButton, alt: "An image of the LocationButton component.")
+        }
+        
+        @Steps {
+            @Step {
+                Create a new view with a `MapView`.
+                @Code(name: "LocationButtonExampleView.swift", file: LocationButtonStep1.swift)
+            }
+            
+            @Step {
+                Add a location display.
+                @Code(name: "LocationButtonExampleView.swift", file: LocationButtonStep2.swift)
+            }
+            
+            @Step {
+                Add an overlay to the `MapView` with `LocationButton` as the content.
+                
+                Notice the view modifier that sets the auto-pan modes you want the user to be able to select.
+                @Code(name: "LocationButtonExampleView.swift", file: LocationButtonStep3.swift) {
+                    @Image(
+                        source: LocationButtonComplete, 
+                        alt: "An image of the LocationButton component overlaid on a map view."
+                    )
+                }
+            }
+        }
+    }
+}
