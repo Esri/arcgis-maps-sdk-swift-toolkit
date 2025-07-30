@@ -20,7 +20,7 @@ import SwiftUI
 /// This is the preferable input type for long lists of coded value domains.
 struct ComboBoxInput: View {
     /// The view model for the form.
-    @EnvironmentObject var model: FormViewModel
+    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
     
     /// The phrase to use when filtering by coded value name.
     @State private var filterPhrase = ""
@@ -89,9 +89,9 @@ struct ComboBoxInput: View {
                 // and we're not required. (i.e., Don't show clear if
                 // the field is required.)
                 XButton(.clear) {
-                    model.focusedElement = element
-                    defer { model.focusedElement = nil }
-                    updateValue(nil)
+                    embeddedFeatureFormViewModel.focusedElement = element
+                    defer { embeddedFeatureFormViewModel.focusedElement = nil }
+                    updateValueAndEvaluateExpressions(nil)
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
             } else {
@@ -117,7 +117,7 @@ struct ComboBoxInput: View {
             }
         }
         .onTapGesture {
-            model.focusedElement = element
+            embeddedFeatureFormViewModel.focusedElement = element
             isPresented = true
         }
         .sheet(isPresented: $isPresented) {
@@ -173,7 +173,7 @@ extension ComboBoxInput {
                                 label: noValueLabel.isEmpty ? String.noValue : noValueLabel,
                                 selected: selectedValue.isNoValue
                             ) {
-                                updateValue(nil)
+                                updateValueAndEvaluateExpressions(nil)
                             }
                             .italic()
                             .foregroundStyle(.secondary)
@@ -181,7 +181,7 @@ extension ComboBoxInput {
                     }
                     ForEach(matchingValues, id: \.self) { codedValue in
                         makePickerRow(label: codedValue.name, selected: selectedValue.codedValue == codedValue) {
-                            updateValue(codedValue.code)
+                            updateValueAndEvaluateExpressions(codedValue)
                         }
                     }
                     if let unsupportedValue = selectedValue.unsupportedValue {
@@ -233,9 +233,10 @@ extension ComboBoxInput {
         }
     }
     
-    private func updateValue(_ value: (any Sendable)?) {
-        element.updateValue(value)
-        model.evaluateExpressions()
+    private func updateValueAndEvaluateExpressions(_ value: CodedValue?) {
+        guard value?.name != element.formattedValue else { return }
+        element.updateValue(value?.code)
+        embeddedFeatureFormViewModel.evaluateExpressions()
     }
 }
 

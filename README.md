@@ -30,7 +30,7 @@ To use Toolkit in your project:
 
 ## Requirements
 * ArcGIS Maps SDK for Swift
-* The [System Requirements](https://developers.arcgis.com/swift/system-requirements/system-requirements-for-200-6/) are the same as those for the ArcGIS Maps SDK for Swift
+* The [System Requirements](https://developers.arcgis.com/swift/system-requirements) are the same as those for the ArcGIS Maps SDK for Swift
 
 ## Instructions
 
@@ -48,9 +48,33 @@ To use Toolkit in your project:
 
 ## Configure API Key & Licensing
 
-Use of ArcGIS location services, such as basemap styles, geocoding, and routing services, requires either user authentication or API key authentication. Some of the toolkit components and examples utilize a set of these ready-to-use ArcGIS location services, including basemap styles, and therefore require an API Key to be set in `ExamplesApp.swift`. Please see [Get started](https://developers.arcgis.com/swift/get-started/#3-get-an-access-token), [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/) and [API Key Authentication](https://developers.arcgis.com/swift/security-and-authentication/#api-key-authentication) for more information.
+Use of ArcGIS location services, such as basemap styles, geocoding, and routing services, requires either user authentication or API key authentication. Some of the toolkit components and examples utilize a set of these ready-to-use ArcGIS location services, including basemap styles, and therefore require an API Key. Please see [Get started](https://developers.arcgis.com/swift/get-started/#3-get-an-access-token), [Create an API Key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/) and [API Key Authentication](https://developers.arcgis.com/swift/security-and-authentication/#api-key-authentication) for more information. Once you've obtained an API Key, steps for using it with the examples in this project are detailed below.
 
 Production deployment of applications built with the ArcGIS Maps SDK for Swift requires that you license your app. For more information, see [License and deployment](https://developers.arcgis.com/swift/license-and-deployment).
+
+> [!IMPORTANT]
+> To run the example apps and access ArcGIS Location Services, follow these steps to obtain an **API key** access token and store it in a secrets file stored in the toolkit's root directory, `/.secrets`.
+
+1. Go to the [Create an API key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/) tutorial to obtain the API key access token. Ensure that the following privileges are enabled:
+
+* Location services > Basemaps
+* Location services > Routing
+
+2. Create a hidden secrets file in the toolkit's root directory.
+
+  ```sh
+  touch .secrets
+  ```
+
+3. Add your API key to the aforementioned secrets file. Adding an API key allows you to access ArcGIS location services, such as the basemap styles service.
+
+  ```sh
+  echo ARCGIS_API_KEY_DEVELOPMENT=your-api-key >> .secrets
+  ```
+
+  > Replace 'your-api-key' with your API Key access token.
+
+Please see [Configure App Secrets](Documentation/ConfigureAppSecrets.md) for adding license string and other details.
 
 ## Additional Resources
 
@@ -69,7 +93,7 @@ Find a bug or want to request a new feature?  Please let us know by [submitting 
 Esri welcomes contributions from anyone and everyone. Please see our [guidelines for contributing](https://github.com/esri/contributing).
 
 ## Licensing
-Copyright 2022 - 2024 Esri
+Copyright 2022 - 2025 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

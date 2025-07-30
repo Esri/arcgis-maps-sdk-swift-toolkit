@@ -31,7 +31,7 @@ struct CodeScanner: View {
             CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
                 .ignoresSafeArea()
                 .overlay(alignment:.topTrailing) {
-                    Button(String.cancel, role: .cancel) {
+                    Button.cancel {
                         isPresented = false
                     }
                     .buttonStyle(.borderedProminent)
@@ -83,12 +83,7 @@ struct CodeScannerRepresentable: UIViewControllerRepresentable {
     }
     
     func makeUIViewController(context: Context) -> ScannerViewController {
-        let scannerViewController: ScannerViewController
-        if #available(iOS 17.0, *) {
-            scannerViewController = ScannerViewController()
-        } else {
-            scannerViewController = LegacyScannerViewController()
-        }
+        let scannerViewController = ScannerViewController()
         scannerViewController.delegate = context.coordinator
         return scannerViewController
     }
@@ -209,9 +204,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
         previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
         updateReticleAndAutoFocus()
-        if #available(iOS 17.0, *) {
-            videoRotationProvider = RotationCoordinator(videoCaptureDevice: videoCaptureDevice, previewLayer: previewLayer)
-        }
+        videoRotationProvider = RotationCoordinator(videoCaptureDevice: videoCaptureDevice, previewLayer: previewLayer)
 #endif
     }
     
@@ -416,7 +409,6 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
     }
 }
 
-@available(iOS 17.0, *)
 @available(visionOS, unavailable)
 class RotationCoordinator {
     private let rotationObservation: NSKeyValueObservation
@@ -431,42 +423,6 @@ class RotationCoordinator {
                     previewLayer.connection?.videoRotationAngle = angle
                 }
             }
-        }
-    }
-}
-
-// MARK: Deprecated
-
-@available(iOS, introduced: 16.0, deprecated: 17.0, message: "Use ScannerViewController with RotationCoordinator instead.")
-@available(visionOS, unavailable)
-class LegacyScannerViewController: ScannerViewController {
-    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        updateRotation()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        updateRotation()
-    }
-    
-    func updateRotation() {
-        guard let connection = previewLayer.connection else { return }
-        let interfaceOrientation = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.interfaceOrientation ?? .portrait
-        let newVideoOrientation = AVCaptureVideoOrientation(interfaceOrientation: interfaceOrientation)
-        connection.videoOrientation = newVideoOrientation
-    }
-}
-
-@available(iOS, introduced: 16.0, deprecated: 17.0)
-@available(visionOS, unavailable)
-extension AVCaptureVideoOrientation {
-    init(interfaceOrientation: UIInterfaceOrientation) {
-        self = switch interfaceOrientation {
-        case .portraitUpsideDown: .portraitUpsideDown
-        case .landscapeLeft: .landscapeLeft
-        case .landscapeRight: .landscapeRight
-        default: .portrait
         }
     }
 }

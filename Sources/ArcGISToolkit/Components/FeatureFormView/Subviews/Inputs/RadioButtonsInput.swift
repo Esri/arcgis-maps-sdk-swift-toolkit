@@ -20,7 +20,7 @@ import SwiftUI
 /// This is the preferable input type for short lists of coded value domains.
 struct RadioButtonsInput: View {
     /// The view model for the form.
-    @EnvironmentObject var model: FormViewModel
+    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
     
     /// A Boolean value indicating whether a ``ComboBoxInput`` should be used instead.
     /// This will be `true` if the current value doesn't exist as an option in the domain
@@ -95,9 +95,10 @@ struct RadioButtonsInput: View {
                     || (input.noValueOption == .hide && !element.formattedValue.isEmpty)
                 }
             }
-            .onChange(selectedValue) { selectedValue in
+            .onChange(of: selectedValue) {
+                guard selectedValue?.name != element.formattedValue else { return }
                 element.updateValue(selectedValue?.code)
-                model.evaluateExpressions()
+                embeddedFeatureFormViewModel.evaluateExpressions()
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 value = newValue
@@ -132,7 +133,7 @@ extension RadioButtonsInput {
         _ action: @escaping () -> Void
     ) -> some View {
         Button {
-            model.focusedElement = element
+            embeddedFeatureFormViewModel.focusedElement = element
             action()
         } label: {
             HStack {

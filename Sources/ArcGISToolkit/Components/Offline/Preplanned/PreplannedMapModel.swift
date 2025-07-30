@@ -37,7 +37,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     private let portalItemID: Item.ID
     
     /// The action to perform when a preplanned map area is deleted.
-    private let onRemoveDownloadAction: () -> Void
+    private let onRemoveDownloadAction: (PreplannedMapModel) -> Void
     
     /// The mobile map package for the preplanned map area.
     @Published private(set) var mobileMapPackage: MobileMapPackage?
@@ -64,7 +64,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         mapArea: PreplannedMapAreaProtocol,
         portalItemID: Item.ID,
         preplannedMapAreaID: Item.ID,
-        onRemoveDownload: @escaping () -> Void
+        onRemoveDownload: @escaping (PreplannedMapModel) -> Void
     ) {
         self.offlineMapTask = offlineMapTask
         preplannedMapArea = mapArea
@@ -156,8 +156,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Downloads the preplanned map area.
     /// - Precondition: `allowsDownload == true`
+    /// - Precondition: `preplannedMapArea.supportsRedownloading`
     func downloadPreplannedMapArea() async {
         precondition(status.allowsDownload)
+        precondition(preplannedMapArea.supportsRedownloading)
         
         status = .downloading
         do {
@@ -189,7 +191,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         Task { await load() }
         
         // Call the closure for the remove download action.
-        onRemoveDownloadAction()
+        onRemoveDownloadAction(self)
     }
     
     /// Sets the job property of this instance, starts the job, observes it, and
@@ -215,7 +217,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         case .success:
             status = .downloaded
         case .failure(let error):
-            status = .downloadFailure(error)
+            if error is CancellationError {
+                // Reset status to packaged if the job was cancelled.
+                Logger.offlineManager.info("DownloadPreplannedOfflineMapJob job cancelled.")
+                status = .packaged
+            } else {
+                Logger.offlineManager.error("DownloadPreplannedOfflineMapJob job failed with error: \(error).")
+                status = .downloadFailure(error)
+            }
             // Remove contents of mmpk directory when download fails.
             try? FileManager.default.removeItem(at: mmpkDirectoryURL)
         }
@@ -309,12 +318,17 @@ extension PreplannedMapModel: Hashable {
 /// A type that acts as a preplanned map area.
 protocol PreplannedMapAreaProtocol: Sendable {
     func retryLoad() async throws
+    /// Creates the parameters for the download preplanned offline map job.
+    /// - Note: This method should not be called for conforming types where
+    /// `supportsRedownloading` is `false`.
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters
     
     var packagingStatus: PreplannedMapArea.PackagingStatus? { get }
     var title: String { get }
     var description: String { get }
     var thumbnail: LoadableImage? { get }
+    /// A Boolean value indicating if this preplanned map area can be re-downloaded.
+    var supportsRedownloading: Bool { get }
 }
 
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -342,6 +356,8 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
         // Remove HTML tags from description.
         portalItem.description.replacing(/<[^>]+>/, with: "")
     }
+    
+    var supportsRedownloading: Bool { true }
 }
 
 /// A value that contains the result of loading the preplanned map models for
@@ -358,7 +374,7 @@ extension PreplannedMapModel {
     static func loadPreplannedMapModels(
         offlineMapTask: OfflineMapTask,
         portalItemID: Item.ID,
-        onRemoveDownload: @escaping () -> Void
+        onRemoveDownload: @escaping (PreplannedMapModel) -> Void
     ) async -> PreplannedModels {
         if offlineMapTask.loadStatus != .loaded {
             try? await offlineMapTask.retryLoad()
@@ -403,7 +419,7 @@ extension PreplannedMapModel {
     private static func loadOfflinePreplannedMapModels(
         offlineMapTask: OfflineMapTask,
         portalItemID: Item.ID,
-        onRemoveDownload: @escaping () -> Void
+        onRemoveDownload: @escaping (PreplannedMapModel) -> Void
     ) async -> [PreplannedMapModel] {
         let preplannedDirectory = URL.preplannedDirectory(forPortalItemID: portalItemID)
         
@@ -468,6 +484,7 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     var id: Item.ID?
     var packagingStatus: PreplannedMapArea.PackagingStatus?
     var thumbnail: LoadableImage?
+    var supportsRedownloading: Bool { false }
     
     func retryLoad() async throws {}
     

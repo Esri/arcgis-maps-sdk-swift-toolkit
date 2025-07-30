@@ -19,8 +19,23 @@ extension LocalizedStringResource.BundleDescription {
     static let toolkit: Self = .atURL(Bundle.toolkitModule.bundleURL)
 }
 
-
 extension LocalizedStringResource {
+    static var cancel: Self {
+        .init(
+            "Cancel",
+            bundle: .toolkit,
+            comment: "A label for a button to cancel an operation."
+        )
+    }
+    
+    static var deleteDownload: Self {
+        .init(
+            "Delete Download",
+            bundle: .toolkit,
+            comment: "A label for a button to delete a map area download."
+        )
+    }
+    
     static var downloaded: Self {
         .init(
             "Downloaded",
@@ -66,6 +81,23 @@ extension LocalizedStringResource {
             "No Internet Connection",
             bundle: .toolkit,
             comment: "An error message explaining that there is no internet connection."
+        )
+    }
+    
+    /// A localized string for the word "OK".
+    static var ok: Self {
+        .init(
+            "OK",
+            bundle: .toolkit,
+            comment: "A label for button to proceed with an operation."
+        )
+    }
+    
+    static var removeDownload: Self {
+        .init(
+            "Remove Download",
+            bundle: .toolkit,
+            comment: "A label for a button to remove a map area download."
         )
     }
 }

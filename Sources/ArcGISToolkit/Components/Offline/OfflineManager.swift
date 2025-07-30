@@ -110,7 +110,7 @@ public class OfflineManager: ObservableObject {
     /// - Parameters:
     ///   - job: The job to start.
     ///   - portalItem: The portal item whose map is being taken offline.
-    func start(job: any JobProtocol, portalItem: PortalItem) {
+    func start(job: some JobProtocol, portalItem: PortalItem) {
         Logger.offlineManager.debug("Starting Job from offline manager")
         jobManager.jobs.append(job)
         observeJob(job)
@@ -121,7 +121,7 @@ public class OfflineManager: ObservableObject {
     }
     
     /// Observes a job for completion.
-    private func observeJob<Job: JobProtocol>(_ job: Job) {
+    private func observeJob(_ job: some JobProtocol) {
         Task {
             Logger.offlineManager.debug("Observing job completion")
             
@@ -148,7 +148,7 @@ public class OfflineManager: ObservableObject {
     
     /// Figures out and returns the portal item associated with the online map for a particular
     /// offline job.
-    private func onlineMapPortalItem<Job: JobProtocol>(for job: Job) -> PortalItem? {
+    private func onlineMapPortalItem(for job: some JobProtocol) -> PortalItem? {
         switch job {
         case let downloadPreplanned as DownloadPreplannedOfflineMapJob:
             downloadPreplanned.onlineMap?.item as? PortalItem

@@ -158,8 +158,10 @@ public struct OfflineMapAreasView: View {
                         switch mapViewModel.mode {
                         case .preplanned:
                             preplannedMapAreasView
-                        case .onDemand, .undetermined:
+                        case .onDemand, .ambiguous:
                             onDemandMapAreasView
+                        case .noInternetAvailable:
+                            noInternetNoAreasView
                         }
                     }
                 }
@@ -302,41 +304,44 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var noInternetNoAreasView: some View {
-        Backported.ContentUnavailableView(
-            .noInternetConnectionErrorMessage,
-            systemImage: "wifi.exclamationmark",
-            description: noMapAreasErrorMessage
-        ) {
+        ContentUnavailableView {
+            Label(
+                LocalizedStringResource.noInternetConnectionErrorMessage.key,
+                systemImage: "wifi.exclamationmark"
+            )
+        } description: {
+            Text(noMapAreasErrorMessage)
+        } actions: {
             refreshPreplannedButton
         }
     }
     
     @ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
-        Backported.ContentUnavailableView(
-            noMapAreas,
-            systemImage: "arrow.down.circle",
-            description: noOfflineMapAreasMessage
-        ) {
+        ContentUnavailableView {
+            Label(noMapAreas.key, systemImage: "arrow.down.circle")
+        } description: {
+            Text(noOfflineMapAreasMessage)
+        } actions: {
             refreshPreplannedButton
         }
     }
     
     @ViewBuilder private var preplannedErrorView: some View {
-        Backported.ContentUnavailableView(
-            errorFetchingAreas,
-            systemImage: "exclamationmark.triangle",
-            description: errorFetchingAreasMessage
-        ) {
+        ContentUnavailableView {
+            Label(errorFetchingAreas.key, systemImage: "exclamationmark.triangle")
+        } description: {
+            Text(errorFetchingAreasMessage)
+        } actions: {
             refreshPreplannedButton
         }
     }
     
     @ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
-        Backported.ContentUnavailableView(
-            noMapAreas,
-            systemImage: "arrow.down.circle",
-            description: emptyOnDemandMessage
-        ) {
+        ContentUnavailableView {
+            Label(noMapAreas.key, systemImage: "arrow.down.circle")
+        } description: {
+            Text(emptyOnDemandMessage)
+        } actions: {
             Button {
                 isAddingOnDemandArea = true
             } label: {
@@ -354,10 +359,10 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var offlineDisabledView: some View {
-        Backported.ContentUnavailableView(
-            offlineDisabled,
+        ContentUnavailableView(
+            offlineDisabled.key,
             systemImage: "exclamationmark.triangle",
-            description: offlineDisabledMessage
+            description: Text(offlineDisabledMessage)
         )
     }
 }
@@ -380,69 +385,6 @@ public struct OfflineMapAreasView: View {
         }
     }
     return OfflineMapAreasViewPreview()
-}
-
-enum Backported {
-    /// A content unavailable view that can be used in older operating systems.
-    struct ContentUnavailableView<Actions: View>: View {
-        let title: LocalizedStringResource
-        let systemImage: String
-        let description: LocalizedStringResource?
-        let actions: () -> Actions
-        
-        init(
-            _ title: LocalizedStringResource,
-            systemImage name: String,
-            description: LocalizedStringResource? = nil,
-            @ViewBuilder actions: @escaping () -> Actions
-        ) {
-            self.title = title
-            self.systemImage = name
-            self.description = description
-            self.actions = actions
-        }
-        
-        init(
-            _ title: LocalizedStringResource,
-            systemImage name: String,
-            description: LocalizedStringResource? = nil
-        ) where Actions == EmptyView {
-            self.title = title
-            self.systemImage = name
-            self.description = description
-            self.actions = { EmptyView() }
-        }
-        
-        var body: some View {
-            if #available(iOS 17, *) {
-                SwiftUI.ContentUnavailableView {
-                    Label(title.key, systemImage: systemImage)
-                } description: {
-                    if let description {
-                        Text(description)
-                    }
-                } actions: {
-                    actions()
-                }
-            } else {
-                VStack(alignment: .center) {
-                    Image(systemName: systemImage)
-                        .imageScale(.large)
-                        .foregroundStyle(.secondary)
-                    Text(title)
-                        .font(.headline)
-                    if let description {
-                        Text(description)
-                            .font(.subheadline)
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.secondary)
-                    }
-                    actions()
-                }
-                .padding()
-            }
-        }
-    }
 }
 
 private extension OfflineMapAreasView {

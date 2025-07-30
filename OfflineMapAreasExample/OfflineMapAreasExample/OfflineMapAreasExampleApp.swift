@@ -39,7 +39,7 @@ struct OfflineMapAreasExampleApp: App {
 
 extension OfflineMapAreasExampleApp {
     /// Posts a local notification that the job completed with success or failure.
-    static func notifyJobCompleted(job: any JobProtocol) {
+    static func notifyJobCompleted(job: some JobProtocol) {
         guard
             job.status == .succeeded || job.status == .failed
         else { return }

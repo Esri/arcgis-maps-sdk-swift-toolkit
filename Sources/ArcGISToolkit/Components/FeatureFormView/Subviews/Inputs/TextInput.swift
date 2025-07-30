@@ -18,7 +18,7 @@ import SwiftUI
 /// A view for text input.
 struct TextInput: View {
     /// The view model for the form.
-    @EnvironmentObject var model: FormViewModel
+    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -44,7 +44,7 @@ struct TextInput: View {
     /// The element the input belongs to.
     private let element: FieldFormElement
     
-    /// Creates a view for text input spanning multiple lines.
+    /// Creates a view for text based input.
     /// - Parameters:
     ///   - element: The input's parent element.
     init(element: FieldFormElement) {
@@ -59,9 +59,10 @@ struct TextInput: View {
     
     var body: some View {
         textWriter
-            .onChange(text) { text in
+            .onChange(of: text) {
+                guard text != element.formattedValue else { return }
                 element.convertAndUpdateValue(text)
-                model.evaluateExpressions()
+                embeddedFeatureFormViewModel.evaluateExpressions()
             }
             .onTapGesture {
                 if element.isMultiline {
@@ -91,10 +92,10 @@ private extension TextInput {
                         .lineLimit(5)
                         .truncationMode(.tail)
                         .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(text: $text, element: element, model: model)
+                            FullScreenTextInput(text: $text, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel)
                                 .padding()
 #if targetEnvironment(macCatalyst)
-                                .environmentObject(model)
+                                .environment(embeddedFeatureFormViewModel)
 #endif
                         }
                         .frame(minHeight: 100, alignment: .top)
@@ -113,12 +114,12 @@ private extension TextInput {
                     // properly at 'formInputStyle'.
                     .hoverEffectDisabled()
 #endif
-                    .onChange(isFocused) { isFocused in
-                        model.focusedElement = isFocused ? element : nil
+                    .onChange(of: isFocused) {
+                        embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
                     }
-                    .onChange(model.focusedElement) { focusedElement in
-                        // Another form input took focus
-                        if focusedElement != element {
+                    .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
+                        // Another form input took focus.
+                        if embeddedFeatureFormViewModel.focusedElement != element {
                             isFocused  = false
                         }
                     }
@@ -144,8 +145,8 @@ private extension TextInput {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
                         // instantaneous focus to enable validation.
-                        model.focusedElement = element
-                        model.focusedElement = nil
+                        embeddedFeatureFormViewModel.focusedElement = element
+                        embeddedFeatureFormViewModel.focusedElement = nil
                     }
                     text.removeAll()
                 }
@@ -154,7 +155,7 @@ private extension TextInput {
 #if !os(visionOS)
             if isBarcodeScanner {
                 Button {
-                    model.focusedElement = element
+                    embeddedFeatureFormViewModel.focusedElement = element
                     scannerIsPresented = true
                 } label: {
                     Image(systemName: "barcode.viewfinder")
@@ -201,6 +202,7 @@ private extension TextInput {
         } label: {
             Image(systemName: "plus.forwardslash.minus")
         }
+        .inspectorTint(.blue)
     }
 }
 
@@ -223,11 +225,11 @@ private extension TextInput {
         let element: FieldFormElement
         
         /// The view model for the form.
-        let model: FormViewModel
+        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
         var body: some View {
             HStack {
-                InputHeader(element: element)
+                FormElementHeader(element: element)
                 Button("Done") {
                     dismiss()
                 }
@@ -237,8 +239,9 @@ private extension TextInput {
 #endif
             }
             RepresentedUITextView(initialText: text) { text in
+                guard text != element.formattedValue else { return }
                 element.convertAndUpdateValue(text)
-                model.evaluateExpressions()
+                embeddedFeatureFormViewModel.evaluateExpressions()
             } onTextViewDidEndEditing: { text in
                 self.text = text
             }
@@ -246,11 +249,11 @@ private extension TextInput {
             .onAppear {
                 isFocused = true
             }
-            .onChange(isFocused) { isFocused in
-                model.focusedElement = isFocused ? element : nil
+            .onChange(of: isFocused) {
+                embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
             }
             Spacer()
-            InputFooter(element: element)
+            FormElementFooter(element: element)
         }
     }
 }

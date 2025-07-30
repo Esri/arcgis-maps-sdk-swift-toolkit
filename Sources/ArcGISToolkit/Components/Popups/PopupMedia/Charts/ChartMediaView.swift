@@ -67,7 +67,6 @@ struct ChartMediaView: View {
                 popupMedia: popupMedia,
                 isShowingDetailView: $isShowingDetailView
             )
-            .padding()
         }
     }
 }

@@ -727,9 +727,9 @@ public struct UtilityNetworkTrace: View {
         }
         .background(Color(uiColor: .systemGroupedBackground))
         .animation(.default, value: currentActivity)
-        .onChange(mapPoint) { newMapPoint in
+        .onChange(of: mapPoint) {
             guard isFocused(traceCreationActivity: .addingStartingPoints),
-                  let mapPoint = newMapPoint,
+                  let mapPoint = mapPoint,
                   let mapViewProxy = mapViewProxy else {
                 return
             }
@@ -742,7 +742,7 @@ public struct UtilityNetworkTrace: View {
                 )
             }
         }
-        .onChange(externalStartingPoints) { _ in
+        .onChange(of: externalStartingPoints) {
             viewModel.externalStartingPoints = externalStartingPoints
         }
         .alert(

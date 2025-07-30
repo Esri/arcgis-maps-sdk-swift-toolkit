@@ -265,6 +265,10 @@ struct CredentialInputSheetView: View {
         }
         .padding()
         .onAppear {
+            // Reset username and password values.
+            username = ""
+            password = ""
+            
             // Set initial focus of text field.
             switch fields {
             case .usernamePassword:
@@ -291,7 +295,7 @@ extension CredentialInputSheetView {
     /// A configuration for an alert action.
     struct Action {
         /// The title of the action.
-        let title: String
+        let title: LocalizedStringResource
         
         /// The block to execute when the action is triggered.
         /// The parameters are the username and the password.

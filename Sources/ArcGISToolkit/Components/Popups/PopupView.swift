@@ -21,7 +21,7 @@ import ArcGIS
 /// `PopupView` will support the display of popup elements created by the Map Viewer, including:
 /// Text, Fields, Attachments, and Media (Images and Charts).
 ///
-/// Thanks to the backwards compatibility support in the API, it will also work with the legacy
+/// Thanks to the backward compatibility support in the API, it will also work with the legacy
 /// popup definitions created by the classic Map Viewer. It does not support editing.
 ///
 /// | iPhone | iPad |
@@ -35,179 +35,87 @@ import ArcGIS
 /// - Display a popup for a feature based on the popup definition defined in a web map.
 /// - Supports image refresh intervals on image popup media, refreshing the image at a given
 /// interval defined in the popup element.
-/// - Supports elements containing Arcade expression and automatically evaluates expressions.
+/// - Supports elements containing Arcade expressions and automatically evaluates expressions.
 /// - Displays media (images and charts) full-screen.
-/// - Supports hyperlinks in text, media, and fields elements.
+/// - Supports hyperlinks in text, media, and field elements.
 /// - Fully supports dark mode, as do all Toolkit components.
 /// - Supports auto-refresh for popups where the geo element is a dynamic entity.
+/// - Supports navigating through associations in a utility network.
 ///
 /// **Behavior**
 ///
+/// As of 200.8, PopupView uses a NavigationStack internally to support browsing utility network
+/// associations. As a result, a PopupView requires a navigation context isolated from any
+/// app-level navigation. Basic apps without navigation can continue to place a PopupView where
+/// desired. More complex apps using NavigationStack or NavigationSplitView will need to relocate
+/// the PopupView outside of that navigation context. If the PopupView can be presented modally (no
+/// background interaction with the map is needed), consider using a Sheet. If a non-modal
+/// presentation is needed, consider placing the PopupView in a Floating Panel or Inspector, on the
+/// app-level navigation container. On supported platforms, WindowGroups are another alternative to
+/// consider as a PopupView container.
+///
 /// The popup view can display an optional "close" button, allowing the user to dismiss the view.
-/// The popup view can be embedded in any type of container view including, as demonstrated in the
-/// example, the Toolkit's `FloatingPanel`.
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to
 /// [PopupExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
-/// in the project. To learn more about using the `PopupView` see the <doc:PopupViewTutorial>.
+/// in the project. To learn more about using the `PopupView`, see the <doc:PopupViewTutorial>.
 public struct PopupView: View {
+    /// The `Popup` to display in the root `EmbeddedPopupView`.
+    let popup: Popup
+    
+    /// A binding to a Boolean value that determines whether the view is presented.
+    let isPresented: Binding<Bool>?
+    
+    /// The properties used by the view's deprecated members.
+    var deprecatedProperties = DeprecatedProperties()
+    
+    /// The closure to perform when a new popup is shown in the navigation stack.
+    var onPopupChanged: ((Popup) -> Void)?
+    
     /// Creates a `PopupView` with the given popup.
     /// - Parameters:
-    ///   - popup: The popup to display.
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
-        self.popup = popup
+    ///   - root: The popup to display.
+    ///   - isPresented: A Boolean value indicating whether the view is presented. The close button
+    ///   is displayed when this is non-`nil`.
+    /// - Since: 200.8
+    public init(root: Popup, isPresented: Binding<Bool>? = nil) {
+        self.popup = root
         self.isPresented = isPresented
     }
     
-    /// The `Popup` to display.
-    private let popup: Popup
-    
-    /// A Boolean value specifying whether a "close" button should be shown or not. If the "close"
-    /// button is shown, you should pass in the `isPresented` argument to the initializer,
-    /// so that the the "close" button can close the view.
-    var showCloseButton = false
-    
-    /// A Boolean value indicating whether the deprecated `PopupView.showCloseButton(_:)`
-    /// modifier is applied.
-    ///
-    /// Once the modifier is removed this property can be removed and the presence or lack of a value for
-    /// `isPresented` should be the sole criteria to show or hide the close button.
-    var showCloseButtonDeprecatedModifierIsApplied = false
-    
-    /// The visibility of the popup header.
-    var headerVisibility: Visibility = .automatic
-    
-    /// The result of evaluating the popup expressions.
-    @State private var evaluation: Evaluation?
-    
-    /// A binding to a Boolean value that determines whether the view is presented.
-    private var isPresented: Binding<Bool>?
-    
     public var body: some View {
-        VStack(alignment: .leading) {
-            if headerVisibility != .hidden {
-                HStack {
-                    if !popup.title.isEmpty {
-                        Text(popup.title)
-                            .font(.title)
-                            .fontWeight(.bold)
-                    }
-                    Spacer()
-                    if (showCloseButtonDeprecatedModifierIsApplied && showCloseButton)
-                        || (!showCloseButtonDeprecatedModifierIsApplied && isPresented != nil) {
-                        XButton(.dismiss) {
-                            isPresented?.wrappedValue = false
-                        }
-#if !os(visionOS)
-                        .font(.title)
-                        .padding([.top, .bottom, .trailing], 4)
-#endif
-                    }
-                }
-                Divider()
-            }
-            Group {
-                if let evaluation {
-                    if let error = evaluation.error {
-                        Text(
-                            "Popup evaluation failed: \(error.localizedDescription)",
-                            bundle: .toolkitModule,
-                            comment: """
-                                     An error message shown when a popup cannot be displayed. The
-                                     variable provides additional data.
-                                     """
-                        )
-                    } else {
-                        PopupElementList(popupElements: evaluation.elements)
-                    }
-                } else {
-                    HStack(alignment: .center, spacing: 10) {
-                        Text(
-                            "Evaluating popup expressions",
-                            bundle: .toolkitModule,
-                            comment: "A label indicating popup expressions are being evaluated."
-                        )
-                        ProgressView()
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-            }
+        NavigationStack {
+            EmbeddedPopupView(popup: popup)
         }
-        .task(id: ObjectIdentifier(popup)) {
-            // Initial evaluation for a newly assigned popup.
-            evaluation = nil
-            await evaluateExpressions()
-        }
-        .task(id: ObjectIdentifier(popup)) {
-            // If the popup is showing for a dynamic entity, then observe
-            // the changes and update the popup accordingly.
-            guard let dynamicEntity = popup.geoElement as? DynamicEntity else { return }
-            for await changes in dynamicEntity.changes {
-                if changes.dynamicEntityWasPurged {
-                    break
-                }
-                if changes.receivedObservation != nil {
-                    await evaluateExpressions()
-                }
-            }
+        .environment(\.isPresented, isPresented)
+        .environment(\.deprecatedProperties, deprecatedProperties)
+        .onPreferenceChange(PresentedPopupPreferenceKey.self) { wrappedPopup in
+            guard let wrappedPopup else { return }
+            onPopupChanged?(wrappedPopup.object)
         }
     }
+}
+
+public extension PopupView {
+    /// Sets a closure to perform when a new popup is shown in the view.
+    ///
+    /// This can happen when navigating through the associations in a `UtilityAssociationsPopupElement`.
+    /// - Parameter action: The closure to perform when the new popup is shown.
+    /// - Since: 200.8
+    func onPopupChanged(perform action: @escaping (Popup) -> Void) -> Self {
+        var copy = self
+        copy.onPopupChanged = action
+        return copy
+    }
+}
+
+/// A preference key that specifies the popup currently presented in the `PopupView` navigation stack.
+struct PresentedPopupPreferenceKey: PreferenceKey {
+    static let defaultValue: EquatableObject<Popup>? = nil
     
-    /// Evaluates the arcade expressions and updates the evaluation property.
-    private func evaluateExpressions() async {
-        do {
-            _ = try await popup.evaluateExpressions()
-            evaluation = Evaluation(elements: popup.evaluatedElements)
-        } catch {
-            evaluation = Evaluation(error: error)
-        }
-    }
-}
-
-extension PopupView {
-    private struct PopupElementList: View {
-        let popupElements: [PopupElement]
-        
-        var body: some View {
-            List(popupElements) { popupElement in
-                Group {
-                    switch popupElement {
-                    case let popupElement as AttachmentsPopupElement:
-                        AttachmentsFeatureElementView(featureElement: popupElement)
-                    case let popupElement as FieldsPopupElement:
-                        FieldsPopupElementView(popupElement: popupElement)
-                    case let popupElement as MediaPopupElement:
-                        MediaPopupElementView(popupElement: popupElement)
-                    case let popupElement as TextPopupElement:
-                        TextPopupElementView(popupElement: popupElement)
-                    default:
-                        EmptyView()
-                    }
-                }
-                .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
-            }
-            .listStyle(.plain)
-        }
-    }
-}
-
-extension PopupView {
-    /// An object used to hold the result of evaluating the expressions of a popup.
-    private final class Evaluation {
-        /// The evaluated elements.
-        let elements: [PopupElement]
-        /// The error that occurred during evaluation, if any.
-        let error: Error?
-        
-        /// Creates an evaluation.
-        /// - Parameters:
-        ///   - elements: The evaluated elements.
-        ///   - error: The error that occurred during evaluation, if any.
-        init(elements: [PopupElement] = [], error: Error? = nil) {
-            self.elements = elements
-            self.error = error
-        }
+    static func reduce(value: inout EquatableObject<Popup>?, nextValue: () -> EquatableObject<Popup>?) {
+        guard let nextValue = nextValue() else { return }
+        value = nextValue
     }
 }

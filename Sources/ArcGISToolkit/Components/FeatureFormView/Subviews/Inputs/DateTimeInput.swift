@@ -18,7 +18,7 @@ import SwiftUI
 /// A view for date/time input.
 struct DateTimeInput: View {
     /// The view model for the form.
-    @EnvironmentObject var model: FormViewModel
+    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
     
     /// The current date selection.
     @State private var date: Date?
@@ -52,13 +52,14 @@ struct DateTimeInput: View {
     
     var body: some View {
         dateEditor
-            .onChange(model.focusedElement) { focusedElement in
-                isEditing = focusedElement == element
+            .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
+                isEditing = embeddedFeatureFormViewModel.focusedElement == element
             }
-            .onChange(date) { date in
+            .onChange(of: date) {
+                guard date != element.value as? Date else { return }
                 element.updateValue(date)
                 formattedValue = element.formattedValue
-                model.evaluateExpressions()
+                embeddedFeatureFormViewModel.evaluateExpressions()
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 if newFormattedValue.isEmpty {
@@ -106,8 +107,8 @@ struct DateTimeInput: View {
                         .foregroundStyle(.secondary)
                 } else if !isRequired {
                     XButton(.clear) {
-                        model.focusedElement = element
-                        defer { model.focusedElement = nil }
+                        embeddedFeatureFormViewModel.focusedElement = element
+                        defer { embeddedFeatureFormViewModel.focusedElement = nil }
                         date = nil
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")
@@ -128,7 +129,7 @@ struct DateTimeInput: View {
                     }
                 }
                 isEditing.toggle()
-                model.focusedElement = isEditing ? element : nil
+                embeddedFeatureFormViewModel.focusedElement = isEditing ? element : nil
             }
         }
     }

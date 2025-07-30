@@ -154,7 +154,9 @@ struct OnDemandConfigurationView: View {
                     mapIsReady = true
                 }
             }
-            .preventMapInteractionFromMovingSheet()
+            .highPriorityGesture(RotateGesture())
+            .highPriorityGesture(DragGesture())
+            .interactiveDismissDisabled()
     }
     
     @ViewBuilder
@@ -237,16 +239,16 @@ struct OnDemandConfigurationView: View {
     @ViewBuilder private var failedToLoadView: some View {
         VStack {
             if hasNoInternetConnection {
-                Backported.ContentUnavailableView(
-                    .noInternetConnectionErrorMessage,
+                ContentUnavailableView(
+                    LocalizedStringResource.noInternetConnectionErrorMessage.key,
                     systemImage: "wifi.exclamationmark",
-                    description: cannotDownloadMessage
+                    description: Text(cannotDownloadMessage)
                 )
             } else {
-                Backported.ContentUnavailableView(
-                    failedToLoadMessage,
+                ContentUnavailableView(
+                    failedToLoadMessage.key,
                     systemImage: "exclamationmark.triangle",
-                    description: cannotDownloadMessage
+                    description: Text(cannotDownloadMessage)
                 )
             }
             Button {
@@ -258,23 +260,6 @@ struct OnDemandConfigurationView: View {
             .padding()
         }
         .padding()
-    }
-}
-
-private extension View {
-    /// Prevent sheet from moving when interacting with map view.
-    @ViewBuilder
-    func preventMapInteractionFromMovingSheet() -> some View {
-        if #available(iOS 17.0, *) {
-            self
-                .highPriorityGesture(DragGesture())
-                .highPriorityGesture(RotateGesture())
-                .interactiveDismissDisabled()
-        } else {
-            self
-                .highPriorityGesture(DragGesture())
-                .interactiveDismissDisabled()
-        }
     }
 }
 
@@ -313,7 +298,7 @@ private struct RenameButton: View {
         .fontWeight(.semibold)
         .alert(enterName, isPresented: $alertIsShowing) {
             TextField(text: $proposedNewTitle, prompt: areaName) {}
-            Button(String.ok, action: submitNewTitle)
+            Button.ok(action: submitNewTitle)
                 .disabled(!proposedTitleIsValid)
                 .keyboardShortcut(.defaultAction)
             Button.cancel {}
@@ -324,8 +309,8 @@ private struct RenameButton: View {
                 comment: "A message explaining that the map area name must be unique."
             )
         }
-        .onChange(proposedNewTitle) {
-            proposedTitleIsValid = isValidCheck($0)
+        .onChange(of: proposedNewTitle) {
+            proposedTitleIsValid = isValidCheck(proposedNewTitle)
         }
     }
     

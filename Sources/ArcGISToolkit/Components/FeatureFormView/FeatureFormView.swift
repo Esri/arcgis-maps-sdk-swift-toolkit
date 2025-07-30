@@ -15,6 +15,8 @@
 import ArcGIS
 import SwiftUI
 
+internal import os
+
 /// The `FeatureFormView` component enables users to edit field values of a feature using
 /// pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
 ///
@@ -32,6 +34,7 @@ import SwiftUI
 /// can be expanded, to show all enclosed elements, or collapsed, hiding
 /// the elements it contains.
 /// - Text Element - used to display read-only plain or Markdown-formatted text.
+/// - Utility Associations Element - used to edit associations in utility networks.
 ///
 /// A Field Element has a single input type object. The following are the supported input types:
 ///
@@ -53,8 +56,14 @@ import SwiftUI
 ///
 /// **Behavior**
 ///
-/// The feature form view can be embedded in any type of container view including, as demonstrated in the
-/// example, the Toolkit's `FloatingPanel`.
+/// As of 200.8, FeatureFormView uses a NavigationStack internally to support browsing utility network
+/// associations. As a result, a FeatureFormView requires a navigation context isolated from any app-level
+/// navigation. Basic apps without navigation can continue to place a FeatureFormView where desired.
+/// More complex apps using NavigationStack or NavigationSplitView will need to relocate the FeatureFormView
+/// outside of that navigation context. If the FeatureFormView can be presented modally (no background
+/// interaction with the map is needed), consider using a Sheet. If a non-modal presentation is needed,
+/// consider placing the FeatureFormView in a Floating Panel or Inspector, on the app-level navigation container.
+/// On supported platforms, WindowGroups are another alternative to consider as a FeatureFormView container.
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FeatureFormExampleView.swift)
@@ -66,124 +75,387 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
-    /// The view model for the form.
-    @StateObject private var model: FormViewModel
+    /// A binding to a Boolean value that determines whether the view is presented.
+    private let isPresented: Binding<Bool>?
     
-    /// A Boolean value indicating whether initial expression evaluation is running.
-    @State private var initialExpressionsAreEvaluating = true
+    /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
+    private let deprecatedInitializerWasUsed: Bool
     
-    /// The title of the feature form view.
-    @State private var title = ""
+    /// The root feature form.
+    private let rootFeatureForm: FeatureForm?
     
-    /// The validation error visibility configuration of the form.
-    var validationErrorVisibility: ValidationErrorVisibility = FormViewValidationErrorVisibility.defaultValue
+    /// The visibility of the "save" and "discard" buttons.
+    var editingButtonsVisibility: Visibility = .automatic
+    
+    /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
+    var onFeatureFormChanged: ((FeatureForm) -> Void)?
+    
+    /// A Boolean which declares whether navigation to forms for features associated via utility association form
+    /// elements is disabled.
+    var navigationIsDisabled = false
+    
+    /// The closure to perform when a ``EditingEvent`` occurs.
+    var onFormEditingEventAction: ((EditingEvent) -> Void)?
+    
+    /// The developer configurable validation error visibility.
+    var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
+    
+    /// Continuation information for the alert.
+    @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
+    
+    /// An error thrown from finish editing.
+    @State private var finishEditingError: (any Error)?
+    
+    /// The navigation path used by the navigation stack in the root feature form view.
+    @State private var navigationPath = NavigationPath()
+    
+    /// The feature form currently visible in the navigation stack.
+    @State private var presentedForm: FeatureForm
+    
+    /// The internally managed validation error visibility.
+    @State private var validationErrorVisibilityInternal = ValidationErrorVisibility.automatic
     
     /// Initializes a form view.
     /// - Parameters:
-    ///   - featureForm: The feature form defining the editing experience.
-    public init(featureForm: FeatureForm) {
-        _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
+    ///   - root: The feature form defining the editing experience.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    /// - Since: 200.8
+    public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
+        self.deprecatedInitializerWasUsed = false
+        self.isPresented = isPresented
+        self.presentedForm = root
+        self.rootFeatureForm = root
     }
     
     public var body: some View {
-        if initialExpressionsAreEvaluating {
-            initialBody
-        } else {
-            evaluatedForm
+        if let rootFeatureForm {
+            NavigationStack(path: $navigationPath) {
+                EmbeddedFeatureFormView(featureForm: rootFeatureForm)
+                    .navigationDestination(for: NavigationPathItem.self) { itemType in
+                        switch itemType {
+                        case let .form(form):
+                            EmbeddedFeatureFormView(featureForm: form)
+                        case let .utilityAssociationFilterResultView(result, embeddedFeatureFormViewModel):
+                            UtilityAssociationsFilterResultView(
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                utilityAssociationsFilterResult: result
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(result.filter.title, subtitle: embeddedFeatureFormViewModel.title)
+                            .preference(
+                                key: PresentedFeatureFormPreferenceKey.self,
+                                value: .init(object: embeddedFeatureFormViewModel.featureForm)
+                            )
+                        case let .utilityAssociationGroupResultView(result, embeddedFeatureFormViewModel):
+                            UtilityAssociationGroupResultView(
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                utilityAssociationGroupResult: result
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(result.name, subtitle: embeddedFeatureFormViewModel.title)
+                        }
+                    }
+            }
+            // Alert for abandoning unsaved edits
+            .alert(
+                presentedForm.validationErrors.isEmpty ? discardEditsQuestion : validationErrors,
+                isPresented: alertForUnsavedEditsIsPresented,
+                actions: {
+                    if let (willNavigate, continuation) = alertContinuation {
+                        Button(role: .destructive) {
+                            presentedForm.discardEdits()
+                            onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
+                            validationErrorVisibilityInternal = .automatic
+                            continuation()
+                        } label: {
+                            discardEdits
+                        }
+                        .onAppear {
+                            if !presentedForm.validationErrors.isEmpty {
+                                validationErrorVisibilityInternal = .visible
+                            }
+                        }
+                        if (presentedForm.validationErrors.isEmpty) {
+                            Button {
+                                Task {
+                                    do {
+                                        try await presentedForm.finishEditing()
+                                        onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
+                                        continuation()
+                                    } catch {
+                                        finishEditingError = error
+                                    }
+                                }
+                            } label: {
+                                saveEdits
+                            }
+                        }
+                        Button(role: .cancel) {
+                            alertForUnsavedEditsIsPresented.wrappedValue = false
+                        } label: {
+                            continueEditing
+                        }
+                    }
+                },
+                message: {
+                    if !presentedForm.validationErrors.isEmpty {
+                        Text(
+                            "You have ^[\(presentedForm.validationErrors.count) error](inflect: true) that must be fixed before saving.",
+                            bundle: .toolkitModule,
+                            comment:
+                                """
+                                A message explaining that the indicated number
+                                of validation errors must be resolved before
+                                saving the feature form.
+                                """
+                        )
+                    } else {
+                        Text(
+                            "Updates to the form will be lost.",
+                            bundle: .toolkitModule,
+                            comment:
+                                """
+                                A message explaining that unsaved edits will be
+                                lost if the user continues to dismiss the form
+                                without saving.
+                                """
+                        )
+                    }
+                }
+            )
+            // Alert for finish editing errors
+            .alert(
+                Text(
+                    "The form wasn't submitted",
+                    bundle: .toolkitModule,
+                    comment: "The title shown when the feature form failed to save."
+                ),
+                isPresented: alertForFinishEditingErrorsIsPresented,
+                actions: { },
+                message: {
+                    if let finishEditingError {
+                        Text(
+                            """
+                            Finish editing failed.
+                            \(String(describing: finishEditingError))
+                            """,
+                            bundle: .toolkitModule,
+                            comment:
+                                """
+                                The message shown when a form could not be 
+                                submitted with additional details.
+                                """
+                        )
+                    } else {
+                        Text(
+                            "Finish editing failed.",
+                            bundle: .toolkitModule,
+                            comment: "The message shown when a form could not be submitted."
+                        )
+                    }
+                }
+            )
+            .environment(\.editingButtonVisibility, editingButtonsVisibility)
+            .environment(\.finishEditingError, $finishEditingError)
+            .environment(\.formDeprecatedInitializerWasUsed, deprecatedInitializerWasUsed)
+            .environment(\.isPresented, isPresented)
+            .environment(\.navigationIsDisabled, navigationIsDisabled)
+            .environment(\.navigationPath, $navigationPath)
+            .environment(\.onFormEditingEventAction, onFormEditingEventAction)
+            .environment(\.setAlertContinuation, setAlertContinuation)
+            .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
+            .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
+            .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) { wrappedFeatureForm in
+                guard let wrappedFeatureForm else { return }
+                formChangedAction(wrappedFeatureForm.object)
+            }
         }
     }
+}
+
+public extension FeatureFormView {
+    /// Represents events that occur during the form editing lifecycle.
+    /// These events notify you when the user has either saved or discarded their edits.
+    /// - Since: 200.8
+    enum EditingEvent {
+        /// Indicates that the user has discarded their edits.
+        /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after discarding.
+        case discardedEdits(willNavigate: Bool)
+        /// Indicates that the user has saved their edits.
+        /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after saving.
+        case savedEdits(willNavigate: Bool)
+    }
     
-    var evaluatedForm: some View {
-        ScrollViewReader { scrollViewProxy in
-            ScrollView {
-                VStack(alignment: .leading) {
-                    if !title.isEmpty {
-                        FormHeader(title: title)
-                        Divider()
-                    }
-                    ForEach(model.visibleElements, id: \.self) { element in
-                        makeElement(element)
-                    }
-                    if let attachmentsElement = model.featureForm.defaultAttachmentsElement {
-                        // The Toolkit currently only supports AttachmentsFormElements via the
-                        // default attachments element. Once AttachmentsFormElements can be authored
-                        // this can call makeElement(_:) instead and makeElement(_:) should have a
-                        // case added for AttachmentsFormElement.
-                        AttachmentsFeatureElementView(featureElement: attachmentsElement)
-                    }
-                }
-            }
-            .onChange(model.focusedElement) { _ in
-                if let focusedElement = model.focusedElement {
-                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
-                }
-            }
-            .onTitleChange(of: model.featureForm) { newTitle in
-                title = newTitle
-            }
+    /// Sets the visibility of the save and discard buttons on the form.
+    /// - Parameter visibility: The visibility of the save and discard buttons.
+    /// - Since: 200.8
+    func editingButtons(_ visibility: Visibility) -> Self {
+        var copy = self
+        copy.editingButtonsVisibility = visibility
+        return copy
+    }
+    
+    /// Sets whether navigation to forms for features associated via utility association form
+    /// elements is disabled.
+    ///
+    /// Use this modifier to conditionally disable navigation into other forms.
+    /// - Parameter disabled: A Boolean value that determines whether navigation is disabled. Pass `true` to disable navigation; otherwise, pass `false`.
+    /// - Since: 200.8
+    func navigationDisabled(_ disabled: Bool) -> Self {
+        var copy = self
+        copy.navigationIsDisabled = disabled
+        return copy
+    }
+    
+    /// Sets a closure to perform when a new feature form is shown in the view.
+    ///
+    /// This can happen when navigating through the associations in a `UtilityAssociationsFormElement`.
+    /// - Parameter action: The closure to perform when the new feature form is shown.
+    /// - Since: 200.8
+    func onFeatureFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
+        var copy = self
+        copy.onFeatureFormChanged = action
+        return copy
+    }
+    
+    /// Sets a closure to perform when a form editing event occurs.
+    /// - Parameter action: The closure to perform when the form editing event occurs.
+    /// - Since: 200.8
+    func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
+        var copy = self
+        copy.onFormEditingEventAction = action
+        return copy
+    }
+    
+    /// Initializes a form view.
+    ///
+    /// - Important: This modifier has been deprecated and replaced with a new version that supports
+    /// UtilityAssociationsFormElement. UtilityAssociationsFormElements will not render when this modifier
+    /// is used. The replacement modifier also provides a few quality-of-life improvements like built-in
+    /// "Save" and "Discard" buttons that appear when the user has unsaved edits, and automatic (but
+    /// override-able) management of validation error visibility.
+    ///
+    /// - Parameter featureForm: The feature form defining the editing experience.
+    /// - Attention: Deprecated at 200.8.
+    @available(*, deprecated, message: "Use 'init(root:isPresented:)' instead.")
+    init(featureForm: FeatureForm) {
+        self.deprecatedInitializerWasUsed = true
+        self.isPresented = nil
+        self.presentedForm = featureForm
+        self.rootFeatureForm = featureForm
+        
+        if featureForm.elements.contains(where: { element in
+            element is UtilityAssociationsFormElement
+        }) {
+            Logger.featureFormView.log(
+                level: .error,
+                """
+                UtilityAssociationsFormElement is not supported with this 
+                FeatureFormView initializer. Please use init(root:isPresented:)
+                instead.
+                """
+            )
         }
-#if os(iOS)
-        .scrollDismissesKeyboard(.immediately)
-#endif
-        .environment(\.validationErrorVisibility, validationErrorVisibility)
-        .environmentObject(model)
     }
 }
 
 extension FeatureFormView {
-    /// Makes UI for a form element.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeElement(_ element: FormElement) -> some View {
-        switch element {
-        case let element as FieldFormElement:
-            makeFieldElement(element)
-        case let element as GroupFormElement:
-            GroupView(element: element, viewCreator: { internalMakeElement($0) })
-        case let element as TextFormElement:
-            makeTextElement(element)
-        default:
-            EmptyView()
-        }
-    }
-    
-    /// Makes UI for a field form element or a text form element.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
-        switch element {
-        case let element as FieldFormElement:
-            makeFieldElement(element)
-        case let element as TextFormElement:
-            makeTextElement(element)
-        default:
-            EmptyView()
-        }
-    }
-    
-    /// Makes UI for a field form element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-        if !(element.input is UnsupportedFormInput) {
-            InputWrapper(element: element)
-            Divider()
-        }
-    }
-    
-    /// Makes UI for a text form element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
-        TextFormElementView(element: element)
-        Divider()
-    }
-    
-    /// The progress view to be shown while initial expression evaluation is running.
-    ///
-    /// This avoids flashing elements that may immediately be set hidden or have
-    /// values change as a result of initial expression evaluation.
-    var initialBody: some View {
-        ProgressView()
-            .task {
-                await model.initialEvaluation()
-                initialExpressionsAreEvaluating = false
+    /// A Boolean value indicating whether the finish editing error alert is presented.
+    var alertForFinishEditingErrorsIsPresented: Binding<Bool> {
+        Binding {
+            finishEditingError != nil
+        } set: { newIsPresented in
+            if !newIsPresented {
+                finishEditingError = nil
             }
+        }
+    }
+    
+    /// A Boolean value indicating whether the unsaved edits alert is presented.
+    var alertForUnsavedEditsIsPresented: Binding<Bool> {
+        Binding {
+            alertContinuation != nil
+        } set: { newIsPresented in
+            if !newIsPresented {
+                alertContinuation = nil
+            }
+        }
+    }
+    
+    /// The closure to perform when the presented feature form changes.
+    ///
+    /// - Note: This action has the potential to be called under four scenarios. Whenever an
+    /// ``EmbeddedFeatureFormView`` appears (which can happen during forward
+    /// or reverse navigation) and whenever a ``UtilityAssociationGroupResultView`` appears
+    /// (which can also happen during forward or reverse navigation). Because those two views (and the
+    /// intermediate ``UtilityAssociationsFilterResultView`` are all considered to be apart of
+    /// the same ``FeatureForm`` make sure not to over-emit form handling events.
+    var formChangedAction: (FeatureForm) -> Void {
+        { featureForm in
+            if featureForm.feature.globalID != presentedForm.feature.globalID {
+                featureForm.feature.refresh()
+                presentedForm = featureForm
+                validationErrorVisibilityInternal = .automatic
+                onFeatureFormChanged?(featureForm)
+            }
+        }
+    }
+    
+    /// A closure used to set the alert continuation.
+    var setAlertContinuation: (Bool, @escaping () -> Void) -> Void {
+        { willNavigate, continuation in
+            alertContinuation = (willNavigate: willNavigate, action: continuation)
+        }
+    }
+    
+    // MARK: Localized text
+    
+    var continueEditing: Text {
+        .init(
+            "Continue Editing",
+            bundle: .toolkitModule,
+            comment: "A label for a button to continue editing the feature form."
+        )
+    }
+    
+    var discardEdits: Text {
+        .init(
+            "Discard Edits",
+            bundle: .toolkitModule,
+            comment: "A label for a button to discard unsaved edits."
+        )
+    }
+    
+    var discardEditsQuestion: Text {
+        .init(
+            "Discard Edits?",
+            bundle: .toolkitModule,
+            comment: "A question asking if the user would like to discard their unsaved edits."
+        )
+    }
+    
+    var saveEdits: Text {
+        .init(
+            "Save Edits",
+            bundle: .toolkitModule,
+            comment: "A label for a button to save edits."
+        )
+    }
+    
+    var validationErrors: Text {
+        .init(
+            "Validation Errors",
+            bundle: .toolkitModule,
+            comment: "A label indicating the feature form has validation errors."
+        )
+    }
+}
+
+extension Logger {
+    /// A logger for the feature form view.
+    static var featureFormView: Logger {
+        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormView")
     }
 }
