@@ -55,7 +55,7 @@ struct PopupExampleView: View {
                     popup = identifyResult?.popups.first
                 }
                 .sheet(isPresented: $showPopup) { [popup] in
-                    PopupView(popup: popup!, isPresented: $showPopup)
+                    PopupView(root: popup!, isPresented: $showPopup)
                 }
         }
     }

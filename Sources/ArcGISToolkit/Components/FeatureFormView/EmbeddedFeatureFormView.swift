@@ -15,85 +15,83 @@
 import ArcGIS
 import SwiftUI
 
-struct InternalFeatureFormView: View {
-    /// The environment value to access the closure to call when the presented feature form changes.
-    @Environment(\.formChangedAction) var formChangedAction
-    
+struct EmbeddedFeatureFormView: View {
     /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
     @Environment(\.formDeprecatedInitializerWasUsed) var deprecatedInitializerWasUsed
     
     /// The view model for the form.
-    @State private var internalFeatureFormViewModel: InternalFeatureFormViewModel
+    @State private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     
     /// Initializes a form view.
     /// - Parameter featureForm: The feature form defining the editing experience.
     init(featureForm: FeatureForm) {
-        self.internalFeatureFormViewModel = InternalFeatureFormViewModel(featureForm: featureForm)
+        self.embeddedFeatureFormViewModel = EmbeddedFeatureFormViewModel(featureForm: featureForm)
     }
     
     var body: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if deprecatedInitializerWasUsed, !internalFeatureFormViewModel.title.isEmpty {
-                        FormHeader(title: internalFeatureFormViewModel.title)
+                    if deprecatedInitializerWasUsed, !embeddedFeatureFormViewModel.title.isEmpty {
+                        FormHeader(title: embeddedFeatureFormViewModel.title)
                         Divider()
                     }
-                    ForEach(internalFeatureFormViewModel.visibleElements, id: \.self) { element in
+                    ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
                         makeElement(element)
                     }
-                    if let attachmentsElement = internalFeatureFormViewModel.featureForm.defaultAttachmentsElement {
+                    if let attachmentsElement = embeddedFeatureFormViewModel.featureForm.defaultAttachmentsElement {
                         // The Toolkit currently only supports AttachmentsFormElements via the
                         // default attachments element. Once AttachmentsFormElements can be authored
                         // this can call makeElement(_:) instead and makeElement(_:) should have a
                         // case added for AttachmentsFormElement.
                         AttachmentsFeatureElementView(
                             formElement: attachmentsElement,
-                            formViewModel: internalFeatureFormViewModel
+                            formViewModel: embeddedFeatureFormViewModel
                         )
                     }
                 }
             }
             .task {
-                for await hasEdits in internalFeatureFormViewModel.featureForm.$hasEdits.dropFirst() {
+                for await hasEdits in embeddedFeatureFormViewModel.featureForm.$hasEdits.dropFirst() {
                     if !hasEdits {
-                        internalFeatureFormViewModel.previouslyFocusedElements.removeAll()
+                        embeddedFeatureFormViewModel.previouslyFocusedElements.removeAll()
                     }
                 }
             }
-            .onChange(of: internalFeatureFormViewModel.focusedElement) {
-                if let focusedElement = internalFeatureFormViewModel.focusedElement {
+            .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
+                if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
-            .onTitleChange(of: internalFeatureFormViewModel.featureForm) { newTitle in
-                internalFeatureFormViewModel.title = newTitle
+            .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
+                embeddedFeatureFormViewModel.title = newTitle
             }
             .navigationBarTitleDisplayMode(
                 .inline,
                 isApplied: !deprecatedInitializerWasUsed
             )
             .navigationTitle(
-                internalFeatureFormViewModel.title,
+                embeddedFeatureFormViewModel.title,
                 isApplied: !deprecatedInitializerWasUsed
             )
         }
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
 #endif
-        .environment(internalFeatureFormViewModel)
+        .environment(embeddedFeatureFormViewModel)
         .padding([.horizontal])
+        .preference(
+            key: PresentedFeatureFormPreferenceKey.self,
+            value: .init(object: embeddedFeatureFormViewModel.featureForm)
+        )
         .task {
-            await internalFeatureFormViewModel.initialEvaluation()
+            await embeddedFeatureFormViewModel.initialEvaluation()
         }
-        .onAppear {
-            formChangedAction?(internalFeatureFormViewModel.featureForm)
-        }
-        .featureFormToolbar(internalFeatureFormViewModel.featureForm, isAForm: true)
+        .featureFormToolbar(embeddedFeatureFormViewModel.featureForm, isAForm: true)
     }
 }
 
-extension InternalFeatureFormView {
+extension EmbeddedFeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {

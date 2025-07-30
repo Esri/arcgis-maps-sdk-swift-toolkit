@@ -71,6 +71,7 @@ struct PreplannedListItemView: View {
         var title: String { "Mock Preplanned Map Area" }
         var description: String { "This is the description text" }
         var thumbnail: LoadableImage? { nil }
+        var supportsRedownloading: Bool { true }
         
         func retryLoad() async throws { }
         func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
@@ -84,7 +85,7 @@ struct PreplannedListItemView: View {
             mapArea: MockPreplannedMapArea(),
             portalItemID: .init("preview")!,
             preplannedMapAreaID: .init("preview")!,
-            onRemoveDownload: {}
+            onRemoveDownload: { _ in }
         ),
         selectedMap: .constant(nil),
         shouldDismiss: true
@@ -102,7 +103,7 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
     var title: String { preplannedMapArea.title }
     var description: String { preplannedMapArea.description }
     var isDownloaded: Bool { status.isDownloaded }
-    var allowsDownload: Bool { status.allowsDownload }
+    var allowsDownload: Bool { preplannedMapArea.supportsRedownloading && status.allowsDownload }
     var dismissMetadataViewOnDelete: Bool { false }
     var removeDownloadButtonText: LocalizedStringResource { .removeDownload }
     

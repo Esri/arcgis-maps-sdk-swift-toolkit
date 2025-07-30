@@ -36,41 +36,49 @@ struct FormFooter: View {
     
     var body: some View {
         HStack {
-            Button {
-                featureForm.discardEdits()
-                formHandlingEventAction?(.discardedEdits(willNavigate: false))
-                validationErrorVisibilityInternal.wrappedValue = .automatic
-            } label: {
-                Text(
-                    "Discard",
-                    bundle: .toolkitModule,
-                    comment: "Discard edits on the feature form."
-                )
-            }
-            
+            discardButton
+                .inspectorTint(.red)
             Spacer()
-            
-            Button {
-                    if featureForm.validationErrors.isEmpty {
-                        Task {
-                            do {
-                                try await featureForm.finishEditing()
-                                formHandlingEventAction?(.savedEdits(willNavigate: false))
-                            } catch {
-                                finishEditingError = error
-                            }
-                        }
-                    } else {
-                        validationErrorVisibilityInternal.wrappedValue = .visible
-                        setAlertContinuation?(false, {})
+            saveButton
+                .inspectorTint(.blue)
+        }
+    }
+    
+    var discardButton: some View {
+        Button(role: .destructive) {
+            featureForm.discardEdits()
+            formHandlingEventAction?(.discardedEdits(willNavigate: false))
+            validationErrorVisibilityInternal.wrappedValue = .automatic
+        } label: {
+            Text(
+                "Discard",
+                bundle: .toolkitModule,
+                comment: "Discard edits on the feature form."
+            )
+        }
+    }
+    
+    var saveButton: some View {
+        Button {
+            if featureForm.validationErrors.isEmpty {
+                Task {
+                    do {
+                        try await featureForm.finishEditing()
+                        formHandlingEventAction?(.savedEdits(willNavigate: false))
+                    } catch {
+                        finishEditingError = error
                     }
-            } label: {
-                Text(
-                    "Save",
-                    bundle: .toolkitModule,
-                    comment: "Finish editing the feature form."
-                )
+                }
+            } else {
+                validationErrorVisibilityInternal.wrappedValue = .visible
+                setAlertContinuation?(false, {})
             }
+        } label: {
+            Text(
+                "Save",
+                bundle: .toolkitModule,
+                comment: "Finish editing the feature form."
+            )
         }
     }
 }

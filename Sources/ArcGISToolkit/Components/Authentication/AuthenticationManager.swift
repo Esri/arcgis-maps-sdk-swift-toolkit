@@ -108,4 +108,13 @@ public extension AuthenticationManager {
             return await group.allSatisfy(\.self)
         }
     }
+    
+    /// Signs the user out of the application by revoking OAuth tokens,
+    /// invalidating IAP credentials, and clearing credential stores.
+    /// - Since: 200.8
+    func signOut() async {
+        await revokeOAuthTokens()
+        await invalidateIAPCredentials()
+        await clearCredentialStores()
+    }
 }

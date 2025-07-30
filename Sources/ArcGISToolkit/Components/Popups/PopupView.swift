@@ -62,23 +62,25 @@ import ArcGIS
 /// in the project. To learn more about using the `PopupView`, see the <doc:PopupViewTutorial>.
 public struct PopupView: View {
     /// The `Popup` to display in the root `EmbeddedPopupView`.
-    private let popup: Popup
+    let popup: Popup
     
     /// A binding to a Boolean value that determines whether the view is presented.
-    private let isPresented: Binding<Bool>?
+    let isPresented: Binding<Bool>?
     
-    /// The visibility of the close button.
-    var closeButtonVisibility: Visibility = .automatic
+    /// The properties used by the view's deprecated members.
+    var deprecatedProperties = DeprecatedProperties()
     
     /// The closure to perform when a new popup is shown in the navigation stack.
     var onPopupChanged: ((Popup) -> Void)?
     
     /// Creates a `PopupView` with the given popup.
     /// - Parameters:
-    ///   - popup: The popup to display.
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
-        self.popup = popup
+    ///   - root: The popup to display.
+    ///   - isPresented: A Boolean value indicating whether the view is presented. The close button
+    ///   is displayed when this is non-`nil`.
+    /// - Since: 200.8
+    public init(root: Popup, isPresented: Binding<Bool>? = nil) {
+        self.popup = root
         self.isPresented = isPresented
     }
     
@@ -86,33 +88,16 @@ public struct PopupView: View {
         NavigationStack {
             EmbeddedPopupView(popup: popup)
         }
-        .environment(\.popupCloseButtonVisibility, closeButtonVisibility)
-        .environment(\.popupIsPresented, isPresented)
+        .environment(\.isPresented, isPresented)
+        .environment(\.deprecatedProperties, deprecatedProperties)
         .onPreferenceChange(PresentedPopupPreferenceKey.self) { wrappedPopup in
             guard let wrappedPopup else { return }
-            onPopupChanged?(wrappedPopup.popup)
+            onPopupChanged?(wrappedPopup.object)
         }
     }
 }
 
-extension EnvironmentValues {
-    /// The visibility of the popup view's close button.
-    @Entry var popupCloseButtonVisibility: Visibility = .automatic
-    
-    /// A binding to a Boolean value that determines whether a popup view is presented.
-    @Entry var popupIsPresented: Binding<Bool>?
-}
-
 public extension PopupView {
-    /// Sets the visibility of the close button on the popup view.
-    /// - Parameter visibility: The visibility of the close button.
-    /// - Since: 200.8
-    func closeButton(_ visibility: Visibility) -> Self {
-        var copy = self
-        copy.closeButtonVisibility = visibility
-        return copy
-    }
-    
     /// Sets a closure to perform when a new popup is shown in the view.
     ///
     /// This can happen when navigating through the associations in a `UtilityAssociationsPopupElement`.
@@ -127,20 +112,9 @@ public extension PopupView {
 
 /// A preference key that specifies the popup currently presented in the `PopupView` navigation stack.
 struct PresentedPopupPreferenceKey: PreferenceKey {
-    /// A wrapper for making a popup equatable.
-    struct EquatablePopup: Equatable {
-        let popup: Popup
-        
-        static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.popup === rhs.popup
-        }
-    }
+    static let defaultValue: EquatableObject<Popup>? = nil
     
-    // MARK: PreferenceKey Conformance
-    
-    static let defaultValue: EquatablePopup? = nil
-    
-    static func reduce(value: inout EquatablePopup?, nextValue: () -> EquatablePopup?) {
+    static func reduce(value: inout EquatableObject<Popup>?, nextValue: () -> EquatableObject<Popup>?) {
         guard let nextValue = nextValue() else { return }
         value = nextValue
     }

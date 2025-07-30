@@ -60,16 +60,20 @@ extension View {
         _ title: T,
         subtitle: S
     ) -> some View where T: StringProtocol, S: StringProtocol {
+        if !subtitle.isEmpty {
 #if swift(>=6.2) && !os(visionOS)
-        if #available(iOS 26.0, *) {
-            self.navigationTitle(title)
-                .navigationSubtitle(subtitle)
-        } else {
-            self.modifier(NavigationTitleModifier(title: title, subtitle: subtitle))
-        }
+            if #available(iOS 26.0, *) {
+                self.navigationTitle(title)
+                    .navigationSubtitle(subtitle)
+            } else {
+                self.modifier(NavigationTitleModifier(title: title, subtitle: subtitle))
+            }
 #else
-        self.modifier(NavigationTitleModifier(title: title, subtitle: subtitle))
+            self.modifier(NavigationTitleModifier(title: title, subtitle: subtitle))
 #endif
+        } else {
+            self.navigationTitle(title)
+        }
     }
     
     /// Conditionally configures the view’s title for purposes of navigation, using a string.

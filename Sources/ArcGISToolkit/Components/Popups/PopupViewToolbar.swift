@@ -23,19 +23,16 @@ extension View {
 
 /// A view modifier that populates the content's toolbar with items used by the `PopupView`.
 private struct PopupViewToolbar: ViewModifier {
-    /// The visibility of the popup view's close button.
-    @Environment(\.popupCloseButtonVisibility) private var closeButtonVisibility
-    
     /// A binding to a Boolean value that determines whether a popup view is presented.
-    @Environment(\.popupIsPresented) private var isPresented
+    @Environment(\.isPresented) private var isPresented
     
     func body(content: Content) -> some View {
         content
             .toolbar {
-                if closeButtonVisibility != .hidden {
+                if let isPresented {
                     ToolbarItem(placement: .topBarTrailing) {
                         XButton(.dismiss) {
-                            isPresented?.wrappedValue = false
+                            isPresented.wrappedValue = false
                         }
                         .font(.headline)
                     }

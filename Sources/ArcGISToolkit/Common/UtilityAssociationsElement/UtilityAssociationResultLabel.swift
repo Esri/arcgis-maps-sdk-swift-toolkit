@@ -27,14 +27,22 @@ struct UtilityAssociationResultLabel: View {
             
             VStack(alignment: .leading) {
                 Text(result.title)
+                    .lineLimit(4)
+                    .truncationMode(.middle)
                 if let details = result.details {
                     details
+                        .accessibilityIdentifier("Association Result Description")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
-                        .accessibilityIdentifier("Association Result Description")
+                        .lineLimit(1)
                 }
             }
-            .lineLimit(1)
+            
+            Spacer()
+            
+            result.fractionAlongEdge
+                .font(.caption2)
+                .foregroundStyle(.secondary)
         }
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("Association Result")
@@ -56,34 +64,47 @@ private extension UtilityAssociationResult {
     /// The details describing the result's association.
     var details: Text? {
         switch association.kind {
-        case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityToSide:
-            if let terminal = associatedElement.terminal {
+        case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
+            if let terminal = associatedElement.terminal, !terminal.name.isEmpty {
                 return Text(terminal.name)
             } else {
                 return nil
             }
         case .containment:
-            return associatedFeatureIsToElement
-            ? Text(
-                "Containment Visible: \(association.containmentIsVisible.description)",
-                bundle: .toolkitModule,
-                comment:
-                    """
-                    A label indicating whether a utility association's 
-                    containment is visible or not.
-                    """
-            )
-            : nil
-        case .junctionEdgeObjectConnectivityMidspan:
-            if associatedFeatureIsToElement && association.toElement.networkSource.kind == .edge {
-                return Text(association.fractionAlongEdge, format: .percent)
-            } else if let terminal = associatedElement.terminal {
-                return Text(terminal.name)
+            if associatedFeatureIsToElement {
+                if association.containmentIsVisible {
+                    return Text(
+                        "Visible Content",
+                        bundle: .toolkitModule,
+                        comment:
+                            """
+                            A label indicating a utility association's 
+                            containment is visible.
+                            """
+                    )
+                } else {
+                    return Text(
+                        "Content",
+                        bundle: .toolkitModule,
+                        comment:
+                            """
+                            A label indicating a utility association's 
+                            containment is not visible.
+                            """
+                    )
+                }
             } else {
                 return nil
             }
         default:
             return nil
+        }
+    }
+    
+    @ViewBuilder
+    var fractionAlongEdge: Text? {
+        if association.kind == .junctionEdgeObjectConnectivityMidspan {
+            Text(association.fractionAlongEdge, format: .percent)
         }
     }
 }
