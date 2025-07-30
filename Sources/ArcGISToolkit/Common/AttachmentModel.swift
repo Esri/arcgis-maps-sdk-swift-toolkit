@@ -69,7 +69,9 @@ internal import os
         self.thumbnailSize = thumbnailSize
         
         if attachment.isLocal {
-            load()
+            initialLoadTask = Task {
+                await load()
+            }
         } else {
             systemImageName = switch attachment.featureAttachmentKind {
             case .image: "photo"
@@ -81,10 +83,16 @@ internal import os
         }
     }
     
+    deinit {
+        initialLoadTask?.cancel()
+    }
+    
+    var initialLoadTask: Task<Void, Never>?
+    
     /// Loads the attachment and generates a thumbnail image.
     /// - Parameter thumbnailSize: The size for the generated thumbnail.
-    func load() {
-        Task {
+    func load() async {
+//        Task {
             loadStatus = .loading
             do {
                 try await attachment._load()
@@ -108,7 +116,7 @@ internal import os
             } catch {
                 systemImageName = "exclamationmark.circle.fill"
             }
-        }
+//        }
     }
     
     /// Synchronizes published properties with attachment metadata.
