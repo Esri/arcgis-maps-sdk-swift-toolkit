@@ -49,13 +49,18 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testAttachmentRenaming() {
         let app = XCUIApplication()
+        let activityIndicator = app.activityIndicators.firstMatch
         let attachmentLabel = app.staticTexts["EsriHQ.jpeg"]
         let formTitle = app.staticTexts["Esri Location"]
         let nameField = app.textFields["New name"]
         let okButton = app.buttons["OK"]
-        let activityIndicator = app.activityIndicators.firstMatch
+#if targetEnvironment(macCatalyst)
+        let rename = app.menuItems["Rename"]
+        let renamedAttachmentLabel = app.staticTexts["EsriHQ\(#function).jpeg"]
+#else
         let rename = app.buttons["Rename"]
         let renamedAttachmentLabel = app.staticTexts["\(#function).jpeg"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -70,7 +75,7 @@ final class FeatureFormViewTests: XCTestCase {
             "The attachment was not present after loading completed."
         )
         
-        attachmentLabel.press(forDuration: 1)
+        attachmentLabel.rightClick()
         
         XCTAssertTrue(
             rename.waitForExistence(timeout: 1),
@@ -95,7 +100,7 @@ final class FeatureFormViewTests: XCTestCase {
         okButton.tap()
         
         XCTAssertTrue(
-            renamedAttachmentLabel.exists,
+            renamedAttachmentLabel.waitForExistence(timeout: 2),
             "The attachment was not present after renaming."
         )
     }
