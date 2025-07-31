@@ -52,6 +52,9 @@ internal import os
     /// The desired size of the thumbnail image.
     let thumbnailSize: CGSize
     
+    /// <#Description#>
+    private var initialLoad: Task<Void, Never>?
+    
     /// Creates a view model representing the combination of a `FeatureAttachment` and
     /// an associated `UIImage` used as a thumbnail.
     /// - Parameters:
@@ -69,8 +72,8 @@ internal import os
         self.thumbnailSize = thumbnailSize
         
         if attachment.isLocal {
-            initialLoadTask = Task {
-                await load()
+            initialLoad = Task { [weak self] in
+                await self?.load()
             }
         } else {
             systemImageName = switch attachment.featureAttachmentKind {
@@ -84,39 +87,39 @@ internal import os
     }
     
     deinit {
-        initialLoadTask?.cancel()
+        initialLoad?.cancel()
     }
     
-    var initialLoadTask: Task<Void, Never>?
-    
     /// Loads the attachment and generates a thumbnail image.
-    /// - Parameter thumbnailSize: The size for the generated thumbnail.
     func load() async {
-//        Task {
-            loadStatus = .loading
-            do {
+        loadStatus = .loading
+        do {
+            try await withTaskCancellationHandler {
                 try await attachment._load()
-            } catch {
-                Logger.attachmentsFeatureElementView.error("Attachment loading failed \(error.localizedDescription)")
+            } onCancel: {
+                attachment.cancelLoad()
+                Logger.attachmentsFeatureElementView.error("Attachment loading was cancelled.")
             }
-            sync()
-            if loadStatus == .failed || attachment.fileURL == nil {
-                systemImageName = "exclamationmark.circle.fill"
-                return
-            }
-            let request = QLThumbnailGenerator.Request(
-                fileAt: attachment.fileURL!,
-                size: thumbnailSize,
-                scale: displayScale,
-                representationTypes: .all
-            )
-            do {
-                let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
-                withAnimation { self.thumbnail = thumbnail.uiImage }
-            } catch {
-                systemImageName = "exclamationmark.circle.fill"
-            }
-//        }
+        } catch {
+            Logger.attachmentsFeatureElementView.error("Attachment loading failed \(error.localizedDescription).")
+        }
+        sync()
+        guard loadStatus != .failed, let url = attachment.fileURL else {
+            systemImageName = "exclamationmark.circle.fill"
+            return
+        }
+        let request = QLThumbnailGenerator.Request(
+            fileAt: url,
+            size: thumbnailSize,
+            scale: displayScale,
+            representationTypes: .all
+        )
+        do {
+            let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
+            withAnimation { self.thumbnail = thumbnail.uiImage }
+        } catch {
+            systemImageName = "exclamationmark.circle.fill"
+        }
     }
     
     /// Synchronizes published properties with attachment metadata.

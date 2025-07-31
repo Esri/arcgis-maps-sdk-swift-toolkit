@@ -107,7 +107,7 @@ struct AttachmentLoadButton: View  {
         }
         .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { }
         .task(id: downloadStart) {
-            guard let downloadStart else { return }
+            guard let _ = downloadStart else { return }
             await attachmentModel.load()
         }
     }
