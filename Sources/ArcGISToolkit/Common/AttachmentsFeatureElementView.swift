@@ -170,7 +170,6 @@ struct AttachmentsFeatureElementView: View {
             displayScale: displayScale,
             thumbnailSize: thumbnailSize
         )
-//        newModel.load() Should be removable. Newly added attachments should be local and therefore be loaded automatically by the model.
         models.insert(newModel, at: 0)
         withAnimation { attachmentModelsState = .initialized(models) }
         embeddedFeatureFormViewModel?.evaluateExpressions()
