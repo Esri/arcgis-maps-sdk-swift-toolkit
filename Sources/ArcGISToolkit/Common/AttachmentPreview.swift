@@ -124,14 +124,8 @@ struct AttachmentPreview: View {
             ),
             isPresented: $renameDialogueIsShowing
         ) {
-            TextField(text: $newAttachmentName) {
-                Text(
-                    "New name",
-                    bundle: .toolkitModule,
-                    comment: "A label in reference to the new name of a file, shown in a file rename interface."
-                )
-            }
-            .autocorrectionDisabled()
+            TextField(String.newName, text: $newAttachmentName)
+                .autocorrectionDisabled()
             Button("Cancel", role: .cancel) { }
             Button("OK") {
                 Task {
@@ -273,6 +267,16 @@ private extension AttachmentPreview.AttachmentCell {
             "Attachments larger than \(attachmentDownloadSizeLimit, format: .byteCount(style: .file)) cannot be downloaded.",
             bundle: .toolkitModule,
             comment: "An error message explaining attachments larger than the provided maximum cannot be downloaded."
+        )
+    }
+}
+
+private extension String {
+    static var newName: Self {
+        .init(
+            localized: "New name",
+            bundle: .toolkitModule,
+            comment: "A label in reference to the new name of a file, shown in a file rename interface."
         )
     }
 }
