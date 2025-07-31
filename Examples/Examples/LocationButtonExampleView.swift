@@ -33,7 +33,11 @@ struct LocationButtonExampleView: View {
             .locationDisplay(locationDisplay)
             .overlay(alignment: .topTrailing) {
                 LocationButton(locationDisplay: locationDisplay)
+#if os(visionOS)
+                    .autoPanModes([.recenter, .off])
+#else
                     .autoPanModes([.recenter, .compassNavigation, .off])
+#endif
                     .imageScale(.large)
                     .frame(minWidth: 50, minHeight: 50)
                     .background(.thinMaterial)
