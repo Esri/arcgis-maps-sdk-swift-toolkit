@@ -47,6 +47,59 @@ final class FeatureFormViewTests: XCTestCase {
         testCaseButton.tap()
     }
     
+    func testAttachmentRenaming() {
+        let app = XCUIApplication()
+        let attachmentLabel = app.staticTexts["EsriHQ.jpeg"]
+        let formTitle = app.staticTexts["Esri Location"]
+        let nameField = app.textFields["New name"]
+        let okButton = app.buttons["OK"]
+        let activityIndicator = app.activityIndicators.firstMatch
+        let rename = app.buttons["Rename"]
+        let renamedAttachmentLabel = app.staticTexts["\(#function).jpeg"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        XCTAssertTrue(
+            activityIndicator.waitForNonExistence(timeout: 5.0),
+            "Attachment loading took longer than 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            attachmentLabel.exists,
+            "The attachment was not present after loading completed."
+        )
+        
+        attachmentLabel.press(forDuration: 1)
+        
+        XCTAssertTrue(
+            rename.waitForExistence(timeout: 1),
+            "The rename button doesn't exist."
+        )
+        
+        rename.tap()
+        
+        XCTAssertTrue(
+            nameField.waitForExistence(timeout: 1),
+            "The name field doesn't exist."
+        )
+        
+        nameField.tap()
+        app.typeText(#function)
+        
+        XCTAssertTrue(
+            okButton.exists,
+            "The OK button doesn't exist."
+        )
+        
+        okButton.tap()
+        
+        XCTAssertTrue(
+            renamedAttachmentLabel.exists,
+            "The attachment was not present after renaming."
+        )
+    }
+    
     // - MARK: Test case 1: Text Box with no hint, no description, value not required
     
     /// Test case 1.1: unfocused and focused state, no value
