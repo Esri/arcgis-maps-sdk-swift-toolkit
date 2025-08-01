@@ -162,8 +162,8 @@ struct AttachmentPreview: View {
         /// A Boolean value indicating whether the empty download alert is presented.
         @State private var emptyDownloadAlertIsPresented = false
         
-        /// <#Description#>
-        @State private var loadStart: Date?
+        /// A Boolean value indicating if the attachment is loading.
+        @State private var isLoading = false
         
         /// A Boolean value indicating whether the maximum size download alert is presented.
         @State private var maximumSizeDownloadExceededAlertIsPresented = false
@@ -218,6 +218,7 @@ struct AttachmentPreview: View {
             .background(Color.gray.opacity(0.2))
             .clipShape(.rect(cornerRadius: 8))
             .onTapGesture {
+                guard !isLoading else { return }
                 if attachmentModel.loadStatus == .loaded {
                     // Set the url to trigger `.quickLookPreview`.
                     url = attachmentModel.attachment.fileURL
@@ -227,8 +228,7 @@ struct AttachmentPreview: View {
                     maximumSizeDownloadExceededAlertIsPresented = true
                 } else if attachmentModel.loadStatus == .notLoaded {
                     // Load the attachment model with the given size.
-//                    attachmentModel.load()
-                    loadStart = .now
+                    isLoading = true
                 }
             }
             // On visionOS, quick look preview will close (sometimes it comes back) a sheet presenting
@@ -238,8 +238,9 @@ struct AttachmentPreview: View {
             .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $emptyDownloadAlertIsPresented) { }
             .alert(maximumSizeDownloadExceededErrorMessage, isPresented: $maximumSizeDownloadExceededAlertIsPresented) { }
             .hoverEffect()
-            .task(id: loadStart) {
-                guard let _ = loadStart else { return }
+            .task(id: isLoading) {
+                guard isLoading else { return }
+                defer { isLoading = false }
                 await attachmentModel.load()
             }
         }
