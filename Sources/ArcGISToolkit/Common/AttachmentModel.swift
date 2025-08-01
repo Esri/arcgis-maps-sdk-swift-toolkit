@@ -52,7 +52,7 @@ internal import os
     /// The desired size of the thumbnail image.
     let thumbnailSize: CGSize
     
-    /// <#Description#>
+    /// The initial attachment load task.
     private var initialLoad: Task<Void, Never>?
     
     /// Creates a view model representing the combination of a `FeatureAttachment` and
