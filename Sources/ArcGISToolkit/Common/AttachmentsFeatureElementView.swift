@@ -170,7 +170,6 @@ struct AttachmentsFeatureElementView: View {
             displayScale: displayScale,
             thumbnailSize: thumbnailSize
         )
-        newModel.load()
         models.insert(newModel, at: 0)
         withAnimation { attachmentModelsState = .initialized(models) }
         embeddedFeatureFormViewModel?.evaluateExpressions()
