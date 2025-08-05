@@ -70,12 +70,15 @@ struct AttachmentLoadButton: View  {
     /// A Boolean value indicating whether the download alert is presented.
     @State private var downloadAlertIsPresented = false
     
+    /// A Boolean value indicating if the attachment is loading.
+    @State private var isLoading = false
+    
     var body: some View {
         Button {
             if attachmentModel.attachment.measuredSize.value.isZero {
                 downloadAlertIsPresented = true
             } else if attachmentModel.loadStatus == .notLoaded {
-                attachmentModel.load()
+                isLoading = true
             }
         } label: {
             Group {
@@ -103,5 +106,11 @@ struct AttachmentLoadButton: View  {
             .padding(.leading)
         }
         .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { }
+        .disabled(isLoading)
+        .task(id: isLoading) {
+            guard isLoading else { return }
+            defer { isLoading = false }
+            await attachmentModel.load()
+        }
     }
 }

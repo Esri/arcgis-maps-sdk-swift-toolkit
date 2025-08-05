@@ -208,6 +208,7 @@ private extension FeatureFormTestView {
     
     /// The set of all Form View UI test cases.
     var cases: [TestCase] {[
+        .init("testAttachmentRenaming", objectID: 1, portalID: .attachmentMapID),
         .init("testCase_1_1", objectID: 1, portalID: .inputValidationMapID),
         .init("testCase_1_2", objectID: 1, portalID: .inputValidationMapID),
         .init("testCase_1_3", objectID: 1, portalID: .inputValidationMapID),

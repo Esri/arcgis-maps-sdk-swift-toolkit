@@ -16,6 +16,7 @@
 		75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */; };
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; };
 		882899FD2AB5099300A0BDC1 /* FlyoverExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */; platformFilter = ios; };
+		88519D3F2C8A7967007D7015 /* LocationButtonExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88519D3E2C8A7967007D7015 /* LocationButtonExampleView.swift */; };
 		8A9419622E035F1D003C7D10 /* AppSecrets.swift.masque in Sources */ = {isa = PBXBuildFile; fileRef = 8A9419612E035F1D003C7D10 /* AppSecrets.swift.masque */; };
 		8AC666152DA865EE00F33C36 /* Examples+ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */; };
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; };
@@ -73,6 +74,7 @@
 		75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExampleView.swift; sourceTree = "<group>"; };
 		75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalebarExampleView.swift; sourceTree = "<group>"; };
 		882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyoverExampleView.swift; sourceTree = "<group>"; };
+		88519D3E2C8A7967007D7015 /* LocationButtonExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationButtonExampleView.swift; sourceTree = "<group>"; };
 		8A9419612E035F1D003C7D10 /* AppSecrets.swift.masque */ = {isa = PBXFileReference; lastKnownFileType = text; name = AppSecrets.swift.masque; path = ../AppSecrets.swift.masque; sourceTree = "<group>"; };
 		8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Examples+ListItem.swift"; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
 				E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */,
 				882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */,
+				88519D3E2C8A7967007D7015 /* LocationButtonExampleView.swift */,
 				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
 				4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */,
 				75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */,
@@ -308,6 +311,7 @@
 				75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */,
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */,
+				88519D3F2C8A7967007D7015 /* LocationButtonExampleView.swift in Sources */,
 				8AC666152DA865EE00F33C36 /* Examples+ListItem.swift in Sources */,
 				75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
@@ -465,7 +469,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.7.0;
+				MARKETING_VERSION = 200.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -498,7 +502,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.7.0;
+				MARKETING_VERSION = 200.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";

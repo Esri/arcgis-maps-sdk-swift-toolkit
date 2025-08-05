@@ -65,6 +65,9 @@ protocol FeatureAttachment: Loadable {
     /// - Returns: A task that represents the asynchronous operation. The task result contains the thumbnail as an `UIImage`.
     func makeThumbnail(width: Int, height: Int) async throws -> UIImage
     
+    /// Cancels loading. This affects all callers waiting for a load.
+    func cancelLoad()
+    
     /// Loads the metadata for the instance asynchronously.
     ///
     /// A workaround providing conforming types an opportunity to call their load method directly.

@@ -216,6 +216,7 @@ private extension BasemapGallery {
                 }
             }
         }
+        .padding()
     }
 }
 
