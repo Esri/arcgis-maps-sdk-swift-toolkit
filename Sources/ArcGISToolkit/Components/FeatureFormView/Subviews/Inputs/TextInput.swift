@@ -79,7 +79,7 @@ private extension TextInput {
     func clearValueAndEvaluateExpressions() {
         guard element.value != nil else { return }
         element.updateValue(nil)
-        internalFeatureFormViewModel.evaluateExpressions()
+        embeddedFeatureFormViewModel.evaluateExpressions()
     }
     
     func updateValueAndEvaluateExpressions<T>(_ newValue: T?) where T: Numeric {
@@ -111,7 +111,7 @@ private extension TextInput {
         default:
             return
         }
-        internalFeatureFormViewModel.evaluateExpressions()
+        embeddedFeatureFormViewModel.evaluateExpressions()
     }
     
     func updateValueAndEvaluateExpressions(_ newValue: String?) {
@@ -121,7 +121,7 @@ private extension TextInput {
         }
         guard newValue != element.value as? String else { return }
         element.updateValue(newValue)
-        internalFeatureFormViewModel.evaluateExpressions()
+        embeddedFeatureFormViewModel.evaluateExpressions()
     }
     
     /// The body of the text input when the element is editable.
