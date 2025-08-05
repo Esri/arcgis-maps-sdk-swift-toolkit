@@ -61,7 +61,9 @@ struct EmbeddedPopupView: View {
         .background(Color(.systemBackground))
 #endif
         .preference(key: PresentedPopupPreferenceKey.self, value: .init(object: popup))
-        .popupViewHeader(title: popup.title)
+        .popupViewToolbar()
+        .navigationTitle(popup.title)
+        .navigationBarTitleDisplayMode(.inline)
         .task(id: ObjectIdentifier(popup)) {
             // Initial evaluation for a newly assigned popup.
             guard !Task.isCancelled else { return }

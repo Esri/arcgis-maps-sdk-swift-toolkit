@@ -32,30 +32,6 @@ public extension PopupView /* Deprecated */ {
         self.isPresented = isPresented
         deprecatedProperties.initializerWasUsed = true
     }
-    
-    /// Specifies the visibility of the popup header.
-    /// - Parameter visibility: The preferred visibility of the popup header.
-    /// - Attention: Deprecated at 200.8.
-    @available(*, deprecated, message: "Use 'init(root:isPresented:)' to control the close button visibility instead.")
-    func header(_ visibility: Visibility) -> Self {
-        var copy = self
-        copy.deprecatedProperties.headerVisibility = visibility
-        return copy
-    }
-    
-    /// Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
-    /// button is shown, you should pass in the `isPresented` argument to the `PopupView`
-    /// initializer, so that the the "close" button can close the view.
-    /// Defaults to `false`.
-    /// - Parameter newShowCloseButton: The new value.
-    /// - Returns: A new `PopupView`.
-    /// - Attention: Deprecated at 200.7.
-    @available(*, deprecated, message: "Use 'init(root:isPresented:)' to control the close button visibility instead.")
-    func showCloseButton(_ newShowCloseButton: Bool) -> Self {
-        var copy = self
-        copy.deprecatedProperties.showCloseButton = newShowCloseButton
-        return copy
-    }
 }
 
 // MARK: - DeprecatedProperties
@@ -66,14 +42,6 @@ extension PopupView {
         /// A Boolean value indicating whether the deprecated PopupView initializer was used.
         /// - Note: This can be removed when `PopupView.init(popup:isPresented:)` is removed.
         fileprivate(set) var initializerWasUsed = false
-        
-        /// The visibility of the popup header.
-        /// - Note: This can be removed when `PopupView.header(_:)` is removed.
-        fileprivate(set) var headerVisibility: Visibility = .automatic
-        
-        /// A Boolean value indicating whether a "close" button should be shown.
-        /// - Note: This can be removed when `PopupView.showCloseButton(_:)` is removed.
-        fileprivate(set) var showCloseButton: Bool? = nil
     }
 }
 
