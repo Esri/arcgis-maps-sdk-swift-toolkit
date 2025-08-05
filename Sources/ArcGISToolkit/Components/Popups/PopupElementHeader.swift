@@ -27,14 +27,13 @@ struct PopupElementHeader: View {
             if !title.isEmpty {
                 Text(title)
                     .multilineTextAlignment(.leading)
-                    .font(.title2)
                     .foregroundStyle(.primary)
             }
             
             if !description.isEmpty {
                 Text(description)
                     .multilineTextAlignment(.leading)
-                    .font(.subheadline)
+                    .font(.caption2)
                     .foregroundStyle(.secondary)
             }
         }

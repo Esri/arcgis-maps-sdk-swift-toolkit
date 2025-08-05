@@ -61,17 +61,21 @@ struct FeatureFormToolbar: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .navigationBarBackButtonHidden(navigationBarBackButtonIsHidden)
+            .navigationBarBackButtonHidden()
             .task(id: featureForm.feature.globalID) {
                 for await hasEdits in featureForm.$hasEdits {
                     withAnimation { self.hasEdits = hasEdits }
                 }
             }
             .toolbar {
-                if navigationBarBackButtonIsHidden {
+                if !isRootView {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
-                            setAlertContinuation?(true) {
+                            if alertBeforeDismissing {
+                                setAlertContinuation?(true) {
+                                    dismiss()
+                                }
+                            } else {
                                 dismiss()
                             }
                         } label: {
@@ -115,16 +119,13 @@ struct FeatureFormToolbar: ViewModifier {
 }
 
 extension FeatureFormToolbar {
+    /// A Boolean value indicating whether to alert for unsaved edits before dismissing the current view.
+    var alertBeforeDismissing: Bool {
+        isAForm && hasEdits
+    }
+    
     /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
     var isRootView: Bool {
         navigationPath?.wrappedValue.isEmpty ?? true
-    }
-    
-    /// A Boolean value indicating whether the navigation bar's back button is hidden.
-    ///
-    /// In certain cases the platform default button is hidden to support blocking back navigation with an
-    /// alert for unsaved edits.
-    var navigationBarBackButtonIsHidden: Bool {
-        isAForm && !isRootView && (hasEdits || navigationIsDisabled)
     }
 }

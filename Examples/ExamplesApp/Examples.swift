@@ -79,6 +79,7 @@ struct Examples: View {
             .example("Feature Form", content: FeatureFormExampleView()),
             .example("Floating Panel", content: FloatingPanelExampleView()),
             .example("Floor Filter", content: FloorFilterExampleView()),
+            .example("Location Button", content: LocationButtonExampleView()),
             .example("Overview Map", content: OverviewMapExampleView()),
             .example("Popup", content: PopupExampleView()),
             .example("Scalebar", content: ScalebarExampleView()),

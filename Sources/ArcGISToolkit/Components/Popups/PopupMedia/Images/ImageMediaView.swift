@@ -37,7 +37,7 @@ struct ImageMediaView: View {
                     refreshInterval: popupMedia.imageRefreshInterval,
                     mediaSize: mediaSize
                 )
-                    .frame(width: mediaSize.width, height: mediaSize.height)
+                .frame(width: mediaSize.width, height: mediaSize.height)
                 VStack {
                     Spacer()
                     PopupMediaFooter(
@@ -60,7 +60,6 @@ struct ImageMediaView: View {
                     popupMedia: popupMedia,
                     isShowingDetailView: $isShowingDetailView
                 )
-                .padding()
             }
         }
     }

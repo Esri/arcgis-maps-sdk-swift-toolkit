@@ -22,10 +22,10 @@ struct Carousel<Content: View>: View {
     @State private var cellSize = CGSize.zero
     
     /// The identifier for the Carousel content.
-    @State private var contentIdentifier = UUID()
+    let contentIdentifier = "content"
     
     /// The content shown in the Carousel.
-    let content: (_: CGSize, _: (() -> Void)?) -> Content
+    let content: (_: CGSize) -> Content
     
     /// The amount to offset the scroll indicator.
     let scrollIndicatorOffset = 10.0
@@ -39,9 +39,12 @@ struct Carousel<Content: View>: View {
     /// The fractional width of the partially visible cell.
     var cellVisiblePortion = 0.25
     
+    /// The trigger used to scroll the scroll view to content's leading anchor.
+    var leftScrollTrigger: (any Equatable & Hashable)?
+    
     /// A horizontally scrolling container to display a set of content.
     /// - Parameter content: A view builder that creates the content of this Carousel.
-    init(@ViewBuilder content: @escaping (_: CGSize, _: (() -> Void)?) -> Content) {
+    init(@ViewBuilder content: @escaping (_: CGSize) -> Content) {
         self.content = content
     }
     
@@ -87,17 +90,18 @@ struct Carousel<Content: View>: View {
     
     func makeCommonScrollViewContent(_ scrollViewProxy: ScrollViewProxy) -> some View {
         HStack(spacing: cellSpacing) {
-            content(cellSize) {
-                withAnimation {
-                    scrollViewProxy.scrollTo(contentIdentifier, anchor: .leading)
-                }
-            }
-            .id(contentIdentifier)
-            .frame(width: cellSize.width, height: cellSize.height)
-            .clipped()
             // Pad the content such that the scroll indicator appears beneath it
-            // so that the content is not covered. 
-            .padding(.bottom, scrollIndicatorOffset)
+            // so that the content is not covered.
+            content(cellSize)
+                .id(contentIdentifier)
+                .frame(width: cellSize.width, height: cellSize.height)
+                .clipped()
+                .padding(.bottom, scrollIndicatorOffset)
+                .onChange(of: leftScrollTrigger?.hashValue) {
+                    withAnimation {
+                        scrollViewProxy.scrollTo(contentIdentifier, anchor: .leading)
+                    }
+                }
         }
     }
 }
@@ -131,24 +135,30 @@ extension Carousel {
         copy.cellVisiblePortion = visiblePortion
         return copy
     }
+    
+    func leftScrollTrigger(_ trigger: (any Equatable & Hashable)?) -> Self {
+        var copy = self
+        copy.leftScrollTrigger = trigger
+        return copy
+    }
 }
 
 #Preview("cellBaseWidth(_:)") {
-    Carousel { _, _ in
+    Carousel { _ in
         PreviewContent()
     }
     .cellBaseWidth(75)
 }
 
 #Preview("cellSpacing(_:)") {
-    Carousel { _, _ in
+    Carousel { _ in
         PreviewContent()
     }
     .cellSpacing(2)
 }
 
 #Preview("cellVisiblePortion(_:)") {
-    Carousel { _, _ in
+    Carousel { _ in
         PreviewContent()
     }
     .cellVisiblePortion(0.5)
@@ -157,38 +167,30 @@ extension Carousel {
 #Preview("In a List") {
     List {
         Text(verbatim: "Hello")
-        Carousel { _, _ in
+        Carousel { _ in
             PreviewContent()
         }
         Text(verbatim: "World!")
     }
 }
 
-#Preview("Scroll to left action") {
-    struct ScrollDemo: View {
-        @State var scrollToLeftAction: (() -> Void)?
-        
-        var body: some View {
-            Carousel { _, scrollToLeftAction in
-                ForEach(1..<11) {
-                    Text($0.description)
-                        .id($0)
-                }
-                .onAppear {
-                    self.scrollToLeftAction = scrollToLeftAction
-                }
-            }
-            Button {
-                withAnimation {
-                    scrollToLeftAction?()
-                }
-            } label: {
-                Text(verbatim: "Scroll to left")
-            }
+#Preview("Programmatically scroll to left") {
+    @Previewable @State var items = [1]
+    
+    Carousel { _ in
+        ForEach(items, id: \.self) {
+            Text($0.description)
+                .id($0)
         }
     }
-    
-    return ScrollDemo()
+    .leftScrollTrigger(items)
+    Button {
+        items.insert(items.count + 1, at: 0)
+    } label: {
+        Text(verbatim: "Insert Item")
+    }
+    Text(verbatim: "The Carousel will scroll to the left to make the item visible, if needed.")
+        .foregroundStyle(.secondary)
 }
 
 private struct PreviewContent: View {

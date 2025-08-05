@@ -32,7 +32,7 @@ struct UtilityAssociationsPopupElementView: View {
     
     init(popupElement: UtilityAssociationsPopupElement) {
         self.popupElement = popupElement
-        self._associationsFilterResultsModel = .init(wrappedValue: .init(popupElement: popupElement))
+        self._associationsFilterResultsModel = .init(wrappedValue: .init(element: popupElement))
     }
     
     var body: some View {
@@ -40,11 +40,7 @@ struct UtilityAssociationsPopupElementView: View {
             switch associationsFilterResultsModel.result {
             case .success(let associationsFilterResults):
                 if associationsFilterResults.isEmpty {
-                    Text(
-                        "No Associations",
-                        bundle: .toolkitModule,
-                        comment: "A label indicating that no associations are available for the popup element."
-                    )
+                    Text.noAssociations
                 } else {
                     ForEach(associationsFilterResults, id: \.id) {
                         UtilityAssociationsFilterResultLink(filterResult: $0)
@@ -52,15 +48,7 @@ struct UtilityAssociationsPopupElementView: View {
                     .environment(\.associationDisplayCount, popupElement.displayCount)
                 }
             case .failure(let error):
-                Text(
-                    "Error fetching filter results: \(error.localizedDescription)",
-                    bundle: .toolkitModule,
-                    comment: """
-                             An error message shown when the element's
-                             associations filter results cannot be displayed.
-                             The variable provides additional data.
-                             """
-                )
+                Text.errorFetchingFilterResults(error)
             case nil:
                 VStack {
                     // This check and the enclosing stack/modifiers workaround an issue where the
@@ -91,38 +79,6 @@ struct UtilityAssociationsPopupElementView: View {
     }
 }
 
-/// A view model for fetching associations filter results.
-@Observable
-private final class AssociationsFilterResultsModel {
-    /// The result of fetching the associations filter results.
-    private(set) var result: Result<[UtilityAssociationsFilterResult], Error>?
-    
-    /// The task for fetching the associations filter results.
-    @ObservationIgnored private var task: Task<Void, Never>?
-    
-    /// Fetches the associations filter results from a given popup element.
-    /// - Parameter popupElement: The popup element containing the associations filter results.
-    @MainActor
-    init(popupElement: UtilityAssociationsPopupElement) {
-        task = Task { [weak self] in
-            guard !Task.isCancelled, let self else {
-                return
-            }
-            
-            let result = await Result {
-                try await popupElement.associationsFilterResults.filter { $0.resultCount > 0 }
-            }
-            withAnimation {
-                self.result = result
-            }
-        }
-    }
-    
-    deinit {
-        task?.cancel()
-    }
-}
-
 /// A view that displays a `UtilityAssociationsFilterResult` and allows
 /// navigating to its group results.
 private struct UtilityAssociationsFilterResultLink: View {
@@ -139,11 +95,9 @@ private struct UtilityAssociationsFilterResultLink: View {
         NavigationLink {
             List(filterResult.groupResults, id: \.id) { groupResult in
                 UtilityAssociationGroupResultView(groupResult: groupResult)
-#if targetEnvironment(macCatalyst)
-                    .listRowInsets(.toolkitDefault)
-#endif
+                    .popupListRowStyle()
             }
-            .listStyle(.inset)
+            .listStyle(.plain)
             .navigationTitle(filterResult.filter.displayTitle, subtitle: popupTitle)
             .navigationBarTitleDisplayMode(.inline)
             .popupViewToolbar()
@@ -250,11 +204,9 @@ private struct SearchUtilityAssociationResultsView: View {
             } label: {
                 UtilityAssociationResultLabel(result: result)
             }
-#if targetEnvironment(macCatalyst)
-            .listRowInsets(.toolkitDefault)
-#endif
+            .popupListRowStyle()
         }
-        .listStyle(.inset)
+        .listStyle(.plain)
         .searchable(
             text: $text,
             placement: .navigationBarDrawer(displayMode: .always),

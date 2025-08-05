@@ -1,0 +1,18 @@
+import ArcGIS
+import ArcGISToolkit
+import SwiftUI
+
+struct LocationButtonExampleView: View {
+    @State private var map = Map(basemapStyle: .arcGISImagery)
+    
+    @State private var locationDisplay = {
+        let locationDisplay = LocationDisplay()
+        locationDisplay.initialZoomScale = 40_000
+        return locationDisplay
+    }()
+    
+    var body: some View {
+        MapView(map: map)
+            .locationDisplay(locationDisplay)
+    }
+}

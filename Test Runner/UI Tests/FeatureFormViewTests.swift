@@ -47,6 +47,64 @@ final class FeatureFormViewTests: XCTestCase {
         testCaseButton.tap()
     }
     
+    func testAttachmentRenaming() {
+        let app = XCUIApplication()
+        let activityIndicator = app.activityIndicators.firstMatch
+        let attachmentLabel = app.staticTexts["EsriHQ.jpeg"]
+        let formTitle = app.staticTexts["Esri Location"]
+        let nameField = app.textFields["New name"]
+        let okButton = app.buttons["OK"]
+#if targetEnvironment(macCatalyst)
+        let rename = app.menuItems["Rename"]
+        let renamedAttachmentLabel = app.staticTexts["EsriHQ\(#function).jpeg"]
+#else
+        let rename = app.buttons["Rename"]
+        let renamedAttachmentLabel = app.staticTexts["\(#function).jpeg"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        XCTAssertTrue(
+            activityIndicator.waitForNonExistence(timeout: 5.0),
+            "Attachment loading took longer than 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            attachmentLabel.exists,
+            "The attachment was not present after loading completed."
+        )
+        
+        attachmentLabel.rightClick()
+        
+        XCTAssertTrue(
+            rename.waitForExistence(timeout: 1),
+            "The rename button doesn't exist."
+        )
+        
+        rename.tap()
+        
+        XCTAssertTrue(
+            nameField.waitForExistence(timeout: 1),
+            "The name field doesn't exist."
+        )
+        
+        nameField.tap()
+        app.typeText(#function)
+        
+        XCTAssertTrue(
+            okButton.exists,
+            "The OK button doesn't exist."
+        )
+        
+        okButton.tap()
+        
+        XCTAssertTrue(
+            renamedAttachmentLabel.waitForExistence(timeout: 2),
+            "The attachment was not present after renaming."
+        )
+    }
+    
     // - MARK: Test case 1: Text Box with no hint, no description, value not required
     
     /// Test case 1.1: unfocused and focused state, no value
@@ -1416,7 +1474,7 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
-            elementTitle.exists,
+            elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
         )
         
@@ -1485,13 +1543,13 @@ final class FeatureFormViewTests: XCTestCase {
         let filterResults = app.staticTexts["Content"]
         let formTitle = app.staticTexts["Structure Boundary"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let utilityElementButton = app.buttons["Circuit Breaker, Containment Visible: False"]
+        let utilityElementButton = app.buttons["Circuit Breaker, Content"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
-            elementTitle.exists,
+            elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
         )
         
@@ -1509,7 +1567,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         networkSourceGroupButton.tap()
         
-        // Expectation: a list of one utility elements with "Containment Visible: False"
+        // Expectation: a list of one utility elements with "Content"
         XCTAssertTrue(
             utilityElementButton.exists,
             "The utility element \"Circuit Breaker\" doesn't exist."
@@ -1528,7 +1586,7 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
-            elementTitle.exists,
+            elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
         )
         
@@ -1572,7 +1630,7 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(
-            elementTitle.exists,
+            elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
         )
         

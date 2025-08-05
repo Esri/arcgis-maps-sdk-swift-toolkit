@@ -78,6 +78,7 @@ public struct PopupView: View {
     ///   - root: The popup to display.
     ///   - isPresented: A Boolean value indicating whether the view is presented. The close button
     ///   is displayed when this is non-`nil`.
+    /// - Since: 200.8
     public init(root: Popup, isPresented: Binding<Bool>? = nil) {
         self.popup = root
         self.isPresented = isPresented
@@ -91,7 +92,7 @@ public struct PopupView: View {
         .environment(\.deprecatedProperties, deprecatedProperties)
         .onPreferenceChange(PresentedPopupPreferenceKey.self) { wrappedPopup in
             guard let wrappedPopup else { return }
-            onPopupChanged?(wrappedPopup.popup)
+            onPopupChanged?(wrappedPopup.object)
         }
     }
 }
@@ -111,20 +112,9 @@ public extension PopupView {
 
 /// A preference key that specifies the popup currently presented in the `PopupView` navigation stack.
 struct PresentedPopupPreferenceKey: PreferenceKey {
-    /// A wrapper for making a popup equatable.
-    struct EquatablePopup: Equatable {
-        let popup: Popup
-        
-        static func == (lhs: Self, rhs: Self) -> Bool {
-            lhs.popup === rhs.popup
-        }
-    }
+    static let defaultValue: EquatableObject<Popup>? = nil
     
-    // MARK: PreferenceKey Conformance
-    
-    static let defaultValue: EquatablePopup? = nil
-    
-    static func reduce(value: inout EquatablePopup?, nextValue: () -> EquatablePopup?) {
+    static func reduce(value: inout EquatableObject<Popup>?, nextValue: () -> EquatableObject<Popup>?) {
         guard let nextValue = nextValue() else { return }
         value = nextValue
     }

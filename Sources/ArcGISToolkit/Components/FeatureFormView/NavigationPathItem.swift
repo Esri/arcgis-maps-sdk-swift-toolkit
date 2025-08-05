@@ -17,8 +17,8 @@ import ArcGIS
 extension FeatureFormView {
     enum NavigationPathItem: Hashable {
         case form(FeatureForm)
-        case utilityAssociationFilterResultView(UtilityAssociationsFilterResult, InternalFeatureFormViewModel)
-        case utilityAssociationGroupResultView(UtilityAssociationGroupResult, InternalFeatureFormViewModel)
+        case utilityAssociationFilterResultView(UtilityAssociationsFilterResult, EmbeddedFeatureFormViewModel)
+        case utilityAssociationGroupResultView(UtilityAssociationGroupResult, EmbeddedFeatureFormViewModel)
         
         static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {

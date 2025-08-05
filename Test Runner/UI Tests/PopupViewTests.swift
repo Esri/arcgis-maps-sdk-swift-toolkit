@@ -75,16 +75,14 @@ final class PopupViewTests: XCTestCase {
     func testUNADefaultTitles() {
         let app = XCUIApplication()
         let associationsElement = app.staticTexts["Associations"]
-        let connectivityFilterResult = app.staticTexts["Connectivity"]
+        let connectedFilterResult = app.staticTexts["Connected"]
         let containerFilterResult = app.staticTexts["Container"]
         let filterResults = app.buttons.matching(identifier: "Associations Filter Result")
         let popupTitle = app.navigationBars["Electric Distribution Device: Arrester"]
         let structureFilterResult = app.staticTexts["Structure"]
         
         openPopup(3216, on: .electricDistributionDevice)
-        XCTExpectFailure("KNOWN ISSUE -- nautilus/issues/2625") {
-            assertPopupOpened(popupTitle: popupTitle)
-        }
+        assertPopupOpened(popupTitle: popupTitle)
         
         // Expectation: The default title is "Associations".
         XCTAssertTrue(
@@ -95,8 +93,8 @@ final class PopupViewTests: XCTestCase {
         // Expectation: Filter elements use their type name as their default title.
         XCTAssertEqual(filterResults.count, 3)
         XCTAssertTrue(
-            connectivityFilterResult.exists,
-            "The filter result \"Connectivity\" doesn't exist."
+            connectedFilterResult.exists,
+            "The filter result \"Connected\" doesn't exist."
         )
         XCTAssertTrue(
             containerFilterResult.exists,
@@ -125,9 +123,7 @@ final class PopupViewTests: XCTestCase {
         let structureTitle = app.staticTexts["Junction Structure"]
         
         openPopup(2473, on: "Electric Distribution Junction")
-        XCTExpectFailure("KNOWN ISSUE -- nautilus/issues/2625") {
-            assertPopupOpened(popupTitle: popupTitle)
-        }
+        assertPopupOpened(popupTitle: popupTitle)
         
         // Expectation: The custom popup element title and description are displayed.
         XCTAssertTrue(
@@ -170,9 +166,7 @@ final class PopupViewTests: XCTestCase {
         let popupTitle = app.navigationBars["Electric Distribution Line: Medium Voltage"]
         
         openPopup(513, on: "Electric Distribution Line")
-        XCTExpectFailure("KNOWN ISSUE -- nautilus/issues/2625") {
-            assertPopupOpened(popupTitle: popupTitle)
-        }
+        assertPopupOpened(popupTitle: popupTitle)
         
         // Expectation: There is only one associations element with no filter results.
         XCTAssertEqual(associationsElements.count, 1)
@@ -196,9 +190,7 @@ final class PopupViewTests: XCTestCase {
         let structureFilterResult = app.staticTexts["Structure"]
         
         openPopup(2339, on: .structureJunction)
-        XCTExpectFailure("KNOWN ISSUE -- nautilus/issues/2625") {
-            assertPopupOpened(popupTitle: popupTitle)
-        }
+        assertPopupOpened(popupTitle: popupTitle)
         
         // Expectation: There are 2 associations popup elements.
         XCTAssertEqual(associationsElements.count, 2)
@@ -236,9 +228,7 @@ final class PopupViewTests: XCTestCase {
         let searchField = app.searchFields["Title"]
         
         openPopup(1464, on: .structureJunction)
-        XCTExpectFailure("KNOWN ISSUE -- nautilus/issues/2625") {
-            assertPopupOpened(popupTitle: switchgearPopupTitle)
-        }
+        assertPopupOpened(popupTitle: switchgearPopupTitle)
         
         // Expectation: A filter result opens the group result list.
         XCTAssertTrue(
@@ -343,9 +333,7 @@ final class PopupViewTests: XCTestCase {
         let switchObjectIDText = app.staticTexts["Selected Popup Object ID, 4361"]
         
         openPopup(4361, on: .electricDistributionDevice)
-        XCTExpectFailure("KNOWN ISSUE -- nautilus/issues/2625") {
-            assertPopupOpened(popupTitle: switchPopupTitle)
-        }
+        assertPopupOpened(popupTitle: switchPopupTitle)
         
         // Expectation: The first provided popup's object ID matches the opened popup's.
         XCTAssertTrue(
@@ -399,23 +387,21 @@ final class PopupViewTests: XCTestCase {
         let associationResults = app.staticTexts.matching(identifier: "Association Result")
         let associationResultIcons = app.images.matching(identifier: "Association Result Icon")
         let backButton = app.navigationBars.element(boundBy: 1).buttons.firstMatch
-        let connectivityFilterResult = app.buttons["Connectivity, 1"]
+        let connectedFilterResult = app.buttons["Connected, 1"]
         let containerFilterResult = app.buttons["Container, 1"]
         let popupTitle = app.navigationBars["Electric Distribution Device: Fuse"]
         let transformerBankResult = app.staticTexts["Electric Distribution Assembly: Transformer Bank"]
         let transformerResult = app.staticTexts["Electric Distribution Device: Transformer"]
         
         openPopup(2672, on: .electricDistributionDevice)
-        XCTExpectFailure("KNOWN ISSUE -- nautilus/issues/2625") {
-            assertPopupOpened(popupTitle: popupTitle)
-        }
+        assertPopupOpened(popupTitle: popupTitle)
         
-        // Opens the "Connectivity" filter result.
+        // Opens the "Connected" filter result.
         XCTAssertTrue(
-            connectivityFilterResult.exists,
-            "The filter result \"Connectivity, 1\" doesn't exist."
+            connectedFilterResult.exists,
+            "The filter result \"Connected, 1\" doesn't exist."
         )
-        connectivityFilterResult.tap()
+        connectedFilterResult.tap()
         
         // Expectation: The one result has a "connection-to-connection" icon.
         XCTAssertTrue(
@@ -455,10 +441,10 @@ final class PopupViewTests: XCTestCase {
     /// Verifies that association results display the correct description when applicable.
     /// - Note: The fraction-along-edge description is not tested as the data does not have any
     /// `junctionEdgeObjectConnectivityMidspan` associations.
-    func testUNAAssociationDescriptions() async {
+    func testUNAAssociationDescriptions() {
         let app = XCUIApplication()
         let associationResultDescription = app.staticTexts["Association Result Description"]
-        let connectivityFilterResult = app.staticTexts["Connectivity"]
+        let connectedFilterResult = app.staticTexts["Connected"]
         let containerFilterResult = app.staticTexts["Container"]
         let contentFilterResult = app.staticTexts["Content"]
         let fusePopupTitle = app.staticTexts["Electric Distribution Device: Fuse"]
@@ -466,16 +452,14 @@ final class PopupViewTests: XCTestCase {
         let transformerBankPopupTitle = app.staticTexts["Electric Distribution Assembly: Transformer Bank"]
         
         openPopup(4567, on: .electricDistributionDevice)
-        XCTExpectFailure("KNOWN ISSUE -- nautilus/issues/2625") {
-            assertPopupOpened(popupTitle: fusePopupTitle)
-        }
+        assertPopupOpened(popupTitle: fusePopupTitle)
         
-        // Opens the "Connectivity" filter result.
+        // Opens the "Connected" filter result.
         XCTAssertTrue(
-            connectivityFilterResult.exists,
-            "The filter result \"Connectivity\" doesn't exist."
+            connectedFilterResult.exists,
+            "The filter result \"Connected\" doesn't exist."
         )
-        connectivityFilterResult.tap()
+        connectedFilterResult.tap()
         
         // Expectations: The transformer result has a "High" description.
         XCTAssertTrue(
@@ -493,10 +477,10 @@ final class PopupViewTests: XCTestCase {
         assertPopupOpened(popupTitle: transformerPopupTitle)
         
         XCTAssertTrue(
-            connectivityFilterResult.exists,
-            "The filter result \"Connectivity\" doesn't exist."
+            connectedFilterResult.exists,
+            "The filter result \"Connected\" doesn't exist."
         )
-        connectivityFilterResult.tap()
+        connectedFilterResult.tap()
         
         // Expectation: The fuse results have a "Single Terminal" description.
         XCTAssertTrue(
@@ -559,9 +543,7 @@ final class PopupViewTests: XCTestCase {
         let searchField = app.searchFields["Title"]
         
         openPopup(316, on: .electricDistributionAssembly)
-        XCTExpectFailure("KNOWN ISSUE -- nautilus/issues/2625") {
-            assertPopupOpened(popupTitle: popupTitle)
-        }
+        assertPopupOpened(popupTitle: popupTitle)
         
         // Opens the filter result.
         XCTAssertTrue(
@@ -607,9 +589,7 @@ final class PopupViewTests: XCTestCase {
         let searchField = app.searchFields["Title"]
         
         openPopup(475, on: .electricDistributionAssembly)
-        XCTExpectFailure("KNOWN ISSUE -- nautilus/issues/2625") {
-            assertPopupOpened(popupTitle: popupTitle)
-        }
+        assertPopupOpened(popupTitle: popupTitle)
         
         // Opens the filter result.
         XCTAssertTrue(

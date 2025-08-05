@@ -22,9 +22,6 @@ extension EnvironmentValues /* FeatureFormView */ {
     /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Entry var finishEditingError: Binding<(any Error)?> = .constant(nil)
     
-    /// The environment value to access the closure to call when the presented feature form changes.
-    @Entry var formChangedAction: ((FeatureForm) -> Void)?
-    
     /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
     @Entry var formDeprecatedInitializerWasUsed = false
     

@@ -18,7 +18,7 @@ import SwiftUI
 /// A view for text input.
 struct TextInput: View {
     /// The view model for the form.
-    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
+    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -138,11 +138,11 @@ private extension TextInput {
                             FullScreenTextInput(
                                 text: valueAsString,
                                 element: element,
-                                internalFeatureFormViewModel: internalFeatureFormViewModel
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
                             )
                             .padding()
 #if targetEnvironment(macCatalyst)
-                            .environment(internalFeatureFormViewModel)
+                            .environment(embeddedFeatureFormViewModel)
 #endif
                         }
                         .frame(minHeight: 100, alignment: .top)
@@ -157,11 +157,11 @@ private extension TextInput {
                         .hoverEffectDisabled()
 #endif
                         .onChange(of: isFocused) {
-                            internalFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                            embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
                         }
-                        .onChange(of: internalFeatureFormViewModel.focusedElement) {
+                        .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
                             // Another form input took focus.
-                            if internalFeatureFormViewModel.focusedElement != element {
+                            if embeddedFeatureFormViewModel.focusedElement != element {
                                 isFocused  = false
                             }
                         }
@@ -187,8 +187,8 @@ private extension TextInput {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
                         // instantaneous focus to enable validation.
-                        internalFeatureFormViewModel.focusedElement = element
-                        internalFeatureFormViewModel.focusedElement = nil
+                        embeddedFeatureFormViewModel.focusedElement = element
+                        embeddedFeatureFormViewModel.focusedElement = nil
                     }
                     clearValueAndEvaluateExpressions()
                 }
@@ -197,7 +197,7 @@ private extension TextInput {
 #if !os(visionOS)
             if isBarcodeScanner {
                 Button {
-                    internalFeatureFormViewModel.focusedElement = element
+                    embeddedFeatureFormViewModel.focusedElement = element
                     scannerIsPresented = true
                 } label: {
                     Image(systemName: "barcode.viewfinder")
@@ -245,6 +245,7 @@ private extension TextInput {
         } label: {
             Image(systemName: "plus.forwardslash.minus")
         }
+        .inspectorTint(.blue)
     }
     
     /// The text field to edit the element's value.
@@ -330,7 +331,7 @@ private extension TextInput {
         let element: FieldFormElement
         
         /// The view model for the form.
-        let internalFeatureFormViewModel: InternalFeatureFormViewModel
+        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
         var body: some View {
             HStack {
@@ -353,7 +354,7 @@ private extension TextInput {
                 isFocused = true
             }
             .onChange(of: isFocused) {
-                internalFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
             }
             Spacer()
             FormElementFooter(element: element)

@@ -72,9 +72,7 @@ struct ProfileView: View {
     func signOut() {
         isSigningOut = true
         Task {
-            await ArcGISEnvironment.authenticationManager.revokeOAuthTokens()
-            await ArcGISEnvironment.authenticationManager.invalidateIAPCredentials()
-            await ArcGISEnvironment.authenticationManager.clearCredentialStores()
+            await ArcGISEnvironment.authenticationManager.signOut()
             isSigningOut = false
             signOutAction()
         }
