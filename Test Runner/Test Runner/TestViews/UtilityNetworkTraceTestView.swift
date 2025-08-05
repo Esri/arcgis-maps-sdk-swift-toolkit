@@ -119,21 +119,6 @@ private extension UtilityNetworkTraceTestView {
     }
 }
 
-private extension UserDefaults {
-    /// The value `-layerName`  launch argument.
-    var layerName: String? {
-        string(forKey: "layerName")
-    }
-    
-    /// The value `-objectID`  launch argument.
-    var objectID: Int? {
-        guard let objectIDString = string(forKey: "objectID") else {
-            return nil
-        }
-        return Int(objectIDString)
-    }
-}
-
 private extension ArcGISCredential {
     static var publicSample: ArcGISCredential {
         get async throws {
@@ -142,21 +127,6 @@ private extension ArcGISCredential {
                 username: "viewer01",
                 password: "I68VGU^nMurF"
             )
-        }
-    }
-}
-
-private extension Binding where Value == Bool {
-    /// Creates a Boolean binding that wraps a binding to an optional.
-    ///
-    /// `wrappedValue` is `true` when the given optional value is non-`nil`. The
-    /// optional value is set to `nil` when the parent binding is set.
-    /// - Parameter optionalValue: A binding to the optional value to wrap.
-    init<T: Sendable>(optionalValue: Binding<T?>) {
-        self.init {
-            optionalValue.wrappedValue != nil
-        } set: { _ in
-            optionalValue.wrappedValue = nil
         }
     }
 }

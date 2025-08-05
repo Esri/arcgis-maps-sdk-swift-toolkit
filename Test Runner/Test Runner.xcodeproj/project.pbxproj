@@ -33,6 +33,8 @@
 		8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */; };
 		8A9845772C3F444B001CCE22 /* AttachmentCameraControllerTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */; platformFilters = (ios, maccatalyst, ); };
 		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; };
+		8AC5AA652E428CB000F0F0E0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5AA642E428CAC00F0F0E0 /* UserDefaults.swift */; };
+		8AC5AA692E428D3E00F0F0E0 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5AA682E428D3C00F0F0E0 /* Binding.swift */; };
 		8AEE70482BEEC0B400C9949C /* RepresentedUITextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */; };
 		8AEE704A2BEEC18000C9949C /* RepresentedUITextViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */; };
 		97E45D7F2E15A1DE0038EA8B /* TestRunner.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 97E45D7E2E15A1DE0038EA8B /* TestRunner.xcconfig */; };
@@ -99,6 +101,8 @@
 		8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCameraControllerTests.swift; sourceTree = "<group>"; };
 		8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCameraControllerTestView.swift; sourceTree = "<group>"; };
 		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; };
+		8AC5AA642E428CAC00F0F0E0 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		8AC5AA682E428D3C00F0F0E0 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentedUITextViewTests.swift; sourceTree = "<group>"; };
 		8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentedUITextViewTestView.swift; sourceTree = "<group>"; };
 		97E45D7E2E15A1DE0038EA8B /* TestRunner.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestRunner.xcconfig; sourceTree = "<group>"; };
@@ -151,6 +155,7 @@
 		7552A7522A573CBB0023DA5A /* Test Runner */ = {
 			isa = PBXGroup;
 			children = (
+				8AC5AA622E428C3F00F0F0E0 /* Extensions */,
 				75CCCD612A5F691E0098B059 /* Test Runner.entitlements */,
 				7552A7532A573CBB0023DA5A /* TestRunnerApp.swift */,
 				7552A7552A573CBB0023DA5A /* Tests.swift */,
@@ -235,6 +240,31 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8AC5AA622E428C3F00F0F0E0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8AC5AA672E428D3500F0F0E0 /* SwiftUI */,
+				8AC5AA632E428CA300F0F0E0 /* Foundation */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		8AC5AA632E428CA300F0F0E0 /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				8AC5AA642E428CAC00F0F0E0 /* UserDefaults.swift */,
+			);
+			path = Foundation;
+			sourceTree = "<group>";
+		};
+		8AC5AA672E428D3500F0F0E0 /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				8AC5AA682E428D3C00F0F0E0 /* Binding.swift */,
+			);
+			path = SwiftUI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -382,10 +412,12 @@
 				7552A7622A573D810023DA5A /* BookmarksTestCase1View.swift in Sources */,
 				7584B7592B1A817A00772AB7 /* BookmarksTestCase3View.swift in Sources */,
 				8A3982E22E39394700A8F1AF /* UtilityNetworkTraceTestView.swift in Sources */,
+				8AC5AA692E428D3E00F0F0E0 /* Binding.swift in Sources */,
 				8AEE704A2BEEC18000C9949C /* RepresentedUITextViewTestView.swift in Sources */,
 				7584B7572B1A7AF100772AB7 /* BookmarksTestCase2View.swift in Sources */,
 				8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */,
 				8A1138132BC7407D007E0BFB /* BookmarksTestCase6View.swift in Sources */,
+				8AC5AA652E428CB000F0F0E0 /* UserDefaults.swift in Sources */,
 				7584B75B2B1A824300772AB7 /* BookmarksTestCase4View.swift in Sources */,
 				D7FDFCBE2DF2090300ED91C1 /* PopupTestView.swift in Sources */,
 				75B236692A5CB49B00AEFACE /* BasemapGalleryTestView.swift in Sources */,
