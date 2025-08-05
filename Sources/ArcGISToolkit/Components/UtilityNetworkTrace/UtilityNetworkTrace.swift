@@ -709,6 +709,7 @@ public struct UtilityNetworkTrace: View {
         VStack {
             if !viewModel.completedTraces.isEmpty &&
                 !isFocused(traceCreationActivity: .addingStartingPoints) &&
+                currentActivity != .tracing &&
                 activeDetent != .summary {
                 activityPicker
             }
