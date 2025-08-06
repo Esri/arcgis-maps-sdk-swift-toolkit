@@ -22,11 +22,6 @@ struct Examples: View {
     @State private var columnVisibility: NavigationSplitViewVisibility = .all
     /// The example selected by the user.
     @State private var selectedExample: Example?
-    /// An identifier for an example selection.
-    ///
-    /// A unique ID should be created each time the selected example changes to ensure that
-    /// `task(id:priority:_:)` modifiers in example views will trigger reliably.
-    @State private var selectionID: UUID?
     
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
@@ -46,23 +41,23 @@ struct Examples: View {
             }
             .navigationTitle("Toolkit Examples")
         } detail: {
-            if let selectedExample {
-                selectedExample.view
-                    .navigationTitle(selectedExample.name)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .id(selectionID)
-            } else {
-                Text("Select an example")
+            NavigationStack {
+                if let selectedExample {
+                    selectedExample.view
+                        .navigationTitle(selectedExample.name)
+                        .navigationBarTitleDisplayMode(.inline)
+                } else {
+                    Text("Select an example")
+                }
             }
         }
-        .onChange(of: selectedExample) {
-            selectionID = selectedExample == nil ? nil : UUID()
+        // visionOS doesn't provide the column visibility toggle like
+        // iPadOS and Mac Catalyst so conditionally hide the column.
 #if !os(visionOS)
-            // visionOS doesn't provide the column visibility toggle like
-            // iPadOS and Mac Catalyst so conditionally hide the column.
+        .onChange(of: selectedExample) {
             columnVisibility = .detailOnly
-#endif
         }
+#endif
     }
     
     static func makeCategories() -> [ListItem] {
