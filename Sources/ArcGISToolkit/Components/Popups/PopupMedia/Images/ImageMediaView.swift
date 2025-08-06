@@ -53,6 +53,7 @@ struct ImageMediaView: View {
                 .clipShape(.rect(cornerRadius: cornerRadius))
                 .hoverEffect()
             }
+            .buttonStyle(.plain)
         }
     }
 }
@@ -64,32 +65,22 @@ private struct ImageMediaDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            if let sourceURL = popupMedia.value?.sourceURL {
+            Button {
+                if let linkURL = popupMedia.value?.linkURL {
+                    UIApplication.shared.open(linkURL)
+                }
+            } label: {
                 AsyncImageView(
-                    url: sourceURL,
+                    url: popupMedia.value!.sourceURL!,
                     refreshInterval: popupMedia.imageRefreshInterval
                 )
-                .onTapGesture {
-                    if let linkURL = popupMedia.value?.linkURL {
-                        UIApplication.shared.open(linkURL)
-                    }
-                }
                 .hoverEffect()
-                if popupMedia.value?.linkURL != nil {
-                    HStack {
-                        Text(
-                            "Tap on the image for more information.",
-                            bundle: .toolkitModule,
-                            comment: """
-                                A label indicating that tapping an image will reveal
-                                additional information.
-                                """
-                        )
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        Spacer()
-                    }
-                }
+            }
+            .buttonStyle(.plain)
+            if popupMedia.value?.linkURL != nil {
+                Text.tapInstruction
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
             }
             Spacer()
         }
@@ -97,5 +88,16 @@ private struct ImageMediaDetailView: View {
         .popupViewToolbar()
         .navigationTitle(popupMedia.title, subtitle: popupMedia.caption)
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+private extension Text {
+    /// Localized text for the phrase "Tap on the image for more information.".
+    static var tapInstruction: Self {
+        .init(
+            "Tap on the image for more information.",
+            bundle: .toolkitModule,
+            comment: "A label indicating that tapping an image will reveal additional information."
+        )
     }
 }

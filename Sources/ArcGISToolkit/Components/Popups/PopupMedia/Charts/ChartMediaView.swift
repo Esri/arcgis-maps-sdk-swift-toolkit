@@ -41,11 +41,10 @@ struct ChartMediaView: View {
     
     var body: some View {
         NavigationLink {
-            ChartView(
-                popupMedia: popupMedia,
-                data: ChartData.getChartData(from: popupMedia),
-                isShowingDetailView: true
-            )
+            ChartView(popupMedia: popupMedia, data: chartData, isShowingDetailView: true)
+                .popupViewToolbar()
+                .navigationTitle(popupMedia.title, subtitle: popupMedia.caption)
+                .navigationBarTitleDisplayMode(.inline)
         } label: {
             ZStack {
                 ChartView(popupMedia: popupMedia, data: chartData)
@@ -70,7 +69,7 @@ struct ChartMediaView: View {
 }
 
 /// A view describing a chart.
-struct ChartView: View {
+private struct ChartView: View {
     /// The popup media to display.
     let popupMedia: PopupMedia
     
@@ -92,7 +91,7 @@ struct ChartView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack {
             switch popupMedia.kind {
             case .barChart, .columnChart:
                 BarChart(
@@ -116,8 +115,5 @@ struct ChartView: View {
             Spacer()
         }
         .padding()
-        .popupViewToolbar()
-        .navigationTitle(popupMedia.title, subtitle: popupMedia.caption)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
