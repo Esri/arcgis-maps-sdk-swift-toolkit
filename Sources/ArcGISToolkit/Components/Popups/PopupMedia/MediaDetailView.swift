@@ -26,34 +26,6 @@ struct MediaDetailView : View {
         NavigationStack {
             VStack {
                 switch popupMedia.kind {
-                case .image:
-                    if let sourceURL = popupMedia.value?.sourceURL {
-                        AsyncImageView(
-                            url: sourceURL,
-                            refreshInterval: popupMedia.imageRefreshInterval
-                        )
-                        .onTapGesture {
-                            if let linkURL = popupMedia.value?.linkURL {
-                                UIApplication.shared.open(linkURL)
-                            }
-                        }
-                        .hoverEffect()
-                        if popupMedia.value?.linkURL != nil {
-                            HStack {
-                                Text(
-                                    "Tap on the image for more information.",
-                                    bundle: .toolkitModule,
-                                    comment: """
-                                         A label indicating that tapping an image will reveal
-                                         additional information.
-                                         """
-                                )
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                                Spacer()
-                            }
-                        }
-                    }
                 case .barChart, .columnChart, .pieChart, .lineChart:
                     ChartView(
                         popupMedia: popupMedia,

@@ -25,42 +25,77 @@ struct ImageMediaView: View {
     /// The corner radius for the view.
     private let cornerRadius: CGFloat = 8
     
-    /// A Boolean value specifying whether the media should be drawn in a larger format.
-    @State private var isShowingDetailView = false
-    
     var body: some View {
         if let sourceURL = popupMedia.value?.sourceURL {
-            ZStack {
-                AsyncImageView(
-                    url: sourceURL,
-                    contentMode: .fill,
-                    refreshInterval: popupMedia.imageRefreshInterval,
-                    mediaSize: mediaSize
-                )
-                .frame(width: mediaSize.width, height: mediaSize.height)
-                VStack {
-                    Spacer()
-                    PopupMediaFooter(
-                        popupMedia: popupMedia,
+            NavigationLink {
+                ImageMediaDetailView(popupMedia: popupMedia)
+            } label: {
+                ZStack {
+                    AsyncImageView(
+                        url: sourceURL,
+                        contentMode: .fill,
+                        refreshInterval: popupMedia.imageRefreshInterval,
                         mediaSize: mediaSize
                     )
-                }
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(.gray, lineWidth: 1)
                     .frame(width: mediaSize.width, height: mediaSize.height)
-            }
-            .frame(width: mediaSize.width, height: mediaSize.height)
-            .clipShape(.rect(cornerRadius: cornerRadius))
-            .onTapGesture {
-                isShowingDetailView = true
-            }
-            .hoverEffect()
-            .sheet(isPresented: $isShowingDetailView) {
-                MediaDetailView(
-                    popupMedia: popupMedia,
-                    isShowingDetailView: $isShowingDetailView
-                )
+                    VStack {
+                        Spacer()
+                        PopupMediaFooter(
+                            popupMedia: popupMedia,
+                            mediaSize: mediaSize
+                        )
+                    }
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .stroke(.gray, lineWidth: 1)
+                        .frame(width: mediaSize.width, height: mediaSize.height)
+                }
+                .frame(width: mediaSize.width, height: mediaSize.height)
+                .clipShape(.rect(cornerRadius: cornerRadius))
+                .hoverEffect()
             }
         }
+    }
+}
+
+/// A view displaying an image media in a large format.
+private struct ImageMediaDetailView: View {
+    /// The popup media to display.
+    let popupMedia: PopupMedia
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            if let sourceURL = popupMedia.value?.sourceURL {
+                AsyncImageView(
+                    url: sourceURL,
+                    refreshInterval: popupMedia.imageRefreshInterval
+                )
+                .onTapGesture {
+                    if let linkURL = popupMedia.value?.linkURL {
+                        UIApplication.shared.open(linkURL)
+                    }
+                }
+                .hoverEffect()
+                if popupMedia.value?.linkURL != nil {
+                    HStack {
+                        Text(
+                            "Tap on the image for more information.",
+                            bundle: .toolkitModule,
+                            comment: """
+                                A label indicating that tapping an image will reveal
+                                additional information.
+                                """
+                        )
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        Spacer()
+                    }
+                }
+            }
+            Spacer()
+        }
+        .padding()
+        .popupViewToolbar()
+        .navigationTitle(popupMedia.title, subtitle: popupMedia.caption)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
