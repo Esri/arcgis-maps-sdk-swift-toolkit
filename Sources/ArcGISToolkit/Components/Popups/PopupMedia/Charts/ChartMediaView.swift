@@ -39,35 +39,33 @@ struct ChartMediaView: View {
     /// The corner radius for the view.
     private let cornerRadius: CGFloat = 8
     
-    /// A Boolean value specifying whether the media should be drawn in a larger format.
-    @State private var isShowingDetailView = false
-    
     var body: some View {
-        ZStack {
-            ChartView(popupMedia: popupMedia, data: chartData)
-            VStack {
-                Spacer()
-                PopupMediaFooter(
-                    popupMedia: popupMedia,
-                    mediaSize: mediaSize
-                )
-            }
-            RoundedRectangle(cornerRadius: cornerRadius)
-                .stroke(.gray, lineWidth: 1)
-                .frame(width: mediaSize.width, height: mediaSize.height)
-        }
-        .frame(width: mediaSize.width, height: mediaSize.height)
-        .clipShape(.rect(cornerRadius: cornerRadius))
-        .onTapGesture {
-            isShowingDetailView = true
-        }
-        .hoverEffect()
-        .sheet(isPresented: $isShowingDetailView) {
-            MediaDetailView(
+        NavigationLink {
+            ChartView(
                 popupMedia: popupMedia,
-                isShowingDetailView: $isShowingDetailView
+                data: ChartData.getChartData(from: popupMedia),
+                isShowingDetailView: true
             )
+        } label: {
+            ZStack {
+                ChartView(popupMedia: popupMedia, data: chartData)
+                VStack {
+                    Spacer()
+                    PopupMediaFooter(
+                        popupMedia: popupMedia,
+                        mediaSize: mediaSize
+                    )
+                }
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(.gray, lineWidth: 1)
+                    .frame(width: mediaSize.width, height: mediaSize.height)
+            }
+            .frame(width: mediaSize.width, height: mediaSize.height)
+            .clipShape(.rect(cornerRadius: cornerRadius))
+            .contentShape(.rect(cornerRadius: cornerRadius))
+            .hoverEffect()
         }
+        .buttonStyle(.plain)
     }
 }
 
@@ -94,25 +92,32 @@ struct ChartView: View {
     }
     
     var body: some View {
-        switch popupMedia.kind {
-        case .barChart, .columnChart:
-            BarChart(
-                chartData: data,
-                isColumnChart: (popupMedia.kind == .columnChart),
-                isShowingDetailView: isShowingDetailView
-            )
-        case .pieChart:
-            PieChart(
-                chartData: data,
-                isShowingDetailView: isShowingDetailView
-            )
-        case .lineChart:
-            LineChart(
-                chartData: data,
-                isShowingDetailView: isShowingDetailView
-            )
-        default:
-            EmptyView()
+        VStack(alignment: .leading) {
+            switch popupMedia.kind {
+            case .barChart, .columnChart:
+                BarChart(
+                    chartData: data,
+                    isColumnChart: (popupMedia.kind == .columnChart),
+                    isShowingDetailView: isShowingDetailView
+                )
+            case .pieChart:
+                PieChart(
+                    chartData: data,
+                    isShowingDetailView: isShowingDetailView
+                )
+            case .lineChart:
+                LineChart(
+                    chartData: data,
+                    isShowingDetailView: isShowingDetailView
+                )
+            default:
+                EmptyView()
+            }
+            Spacer()
         }
+        .padding()
+        .popupViewToolbar()
+        .navigationTitle(popupMedia.title, subtitle: popupMedia.caption)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
