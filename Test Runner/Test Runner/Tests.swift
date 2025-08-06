@@ -27,6 +27,7 @@ struct Tests: View {
                 NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
                 NavigationLink("Popup Tests", destination: PopupTestView())
                 NavigationLink("RepresentedUITextView Tests", destination: RepresentedUITextViewTestView())
+                NavigationLink("Utility Network Trace Tests", destination: UtilityNetworkTraceTestView())
             }
         }
     }
