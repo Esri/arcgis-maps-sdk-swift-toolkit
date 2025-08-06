@@ -41,12 +41,14 @@ struct Examples: View {
             }
             .navigationTitle("Toolkit Examples")
         } detail: {
-            if let selectedExample {
-                selectedExample.view
-                    .navigationTitle(selectedExample.name)
-                    .navigationBarTitleDisplayMode(.inline)
-            } else {
-                Text("Select an example")
+            NavigationStack {
+                if let selectedExample {
+                    selectedExample.view
+                        .navigationTitle(selectedExample.name)
+                        .navigationBarTitleDisplayMode(.inline)
+                } else {
+                    Text("Select an example")
+                }
             }
         }
         // visionOS doesn't provide the column visibility toggle like
