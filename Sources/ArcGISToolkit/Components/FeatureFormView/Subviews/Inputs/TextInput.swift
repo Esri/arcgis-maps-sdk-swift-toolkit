@@ -230,7 +230,7 @@ private extension TextInput {
         var body: some View {
             HStack {
                 FormElementHeader(element: element)
-                Button("Done") {
+                Button.done {
                     dismiss()
                 }
 #if !os(visionOS)
