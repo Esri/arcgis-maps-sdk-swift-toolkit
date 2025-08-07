@@ -70,58 +70,51 @@ struct TextInput: View {
             }
 #endif
             .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { newValue, _ in
+                embeddedFeatureFormViewModel.evaluateExpressions()
                 value = newValue
             }
     }
 }
 
 private extension TextInput {
-    func clearValueAndEvaluateExpressions() {
+    func clearValue() {
         guard element.value != nil else { return }
         element.updateValue(nil)
-        embeddedFeatureFormViewModel.evaluateExpressions()
     }
     
-    func updateValueAndEvaluateExpressions<T>(_ newValue: T?) where T: Numeric {
+    func updateValue<T>(_ newValue: T?) where T: Numeric {
         guard let newValue else {
-            clearValueAndEvaluateExpressions()
+            clearValue()
             return
         }
         switch (element.fieldType, newValue) {
         case (.float32, let newValue as Double):
-            guard let newValue = Float32(exactly: newValue),
-                  newValue != element.value as? Float32 else { return }
+            guard let newValue = Float32(exactly: newValue), newValue != element.value as? Float32 else { return }
             element.updateValue(newValue)
         case (.float64, let newValue as Double):
-            guard let newValue = Float64(exactly: newValue),
-                  newValue != element.value as? Float64 else { return }
+            guard let newValue = Float64(exactly: newValue), newValue != element.value as? Float64 else { return }
             element.updateValue(newValue)
         case (.int16, let newValue as Int):
-            guard let newValue = Int16(exactly: newValue),
-                  newValue != element.value as? Int16 else { return }
+            guard let newValue = Int16(exactly: newValue), newValue != element.value as? Int16 else { return }
             element.updateValue(newValue)
         case (.int32, let newValue as Int):
-            guard let newValue = Int32(exactly: newValue),
-                  newValue != element.value as? Int32 else { return }
+            guard let newValue = Int32(exactly: newValue), newValue != element.value as? Int32 else { return }
             element.updateValue(newValue)
         case (.int64, let newValue as Int):
-            guard let newValue = Int64(exactly: newValue),
-                  newValue != element.value as? Int64 else { return }
+            guard let newValue = Int64(exactly: newValue), newValue != element.value as? Int64 else { return }
             element.updateValue(newValue)
         default:
             return
         }
-        embeddedFeatureFormViewModel.evaluateExpressions()
     }
     
-    func updateValueAndEvaluateExpressions(_ newValue: String?) {
+    func updateValue(_ newValue: String?) {
         guard let newValue else {
-            clearValueAndEvaluateExpressions()
+            clearValue()
             return
         }
         guard newValue != element.value as? String else { return }
         element.updateValue(newValue)
-        embeddedFeatureFormViewModel.evaluateExpressions()
     }
     
     /// The body of the text input when the element is editable.
@@ -190,7 +183,7 @@ private extension TextInput {
                         embeddedFeatureFormViewModel.focusedElement = element
                         embeddedFeatureFormViewModel.focusedElement = nil
                     }
-                    clearValueAndEvaluateExpressions()
+                    clearValue()
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
             }
@@ -236,9 +229,9 @@ private extension TextInput {
         Button {
             switch value {
             case let value as Double:
-                updateValueAndEvaluateExpressions(-value)
+                updateValue(-value)
             case let value as Int:
-                updateValueAndEvaluateExpressions(-value)
+                updateValue(-value)
             default:
                 break
             }
@@ -255,7 +248,7 @@ private extension TextInput {
         case .float32, .float64:
             TextField(
                 element.label,
-                value: Binding { value as? Double } set: { updateValueAndEvaluateExpressions($0) },
+                value: Binding { value as? Double } set: { updateValue($0) },
                 format: .number.grouping(.never),
                 prompt: textFieldPrompt
             )
@@ -263,7 +256,7 @@ private extension TextInput {
         case .int16, .int32, .int64:
             TextField(
                 element.label,
-                value: Binding { value as? Int } set: { updateValueAndEvaluateExpressions($0) },
+                value: Binding { value as? Int } set: { updateValue($0) },
                 format: .number.grouping(.never),
                 prompt: textFieldPrompt
             )
@@ -271,7 +264,7 @@ private extension TextInput {
         default:
             TextField(
                 element.label,
-                text: Binding { value as? String ?? element.formattedValue } set: { updateValueAndEvaluateExpressions($0) },
+                text: Binding { value as? String ?? element.formattedValue } set: { updateValue($0) },
                 prompt: textFieldPrompt,
                 axis: .horizontal
             )
@@ -293,11 +286,11 @@ private extension TextInput {
         } set: {
             switch element.fieldType {
             case .float32, .float64:
-                updateValueAndEvaluateExpressions(Double($0))
+                updateValue(Double($0))
             case .int16, .int32, .int64:
-                updateValueAndEvaluateExpressions(Int($0))
+                updateValue(Int($0))
             default:
-                updateValueAndEvaluateExpressions($0)
+                updateValue($0)
             }
         }
     }
@@ -307,7 +300,7 @@ private extension TextInput {
         Binding {
             value as? String ?? element.formattedValue
         } set: { newValue in
-            updateValueAndEvaluateExpressions(newValue)
+            updateValue(newValue)
         }
     }
 }
