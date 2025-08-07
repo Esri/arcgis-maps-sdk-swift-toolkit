@@ -37,7 +37,6 @@ struct UtilityNetworkTraceTestView: View {
                     self.mapPoint = mapPoint
                 }
                 .floatingPanel(
-                    backgroundColor: Color(uiColor: .systemGroupedBackground),
                     horizontalAlignment: .trailing,
                     isPresented: .constant(true)
                 ) {
