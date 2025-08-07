@@ -75,7 +75,11 @@ final class FeatureFormViewTests: XCTestCase {
             "The attachment was not present after loading completed."
         )
         
+#if targetEnvironment(macCatalyst)
         attachmentLabel.rightClick()
+#else
+        attachmentLabel.press(forDuration: 1)
+#endif
         
         XCTAssertTrue(
             rename.waitForExistence(timeout: 1),

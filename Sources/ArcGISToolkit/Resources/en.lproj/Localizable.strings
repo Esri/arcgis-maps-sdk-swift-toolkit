@@ -656,6 +656,9 @@ to be imported as an attachment. */
 /* A label in reference to a utility network trace configuration. */
 "Trace Configuration" = "Trace Configuration";
 
+/* A label indicating that a utility network trace is running. */
+"Tracing…" = "Tracing…";
+
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Try Again";
 
