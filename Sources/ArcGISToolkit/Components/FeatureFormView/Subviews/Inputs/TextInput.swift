@@ -49,10 +49,9 @@ struct TextInput: View {
     ///   - element: The input's parent element.
     init(element: FieldFormElement) {
         precondition(
-            element.input is TextAreaFormInput
-            || element.input is TextBoxFormInput
+            element.input is TextBoxFormInput
             || element.input is BarcodeScannerFormInput,
-            "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self), \(TextBoxFormInput.self) or \(BarcodeScannerFormInput.self)."
+            "\(Self.self).\(#function) element's input must be \(TextBoxFormInput.self) or \(BarcodeScannerFormInput.self)."
         )
         self.element = element
     }

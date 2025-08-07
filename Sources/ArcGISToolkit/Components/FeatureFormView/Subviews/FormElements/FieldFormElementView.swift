@@ -26,7 +26,7 @@ struct FieldFormElementView: View {
         Group {
             if isEditable {
                 switch element.input {
-                case is BarcodeScannerFormInput, is TextAreaFormInput, is TextBoxFormInput:
+                case is BarcodeScannerFormInput, is TextBoxFormInput:
                     TextInput(element: element)
                 case is ComboBoxFormInput:
                     ComboBoxInput(element: element)
@@ -36,6 +36,8 @@ struct FieldFormElementView: View {
                     RadioButtonsInput(element: element)
                 case is SwitchFormInput:
                     SwitchInput(element: element)
+                case is TextAreaFormInput:
+                    TextAreaFormInputView(element: element)
                 default:
                     EmptyView()
                 }
