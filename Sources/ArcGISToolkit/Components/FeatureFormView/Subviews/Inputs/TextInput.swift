@@ -128,14 +128,10 @@ private extension TextInput {
                         .lineLimit(5)
                         .truncationMode(.tail)
                         .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(
-                                text: valueAsString,
-                                element: element,
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
-                            )
-                            .padding()
+                            FullScreenTextInput(text: valueAsString, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel)
+                                .padding()
 #if targetEnvironment(macCatalyst)
-                            .environment(embeddedFeatureFormViewModel)
+                                .environment(embeddedFeatureFormViewModel)
 #endif
                         }
                         .frame(minHeight: 100, alignment: .top)
