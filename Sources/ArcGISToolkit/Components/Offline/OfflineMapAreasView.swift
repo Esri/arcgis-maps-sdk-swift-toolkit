@@ -305,10 +305,11 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var noInternetNoAreasView: some View {
         ContentUnavailableView {
-            Label(
-                LocalizedStringResource.noInternetConnectionErrorMessage.key,
-                systemImage: "wifi.exclamationmark"
-            )
+            Label {
+                Text(.noInternetConnectionErrorMessage)
+            } icon: {
+                Image(systemName: "wifi.exclamationmark")
+            }
         } description: {
             Text(noMapAreasErrorMessage)
         } actions: {
@@ -318,7 +319,11 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
         ContentUnavailableView {
-            Label(noMapAreas.key, systemImage: "arrow.down.circle")
+            Label {
+                Text(noMapAreas)
+            } icon: {
+                Image(systemName: "arrow.down.circle")
+            }
         } description: {
             Text(noOfflineMapAreasMessage)
         } actions: {
@@ -328,7 +333,11 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var preplannedErrorView: some View {
         ContentUnavailableView {
-            Label(errorFetchingAreas.key, systemImage: "exclamationmark.triangle")
+            Label {
+                Text(errorFetchingAreas)
+            } icon: {
+                Image(systemName: "exclamationmark.triangle")
+            }
         } description: {
             Text(errorFetchingAreasMessage)
         } actions: {
@@ -338,7 +347,11 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
         ContentUnavailableView {
-            Label(noMapAreas.key, systemImage: "arrow.down.circle")
+            Label {
+                Text(noMapAreas)
+            } icon: {
+                Image(systemName: "arrow.down.circle")
+            }
         } description: {
             Text(emptyOnDemandMessage)
         } actions: {
@@ -359,11 +372,15 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var offlineDisabledView: some View {
-        ContentUnavailableView(
-            offlineDisabled.key,
-            systemImage: "exclamationmark.triangle",
-            description: Text(offlineDisabledMessage)
-        )
+        ContentUnavailableView {
+            Label {
+                Text(offlineDisabled)
+            } icon: {
+                Image(systemName: "exclamationmark.triangle")
+            }
+        } description: {
+            Text(offlineDisabledMessage)
+        }
     }
 }
 
