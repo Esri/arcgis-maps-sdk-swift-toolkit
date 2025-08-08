@@ -58,8 +58,7 @@ struct DateTimeInput: View {
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
             .onValueChange(of: element) { newValue, _ in
-                let newDate = newValue as? Date
-                guard newDate != date else { return }
+                guard let newDate = newValue as? Date, newDate != date else { return }
                 date = newDate
             }
             .onIsRequiredChange(of: element) { newIsRequired in
@@ -130,14 +129,12 @@ struct DateTimeInput: View {
     /// The system formatted version of the element's current date.
     var formattedDate: Text {
         if let date {
-            let format: Date.FormatStyle = if input.includesTime {
-                .dateTime
-            } else {
-                .dateTime.day().month().year()
-            }
-            return Text(date, format: format)
+            Text(
+                date,
+                format: input.includesTime ? .dateTime : .dateTime.day().month().year()
+            )
         } else {
-            return Text(String.noValue)
+            Text(String.noValue)
         }
     }
     
