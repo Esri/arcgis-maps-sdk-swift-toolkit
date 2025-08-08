@@ -52,7 +52,7 @@ struct ReadOnlyInput: View {
     /// The text to display for the element's current value.
     ///
     /// For non-date fields, we always use the element's formatted value. This ensures that if the element
-    /// uses a domain we show the user-friendly coded value name.
+    /// uses a domain, we show the user-friendly coded value name.
     var value: Text {
         switch element.value {
         case nil:
