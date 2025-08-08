@@ -25,18 +25,18 @@ struct ReadOnlyInput: View {
     
     var body: some View {
         if element.isMultiline {
-            modifiedText
+            modifiedValue
                 .frame(maxWidth: .infinity, alignment: .leading)
         } else {
             ScrollView(.horizontal) {
-                modifiedText
+                modifiedValue
             }
         }
     }
     
     /// The text to display for the element's current value with read-only modifiers.
-    var modifiedText: some View {
-        text
+    var modifiedValue: some View {
+        value
             .accessibilityIdentifier("\(element.label) Read Only Input")
             .fixedSize(horizontal: false, vertical: true)
             .id(id)
@@ -50,16 +50,22 @@ struct ReadOnlyInput: View {
     }
     
     /// The text to display for the element's current value.
-    var text: Text {
+    var value: Text {
         switch element.value {
         case nil:
             Text(verbatim: "--")
-        case let date as Date:
+        case let value as Date:
             if let input = element.input as? DateTimePickerFormInput, input.includesTime {
-                Text(date, format: .dateTime)
+                Text(value, format: .dateTime)
             } else {
-                Text(date, format: .dateTime.day().month().year())
+                Text(value, format: .dateTime.day().month().year())
             }
+        case let value as Double:
+            Text(value, format: .number)
+        case let value as Int:
+            Text(value, format: .number)
+        case let value as String:
+            Text(value)
         default:
             Text(element.formattedValue)
         }
