@@ -30,7 +30,16 @@ struct TextInput: View {
     @State private var scannerIsPresented = false
     
     /// The element's current value.
-    @State private var value: Any?
+    ///
+    /// - Note: A string is used, irrespective of the element's field type, in order to take advantage of the
+    /// feature form's validation system. If the user enters an alphanumeric value into a numeric field, it
+    /// triggers a validation error that is shown in the UI. If a type respective of the field type is used
+    /// instead, when the user enters an alphanumeric string into a numeric field, the bound value is not
+    /// updated and the opportunity to present a validation error to the user is lost. Additionally, if the user
+    /// gives focus to another field, the bad value they've entered is lost, creating a potentially frustrating
+    /// user experience. The string approach affords the user the opportunity to return the input and resolve
+    /// the validation error.
+    @State private var text = ""
     
     /// A Boolean value indicating whether the device camera is accessible for scanning.
     private let cameraIsDisabled: Bool = {
@@ -59,6 +68,11 @@ struct TextInput: View {
     
     var body: some View {
         textWriter
+            .onChange(of: text) {
+                guard text != element.formattedValue else { return }
+                element.convertAndUpdateValue(text)
+                embeddedFeatureFormViewModel.evaluateExpressions()
+            }
             .onTapGesture {
                 if element.isMultiline {
                     fullScreenTextInputIsPresented = true
@@ -66,69 +80,28 @@ struct TextInput: View {
             }
 #if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
-                CodeScanner(code: valueAsDynamicType, isPresented: $scannerIsPresented)
+                CodeScanner(code: $text, isPresented: $scannerIsPresented)
             }
 #endif
-            .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { newValue, _ in
-                embeddedFeatureFormViewModel.evaluateExpressions()
-                value = newValue
+            .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+                text = newFormattedValue
             }
     }
 }
 
 private extension TextInput {
-    func clearValue() {
-        guard element.value != nil else { return }
-        element.updateValue(nil)
-    }
-    
-    func updateValue<T>(_ newValue: T?) where T: Numeric {
-        guard let newValue else {
-            clearValue()
-            return
-        }
-        switch (element.fieldType, newValue) {
-        case (.float32, let newValue as Double):
-            guard let newValue = Float32(exactly: newValue), newValue != element.value as? Float32 else { return }
-            element.updateValue(newValue)
-        case (.float64, let newValue as Double):
-            guard let newValue = Float64(exactly: newValue), newValue != element.value as? Float64 else { return }
-            element.updateValue(newValue)
-        case (.int16, let newValue as Int):
-            guard let newValue = Int16(exactly: newValue), newValue != element.value as? Int16 else { return }
-            element.updateValue(newValue)
-        case (.int32, let newValue as Int):
-            guard let newValue = Int32(exactly: newValue), newValue != element.value as? Int32 else { return }
-            element.updateValue(newValue)
-        case (.int64, let newValue as Int):
-            guard let newValue = Int64(exactly: newValue), newValue != element.value as? Int64 else { return }
-            element.updateValue(newValue)
-        default:
-            return
-        }
-    }
-    
-    func updateValue(_ newValue: String?) {
-        guard let newValue else {
-            clearValue()
-            return
-        }
-        guard newValue != element.value as? String else { return }
-        element.updateValue(newValue)
-    }
-    
     /// The body of the text input when the element is editable.
     var textWriter: some View {
         HStack(alignment: .firstTextBaseline) {
             Group {
                 if element.isMultiline {
-                    Text(valueAsString.wrappedValue)
+                    Text(text)
                         .accessibilityIdentifier("\(element.label) Text Input Preview")
                         .fixedSize(horizontal: false, vertical: true)
                         .lineLimit(5)
                         .truncationMode(.tail)
                         .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(text: valueAsString, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel)
+                            FullScreenTextInput(text: $text, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel)
                                 .padding()
 #if targetEnvironment(macCatalyst)
                                 .environment(embeddedFeatureFormViewModel)
@@ -136,24 +109,29 @@ private extension TextInput {
                         }
                         .frame(minHeight: 100, alignment: .top)
                 } else {
-                    textField
-                        .accessibilityIdentifier("\(element.label) Text Input")
-                        .focused($isFocused)
-                        .keyboardType(keyboardType)
+                    TextField(
+                        element.label,
+                        text: $text,
+                        prompt: Text(element.input is BarcodeScannerFormInput ? String.noValue : element.hint).foregroundColor(.secondary),
+                        axis: .horizontal
+                    )
+                    .accessibilityIdentifier("\(element.label) Text Input")
+                    .focused($isFocused)
+                    .keyboardType(keyboardType)
 #if os(visionOS)
-                        // No need for hover effect since it will be applied
-                        // properly at 'formInputStyle'.
-                        .hoverEffectDisabled()
+                    // No need for hover effect since it will be applied
+                    // properly at 'formInputStyle'.
+                    .hoverEffectDisabled()
 #endif
-                        .onChange(of: isFocused) {
-                            embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                    .onChange(of: isFocused) {
+                        embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                    }
+                    .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
+                        // Another form input took focus.
+                        if embeddedFeatureFormViewModel.focusedElement != element {
+                            isFocused  = false
                         }
-                        .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
-                            // Another form input took focus.
-                            if embeddedFeatureFormViewModel.focusedElement != element {
-                                isFocused  = false
-                            }
-                        }
+                    }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -169,7 +147,7 @@ private extension TextInput {
             }
 #endif
             .scrollContentBackground(.hidden)
-            if value != nil,
+            if !text.isEmpty,
                !isBarcodeScanner,
                !element.isMultiline {
                 XButton(.clear) {
@@ -179,7 +157,7 @@ private extension TextInput {
                         embeddedFeatureFormViewModel.focusedElement = element
                         embeddedFeatureFormViewModel.focusedElement = nil
                     }
-                    clearValue()
+                    text.removeAll()
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
             }
@@ -223,81 +201,17 @@ private extension TextInput {
     /// The button that allows a user to switch the numeric value between positive and negative.
     var positiveNegativeButton: some View {
         Button {
-            switch value {
-            case let value as Double:
-                updateValue(-value)
-            case let value as Int:
-                updateValue(-value)
-            default:
-                break
+            if let value = Int(text) {
+                text = String(value * -1)
+            } else if let value = Float(text) {
+                text = String(value * -1)
+            } else if let value = Double(text) {
+                text = String(value * -1)
             }
         } label: {
             Image(systemName: "plus.forwardslash.minus")
         }
         .inspectorTint(.blue)
-    }
-    
-    /// The text field to edit the element's value.
-    @ViewBuilder
-    var textField: some View {
-        switch element.fieldType {
-        case .float32, .float64:
-            TextField(
-                element.label,
-                value: Binding { value as? Double } set: { updateValue($0) },
-                format: .number.grouping(.never),
-                prompt: textFieldPrompt
-            )
-            .keyboardType(.decimalPad)
-        case .int16, .int32, .int64:
-            TextField(
-                element.label,
-                value: Binding { value as? Int } set: { updateValue($0) },
-                format: .number.grouping(.never),
-                prompt: textFieldPrompt
-            )
-            .keyboardType(.numberPad)
-        default:
-            TextField(
-                element.label,
-                text: Binding { value as? String ?? element.formattedValue } set: { updateValue($0) },
-                prompt: textFieldPrompt,
-                axis: .horizontal
-            )
-            .keyboardType(.default)
-        }
-    }
-    
-    /// The common prompt used across the various forms of the text field.
-    var textFieldPrompt: Text {
-        Text(element.input is BarcodeScannerFormInput ? String.noValue : element.hint)
-            .foregroundColor(.secondary)
-    }
-    
-    /// A binding which gets the element's value as a string and sets the value according to the element's
-    /// field type.
-    var valueAsDynamicType: Binding<String> {
-        .init {
-            valueAsString.wrappedValue
-        } set: {
-            switch element.fieldType {
-            case .float32, .float64:
-                updateValue(Double($0))
-            case .int16, .int32, .int64:
-                updateValue(Int($0))
-            default:
-                updateValue($0)
-            }
-        }
-    }
-    
-    /// A binding which gets and sets the element's value as a string.
-    var valueAsString: Binding<String> {
-        Binding {
-            value as? String ?? element.formattedValue
-        } set: { newValue in
-            updateValue(newValue)
-        }
     }
 }
 
@@ -334,7 +248,9 @@ private extension TextInput {
 #endif
             }
             RepresentedUITextView(initialText: text) { text in
-                self.text = text
+                guard text != element.formattedValue else { return }
+                element.convertAndUpdateValue(text)
+                embeddedFeatureFormViewModel.evaluateExpressions()
             } onTextViewDidEndEditing: { text in
                 self.text = text
             }
