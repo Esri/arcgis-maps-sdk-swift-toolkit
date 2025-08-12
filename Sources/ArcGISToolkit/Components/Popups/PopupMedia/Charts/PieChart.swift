@@ -41,7 +41,6 @@ struct PieChart: View {
         }
         .chartForegroundStyleScale(range: chartData.map { Color($0.color) })
         .chartLegend(showLegend ? .automatic : .hidden)
-        .padding()
     }
 }
 
