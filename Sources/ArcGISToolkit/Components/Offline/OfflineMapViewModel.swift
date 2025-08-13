@@ -20,6 +20,10 @@ import Foundation
 class OfflineMapViewModel: ObservableObject {
     /// The mode that we are displaying models in.
     enum Mode {
+        /// The mode has not been determined yet.
+        case notLoaded
+        /// Offline is disabled for the web map.
+        case offlineDisabled
         /// No preplanned areas defined, no on-demand areas downloaded yet.
         /// In this case we will default to show on-demand mode, unless
         /// preplanned areas are later defined on the web map.
@@ -49,13 +53,7 @@ class OfflineMapViewModel: ObservableObject {
     @Published private(set) var onDemandMapModels: [OnDemandMapModel] = []
     
     /// The mode that we are displaying models in.
-    @Published private(set) var mode: Mode = .ambiguous
-    
-    /// A Boolean value indicating whether the models are loading.
-    @Published private(set) var isLoadingModels = false
-
-    /// A Boolean value indicating whether the web map is offline disabled.
-    @Published private(set) var mapIsOfflineDisabled = false
+    @Published private(set) var mode: Mode = .notLoaded
     
     /// The online map.
     private let onlineMap: Map
@@ -122,14 +120,14 @@ class OfflineMapViewModel: ObservableObject {
     
     /// Loads the preplanned and on-demand models.
     func loadModels() async {
-        isLoadingModels = true
-        defer { isLoadingModels = false }
-        
         // Determine if offline is disabled for the map.
+        guard mode != .offlineDisabled else { return }
         try? await onlineMap.retryLoad()
-        mapIsOfflineDisabled = onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil
-        guard !mapIsOfflineDisabled else { return }
-        
+        if onlineMap.loadStatus == .loaded && onlineMap.offlineSettings == nil {
+            // The web map is offline disabled.
+            mode = .offlineDisabled
+            return
+        }
         // Note: We don't reset the mode once it is determined.
         
         switch mode {
@@ -137,14 +135,16 @@ class OfflineMapViewModel: ObservableObject {
             await loadPreplannedMapModels()
         case .onDemand:
             await loadOnDemandMapModels()
-        case .noInternetAvailable, .ambiguous:
+        case .noInternetAvailable, .ambiguous, .notLoaded:
             await determineMode()
+        case .offlineDisabled:
+            fatalError("Offline disabled mode should have been handled earlier.")
         }
         
         /// Attempts to determine the mode.
-        /// - Precondition: `mode == .ambiguous || mode == .noInternetAvailable`
+        /// - Precondition: `mode == .ambiguous || mode == .noInternetAvailable || mode == .notLoaded`
         func determineMode() async {
-            precondition(mode == .ambiguous || mode == .noInternetAvailable)
+            precondition(mode == .ambiguous || mode == .noInternetAvailable || mode == .notLoaded)
             
             // Start by trying to load preplanned map models.
             await loadPreplannedMapModels()
