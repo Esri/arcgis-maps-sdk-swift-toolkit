@@ -29,7 +29,16 @@ struct TextInput: View {
     /// A Boolean value indicating whether the code scanner is presented.
     @State private var scannerIsPresented = false
     
-    /// The current text value.
+    /// The element's current value.
+    ///
+    /// - Note: A string is used, irrespective of the element's field type, in order to take advantage of the
+    /// feature form's validation system. If the user enters an alphanumeric value into a numeric field, it
+    /// triggers a validation error that is shown in the UI. If a type respective of the field type is used
+    /// instead, when the user enters an alphanumeric string into a numeric field, the bound value is not
+    /// updated and the opportunity to present a validation error to the user is lost. Additionally, if the user
+    /// gives focus to another field, the bad value they've entered is lost, creating a potentially frustrating
+    /// user experience. The string approach affords the user the opportunity to return the input and resolve
+    /// the validation error.
     @State private var text = ""
     
     /// A Boolean value indicating whether the device camera is accessible for scanning.

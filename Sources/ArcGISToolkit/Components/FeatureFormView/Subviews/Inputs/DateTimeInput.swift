@@ -23,9 +23,6 @@ struct DateTimeInput: View {
     /// The current date selection.
     @State private var date: Date?
     
-    /// The formatted version of the element's current value.
-    @State private var formattedValue = ""
-    
     /// A Boolean value indicating whether a new date (or time is being set).
     @State private var isEditing = false
     
@@ -58,16 +55,11 @@ struct DateTimeInput: View {
             .onChange(of: date) {
                 guard date != element.value as? Date else { return }
                 element.updateValue(date)
-                formattedValue = element.formattedValue
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
-            .onValueChange(of: element) { newValue, newFormattedValue in
-                if newFormattedValue.isEmpty {
-                    date = nil
-                } else {
-                    date = newValue as? Date
-                }
-                formattedValue = newFormattedValue
+            .onValueChange(of: element) { newValue, _ in
+                guard let newDate = newValue as? Date, newDate != date else { return }
+                date = newDate
             }
             .onIsRequiredChange(of: element) { newIsRequired in
                 isRequired = newIsRequired
@@ -91,7 +83,7 @@ struct DateTimeInput: View {
     /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
-            Text(!formattedValue.isEmpty ? formattedValue : .noValue)
+            formattedDate
                 .accessibilityIdentifier("\(element.label) Value")
                 .foregroundStyle(displayColor)
             
@@ -131,6 +123,18 @@ struct DateTimeInput: View {
                 isEditing.toggle()
                 embeddedFeatureFormViewModel.focusedElement = isEditing ? element : nil
             }
+        }
+    }
+    
+    /// The system formatted version of the element's current date.
+    var formattedDate: Text {
+        if let date {
+            Text(
+                date,
+                format: input.includesTime ? .dateTime : .dateTime.day().month().year()
+            )
+        } else {
+            Text(String.noValue)
         }
     }
     
