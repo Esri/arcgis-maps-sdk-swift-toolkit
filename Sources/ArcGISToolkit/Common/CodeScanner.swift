@@ -19,41 +19,24 @@ import SwiftUI
 @available(visionOS, unavailable)
 struct CodeScanner: View {
     @Binding var code: String
-    
     @Binding var isPresented: Bool
     
-    @State private var cameraAccessIsAuthorized = false
-    
-    @StateObject private var cameraRequester = CameraRequester()
-    
     var body: some View {
-        if cameraAccessIsAuthorized {
-            CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
-                .ignoresSafeArea()
-                .overlay(alignment:.topTrailing) {
-                    Button.cancel {
-                        isPresented = false
-                    }
-                    .buttonStyle(.borderedProminent)
+        CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
+            .ignoresSafeArea()
+            .overlay(alignment:.topTrailing) {
+                Button.cancel {
+                    isPresented = false
+                }
+                .buttonStyle(.borderedProminent)
+                .padding()
+            }
+            .overlay(alignment: .bottom) {
+                FlashlightButton()
+                    .hiddenIfUnavailable()
+                    .font(.title)
                     .padding()
-                }
-                .overlay(alignment: .bottom) {
-                    FlashlightButton()
-                        .hiddenIfUnavailable()
-                        .font(.title)
-                        .padding()
-                }
-        } else {
-            Color.clear
-                .task {
-                    await cameraRequester.request {
-                        cameraAccessIsAuthorized = true
-                    } onAccessDenied: {
-                        isPresented = false
-                    }
-                }
-                .cameraRequester(cameraRequester)
-        }
+            }
     }
 }
 

@@ -23,6 +23,9 @@ struct TextInput: View {
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
+    /// Performs camera authorization request handling.
+    @State private var cameraRequester = CameraRequester()
+    
     /// A Boolean value indicating whether the full screen text input is presented.
     @State private var fullScreenTextInputIsPresented = false
     
@@ -165,7 +168,11 @@ private extension TextInput {
             if isBarcodeScanner {
                 Button {
                     embeddedFeatureFormViewModel.focusedElement = element
-                    scannerIsPresented = true
+                    if cameraRequester.authorizationStatus == .authorized {
+                        scannerIsPresented = true
+                    } else {
+                        cameraRequester.request()
+                    }
                 } label: {
                     Image(systemName: "barcode.viewfinder")
                         .font(.title2)
@@ -174,6 +181,12 @@ private extension TextInput {
                 .disabled(cameraIsDisabled)
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("\(element.label) Scan Button")
+                .cameraRequester(cameraRequester)
+                .onChange(of: cameraRequester.authorizationStatus) { _, newValue in
+                    if newValue == .authorized {
+                        scannerIsPresented = true
+                    }
+                }
             }
 #endif
         }
