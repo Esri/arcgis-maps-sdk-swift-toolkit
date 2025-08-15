@@ -177,7 +177,6 @@ private extension TextInput {
             }
 #endif
         }
-        .formInputStyle(isTappable: true)
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.

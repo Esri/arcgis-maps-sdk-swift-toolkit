@@ -30,25 +30,23 @@ struct EmbeddedFeatureFormView: View {
     
     var body: some View {
         ScrollViewReader { scrollViewProxy in
-            ScrollView {
-                VStack(alignment: .leading) {
-                    if deprecatedInitializerWasUsed, !embeddedFeatureFormViewModel.title.isEmpty {
-                        FormHeader(title: embeddedFeatureFormViewModel.title)
-                        Divider()
-                    }
-                    ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
-                        makeElement(element)
-                    }
-                    if let attachmentsElement = embeddedFeatureFormViewModel.featureForm.defaultAttachmentsElement {
-                        // The Toolkit currently only supports AttachmentsFormElements via the
-                        // default attachments element. Once AttachmentsFormElements can be authored
-                        // this can call makeElement(_:) instead and makeElement(_:) should have a
-                        // case added for AttachmentsFormElement.
-                        AttachmentsFeatureElementView(
-                            formElement: attachmentsElement,
-                            formViewModel: embeddedFeatureFormViewModel
-                        )
-                    }
+            List {
+                if deprecatedInitializerWasUsed, !embeddedFeatureFormViewModel.title.isEmpty {
+                    FormHeader(title: embeddedFeatureFormViewModel.title)
+                    Divider()
+                }
+                ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
+                    makeElement(element)
+                }
+                if let attachmentsElement = embeddedFeatureFormViewModel.featureForm.defaultAttachmentsElement {
+                    // The Toolkit currently only supports AttachmentsFormElements via the
+                    // default attachments element. Once AttachmentsFormElements can be authored
+                    // this can call makeElement(_:) instead and makeElement(_:) should have a
+                    // case added for AttachmentsFormElement.
+                    AttachmentsFeatureElementView(
+                        formElement: attachmentsElement,
+                        formViewModel: embeddedFeatureFormViewModel
+                    )
                 }
             }
             .task {
@@ -79,7 +77,6 @@ struct EmbeddedFeatureFormView: View {
         .scrollDismissesKeyboard(.immediately)
 #endif
         .environment(embeddedFeatureFormViewModel)
-        .padding([.horizontal])
         .preference(
             key: PresentedFeatureFormPreferenceKey.self,
             value: .init(object: embeddedFeatureFormViewModel.featureForm)
@@ -99,7 +96,15 @@ extension EmbeddedFeatureFormView {
         case let element as GroupFormElement:
             GroupFormElementView(element: element) { internalMakeElement($0) }
         default:
-            internalMakeElement(element)
+            Section {
+                internalMakeElement(element)
+            } header: {
+                FormElementHeader(element: element)
+                    .textCase(.none)
+            } footer: {
+                FormElementFooter(element: element)
+                    .textCase(.none)
+            }
         }
     }
     
@@ -125,7 +130,6 @@ extension EmbeddedFeatureFormView {
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
         if !(element.input is UnsupportedFormInput) {
             FormElementWrapper(element: element)
-            Divider()
         }
     }
     
@@ -133,13 +137,11 @@ extension EmbeddedFeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
         TextFormElementView(element: element)
-        Divider()
     }
     
     /// Makes UI for a utility associations element including a divider beneath it.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
         FormElementWrapper(element: element)
-        Divider()
     }
 }

@@ -40,8 +40,12 @@ struct GroupFormElementView<Content>: View where Content: View {
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
             ForEach(visibleElements, id: \.self) { element in
-                viewCreator(element)
-                    .padding(.leading, 16)
+                VStack(alignment: .leading) {
+                    FormElementHeader(element: element)
+                    viewCreator(element)
+                        .formInputStyle(isTappable: true)
+                    FormElementFooter(element: element)
+                }
             }
         } label: {
             Header(element: element)

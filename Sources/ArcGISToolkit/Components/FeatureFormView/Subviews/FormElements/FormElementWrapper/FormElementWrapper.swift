@@ -24,17 +24,13 @@ struct FormElementWrapper: View {
     let element: FormElement
     
     var body: some View {
-        VStack(alignment: .leading) {
-            FormElementHeader(element: element)
-            switch element {
-            case let element as FieldFormElement:
-                FieldFormElementView(element: element)
-            case let element as UtilityAssociationsFormElement:
-                FeatureFormView.UtilityAssociationsFormElementView(element: element)
-            default:
-                EmptyView()
-            }
-            FormElementFooter(element: element)
+        switch element {
+        case let element as FieldFormElement:
+            FieldFormElementView(element: element)
+        case let element as UtilityAssociationsFormElement:
+            FeatureFormView.UtilityAssociationsFormElementView(element: element)
+        default:
+            EmptyView()
         }
     }
 }

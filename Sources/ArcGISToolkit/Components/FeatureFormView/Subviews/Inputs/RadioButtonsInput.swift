@@ -79,11 +79,6 @@ struct RadioButtonsInput: View {
                     }
                 }
             }
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(uiColor: .tertiarySystemFill))
-            )
-            .frame(maxWidth: .infinity, alignment: .leading)
             .onAppear {
                 if let selectedValue = element.codedValues.first(where: {
                     $0.name == element.formattedValue

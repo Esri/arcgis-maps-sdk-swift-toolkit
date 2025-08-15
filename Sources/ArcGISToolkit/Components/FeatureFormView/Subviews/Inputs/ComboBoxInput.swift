@@ -101,7 +101,6 @@ struct ComboBoxInput: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .formInputStyle(isTappable: true)
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }
