@@ -33,22 +33,22 @@ struct AttachmentImportMenu: View {
     }
     
     /// A Boolean value indicating whether the attachment camera controller is presented.
-    @State private var cameraIsShowing = false
+    @State private var cameraControllerIsPresented = false
+    
+    /// Performs camera authorization request handling.
+    @State private var cameraRequester = CameraRequester()
     
     /// A Boolean value indicating whether the attachment file importer is presented.
-    @State private var fileImporterIsShowing = false
+    @State private var fileImporterIsPresented = false
     
     /// The current import state.
     @State private var importState: AttachmentImportState = .none
     
     /// A Boolean value indicating whether the microphone access alert is visible.
-    @State private var microphoneAccessAlertIsVisible = false
+    @State private var microphoneAccessAlertIsPresented = false
     
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
-    
-    /// Performs camera authorization request handling.
-    @StateObject private var cameraRequester = CameraRequester()
     
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
@@ -73,10 +73,10 @@ struct AttachmentImportMenu: View {
     @available(visionOS, unavailable)
     private func takePhotoOrVideoButton() -> Button<some View> {
         Button {
-            Task {
-                await cameraRequester.request {
-                    cameraIsShowing = true
-                } onAccessDenied: { }
+            if cameraRequester.authorizationStatus == .authorized {
+                cameraControllerIsPresented = true
+            } else {
+                cameraRequester.request()
             }
         } label: {
             Text(cameraButtonLabel)
@@ -95,7 +95,7 @@ struct AttachmentImportMenu: View {
     
     private func chooseFromFilesButton() -> Button<some View> {
         Button {
-            fileImporterIsShowing = true
+            fileImporterIsPresented = true
         } label: {
             Text(filesButtonLabel)
             Image(systemName: "folder")
@@ -125,6 +125,11 @@ struct AttachmentImportMenu: View {
         .cameraRequester(cameraRequester)
         .alert(importFailureAlertTitle, isPresented: errorIsPresented) { } message: {
             Text(importFailureAlertMessage)
+        }
+        .onChange(of: cameraRequester.authorizationStatus) { _, status in
+            if status == .authorized {
+                cameraControllerIsPresented = true
+            }
         }
 #if targetEnvironment(macCatalyst)
         .menuStyle(.borderlessButton)
@@ -166,7 +171,7 @@ struct AttachmentImportMenu: View {
             onAdd?(newAttachment)
             importState = .none
         }
-        .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
+        .fileImporter(isPresented: $fileImporterIsPresented, allowedContentTypes: [.item]) { result in
             importState = .importing
             switch result {
             case .success(let url):
@@ -186,18 +191,18 @@ struct AttachmentImportMenu: View {
             }
         }
 #if os(iOS)
-        .fullScreenCover(isPresented: $cameraIsShowing) {
+        .fullScreenCover(isPresented: $cameraControllerIsPresented) {
             AttachmentCameraController(
-                importState: $importState
+                importState: $importState, isPresented: $cameraControllerIsPresented
             )
 #if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
             .onCameraCaptureModeChanged { captureMode in
                 if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
-                    microphoneAccessAlertIsVisible = true
+                    microphoneAccessAlertIsPresented = true
                 }
             }
 #endif
-            .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
+            .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsPresented) {
                 appSettingsButton
                 Button(role: .cancel) { } label: {
                     Text(recordVideoOnlyButtonLabel)

@@ -17,32 +17,30 @@ import SwiftUI
 
 /// Performs camera authorization request handling.
 ///
-/// Ensures that access is granted before launching the system camera.
-@MainActor final class CameraRequester: ObservableObject {
-    @Published var alertIsPresented = false
+/// Helps to ensure that access is granted before launching the system camera.
+@MainActor @Observable final class CameraRequester {
+    fileprivate var alertIsPresented = false
     
-    var onAccessDenied: (() -> Void)?
+    @ObservationIgnored private var requestTask: Task<Void, Never>?
     
-    func request(onAccessGranted: @escaping () -> Void, onAccessDenied: @escaping () -> Void) async {
-        self.onAccessDenied = onAccessDenied
-        switch AVCaptureDevice.authorizationStatus(for: .video) {
-        case .authorized:
-            onAccessGranted()
-        case .notDetermined:
-            let isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
-            if isAuthorized {
-                onAccessGranted()
-            } else {
-                onAccessDenied()
+    /// The status of the app’s authorization to capture media.
+    var authorizationStatus: AVAuthorizationStatus = .notDetermined
+    
+    /// Requests the user’s permission to allow the app to capture media.
+    func request() {
+        requestTask?.cancel()
+        requestTask = Task {
+            await AVCaptureDevice.requestAccess(for: .video)
+            authorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
+            if authorizationStatus == .denied {
+                alertIsPresented = true
             }
-        default:
-            alertIsPresented = true
         }
     }
 }
 
 private struct CameraRequesterModifier: ViewModifier {
-    @ObservedObject var requester: CameraRequester
+    @Bindable var requester: CameraRequester
     
     func body(content: Content) -> some View {
         content
@@ -52,9 +50,7 @@ private struct CameraRequesterModifier: ViewModifier {
                     Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
                 }
 #endif
-                Button.cancel {
-                    requester.onAccessDenied?()
-                }
+                Button.cancel {}
             } message: {
                 Text(cameraAccessAlertMessage)
             }
