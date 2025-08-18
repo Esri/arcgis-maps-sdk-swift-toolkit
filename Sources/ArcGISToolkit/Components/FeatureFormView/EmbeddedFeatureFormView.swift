@@ -58,6 +58,8 @@ struct EmbeddedFeatureFormView: View {
             }
             .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
                 if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
+                    // Navigation bars will unfortunately cover or obscure
+                    // section headers. See FB19740517.
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
