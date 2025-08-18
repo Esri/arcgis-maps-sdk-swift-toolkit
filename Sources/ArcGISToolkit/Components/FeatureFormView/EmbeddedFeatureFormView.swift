@@ -29,7 +29,7 @@ struct EmbeddedFeatureFormView: View {
     }
     
     var body: some View {
-        ScrollViewReader { scrollViewProxy in
+        ScrollViewReader { scrollView in
             List {
                 if deprecatedInitializerWasUsed, !embeddedFeatureFormViewModel.title.isEmpty {
                     FormHeader(title: embeddedFeatureFormViewModel.title)
@@ -60,7 +60,7 @@ struct EmbeddedFeatureFormView: View {
                 if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
                     // Navigation bars will unfortunately cover or obscure
                     // section headers. See FB19740517.
-                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
+                    withAnimation { scrollView.scrollTo(focusedElement, anchor: .top) }
                 }
             }
             .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
