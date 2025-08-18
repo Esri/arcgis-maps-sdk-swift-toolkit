@@ -115,6 +115,7 @@ struct ComboBoxInput: View {
                 selectedValue = .noValue
             }
         }
+        .contentShape(.rect)
         .onTapGesture {
             embeddedFeatureFormViewModel.focusedElement = element
             isPresented = true
