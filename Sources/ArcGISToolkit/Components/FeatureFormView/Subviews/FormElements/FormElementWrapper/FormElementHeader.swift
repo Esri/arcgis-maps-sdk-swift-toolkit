@@ -38,7 +38,6 @@ struct FormElementHeader: View {
             FieldFormElementTitle(element: element)
         case let element as UtilityAssociationsFormElement:
             Text(element.label)
-            Spacer()
         default:
             EmptyView()
         }
