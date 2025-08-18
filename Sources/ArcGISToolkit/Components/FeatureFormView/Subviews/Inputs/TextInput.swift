@@ -73,6 +73,7 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
+            .contentShape(.rect)
             .onTapGesture {
                 if element.isMultiline {
                     fullScreenTextInputIsPresented = true
