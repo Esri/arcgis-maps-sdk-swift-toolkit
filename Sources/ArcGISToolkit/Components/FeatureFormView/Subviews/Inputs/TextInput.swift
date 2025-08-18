@@ -107,7 +107,7 @@ private extension TextInput {
                                 .environment(embeddedFeatureFormViewModel)
 #endif
                         }
-                        .frame(minHeight: 100, alignment: .top)
+                        .frame(maxWidth: .infinity, minHeight: 100, alignment: .top)
                 } else {
                     TextField(
                         element.label,
