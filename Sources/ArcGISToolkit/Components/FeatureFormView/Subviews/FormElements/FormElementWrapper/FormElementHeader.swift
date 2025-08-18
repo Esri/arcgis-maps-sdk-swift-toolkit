@@ -27,7 +27,6 @@ struct FormElementHeader: View {
             titleTextForElement
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-            Spacer()
         }
         .padding(.top, formElementPadding)
     }
@@ -39,6 +38,7 @@ struct FormElementHeader: View {
             FieldFormElementTitle(element: element)
         case let element as UtilityAssociationsFormElement:
             Text(element.label)
+            Spacer()
         default:
             EmptyView()
         }
@@ -63,6 +63,10 @@ extension FormElementHeader {
                 .onIsRequiredChange(of: element) { newIsRequired in
                     isRequired = newIsRequired
                 }
+            Spacer()
+            if !isEditable {
+                Image(systemName: "pencil.slash")
+            }
         }
     }
 }
