@@ -32,21 +32,17 @@ extension FeatureFormView {
             switch associationsFilterResultModel.result {
             case .success(let results):
                 if results.isEmpty {
-                    FeatureFormGroupedContentView(
-                        content: [Text.noAssociations]
-                    )
+                    Text.noAssociations
                 } else {
-                    FeatureFormGroupedContentView(content: results.map {
-                        UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
+                    ForEach(results.enumerated().map({ ($0.offset, $0.element) }), id: \.0) { (offset, content) in
+                        UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: content)
                             .environment(embeddedFeatureFormViewModel)
-                    })
+                    }
                 }
             case .failure(let error):
-                FeatureFormGroupedContentView(content: [
-                    Text.errorFetchingFilterResults(error)
-                ])
+                Text.errorFetchingFilterResults(error)
             case nil:
-                FeatureFormGroupedContentView(content: [ProgressView()])
+                ProgressView()
             }
         }
     }
