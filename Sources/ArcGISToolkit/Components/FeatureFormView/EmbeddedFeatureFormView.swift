@@ -94,19 +94,19 @@ extension EmbeddedFeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
-        switch element {
-        case let element as GroupFormElement:
-            GroupFormElementView(element: element) { internalMakeElement($0) }
-        default:
-            Section {
+        Section {
+            switch element {
+            case let element as GroupFormElement:
+                GroupFormElementView(element: element) { internalMakeElement($0) }
+            default:
                 internalMakeElement(element)
-            } header: {
-                FormElementHeader(element: element)
-                    .textCase(.none)
-            } footer: {
-                FormElementFooter(element: element)
-                    .textCase(.none)
             }
+        } header: {
+            FormElementHeader(element: element)
+                .textCase(.none)
+        } footer: {
+            FormElementFooter(element: element)
+                .textCase(.none)
         }
     }
     

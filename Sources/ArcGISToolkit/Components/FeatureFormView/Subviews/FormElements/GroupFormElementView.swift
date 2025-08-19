@@ -48,7 +48,7 @@ struct GroupFormElementView<Content>: View where Content: View {
                 }
             }
         } label: {
-            Header(element: element)
+            Label(element: element)
                 .multilineTextAlignment(.leading)
                 .tint(.primary)
         }
@@ -76,21 +76,15 @@ struct GroupFormElementView<Content>: View where Content: View {
 
 extension GroupFormElementView {
     /// A view displaying a label and description of a `GroupFormElement`.
-    struct Header: View {
+    struct Label: View {
         let element: GroupFormElement
         
         var body: some View {
-            VStack(alignment: .leading) {
-                if !element.label.isEmpty {
-                    Text(element.label)
-                        .accessibilityIdentifier("\(element.label)")
-                }
-                if !element.description.isEmpty {
-                    Text(element.description)
-                        .accessibilityIdentifier("\(element.label) Description")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
+            if !element.description.isEmpty {
+                Text(element.description)
+                    .accessibilityIdentifier("\(element.label) Description")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
             }
         }
     }

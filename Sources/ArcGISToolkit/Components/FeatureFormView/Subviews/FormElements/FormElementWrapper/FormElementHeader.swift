@@ -36,10 +36,8 @@ struct FormElementHeader: View {
         switch element {
         case let element as FieldFormElement:
             FieldFormElementTitle(element: element)
-        case let element as UtilityAssociationsFormElement:
-            Text(element.label)
         default:
-            EmptyView()
+            Text(element.label)
         }
     }
 }

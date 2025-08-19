@@ -41,7 +41,6 @@ struct ReadOnlyInput: View {
             .fixedSize(horizontal: false, vertical: true)
             .id(id)
             .lineLimit(element.isMultiline ? nil : 1)
-            .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .textSelection(.enabled)
             .onValueChange(of: element) { _, _ in
