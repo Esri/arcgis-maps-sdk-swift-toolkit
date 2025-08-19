@@ -107,7 +107,6 @@ struct DateTimeInput: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity)
         .contentShape(.rect)
         .onTapGesture {
             withAnimation {
