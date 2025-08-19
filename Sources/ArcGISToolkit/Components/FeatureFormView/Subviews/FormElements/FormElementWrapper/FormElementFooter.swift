@@ -36,6 +36,8 @@ struct FormElementFooter: View {
         case let element as UtilityAssociationsFormElement:
             UtilityAssociationsFormElementFooter(element: element)
         default:
+            // GroupFormElement's description is shown in the DisclosureGroup's
+            // label.
             EmptyView()
         }
     }
