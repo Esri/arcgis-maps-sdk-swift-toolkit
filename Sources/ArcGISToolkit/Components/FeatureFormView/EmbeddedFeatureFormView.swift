@@ -131,7 +131,7 @@ extension EmbeddedFeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
         if !(element.input is UnsupportedFormInput) {
-            FormElementWrapper(element: element)
+            FieldFormElementView(element: element)
         }
     }
     
@@ -144,6 +144,6 @@ extension EmbeddedFeatureFormView {
     /// Makes UI for a utility associations element including a divider beneath it.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
-        FormElementWrapper(element: element)
+        FeatureFormView.UtilityAssociationsFormElementView(element: element)
     }
 }
