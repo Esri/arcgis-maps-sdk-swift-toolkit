@@ -61,7 +61,9 @@ struct FeatureEditorExampleView: View {
                     featureForm: $featureForm,
                     geometryEditor: geometryEditor
                 ) {
-                    FeatureEditorView(featureForm: $featureForm, geometryEditor: geometryEditor)
+                    if let featureForm {
+                        FeatureEditorView(featureForm: featureForm, geometryEditor: geometryEditor)
+                    }
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -191,22 +193,22 @@ struct FeatureEditorView: View {
         case attributes
     }
     
-    private var featureForm: Binding<FeatureForm?>
+    private var featureForm: FeatureForm
     private var geometryEditor: GeometryEditor
     @State private var geometryChangedAlertIsPresented = false
     @State private var navigationDisabled = false
     @State var geometryChange: GeometryChange?
+    /// A Boolean value indicating whether the form is presented.
+    @State private var featureFormViewIsPresented = false
 
-    init(featureForm: Binding<FeatureForm?>, geometryEditor: GeometryEditor) {
+    init(featureForm: FeatureForm, geometryEditor: GeometryEditor) {
         self.featureForm = featureForm
         self.geometryEditor = geometryEditor
     }
 
     var body: some View {
         VStack {
-            FeatureFormView(featureForm: featureForm)
-                .closeButton(.hidden) // Defaults to .automatic
-                .editingButtons(.hidden)
+            FeatureFormView(root: featureForm, isPresented: $featureFormViewIsPresented)
                 .onFormEditingEvent { action in
                     switch action {
                     case .discardedEdits(willNavigate: let willNavigate):
@@ -216,29 +218,29 @@ struct FeatureEditorView: View {
                         discard()
                     case .savedEdits(willNavigate: let willNavigate):
                         guard willNavigate else { return }
-                        //                            featureForm.wrappedValue?.feature.geometry = geometry
+                        //                            featureForm.feature.geometry = geometry
                         print("should also save geometry edits")
                         save()
-                        featureForm.wrappedValue?.feature.refresh()
+                        featureForm.feature.refresh()
                     }
                 }
                 .navigationDisabled(navigationDisabled)
                 .onAppear {
-                    if let geometry = featureForm.wrappedValue?.feature.geometry {
+                    if let geometry = featureForm.feature.geometry {
                         geometryEditor.start(withInitial: geometry)
                     } else {
-                        geometryEditor.start(withType: featureForm.wrappedValue?.feature.table?.geometryType ?? Point.self)
+                        geometryEditor.start(withType: featureForm.feature.table?.geometryType ?? Point.self)
                     }
                 }
                 .task {
-                    for await hasEdits in featureForm.wrappedValue!.$hasEdits {
+                    for await hasEdits in featureForm.$hasEdits {
                         self.navigationDisabled = hasEdits
                     }
                 }
                 .task {
                     for await newGeometry in geometryEditor.$geometry.dropFirst() {
                         if let newGeometry,
-                           let originalGeometry = featureForm.wrappedValue?.feature.geometry,
+                           let originalGeometry = featureForm.feature.geometry,
                            !GeometryEngine.isGeometry(originalGeometry, equivalentTo: newGeometry) {
                             self.navigationDisabled = true
                         } else {
@@ -278,52 +280,48 @@ struct FeatureEditorView: View {
                             Text("You have unsaved geometry changes.")
                     }
                 )
-                .onChange(of: featureForm.wrappedValue) { oldValue, newValue in
-//                    print("newFeatureForm: \(newValue?.title); oldValue: \(oldValue.wrappedValue?.title)")
+                .onChange(of: featureForm) { oldValue, newValue in
+                    //                    print("newFeatureForm: \(newValue?.title); oldValue: \(oldValue.title)")
                     // Clean up old featureForm info
-                    if let oldValue {
-                        (oldValue.feature.table?.layer as? FeatureLayer)?.unselectFeature(oldValue.feature)
-                        if geometryEditor.isStarted,
-                           let originalGeometry = oldValue.feature.geometry,
-                           let newGeometry = geometryEditor.geometry {
-                            if !GeometryEngine.isGeometry(originalGeometry, equivalentTo: newGeometry) {
-                                navigationDisabled = true
-                                geometryChange = GeometryChange(newGeometry: newGeometry, oldFeature: oldValue.feature, newFeature: newValue?.feature)
-                                geometryChangedAlertIsPresented = true
-                                print("Need to alert the user! There is a change to the original geometry.")
-                            }
+                    (oldValue.feature.table?.layer as? FeatureLayer)?.unselectFeature(oldValue.feature)
+                    if geometryEditor.isStarted,
+                       let originalGeometry = oldValue.feature.geometry,
+                       let newGeometry = geometryEditor.geometry {
+                        if !GeometryEngine.isGeometry(originalGeometry, equivalentTo: newGeometry) {
+                            navigationDisabled = true
+                            geometryChange = GeometryChange(newGeometry: newGeometry, oldFeature: oldValue.feature, newFeature: newValue.feature)
+                            geometryChangedAlertIsPresented = true
+                            print("Need to alert the user! There is a change to the original geometry.")
                         }
-                        geometryEditor.stop()
                     }
-
-                    if let newValue {
-                        (newValue.feature.table?.layer as? FeatureLayer)?.selectFeature(newValue.feature)
-                        if let geometry = newValue.feature.geometry {
-                            geometryEditor.start(withInitial: geometry)
-                        } else {
-                            geometryEditor.start(withType: newValue.feature.table?.geometryType ?? Point.self)
-                        }
-                        navigationDisabled = false
+                    geometryEditor.stop()
+                    
+                    (newValue.feature.table?.layer as? FeatureLayer)?.selectFeature(newValue.feature)
+                    if let geometry = newValue.feature.geometry {
+                        geometryEditor.start(withInitial: geometry)
+                    } else {
+                        geometryEditor.start(withType: newValue.feature.table?.geometryType ?? Point.self)
                     }
+                    navigationDisabled = false
                 }
         }
     }
     
     private func discard() {
         geometryEditor.stop()
-        (featureForm.wrappedValue?.feature.table?.layer as? FeatureLayer)?.clearSelection()
+        (featureForm.feature.table?.layer as? FeatureLayer)?.clearSelection()
         // Should already be done by the FeatureForm
-//        featureForm.wrappedValue?.discardEdits()
+//        featureForm.discardEdits()
         navigationDisabled = false
     }
     
     private func save() {
         Task {
-            featureForm.wrappedValue?.feature.geometry = geometryEditor.stop()
-            (featureForm.wrappedValue?.feature.table?.layer as? FeatureLayer)?.clearSelection()
+            featureForm.feature.geometry = geometryEditor.stop()
+            (featureForm.feature.table?.layer as? FeatureLayer)?.clearSelection()
             
             // Push the geometry changes to the local store
-            try? await featureForm.wrappedValue?.finishEditing()
+            try? await featureForm.finishEditing()
             navigationDisabled = false
         }
     }
