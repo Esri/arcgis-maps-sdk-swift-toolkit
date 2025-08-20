@@ -34,8 +34,8 @@ extension FeatureFormView {
                 if results.isEmpty {
                     Text.noAssociations
                 } else {
-                    ForEach(results.enumerated().map({ ($0.offset, $0.element) }), id: \.0) { (offset, content) in
-                        UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: content)
+                    ForEach(results.indices) { index in
+                        UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: results[index])
                             .environment(embeddedFeatureFormViewModel)
                     }
                 }
