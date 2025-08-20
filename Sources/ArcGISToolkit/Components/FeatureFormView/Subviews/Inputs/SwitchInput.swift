@@ -20,7 +20,7 @@ import SwiftUI
 /// The switch represents two mutually exclusive values, such as: yes/no, on/off, true/false.
 struct SwitchInput: View {
     /// The view model for the form.
-    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
+    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
     
     /// A Boolean value indicating whether the initial element value was received.
     @State private var didReceiveInitialValue = false
@@ -81,8 +81,12 @@ struct SwitchInput: View {
             // loads, depending if the initial value matches the default value
             // defined for `isOn`.
             .onChange(of: isOn) {
+                guard (isOn && element.formattedValue == input.offValue.name)
+                        || (!isOn && element.formattedValue == input.onValue.name) else {
+                    return
+                }
                 element.updateValue(isOn ? input.onValue.code : input.offValue.code)
-                internalFeatureFormViewModel.evaluateExpressions()
+                embeddedFeatureFormViewModel.evaluateExpressions()
             }
             // onValueChange(of:action:) is a good signal for user interaction
             // because it will reliably run when the view first loads and each
@@ -91,7 +95,7 @@ struct SwitchInput: View {
             .onValueChange(of: element) { newValue, newFormattedValue in
                 isOn = newFormattedValue == input.onValue.name
                 if didReceiveInitialValue {
-                    internalFeatureFormViewModel.focusedElement = element
+                    embeddedFeatureFormViewModel.focusedElement = element
                 } else {
                     didReceiveInitialValue = true
                 }

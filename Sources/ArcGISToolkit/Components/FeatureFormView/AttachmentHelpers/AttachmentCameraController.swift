@@ -18,19 +18,13 @@ import UniformTypeIdentifiers
 
 /// A UIImagePickerController wrapper to provide a native photo capture experience.
 struct AttachmentCameraController: UIViewControllerRepresentable {
-    @Environment(\.dismiss) private var dismiss
-    
     /// The current import state.
     @Binding var importState: AttachmentImportState
     
+    @Binding var isPresented: Bool
+    
     /// The image picker controller represented within the view.
     private let controller = AttachmentUIImagePickerController()
-    
-    /// Dismisses the picker controller.
-    func endCapture() {
-        controller.dismiss(animated: true)
-        dismiss()
-    }
     
     func makeUIViewController(context: Context) -> some UIViewController {
         controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
@@ -69,11 +63,11 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
                 parent.importState = .finalizing(AttachmentImportData(contentType: contentType, data: videoData))
             }
         }
-        parent.endCapture()
+        parent.isPresented = false
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        parent.endCapture()
+        parent.isPresented = false
     }
 }
 

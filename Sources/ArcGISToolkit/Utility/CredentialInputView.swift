@@ -265,6 +265,10 @@ struct CredentialInputSheetView: View {
         }
         .padding()
         .onAppear {
+            // Reset username and password values.
+            username = ""
+            password = ""
+            
             // Set initial focus of text field.
             switch fields {
             case .usernamePassword:

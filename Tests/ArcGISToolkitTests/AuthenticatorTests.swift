@@ -20,13 +20,33 @@ import Combine
 final class AuthenticatorTests: XCTestCase {
     @MainActor
     func testInit() {
-        let config = OAuthUserConfiguration(
+        let oAuthUserConfiguration = OAuthUserConfiguration(
             portalURL: URL(string:"www.arcgis.com")!,
             clientID: "client id",
-            redirectURL: URL(string:"myapp://oauth")!
+            redirectURL: URL(string:"myapp://auth")!
         )
-        let authenticator = Authenticator(promptForUntrustedHosts: true, oAuthUserConfigurations: [config])
+        let iapConfiguration = try! IAPConfiguration.configuration(
+            authorizeURL: URL(string: "https://login.microsoftonline.com/tenantID/oauth2/v2.0/authorize")!,
+            tokenURL: URL(string: "https://login.microsoftonline.com/tenantID/oauth2/v2.0/token")!,
+            logoutURL: URL(string: "https://login.microsoftonline.com/tenantID/oauth2/v2.0/logout")!,
+            clientID: "clientID",
+            redirectURL: URL(string: "myapp://auth")!,
+            scopes: [
+                "clientID/.default",
+                "offline_access",
+                "openid",
+                "profile"
+            ],
+            hostsBehindProxy: ["*.domain.com"],
+            authorizationPromptType: .login
+        )
+        let authenticator = Authenticator(
+            promptForUntrustedHosts: true,
+            oAuthUserConfigurations: [oAuthUserConfiguration],
+            iapConfigurations: [iapConfiguration]
+        )
         XCTAssertTrue(authenticator.promptForUntrustedHosts)
-        XCTAssertEqual(authenticator.oAuthUserConfigurations, [config])
+        XCTAssertEqual(authenticator.oAuthUserConfigurations, [oAuthUserConfiguration])
+        XCTAssertEqual(authenticator.iapConfigurations, [iapConfiguration])
     }
 }

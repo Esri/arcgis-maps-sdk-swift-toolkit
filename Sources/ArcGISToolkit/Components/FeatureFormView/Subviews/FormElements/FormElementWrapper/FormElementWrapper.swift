@@ -30,7 +30,7 @@ struct FormElementWrapper: View {
             case let element as FieldFormElement:
                 FieldFormElementView(element: element)
             case let element as UtilityAssociationsFormElement:
-                UtilityAssociationsFormElementView(element: element)
+                FeatureFormView.UtilityAssociationsFormElementView(element: element)
             default:
                 EmptyView()
             }

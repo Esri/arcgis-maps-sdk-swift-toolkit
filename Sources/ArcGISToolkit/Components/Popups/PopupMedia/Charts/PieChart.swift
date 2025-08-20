@@ -12,104 +12,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import Charts
 import SwiftUI
 
 /// A view displaying details for pie chart popup media.
 struct PieChart: View {
-    /// The view model for the pie chart.
-    @ObservedObject private var viewModel: PieChartModel
+    /// The chart data to display.
+    let chartData: [ChartData]
     
     /// A Boolean value determining whether to show the legend for the chart.
     let showLegend: Bool
-    
-    @Environment(\.isPortraitOrientation) var isPortraitOrientation
-    
-    /// A Boolean value denoting if the view should be shown as regular width.
-    var isRegularWidth: Bool {
-        !isPortraitOrientation
-    }
     
     /// Creates a `PieChart`.
     /// - Parameters:
     ///   - chartData: The data to display in the chart.
     ///   - isShowingDetailView: Specifies whether the chart is being drawn in a larger format.
     init(chartData: [ChartData], isShowingDetailView: Bool = false) {
-        _viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
+        self.chartData = chartData
         
         // Only show the legend if we're being shown in a detail view.
         showLegend = isShowingDetailView
     }
     
     var body: some View {
-        Pie(viewModel: viewModel)
-            .padding()
-        if showLegend {
-            makeLegend(slices: viewModel.pieSlices)
+        Chart(chartData) {
+            SectorMark(angle: .value(.value, $0.value))
+                .foregroundStyle(by: .value(.label, $0.label))
         }
-    }
-    
-    /// Creates a legend view for a pie chart.
-    /// - Parameter slices: The slices that make up the pie chart.
-    /// - Returns: A view representing a pie chart legend.
-    @ViewBuilder func makeLegend(slices: [PieSlice]) -> some View {
-        LazyVGrid(
-            columns: Array(
-                repeating: GridItem(.flexible(), alignment: .top),
-                count: isRegularWidth ? 3 : 2
-            )
-        ) {
-            ForEach(slices) { slice in
-                HStack {
-                    Rectangle()
-                        .stroke(.gray, lineWidth: 1)
-                        .frame(width: 20, height: 20)
-                        .background(slice.color)
-                    Text(slice.name)
-                        .font(.footnote)
-                    Spacer()
-                }
-            }
-        }
+        .chartForegroundStyleScale(range: chartData.map { Color($0.color) })
+        .chartLegend(showLegend ? .automatic : .hidden)
     }
 }
 
-/// A view representing a pie chart.
-struct Pie: View {
-    /// The view model for the pie chart.
-    @ObservedObject private var viewModel: PieChartModel
-    
-    /// Creates a Pie view.
-    /// - Parameter viewModel: The view model for the pie chart.
-    init(viewModel: PieChartModel) {
-        self.viewModel = viewModel
+private extension Text {
+    /// A label for a `SectorMark` angle value.
+    static var value: Self {
+        .init(
+            "Value",
+            bundle: .toolkitModule,
+            comment: "A label for the value of a pie chart slice."
+        )
     }
     
-    var body: some View {
-        GeometryReader { geometry in
-            let radius = min(geometry.size.width, geometry.size.height) / 2.0
-            let center = CGPoint(
-                x: geometry.size.width / 2.0,
-                y: geometry.size.height / 2.0
-            )
-            var startAngle: Double = -90
-            ForEach(viewModel.pieSlices, id: \.self) { slice in
-                let endAngle = startAngle + slice.fraction * 360.0
-                let path = Path { pieChart in
-                    pieChart.move(to: center)
-                    pieChart.addArc(
-                        center: center,
-                        radius: radius,
-                        startAngle: .degrees(startAngle),
-                        endAngle: .degrees(endAngle),
-                        clockwise: false
-                    )
-                    
-                    pieChart.closeSubpath()
-                    startAngle = endAngle
-                }
-                path.fill(slice.color)
-                path.stroke(.gray, lineWidth: 0.5)
-            }
-        }
+    /// A label for a `SectorMark` foreground style value.
+    static var label: Self {
+        .init(
+            "Label",
+            bundle: .toolkitModule,
+            comment: "A label for a pie chart legend item label."
+        )
     }
 }

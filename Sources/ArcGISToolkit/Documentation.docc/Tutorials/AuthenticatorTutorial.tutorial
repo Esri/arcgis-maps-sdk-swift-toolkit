@@ -13,8 +13,6 @@
         @Steps {
             @Step {
                 Declare and initialize an `Authenticator` member in your app.
-                
-                For OAuth implementations use `Authenticator(oAuthUserConfigurations:)`.
                 @Code(name: "ExampleApp.swift", file: AuthenticatorStep1.swift)
             }
             
@@ -24,13 +22,16 @@
             }
             
             @Step {
+                Configure the `Authenticator` with OAuth and IAP configurations if required. 
                 Set the `Authenticator` to handle challenges.
                 Set up credential persistence.
                 @Code(name: "ExampleApp.swift", file: AuthenticatorStep3.swift)
             }
             
             @Step {
-                During sign-out, use these `AuthenticationManager` methods.
+                During sign-out, use the `AuthenticationManager` method. 
+                It signs the user out of the application by revoking OAuth tokens,
+                invalidating IAP credentials, and clearing credential stores.
                 @Code(name: "SignOutView.swift", file: AuthenticatorStep4.swift)
             }
         }

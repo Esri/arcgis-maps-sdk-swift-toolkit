@@ -18,13 +18,10 @@ import SwiftUI
 /// A view for date/time input.
 struct DateTimeInput: View {
     /// The view model for the form.
-    @Environment(InternalFeatureFormViewModel.self) private var internalFeatureFormViewModel
+    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
     
     /// The current date selection.
     @State private var date: Date?
-    
-    /// The formatted version of the element's current value.
-    @State private var formattedValue = ""
     
     /// A Boolean value indicating whether a new date (or time is being set).
     @State private var isEditing = false
@@ -52,21 +49,17 @@ struct DateTimeInput: View {
     
     var body: some View {
         dateEditor
-            .onChange(of: internalFeatureFormViewModel.focusedElement) {
-                isEditing = internalFeatureFormViewModel.focusedElement == element
+            .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
+                isEditing = embeddedFeatureFormViewModel.focusedElement == element
             }
             .onChange(of: date) {
+                guard date != element.value as? Date else { return }
                 element.updateValue(date)
-                formattedValue = element.formattedValue
-                internalFeatureFormViewModel.evaluateExpressions()
+                embeddedFeatureFormViewModel.evaluateExpressions()
             }
-            .onValueChange(of: element) { newValue, newFormattedValue in
-                if newFormattedValue.isEmpty {
-                    date = nil
-                } else {
-                    date = newValue as? Date
-                }
-                formattedValue = newFormattedValue
+            .onValueChange(of: element) { newValue, _ in
+                guard let newDate = newValue as? Date, newDate != date else { return }
+                date = newDate
             }
             .onIsRequiredChange(of: element) { newIsRequired in
                 isRequired = newIsRequired
@@ -90,7 +83,7 @@ struct DateTimeInput: View {
     /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
-            Text(!formattedValue.isEmpty ? formattedValue : .noValue)
+            formattedDate
                 .accessibilityIdentifier("\(element.label) Value")
                 .foregroundStyle(displayColor)
             
@@ -106,8 +99,8 @@ struct DateTimeInput: View {
                         .foregroundStyle(.secondary)
                 } else if !isRequired {
                     XButton(.clear) {
-                        internalFeatureFormViewModel.focusedElement = element
-                        defer { internalFeatureFormViewModel.focusedElement = nil }
+                        embeddedFeatureFormViewModel.focusedElement = element
+                        defer { embeddedFeatureFormViewModel.focusedElement = nil }
                         date = nil
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")
@@ -128,8 +121,20 @@ struct DateTimeInput: View {
                     }
                 }
                 isEditing.toggle()
-                internalFeatureFormViewModel.focusedElement = isEditing ? element : nil
+                embeddedFeatureFormViewModel.focusedElement = isEditing ? element : nil
             }
+        }
+    }
+    
+    /// The system formatted version of the element's current date.
+    var formattedDate: Text {
+        if let date {
+            Text(
+                date,
+                format: input.includesTime ? .dateTime : .dateTime.day().month().year()
+            )
+        } else {
+            Text(String.noValue)
         }
     }
     

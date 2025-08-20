@@ -22,7 +22,7 @@ struct FeatureFormGroupedContentView<Content: View>: View {
         VStack(alignment: .leading) {
             ForEach(content.enumerated().map({ ($0.offset, $0.element) }), id: \.0) { (offset, content) in
                 content
-                if offset+1 != self.content.count {
+                if offset + 1 != self.content.count {
                     Divider()
                 }
             }
@@ -36,14 +36,14 @@ struct FeatureFormGroupedContentView<Content: View>: View {
     ScrollView {
         FeatureFormGroupedContentView(content: [
             Button { } label: {
-                Text("A Button")
+                Text(verbatim: "A Button")
                 Spacer()
                 Image(systemName: "chevron.right")
             }
         ])
         
         FeatureFormGroupedContentView(content: [
-            Text("Text 1"), Text("Text 2")
+            Text(verbatim: "Text 1"), Text(verbatim: "Text 2")
         ])
         
         FeatureFormGroupedContentView(content: [

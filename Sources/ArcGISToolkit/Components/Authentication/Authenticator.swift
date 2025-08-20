@@ -27,7 +27,7 @@ import CryptoTokenKit
 /// asked to handle an authentication challenge. This will handle many different types of
 /// authentication, for example:
 ///
-///   - ArcGIS authentication (token and OAuth)
+///   - ArcGIS authentication (token, OAuth, and Identity-Aware Proxy (IAP))
 ///   - Integrated Windows Authentication (IWA)
 ///   - Client Certificate (PKI)
 ///
@@ -36,38 +36,64 @@ import CryptoTokenKit
 /// `Authenticator` is accessible via a modifier on `View`:
 ///
 /// ```swift
-/// /// Presents user experiences for collecting network authentication credentials from the user.
+/// /// Presents user experiences for collecting authentication credentials from the user.
 /// /// - Parameter authenticator: The authenticator for which credentials will be prompted.
 /// @ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View
 /// ```
 ///
 /// **Behavior**
 ///
-/// The `authenticator(_:)` view modifier will display an alert prompting the user for credentials. If
+/// The `authenticator(_:)` view modifier will display a sheet prompting the user for credentials. If
 /// credentials were persisted to the keychain, the authenticator will use those instead of
 /// requiring the user to re-enter credentials.
 ///
 /// To see the `Authenticator` in action, check out the [Authentication Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/AuthenticationExample)
 /// and refer to [AuthenticationApp.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift).
 /// To learn more about using the `Authenticator`, see the <doc:AuthenticatorTutorial>.
+///
+/// - Since: 200.1
 @MainActor
 public final class Authenticator: ObservableObject {
     /// A value indicating whether we should prompt the user when encountering an untrusted host.
     let promptForUntrustedHosts: Bool
-    /// The OAuth configurations that this authenticator can work with.
-    let oAuthUserConfigurations: [OAuthUserConfiguration]
+    /// The OAuth user configurations that this authenticator can work with.
+    /// - Since: 200.8
+    public var oAuthUserConfigurations: [OAuthUserConfiguration] = []
+    /// The IAP configurations that this authenticator can work with.
+    /// - Since: 200.8
+    public var iapConfigurations: [IAPConfiguration] = []
     
     /// Creates an authenticator.
     /// - Parameters:
     ///   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
     ///   encountering an untrusted host.
     ///   - oAuthUserConfigurations: The OAuth configurations that this authenticator can work with.
+    /// - Attention: Deprecated at 200.8.
+    @_disfavoredOverload
+    @available(*, deprecated, message: "Use 'init(promptForUntrustedHosts:oAuthUserConfigurations:iapConfigurations:)' instead")
     public init(
         promptForUntrustedHosts: Bool = false,
         oAuthUserConfigurations: [OAuthUserConfiguration] = []
     ) {
         self.promptForUntrustedHosts = promptForUntrustedHosts
         self.oAuthUserConfigurations = oAuthUserConfigurations
+    }
+    
+    /// Creates an authenticator.
+    /// - Parameters:
+    ///   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
+    ///   encountering an untrusted host.
+    ///   - oAuthUserConfigurations: The OAuth user configurations that this authenticator can work with.
+    ///   - iapConfigurations: The IAP configurations that this authenticator can work with.
+    /// - Since: 200.8
+    public init(
+        promptForUntrustedHosts: Bool = false,
+        oAuthUserConfigurations: [OAuthUserConfiguration] = [],
+        iapConfigurations: [IAPConfiguration] = []
+    ) {
+        self.promptForUntrustedHosts = promptForUntrustedHosts
+        self.oAuthUserConfigurations = oAuthUserConfigurations
+        self.iapConfigurations = iapConfigurations
     }
     
     /// The current challenge.
@@ -82,8 +108,33 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
         // Alleviates an error with "already presenting".
         await Task.yield()
         
-        // Create the correct challenge type.
-        if let configuration = oAuthUserConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) }) {
+        // Handle different types of challenges.
+        switch challenge.kind {
+        case .iap:
+            // The IAP configuration must be available to handle the challenge;
+            // otherwise, continue without credentials, which is expected
+            // to cause the request that issued this challenge to fail.
+            guard let configuration = iapConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) }) else {
+                return .continueWithoutCredential
+            }
+            
+            do {
+                return .continueWithCredential(try await IAPCredential.credential(for: configuration))
+            } catch is CancellationError {
+                // If user cancels the creation of IAP credential then catch the
+                // cancellation error and cancel the challenge. This will make the
+                // request which issued the challenge fail with `ArcGISChallengeCancellationError`.
+                return .cancel
+            }
+        case .oAuthOrToken:
+            // The challenge can be handled either using OAuth or token credentials.
+            // If the OAuth user configuration is available, then handle the challenge
+            // using it; otherwise, fall through to handle the challenge using token
+            // credentials.
+            guard let configuration = oAuthUserConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) }) else {
+                fallthrough
+            }
+            
             do {
                 return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
             } catch is CancellationError {
@@ -92,7 +143,7 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
                 // issued the challenge fail with `ArcGISChallengeCancellationError`.
                 return .cancel
             }
-        } else {
+        case .token:
             let tokenChallengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
             
             // Set the current challenge, which will present the UX.
@@ -101,6 +152,8 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
             
             // Wait for it to complete and return the resulting disposition.
             return try await tokenChallengeContinuation.value.get()
+        @unknown default:
+            fatalError("Unknown challenge")
         }
     }
 }

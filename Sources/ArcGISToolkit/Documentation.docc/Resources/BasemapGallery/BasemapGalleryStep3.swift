@@ -18,10 +18,12 @@ struct BasemapGalleryExampleView: View {
     
     var body: some View {
         MapView(map: map)
-            .sheet(isPresented: $basemapGalleryIsPresented) {
-                BasemapGallery(items: basemaps, geoModel: map)
-                    .style(.grid(maxItemWidth: 100))
-                    .padding()
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Show basemaps", image: .basemap) {
+                        basemapGalleryIsPresented = true
+                    }
+                }
             }
     }
     
