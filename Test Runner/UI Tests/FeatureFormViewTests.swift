@@ -227,6 +227,7 @@ final class FeatureFormViewTests: XCTestCase {
         returnButton.tap()
 #endif
         
+        // Scroll slightly up to expose section header. FB19740517
         app.scrollToElement(fieldTitle, direction: .down, maxSwipes: 1, velocity: .slow)
         
         XCTAssertTrue(
@@ -466,6 +467,9 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         fieldValue.tap()
+        
+        // Scroll slightly up to expose section header. FB19740517
+        app.scrollToElement(fieldTitle, direction: .down, maxSwipes: 1, velocity: .slow)
         
         XCTAssertTrue(
             fieldTitle.isHittable,
