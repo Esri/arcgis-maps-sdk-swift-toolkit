@@ -123,6 +123,8 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(fieldTitle, direction: .up)
+        
         XCTAssertTrue(
             fieldTitle.exists,
             "The field title doesn't exist."
@@ -183,6 +185,8 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(textField, direction: .up)
+        
         textField.tap()
         
         app.typeText("Sample text")
@@ -223,6 +227,8 @@ final class FeatureFormViewTests: XCTestCase {
         returnButton.tap()
 #endif
         
+        app.scrollToElement(fieldTitle, direction: .down, maxSwipes: 1, velocity: .slow)
+        
         XCTAssertTrue(
             fieldTitle.isHittable,
             "The title isn't hittable."
@@ -237,6 +243,8 @@ final class FeatureFormViewTests: XCTestCase {
             clearButton.isHittable,
             "The clear button isn't hittable."
         )
+        
+        app.scrollToElement(textField, direction: .up, maxSwipes: 1, velocity: .slow)
         
         XCTAssertTrue(
             textField.isHittable,
@@ -257,6 +265,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.scrollToElement(textField, direction: .up)
         
         textField.tap()
         
@@ -392,6 +402,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.scrollToElement(fieldValue, direction: .up)
         
         if fieldValue.label != "No Value" {
             clearButton.tap()
@@ -562,6 +574,8 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(fieldValue, direction: .up)
+        
         if fieldValue.label != "No Value" {
             clearButton.tap()
         }
@@ -622,6 +636,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.scrollToElement(fieldValue, direction: .up)
         
         fieldValue.tap()
         
@@ -1098,11 +1114,15 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(field1, direction: .up)
+        
         // Verify the Radio Button fallback to Combo Box was successful.
         XCTAssertTrue(
             field1.exists,
             "The combo box doesn't exist."
         )
+        
+        app.scrollToElement(noValueEnabledRadioButton, direction: .up)
         
         // Verify the radio buttons are shown even when the value option is enabled.
         XCTAssertTrue(
@@ -1242,6 +1262,8 @@ final class FeatureFormViewTests: XCTestCase {
             "The first group element doesn't exist."
         )
         
+        app.scrollToElement(collapsedGroup, direction: .up)
+        
         XCTAssertTrue(
             collapsedGroup.exists,
             "The collapsed group header doesn't exist."
@@ -1272,10 +1294,14 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(hiddenElementsGroup, direction: .up)
+        
         XCTAssertTrue(
             hiddenElementsGroup.exists,
             "The group header doesn't exist."
         )
+        
+        app.scrollToElement(hiddenElementsGroupDescription, direction: .up)
         
         XCTAssertTrue(
             hiddenElementsGroupDescription.exists,
@@ -1300,6 +1326,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         showElementsButton.tap()
+        
+        app.scrollToElement(groupElement, direction: .up)
         
         // Confirm the first element of the conditional group doesn't exist.
         XCTAssertTrue(
@@ -1716,4 +1744,44 @@ private extension String {
             """
         )
     }
+}
+
+extension XCUIApplication {
+    /// Scrolls up until the target element is hittable or max swipes reached.
+    func scrollToElement(_ element: XCUIElement, direction: ScrollDirection, maxSwipes: Int = 10, velocity: XCUIGestureVelocity? = nil) {
+        var swipes = 0
+        while !element.isHittable && swipes < maxSwipes {
+#if targetEnvironment(macCatalyst)
+            let target = sheets.firstMatch
+            switch (direction, velocity) {
+            case (.up, .none):
+                target.swipeUp()
+            case (.up, .some(let velocity)):
+                target.swipeUp(velocity: velocity)
+            case (.down, .none):
+                target.swipeDown()
+            case (.down, .some(let velocity)):
+                target.swipeDown(velocity: velocity)
+            }
+#else
+            let target = self
+            switch (direction, velocity) {
+            case (.up, .none):
+                target.swipeUp()
+            case (.up, .some(let velocity)):
+                target.swipeUp(velocity: velocity)
+            case (.down, .none):
+                target.swipeDown()
+            case (.down, .some(let velocity)):
+                target.swipeDown(velocity: velocity)
+            }
+#endif
+            swipes += 1
+        }
+    }
+}
+
+enum ScrollDirection {
+    case down
+    case up
 }
