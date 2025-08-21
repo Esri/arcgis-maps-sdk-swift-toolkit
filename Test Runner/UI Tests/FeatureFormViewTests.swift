@@ -1453,7 +1453,7 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
-        XCTAssertTrue(placeholderImage.exists)
+        XCTAssertTrue(placeholderImage.waitForExistence(timeout: 10))
         XCTAssertTrue(attachmentName.exists)
         XCTAssertTrue(sizeLabel.exists)
         XCTAssertTrue(downloadIcon.exists)
