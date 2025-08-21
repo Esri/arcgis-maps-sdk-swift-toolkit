@@ -616,6 +616,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         fieldValue.tap()
         
+        app.scrollToElement(footer, direction: .up, velocity: .slow)
+        
         XCTAssertEqual(
             footer.label,
             "End date and Time 7/27/1969 12:00:00 AM"
@@ -626,6 +628,8 @@ final class FeatureFormViewTests: XCTestCase {
                 timeZone: .gmt, year: 1969, month: 7, day: 27, hour: 7
             )
         )
+        
+        app.scrollToElement(fieldValue, direction: .down, velocity: .slow)
         
         XCTAssertEqual(
             fieldValue.label,
