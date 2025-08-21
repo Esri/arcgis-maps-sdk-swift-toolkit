@@ -158,6 +158,7 @@ public struct FeatureFormView: View {
                         }
                     }
             }
+            .accessibilityIdentifier("FeatureFormView")
             // Alert for abandoning unsaved edits
             .alert(
                 presentedForm.validationErrors.isEmpty ? discardEditsQuestion : validationErrors,

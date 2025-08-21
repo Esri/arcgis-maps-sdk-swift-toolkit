@@ -1769,11 +1769,15 @@ private extension String {
 
 extension XCUIApplication {
     /// Scrolls up until the target element is hittable or max swipes reached.
-    func scrollToElement(_ element: XCUIElement, direction: ScrollDirection, maxSwipes: Int = 10, velocity: XCUIGestureVelocity? = nil) {
+    func scrollToElement(
+        _ element: XCUIElement,
+        direction: ScrollDirection,
+        maxSwipes: Int = 10,
+        velocity: XCUIGestureVelocity? = nil
+    ) {
+        let target = otherElements["FeatureFormView"].firstMatch
         var swipes = 0
         while !element.isHittable && swipes < maxSwipes {
-#if targetEnvironment(macCatalyst)
-            let target = sheets.firstMatch
             switch (direction, velocity) {
             case (.up, .none):
                 target.swipeUp()
@@ -1784,19 +1788,6 @@ extension XCUIApplication {
             case (.down, .some(let velocity)):
                 target.swipeDown(velocity: velocity)
             }
-#else
-            let target = self
-            switch (direction, velocity) {
-            case (.up, .none):
-                target.swipeUp()
-            case (.up, .some(let velocity)):
-                target.swipeUp(velocity: velocity)
-            case (.down, .none):
-                target.swipeDown()
-            case (.down, .some(let velocity)):
-                target.swipeDown(velocity: velocity)
-            }
-#endif
             swipes += 1
         }
     }
