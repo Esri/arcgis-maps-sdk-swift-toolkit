@@ -688,9 +688,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         nowButton.tap()
         
-#if os(visionOS)
-        fieldValue.tap()
-#endif
+        app.scrollToElement(julyFirstButton, direction: .up, velocity: .slow)
         
         julyFirstButton.tap()
         
