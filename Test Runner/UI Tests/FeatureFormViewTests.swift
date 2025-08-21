@@ -1190,7 +1190,7 @@ final class FeatureFormViewTests: XCTestCase {
             "The switch isn't hittable."
         )
         
-        switchView.tap()
+        switchView.switches.firstMatch.tap()
         
         XCTAssertEqual(
             switchView.label,
