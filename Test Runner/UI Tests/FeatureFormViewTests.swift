@@ -1345,6 +1345,8 @@ final class FeatureFormViewTests: XCTestCase {
             "The first group element exists but should be hidden."
         )
         
+        app.scrollToElement(showElementsButton, direction: .down)
+        
         // Confirm the option to show the elements exists.
         XCTAssertTrue(
             showElementsButton.exists,
