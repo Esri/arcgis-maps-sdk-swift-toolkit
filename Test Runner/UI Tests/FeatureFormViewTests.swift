@@ -1549,6 +1549,8 @@ final class FeatureFormViewTests: XCTestCase {
             "The element \"Associations\" doesn't exist."
         )
         
+        app.scrollToElement(filterResults3, direction: .up)
+        
         XCTAssertTrue(
             filterResults1.waitForExistence(timeout: 5),
             "The filter result \"Connected\" doesn't exist."
