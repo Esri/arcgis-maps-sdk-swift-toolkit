@@ -254,7 +254,7 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 1.3: unfocused and focused state, with error value (> 256 chars)
-    func testCase_1_3() throws {
+    func testCase_1_3() async throws {
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
@@ -293,9 +293,14 @@ final class FeatureFormViewTests: XCTestCase {
             "The character count doesn't exist."
         )
         
-        XCTAssertEqual(
-            characterIndicator.label,
-            "257"
+        await fulfillment(
+            of: [
+                expectation(
+                    for: NSPredicate(format: "label == \"257\""),
+                    evaluatedWith: characterIndicator
+                )
+            ],
+            timeout: 10.0
         )
         
         XCTAssertTrue(
@@ -340,7 +345,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
     }
     
-    func testCase_1_4() {
+    func testCase_1_4() async {
         let app = XCUIApplication()
         let footer = app.staticTexts["numbers Footer"]
         let formTitle = app.staticTexts["Domain"]
@@ -372,11 +377,15 @@ final class FeatureFormViewTests: XCTestCase {
         textField.doubleTap()
         textField.typeText("3")
         
-        expectation(
-            for: NSPredicate(format: "label == \"Range domain 2-5\""),
-            evaluatedWith: footer
+        await fulfillment(
+            of: [
+                expectation(
+                    for: NSPredicate(format: "label == \"Range domain 2-5\""),
+                    evaluatedWith: footer
+                )
+            ],
+            timeout: 10
         )
-        waitForExpectations(timeout: 10, handler: nil)
         
         // Highlight/select the current value and replace it
         textField.doubleTap()
