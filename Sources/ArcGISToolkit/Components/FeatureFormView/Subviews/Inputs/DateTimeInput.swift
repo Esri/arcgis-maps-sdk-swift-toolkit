@@ -86,6 +86,23 @@ struct DateTimeInput: View {
             formattedDate
                 .accessibilityIdentifier("\(element.label) Value")
                 .foregroundStyle(displayColor)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(.rect)
+                .onTapGesture {
+                    withAnimation {
+                        if date == nil {
+                            if dateRange.contains(.now) {
+                                date = .now
+                            } else if let min = input.min {
+                                date = min
+                            } else if let max = input.max {
+                                date = max
+                            }
+                        }
+                        isEditing.toggle()
+                        embeddedFeatureFormViewModel.focusedElement = isEditing ? element : nil
+                    }
+                }
             
             Spacer()
             
@@ -105,22 +122,6 @@ struct DateTimeInput: View {
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")
                 }
-            }
-        }
-        .contentShape(.rect)
-        .onTapGesture {
-            withAnimation {
-                if date == nil {
-                    if dateRange.contains(.now) {
-                        date = .now
-                    } else if let min = input.min {
-                        date = min
-                    } else if let max = input.max {
-                        date = max
-                    }
-                }
-                isEditing.toggle()
-                embeddedFeatureFormViewModel.focusedElement = isEditing ? element : nil
             }
         }
     }
