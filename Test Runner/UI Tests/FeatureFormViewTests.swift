@@ -967,17 +967,11 @@ final class FeatureFormViewTests: XCTestCase {
             "The field title doesn't exist."
         )
         
-        if #available(iOS 18.0, *) {
-            XCTAssertFalse(
-                fieldValue.exists,
-                "The field value exists but it should not because it is empty."
-            )
-        } else {
-            XCTAssertEqual(
-                fieldValue.label,
-                ""
-            )
-        }
+        XCTAssertEqual(
+            fieldValue.label,
+            "",
+            "The field value was not empty as expected."
+        )
         
         optionsButton.tap()
         
