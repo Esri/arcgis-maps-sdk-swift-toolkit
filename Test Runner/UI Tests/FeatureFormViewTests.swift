@@ -1181,11 +1181,7 @@ final class FeatureFormViewTests: XCTestCase {
             "2"
         )
         
-#if os(visionOS)
-        switchView.tap()
-#else
-        switchView.switches.firstMatch.tap()
-#endif
+        switchView.tapSwitch()
         
         XCTAssertEqual(
             switchView.label,
@@ -1218,7 +1214,7 @@ final class FeatureFormViewTests: XCTestCase {
             "The switch isn't hittable."
         )
         
-        switchView.switches.firstMatch.tap()
+        switchView.tapSwitch()
         
         XCTAssertEqual(
             switchView.label,
@@ -1396,6 +1392,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(radioButtonsReadOnlyInput.exists)
         
+        app.scrollToElement(dateReadOnlyInput, direction: .up)
+        
         XCTAssertTrue(dateReadOnlyInput.exists)
         
         app.scrollToElement(shortTextReadOnlyInput, direction: .up)
@@ -1409,17 +1407,19 @@ final class FeatureFormViewTests: XCTestCase {
         // Scroll slightly up to expose section header. FB19740517
         app.scrollToElement(elementsAreEditableSwitch, direction: .down)
         
-        elementsAreEditableSwitch.switches.firstMatch.tap()
+        elementsAreEditableSwitch.tapSwitch()
         
         XCTAssertTrue(elementInTheGroupIsEditableSwitch.exists)
         
-        elementInTheGroupIsEditableSwitch.switches.firstMatch.tap()
+        elementInTheGroupIsEditableSwitch.tapSwitch()
         
         XCTAssertTrue(comboBox.exists)
         
         XCTAssertTrue(radioButtonsInput.exists)
         
         XCTAssertTrue(dateInput.exists)
+        
+        app.scrollToElement(shortTextTextInput, direction: .up)
         
         XCTAssertTrue(shortTextTextInput.exists)
         
@@ -1822,4 +1822,14 @@ extension XCUIApplication {
 enum ScrollDirection {
     case down
     case up
+}
+
+extension XCUIElement {
+    func tapSwitch() {
+#if os(visionOS)
+        tap()
+#else
+        switches.firstMatch.tap()
+#endif
+    }
 }
