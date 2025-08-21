@@ -73,12 +73,6 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
-            .contentShape(.rect)
-            .onTapGesture {
-                if element.isMultiline {
-                    fullScreenTextInputIsPresented = true
-                }
-            }
 #if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
@@ -110,6 +104,12 @@ private extension TextInput {
 #endif
                         }
                         .frame(minHeight: 100, alignment: .top)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            if element.isMultiline {
+                                fullScreenTextInputIsPresented = true
+                            }
+                        }
                 } else {
                     TextField(
                         element.label,

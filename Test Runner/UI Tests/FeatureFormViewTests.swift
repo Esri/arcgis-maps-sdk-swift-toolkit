@@ -1483,7 +1483,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         titleTextField.typeText("Los Angeles")
         
-        XCTAssertTrue(losAngelesText.exists)
+        XCTAssertTrue(losAngelesText.waitForExistence(timeout: 10))
     }
     
     /// Test plain text
