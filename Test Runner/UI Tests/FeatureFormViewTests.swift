@@ -916,6 +916,8 @@ final class FeatureFormViewTests: XCTestCase {
             "The clear button is hittable."
         )
         
+        app.scrollToElement(footer, direction: .up, velocity: .slow)
+        
         XCTAssertTrue(
             footer.exists,
             "The footer doesn't exist."
