@@ -303,7 +303,7 @@ final class FeatureFormViewTests: XCTestCase {
             "The clear button doesn't exist."
         )
         
-#if targetEnvironment(macCatalyst)
+#if targetEnvironment(macCatalyst) || os(visionOS)
         app.typeText("\r")
 #else
         returnButton.tap()
