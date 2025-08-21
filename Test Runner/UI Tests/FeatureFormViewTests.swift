@@ -601,10 +601,14 @@ final class FeatureFormViewTests: XCTestCase {
         
         fieldValue.tap()
         
+        app.scrollToElement(footer, direction: .up, velocity: .slow)
+        
         XCTAssertTrue(
             footer.exists,
             "The footer doesn't exist."
         )
+        
+        app.scrollToElement(nowButton, direction: .down, velocity: .slow)
         
         XCTAssertTrue(
             nowButton.waitForExistence(timeout: 2.5),
