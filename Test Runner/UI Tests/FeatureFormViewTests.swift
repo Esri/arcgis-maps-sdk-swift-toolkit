@@ -447,6 +447,8 @@ final class FeatureFormViewTests: XCTestCase {
             "The now button isn't hittable."
         )
         
+        app.scrollToElement(footer, direction: .up, velocity: .slow)
+        
         XCTAssertEqual(
             footer.label,
             "Date Entry is Required"
