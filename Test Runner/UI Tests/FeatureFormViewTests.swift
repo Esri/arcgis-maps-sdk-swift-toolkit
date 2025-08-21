@@ -1372,6 +1372,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(dateReadOnlyInput.exists)
         
+        app.scrollToElement(shortTextReadOnlyInput, direction: .up)
+        
         XCTAssertTrue(shortTextReadOnlyInput.exists)
         
         app.scrollToElement(longTextReadOnlyInput, direction: .up)
