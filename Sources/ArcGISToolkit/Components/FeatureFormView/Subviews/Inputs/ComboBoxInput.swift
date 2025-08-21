@@ -84,6 +84,11 @@ struct ComboBoxInput: View {
                 .accessibilityIdentifier("\(element.label) Combo Box Value")
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
+                .contentShape(.rect)
+                .onTapGesture {
+                    embeddedFeatureFormViewModel.focusedElement = element
+                    isPresented = true
+                }
             if let _ = selectedValue.codedValue, !isRequired {
                 // Only show clear button if we have a value
                 // and we're not required. (i.e., Don't show clear if
@@ -114,11 +119,6 @@ struct ComboBoxInput: View {
             } else {
                 selectedValue = .noValue
             }
-        }
-        .contentShape(.rect)
-        .onTapGesture {
-            embeddedFeatureFormViewModel.focusedElement = element
-            isPresented = true
         }
         .sheet(isPresented: $isPresented) {
             makePicker()
