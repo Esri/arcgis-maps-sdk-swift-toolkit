@@ -1157,7 +1157,7 @@ final class FeatureFormViewTests: XCTestCase {
             "2"
         )
         
-        switchView.tap()
+        switchView.switches.firstMatch.tap()
         
         XCTAssertEqual(
             switchView.label,
@@ -1370,13 +1370,18 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(shortTextReadOnlyInput.exists)
         
+        app.scrollToElement(longTextReadOnlyInput, direction: .up)
+        
         XCTAssertTrue(longTextReadOnlyInput.exists)
         
-        elementsAreEditableSwitch.tap()
+        // Scroll slightly up to expose section header. FB19740517
+        app.scrollToElement(elementsAreEditableSwitch, direction: .down)
+        
+        elementsAreEditableSwitch.switches.firstMatch.tap()
         
         XCTAssertTrue(elementInTheGroupIsEditableSwitch.exists)
         
-        elementInTheGroupIsEditableSwitch.tap()
+        elementInTheGroupIsEditableSwitch.switches.firstMatch.tap()
         
         XCTAssertTrue(comboBox.exists)
         
@@ -1385,6 +1390,8 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertTrue(dateInput.exists)
         
         XCTAssertTrue(shortTextTextInput.exists)
+        
+        app.scrollToElement(longTextTextInputPreview, direction: .up)
         
         XCTAssertTrue(longTextTextInputPreview.exists)
     }
