@@ -1020,6 +1020,8 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(fieldTitle, direction: .up)
+        
         XCTAssertTrue(
             fieldTitle.exists,
             "The field title doesn't exist."
