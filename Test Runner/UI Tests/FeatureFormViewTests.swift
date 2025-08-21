@@ -1593,12 +1593,14 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(elementTitle, direction: .up, velocity: .fast)
+        
         XCTAssertTrue(
             elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
         )
         
-        app.scrollToElement(filterResults, direction: .up, velocity: .fast)
+        app.scrollToElement(filterResults, direction: .up, velocity: .slow)
         
         XCTAssertTrue(
             filterResults.waitForExistence(timeout: 5),
