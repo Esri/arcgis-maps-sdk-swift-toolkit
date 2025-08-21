@@ -1181,7 +1181,11 @@ final class FeatureFormViewTests: XCTestCase {
             "2"
         )
         
+#if os(visionOS)
+        switchView.tap()
+#else
         switchView.switches.firstMatch.tap()
+#endif
         
         XCTAssertEqual(
             switchView.label,
