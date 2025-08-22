@@ -1800,7 +1800,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         // Tap the "Discard" option. Note that some platforms may use "Discard Edits".
-        discardEditsButton.tap()
+        discardEditsButton.firstMatch.tap()
         
         // Access the new `FeatureForm`
         // Expectation: the form title should be "Electric Distribution Junction"
