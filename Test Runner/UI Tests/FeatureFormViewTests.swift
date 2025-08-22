@@ -113,7 +113,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 1.1: unfocused and focused state, no value
     func testCase_1_1() throws {
-        try skipForCatalystOverScroll()
+        try skipForCatalystScrollBehavior()
         
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
@@ -175,7 +175,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 1.2: focused and unfocused state, with value (populated)
     func testCase_1_2() throws {
-        try skipForCatalystOverScroll()
+        try skipForCatalystScrollBehavior()
         
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
@@ -259,7 +259,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 1.3: unfocused and focused state, with error value (> 256 chars)
     func testCase_1_3() async throws {
-        try skipForCatalystOverScroll()
+        try skipForCatalystScrollBehavior()
         
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
@@ -472,7 +472,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 2.2: Focused and unfocused state, with value (populated)
     func testCase_2_2() throws {
-        try skipForCatalystOverScroll()
+        try skipForCatalystScrollBehavior()
         
         let app = XCUIApplication()
         let datePicker = app.datePickers["Launch Date and Time for Apollo 11 Date Picker"]
@@ -591,7 +591,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 2.4: Maximum date
     func testCase_2_4() throws {
-        try skipForCatalystOverScroll()
+        try skipForCatalystScrollBehavior()
         
         let app = XCUIApplication()
         let clearButton = app.buttons["Launch Date Time End Clear Button"]
@@ -662,7 +662,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 2.5: Minimum date
     func testCase_2_5() throws {
-        try skipForCatalystOverScroll()
+        try skipForCatalystScrollBehavior()
         
         let app = XCUIApplication()
         let datePicker = app.datePickers["start and end date time Date Picker"]
@@ -1327,7 +1327,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 6.2: Test visibility of empty group
     func testCase_6_2() throws {
-        try skipForCatalystOverScroll()
+        try skipForCatalystScrollBehavior()
         
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
@@ -1391,7 +1391,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 7.1: Test read only elements
     func testCase_7_1() throws {
-        try skipForCatalystOverScroll()
+        try skipForCatalystScrollBehavior()
         
         let app = XCUIApplication()
         let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
@@ -1863,6 +1863,14 @@ extension XCUIElement {
         tap()
 #else
         switches.firstMatch.tap()
+#endif
+    }
+}
+
+extension XCTestCase {
+    func skipForCatalystScrollBehavior() throws {
+#if targetEnvironment(macCatalyst)
+        throw XCTSkip("Scrolling in UI tests on Mac Catalyst is inconsistent (FB19836397)")
 #endif
     }
 }
