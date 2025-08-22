@@ -710,6 +710,8 @@ final class FeatureFormViewTests: XCTestCase {
             )
         )
         
+        app.scrollToElement(fieldValue, direction: .down, velocity: .slow)
+        
         XCTAssertEqual(
             fieldValue.label,
             localDate?.formatted()
