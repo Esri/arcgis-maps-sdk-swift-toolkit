@@ -113,6 +113,8 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 1.1: unfocused and focused state, no value
     func testCase_1_1() throws {
+        try skipForCatalystOverScroll()
+        
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
@@ -173,6 +175,8 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 1.2: focused and unfocused state, with value (populated)
     func testCase_1_2() throws {
+        try skipForCatalystOverScroll()
+        
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
@@ -255,6 +259,8 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 1.3: unfocused and focused state, with error value (> 256 chars)
     func testCase_1_3() async throws {
+        try skipForCatalystOverScroll()
+        
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
@@ -465,7 +471,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 2.2: Focused and unfocused state, with value (populated)
-    func testCase_2_2() {
+    func testCase_2_2() throws {
+        try skipForCatalystOverScroll()
+        
         let app = XCUIApplication()
         let datePicker = app.datePickers["Launch Date and Time for Apollo 11 Date Picker"]
         let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
@@ -582,7 +590,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 2.4: Maximum date
-    func testCase_2_4() {
+    func testCase_2_4() throws {
+        try skipForCatalystOverScroll()
+        
         let app = XCUIApplication()
         let clearButton = app.buttons["Launch Date Time End Clear Button"]
         let fieldValue = app.staticTexts["Launch Date Time End Value"]
@@ -651,7 +661,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 2.5: Minimum date
-    func testCase_2_5() {
+    func testCase_2_5() throws {
+        try skipForCatalystOverScroll()
+        
         let app = XCUIApplication()
         let datePicker = app.datePickers["start and end date time Date Picker"]
         let fieldValue = app.staticTexts["start and end date time Value"]
@@ -1185,6 +1197,10 @@ final class FeatureFormViewTests: XCTestCase {
             "The field title isn't hittable."
         )
         
+#if targetEnvironment(macCatalyst)
+        XCTExpectFailure("The switch cannot be found on Mac Catalyst.")
+#endif
+        
         XCTAssertEqual(
             switchView.label,
             "2"
@@ -1212,6 +1228,10 @@ final class FeatureFormViewTests: XCTestCase {
             fieldTitle.isHittable,
             "The field title isn't hittable."
         )
+        
+#if targetEnvironment(macCatalyst)
+        XCTExpectFailure("The switch cannot be found on Mac Catalyst.")
+#endif
         
         XCTAssertEqual(
             switchView.label,
@@ -1308,7 +1328,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 6.2: Test visibility of empty group
-    func testCase_6_2() {
+    func testCase_6_2() throws {
+        try skipForCatalystOverScroll()
+        
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let groupElement = app.staticTexts["single line text 3"]
@@ -1371,6 +1393,8 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 7.1: Test read only elements
     func testCase_7_1() throws {
+        try skipForCatalystOverScroll()
+        
         let app = XCUIApplication()
         let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
         let elementsAreEditableSwitch = app.switches["Elements are editable Switch"]
