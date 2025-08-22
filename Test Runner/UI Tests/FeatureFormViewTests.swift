@@ -1481,7 +1481,7 @@ final class FeatureFormViewTests: XCTestCase {
         placeholderImage.tap()
         
         XCTAssertTrue(thumbnailImage.waitForExistence(timeout: 10))
-        XCTAssertFalse(placeholderImage.exists)
+        XCTAssertFalse(placeholderImage.waitForExistence(timeout: 10))
         XCTAssertFalse(downloadIcon.exists)
     }
     
@@ -1834,7 +1834,7 @@ extension XCUIApplication {
         maxSwipes: Int = 10,
         velocity: XCUIGestureVelocity? = nil
     ) {
-        let target = otherElements["FeatureFormView"].firstMatch
+        let target = collectionViews.firstMatch
         var swipes = 0
         while !element.isHittable && swipes < maxSwipes {
             switch (direction, velocity) {
