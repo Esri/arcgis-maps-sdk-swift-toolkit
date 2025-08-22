@@ -930,7 +930,7 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        app.scrollToElement(fieldTitle, direction: .up, velocity: .slow)
+        app.scrollToElement(footer, direction: .up, velocity: .slow)
         
         XCTAssertTrue(
             fieldTitle.exists,
@@ -946,8 +946,6 @@ final class FeatureFormViewTests: XCTestCase {
             clearButton.isHittable,
             "The clear button is hittable."
         )
-        
-        app.scrollToElement(footer, direction: .up, velocity: .slow)
         
         XCTAssertTrue(
             footer.exists,
