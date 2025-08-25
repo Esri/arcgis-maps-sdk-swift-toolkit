@@ -78,9 +78,6 @@ public struct FeatureFormView: View {
     /// A binding to a Boolean value that determines whether the view is presented.
     private let isPresented: Binding<Bool>?
     
-    /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
-    private let deprecatedInitializerWasUsed: Bool
-    
     /// The root feature form.
     private let rootFeatureForm: FeatureForm?
     
@@ -121,7 +118,6 @@ public struct FeatureFormView: View {
     ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Since: 200.8
     public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
-        self.deprecatedInitializerWasUsed = false
         self.isPresented = isPresented
         self.presentedForm = root
         self.rootFeatureForm = root
@@ -259,7 +255,6 @@ public struct FeatureFormView: View {
             )
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.finishEditingError, $finishEditingError)
-            .environment(\.formDeprecatedInitializerWasUsed, deprecatedInitializerWasUsed)
             .environment(\.isPresented, isPresented)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
             .environment(\.navigationPath, $navigationPath)
@@ -327,37 +322,6 @@ public extension FeatureFormView {
         var copy = self
         copy.onFormEditingEventAction = action
         return copy
-    }
-    
-    /// Initializes a form view.
-    ///
-    /// - Important: This modifier has been deprecated and replaced with a new version that supports
-    /// UtilityAssociationsFormElement. UtilityAssociationsFormElements will not render when this modifier
-    /// is used. The replacement modifier also provides a few quality-of-life improvements like built-in
-    /// "Save" and "Discard" buttons that appear when the user has unsaved edits, and automatic (but
-    /// override-able) management of validation error visibility.
-    ///
-    /// - Parameter featureForm: The feature form defining the editing experience.
-    /// - Attention: Deprecated at 200.8.
-    @available(*, deprecated, message: "Use 'init(root:isPresented:)' instead.")
-    init(featureForm: FeatureForm) {
-        self.deprecatedInitializerWasUsed = true
-        self.isPresented = nil
-        self.presentedForm = featureForm
-        self.rootFeatureForm = featureForm
-        
-        if featureForm.elements.contains(where: { element in
-            element is UtilityAssociationsFormElement
-        }) {
-            Logger.featureFormView.log(
-                level: .error,
-                """
-                UtilityAssociationsFormElement is not supported with this 
-                FeatureFormView initializer. Please use init(root:isPresented:)
-                instead.
-                """
-            )
-        }
     }
 }
 
