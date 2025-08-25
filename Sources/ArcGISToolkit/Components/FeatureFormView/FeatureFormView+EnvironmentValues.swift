@@ -22,9 +22,6 @@ extension EnvironmentValues /* FeatureFormView */ {
     /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Entry var finishEditingError: Binding<(any Error)?> = .constant(nil)
     
-    /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
-    @Entry var formDeprecatedInitializerWasUsed = false
-    
     /// The environment value which declares whether navigation to forms for features associated via utility association form
     /// elements is disabled.
     @Entry var navigationIsDisabled = false

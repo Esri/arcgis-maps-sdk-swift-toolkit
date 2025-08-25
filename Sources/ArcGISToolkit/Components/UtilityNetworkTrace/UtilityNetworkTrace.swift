@@ -1085,43 +1085,6 @@ private extension String {
     }
 }
 
-public extension UtilityNetworkTrace /* Deprecated */ {
-    /// A graphical interface to run pre-configured traces on a map's utility networks.
-    /// - Parameters:
-    ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
-    ///   - map: The map containing the utility network(s).
-    ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-    ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
-    ///   - mapViewProxy: The proxy to provide access to map view operations.
-    ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
-    ///   - startingPoints: An optional list of programmatically provided starting points. This
-    ///   property will not modify interactively added starting points.
-    /// - Attention: Deprecated at 200.7.
-    @available(*, deprecated, message: "Use 'init(graphicsOverlay:map:mapPoint:mapViewProxy:startingPoints:)' instead.")
-    init(
-        graphicsOverlay: Binding<GraphicsOverlay>,
-        map: Map,
-        mapPoint: Binding<Point?>,
-        screenPoint: Binding<CGPoint?>,
-        mapViewProxy: MapViewProxy?,
-        viewpoint: Binding<Viewpoint?>,
-        startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
-    ) {
-        self.mapViewProxy = mapViewProxy
-        _activeDetent = .constant(nil)
-        _mapPoint = mapPoint
-        _graphicsOverlay = graphicsOverlay
-        _externalStartingPoints = startingPoints
-        _viewModel = StateObject(
-            wrappedValue: UtilityNetworkTraceViewModel(
-                map: map,
-                graphicsOverlay: graphicsOverlay.wrappedValue,
-                startingPoints: startingPoints.wrappedValue
-            )
-        )
-    }
-}
-
 private extension Text {
     static func makeResultsLabel(_ results: Int) -> Self {
         .init(

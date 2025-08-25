@@ -16,9 +16,6 @@ import ArcGIS
 import SwiftUI
 
 struct EmbeddedFeatureFormView: View {
-    /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
-    @Environment(\.formDeprecatedInitializerWasUsed) var deprecatedInitializerWasUsed
-    
     /// The view model for the form.
     @State private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     
@@ -32,10 +29,6 @@ struct EmbeddedFeatureFormView: View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 VStack(alignment: .leading) {
-                    if deprecatedInitializerWasUsed, !embeddedFeatureFormViewModel.title.isEmpty {
-                        FormHeader(title: embeddedFeatureFormViewModel.title)
-                        Divider()
-                    }
                     ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
                         makeElement(element)
                     }
@@ -66,14 +59,8 @@ struct EmbeddedFeatureFormView: View {
             .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
                 embeddedFeatureFormViewModel.title = newTitle
             }
-            .navigationBarTitleDisplayMode(
-                .inline,
-                isApplied: !deprecatedInitializerWasUsed
-            )
-            .navigationTitle(
-                embeddedFeatureFormViewModel.title,
-                isApplied: !deprecatedInitializerWasUsed
-            )
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(embeddedFeatureFormViewModel.title)
         }
 #if os(iOS)
         .scrollDismissesKeyboard(.immediately)
@@ -112,9 +99,7 @@ extension EmbeddedFeatureFormView {
         case let element as TextFormElement:
             makeTextElement(element)
         case let element as UtilityAssociationsFormElement:
-            if !deprecatedInitializerWasUsed {
-                makeUtilityAssociationsFormElement(element)
-            }
+            makeUtilityAssociationsFormElement(element)
         default:
             EmptyView()
         }
