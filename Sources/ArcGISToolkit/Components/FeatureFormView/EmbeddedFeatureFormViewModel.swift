@@ -46,6 +46,7 @@ class EmbeddedFeatureFormViewModel {
         return elements
     }
     
+    /// A dictionary of each form element and whether or not it is visible.
     private var elementVisibility: [FormElement: Bool] = [:]
     
     /// The expression evaluation task.
