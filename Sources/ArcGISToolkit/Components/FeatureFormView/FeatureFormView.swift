@@ -262,6 +262,9 @@ public struct FeatureFormView: View {
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
             .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
+            .onChange(of: ObjectIdentifier(rootFeatureForm)) {
+                presentedForm = rootFeatureForm
+            }
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) { wrappedFeatureForm in
                 guard let wrappedFeatureForm else { return }
                 formChangedAction(wrappedFeatureForm.object)

@@ -16,6 +16,8 @@ import ArcGIS
 import SwiftUI
 
 struct EmbeddedFeatureFormView: View {
+    private let featureForm: FeatureForm
+    
     /// The view model for the form.
     @State private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     
@@ -23,6 +25,7 @@ struct EmbeddedFeatureFormView: View {
     /// - Parameter featureForm: The feature form defining the editing experience.
     init(featureForm: FeatureForm) {
         self.embeddedFeatureFormViewModel = EmbeddedFeatureFormViewModel(featureForm: featureForm)
+        self.featureForm = featureForm
     }
     
     var body: some View {
@@ -31,16 +34,6 @@ struct EmbeddedFeatureFormView: View {
                 VStack(alignment: .leading) {
                     ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
                         makeElement(element)
-                    }
-                    if let attachmentsElement = embeddedFeatureFormViewModel.featureForm.defaultAttachmentsElement {
-                        // The Toolkit currently only supports AttachmentsFormElements via the
-                        // default attachments element. Once AttachmentsFormElements can be authored
-                        // this can call makeElement(_:) instead and makeElement(_:) should have a
-                        // case added for AttachmentsFormElement.
-                        AttachmentsFeatureElementView(
-                            formElement: attachmentsElement,
-                            formViewModel: embeddedFeatureFormViewModel
-                        )
                     }
                 }
             }
@@ -66,14 +59,14 @@ struct EmbeddedFeatureFormView: View {
         .scrollDismissesKeyboard(.immediately)
 #endif
         .environment(embeddedFeatureFormViewModel)
-        .padding([.horizontal])
+        .padding(.horizontal)
+        .onChange(of: ObjectIdentifier(featureForm)) {
+            embeddedFeatureFormViewModel = EmbeddedFeatureFormViewModel(featureForm: featureForm)
+        }
         .preference(
             key: PresentedFeatureFormPreferenceKey.self,
             value: .init(object: embeddedFeatureFormViewModel.featureForm)
         )
-        .task {
-            await embeddedFeatureFormViewModel.initialEvaluation()
-        }
         .featureFormToolbar(embeddedFeatureFormViewModel.featureForm, isAForm: true)
     }
 }
@@ -94,6 +87,11 @@ extension EmbeddedFeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
         switch element {
+        case let element as AttachmentsFormElement:
+            AttachmentsFeatureElementView(
+                formElement: element,
+                formViewModel: embeddedFeatureFormViewModel
+            )
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as TextFormElement:
