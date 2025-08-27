@@ -114,6 +114,7 @@ extension FeatureFormView {
                     Button(role: .destructive) {
                         do {
                             try element.delete(utilityAssociationResult.association)
+                            embeddedFeatureFormViewModel.evaluateExpressions()
                             Logger.featureFormView.info("Association deleted successfully.")
                         } catch {
                             Logger.featureFormView.error("Failed to delete association: \(error.localizedDescription).")
