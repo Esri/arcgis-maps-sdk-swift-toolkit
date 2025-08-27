@@ -69,6 +69,14 @@ extension String {
         )
     }
     
+    static var removeAssociation: Self {
+        .init(
+            localized: "Remove Association?",
+            bundle: .toolkitModule,
+            comment: "A label for a confirmation to remove a utility association."
+        )
+    }
+    
     /// A label for a button to take the user to a contextually inferred settings page.
     static var settings: String {
         .init(
