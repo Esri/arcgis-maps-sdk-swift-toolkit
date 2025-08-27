@@ -15,6 +15,8 @@
 import ArcGIS
 import SwiftUI
 
+internal import os
+
 extension FeatureFormView {
     /// A view for a utility associations form element.
     struct UtilityAssociationsFormElementView: View {
@@ -24,7 +26,11 @@ extension FeatureFormView {
         /// The model for fetching the form element's associations filter results.
         @State private var associationsFilterResultModel: AssociationsFilterResultsModel
         
+        /// The form element.
+        let element: UtilityAssociationsFormElement
+        
         init(element: UtilityAssociationsFormElement) {
+            self.element = element
             self._associationsFilterResultModel = .init(wrappedValue: .init(element: element))
         }
         
@@ -37,7 +43,7 @@ extension FeatureFormView {
                     )
                 } else {
                     FeatureFormGroupedContentView(content: results.map {
-                        UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
+                        UtilityAssociationsFilterResultListRowView(element: element, utilityAssociationsFilterResult: $0)
                             .environment(embeddedFeatureFormViewModel)
                     })
                 }
@@ -62,6 +68,12 @@ extension FeatureFormView {
         
         /// The environment value to set the continuation to use when the user responds to the alert.
         @Environment(\.setAlertContinuation) var setAlertContinuation
+        
+        /// A Boolean value indicating whether the deletion confirmation is presented.
+        @State private var deletionConfirmationIsPresented = false
+        
+        /// The form element containing the group result.
+        let element: UtilityAssociationsFormElement
         
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
@@ -90,11 +102,26 @@ extension FeatureFormView {
                     UtilityAssociationResultLabel(result: utilityAssociationResult)
                 }
                 .disabled(navigationIsDisabled)
-                .swipeActions(edge: .trailing) {
-                    Button(role: .destructive) {} label: {
+                .swipeActions {
+                    Button {
+                        deletionConfirmationIsPresented = true
+                    } label: {
                         Label(String.delete, systemImage: "trash.fill")
                             .tint(.red)
                     }
+                }
+                .confirmationDialog(String.removeAssociation, isPresented: $deletionConfirmationIsPresented) {
+                    Button(role: .destructive) {
+                        do {
+                            try element.delete(utilityAssociationResult.association)
+                            Logger.featureFormView.info("Association deleted successfully.")
+                        } catch {
+                            Logger.featureFormView.error("Failed to delete association: \(error.localizedDescription).")
+                        }
+                    } label: {
+                        Text(String.delete)
+                    }
+                    Button.cancel {}
                 }
                 .tint(.primary)
             }
@@ -109,6 +136,9 @@ extension FeatureFormView {
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
+        /// The form element containing the filter result.
+        let element: UtilityAssociationsFormElement
+        
         /// The referenced utility associations filter result.
         let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
         
@@ -117,7 +147,8 @@ extension FeatureFormView {
                 navigationPath?.wrappedValue.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
                         utilityAssociationsFilterResult,
-                        embeddedFeatureFormViewModel
+                        embeddedFeatureFormViewModel,
+                        element
                     )
                 )
             } label: {
@@ -153,6 +184,9 @@ extension FeatureFormView {
         /// Add association support is not yet currently supported.
         let futureAddAssociationSupportIsEnabled = false
         
+        /// The form element containing the filter result.
+        let element: UtilityAssociationsFormElement
+        
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
@@ -172,7 +206,8 @@ extension FeatureFormView {
                             navigationPath?.wrappedValue.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
                                     utilityAssociationGroupResult,
-                                    embeddedFeatureFormViewModel
+                                    embeddedFeatureFormViewModel,
+                                    element
                                 )
                             )
                         } label: {
