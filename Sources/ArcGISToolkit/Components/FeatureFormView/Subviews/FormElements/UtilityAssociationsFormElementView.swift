@@ -99,7 +99,25 @@ extension FeatureFormView {
                         navigationAction()
                     }
                 } label: {
-                    UtilityAssociationResultLabel(result: utilityAssociationResult)
+                    HStack {
+                        UtilityAssociationResultLabel(result: utilityAssociationResult)
+                        Button {
+                            navigationPath?.wrappedValue.append(FeatureFormView.navigationPa)
+                        } label: {
+                            Label {
+                                Text(
+                                    "Utility Association Details",
+                                    bundle: .toolkitModule,
+                                    comment: "A label for a button to view utility association details."
+                                )
+                            } icon: {
+                                Image(systemName: "ellipsis.circle")
+                            }
+                            .contentShape(.circle)
+                            .labelStyle(.iconOnly)
+                            .tint(.blue)
+                        }
+                    }
                 }
                 .disabled(navigationIsDisabled)
                 .swipeActions {
