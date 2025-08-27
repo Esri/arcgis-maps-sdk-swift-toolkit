@@ -17,16 +17,16 @@ import ArcGIS
 extension FeatureFormView {
     enum NavigationPathItem: Hashable {
         case form(FeatureForm)
-        case utilityAssociationFilterResultView(UtilityAssociationsFilterResult, EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement)
-        case utilityAssociationGroupResultView(UtilityAssociationGroupResult, EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement)
+        case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilterResult)
+        case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationGroupResult)
         
         static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case let (.form(a), .form(b)):
                 a === b
-            case let (.utilityAssociationFilterResultView(a, _, _), .utilityAssociationFilterResultView(b, _, _)):
+            case let (.utilityAssociationFilterResultView(_, _, a), .utilityAssociationFilterResultView(_, _, b)):
                 a === b
-            case let (.utilityAssociationGroupResultView(a, _, _), .utilityAssociationGroupResultView(b, _, _)):
+            case let (.utilityAssociationGroupResultView(_, _, a), .utilityAssociationGroupResultView(_, _, b)):
                 a === b
             default:
                 false
@@ -37,9 +37,9 @@ extension FeatureFormView {
             switch self {
             case .form(let form):
                 hasher.combine(ObjectIdentifier(form))
-            case .utilityAssociationFilterResultView(let result, _, _):
+            case .utilityAssociationFilterResultView(_, _, let result):
                 hasher.combine(ObjectIdentifier(result))
-            case .utilityAssociationGroupResultView(let result, _, _):
+            case .utilityAssociationGroupResultView(_, _, let result):
                 hasher.combine(ObjectIdentifier(result))
             }
         }

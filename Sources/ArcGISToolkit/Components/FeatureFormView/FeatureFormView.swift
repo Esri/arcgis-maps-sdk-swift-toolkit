@@ -131,7 +131,7 @@ public struct FeatureFormView: View {
                         switch itemType {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
-                        case let .utilityAssociationFilterResultView(result, embeddedFeatureFormViewModel, element):
+                        case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, element, result):
                             UtilityAssociationsFilterResultView(
                                 element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
@@ -144,7 +144,7 @@ public struct FeatureFormView: View {
                                 key: PresentedFeatureFormPreferenceKey.self,
                                 value: .init(object: embeddedFeatureFormViewModel.featureForm)
                             )
-                        case let .utilityAssociationGroupResultView(result, embeddedFeatureFormViewModel, element):
+                        case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, element, result):
                             UtilityAssociationGroupResultView(
                                 element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,

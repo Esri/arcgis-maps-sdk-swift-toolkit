@@ -147,9 +147,9 @@ extension FeatureFormView {
             Button {
                 navigationPath?.wrappedValue.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
-                        utilityAssociationsFilterResult,
                         embeddedFeatureFormViewModel,
-                        element
+                        element,
+                        utilityAssociationsFilterResult
                     )
                 )
             } label: {
@@ -206,9 +206,9 @@ extension FeatureFormView {
                         Button {
                             navigationPath?.wrappedValue.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
-                                    utilityAssociationGroupResult,
                                     embeddedFeatureFormViewModel,
-                                    element
+                                    element,
+                                    utilityAssociationGroupResult
                                 )
                             )
                         } label: {
