@@ -88,7 +88,7 @@ Please see [Configure App Secrets](Documentation/ConfigureAppSecrets.md) for add
 
 Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/new).
 
-Because this project is meant to be used for a large variety of user and use cases, we are unable to accomodate every request for changes that is made. However, fear not, as an open source project you should feel free to create your own fork of the repository and modify it for your specific use case. 
+Because this project is meant to be used for a large variety of users and use cases, we are unable to accomodate every request for changes that is made. However, fear not, as an open source project you should feel free to create your own fork of the repository and modify it for your specific use case. 
 
 ## Contributing
 
