@@ -320,7 +320,7 @@ public struct UtilityNetworkTrace: View {
                             isPresented: $deleteAllStartingPointsConfirmationIsPresented,
                             titleVisibility: .visible
                         ) {
-                            Button(String.deleteButtonLabel, role: .destructive) {
+                            Button(String.delete, role: .destructive) {
                                 for startingPoint in viewModel.pendingTrace.startingPoints {
                                     viewModel.deleteStartingPoint(startingPoint)
                                     externalStartingPoints.removeAll()
@@ -424,7 +424,7 @@ public struct UtilityNetworkTrace: View {
                         updateViewpoint(to: resultExtent)
                     }
                 }
-                Button(String.deleteButtonLabel) {
+                Button(String.delete) {
                     if viewModel.completedTraces.count == 1 {
                         currentActivity = .creatingTrace(nil)
                     }
@@ -557,7 +557,7 @@ public struct UtilityNetworkTrace: View {
                     updateViewpoint(to: extent)
                 }
             }
-            Button(String.deleteButtonLabel, role: .destructive) {
+            Button(String.delete, role: .destructive) {
                 if let startingPoint = selectedStartingPoint {
                     viewModel.deleteStartingPoint(startingPoint)
                     externalStartingPoints.removeAll { $0 == startingPoint }
@@ -916,14 +916,6 @@ private extension String {
             localized: "Delete all starting points?",
             bundle: .toolkitModule,
             comment: "The title of the dialogue confirming deletion of all points."
-        )
-    }
-    
-    static var deleteButtonLabel: Self {
-        .init(
-            localized: "Delete",
-            bundle: .toolkitModule,
-            comment: "A label for a button used to delete a utility network trace input component or result."
         )
     }
     

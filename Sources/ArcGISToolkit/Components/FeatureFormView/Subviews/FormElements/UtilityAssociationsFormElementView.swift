@@ -90,6 +90,12 @@ extension FeatureFormView {
                     UtilityAssociationResultLabel(result: utilityAssociationResult)
                 }
                 .disabled(navigationIsDisabled)
+                .swipeActions(edge: .trailing) {
+                    Button(role: .destructive) {} label: {
+                        Label(String.delete, systemImage: "trash.fill")
+                            .tint(.red)
+                    }
+                }
                 .tint(.primary)
             }
         }
