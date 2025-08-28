@@ -22,8 +22,11 @@ struct UtilityAssociationDetailsView: View {
     /// A Boolean value indicating whether the deletion confirmation is presented.
     @State private var deletionConfirmationIsPresented = false
     
+    /// The association.
     let association: UtilityAssociation
+    /// The element containing the association.
     let element: UtilityAssociationsFormElement
+    /// The model for the feature form containing the element with the association.
     let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     
     var body: some View {
