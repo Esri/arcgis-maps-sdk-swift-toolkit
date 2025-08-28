@@ -17,13 +17,15 @@ import ArcGIS
 extension FeatureFormView {
     enum NavigationPathItem: Hashable {
         case form(FeatureForm)
-        case utilityAssociationDetailsView(UtilityAssociationsFormElement, UtilityAssociation)
+        case utilityAssociationDetailsView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociation)
         case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilterResult)
         case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationGroupResult)
         
         static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case let (.form(a), .form(b)):
+                a === b
+            case let (.utilityAssociationDetailsView(_, a, _), .utilityAssociationDetailsView(_, b, _)):
                 a === b
             case let (.utilityAssociationFilterResultView(_, _, a), .utilityAssociationFilterResultView(_, _, b)):
                 a === b
@@ -38,7 +40,7 @@ extension FeatureFormView {
             switch self {
             case .form(let form):
                 hasher.combine(ObjectIdentifier(form))
-            case .utilityAssociationDetailsView(let element, _):
+            case .utilityAssociationDetailsView(_, let element, _):
                 hasher.combine(element)
             case .utilityAssociationFilterResultView(_, _, let result):
                 hasher.combine(ObjectIdentifier(result))

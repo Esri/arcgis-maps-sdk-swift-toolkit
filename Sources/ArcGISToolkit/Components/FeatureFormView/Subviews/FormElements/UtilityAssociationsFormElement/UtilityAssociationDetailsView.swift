@@ -16,9 +16,12 @@ import ArcGIS
 import SwiftUI
 
 struct UtilityAssociationDetailsView: View {
-    let element: UtilityAssociationsFormElement
+    /// A Boolean value indicating whether the deletion confirmation is presented.
+    @State private var deletionConfirmationIsPresented = false
     
     let association: UtilityAssociation
+    let element: UtilityAssociationsFormElement
+    let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     
     var body: some View {
         List {
@@ -66,7 +69,9 @@ struct UtilityAssociationDetailsView: View {
                 }
             }
             Section {
-                Button(role: .destructive) {} label: {
+                Button(role: .destructive) {
+                    deletionConfirmationIsPresented = true
+                } label: {
                     Text(
                         "Remove Association",
                         bundle: .toolkitModule,
@@ -74,6 +79,12 @@ struct UtilityAssociationDetailsView: View {
                     )
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
+                .associationDeletionConfirmationDialogue(
+                    isPresented: $deletionConfirmationIsPresented,
+                    association: association,
+                    element: element,
+                    embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+                )
             } footer: {
                 Text(
                     "Only removes the association. The feature remains.",

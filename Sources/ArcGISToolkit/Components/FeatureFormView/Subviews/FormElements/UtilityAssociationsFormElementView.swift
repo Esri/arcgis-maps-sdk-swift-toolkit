@@ -102,7 +102,11 @@ extension FeatureFormView {
                     HStack {
                         UtilityAssociationResultLabel(result: utilityAssociationResult)
                         Button {
-                            navigationPath?.wrappedValue.append(FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(element, utilityAssociationResult.association))
+                            navigationPath?.wrappedValue.append(
+                                FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
+                                    embeddedFeatureFormViewModel, element, utilityAssociationResult.association
+                                )
+                            )
                         } label: {
                             Label {
                                 Text(
@@ -129,20 +133,12 @@ extension FeatureFormView {
                             .tint(.red)
                     }
                 }
-                .confirmationDialog(String.removeAssociation, isPresented: $deletionConfirmationIsPresented) {
-                    Button(role: .destructive) {
-                        do {
-                            try element.delete(utilityAssociationResult.association)
-                            embeddedFeatureFormViewModel.evaluateExpressions()
-                            Logger.featureFormView.info("Association deleted successfully.")
-                        } catch {
-                            Logger.featureFormView.error("Failed to delete association: \(error.localizedDescription).")
-                        }
-                    } label: {
-                        Text(String.delete)
-                    }
-                    Button.cancel {}
-                }
+                .associationDeletionConfirmationDialogue(
+                    isPresented: $deletionConfirmationIsPresented,
+                    association: utilityAssociationResult.association,
+                    element: element,
+                    embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+                )
                 .tint(.primary)
             }
         }
