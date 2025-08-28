@@ -28,7 +28,15 @@ struct AssociationDeletionConfirmationDialog: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .confirmationDialog(String.removeAssociation, isPresented: $isPresented) {
+            .confirmationDialog(
+                Text(
+                    "Remove Association?",
+                    bundle: .toolkitModule,
+                    comment: "A label for a confirmation to remove a utility association."
+                ),
+                isPresented: $isPresented,
+                titleVisibility: .visible
+            ) {
                 Button(role: .destructive) {
                     do {
                         try element.delete(association)
@@ -38,7 +46,11 @@ struct AssociationDeletionConfirmationDialog: ViewModifier {
                         Logger.featureFormView.error("Failed to delete association: \(error.localizedDescription).")
                     }
                 } label: {
-                    Text(String.delete)
+                    Text(
+                        "Remove",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to remove a utility network association."
+                    )
                 }
                 Button.cancel {}
             }
