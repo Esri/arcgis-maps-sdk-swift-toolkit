@@ -131,6 +131,8 @@ public struct FeatureFormView: View {
                         switch itemType {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
+                        case let .utilityAssociationDetailsView(element, association):
+                            UtilityAssociationDetailsView(element: element, association: association)
                         case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, element, result):
                             UtilityAssociationsFilterResultView(
                                 element: element,

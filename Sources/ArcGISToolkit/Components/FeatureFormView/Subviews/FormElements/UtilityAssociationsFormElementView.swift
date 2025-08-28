@@ -102,7 +102,7 @@ extension FeatureFormView {
                     HStack {
                         UtilityAssociationResultLabel(result: utilityAssociationResult)
                         Button {
-                            navigationPath?.wrappedValue.append(FeatureFormView.navigationPa)
+                            navigationPath?.wrappedValue.append(FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(element, utilityAssociationResult.association))
                         } label: {
                             Label {
                                 Text(
@@ -125,6 +125,7 @@ extension FeatureFormView {
                         deletionConfirmationIsPresented = true
                     } label: {
                         Label(String.delete, systemImage: "trash.fill")
+                            .labelStyle(.iconOnly)
                             .tint(.red)
                     }
                 }
