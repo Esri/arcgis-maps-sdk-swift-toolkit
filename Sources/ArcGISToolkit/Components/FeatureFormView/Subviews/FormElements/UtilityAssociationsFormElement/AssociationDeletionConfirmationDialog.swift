@@ -18,6 +18,8 @@ import SwiftUI
 internal import os
 
 struct AssociationDeletionConfirmationDialog: ViewModifier {
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
+    
     @Binding var isPresented: Bool
     
     let association: UtilityAssociation
@@ -27,33 +29,24 @@ struct AssociationDeletionConfirmationDialog: ViewModifier {
     let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     
     func body(content: Content) -> some View {
-        content
-            .confirmationDialog(
-                Text(
-                    "Remove Association?",
-                    bundle: .toolkitModule,
-                    comment: "A label for a confirmation to remove a utility association."
-                ),
-                isPresented: $isPresented,
-                titleVisibility: .visible
-            ) {
-                Button(role: .destructive) {
-                    do {
-                        try element.delete(association)
-                        embeddedFeatureFormViewModel.evaluateExpressions()
-                        Logger.featureFormView.info("Association deleted successfully.")
-                    } catch {
-                        Logger.featureFormView.error("Failed to delete association: \(error.localizedDescription).")
-                    }
-                } label: {
-                    Text(
-                        "Remove",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to remove a utility network association."
-                    )
-                }
-                Button.cancel {}
-            }
+        if isPortraitOrientation {
+            content
+                .confirmationDialog(
+                    confirmationTitle,
+                    isPresented: $isPresented,
+                    titleVisibility: .visible
+                ) {
+                    actions
+                } message: {}
+        } else {
+            content
+                .alert(
+                    confirmationTitle,
+                    isPresented: $isPresented
+                ) {
+                    actions
+                } message: {}
+        }
     }
 }
 
@@ -71,6 +64,35 @@ extension View {
                 element: element,
                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
             )
+        )
+    }
+}
+
+extension AssociationDeletionConfirmationDialog {
+    @ViewBuilder var actions: some View {
+        Button(role: .destructive) {
+            do {
+                try element.delete(association)
+                embeddedFeatureFormViewModel.evaluateExpressions()
+                Logger.featureFormView.info("Association deleted successfully.")
+            } catch {
+                Logger.featureFormView.error("Failed to delete association: \(error.localizedDescription).")
+            }
+        } label: {
+            Text(
+                "Remove",
+                bundle: .toolkitModule,
+                comment: "A label for a button to remove a utility network association."
+            )
+        }
+        Button.cancel {}
+    }
+    
+    var confirmationTitle: Text {
+        Text(
+            "Remove Association?",
+            bundle: .toolkitModule,
+            comment: "A label for a confirmation to remove a utility association."
         )
     }
 }
