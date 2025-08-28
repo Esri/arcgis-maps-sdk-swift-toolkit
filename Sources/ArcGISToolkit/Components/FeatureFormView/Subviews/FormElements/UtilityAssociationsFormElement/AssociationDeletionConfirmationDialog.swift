@@ -22,10 +22,11 @@ struct AssociationDeletionConfirmationDialog: ViewModifier {
     
     @Binding var isPresented: Bool
     
+    /// The association to be deleted.
     let association: UtilityAssociation
-    
+    /// The element containing the association to delete.
     let element: UtilityAssociationsFormElement
-    
+    /// The model for the feature form containing the element with the association to be deleted.
     let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     
     func body(content: Content) -> some View {
