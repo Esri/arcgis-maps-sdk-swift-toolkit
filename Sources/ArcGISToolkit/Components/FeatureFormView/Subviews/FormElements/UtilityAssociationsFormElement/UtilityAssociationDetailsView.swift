@@ -16,6 +16,9 @@ import ArcGIS
 import SwiftUI
 
 struct UtilityAssociationDetailsView: View {
+    /// The navigation path for the navigation stack presenting this view.
+    @Environment(\.navigationPath) var navigationPath
+    
     /// A Boolean value indicating whether the deletion confirmation is presented.
     @State private var deletionConfirmationIsPresented = false
     
@@ -84,7 +87,9 @@ struct UtilityAssociationDetailsView: View {
                     association: association,
                     element: element,
                     embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
-                )
+                ) {
+                    navigationPath?.wrappedValue.removeLast()
+                }
             } footer: {
                 Text(
                     "Only removes the association. The feature remains.",

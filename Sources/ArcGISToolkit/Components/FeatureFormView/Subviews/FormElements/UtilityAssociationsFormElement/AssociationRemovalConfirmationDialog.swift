@@ -28,6 +28,8 @@ struct AssociationRemovalConfirmationDialog: ViewModifier {
     let element: UtilityAssociationsFormElement
     /// The model for the feature form containing the element with the association to be removed.
     let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
+    /// The action to run when the removal is completed.
+    let onRemoval: () -> Void
     
     func body(content: Content) -> some View {
         if isPortraitOrientation {
@@ -56,14 +58,16 @@ extension View {
         isPresented: Binding<Bool>,
         association: UtilityAssociation,
         element: UtilityAssociationsFormElement,
-        embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
+        embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel,
+        onRemoval: @escaping () -> Void
     ) -> some View {
         modifier(
             AssociationRemovalConfirmationDialog(
                 isPresented: isPresented,
                 association: association,
                 element: element,
-                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                onRemoval: onRemoval
             )
         )
     }
@@ -75,6 +79,7 @@ extension AssociationRemovalConfirmationDialog {
             do {
                 try element.delete(association)
                 embeddedFeatureFormViewModel.evaluateExpressions()
+                onRemoval()
                 Logger.featureFormView.info("Association removed successfully.")
             } catch {
                 Logger.featureFormView.error("Failed to remove association: \(error.localizedDescription).")

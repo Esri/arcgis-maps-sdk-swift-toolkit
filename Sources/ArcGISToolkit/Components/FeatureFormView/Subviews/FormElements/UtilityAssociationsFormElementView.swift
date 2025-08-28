@@ -136,7 +136,7 @@ extension FeatureFormView {
                     association: utilityAssociationResult.association,
                     element: element,
                     embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
-                )
+                ) {}
                 .tint(.primary)
             }
         }
