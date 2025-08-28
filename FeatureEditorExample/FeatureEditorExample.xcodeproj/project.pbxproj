@@ -6,7 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D7AFAC732E60B56200CFE9C9 /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = D7AFAC722E60B56200CFE9C9 /* ArcGISToolkit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		1CBE202F2BF2C5AD0006B55D /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "arcgis-maps-sdk-swift-toolkit"; path = ..; sourceTree = "<group>"; };
 		D74A94222E60B2F20087BB8A /* FeatureEditorExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeatureEditorExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -23,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7AFAC732E60B56200CFE9C9 /* ArcGISToolkit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,6 +38,7 @@
 		D74A94192E60B2F20087BB8A = {
 			isa = PBXGroup;
 			children = (
+				1CBE202F2BF2C5AD0006B55D /* arcgis-maps-sdk-swift-toolkit */,
 				D74A94242E60B2F20087BB8A /* FeatureEditorExample */,
 				D74A94232E60B2F20087BB8A /* Products */,
 			);
@@ -65,6 +72,7 @@
 			);
 			name = FeatureEditorExample;
 			packageProductDependencies = (
+				D7AFAC722E60B56200CFE9C9 /* ArcGISToolkit */,
 			);
 			productName = FeatureEditorExample;
 			productReference = D74A94222E60B2F20087BB8A /* FeatureEditorExample.app */;
@@ -320,6 +328,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D7AFAC722E60B56200CFE9C9 /* ArcGISToolkit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ArcGISToolkit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D74A941A2E60B2F20087BB8A /* Project object */;
 }
