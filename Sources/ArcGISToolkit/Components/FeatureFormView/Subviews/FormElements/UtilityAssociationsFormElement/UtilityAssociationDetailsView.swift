@@ -27,14 +27,22 @@ struct UtilityAssociationDetailsView: View {
             }
             Section {
                 LabeledContent("From Element", value: "\(association.fromElement.globalID)")
-                LabeledContent {} label: {
-                    terminal
+                if let fromElementTerminal = association.fromElement.terminal {
+                    LabeledContent {
+                        Text(fromElementTerminal.name)
+                    } label: {
+                        terminal
+                    }
                 }
             }
             Section {
                 LabeledContent("To Element", value: "\(association.toElement.globalID)")
-                LabeledContent {} label: {
-                    terminal
+                if let toElementTerminal = association.toElement.terminal {
+                    LabeledContent {
+                        Text(toElementTerminal.name)
+                    } label: {
+                        terminal
+                    }
                 }
             }
             Section {
