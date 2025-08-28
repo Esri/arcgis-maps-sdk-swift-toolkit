@@ -34,7 +34,13 @@ struct UtilityAssociationDetailsView: View {
                 }
             }
             Section {
-                LabeledContent("From Element", value: "\(association.fromElement.globalID)")
+                LabeledContent {} label: {
+                    Text(
+                        "From Element",
+                        bundle: .toolkitModule,
+                        comment: "A label for the element on the \"from\" side of a utility association."
+                    )
+                }
                 if let fromElementTerminal = association.fromElement.terminal {
                     LabeledContent {
                         Text(fromElementTerminal.name)
@@ -44,7 +50,13 @@ struct UtilityAssociationDetailsView: View {
                 }
             }
             Section {
-                LabeledContent("To Element", value: "\(association.toElement.globalID)")
+                LabeledContent {} label: {
+                    Text(
+                        "To Element",
+                        bundle: .toolkitModule,
+                        comment: "A label for the element on the \"to\" side of a utility association."
+                    )
+                }
                 if let toElementTerminal = association.toElement.terminal {
                     LabeledContent {
                         Text(toElementTerminal.name)
