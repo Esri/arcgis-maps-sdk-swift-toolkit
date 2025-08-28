@@ -27,11 +27,15 @@ struct UtilityAssociationDetailsView: View {
             }
             Section {
                 LabeledContent("From Element", value: "\(association.fromElement.globalID)")
-//                LabeledContent(terminal, value: "Low")
+                LabeledContent {} label: {
+                    terminal
+                }
             }
             Section {
                 LabeledContent("To Element", value: "\(association.toElement.globalID)")
-//                LabeledContent(terminal, value: "High")
+                LabeledContent {} label: {
+                    terminal
+                }
             }
             Section {
                 Button(role: .destructive) {} label: {
