@@ -52,7 +52,7 @@ struct AssociationDeletionConfirmationDialog: ViewModifier {
 }
 
 extension View {
-    func associationDeletionConfirmationDialogue(
+    func associationDeletionConfirmationDialog(
         isPresented: Binding<Bool>,
         association: UtilityAssociation,
         element: UtilityAssociationsFormElement,
