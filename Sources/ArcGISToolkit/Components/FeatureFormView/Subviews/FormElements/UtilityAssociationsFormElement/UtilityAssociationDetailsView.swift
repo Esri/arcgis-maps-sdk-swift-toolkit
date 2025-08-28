@@ -23,7 +23,15 @@ struct UtilityAssociationDetailsView: View {
     var body: some View {
         List {
             Section {
-                LabeledContent("Association Type", value: "\(association.kind)".capitalized)
+                LabeledContent {
+                    Text("\(association.kind)".capitalized)
+                } label: {
+                    Text(
+                        "Association Type",
+                        bundle: .toolkitModule,
+                        comment: "A label in reference to a utility association type."
+                    )
+                }
             }
             Section {
                 LabeledContent("From Element", value: "\(association.fromElement.globalID)")
