@@ -15,8 +15,6 @@
 import ArcGIS
 import SwiftUI
 
-internal import os
-
 extension FeatureFormView {
     /// A view for a utility associations form element.
     struct UtilityAssociationsFormElementView: View {
