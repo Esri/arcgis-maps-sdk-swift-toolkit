@@ -17,16 +17,16 @@ import SwiftUI
 
 internal import os
 
-struct AssociationDeletionConfirmationDialog: ViewModifier {
+struct AssociationRemovalConfirmationDialog: ViewModifier {
     @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
     @Binding var isPresented: Bool
     
-    /// The association to be deleted.
+    /// The association to be removed.
     let association: UtilityAssociation
-    /// The element containing the association to delete.
+    /// The element containing the association to remove.
     let element: UtilityAssociationsFormElement
-    /// The model for the feature form containing the element with the association to be deleted.
+    /// The model for the feature form containing the element with the association to be removed.
     let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     
     func body(content: Content) -> some View {
@@ -52,14 +52,14 @@ struct AssociationDeletionConfirmationDialog: ViewModifier {
 }
 
 extension View {
-    func associationDeletionConfirmationDialog(
+    func associationRemovalConfirmationDialog(
         isPresented: Binding<Bool>,
         association: UtilityAssociation,
         element: UtilityAssociationsFormElement,
         embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     ) -> some View {
         modifier(
-            AssociationDeletionConfirmationDialog(
+            AssociationRemovalConfirmationDialog(
                 isPresented: isPresented,
                 association: association,
                 element: element,
@@ -69,15 +69,15 @@ extension View {
     }
 }
 
-extension AssociationDeletionConfirmationDialog {
+extension AssociationRemovalConfirmationDialog {
     @ViewBuilder var actions: some View {
         Button(role: .destructive) {
             do {
                 try element.delete(association)
                 embeddedFeatureFormViewModel.evaluateExpressions()
-                Logger.featureFormView.info("Association deleted successfully.")
+                Logger.featureFormView.info("Association removed successfully.")
             } catch {
-                Logger.featureFormView.error("Failed to delete association: \(error.localizedDescription).")
+                Logger.featureFormView.error("Failed to remove association: \(error.localizedDescription).")
             }
         } label: {
             Text(

@@ -79,7 +79,7 @@ struct UtilityAssociationDetailsView: View {
                     )
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
-                .associationDeletionConfirmationDialog(
+                .associationRemovalConfirmationDialog(
                     isPresented: $deletionConfirmationIsPresented,
                     association: association,
                     element: element,

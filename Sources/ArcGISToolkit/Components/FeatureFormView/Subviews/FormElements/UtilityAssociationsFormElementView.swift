@@ -131,7 +131,7 @@ extension FeatureFormView {
                             .tint(.red)
                     }
                 }
-                .associationDeletionConfirmationDialog(
+                .associationRemovalConfirmationDialog(
                     isPresented: $deletionConfirmationIsPresented,
                     association: utilityAssociationResult.association,
                     element: element,
