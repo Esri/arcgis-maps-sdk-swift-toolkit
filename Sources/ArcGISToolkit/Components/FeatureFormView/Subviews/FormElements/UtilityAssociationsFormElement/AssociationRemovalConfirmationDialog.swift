@@ -23,7 +23,7 @@ struct AssociationRemovalConfirmationDialog: ViewModifier {
     @Binding var isPresented: Bool
     
     /// The association to be removed.
-    let association: UtilityAssociation
+    let association: UtilityAssociation?
     /// The element containing the association to remove.
     let element: UtilityAssociationsFormElement
     /// The model for the feature form containing the element with the association to be removed.
@@ -56,7 +56,7 @@ struct AssociationRemovalConfirmationDialog: ViewModifier {
 extension View {
     func associationRemovalConfirmationDialog(
         isPresented: Binding<Bool>,
-        association: UtilityAssociation,
+        association: UtilityAssociation?,
         element: UtilityAssociationsFormElement,
         embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel,
         onRemoval: @escaping () -> Void
@@ -76,6 +76,7 @@ extension View {
 extension AssociationRemovalConfirmationDialog {
     @ViewBuilder var actions: some View {
         Button(role: .destructive) {
+            guard let association else { return }
             do {
                 try element.delete(association)
                 embeddedFeatureFormViewModel.evaluateExpressions()

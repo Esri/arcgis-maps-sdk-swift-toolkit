@@ -67,6 +67,9 @@ extension FeatureFormView {
         /// The environment value to set the continuation to use when the user responds to the alert.
         @Environment(\.setAlertContinuation) var setAlertContinuation
         
+        /// The association to be potentially deleted.
+        @State private var associationPendingDeletion: UtilityAssociation?
+        
         /// A Boolean value indicating whether the deletion confirmation is presented.
         @State private var deletionConfirmationIsPresented = false
         
@@ -132,6 +135,7 @@ extension FeatureFormView {
                 .disabled(navigationIsDisabled)
                 .swipeActions {
                     Button {
+                        associationPendingDeletion = utilityAssociationResult.association
                         deletionConfirmationIsPresented = true
                     } label: {
                         Label(String.delete, systemImage: "trash.fill")
@@ -139,15 +143,15 @@ extension FeatureFormView {
                             .tint(.red)
                     }
                 }
-                .associationRemovalConfirmationDialog(
-                    isPresented: $deletionConfirmationIsPresented,
-                    association: utilityAssociationResult.association,
-                    element: element,
-                    embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
-                ) {
-                    associationsFilterResultsModel.fetchResults()
-                }
                 .tint(.primary)
+            }
+            .associationRemovalConfirmationDialog(
+                isPresented: $deletionConfirmationIsPresented,
+                association: associationPendingDeletion,
+                element: element,
+                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+            ) {
+                associationsFilterResultsModel.fetchResults()
             }
         }
     }
