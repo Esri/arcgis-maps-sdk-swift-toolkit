@@ -140,6 +140,8 @@ extension FeatureFormView {
                             .labelStyle(.iconOnly)
                             .tint(.blue)
                         }
+                        .buttonStyle(.plain)
+                        .hoverEffect()
                     }
                 }
                 .disabled(navigationIsDisabled)
