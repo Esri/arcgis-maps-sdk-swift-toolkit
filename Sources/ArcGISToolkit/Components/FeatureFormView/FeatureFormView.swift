@@ -131,17 +131,18 @@ public struct FeatureFormView: View {
                         switch itemType {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
-                        case let .utilityAssociationDetailsView(embeddedFeatureFormViewModel, element, association, associationsFilterResultsModel):
+                        case let .utilityAssociationDetailsView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, association):
                             UtilityAssociationDetailsView(
                                 association: association,
                                 associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
                             )
-                        case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, element, resultTitle, associationsFilterResultsModel):
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                        case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, resultTitle):
                             UtilityAssociationsFilterResultView(
-                                element: element,
                                 associationsFilterResultsModel: associationsFilterResultsModel,
+                                element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
                                 filterTitle: resultTitle
                             )
@@ -152,11 +153,11 @@ public struct FeatureFormView: View {
                                 key: PresentedFeatureFormPreferenceKey.self,
                                 value: .init(object: embeddedFeatureFormViewModel.featureForm)
                             )
-                        case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, element, filterTitle, groupTitle, associationsFilterResultsModel):
+                        case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filterTitle, groupTitle):
                             UtilityAssociationGroupResultView(
+                                associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                associationsFilterResultsModel: associationsFilterResultsModel,
                                 filterTitle: filterTitle,
                                 groupTitle: groupTitle
                             )

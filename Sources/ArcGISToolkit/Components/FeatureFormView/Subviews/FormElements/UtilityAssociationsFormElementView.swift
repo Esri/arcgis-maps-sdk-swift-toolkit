@@ -41,8 +41,12 @@ extension FeatureFormView {
                     )
                 } else {
                     FeatureFormGroupedContentView(content: results.map {
-                        UtilityAssociationsFilterResultListRowView(element: element, filterTitle: $0.filter.title, associationsFilterResultsModel: associationsFilterResultModel)
-                            .environment(embeddedFeatureFormViewModel)
+                        UtilityAssociationsFilterResultListRowView(
+                            associationsFilterResultsModel: associationsFilterResultModel,
+                            element: element,
+                            filterTitle: $0.filter.title
+                        )
+                        .environment(embeddedFeatureFormViewModel)
                     })
                 }
             case .failure(let error):
@@ -73,16 +77,19 @@ extension FeatureFormView {
         /// A Boolean value indicating whether the deletion confirmation is presented.
         @State private var deletionConfirmationIsPresented = false
         
+        /// The model containing the latest association filter results.
+        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        
         /// The form element containing the group result.
         let element: UtilityAssociationsFormElement
         
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
-        let associationsFilterResultsModel: AssociationsFilterResultsModel
-        
+        /// The title of the selected utility associations filter result.
         let filterTitle: String
         
+        /// The title of the selected utility association group result.
         let groupTitle: String
         
         /// The backing utility association group result.
@@ -113,7 +120,10 @@ extension FeatureFormView {
                         Button {
                             navigationPath?.wrappedValue.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
-                                    embeddedFeatureFormViewModel, element, utilityAssociationResult.association, associationsFilterResultsModel
+                                    embeddedFeatureFormViewModel,
+                                    associationsFilterResultsModel,
+                                    element,
+                                    utilityAssociationResult.association
                                 )
                             )
                         } label: {
@@ -163,16 +173,18 @@ extension FeatureFormView {
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
+        /// The model containing the latest association filter results.
+        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        
         /// The form element containing the filter result.
         let element: UtilityAssociationsFormElement
         
-        /// The referenced utility associations filter result.
+        /// The title of the referenced utility associations filter result.
         let filterTitle: String
         
-        let associationsFilterResultsModel: AssociationsFilterResultsModel
-        
+        /// The referenced utility associations filter result.
         var filterResult: UtilityAssociationsFilterResult? {
-            try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )
+            try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle } )
         }
         
         var body: some View {
@@ -180,9 +192,9 @@ extension FeatureFormView {
                 navigationPath?.wrappedValue.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
                         embeddedFeatureFormViewModel,
+                        associationsFilterResultsModel,
                         element,
-                        filterTitle,
-                        associationsFilterResultsModel
+                        filterTitle
                     )
                 )
             } label: {
@@ -221,19 +233,19 @@ extension FeatureFormView {
         /// Add association support is not yet currently supported.
         let futureAddAssociationSupportIsEnabled = false
         
+        /// The model containing the latest association filter results.
+        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        
         /// The form element containing the filter result.
         let element: UtilityAssociationsFormElement
-        
-        let associationsFilterResultsModel: AssociationsFilterResultsModel
         
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
-        /// The backing utility associations filter result.
-//        let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
-        
+        /// The title of the selected utility associations filter result.
         let filterTitle: String
         
+        /// The selected utility associations filter result.
         var filterResult: UtilityAssociationsFilterResult? {
             try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )
         }
@@ -251,10 +263,10 @@ extension FeatureFormView {
                             navigationPath?.wrappedValue.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
                                     embeddedFeatureFormViewModel,
+                                    associationsFilterResultsModel,
                                     element,
                                     filterTitle,
-                                    utilityAssociationGroupResult.name,
-                                    associationsFilterResultsModel
+                                    utilityAssociationGroupResult.name
                                 )
                             )
                         } label: {
