@@ -212,7 +212,6 @@ extension FeatureFormView {
                         if let filterResult {
                             Text(filterResult.resultCount, format: .number)
                         }
-                        
                         Image(systemName: "chevron.right")
                     }
                     .foregroundColor(.secondary)
