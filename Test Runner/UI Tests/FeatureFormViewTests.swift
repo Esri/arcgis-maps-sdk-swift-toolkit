@@ -1741,26 +1741,26 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(
             transformerButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The \"Transformer\" association doesn't exist."
         )
         
         XCTAssertTrue(
             associationSettingButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The association settings button doesn't exist."
         )
         
         associationSettingButton.tap()
         
         XCTAssertTrue(
             removeAssociationButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The remove association button doesn't exist."
         )
         
         removeAssociationButton.tap()
         
         XCTAssertTrue(
             cancelButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The cancel button doesn't exist."
         )
         
         cancelButton.tap()
@@ -1769,35 +1769,35 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(
             removeButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The remove button doesn't exist."
         )
         
         removeButton.tap()
         
         XCTAssertTrue(
             discardButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The discard button doesn't exist."
         )
         
         discardButton.tap()
         
         XCTAssertTrue(
             transformerButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The \"Transformer\" association doesn't exist."
         )
         
         transformerButton.swipeLeft()
         
         XCTAssertTrue(
             deleteButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The delete button doesn't exist."
         )
         
         deleteButton.tap()
         
         XCTAssertTrue(
             cancelButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The cancel button doesn't exist."
         )
         
         cancelButton.tap()
@@ -1806,21 +1806,21 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(
             deleteButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The delete button doesn't exist."
         )
         
         deleteButton.tap()
         
         XCTAssertTrue(
             removeButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The remove button doesn't exist."
         )
         
         removeButton.tap()
         
         XCTAssertTrue(
             discardButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
+            "The discard button doesn't exist."
         )
         XCTAssertFalse(transformerButton.exists)
     }
