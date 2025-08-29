@@ -1706,7 +1706,7 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_12_6() {
         let app = XCUIApplication()
         let associationSettingButton = app.buttons["Utility Association Details"]
-        let cancelButton = app.buttons["Cancel"]
+        let cancelButton = app.buttons["Cancel"].firstMatch
         let deleteButton = app.buttons["Delete"]
         let discardButton = app.buttons["Discard"]
         let elementTitle = app.staticTexts["Associations"]
