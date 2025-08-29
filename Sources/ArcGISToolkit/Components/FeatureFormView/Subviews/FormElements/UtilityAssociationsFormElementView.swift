@@ -71,11 +71,11 @@ extension FeatureFormView {
         /// The environment value to set the continuation to use when the user responds to the alert.
         @Environment(\.setAlertContinuation) var setAlertContinuation
         
-        /// The association to be potentially deleted.
-        @State private var associationPendingDeletion: UtilityAssociation?
+        /// The association to be potentially removed.
+        @State private var associationPendingRemoval: UtilityAssociation?
         
-        /// A Boolean value indicating whether the deletion confirmation is presented.
-        @State private var deletionConfirmationIsPresented = false
+        /// A Boolean value indicating whether the removal confirmation is presented.
+        @State private var removalConfirmationIsPresented = false
         
         /// The model containing the latest association filter results.
         let associationsFilterResultsModel: AssociationsFilterResultsModel
@@ -145,8 +145,8 @@ extension FeatureFormView {
                 .disabled(navigationIsDisabled)
                 .swipeActions {
                     Button {
-                        associationPendingDeletion = utilityAssociationResult.association
-                        deletionConfirmationIsPresented = true
+                        associationPendingRemoval = utilityAssociationResult.association
+                        removalConfirmationIsPresented = true
                     } label: {
                         Label(String.delete, systemImage: "trash.fill")
                             .labelStyle(.iconOnly)
@@ -156,8 +156,8 @@ extension FeatureFormView {
                 .tint(.primary)
             }
             .associationRemovalConfirmationDialog(
-                isPresented: $deletionConfirmationIsPresented,
-                association: associationPendingDeletion,
+                isPresented: $removalConfirmationIsPresented,
+                association: associationPendingRemoval,
                 element: element,
                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
             ) {
