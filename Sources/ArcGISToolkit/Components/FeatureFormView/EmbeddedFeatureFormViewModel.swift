@@ -26,6 +26,14 @@ class EmbeddedFeatureFormViewModel {
         }
     }
     
+    var hasEdits = false {
+        didSet {
+            if !hasEdits {
+                previouslyFocusedElements.removeAll()
+            }
+        }
+    }
+    
     /// The currently presented feature form view.
     var presentedForm: FeatureFormView?
     
@@ -48,6 +56,10 @@ class EmbeddedFeatureFormViewModel {
     /// The group of visibility tasks.
     @ObservationIgnored
     private var isVisibleTasks = [Task<Void, Never>]()
+    
+    /// A task to monitor whether the form has edits.
+    @ObservationIgnored
+    private var monitorEditsTask: Task<Void, Never>?
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
@@ -97,6 +109,17 @@ class EmbeddedFeatureFormViewModel {
         evaluateTask?.cancel()
         evaluateTask = Task {
             _ = try? await featureForm.evaluateExpressions()
+        }
+    }
+    
+    @MainActor
+    func monitorEdits() {
+        monitorEditsTask?.cancel()
+        monitorEditsTask = Task { [weak self] in
+            guard !Task.isCancelled, let self else { return }
+            for await hasEdits in featureForm.$hasEdits.dropFirst() {
+                self.hasEdits = hasEdits
+            }
         }
     }
 }

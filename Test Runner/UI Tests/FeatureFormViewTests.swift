@@ -1702,6 +1702,128 @@ final class FeatureFormViewTests: XCTestCase {
             "The utility element \"Transformer - 2552\" doesn't exist."
         )
     }
+    
+    func testCase_12_6() {
+        let app = XCUIApplication()
+        let associationSettingButton = app.buttons["Utility Association Details"]
+        let cancelButton = app.buttons["Cancel"]
+        let deleteButton = app.buttons["Delete"]
+        let discardButton = app.buttons["Discard"]
+        let elementTitle = app.staticTexts["Associations"]
+        let filterResults = app.staticTexts["Connected"]
+        let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
+        let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
+        let removeAssociationButton = app.buttons["Remove Association"]
+        let removeButton = app.buttons["Remove"]
+        let transformerButton = app.buttons["Transformer, High"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: electricDistributionDevice)
+        
+        XCTAssertTrue(
+            elementTitle.waitForExistence(timeout: 5),
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            filterResults.waitForExistence(timeout: 5),
+            "The filter result \"Connected\" doesn't exist."
+        )
+        
+        filterResults.tap()
+        
+        XCTAssertTrue(
+            networkSourceGroupButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        networkSourceGroupButton.tap()
+        
+        XCTAssertTrue(
+            transformerButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            associationSettingButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        associationSettingButton.tap()
+        
+        XCTAssertTrue(
+            removeAssociationButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        removeAssociationButton.tap()
+        
+        XCTAssertTrue(
+            cancelButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        cancelButton.tap()
+        
+        removeAssociationButton.tap()
+        
+        XCTAssertTrue(
+            removeButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        removeButton.tap()
+        
+        XCTAssertTrue(
+            discardButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        discardButton.tap()
+        
+        XCTAssertTrue(
+            transformerButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        transformerButton.swipeLeft()
+        
+        XCTAssertTrue(
+            deleteButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        deleteButton.tap()
+        
+        XCTAssertTrue(
+            cancelButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        cancelButton.tap()
+        
+        transformerButton.swipeLeft()
+        
+        XCTAssertTrue(
+            deleteButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        deleteButton.tap()
+        
+        XCTAssertTrue(
+            removeButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        removeButton.tap()
+        
+        XCTAssertTrue(
+            discardButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        XCTAssertFalse(transformerButton.exists)
+    }
 }
 
 private extension String {

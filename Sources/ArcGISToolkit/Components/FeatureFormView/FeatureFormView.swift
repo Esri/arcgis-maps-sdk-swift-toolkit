@@ -139,6 +139,7 @@ public struct FeatureFormView: View {
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
                         case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, resultTitle):
                             UtilityAssociationsFilterResultView(
                                 associationsFilterResultsModel: associationsFilterResultsModel,

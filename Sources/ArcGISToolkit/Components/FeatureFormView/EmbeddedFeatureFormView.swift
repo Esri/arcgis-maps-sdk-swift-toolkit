@@ -44,13 +44,6 @@ struct EmbeddedFeatureFormView: View {
                     }
                 }
             }
-            .task {
-                for await hasEdits in embeddedFeatureFormViewModel.featureForm.$hasEdits.dropFirst() {
-                    if !hasEdits {
-                        embeddedFeatureFormViewModel.previouslyFocusedElements.removeAll()
-                    }
-                }
-            }
             .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
                 if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
@@ -72,6 +65,7 @@ struct EmbeddedFeatureFormView: View {
             value: .init(object: embeddedFeatureFormViewModel.featureForm)
         )
         .task {
+            embeddedFeatureFormViewModel.monitorEdits()
             await embeddedFeatureFormViewModel.initialEvaluation()
         }
         .featureFormToolbar(embeddedFeatureFormViewModel.featureForm, isAForm: true)

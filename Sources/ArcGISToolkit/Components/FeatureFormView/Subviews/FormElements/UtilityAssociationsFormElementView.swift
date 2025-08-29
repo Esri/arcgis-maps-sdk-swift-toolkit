@@ -22,39 +22,46 @@ extension FeatureFormView {
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
         
         /// The model for fetching the form element's associations filter results.
-        @State private var associationsFilterResultModel: AssociationsFilterResultsModel
+        @State private var associationsFilterResultsModel: AssociationsFilterResultsModel
         
         /// The form element.
         let element: UtilityAssociationsFormElement
         
         init(element: UtilityAssociationsFormElement) {
             self.element = element
-            self._associationsFilterResultModel = .init(wrappedValue: .init(element: element))
+            self._associationsFilterResultsModel = .init(wrappedValue: .init(element: element))
         }
         
         var body: some View {
-            switch associationsFilterResultModel.result {
-            case .success(let results):
-                if results.isEmpty {
-                    FeatureFormGroupedContentView(
-                        content: [Text.noAssociations]
-                    )
-                } else {
-                    FeatureFormGroupedContentView(content: results.map {
-                        UtilityAssociationsFilterResultListRowView(
-                            associationsFilterResultsModel: associationsFilterResultModel,
-                            element: element,
-                            filterTitle: $0.filter.title
+            Group {
+                switch associationsFilterResultsModel.result {
+                case .success(let results):
+                    if results.isEmpty {
+                        FeatureFormGroupedContentView(
+                            content: [Text.noAssociations]
                         )
-                        .environment(embeddedFeatureFormViewModel)
-                    })
+                    } else {
+                        FeatureFormGroupedContentView(content: results.map {
+                            UtilityAssociationsFilterResultListRowView(
+                                associationsFilterResultsModel: associationsFilterResultsModel,
+                                element: element,
+                                filterTitle: $0.filter.title
+                            )
+                            .environment(embeddedFeatureFormViewModel)
+                        })
+                    }
+                case .failure(let error):
+                    FeatureFormGroupedContentView(content: [
+                        Text.errorFetchingFilterResults(error)
+                    ])
+                case nil:
+                    FeatureFormGroupedContentView(content: [ProgressView()])
                 }
-            case .failure(let error):
-                FeatureFormGroupedContentView(content: [
-                    Text.errorFetchingFilterResults(error)
-                ])
-            case nil:
-                FeatureFormGroupedContentView(content: [ProgressView()])
+            }
+            .onChange(of: embeddedFeatureFormViewModel.hasEdits) { oldValue, newValue in
+                if oldValue, !newValue {
+                    associationsFilterResultsModel.fetchResults()
+                }
             }
         }
     }
@@ -164,6 +171,11 @@ extension FeatureFormView {
                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
             ) {
                 associationsFilterResultsModel.fetchResults()
+            }
+            .onChange(of: embeddedFeatureFormViewModel.hasEdits) { oldValue, newValue in
+                if oldValue, !newValue {
+                    associationsFilterResultsModel.fetchResults()
+                }
             }
         }
     }
@@ -298,6 +310,11 @@ extension FeatureFormView {
                             .buttonStyle(.borderedProminent)
                         }
                     }
+                }
+            }
+            .onChange(of: embeddedFeatureFormViewModel.hasEdits) { oldValue, newValue in
+                if oldValue, !newValue {
+                    associationsFilterResultsModel.fetchResults()
                 }
             }
         }
