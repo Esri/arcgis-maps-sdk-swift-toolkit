@@ -96,16 +96,6 @@ struct UtilityAssociationDetailsView: View {
                     associationsFilterResultsModel.fetchResults()
                     navigationPath?.wrappedValue.removeLast()
                 }
-            } footer: {
-                Text(
-                    "Only removes the association. The feature remains.",
-                    bundle: .toolkitModule,
-                    comment:
-                    """
-                    Helper text indicating that an accompanying button only 
-                    removes only the association. 
-                    """
-                )
             }
         }
         .navigationTitle(

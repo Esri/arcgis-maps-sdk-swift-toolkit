@@ -40,7 +40,9 @@ struct AssociationRemovalConfirmationDialog: ViewModifier {
                     titleVisibility: .visible
                 ) {
                     actions
-                } message: {}
+                } message: {
+                    confirmationMessage
+                }
         } else {
             content
                 .alert(
@@ -48,7 +50,9 @@ struct AssociationRemovalConfirmationDialog: ViewModifier {
                     isPresented: $isPresented
                 ) {
                     actions
-                } message: {}
+                } message: {
+                    confirmationMessage
+                }
         }
     }
 }
@@ -93,6 +97,18 @@ extension AssociationRemovalConfirmationDialog {
             )
         }
         Button.cancel {}
+    }
+    
+    var confirmationMessage: Text {
+        Text(
+            "Only removes the association. The feature remains.",
+            bundle: .toolkitModule,
+            comment:
+            """
+            Helper text indicating that an accompanying button only 
+            removes only the association. 
+            """
+        )
     }
     
     var confirmationTitle: Text {
