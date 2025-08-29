@@ -1714,7 +1714,7 @@ final class FeatureFormViewTests: XCTestCase {
         let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
         let removeAssociationButton = app.buttons["Remove Association"]
-        let removeButton = app.buttons["Remove"]
+        let removeButton = app.buttons["Remove"].firstMatch
         let transformerButton = app.buttons["Transformer, High"]
         
         openTestCase()
