@@ -24,11 +24,11 @@ final class AssociationsFilterResultsModel {
     /// The task for fetching the associations filter results.
     @ObservationIgnored private var task: Task<Void, Never>?
     
-    /// <#Description#>
+    /// The element containing the association filters.
     let element: UtilityAssociationsElement
     
     /// Fetches the associations filter results from a given associations element.
-    /// - Parameter element: The element containing the associations filter results.
+    /// - Parameter element: The element containing the association filters.
     init(element: UtilityAssociationsElement) {
         self.element = element
         fetchResults()
