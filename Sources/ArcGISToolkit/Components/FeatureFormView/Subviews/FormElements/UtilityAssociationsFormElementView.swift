@@ -145,29 +145,11 @@ extension FeatureFormView {
                     element: element,
                     embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
                 ) {
-                    printStats()
                     associationsFilterResultsModel.fetchResults()
                 }
                 .tint(.primary)
             }
-            .id(associationsFilterResultsModel.id)
-            .onAppear {
-                printStats()
-            }
         }
-        
-        func printStats() {
-            Task {
-                let filterResults = try? await element.associationsFilterResults
-                filterResults?.forEach { filterResult in
-                    print(filterResult, ObjectIdentifier(filterResult))
-                    filterResult.groupResults.forEach { groupResult in
-                        print("\t", groupResult, ObjectIdentifier(groupResult), groupResult.associationResults.count)
-                    }
-                }
-            }
-        }
-        
     }
     /// A view referencing a utility associations filter result.
     struct UtilityAssociationsFilterResultListRowView: View {
@@ -301,7 +283,6 @@ extension FeatureFormView {
                     }
                 }
             }
-            .id(associationsFilterResultsModel.id)
         }
     }
 }

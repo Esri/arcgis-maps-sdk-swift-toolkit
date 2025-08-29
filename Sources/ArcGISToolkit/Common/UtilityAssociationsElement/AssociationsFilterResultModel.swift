@@ -27,9 +27,6 @@ final class AssociationsFilterResultsModel {
     /// <#Description#>
     let element: UtilityAssociationsElement
     
-    /// <#Description#>
-    private(set) var id = UUID()
-    
     /// Fetches the associations filter results from a given associations element.
     /// - Parameter element: The element containing the associations filter results.
     init(element: UtilityAssociationsElement) {
@@ -45,7 +42,6 @@ final class AssociationsFilterResultsModel {
                 try await element.associationsFilterResults.filter { $0.resultCount > 0 }
             }
             withAnimation { self.result = result }
-            id = UUID()
         }
     }
     
