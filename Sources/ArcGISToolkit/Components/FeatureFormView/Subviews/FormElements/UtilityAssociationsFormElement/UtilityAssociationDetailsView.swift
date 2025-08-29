@@ -24,6 +24,8 @@ struct UtilityAssociationDetailsView: View {
     
     /// The association.
     let association: UtilityAssociation
+    /// <#Description#>
+    let associationsFilterResultsModel: AssociationsFilterResultsModel
     /// The element containing the association.
     let element: UtilityAssociationsFormElement
     /// The model for the feature form containing the element with the association.
@@ -91,6 +93,7 @@ struct UtilityAssociationDetailsView: View {
                     element: element,
                     embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
                 ) {
+                    associationsFilterResultsModel.fetchResults()
                     navigationPath?.wrappedValue.removeLast()
                 }
             } footer: {

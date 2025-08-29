@@ -41,7 +41,7 @@ extension FeatureFormView {
                     )
                 } else {
                     FeatureFormGroupedContentView(content: results.map {
-                        UtilityAssociationsFilterResultListRowView(element: element, utilityAssociationsFilterResult: $0)
+                        UtilityAssociationsFilterResultListRowView(element: element, filterTitle: $0.filter.title, associationsFilterResultsModel: associationsFilterResultModel)
                             .environment(embeddedFeatureFormViewModel)
                     })
                 }
@@ -76,11 +76,19 @@ extension FeatureFormView {
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
+        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        
+        let filterTitle: String
+        
+        let groupTitle: String
+        
         /// The backing utility association group result.
-        let utilityAssociationGroupResult: UtilityAssociationGroupResult
+        var utilityAssociationGroupResult: UtilityAssociationGroupResult? {
+            try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )?.groupResults.first(where: { $0.name == groupTitle })
+        }
         
         var body: some View {
-            List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
+            List(utilityAssociationGroupResult?.associationResults ?? [], id: \.associatedFeature.globalID) { utilityAssociationResult in
                 Button {
                     let navigationAction = {
                         navigationPath?.wrappedValue.append(
@@ -102,7 +110,7 @@ extension FeatureFormView {
                         Button {
                             navigationPath?.wrappedValue.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
-                                    embeddedFeatureFormViewModel, element, utilityAssociationResult.association
+                                    embeddedFeatureFormViewModel, element, utilityAssociationResult.association, associationsFilterResultsModel
                                 )
                             )
                         } label: {
@@ -136,12 +144,31 @@ extension FeatureFormView {
                     association: utilityAssociationResult.association,
                     element: element,
                     embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
-                ) {}
+                ) {
+                    printStats()
+                    associationsFilterResultsModel.fetchResults()
+                }
                 .tint(.primary)
             }
+            .id(associationsFilterResultsModel.id)
+            .onAppear {
+                printStats()
+            }
         }
+        
+        func printStats() {
+            Task {
+                let filterResults = try? await element.associationsFilterResults
+                filterResults?.forEach { filterResult in
+                    print(filterResult, ObjectIdentifier(filterResult))
+                    filterResult.groupResults.forEach { groupResult in
+                        print("\t", groupResult, ObjectIdentifier(groupResult), groupResult.associationResults.count)
+                    }
+                }
+            }
+        }
+        
     }
-    
     /// A view referencing a utility associations filter result.
     struct UtilityAssociationsFilterResultListRowView: View {
         /// The view model for the form.
@@ -154,7 +181,13 @@ extension FeatureFormView {
         let element: UtilityAssociationsFormElement
         
         /// The referenced utility associations filter result.
-        let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
+        let filterTitle: String
+        
+        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        
+        var filterResult: UtilityAssociationsFilterResult? {
+            try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )
+        }
         
         var body: some View {
             Button {
@@ -162,22 +195,26 @@ extension FeatureFormView {
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
                         embeddedFeatureFormViewModel,
                         element,
-                        utilityAssociationsFilterResult
+                        filterTitle,
+                        associationsFilterResultsModel
                     )
                 )
             } label: {
                 HStack {
                     VStack {
-                        Text(utilityAssociationsFilterResult.filter.title.capitalized)
-                        if !utilityAssociationsFilterResult.filter.description.isEmpty {
-                            Text(utilityAssociationsFilterResult.filter.description)
+                        Text(filterTitle.capitalized)
+                        if let filterResult, !filterResult.filter.description.isEmpty {
+                            Text(filterResult.filter.description)
                                 .font(.caption)
                         }
                     }
                     .lineLimit(1)
                     Spacer()
                     Group {
-                        Text(utilityAssociationsFilterResult.resultCount, format: .number)
+                        if let filterResult {
+                            Text(filterResult.resultCount, format: .number)
+                        }
+                        
                         Image(systemName: "chevron.right")
                     }
                     .foregroundColor(.secondary)
@@ -201,11 +238,19 @@ extension FeatureFormView {
         /// The form element containing the filter result.
         let element: UtilityAssociationsFormElement
         
+        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
         /// The backing utility associations filter result.
-        let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
+//        let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
+        
+        let filterTitle: String
+        
+        var filterResult: UtilityAssociationsFilterResult? {
+            try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )
+        }
         
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
@@ -215,13 +260,15 @@ extension FeatureFormView {
         var body: some View {
             List {
                 Section {
-                    ForEach(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
+                    ForEach(filterResult?.groupResults ?? [], id: \.name) { utilityAssociationGroupResult in
                         Button {
                             navigationPath?.wrappedValue.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
                                     embeddedFeatureFormViewModel,
                                     element,
-                                    utilityAssociationGroupResult
+                                    filterTitle,
+                                    utilityAssociationGroupResult.name,
+                                    associationsFilterResultsModel
                                 )
                             )
                         } label: {
@@ -254,6 +301,7 @@ extension FeatureFormView {
                     }
                 }
             }
+            .id(associationsFilterResultsModel.id)
         }
     }
 }
