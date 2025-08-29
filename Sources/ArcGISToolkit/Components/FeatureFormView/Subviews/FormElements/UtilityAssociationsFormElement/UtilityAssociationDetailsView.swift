@@ -24,7 +24,7 @@ struct UtilityAssociationDetailsView: View {
     
     /// The association.
     let association: UtilityAssociation
-    /// <#Description#>
+    /// The model containing the latest association filter results.
     let associationsFilterResultsModel: AssociationsFilterResultsModel
     /// The element containing the association.
     let element: UtilityAssociationsFormElement
