@@ -19,8 +19,8 @@ struct UtilityAssociationDetailsView: View {
     /// The navigation path for the navigation stack presenting this view.
     @Environment(\.navigationPath) var navigationPath
     
-    /// A Boolean value indicating whether the deletion confirmation is presented.
-    @State private var deletionConfirmationIsPresented = false
+    /// A Boolean value indicating whether the removal confirmation is presented.
+    @State private var removalConfirmationIsPresented = false
     
     /// The association.
     let association: UtilityAssociation
@@ -33,70 +33,10 @@ struct UtilityAssociationDetailsView: View {
     
     var body: some View {
         List {
-            Section {
-                LabeledContent {
-                    Text("\(association.kind)".capitalized)
-                } label: {
-                    Text(
-                        "Association Type",
-                        bundle: .toolkitModule,
-                        comment: "A label in reference to a utility association type."
-                    )
-                }
-            }
-            Section {
-                LabeledContent {} label: {
-                    Text(
-                        "From Element",
-                        bundle: .toolkitModule,
-                        comment: "A label for the element on the \"from\" side of a utility association."
-                    )
-                }
-                if let fromElementTerminal = association.fromElement.terminal {
-                    LabeledContent {
-                        Text(fromElementTerminal.name)
-                    } label: {
-                        terminal
-                    }
-                }
-            }
-            Section {
-                LabeledContent {} label: {
-                    Text(
-                        "To Element",
-                        bundle: .toolkitModule,
-                        comment: "A label for the element on the \"to\" side of a utility association."
-                    )
-                }
-                if let toElementTerminal = association.toElement.terminal {
-                    LabeledContent {
-                        Text(toElementTerminal.name)
-                    } label: {
-                        terminal
-                    }
-                }
-            }
-            Section {
-                Button(role: .destructive) {
-                    deletionConfirmationIsPresented = true
-                } label: {
-                    Text(
-                        "Remove Association",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to remove an utility association."
-                    )
-                    .frame(maxWidth: .infinity, alignment: .center)
-                }
-                .associationRemovalConfirmationDialog(
-                    isPresented: $deletionConfirmationIsPresented,
-                    association: association,
-                    element: element,
-                    embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
-                ) {
-                    associationsFilterResultsModel.fetchResults()
-                    navigationPath?.wrappedValue.removeLast()
-                }
-            }
+            associationSection
+            elementFromSection
+            elementToSection
+            removalSection
         }
         .navigationTitle(
             Text(
@@ -105,6 +45,82 @@ struct UtilityAssociationDetailsView: View {
                 comment: "A navigation title for the Association Settings page."
             )
         )
+    }
+    
+    var associationSection: some View {
+        Section {
+            LabeledContent {
+                Text("\(association.kind)".capitalized)
+            } label: {
+                Text(
+                    "Association Type",
+                    bundle: .toolkitModule,
+                    comment: "A label in reference to a utility association type."
+                )
+            }
+        }
+    }
+    
+    var elementFromSection: some View {
+        Section {
+            LabeledContent {} label: {
+                Text(
+                    "From Element",
+                    bundle: .toolkitModule,
+                    comment: "A label for the element on the \"from\" side of a utility association."
+                )
+            }
+            if let fromElementTerminal = association.fromElement.terminal {
+                LabeledContent {
+                    Text(fromElementTerminal.name)
+                } label: {
+                    terminal
+                }
+            }
+        }
+    }
+    
+    var elementToSection: some View {
+        Section {
+            LabeledContent {} label: {
+                Text(
+                    "To Element",
+                    bundle: .toolkitModule,
+                    comment: "A label for the element on the \"to\" side of a utility association."
+                )
+            }
+            if let toElementTerminal = association.toElement.terminal {
+                LabeledContent {
+                    Text(toElementTerminal.name)
+                } label: {
+                    terminal
+                }
+            }
+        }
+    }
+    
+    var removalSection: some View {
+        Section {
+            Button(role: .destructive) {
+                removalConfirmationIsPresented = true
+            } label: {
+                Text(
+                    "Remove Association",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to remove an utility association."
+                )
+                .frame(maxWidth: .infinity, alignment: .center)
+            }
+            .associationRemovalConfirmationDialog(
+                isPresented: $removalConfirmationIsPresented,
+                association: association,
+                element: element,
+                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+            ) {
+                associationsFilterResultsModel.fetchResults()
+                navigationPath?.wrappedValue.removeLast()
+            }
+        }
     }
     
     var terminal: Text {
