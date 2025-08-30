@@ -152,16 +152,15 @@ extension FeatureFormView {
                     }
                 }
                 .disabled(navigationIsDisabled)
-                .swipeActions {
-                    Button {
-                        associationPendingRemoval = utilityAssociationResult.association
-                        removalConfirmationIsPresented = true
-                    } label: {
-                        Label(String.delete, systemImage: "trash.fill")
-                            .labelStyle(.iconOnly)
-                            .tint(.red)
-                    }
+#if targetEnvironment(macCatalyst)
+                .contextMenu {
+                    makeDeleteButton(association: utilityAssociationResult.association)
                 }
+#else
+                .swipeActions {
+                    makeDeleteButton(association: utilityAssociationResult.association)
+                }
+#endif
                 .tint(.primary)
             }
             .associationRemovalConfirmationDialog(
@@ -176,6 +175,17 @@ extension FeatureFormView {
                 if oldValue, !newValue {
                     associationsFilterResultsModel.fetchResults()
                 }
+            }
+        }
+        
+        func makeDeleteButton(association: UtilityAssociation) -> some View {
+            Button {
+                associationPendingRemoval = association
+                removalConfirmationIsPresented = true
+            } label: {
+                Label(String.delete, systemImage: "trash.fill")
+                    .labelStyle(.iconOnly)
+                    .tint(.red)
             }
         }
     }
