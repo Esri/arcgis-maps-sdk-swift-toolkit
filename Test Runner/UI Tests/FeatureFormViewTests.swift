@@ -1708,7 +1708,7 @@ final class FeatureFormViewTests: XCTestCase {
         let associationSettingButton = app.buttons["Utility Association Details"]
         let cancelButton = app.buttons["Cancel"].firstMatch
         let deleteButton = app.buttons["Delete"]
-        let discardButton = app.buttons["Discard"]
+        let discardButton = app.buttons["Discard"].firstMatch
         let elementTitle = app.staticTexts["Associations"]
         let filterResults = app.staticTexts["Connected"]
         let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
