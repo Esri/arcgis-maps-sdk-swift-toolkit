@@ -60,9 +60,6 @@ struct EmbeddedFeatureFormView: View {
 #endif
         .environment(embeddedFeatureFormViewModel)
         .padding(.horizontal)
-        .onChange(of: ObjectIdentifier(featureForm)) {
-            embeddedFeatureFormViewModel = EmbeddedFeatureFormViewModel(featureForm: featureForm)
-        }
         .preference(
             key: PresentedFeatureFormPreferenceKey.self,
             value: .init(object: embeddedFeatureFormViewModel.featureForm)
