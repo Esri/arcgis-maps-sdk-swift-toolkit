@@ -22,8 +22,8 @@ struct UtilityAssociationDetailsView: View {
     /// A Boolean value indicating whether the removal confirmation is presented.
     @State private var removalConfirmationIsPresented = false
     
-    /// The association.
-    let association: UtilityAssociation
+    /// The association result.
+    let associationResult: UtilityAssociationResult
     /// The model containing the latest association filter results.
     let associationsFilterResultsModel: AssociationsFilterResultsModel
     /// The element containing the association.
@@ -50,7 +50,7 @@ struct UtilityAssociationDetailsView: View {
     var associationSection: some View {
         Section {
             LabeledContent {
-                Text("\(association.kind)".capitalized)
+                Text("\(associationResult.association.kind)".capitalized)
             } label: {
                 Text(
                     "Association Type",
@@ -63,14 +63,16 @@ struct UtilityAssociationDetailsView: View {
     
     var elementFromSection: some View {
         Section {
-            LabeledContent {} label: {
+            LabeledContent {
+                Text(associationResult.associatedFeatureIsToElement ? embeddedFeatureFormViewModel.title : associationResult.title)
+            } label: {
                 Text(
                     "From Element",
                     bundle: .toolkitModule,
                     comment: "A label for the element on the \"from\" side of a utility association."
                 )
             }
-            if let fromElementTerminal = association.fromElement.terminal {
+            if let fromElementTerminal = associationResult.association.fromElement.terminal {
                 LabeledContent {
                     Text(fromElementTerminal.name)
                 } label: {
@@ -82,14 +84,16 @@ struct UtilityAssociationDetailsView: View {
     
     var elementToSection: some View {
         Section {
-            LabeledContent {} label: {
+            LabeledContent {
+                Text(associationResult.associatedFeatureIsToElement ? associationResult.title : embeddedFeatureFormViewModel.title)
+            } label: {
                 Text(
                     "To Element",
                     bundle: .toolkitModule,
                     comment: "A label for the element on the \"to\" side of a utility association."
                 )
             }
-            if let toElementTerminal = association.toElement.terminal {
+            if let toElementTerminal = associationResult.association.toElement.terminal {
                 LabeledContent {
                     Text(toElementTerminal.name)
                 } label: {
@@ -113,7 +117,7 @@ struct UtilityAssociationDetailsView: View {
             }
             .associationRemovalConfirmationDialog(
                 isPresented: $removalConfirmationIsPresented,
-                association: association,
+                association: associationResult.association,
                 element: element,
                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
             ) {

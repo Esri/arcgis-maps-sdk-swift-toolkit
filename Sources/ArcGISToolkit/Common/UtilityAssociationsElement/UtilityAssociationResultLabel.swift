@@ -50,17 +50,6 @@ struct UtilityAssociationResultLabel: View {
 }
 
 private extension UtilityAssociationResult {
-    /// The utility element which is the associated feature.
-    private var associatedElement: UtilityElement {
-        associatedFeatureIsToElement ?  association.toElement : association.fromElement
-    }
-    
-    /// A Boolean value indicating whether the `associatedFeature` global ID
-    /// matches the `toElement` global ID.
-    private var associatedFeatureIsToElement: Bool {
-        associatedFeature.globalID == association.toElement.globalID
-    }
-    
     /// The details describing the result's association.
     var details: Text? {
         switch association.kind {

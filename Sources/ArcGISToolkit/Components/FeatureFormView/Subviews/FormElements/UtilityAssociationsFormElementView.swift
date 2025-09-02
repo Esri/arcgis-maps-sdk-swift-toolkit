@@ -130,7 +130,7 @@ extension FeatureFormView {
                                             embeddedFeatureFormViewModel,
                                             associationsFilterResultsModel,
                                             element,
-                                            utilityAssociationResult.association
+                                            utilityAssociationResult
                                         )
                                     )
                                 } label: {
@@ -356,16 +356,5 @@ private extension String {
             bundle: .toolkitModule,
             comment: "A label for an option to add a new utility association."
         )
-    }
-}
-
-private extension UtilityAssociationResult {
-    /// The utility element for the association.
-    var associatedElement: UtilityElement {
-        if associatedFeature.globalID == association.toElement.globalID {
-            association.toElement
-        } else {
-            association.fromElement
-        }
     }
 }
