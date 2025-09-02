@@ -59,9 +59,7 @@ extension FeatureFormView {
                 }
             }
             .onChange(of: embeddedFeatureFormViewModel.hasEdits) { oldValue, newValue in
-                if oldValue, !newValue {
-                    associationsFilterResultsModel.fetchResults()
-                }
+                associationsFilterResultsModel.fetchResults()
             }
         }
     }
@@ -105,76 +103,86 @@ extension FeatureFormView {
         }
         
         var body: some View {
-            List(utilityAssociationGroupResult?.associationResults ?? [], id: \.associatedFeature.globalID) { utilityAssociationResult in
-                Button {
-                    let navigationAction = {
-                        navigationPath?.wrappedValue.append(
-                            FeatureFormView.NavigationPathItem.form(
-                                FeatureForm(feature: utilityAssociationResult.associatedFeature)
-                            )
+            Group {
+                if let utilityAssociationGroupResult {
+                    List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
+                        Button {
+                            let navigationAction = {
+                                navigationPath?.wrappedValue.append(
+                                    FeatureFormView.NavigationPathItem.form(
+                                        FeatureForm(feature: utilityAssociationResult.associatedFeature)
+                                    )
+                                )
+                            }
+                            if embeddedFeatureFormViewModel.featureForm.hasEdits {
+                                setAlertContinuation?(true) {
+                                    navigationAction()
+                                }
+                            } else {
+                                navigationAction()
+                            }
+                        } label: {
+                            HStack {
+                                UtilityAssociationResultLabel(result: utilityAssociationResult)
+                                Button {
+                                    navigationPath?.wrappedValue.append(
+                                        FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
+                                            embeddedFeatureFormViewModel,
+                                            associationsFilterResultsModel,
+                                            element,
+                                            utilityAssociationResult.association
+                                        )
+                                    )
+                                } label: {
+                                    Label {
+                                        Text(
+                                            "Utility Association Details",
+                                            bundle: .toolkitModule,
+                                            comment: "A label for a button to view utility association details."
+                                        )
+                                    } icon: {
+                                        Image(systemName: "ellipsis.circle")
+                                    }
+                                    .contentShape(.circle)
+                                    .labelStyle(.iconOnly)
+                                    .tint(.blue)
+                                }
+                                .buttonStyle(.plain)
+                                .hoverEffect()
+                            }
+                        }
+                        .disabled(navigationIsDisabled)
+        #if targetEnvironment(macCatalyst)
+                        .contextMenu {
+                            makeDeleteButton(association: utilityAssociationResult.association)
+                        }
+        #else
+                        .swipeActions {
+                            makeDeleteButton(association: utilityAssociationResult.association)
+                        }
+        #endif
+                        .tint(.primary)
+                    }
+                    .associationRemovalConfirmationDialog(
+                        isPresented: $removalConfirmationIsPresented,
+                        association: associationPendingRemoval,
+                        element: element,
+                        embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+                    ) {
+                        associationsFilterResultsModel.fetchResults()
+                    }
+                } else {
+                    ContentUnavailableView {
+                        Text(
+                            "No Association Results",
+                            bundle: .toolkitModule,
+                            comment: "A label indication no association results were found."
                         )
                     }
-                    if embeddedFeatureFormViewModel.featureForm.hasEdits {
-                        setAlertContinuation?(true) {
-                            navigationAction()
-                        }
-                    } else {
-                        navigationAction()
-                    }
-                } label: {
-                    HStack {
-                        UtilityAssociationResultLabel(result: utilityAssociationResult)
-                        Button {
-                            navigationPath?.wrappedValue.append(
-                                FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
-                                    embeddedFeatureFormViewModel,
-                                    associationsFilterResultsModel,
-                                    element,
-                                    utilityAssociationResult.association
-                                )
-                            )
-                        } label: {
-                            Label {
-                                Text(
-                                    "Utility Association Details",
-                                    bundle: .toolkitModule,
-                                    comment: "A label for a button to view utility association details."
-                                )
-                            } icon: {
-                                Image(systemName: "ellipsis.circle")
-                            }
-                            .contentShape(.circle)
-                            .labelStyle(.iconOnly)
-                            .tint(.blue)
-                        }
-                        .buttonStyle(.plain)
-                        .hoverEffect()
-                    }
                 }
-                .disabled(navigationIsDisabled)
-#if targetEnvironment(macCatalyst)
-                .contextMenu {
-                    makeDeleteButton(association: utilityAssociationResult.association)
-                }
-#else
-                .swipeActions {
-                    makeDeleteButton(association: utilityAssociationResult.association)
-                }
-#endif
-                .tint(.primary)
             }
-            .associationRemovalConfirmationDialog(
-                isPresented: $removalConfirmationIsPresented,
-                association: associationPendingRemoval,
-                element: element,
-                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
-            ) {
+            .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
                 associationsFilterResultsModel.fetchResults()
-            }
-            .onChange(of: embeddedFeatureFormViewModel.hasEdits) { oldValue, newValue in
-                if oldValue, !newValue {
-                    associationsFilterResultsModel.fetchResults()
-                }
             }
         }
         
@@ -279,53 +287,63 @@ extension FeatureFormView {
         @Namespace private var namespace
         
         var body: some View {
-            List {
-                Section {
-                    ForEach(filterResult?.groupResults ?? [], id: \.name) { utilityAssociationGroupResult in
-                        Button {
-                            navigationPath?.wrappedValue.append(
-                                FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
-                                    embeddedFeatureFormViewModel,
-                                    associationsFilterResultsModel,
-                                    element,
-                                    filterTitle,
-                                    utilityAssociationGroupResult.name
-                                )
-                            )
-                        } label: {
-                            HStack {
-                                Text(utilityAssociationGroupResult.name)
-                                Spacer()
-                                Group {
-                                    Text(utilityAssociationGroupResult.associationResults.count, format: .number)
-                                    Image(systemName: "chevron.right")
+            Group {
+                if let filterResult {
+                    List {
+                        Section {
+                            ForEach(filterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
+                                Button {
+                                    navigationPath?.wrappedValue.append(
+                                        FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
+                                            embeddedFeatureFormViewModel,
+                                            associationsFilterResultsModel,
+                                            element,
+                                            filterTitle,
+                                            utilityAssociationGroupResult.name
+                                        )
+                                    )
+                                } label: {
+                                    HStack {
+                                        Text(utilityAssociationGroupResult.name)
+                                        Spacer()
+                                        Group {
+                                            Text(utilityAssociationGroupResult.associationResults.count, format: .number)
+                                            Image(systemName: "chevron.right")
+                                        }
+                                        .foregroundColor(.secondary)
+                                    }
                                 }
-                                .foregroundColor(.secondary)
+                                .tint(.primary)
+                            }
+                        } footer: {
+                            if futureAddAssociationSupportIsEnabled {
+                                if #available(iOS 18.0, *) {
+                                    NavigationLink(String.addAssociation) {
+                                        ContentUnavailableView(String.addAssociation, systemImage: "link")
+                                            .navigationTransition(.zoom(sourceID: "world", in: namespace))
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                } else {
+                                    NavigationLink(String.addAssociation) {
+                                        ContentUnavailableView(String.addAssociation, systemImage: "link")
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                }
                             }
                         }
-                        .tint(.primary)
                     }
-                } footer: {
-                    if futureAddAssociationSupportIsEnabled {
-                        if #available(iOS 18.0, *) {
-                            NavigationLink(String.addAssociation) {
-                                ContentUnavailableView(String.addAssociation, systemImage: "link")
-                                    .navigationTransition(.zoom(sourceID: "world", in: namespace))
-                            }
-                            .buttonStyle(.borderedProminent)
-                        } else {
-                            NavigationLink(String.addAssociation) {
-                                ContentUnavailableView(String.addAssociation, systemImage: "link")
-                            }
-                            .buttonStyle(.borderedProminent)
-                        }
+                } else {
+                    ContentUnavailableView {
+                        Text(
+                            "No Group Results",
+                            bundle: .toolkitModule,
+                            comment: "A label indication no group results were found."
+                        )
                     }
                 }
             }
-            .onChange(of: embeddedFeatureFormViewModel.hasEdits) { oldValue, newValue in
-                if oldValue, !newValue {
-                    associationsFilterResultsModel.fetchResults()
-                }
+            .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
+                associationsFilterResultsModel.fetchResults()
             }
         }
     }

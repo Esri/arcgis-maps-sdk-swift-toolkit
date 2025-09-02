@@ -1712,6 +1712,7 @@ final class FeatureFormViewTests: XCTestCase {
         let filterResults = app.staticTexts["Connected"]
         let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
+        let noAssociationResults = app.staticTexts["No Association Results"]
         let removeAssociationButton = app.buttons["Remove Association"]
         let removeButton = app.buttons["Remove"].firstMatch
         let transformerButton = app.buttons["Transformer, High"]
@@ -1778,6 +1779,11 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         removeButton.tap()
+        
+        XCTAssertTrue(
+            noAssociationResults.waitForExistence(timeout: 5),
+            "The \"No Association Results\" text doesn't exist."
+        )
         
         XCTAssertTrue(
             discardButton.waitForExistence(timeout: 5),
