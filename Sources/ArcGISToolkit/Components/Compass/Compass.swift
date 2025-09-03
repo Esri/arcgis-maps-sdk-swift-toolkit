@@ -65,13 +65,7 @@ public struct Compass: View {
         mapViewProxy: MapViewProxy?,
         action: (() -> Void)?
     ) {
-        let heading: Double
-        if let rotation {
-            heading = rotation.isZero ? .zero : 360 - rotation
-        } else {
-            heading = .nan
-        }
-        self.heading = heading
+        self.heading = rotation ?? .nan
         self.mapViewProxy = mapViewProxy
         self.action = action
     }
@@ -81,7 +75,7 @@ public struct Compass: View {
             CompassBody()
                 .overlay {
                     Needle()
-                        .rotationEffect(.degrees(heading))
+                        .rotationEffect(.degrees(360 - heading))
                 }
                 .aspectRatio(1, contentMode: .fit)
                 .opacity(opacity)
@@ -101,16 +95,31 @@ public struct Compass: View {
                         action()
                     }
                 }
+                .accessibilityHidden(opacity.isZero)
+                .accessibilityAddTraits(.isButton)
                 .accessibilityLabel(
-                    String(
-                        localized: "Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)",
+                    Text(
+                        "Compass",
+                        bundle: .toolkitModule,
+                        comment: "The accessibility label of the compass component."
+                    )
+                )
+                .accessibilityValue(
+                    Text(
+                        "Heading: \(Measurement<UnitAngle>(value: heading, unit: .degrees), format: .measurement(width: .wide, numberFormatStyle: .number.rounded(increment: 1))) \(CompassDirection(heading).name)",
                         bundle: .toolkitModule,
                         comment: """
-                                 An compass description to be read by a screen reader describing the
-                                 current heading. The first variable being a degree value and the
-                                 second being a corresponding cardinal direction (north, northeast,
-                                 east, etc.).
-                                 """
+                            The accessibility value of a compass. The first \
+                            variable is a heading in degrees and the second \
+                            variable is a cardinal or intercardinal direction.
+                            """
+                    )
+                )
+                .accessibilityHint(
+                    Text(
+                        "Reorient map north",
+                        bundle: .toolkitModule,
+                        comment: "The accessibility hint of the compass component."
                     )
                 )
 #if os(visionOS)
@@ -154,7 +163,7 @@ extension Compass {
 
 public extension Compass {
     /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
-    /// a direction toward true West, etc.).
+    /// a direction toward true East, etc.).
     /// - Parameters:
     ///   - rotation: The rotation whose value determines the heading of the compass.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
@@ -166,7 +175,7 @@ public extension Compass {
     }
     
     /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
-    /// a direction toward true West, etc.).
+    /// a direction toward true East, etc.).
     /// - Parameters:
     ///   - rotation: The rotation whose value determines the heading of the compass.
     ///   - action: The action to perform when the compass is tapped.
