@@ -131,7 +131,7 @@ extension FeatureFormView {
                 associationsFilterResultsModel.fetchResults()
             }
             .onChange(of: associationResults.count) {
-                if associationResults.count == 0 {
+                if associationResults.isEmpty {
                     navigationPath?.wrappedValue.removeLast()
                 }
             }
@@ -341,13 +341,13 @@ extension FeatureFormView {
                     }
                 }
             }
-            .onChange(of: groupResults.count) {
-                if groupResults.count == 0 {
-                    navigationPath?.wrappedValue.removeLast()
-                }
-            }
             .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
                 associationsFilterResultsModel.fetchResults()
+            }
+            .onChange(of: groupResults.count) {
+                if groupResults.isEmpty {
+                    navigationPath?.wrappedValue.removeLast()
+                }
             }
         }
     }
