@@ -37,9 +37,9 @@ class EmbeddedFeatureFormViewModel {
     
     /// The list of visible form elements.
     var visibleElements: [FormElement] {
-        var elements = elementVisibility
-            .filter(\.value)
-            .map(\.key)
+        var elements = featureForm
+            .elements
+            .filter { elementVisibility[$0] == true }
         if let attachmentsElement = featureForm.defaultAttachmentsElement {
             elements.append(attachmentsElement)
         }
