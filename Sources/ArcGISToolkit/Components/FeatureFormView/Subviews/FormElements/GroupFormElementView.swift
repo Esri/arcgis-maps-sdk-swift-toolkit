@@ -44,12 +44,10 @@ struct GroupFormElementView<Content>: View where Content: View {
         .task {
             await withTaskGroup { group in
                 for element in element.elements {
-                    group.addTask {
+                    group.addTask { @MainActor @Sendable in
                         for await isVisible in element.$isVisible {
                             guard !Task.isCancelled else { return }
-                            await MainActor.run {
-                                elementVisibility[element] = isVisible
-                            }
+                            elementVisibility[element] = isVisible
                         }
                     }
                 }
