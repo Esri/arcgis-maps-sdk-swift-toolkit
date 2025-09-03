@@ -97,88 +97,41 @@ extension FeatureFormView {
         /// The title of the selected utility association group result.
         let groupTitle: String
         
+        /// The set of association results within the group result.
+        var associationResults: [UtilityAssociationResult] {
+            utilityAssociationGroupResult?.associationResults ?? []
+        }
         /// The backing utility association group result.
         var utilityAssociationGroupResult: UtilityAssociationGroupResult? {
             try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )?.groupResults.first(where: { $0.name == groupTitle })
         }
         
         var body: some View {
-            Group {
-                if let utilityAssociationGroupResult {
-                    List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-                        Button {
-                            let navigationAction = {
-                                navigationPath?.wrappedValue.append(
-                                    FeatureFormView.NavigationPathItem.form(
-                                        FeatureForm(feature: utilityAssociationResult.associatedFeature)
-                                    )
-                                )
-                            }
-                            if embeddedFeatureFormViewModel.featureForm.hasEdits {
-                                setAlertContinuation?(true) {
-                                    navigationAction()
-                                }
-                            } else {
-                                navigationAction()
-                            }
-                        } label: {
-                            HStack {
-                                UtilityAssociationResultLabel(result: utilityAssociationResult)
-                                Button {
-                                    navigationPath?.wrappedValue.append(
-                                        FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
-                                            embeddedFeatureFormViewModel,
-                                            associationsFilterResultsModel,
-                                            element,
-                                            utilityAssociationResult
-                                        )
-                                    )
-                                } label: {
-                                    Label {
-                                        Text(
-                                            "Utility Association Details",
-                                            bundle: .toolkitModule,
-                                            comment: "A label for a button to view utility association details."
-                                        )
-                                    } icon: {
-                                        Image(systemName: "ellipsis.circle")
-                                    }
-                                    .contentShape(.circle)
-                                    .labelStyle(.iconOnly)
-                                    .tint(.blue)
-                                }
-                                .buttonStyle(.plain)
-                                .hoverEffect()
-                            }
-                        }
-                        .disabled(navigationIsDisabled)
-        #if targetEnvironment(macCatalyst)
-                        .contextMenu {
-                            makeDeleteButton(association: utilityAssociationResult.association)
-                        }
-        #else
-                        .swipeActions {
-                            makeDeleteButton(association: utilityAssociationResult.association)
-                        }
-        #endif
-                        .tint(.primary)
+            List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
+                makeMainButton(result: utilityAssociationResult)
+                    .disabled(navigationIsDisabled)
+#if targetEnvironment(macCatalyst)
+                    .contextMenu {
+                        makeDeleteButton(association: utilityAssociationResult.association)
                     }
-                    .associationRemovalConfirmationDialog(
-                        isPresented: $removalConfirmationIsPresented,
-                        association: associationPendingRemoval,
-                        element: element,
-                        embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
-                    ) {
-                        associationsFilterResultsModel.fetchResults()
+#else
+                    .swipeActions {
+                        makeDeleteButton(association: utilityAssociationResult.association)
                     }
-                } else {
-                    ContentUnavailableView {
-                        Text(
-                            "No Association Results",
-                            bundle: .toolkitModule,
-                            comment: "A label indication no association results were found."
-                        )
-                    }
+#endif
+                    .tint(.primary)
+            }
+            .associationRemovalConfirmationDialog(
+                isPresented: $removalConfirmationIsPresented,
+                association: associationPendingRemoval,
+                element: element,
+                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+            ) {
+                associationsFilterResultsModel.fetchResults()
+            }
+            .onChange(of: associationResults.count) {
+                if associationResults.count == 0 {
+                    navigationPath?.wrappedValue.removeLast()
                 }
             }
             .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
@@ -194,6 +147,58 @@ extension FeatureFormView {
                 Label(String.delete, systemImage: "trash.fill")
                     .labelStyle(.iconOnly)
                     .tint(.red)
+            }
+        }
+        
+        func makeDetailsButton(result: UtilityAssociationResult) -> some View {
+            Button {
+                navigationPath?.wrappedValue.append(
+                    FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
+                        embeddedFeatureFormViewModel,
+                        associationsFilterResultsModel,
+                        element,
+                        result
+                    )
+                )
+            } label: {
+                Label {
+                    Text(
+                        "Utility Association Details",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to view utility association details."
+                    )
+                } icon: {
+                    Image(systemName: "ellipsis.circle")
+                }
+                .contentShape(.circle)
+                .labelStyle(.iconOnly)
+                .tint(.blue)
+            }
+        }
+        
+        func makeMainButton(result: UtilityAssociationResult) -> some View {
+            Button {
+                let navigationAction = {
+                    navigationPath?.wrappedValue.append(
+                        FeatureFormView.NavigationPathItem.form(
+                            FeatureForm(feature: result.associatedFeature)
+                        )
+                    )
+                }
+                if embeddedFeatureFormViewModel.featureForm.hasEdits {
+                    setAlertContinuation?(true) {
+                        navigationAction()
+                    }
+                } else {
+                    navigationAction()
+                }
+            } label: {
+                HStack {
+                    UtilityAssociationResultLabel(result: result)
+                    makeDetailsButton(result: result)
+                        .buttonStyle(.plain)
+                        .hoverEffect()
+                }
             }
         }
     }
