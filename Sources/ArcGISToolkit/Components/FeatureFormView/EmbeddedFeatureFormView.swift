@@ -16,8 +16,6 @@ import ArcGIS
 import SwiftUI
 
 struct EmbeddedFeatureFormView: View {
-    private let featureForm: FeatureForm
-    
     /// The view model for the form.
     @State private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     
@@ -25,7 +23,6 @@ struct EmbeddedFeatureFormView: View {
     /// - Parameter featureForm: The feature form defining the editing experience.
     init(featureForm: FeatureForm) {
         self.embeddedFeatureFormViewModel = EmbeddedFeatureFormViewModel(featureForm: featureForm)
-        self.featureForm = featureForm
     }
     
     var body: some View {
