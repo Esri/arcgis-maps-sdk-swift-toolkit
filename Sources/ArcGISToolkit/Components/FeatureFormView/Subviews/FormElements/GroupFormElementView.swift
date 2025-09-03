@@ -42,7 +42,7 @@ struct GroupFormElementView<Content>: View where Content: View {
             isExpanded = element.initialState == .expanded
         }
         .task {
-            await withTaskGroup(of: Void.self) { group in
+            await withTaskGroup { group in
                 for element in element.elements {
                     group.addTask {
                         for await isVisible in element.$isVisible {

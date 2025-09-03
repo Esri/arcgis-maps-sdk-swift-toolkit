@@ -85,7 +85,7 @@ class EmbeddedFeatureFormViewModel {
     private func monitorVisibility() {
         visibilityTask?.cancel()
         visibilityTask = Task { [weak self] in
-            await withTaskGroup(of: Void.self) { group in
+            await withTaskGroup { group in
                 for element in self?.featureForm.elements ?? [] {
                     group.addTask { [weak self] in
                         for await isVisible in element.$isVisible {
