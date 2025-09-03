@@ -87,12 +87,10 @@ class EmbeddedFeatureFormViewModel {
         visibilityTask = Task { [weak self] in
             await withTaskGroup { group in
                 for element in self?.featureForm.elements ?? [] {
-                    group.addTask { [weak self] in
+                    group.addTask { @MainActor @Sendable [weak self] in
                         for await isVisible in element.$isVisible {
                             guard !Task.isCancelled else { return }
-                            await MainActor.run { [weak self] in
-                                self?.elementVisibility[element] = isVisible
-                            }
+                            self?.elementVisibility[element] = isVisible
                         }
                     }
                 }
