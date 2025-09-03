@@ -1712,7 +1712,6 @@ final class FeatureFormViewTests: XCTestCase {
         let filterResults = app.staticTexts["Connected"]
         let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let noAssociationResults = app.staticTexts["No Association Results"]
         let removeAssociationButton = app.buttons["Remove Association"]
         let removeButton = app.buttons["Remove"].firstMatch
         let transformerButton = app.buttons["Transformer, High"]
@@ -1781,8 +1780,8 @@ final class FeatureFormViewTests: XCTestCase {
         removeButton.tap()
         
         XCTAssertTrue(
-            noAssociationResults.waitForExistence(timeout: 5),
-            "The \"No Association Results\" text doesn't exist."
+            elementTitle.waitForExistence(timeout: 5),
+            "The element \"Associations\" doesn't exist."
         )
         
         XCTAssertTrue(
@@ -1791,6 +1790,20 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         discardButton.tap()
+        
+        XCTAssertTrue(
+            filterResults.waitForExistence(timeout: 5),
+            "The filter result \"Connected\" doesn't exist."
+        )
+        
+        filterResults.tap()
+        
+        XCTAssertTrue(
+            networkSourceGroupButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        networkSourceGroupButton.tap()
         
         XCTAssertTrue(
             transformerButton.waitForExistence(timeout: 5),
@@ -1841,7 +1854,11 @@ final class FeatureFormViewTests: XCTestCase {
             discardButton.waitForExistence(timeout: 5),
             "The discard button doesn't exist."
         )
-        XCTAssertFalse(transformerButton.exists)
+        
+        XCTAssertTrue(
+            elementTitle.waitForExistence(timeout: 5),
+            "The element \"Associations\" doesn't exist."
+        )
     }
 }
 
