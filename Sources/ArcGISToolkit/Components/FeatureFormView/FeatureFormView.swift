@@ -256,6 +256,7 @@ public struct FeatureFormView: View {
                     }
                 }
             )
+            .animation(.default, value: ObjectIdentifier(rootFeatureForm))
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.finishEditingError, $finishEditingError)
             .environment(\.isPresented, isPresented)
