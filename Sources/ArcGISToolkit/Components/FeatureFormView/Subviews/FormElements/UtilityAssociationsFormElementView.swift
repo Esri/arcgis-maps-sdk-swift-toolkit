@@ -101,6 +101,7 @@ extension FeatureFormView {
         var associationResults: [UtilityAssociationResult] {
             utilityAssociationGroupResult?.associationResults ?? []
         }
+        
         /// The backing utility association group result.
         var utilityAssociationGroupResult: UtilityAssociationGroupResult? {
             try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )?.groupResults.first(where: { $0.name == groupTitle })
@@ -286,65 +287,63 @@ extension FeatureFormView {
             try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )
         }
         
+        /// The set of group results within the filter result.
+        var groupResults: [UtilityAssociationGroupResult] {
+            filterResult?.groupResults ?? []
+        }
+        
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
         @Namespace private var namespace
         
         var body: some View {
-            Group {
-                if let filterResult {
-                    List {
-                        Section {
-                            ForEach(filterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
-                                Button {
-                                    navigationPath?.wrappedValue.append(
-                                        FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
-                                            embeddedFeatureFormViewModel,
-                                            associationsFilterResultsModel,
-                                            element,
-                                            filterTitle,
-                                            utilityAssociationGroupResult.name
-                                        )
-                                    )
-                                } label: {
-                                    HStack {
-                                        Text(utilityAssociationGroupResult.name)
-                                        Spacer()
-                                        Group {
-                                            Text(utilityAssociationGroupResult.associationResults.count, format: .number)
-                                            Image(systemName: "chevron.right")
-                                        }
-                                        .foregroundColor(.secondary)
-                                    }
+            List {
+                Section {
+                    ForEach(groupResults, id: \.name) { utilityAssociationGroupResult in
+                        Button {
+                            navigationPath?.wrappedValue.append(
+                                FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
+                                    embeddedFeatureFormViewModel,
+                                    associationsFilterResultsModel,
+                                    element,
+                                    filterTitle,
+                                    utilityAssociationGroupResult.name
+                                )
+                            )
+                        } label: {
+                            HStack {
+                                Text(utilityAssociationGroupResult.name)
+                                Spacer()
+                                Group {
+                                    Text(utilityAssociationGroupResult.associationResults.count, format: .number)
+                                    Image(systemName: "chevron.right")
                                 }
-                                .tint(.primary)
-                            }
-                        } footer: {
-                            if futureAddAssociationSupportIsEnabled {
-                                if #available(iOS 18.0, *) {
-                                    NavigationLink(String.addAssociation) {
-                                        ContentUnavailableView(String.addAssociation, systemImage: "link")
-                                            .navigationTransition(.zoom(sourceID: "world", in: namespace))
-                                    }
-                                    .buttonStyle(.borderedProminent)
-                                } else {
-                                    NavigationLink(String.addAssociation) {
-                                        ContentUnavailableView(String.addAssociation, systemImage: "link")
-                                    }
-                                    .buttonStyle(.borderedProminent)
-                                }
+                                .foregroundColor(.secondary)
                             }
                         }
+                        .tint(.primary)
                     }
-                } else {
-                    ContentUnavailableView {
-                        Text(
-                            "No Group Results",
-                            bundle: .toolkitModule,
-                            comment: "A label indication no group results were found."
-                        )
+                } footer: {
+                    if futureAddAssociationSupportIsEnabled {
+                        if #available(iOS 18.0, *) {
+                            NavigationLink(String.addAssociation) {
+                                ContentUnavailableView(String.addAssociation, systemImage: "link")
+                                    .navigationTransition(.zoom(sourceID: "world", in: namespace))
+                            }
+                            .buttonStyle(.borderedProminent)
+                        } else {
+                            NavigationLink(String.addAssociation) {
+                                ContentUnavailableView(String.addAssociation, systemImage: "link")
+                            }
+                            .buttonStyle(.borderedProminent)
+                        }
                     }
+                }
+            }
+            .onChange(of: groupResults.count) {
+                if groupResults.count == 0 {
+                    navigationPath?.wrappedValue.removeLast()
                 }
             }
             .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
