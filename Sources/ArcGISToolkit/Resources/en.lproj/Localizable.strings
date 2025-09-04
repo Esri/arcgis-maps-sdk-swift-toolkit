@@ -142,24 +142,12 @@ for the AR experience. */
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Color";
 
-/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+/* The accessibility label of the compass component.
+The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
 "Compass" = "Compass";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
 "Compass navigation" = "Compass navigation";
-
-/* An compass description to be read by a screen reader describing the
-current heading. The first variable being a degree value and the
-second being a corresponding cardinal direction (north, northeast,
-east, etc.). */
-"Compass, heading %lld degrees %@" = "Compass, heading %lld degrees %@";
-
-/* A label indicating a utility association's 
-containment is not visible. */
-"Content" = "Content";
-
-/* The accessibility label of the compass component. */
-"Compass" = "Compass";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -371,14 +359,16 @@ trace operation. */
 AR experience. */
 "heading" = "heading";
 
+/* The accessibility value of a compass. The first
+variable is a heading in degrees and the second
+variable is a cardinal or intercardinal direction. */
+"Heading: %@ %@" = "Heading: %@ %@";
+
 /* The section header for the auto-pan section in the location button context menu. */
 "Hide Location" = "Hide Location";
 
 /* The accessibility hint of the hide location display context menu option. */
 "Hide location display" = "Hide location display";
-
-/* The accessibility value of a compass. The first variable is a heading in degrees and the second variable is a cardinal or intercardinal direction. */
-"Heading: %1$@ %2$@" = "Heading: %1$@ %2$@";
 
 /* House Property (Level of Detail) */
 "House Property" = "House Property";
