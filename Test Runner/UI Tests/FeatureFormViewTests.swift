@@ -1649,7 +1649,7 @@ final class FeatureFormViewTests: XCTestCase {
         let filterResults = app.staticTexts["Content"]
         let formTitle = app.staticTexts["Structure Boundary"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let utilityElementButton = app.buttons["Circuit Breaker, Content"]
+        let utilityElementButton = app.buttons["Circuit Breaker, Visible: false"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)

@@ -17,25 +17,15 @@ import SwiftUI
 
 /// Displays a group form element and manages the visibility of the elements within the group.
 struct GroupFormElementView<Content>: View where Content: View {
-    /// A Boolean value indicating whether the group is expanded or collapsed.
-    @State private var isExpanded = false
-    
-    /// The group of visibility tasks.
-    @State private var isVisibleTasks = [Task<Void, Never>]()
-    
-    /// The list of visible group elements.
-    @State private var visibleElements = [FormElement]()
-    
     /// The group form element.
     let element: GroupFormElement
-    
     /// The closure to perform to build an element in the group.
     let viewCreator: (FormElement) -> Content
     
-    /// Filters the group's elements by visibility.
-    private func updateVisibleElements() {
-        visibleElements = element.elements.filter { $0.isVisible }
-    }
+    /// A dictionary of each group element and whether or not it is visible.
+    @State private var elementVisibility: [FormElement: Bool] = [:]
+    /// A Boolean value indicating whether the group is expanded or collapsed.
+    @State private var isExpanded = false
     
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
@@ -54,23 +44,28 @@ struct GroupFormElementView<Content>: View where Content: View {
         }
         .onAppear {
             isExpanded = element.initialState == .expanded
-            for element in element.elements {
-                let newTask = Task { @MainActor [self] in
-                    for await _ in element.$isVisible {
-                        self.updateVisibleElements()
+        }
+        .task {
+            await withTaskGroup { group in
+                for element in element.elements {
+                    group.addTask { @MainActor @Sendable in
+                        for await isVisible in element.$isVisible {
+                            guard !Task.isCancelled else { return }
+                            elementVisibility[element] = isVisible
+                        }
                     }
                 }
-                isVisibleTasks.append(newTask)
             }
-        }
-        .onDisappear {
-            isVisibleTasks.forEach { task in
-                task.cancel()
-            }
-            isVisibleTasks.removeAll()
         }
         // Tints the disclosure triangle.
         .inspectorTint(.blue)
+    }
+    
+    /// The list of visible group elements.
+    private var visibleElements: [FormElement] {
+        element
+            .elements
+            .filter { elementVisibility[$0] == true }
     }
 }
 

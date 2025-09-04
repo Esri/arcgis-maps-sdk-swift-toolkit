@@ -31,16 +31,6 @@ struct EmbeddedFeatureFormView: View {
                 ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
                     makeElement(element)
                 }
-                if let attachmentsElement = embeddedFeatureFormViewModel.featureForm.defaultAttachmentsElement {
-                    // The Toolkit currently only supports AttachmentsFormElements via the
-                    // default attachments element. Once AttachmentsFormElements can be authored
-                    // this can call makeElement(_:) instead and makeElement(_:) should have a
-                    // case added for AttachmentsFormElement.
-                    AttachmentsFeatureElementView(
-                        formElement: attachmentsElement,
-                        formViewModel: embeddedFeatureFormViewModel
-                    )
-                }
             }
             .task {
                 for await hasEdits in embeddedFeatureFormViewModel.featureForm.$hasEdits.dropFirst() {
@@ -70,9 +60,6 @@ struct EmbeddedFeatureFormView: View {
             key: PresentedFeatureFormPreferenceKey.self,
             value: .init(object: embeddedFeatureFormViewModel.featureForm)
         )
-        .task {
-            await embeddedFeatureFormViewModel.initialEvaluation()
-        }
         .featureFormToolbar(embeddedFeatureFormViewModel.featureForm, isAForm: true)
     }
 }
@@ -101,6 +88,11 @@ extension EmbeddedFeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
         switch element {
+        case let element as AttachmentsFormElement:
+            AttachmentsFeatureElementView(
+                formElement: element,
+                formViewModel: embeddedFeatureFormViewModel
+            )
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as TextFormElement:
