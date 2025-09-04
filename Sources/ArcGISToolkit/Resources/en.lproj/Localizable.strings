@@ -1,3 +1,9 @@
+/* A label with the name of a terminal on an associated
+utility element (first variable) and a fractional value
+(second variable) indicating the relative location along
+an edge where a utility association is (logically) located. */
+"%@, %@" = "%@, %@";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld selected";
 
