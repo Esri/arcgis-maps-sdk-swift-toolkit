@@ -109,8 +109,8 @@ public struct Compass: View {
                         "Heading: \(Measurement<UnitAngle>(value: heading, unit: .degrees), format: .measurement(width: .wide, numberFormatStyle: .number.rounded(increment: 1))) \(CompassDirection(heading).name)",
                         bundle: .toolkitModule,
                         comment: """
-                            The accessibility value of a compass. The first \
-                            variable is a heading in degrees and the second \
+                            The accessibility value of a compass. The first
+                            variable is a heading in degrees and the second
                             variable is a cardinal or intercardinal direction.
                             """
                     )
