@@ -1,3 +1,9 @@
+/* A label with the name of a terminal on an associated
+utility element (first variable) and a fractional value
+(second variable) indicating the relative location along
+an edge where a utility association is (logically) located. */
+"%@, %@" = "%@, %@";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld selected";
 
@@ -131,10 +137,6 @@ current heading. The first variable being a degree value and the
 second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Compass, heading %lld degrees %@";
-
-/* A label indicating a utility association's 
-containment is not visible. */
-"Content" = "Content";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -750,8 +752,12 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "View";
 
 /* A label indicating a utility association's 
+containment is not visible. */
+"Visible: false" = "Visible: false";
+
+/* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "Visible Content";
+"Visible: true" = "Visible: true";
 
 /* World (Level of Detail) */
 "World" = "World";

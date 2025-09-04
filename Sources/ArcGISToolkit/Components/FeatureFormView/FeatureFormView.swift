@@ -127,6 +127,9 @@ public struct FeatureFormView: View {
         if let rootFeatureForm {
             NavigationStack(path: $navigationPath) {
                 EmbeddedFeatureFormView(featureForm: rootFeatureForm)
+                    // Refresh the navigation stack's root view when the root
+                    // feature form changes.
+                    .id(ObjectIdentifier(rootFeatureForm))
                     .navigationDestination(for: NavigationPathItem.self) { itemType in
                         switch itemType {
                         case let .form(form):
@@ -267,6 +270,7 @@ public struct FeatureFormView: View {
                     }
                 }
             )
+            .animation(.default, value: ObjectIdentifier(rootFeatureForm))
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.finishEditingError, $finishEditingError)
             .environment(\.isPresented, isPresented)
@@ -276,6 +280,9 @@ public struct FeatureFormView: View {
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
             .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
+            .onChange(of: ObjectIdentifier(rootFeatureForm)) {
+                presentedForm = rootFeatureForm
+            }
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) { wrappedFeatureForm in
                 guard let wrappedFeatureForm else { return }
                 formChangedAction(wrappedFeatureForm.object)

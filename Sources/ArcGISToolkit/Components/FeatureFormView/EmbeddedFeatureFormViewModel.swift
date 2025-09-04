@@ -15,7 +15,7 @@
 import ArcGIS
 import Observation
 
-@Observable
+@MainActor @Observable
 class EmbeddedFeatureFormViewModel {
     /// The current focused element, if one exists.
     var focusedElement: FormElement? {
@@ -44,7 +44,18 @@ class EmbeddedFeatureFormViewModel {
     var title = ""
     
     /// The list of visible form elements.
-    var visibleElements = [FormElement]()
+    var visibleElements: [FormElement] {
+        var elements = featureForm
+            .elements
+            .filter { elementVisibility[$0] == true }
+        if let attachmentsElement = featureForm.defaultAttachmentsElement {
+            elements.append(attachmentsElement)
+        }
+        return elements
+    }
+    
+    /// A dictionary of each form element and whether or not it is visible.
+    private var elementVisibility: [FormElement: Bool] = [:]
     
     /// The expression evaluation task.
     @ObservationIgnored
@@ -55,7 +66,7 @@ class EmbeddedFeatureFormViewModel {
     
     /// The group of visibility tasks.
     @ObservationIgnored
-    private var isVisibleTasks = [Task<Void, Never>]()
+    private var visibilityTask: Task<Void, Never>?
     
     /// A task to monitor whether the form has edits.
     @ObservationIgnored
@@ -65,46 +76,17 @@ class EmbeddedFeatureFormViewModel {
     /// - Parameter featureForm: The feature form defining the editing experience.
     public init(featureForm: FeatureForm) {
         self.featureForm = featureForm
+        evaluateExpressions()
+        monitorEdits()
+        monitorVisibility()
     }
     
     deinit {
         evaluateTask?.cancel()
-        isVisibleTasks.forEach { task in
-            task.cancel()
-        }
-        isVisibleTasks.removeAll()
-    }
-    
-    /// Kick off tasks to monitor `isVisible` for each element.
-    @MainActor
-    private func initializeIsVisibleTasks() {
-        isVisibleTasks.forEach { $0.cancel() }
-        isVisibleTasks.removeAll()
-        for element in featureForm.elements {
-            let newTask = Task { [weak self] in
-                for await _ in element.$isVisible {
-                    guard !Task.isCancelled else { return }
-                    self?.updateVisibleElements()
-                }
-            }
-            isVisibleTasks.append(newTask)
-        }
-    }
-    
-    /// A detached task observing visibility changes.
-    private func updateVisibleElements() {
-        visibleElements = featureForm.elements.filter { $0.isVisible }
-    }
-    
-    /// Performs an initial evaluation of all form expressions.
-    @MainActor
-    func initialEvaluation() async {
-        _ = try? await featureForm.evaluateExpressions()
-        initializeIsVisibleTasks()
+        visibilityTask?.cancel()
     }
     
     /// Performs an evaluation of all form expressions.
-    @MainActor
     func evaluateExpressions() {
         evaluateTask?.cancel()
         evaluateTask = Task {
@@ -112,13 +94,29 @@ class EmbeddedFeatureFormViewModel {
         }
     }
     
-    @MainActor
-    func monitorEdits() {
+    private func monitorEdits() {
         monitorEditsTask?.cancel()
         monitorEditsTask = Task { [weak self] in
             guard !Task.isCancelled, let self else { return }
             for await hasEdits in featureForm.$hasEdits.dropFirst() {
                 self.hasEdits = hasEdits
+            }
+        }
+    }
+    
+    /// Starts a task group which monitors the visibility of each form element.
+    private func monitorVisibility() {
+        visibilityTask?.cancel()
+        visibilityTask = Task { [weak self] in
+            await withTaskGroup { group in
+                for element in self?.featureForm.elements ?? [] {
+                    group.addTask { @MainActor @Sendable [weak self] in
+                        for await isVisible in element.$isVisible {
+                            guard !Task.isCancelled else { return }
+                            self?.elementVisibility[element] = isVisible
+                        }
+                    }
+                }
             }
         }
     }
