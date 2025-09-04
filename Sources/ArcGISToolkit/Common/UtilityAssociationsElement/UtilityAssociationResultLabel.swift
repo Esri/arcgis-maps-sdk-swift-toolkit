@@ -114,13 +114,6 @@ private extension UtilityAssociationResult {
             return nil
         }
     }
-    
-    @ViewBuilder
-    var fractionAlongEdge: Text? {
-        if association.kind == .junctionEdgeObjectConnectivityMidspan {
-            Text(association.fractionAlongEdge, format: .percent)
-        }
-    }
 }
 
 private extension UtilityAssociation.Kind {
