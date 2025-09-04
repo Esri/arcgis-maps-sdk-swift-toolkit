@@ -27,10 +27,8 @@ struct EmbeddedFeatureFormView: View {
     
     var body: some View {
         ScrollViewReader { scrollView in
-            List {
-                ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
-                    makeElement(element)
-                }
+            List(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
+                makeElement(element)
             }
             .task {
                 for await hasEdits in embeddedFeatureFormViewModel.featureForm.$hasEdits.dropFirst() {
