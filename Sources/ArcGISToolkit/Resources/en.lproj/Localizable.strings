@@ -126,11 +126,8 @@ for the AR experience. */
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Color";
 
-/* An compass description to be read by a screen reader describing the
-current heading. The first variable being a degree value and the
-second being a corresponding cardinal direction (north, northeast,
-east, etc.). */
-"Compass, heading %lld degrees %@" = "Compass, heading %lld degrees %@";
+/* The accessibility label of the compass component. */
+"Compass" = "Compass";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -222,6 +219,9 @@ east, etc.). */
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Duplicate starting points cannot be added.";
+
+/* The cardinal direction East. */
+"East" = "East";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -336,6 +336,9 @@ trace operation. */
 AR experience. */
 "heading" = "heading";
 
+/* The accessibility value of a compass. The first variable is a heading in degrees and the second variable is a cardinal or intercardinal direction. */
+"Heading: %1$@ %2$@" = "Heading: %1$@ %2$@";
+
 /* House Property (Level of Detail) */
 "House Property" = "House Property";
 
@@ -426,6 +429,15 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "No Value";
 
+/* The cardinal direction North. */
+"North" = "North";
+
+/* The intercardinal direction Northeast. */
+"Northeast" = "Northeast";
+
+/* The intercardinal direction Northwest. */
+"Northwest" = "Northwest";
+
 /* A trace function output result was not provided. */
 "Not Available" = "Not Available";
 
@@ -498,6 +510,9 @@ The variable provides additional data. */
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
 "Rename attachment" = "Rename attachment";
 
+/* The accessibility hint of the compass component. */
+"Reorient map north" = "Reorient map north";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -554,6 +569,15 @@ or more levels in a floor-aware map or scene. */
 
 /* Small Building (Level of Detail) */
 "Small Building" = "Small Building";
+
+/* The cardinal direction South. */
+"South" = "South";
+
+/* The intercardinal direction Southeast. */
+"Southeast" = "Southeast";
+
+/* The intercardinal direction Southwest. */
+"Southwest" = "Southwest";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
@@ -727,6 +751,9 @@ containment is not visible. */
 /* A label indicating a utility association's 
 containment is visible. */
 "Visible: true" = "Visible: true";
+
+/* The cardinal direction West. */
+"West" = "West";
 
 /* World (Level of Detail) */
 "World" = "World";
