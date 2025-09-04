@@ -15,7 +15,7 @@
 
 TMP_PATH="/tmp/toolkit-translations"
 
-echo "Removing the current localized strings." \
+echo "Removing the current localizable strings." \
 && rm -f Sources/ArcGISToolkit/Resources/en.lproj/Localizable.strings \
 && echo "Determining which SDK to use. Getting latest available iphoneos." \
 && SDK=$(xcodebuild -showsdks | grep iphoneos | awk '{print $NF}' | sort -V | tail -1) \
