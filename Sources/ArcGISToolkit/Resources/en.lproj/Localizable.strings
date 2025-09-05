@@ -142,12 +142,14 @@ for the AR experience. */
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Color";
 
-/* The accessibility label of the compass component.
-The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Compass" = "Compass";
-
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
 "Compass navigation" = "Compass navigation";
+
+/* The accessibility label of the compass button. */
+"compass-button-label" = "Compass";
+
+/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"compass-navigation-label" = "Compass";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";

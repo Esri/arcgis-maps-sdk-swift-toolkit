@@ -99,9 +99,12 @@ public struct Compass: View {
                 .accessibilityAddTraits(.isButton)
                 .accessibilityLabel(
                     Text(
-                        "Compass",
-                        bundle: .toolkitModule,
-                        comment: "The accessibility label of the compass component."
+                        LocalizedStringResource(
+                            "compass-button-label",
+                            defaultValue: "Compass",
+                            bundle: .toolkit,
+                            comment: "The accessibility label of the compass button."
+                        )
                     )
                 )
                 .accessibilityValue(

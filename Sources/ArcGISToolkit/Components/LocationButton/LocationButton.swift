@@ -404,9 +404,12 @@ private extension LocationDisplay.AutoPanMode {
             )
         case .compassNavigation:
             Text(
-                "Compass",
-                bundle: .toolkitModule,
-                comment: "The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu."
+                LocalizedStringResource(
+                    "compass-navigation-label",
+                    defaultValue: "Compass",
+                    bundle: .toolkit,
+                    comment: "The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu."
+                )
             )
         case .navigation:
             Text(
