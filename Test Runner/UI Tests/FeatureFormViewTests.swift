@@ -263,21 +263,18 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 1.3: unfocused and focused state, with error value (> 256 chars)
     func testCase_1_3() async throws {
-        try skipForCatalystScrollBehavior()
-        
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
+        let elements = ["Single Line No Value, Placeholder or Description"]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let returnButton = app.buttons["Return"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
-        openTestCase()
+        openTestCase(elements)
         assertFormOpened(titleElement: formTitle)
-        
-        app.scrollToElement(textField, direction: .up)
         
         textField.tap()
         
