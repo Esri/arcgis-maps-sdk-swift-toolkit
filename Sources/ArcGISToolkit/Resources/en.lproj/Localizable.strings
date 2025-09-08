@@ -324,7 +324,7 @@ to be used as a trace starting point. */
 trace operation. */
 "Feature Results" = "Feature Results";
 
-/* A field in a set of data contained in a popup. */
+/* A field in a dataset. */
 "Field" = "Field";
 
 /* A label in reference to fields in a set of data contained in a popup. */
@@ -784,8 +784,7 @@ without saving. */
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";
 
-/* A label for the value of a pie chart slice.
-A value in a set of data contained in a popup. */
+/* A value in a dataset. */
 "Value" = "Value";
 
 /* Text indicating a field's computed value must be within the

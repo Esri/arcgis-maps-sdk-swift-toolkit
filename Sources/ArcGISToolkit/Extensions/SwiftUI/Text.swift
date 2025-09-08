@@ -29,6 +29,15 @@ extension Text {
         )
     }
     
+    /// Localized text for the word "Field".
+    static var field: Self {
+        .init(
+            "Field",
+            bundle: .toolkitModule,
+            comment: "A field in a dataset."
+        )
+    }
+    
     /// Localized text for the phrase "No Associations".
     static var noAssociations: Self {
         .init(
@@ -62,6 +71,15 @@ extension Text {
             "Try Again",
             bundle: .toolkitModule,
             comment: "A label for a button allowing the user to retry an operation."
+        )
+    }
+    
+    /// Localized text for the word "Value".
+    static var value: Self {
+        .init(
+            "Value",
+            bundle: .toolkitModule,
+            comment: "A value in a dataset."
         )
     }
     
