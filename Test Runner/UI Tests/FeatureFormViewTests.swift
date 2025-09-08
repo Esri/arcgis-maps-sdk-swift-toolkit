@@ -27,13 +27,14 @@ final class FeatureFormViewTests: XCTestCase {
         )
     }
     
-    func openTestCase(id: String = #function, _ visibleElements: [String] = []) {
+    func openTestCase(id: String = #function, _ visibleElements: [String]? = nil) {
         let app = XCUIApplication()
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         // Open tests
         
-        let visibleElements = ["-featureFormVisibleElements", visibleElements.joined(separator: "\n")]
-        app.launchArguments.append(contentsOf: visibleElements)
+        if let visibleElements {
+            app.launchArguments.append(contentsOf: ["-featureFormVisibleElements", visibleElements.joined(separator: "\n")])
+        }
         
         app.launch()
         formViewTestsButton.tap()
@@ -117,19 +118,16 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 1.1: unfocused and focused state, no value
     func testCase_1_1() throws {
-        try skipForCatalystScrollBehavior()
-        
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
+        let elements = ["Single Line No Value, Placeholder or Description"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
-        openTestCase()
+        openTestCase(elements)
         assertFormOpened(titleElement: formTitle)
-        
-        app.scrollToElement(fieldTitle, direction: .up)
         
         XCTAssertTrue(
             fieldTitle.exists,
