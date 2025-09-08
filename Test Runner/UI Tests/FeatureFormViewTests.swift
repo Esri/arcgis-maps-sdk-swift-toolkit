@@ -407,15 +407,14 @@ final class FeatureFormViewTests: XCTestCase {
         let calendarImage = app.images["Required Date Calendar Image"]
         let clearButton = app.buttons["Required Date Clear Button"]
         let datePicker = app.datePickers["Required Date Date Picker"]
+        let elements = ["Required Date"]
         let fieldValue = app.staticTexts["Required Date Value"]
         let footer = app.staticTexts["Required Date Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
         let nowButton = app.buttons["Required Date Now Button"]
         
-        openTestCase()
+        openTestCase(elements)
         assertFormOpened(titleElement: formTitle)
-        
-        app.scrollToElement(fieldValue, direction: .up)
         
         if fieldValue.label != "No Value" {
             clearButton.tap()
