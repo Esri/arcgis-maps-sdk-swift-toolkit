@@ -150,7 +150,7 @@ for the AR experience. */
 "Compass navigation" = "Compass navigation";
 
 /* The accessibility label of the compass button. */
-"compass-button-label" = "Compass";
+"compass-button-accessibility-label" = "Compass";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";

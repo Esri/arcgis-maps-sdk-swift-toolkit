@@ -100,7 +100,7 @@ public struct Compass: View {
                 .accessibilityLabel(
                     Text(
                         LocalizedStringResource(
-                            "compass-button-label",
+                            "compass-button-accessibility-label",
                             defaultValue: "Compass",
                             bundle: .toolkit,
                             comment: "The accessibility label of the compass button."
