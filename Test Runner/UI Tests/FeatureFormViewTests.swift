@@ -235,9 +235,6 @@ final class FeatureFormViewTests: XCTestCase {
         returnButton.tap()
 #endif
         
-        // Scroll slightly up to expose section header. FB19740517
-        app.scrollToElement(fieldTitle, direction: .down, maxSwipes: 1, velocity: .slow)
-        
         XCTAssertTrue(
             fieldTitle.isHittable,
             "The title isn't hittable."
@@ -252,8 +249,6 @@ final class FeatureFormViewTests: XCTestCase {
             clearButton.isHittable,
             "The clear button isn't hittable."
         )
-        
-        app.scrollToElement(textField, direction: .up, maxSwipes: 1, velocity: .slow)
         
         XCTAssertTrue(
             textField.isHittable,
