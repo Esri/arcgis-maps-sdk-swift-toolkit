@@ -152,9 +152,6 @@ for the AR experience. */
 /* The accessibility label of the compass button. */
 "compass-button-label" = "Compass";
 
-/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"compass-navigation-label" = "Compass";
-
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
 
@@ -400,6 +397,12 @@ variable is a cardinal or intercardinal direction. */
 /* The accessibility label of the location button when the location display is not showing. */
 "Location display" = "Location display";
 
+/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"location-display-auto-pan-mode-compass-label" = "Compass";
+
+/* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"location-display-auto-pan-mode-navigation-label" = "Navigation";
+
 /* A title for the offline map areas view. */
 "Map Areas" = "Map Areas";
 
@@ -427,9 +430,8 @@ variable is a cardinal or intercardinal direction. */
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Name";
 
-/* The accessibility value of the location button when the auto-pan mode is navigation.
-The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Navigation" = "Navigation";
+/* The accessibility value of the location button when the auto-pan mode is navigation. */
+"navigation-accessibility-value" = "Navigation";
 
 /* Neighborhood (Level of Detail) */
 "Neighborhood" = "Neighborhood";

@@ -180,9 +180,12 @@ public struct LocationButton: View {
                 )
             case .navigation:
                 Text(
-                    "Navigation",
-                    bundle: .toolkitModule,
-                    comment: "The accessibility value of the location button when the auto-pan mode is navigation."
+                    LocalizedStringResource(
+                        "navigation-accessibility-value",
+                        defaultValue: "Navigation",
+                        bundle: .toolkit,
+                        comment: "The accessibility value of the location button when the auto-pan mode is navigation."
+                    )
                 )
             @unknown default:
                 fatalError("Unknown case")
@@ -412,7 +415,7 @@ private extension LocationDisplay.AutoPanMode {
         case .compassNavigation:
             Text(
                 LocalizedStringResource(
-                    "compass-navigation-label",
+                    "location-display-auto-pan-mode-compass-label",
                     defaultValue: "Compass",
                     bundle: .toolkit,
                     comment: "The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu."
@@ -420,9 +423,12 @@ private extension LocationDisplay.AutoPanMode {
             )
         case .navigation:
             Text(
-                "Navigation",
-                bundle: .toolkitModule,
-                comment: "The label text for choosing the 'navigation' auto-pan mode in the location button context menu."
+                LocalizedStringResource(
+                    "location-display-auto-pan-mode-navigation-label",
+                    defaultValue: "Navigation",
+                    bundle: .toolkit,
+                    comment: "The label text for choosing the 'navigation' auto-pan mode in the location button context menu."
+                )
             )
         @unknown default:
             fatalError()
