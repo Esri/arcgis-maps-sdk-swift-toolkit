@@ -71,7 +71,7 @@ through auto-pan modes. */
 "auto-pan-accessibility-label" = "Auto-pan";
 
 /* The header of the auto-pan section in the location button context menu. */
-"auto-pan-header-label" = "Auto-pan";
+"autopan-section-header-title" = "Auto-pan";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Back";
