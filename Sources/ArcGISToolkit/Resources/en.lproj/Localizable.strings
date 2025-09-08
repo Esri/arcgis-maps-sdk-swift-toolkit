@@ -65,14 +65,6 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Authentication Required";
 
-/* The accessibility label of the location button when the 
-location display is showing and the button cycles 
-through auto-pan modes. */
-"auto-pan-accessibility-label" = "Auto-pan";
-
-/* The header of the auto-pan section in the location button context menu. */
-"autopan-section-header-title" = "Auto-pan";
-
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Back";
 
@@ -408,6 +400,14 @@ variable is a cardinal or intercardinal direction. */
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
 "location-button-accessibility-value-recenter" = "Recenter";
+
+/* The accessibility label of the location button when the 
+location display is showing and the button cycles 
+through auto-pan modes. */
+"location-button-auto-pan-accessibility-label" = "Auto-pan";
+
+/* The header of the auto-pan section in the location button context menu. */
+"location-button-auto-pan-section-header-title" = "Auto-pan";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
 "location-button-status-label-navigation" = "Navigation";

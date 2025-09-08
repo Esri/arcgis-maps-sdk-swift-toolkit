@@ -117,7 +117,7 @@ public struct LocationButton: View {
         case .started:
             Text(
                 LocalizedStringResource(
-                    "auto-pan-accessibility-label",
+                    "location-button-auto-pan-accessibility-label",
                     defaultValue: "Auto-pan",
                     bundle: .toolkit,
                     comment: """
@@ -266,7 +266,7 @@ public struct LocationButton: View {
     private var autoPanSectionHeaderLabelText: Text {
         Text(
             LocalizedStringResource(
-                "autopan-section-header-title",
+                "location-button-auto-pan-section-header-title",
                 defaultValue: "Auto-pan",
                 bundle: .toolkit,
                 comment: "The header of the auto-pan section in the location button context menu."
