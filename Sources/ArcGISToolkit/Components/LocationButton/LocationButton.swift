@@ -116,12 +116,16 @@ public struct LocationButton: View {
             )
         case .started:
             Text(
-                "Auto-pan",
-                bundle: .toolkitModule,
-                comment:
-                    """
-                    The accessibility label of the location button when the location display is showing and the button cycles through auto-pan modes.
-                    """
+                LocalizedStringResource(
+                    "auto-pan-accessibility-label",
+                    defaultValue: "Auto-pan",
+                    bundle: .toolkit,
+                    comment: """
+                        The accessibility label of the location button when the 
+                        location display is showing and the button cycles 
+                        through auto-pan modes.
+                        """
+                )
             )
         @unknown default:
             fatalError()
@@ -252,9 +256,12 @@ public struct LocationButton: View {
     /// The text for the auto-pan section in the context menu.
     private var autoPanSectionHeaderLabelText: Text {
         Text(
-            "Auto-pan",
-            bundle: .toolkitModule,
-            comment: "The header of the auto-pan section in the location button context menu."
+            LocalizedStringResource(
+                "auto-pan-header-label",
+                defaultValue: "Auto-pan",
+                bundle: .toolkit,
+                comment: "The header of the auto-pan section in the location button context menu."
+            )
         )
     }
     
