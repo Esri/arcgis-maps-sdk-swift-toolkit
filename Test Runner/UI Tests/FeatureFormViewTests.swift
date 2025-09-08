@@ -27,10 +27,14 @@ final class FeatureFormViewTests: XCTestCase {
         )
     }
     
-    func openTestCase(id: String = #function) {
+    func openTestCase(id: String = #function, _ visibleElements: [String] = []) {
         let app = XCUIApplication()
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         // Open tests
+        
+        let visibleElements = ["-featureFormVisibleElements", visibleElements.joined(separator: "\n")]
+        app.launchArguments.append(contentsOf: visibleElements)
+        
         app.launch()
         formViewTestsButton.tap()
         
@@ -175,21 +179,18 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 1.2: focused and unfocused state, with value (populated)
     func testCase_1_2() throws {
-        try skipForCatalystScrollBehavior()
-        
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
+        let elements = ["Single Line No Value, Placeholder or Description"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
         let returnButton = app.buttons["Return"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
-        openTestCase()
+        openTestCase(elements)
         assertFormOpened(titleElement: formTitle)
-        
-        app.scrollToElement(textField, direction: .up)
         
         textField.tap()
         

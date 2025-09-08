@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
 import Observation
 
 @MainActor @Observable
@@ -43,7 +44,12 @@ class EmbeddedFeatureFormViewModel {
         if let attachmentsElement = featureForm.defaultAttachmentsElement {
             elements.append(attachmentsElement)
         }
-        return elements
+        
+        if let visibleElements = UserDefaults.standard.visibleElements {
+            return elements.filter { visibleElements.contains($0.label) }
+        } else {
+            return elements
+        }
     }
     
     /// A dictionary of each form element and whether or not it is visible.
@@ -95,6 +101,18 @@ class EmbeddedFeatureFormViewModel {
                     }
                 }
             }
+        }
+    }
+}
+
+private extension UserDefaults {
+    /// The value of the `-featureFormVisibleElements` launch argument, used to filter which form
+    /// elements are visible during UI testing.
+    var visibleElements: [String]? {
+        if let t = string(forKey: "featureFormVisibleElements") {
+            return t.split(separator: "\n").map(String.init)
+        } else {
+            return nil
         }
     }
 }
