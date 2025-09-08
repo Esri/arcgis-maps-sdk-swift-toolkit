@@ -162,9 +162,12 @@ public struct LocationButton: View {
             switch autoPanMode {
             case .off:
                 Text(
-                    "Off",
-                    bundle: .toolkitModule,
-                    comment: "The accessibility value of the location button when the auto-pan mode is off."
+                    LocalizedStringResource(
+                        "location-button-status-label-off",
+                        defaultValue: "Off",
+                        bundle: .toolkit,
+                        comment: "The accessibility value of the location button when the auto-pan mode is off."
+                    )
                 )
             case .recenter:
                 Text(
@@ -181,7 +184,7 @@ public struct LocationButton: View {
             case .navigation:
                 Text(
                     LocalizedStringResource(
-                        "navigation-accessibility-value",
+                        "location-button-status-label-navigation",
                         defaultValue: "Navigation",
                         bundle: .toolkit,
                         comment: "The accessibility value of the location button when the auto-pan mode is navigation."
@@ -402,9 +405,12 @@ private extension LocationDisplay.AutoPanMode {
         return switch self {
         case .off:
             Text(
-                "Off",
-                bundle: .toolkitModule,
-                comment: "The label text for turning the auto-pan mode off in the location button context menu."
+                LocalizedStringResource(
+                    "location-display-auto-pan-mode-label-off",
+                    defaultValue: "Off",
+                    bundle: .toolkit,
+                    comment: "The label text for turning the auto-pan mode off in the location button context menu."
+                )
             )
         case .recenter:
             Text(
@@ -415,7 +421,7 @@ private extension LocationDisplay.AutoPanMode {
         case .compassNavigation:
             Text(
                 LocalizedStringResource(
-                    "location-display-auto-pan-mode-compass-label",
+                    "location-display-auto-pan-mode-label-compass",
                     defaultValue: "Compass",
                     bundle: .toolkit,
                     comment: "The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu."
@@ -424,7 +430,7 @@ private extension LocationDisplay.AutoPanMode {
         case .navigation:
             Text(
                 LocalizedStringResource(
-                    "location-display-auto-pan-mode-navigation-label",
+                    "location-display-auto-pan-mode-label-navigation",
                     defaultValue: "Navigation",
                     bundle: .toolkit,
                     comment: "The label text for choosing the 'navigation' auto-pan mode in the location button context menu."

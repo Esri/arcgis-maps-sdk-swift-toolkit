@@ -397,11 +397,20 @@ variable is a cardinal or intercardinal direction. */
 /* The accessibility label of the location button when the location display is not showing. */
 "Location display" = "Location display";
 
+/* The accessibility value of the location button when the auto-pan mode is navigation. */
+"location-button-status-label-navigation" = "Navigation";
+
+/* The accessibility value of the location button when the auto-pan mode is off. */
+"location-button-status-label-off" = "Off";
+
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-display-auto-pan-mode-compass-label" = "Compass";
+"location-display-auto-pan-mode-label-compass" = "Compass";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-display-auto-pan-mode-navigation-label" = "Navigation";
+"location-display-auto-pan-mode-label-navigation" = "Navigation";
+
+/* The label text for turning the auto-pan mode off in the location button context menu. */
+"location-display-auto-pan-mode-label-off" = "Off";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Map Areas";
@@ -429,9 +438,6 @@ variable is a cardinal or intercardinal direction. */
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Name";
-
-/* The accessibility value of the location button when the auto-pan mode is navigation. */
-"navigation-accessibility-value" = "Navigation";
 
 /* Neighborhood (Level of Detail) */
 "Neighborhood" = "Neighborhood";
@@ -495,10 +501,6 @@ variable is a cardinal or intercardinal direction. */
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Object ID: %@";
-
-/* The accessibility value of the location button when the auto-pan mode is off.
-The label text for turning the auto-pan mode off in the location button context menu. */
-"Off" = "Off";
 
 /* A label indicating that the map is offline disabled. */
 "Offline Disabled" = "Offline Disabled";
