@@ -171,9 +171,12 @@ public struct LocationButton: View {
                 )
             case .recenter:
                 Text(
-                    "Recenter",
-                    bundle: .toolkitModule,
-                    comment: "The accessibility value of the location button when the auto-pan mode is recenter."
+                    LocalizedStringResource(
+                        "location-button-status-label-recenter",
+                        defaultValue: "Recenter",
+                        bundle: .toolkit,
+                        comment: "The accessibility value of the location button when the auto-pan mode is recenter."
+                    )
                 )
             case .compassNavigation:
                 Text(
@@ -414,9 +417,12 @@ private extension LocationDisplay.AutoPanMode {
             )
         case .recenter:
             Text(
-                "Recenter",
-                bundle: .toolkitModule,
-                comment: "The label text for choosing the 'recenter' auto-pan mode in the location button context menu."
+                LocalizedStringResource(
+                    "location-display-auto-pan-mode-label-recenter",
+                    defaultValue: "Recenter",
+                    bundle: .toolkit,
+                    comment: "The label text for choosing the 'recenter' auto-pan mode in the location button context menu."
+                )
             )
         case .compassNavigation:
             Text(

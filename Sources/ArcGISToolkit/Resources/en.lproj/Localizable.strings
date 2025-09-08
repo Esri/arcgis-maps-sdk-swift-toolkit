@@ -403,6 +403,9 @@ variable is a cardinal or intercardinal direction. */
 /* The accessibility value of the location button when the auto-pan mode is off. */
 "location-button-status-label-off" = "Off";
 
+/* The accessibility value of the location button when the auto-pan mode is recenter. */
+"location-button-status-label-recenter" = "Recenter";
+
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
 "location-display-auto-pan-mode-label-compass" = "Compass";
 
@@ -411,6 +414,9 @@ variable is a cardinal or intercardinal direction. */
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
 "location-display-auto-pan-mode-label-off" = "Off";
+
+/* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"location-display-auto-pan-mode-label-recenter" = "Recenter";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Map Areas";
@@ -549,10 +555,6 @@ The variable provides additional data. */
 
 /* The status text when a map area is ready to download. */
 "Ready to download" = "Ready to download";
-
-/* The accessibility value of the location button when the auto-pan mode is recenter.
-The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Recenter" = "Recenter";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Record video only";
