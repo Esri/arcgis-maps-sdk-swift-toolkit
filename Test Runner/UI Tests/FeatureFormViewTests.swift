@@ -178,7 +178,7 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 1.2: focused and unfocused state, with value (populated)
-    func testCase_1_2() throws {
+    func testCase_1_2() async throws {
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
@@ -216,9 +216,14 @@ final class FeatureFormViewTests: XCTestCase {
             "The character count doesn't exist."
         )
         
-        XCTAssertEqual(
-            characterIndicator.label,
-            "11"
+        await fulfillment(
+            of: [
+                expectation(
+                    for: NSPredicate(format: "label == \"11\""),
+                    evaluatedWith: characterIndicator
+                )
+            ],
+            timeout: 10.0
         )
         
         XCTAssertTrue(
