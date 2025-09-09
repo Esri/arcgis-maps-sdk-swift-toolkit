@@ -62,7 +62,7 @@ class EmbeddedFeatureFormViewModel {
     private var evaluateTask: Task<Void, Never>?
     
     /// The feature form.
-    private(set) var featureForm: FeatureForm
+    let featureForm: FeatureForm
     
     /// The group of visibility tasks.
     @ObservationIgnored
