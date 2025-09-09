@@ -44,19 +44,59 @@ struct FeatureFormTestView: View {
     @State private var testSetupTask: Task<Void, Never>?
     
     var body: some View {
-        Group {
+        MapViewReader { mapView in
             if let map, let testCase {
-                makeMapView(map, testCase)
-                    .task {
-                        if let credentialInfo = testCase.credentialInfo {
-                            await addCredential(credentialInfo)
+                MapView(map: map)
+                    .onDrawStatusChanged { drawStatus in
+                        if !initialDrawCompleted, drawStatus == .completed {
+                            initialDrawCompleted = true
+                            testSetupTask = Task {
+                                await selectObjectID(testCase.objectID, on: map, for: testCase.layerName)
+                            }
                         }
                     }
-            } else {
-                testCaseList
             }
         }
+        .alert(
+            "Error",
+            isPresented: Binding {
+                alertError != nil
+            } set: { _ in },
+            actions: {},
+            message: { Text(alertError ?? "Unknown error") }
+        )
+        .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(featureForm != nil)
+        .sheet(isPresented: Binding(get: { featureForm != nil }, set: { _ in })) {
+            FeatureFormView(root: featureForm!)
+        }
+        .task {
+            await setup()
+        }
+    }
+    
+    /// Sets up the view for the desired test case.
+    func setup() async {
+        guard let testCaseArg = UserDefaults.standard.testCase else {
+            alertError = "A test case argument (\"-testCase\") was not provided."
+            return
+        }
+        guard let testCase = cases.first(where: { $0.id == testCaseArg }) else {
+            alertError = "A test case matching \(testCaseArg) not found."
+            return
+        }
+        
+        self.testCase = testCase
+        map = Map(url: testCase.url)
+        
+        if let credentialInfo = testCase.credentialInfo {
+            await addCredential(credentialInfo)
+        }
+        do {
+            try await map?.load()
+        } catch {
+            alertError = error.localizedDescription
+        }
     }
 }
 
@@ -72,43 +112,6 @@ private extension FeatureFormTestView {
             ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
         } catch {
             alertError = error.localizedDescription
-        }
-    }
-    
-    /// Make the main test UI.
-    /// - Parameters:
-    ///   - map: The map under test.
-    ///   - testCase: The test definition.
-    func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
-        MapViewReader { mapView in
-            MapView(map: map)
-                .onDrawStatusChanged { drawStatus in
-                    if !initialDrawCompleted, drawStatus == .completed {
-                        initialDrawCompleted = true
-                        testSetupTask = Task {
-                            await selectObjectID(testCase.objectID, on: map, for: testCase.layerName)
-                        }
-                    }
-                }
-                .alert(
-                    "Error",
-                    isPresented: Binding {
-                        alertError != nil
-                    } set: { _ in },
-                    actions: { },
-                    message: { Text(alertError ?? "Unknown error") }
-                )
-                .ignoresSafeArea(.keyboard)
-                .task {
-                    do {
-                        try await map.load()
-                    } catch {
-                        alertError = error.localizedDescription
-                    }
-                }
-                .sheet(isPresented: Binding(get: { featureForm != nil }, set: { _ in })) {
-                    FeatureFormView(root: featureForm!)
-                }
         }
     }
     
@@ -141,23 +144,6 @@ private extension FeatureFormTestView {
             featureForm = FeatureForm(feature: feature)
         } catch {
             alertError = error.localizedDescription
-        }
-    }
-    
-    /// The list of test cases.
-    var testCaseList: some View {
-        List {
-            Section {
-                TextField("Search", text: $searchTerm, prompt: Text("Search"))
-            }
-            let cases = searchTerm.isEmpty ? cases : cases.filter { $0.id.localizedStandardContains(searchTerm) }
-            ForEach(cases) { testCase in
-                Button(testCase.id) {
-                    self.testCase = testCase
-                    map = Map(url: testCase.url)
-                }
-                .buttonStyle(.plain)
-            }
         }
     }
     
@@ -294,5 +280,12 @@ private extension FeatureFormTestView.TestCase.CredentialInfo {
 private extension URL {
     static var sampleServer7Portal: Self {
         .init(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!
+    }
+}
+
+private extension UserDefaults {
+    /// The value `-testCase` launch argument.
+    var testCase: String? {
+        string(forKey: "testCase")
     }
 }
