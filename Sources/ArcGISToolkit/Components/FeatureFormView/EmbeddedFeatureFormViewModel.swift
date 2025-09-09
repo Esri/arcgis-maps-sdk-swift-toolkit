@@ -26,9 +26,6 @@ class EmbeddedFeatureFormViewModel {
         }
     }
     
-    /// The currently presented feature form view.
-    var presentedForm: FeatureFormView?
-    
     /// The set of all elements which previously held focus.
     var previouslyFocusedElements = [FormElement]()
     
@@ -54,7 +51,7 @@ class EmbeddedFeatureFormViewModel {
     private var evaluateTask: Task<Void, Never>?
     
     /// The feature form.
-    private(set) var featureForm: FeatureForm
+    let featureForm: FeatureForm
     
     /// The group of visibility tasks.
     @ObservationIgnored
