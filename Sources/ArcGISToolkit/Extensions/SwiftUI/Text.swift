@@ -77,9 +77,12 @@ extension Text {
     /// Localized text for the word "Value".
     static var value: Self {
         .init(
-            "Value",
-            bundle: .toolkitModule,
-            comment: "A value in a dataset."
+            LocalizedStringResource(
+                "chart-mark-label-value",
+                defaultValue: "Value",
+                bundle: .toolkit,
+                comment: "A label of a mark on a chart."
+            )
         )
     }
     

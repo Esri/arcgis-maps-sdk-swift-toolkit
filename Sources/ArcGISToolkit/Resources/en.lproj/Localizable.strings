@@ -117,6 +117,9 @@ for the AR experience. */
 /* The accessibility hint of the location button. */
 "Change location display options" = "Change location display options";
 
+/* A label of a mark on a chart. */
+"chart-mark-label-value" = "Value";
+
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Choose From Files";
 
@@ -783,9 +786,6 @@ without saving. */
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";
-
-/* A value in a dataset. */
-"Value" = "Value";
 
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
