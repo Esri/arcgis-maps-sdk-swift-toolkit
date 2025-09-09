@@ -284,7 +284,7 @@ private extension URL {
 }
 
 private extension UserDefaults {
-    /// The value `-testCase` launch argument.
+    /// The value of the `-testCase` launch argument.
     var testCase: String? {
         string(forKey: "testCase")
     }
