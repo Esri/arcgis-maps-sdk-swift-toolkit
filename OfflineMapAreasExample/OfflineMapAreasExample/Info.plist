@@ -6,6 +6,49 @@
 	<array>
 		<string>com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck</string>
 	</array>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>ar</string>
+		<string>bg</string>
+		<string>bs</string>
+		<string>ca</string>
+		<string>cs</string>
+		<string>da</string>
+		<string>de</string>
+		<string>el</string>
+		<string>en</string>
+		<string>es</string>
+		<string>et</string>
+		<string>fi</string>
+		<string>fr</string>
+		<string>he</string>
+		<string>hr</string>
+		<string>hu</string>
+		<string>id</string>
+		<string>it</string>
+		<string>ja</string>
+		<string>ko</string>
+		<string>lt</string>
+		<string>lv</string>
+		<string>nb</string>
+		<string>nl</string>
+		<string>pl</string>
+		<string>pt-BR</string>
+		<string>pt-PT</string>
+		<string>ro</string>
+		<string>ru</string>
+		<string>sk</string>
+		<string>sl</string>
+		<string>sv</string>
+		<string>th</string>
+		<string>tr</string>
+		<string>uk</string>
+		<string>vi</string>
+		<string>zh-Hans-CN</string>
+		<string>zh-Hans</string>
+		<string>zh-Hant-HK</string>
+		<string>zh-Hant-TW</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

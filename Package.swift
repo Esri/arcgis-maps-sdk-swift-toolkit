@@ -31,7 +31,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.7.0")),
+        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.8.0")),
         .package(url: "https://github.com/swiftlang/swift-markdown.git", .upToNextMinor(from: "0.4.0"))
     ],
     targets: [
@@ -44,7 +44,15 @@ let package = Package(
         ),
         .testTarget(
             name: "ArcGISToolkitTests",
-            dependencies: ["ArcGISToolkit"]
+            dependencies: ["ArcGISToolkit"],
+            plugins: [
+                .plugin(name: "MasqueradePlugin")
+            ]
+        ),
+        .plugin(
+            name: "MasqueradePlugin",
+            capability: .buildTool(),
+            path: "Plugins/MasqueradePlugin"
         )
     ]
 )

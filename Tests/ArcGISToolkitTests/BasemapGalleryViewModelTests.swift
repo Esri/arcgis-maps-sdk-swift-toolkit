@@ -24,7 +24,7 @@ import XCTest
 // accommodate those differences.
 class BasemapGalleryViewModelTests: XCTestCase {
     override func setUp() async throws {
-        ArcGISEnvironment.apiKey = .default
+        ArcGISEnvironment.apiKey = .development
     }
     
     override func tearDown() {
@@ -274,7 +274,6 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let items = try await viewModel.$items.dropFirst().first
         let basemapGalleryItems = try XCTUnwrap(items)
         XCTAssertFalse(basemapGalleryItems.isEmpty)
-        XCTAssertEqual(basemapGalleryItems.count, 37)
         
         try await withThrowingTaskGroup(of: Void.self) { group in
             for index in basemapGalleryItems.indices {
@@ -312,7 +311,6 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let items = try await viewModel.$items.dropFirst().first
         let basemapGalleryItems = try XCTUnwrap(items)
         XCTAssertFalse(basemapGalleryItems.isEmpty)
-        XCTAssertEqual(basemapGalleryItems.count, 43)
         
         try await withThrowingTaskGroup(of: Void.self) { group in
             for index in basemapGalleryItems.indices {

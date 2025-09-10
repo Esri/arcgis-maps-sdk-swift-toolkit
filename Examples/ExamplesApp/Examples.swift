@@ -41,12 +41,14 @@ struct Examples: View {
             }
             .navigationTitle("Toolkit Examples")
         } detail: {
-            if let selectedExample {
-                selectedExample.view
-                    .navigationTitle(selectedExample.name)
-                    .navigationBarTitleDisplayMode(.inline)
-            } else {
-                Text("Select an example")
+            NavigationStack {
+                if let selectedExample {
+                    selectedExample.view
+                        .navigationTitle(selectedExample.name)
+                        .navigationBarTitleDisplayMode(.inline)
+                } else {
+                    Text("Select an example")
+                }
             }
         }
         // visionOS doesn't provide the column visibility toggle like
@@ -79,6 +81,7 @@ struct Examples: View {
             .example("Feature Form", content: FeatureFormExampleView()),
             .example("Floating Panel", content: FloatingPanelExampleView()),
             .example("Floor Filter", content: FloorFilterExampleView()),
+            .example("Location Button", content: LocationButtonExampleView()),
             .example("Overview Map", content: OverviewMapExampleView()),
             .example("Popup", content: PopupExampleView()),
             .example("Scalebar", content: ScalebarExampleView()),

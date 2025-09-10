@@ -20,67 +20,61 @@ struct MediaDetailView : View {
     let popupMedia: PopupMedia
     
     /// A Boolean value specifying whether the media should be drawn in a larger format.
-    var isShowingDetailView: Binding<Bool>
+    let isShowingDetailView: Binding<Bool>
     
     var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Button.done {
-                    isShowingDetailView.wrappedValue = false
-                }
-                .padding([.bottom], 4)
-            }
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(popupMedia.title)
-                        .font(.title2)
-                    Text(popupMedia.caption)
-                        .font(.title3)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-            }
-            
-            switch popupMedia.kind {
-            case .image:
-                if let sourceURL = popupMedia.value?.sourceURL {
-                    AsyncImageView(
-                        url: sourceURL,
-                        refreshInterval: popupMedia.imageRefreshInterval
-                    )
-                    .onTapGesture {
-                        if let linkURL = popupMedia.value?.linkURL {
-                            UIApplication.shared.open(linkURL)
+        NavigationStack {
+            VStack {
+                switch popupMedia.kind {
+                case .image:
+                    if let sourceURL = popupMedia.value?.sourceURL {
+                        AsyncImageView(
+                            url: sourceURL,
+                            refreshInterval: popupMedia.imageRefreshInterval
+                        )
+                        .onTapGesture {
+                            if let linkURL = popupMedia.value?.linkURL {
+                                UIApplication.shared.open(linkURL)
+                            }
                         }
-                    }
-                    .hoverEffect()
-                    if popupMedia.value?.linkURL != nil {
-                        HStack {
-                            Text(
-                                "Tap on the image for more information.",
-                                bundle: .toolkitModule,
-                                comment: """
+                        .hoverEffect()
+                        if popupMedia.value?.linkURL != nil {
+                            HStack {
+                                Text(
+                                    "Tap on the image for more information.",
+                                    bundle: .toolkitModule,
+                                    comment: """
                                          A label indicating that tapping an image will reveal
                                          additional information.
                                          """
-                            )
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            Spacer()
+                                )
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                Spacer()
+                            }
                         }
                     }
+                case .barChart, .columnChart, .pieChart, .lineChart:
+                    ChartView(
+                        popupMedia: popupMedia,
+                        data: ChartData.getChartData(from: popupMedia),
+                        isShowingDetailView: true
+                    )
+                default:
+                    EmptyView()
                 }
-            case .barChart, .columnChart, .pieChart, .lineChart:
-                ChartView(
-                    popupMedia: popupMedia,
-                    data: ChartData.getChartData(from: popupMedia),
-                    isShowingDetailView: true
-                )
-            default:
-                EmptyView()
+                Spacer()
             }
-            Spacer()
+            .padding()
+            .navigationTitle(popupMedia.title, subtitle: popupMedia.caption)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button.done {
+                        isShowingDetailView.wrappedValue = false
+                    }
+                }
+            }
         }
     }
 }

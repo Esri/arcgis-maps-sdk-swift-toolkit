@@ -4,12 +4,18 @@
 /* A label indicating the number of results of a utility network trace. */
 "^[%lld Results](inflect: true)" = "^[%lld результатов](inflect: true)";
 
+/* A reference to 3D content. */
+"3D" = "3D";
+
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "Для доступа к ресурсам на %@ необходим сертификат";
 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "В данное время область карты невозможно загрузить.";
+
+/* A label for an option to add a new utility association. */
+"Add Association" = "Добавить связь";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Добавить область карты";
@@ -38,6 +44,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "Имя области";
 
+/* A label in reference to utility associations elements contained within a popup. */
+"Associations" = "Связи";
+
 /* A label in reference to attachments. */
 "Attachments" = "Вложения";
 
@@ -49,6 +58,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Необходима аутентификация";
+
+/* A generic label for navigating to the previous screen or returning to the previous context. */
+"Back" = "Назад";
 
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Закладки";
@@ -72,8 +84,7 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Доступ к камере отключен";
 
-/* A label for a button to cancel an operation.
-Title for a button that cancels an action. */
+/* A label for a button to cancel an operation. */
 "Cancel" = "Отмена";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -109,17 +120,18 @@ Title for a button that cancels an action. */
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Цвет";
 
-/* An compass description to be read by a screen reader describing the
-current heading. The first variable being a degree value and the
-second being a corresponding cardinal direction (north, northeast,
-east, etc.). */
-"Compass, heading %lld degrees %@" = "Компас, направление %lld градусы %@";
+/* A label indicating a utility association's 
+containment is not visible. */
+"Content" = "Ресурсы";
 
 /* Continent (Level of Detail) */
 "Continent" = "Континент";
 
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Продолжить";
+
+/* A label for a button to continue editing the feature form. */
+"Continue Editing" = "Продолжить редактирование";
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Невозможно получить области карты для этой карты.";
@@ -163,11 +175,20 @@ east, etc.). */
 /* The title of the dialogue confirming deletion of all points. */
 "Delete all starting points?" = "Удалить все начальные точки?";
 
-/* A label for a button to delete a map area. */
-"Delete Map Area" = "Удалить область карты";
+/* A label for a button to delete a map area download. */
+"Delete Download" = "Удалить загрузку";
 
 /* A label for the description of the map area. */
 "Description" = "Описание";
+
+/* Discard edits on the feature form. */
+"Discard" = "Да";
+
+/* A label for a button to discard unsaved edits. */
+"Discard Edits" = "Отклонить изменения";
+
+/* A question asking if the user would like to discard their unsaved edits. */
+"Discard Edits?" = "Отклонить изменения?";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Убрать";
@@ -229,6 +250,11 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Ошибка";
 
+/* An error message shown when the element's
+associations filter results cannot be displayed.
+The variable provides additional data. */
+"Error fetching filter results: %@" = "Ошибка при извлечении результатов фильтра: %@";
+
 /* A label indicating that an error occurred while fetching map areas. */
 "Error Fetching Map Areas" = "Ошибка получения областей карт";
 
@@ -283,6 +309,13 @@ contains one or more facilities in a floor-aware map or scene. */
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Найти адрес или место";
+
+/* The message shown when a form could not be submitted. */
+"Finish editing failed." = "Завершить редактирование не удалось.";
+
+/* The message shown when a form could not be 
+submitted with additional details. */
+"Finish editing failed.\n%@" = "Завершить редактирование не удалось. %@";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Дробление вдоль ребра";
@@ -351,6 +384,9 @@ AR experience. */
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "Новая трассировка";
+
+/* A label indicating that no associations are available for the popup element. */
+"No Associations" = "Связи отсутствуют";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Нет закладок";
@@ -432,8 +468,8 @@ chosen utility network trace configuration. */
 chosen utility network trace configuration. */
 "Please set at least 2 starting locations." = "Укажите хотя бы 2 начальных точки.";
 
-/* An error message shown when a popup cannot be displayed. The
-variable provides additional data. */
+/* An error message shown when a popup cannot be displayed.
+The variable provides additional data. */
 "Popup evaluation failed: %@" = "Оценка всплывающих окон не удалась: %@";
 
 /* The status text when a map area is ready to download. */
@@ -444,6 +480,9 @@ variable provides additional data. */
 
 /* A label for a button to refresh map area content. */
 "Refresh" = "Обновить";
+
+/* A label for a button to remove a map area download. */
+"Remove Download" = "Удалить загрузку";
 
 /* A label for a button to rename an attachment. */
 "Rename" = "Переименовать";
@@ -468,6 +507,12 @@ current visible extent of the map or scene. */
 /* Rooms (Level of Detail) */
 "Rooms" = "Комнаты";
 
+/* Finish editing the feature form. */
+"Save" = "Сохранить";
+
+/* A label for a button to save edits. */
+"Save Edits" = "Сохранить изменения";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Запрос поиска";
 
@@ -489,6 +534,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "Настройки";
+
+/* A label for a button to show all the association results. */
+"Show all" = "Показать все";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Сайты";
@@ -550,6 +598,9 @@ match the spatial reference of the map. */
 /* A label indicating the chosen file was invalid. */
 "The certificate file was invalid." = "Файл сертификата недопустим.";
 
+/* The title shown when the feature form failed to save. */
+"The form wasn't submitted" = "Форма не была отправлена";
+
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Карта не имеет пространственной привязки.";
 
@@ -578,8 +629,14 @@ to be imported as an attachment. */
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "Для этой карты нет областей карты. Коснитесь кнопки ниже, чтобы начать.";
 
+/* A label for a text entry field that allows the user to filter a list of association results by title. */
+"Title" = "Заголовок";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "Сегодня";
+
+/* Text indicating the total count of association results. */
+"Total: %lld" = "Всего: %lld";
 
 /* Town (Level of Detail) */
 "Town" = "Небольшой город";
@@ -608,8 +665,16 @@ to be imported as an attachment. */
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
 "Unsupported Value" = "Неподдерживаемое значение";
 
+/* A message explaining that unsaved edits will be
+lost if the user continues to dismiss the form
+without saving. */
+"Updates to the form will be lost." = "Обновления этой формы будут потеряны.";
+
 /* A label in reference to a credential username. */
 "Username" = "Имя пользователя";
+
+/* A label indicating the feature form has validation errors. */
+"Validation Errors" = "Ошибки проверки";
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Значение";
@@ -644,6 +709,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Просмотреть";
 
+/* A label indicating a utility association's 
+containment is visible. */
+"Visible Content" = "Видимое содержание";
+
 /* World (Level of Detail) */
 "World" = "Весь мир";
 
@@ -652,6 +721,11 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* World (Small) (Level of Detail) */
 "World (Small)" = "Весь мир (малый)";
+
+/* A message explaining that the indicated number
+of validation errors must be resolved before
+saving the feature form. */
+"You have ^[%lld error](inflect: true) that must be fixed before saving." = "У вас возникла ошибка ^[%lld](inflect: true), которую необходимо исправить перед сохранением.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */

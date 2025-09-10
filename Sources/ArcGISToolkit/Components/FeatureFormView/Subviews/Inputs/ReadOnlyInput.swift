@@ -17,39 +17,54 @@ import SwiftUI
 
 /// A view for a read only field form element.
 struct ReadOnlyInput: View {
-    /// The formatted version of the element's current value.
-    @State private var formattedValue = ""
+    /// An identity for the displayed text. A new identity is generated when the element's value changes.
+    @State private var id = UUID()
     
     /// The element the input belongs to.
     let element: FieldFormElement
     
     var body: some View {
-        Group {
-            if element.isMultiline {
-                textReader
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                ScrollView(.horizontal) {
-                    textReader
-                }
+        if element.isMultiline {
+            modifiedValue
+                .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+            ScrollView(.horizontal) {
+                modifiedValue
             }
-        }
-        .onAppear {
-            formattedValue = element.formattedValue
-        }
-        .onValueChange(of: element) { _, newFormattedValue in
-            formattedValue = newFormattedValue
         }
     }
     
-    /// The body of the text input when the element is non-editable.
-    var textReader: some View {
-        Text(formattedValue.isEmpty ? "--" : formattedValue)
+    /// The text to display for the element's current value with read-only modifiers.
+    var modifiedValue: some View {
+        value
             .accessibilityIdentifier("\(element.label) Read Only Input")
             .fixedSize(horizontal: false, vertical: true)
+            .id(id)
             .lineLimit(element.isMultiline ? nil : 1)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .textSelection(.enabled)
+            .onValueChange(of: element) { _, _ in
+                id = UUID()
+            }
+    }
+    
+    /// The text to display for the element's current value.
+    ///
+    /// For non-date fields, we always use the element's formatted value. This ensures that if the element
+    /// uses a domain, we show the user-friendly coded value name.
+    var value: Text {
+        switch element.value {
+        case nil:
+            Text(verbatim: "--")
+        case let value as Date:
+            if let input = element.input as? DateTimePickerFormInput, input.includesTime {
+                Text(value, format: .dateTime)
+            } else {
+                Text(value, format: .dateTime.day().month().year())
+            }
+        default:
+            Text(element.formattedValue)
+        }
     }
 }

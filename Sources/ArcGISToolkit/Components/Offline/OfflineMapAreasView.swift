@@ -158,8 +158,10 @@ public struct OfflineMapAreasView: View {
                         switch mapViewModel.mode {
                         case .preplanned:
                             preplannedMapAreasView
-                        case .onDemand, .undetermined:
+                        case .onDemand, .ambiguous:
                             onDemandMapAreasView
+                        case .noInternetAvailable:
+                            noInternetNoAreasView
                         }
                     }
                 }
@@ -179,7 +181,7 @@ public struct OfflineMapAreasView: View {
             // or else the state is lost when backgrounding and foregrounding the application.
             .sheet(isPresented: $isAddingOnDemandArea) {
                 OnDemandConfigurationView(
-                    map: onlineMap.clone(),
+                    map: Map(item: onlineMap.item!),
                     title: mapViewModel.nextOnDemandAreaTitle(),
                     titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
                 ) {
@@ -302,41 +304,57 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var noInternetNoAreasView: some View {
-        Backported.ContentUnavailableView(
-            .noInternetConnectionErrorMessage,
-            systemImage: "wifi.exclamationmark",
-            description: noMapAreasErrorMessage
-        ) {
+        ContentUnavailableView {
+            Label {
+                Text(.noInternetConnectionErrorMessage)
+            } icon: {
+                Image(systemName: "wifi.exclamationmark")
+            }
+        } description: {
+            Text(noMapAreasErrorMessage)
+        } actions: {
             refreshPreplannedButton
         }
     }
     
     @ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
-        Backported.ContentUnavailableView(
-            noMapAreas,
-            systemImage: "arrow.down.circle",
-            description: noOfflineMapAreasMessage
-        ) {
+        ContentUnavailableView {
+            Label {
+                Text(noMapAreas)
+            } icon: {
+                Image(systemName: "arrow.down.circle")
+            }
+        } description: {
+            Text(noOfflineMapAreasMessage)
+        } actions: {
             refreshPreplannedButton
         }
     }
     
     @ViewBuilder private var preplannedErrorView: some View {
-        Backported.ContentUnavailableView(
-            errorFetchingAreas,
-            systemImage: "exclamationmark.triangle",
-            description: errorFetchingAreasMessage
-        ) {
+        ContentUnavailableView {
+            Label {
+                Text(errorFetchingAreas)
+            } icon: {
+                Image(systemName: "exclamationmark.triangle")
+            }
+        } description: {
+            Text(errorFetchingAreasMessage)
+        } actions: {
             refreshPreplannedButton
         }
     }
     
     @ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
-        Backported.ContentUnavailableView(
-            noMapAreas,
-            systemImage: "arrow.down.circle",
-            description: emptyOnDemandMessage
-        ) {
+        ContentUnavailableView {
+            Label {
+                Text(noMapAreas)
+            } icon: {
+                Image(systemName: "arrow.down.circle")
+            }
+        } description: {
+            Text(emptyOnDemandMessage)
+        } actions: {
             Button {
                 isAddingOnDemandArea = true
             } label: {
@@ -354,11 +372,15 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var offlineDisabledView: some View {
-        Backported.ContentUnavailableView(
-            offlineDisabled,
-            systemImage: "exclamationmark.triangle",
-            description: offlineDisabledMessage
-        )
+        ContentUnavailableView {
+            Label {
+                Text(offlineDisabled)
+            } icon: {
+                Image(systemName: "exclamationmark.triangle")
+            }
+        } description: {
+            Text(offlineDisabledMessage)
+        }
     }
 }
 
@@ -380,51 +402,6 @@ public struct OfflineMapAreasView: View {
         }
     }
     return OfflineMapAreasViewPreview()
-}
-
-enum Backported {
-    /// A content unavailable view that can be used in older operating systems.
-    struct ContentUnavailableView<Actions: View>: View {
-        let title: LocalizedStringResource
-        let systemImage: String
-        let description: LocalizedStringResource?
-        let actions: () -> Actions
-        
-        init(
-            _ title: LocalizedStringResource,
-            systemImage name: String,
-            description: LocalizedStringResource? = nil,
-            @ViewBuilder actions: @escaping () -> Actions
-        ) {
-            self.title = title
-            self.systemImage = name
-            self.description = description
-            self.actions = actions
-        }
-        
-        init(
-            _ title: LocalizedStringResource,
-            systemImage name: String,
-            description: LocalizedStringResource? = nil
-        ) where Actions == EmptyView {
-            self.title = title
-            self.systemImage = name
-            self.description = description
-            self.actions = { EmptyView() }
-        }
-        
-        var body: some View {
-            SwiftUI.ContentUnavailableView {
-                Label(title.key, systemImage: systemImage)
-            } description: {
-                if let description {
-                    Text(description)
-                }
-            } actions: {
-                actions()
-            }
-        }
-    }
 }
 
 private extension OfflineMapAreasView {
