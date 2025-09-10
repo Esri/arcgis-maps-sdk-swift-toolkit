@@ -24,9 +24,6 @@ extension FeatureFormView.AddUtilityAssociationView {
         /// The conditions used to query features to add as an association.
         var featureQueryConditions = [String]()
         
-        /// The model for the navigation layer.
-        var navigationLayerModel: NavigationLayerModel? = nil
-        
         // MARK: Presentation properties
         
         var utilityAssociationDetailsCoreIsPresented = false

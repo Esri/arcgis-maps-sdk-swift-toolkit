@@ -18,7 +18,7 @@ struct FeatureQueryConditionsView: View {
     @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
     
     var body: some View {
-        NavigationLayer { _ in
+//        NavigationLayer { _ in
             Group {
                 if addUtilityAssociationViewModel.featureQueryConditions.isEmpty {
                     NoConditionsAddedView()
@@ -26,9 +26,9 @@ struct FeatureQueryConditionsView: View {
                     ConditionsForm()
                 }
             }
-            .navigationLayerTitle("Filter Features")
+//            .navigationLayerTitle("Filter Features")
             .transition(.scale)
-        } headerTrailing: {
+//        } headerTrailing: {
             Button {
                 withAnimation {
                     addUtilityAssociationViewModel.featureQueryConditionsViewIsPresented = false
@@ -40,7 +40,7 @@ struct FeatureQueryConditionsView: View {
                     comment: "A button label to apply the conditions added to the query."
                 )
             }
-        }
+//        }
 #if os(visionOS)
         .background(Color(uiColor: .tertiarySystemGroupedBackground))
 #else

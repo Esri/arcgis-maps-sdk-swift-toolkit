@@ -95,7 +95,7 @@ extension FeatureFormView.AddUtilityAssociationView {
                     }
                 }
             }
-            .navigationLayerTitle(sourceName ?? "Add Association")
+//            .navigationLayerTitle(sourceName ?? "Add Association")
             .onChange(of: inspectedFeature, initial: false) { oldValue, newValue in
                 if let feature = oldValue?.feature, let layer = feature.featureLayer {
                     layer.unselectFeature(feature)

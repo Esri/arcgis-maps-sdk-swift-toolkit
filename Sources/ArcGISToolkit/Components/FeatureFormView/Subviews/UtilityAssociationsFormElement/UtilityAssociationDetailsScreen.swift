@@ -19,9 +19,9 @@ extension FeatureFormView {
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         
         var body: some View {
-            NavigationLayer { _ in
+//            NavigationLayer { _ in
                 UtilityAssociationDetailsCore()
-            } headerTrailing: {
+//            } headerTrailing: {
                 XButton(.dismiss) {
                     withAnimation {
 #warning("Look to merge these two properties.")
@@ -30,7 +30,7 @@ extension FeatureFormView {
                     }
                 }
                 .font(.title)
-            }
+//            }
             // TODO: Combine with similar code in FeatureFormView.AddUtilityAssociationScreen.swift
 #if os(visionOS)
             .background(Color(uiColor: .tertiarySystemGroupedBackground))
@@ -88,7 +88,7 @@ extension FeatureFormView {
                     }
                 }
             }
-            .navigationLayerTitle("Association Settings")
+//            .navigationLayerTitle("Association Settings")
             .onAppear {
                 if let addUtilityAssociationViewModel {
                     addUtilityAssociationViewModel.utilityAssociationDetailsCoreIsPresented = true

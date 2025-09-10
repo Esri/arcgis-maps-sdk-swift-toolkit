@@ -120,12 +120,12 @@ public struct FeatureFormView: View {
     
     /// Creates a feature form view.
     /// - Parameters:
-    ///   - featureForm: The feature form defining the editing experience.
+    ///   - root: The feature form defining the editing experience.
     ///   - mapPoint: The point at which to run feature identification when adding utility associations.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
     /// - Since: 200.8
     public init(
-        featureForm: Binding<FeatureForm?>,
+        root: FeatureForm,
         mapPoint: Point? = nil,
         mapViewProxy: MapViewProxy? = nil,
         _ utilityNetwork: UtilityNetwork? = nil /* Temporary parameter only */
@@ -134,9 +134,10 @@ public struct FeatureFormView: View {
             mapViewProxy: mapViewProxy,
             utilityNetwork: utilityNetwork
         )
+        self.isPresented = .constant(true)
         self.mapPoint = mapPoint
-        self.presentedForm = featureForm
-        self.rootFeatureForm = featureForm.wrappedValue
+        self.presentedForm = root
+        self.rootFeatureForm = root
     }
     
     /// Initializes a form view.
@@ -145,7 +146,9 @@ public struct FeatureFormView: View {
     ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Since: 200.8
     public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
+        self.featureFormViewModel = FeatureFormViewModel()
         self.isPresented = isPresented
+        self.mapPoint = nil
         self.presentedForm = root
         self.rootFeatureForm = root
     }

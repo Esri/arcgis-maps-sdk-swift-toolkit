@@ -83,12 +83,12 @@ extension FeatureFormView.AddUtilityAssociationView {
                         withAnimation {
                             addUtilityAssociationViewModel.spatialFeatureSelectionViewIsPresented = false
                         }
-                        addUtilityAssociationViewModel.navigationLayerModel?.push {
-                            TabularFeatureSelectionView(
-                                features: identifiedFeatures,
-                                sourceName: nil
-                            )
-                        }
+//                        addUtilityAssociationViewModel.navigationLayerModel?.push {
+//                            TabularFeatureSelectionView(
+//                                features: identifiedFeatures,
+//                                sourceName: nil
+//                            )
+//                        }
                     } label: {
                         Text.done
                             .frame(maxWidth: .infinity, alignment: .center)

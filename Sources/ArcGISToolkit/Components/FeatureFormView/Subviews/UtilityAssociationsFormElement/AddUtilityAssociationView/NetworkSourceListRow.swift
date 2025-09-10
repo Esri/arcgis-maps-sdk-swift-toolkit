@@ -18,7 +18,7 @@ import SwiftUI
 extension FeatureFormView.AddUtilityAssociationView {
     struct NetworkSourceListRow: View {
         /// The model for the navigation layer.
-        @Environment(NavigationLayerModel.self) private var navigationLayerModel
+//        @Environment(NavigationLayerModel.self) private var navigationLayerModel
         
         let layer: Layer
         
@@ -44,12 +44,12 @@ extension FeatureFormView.AddUtilityAssociationView {
                             queryParameters.whereClause = "1=1"
                             let featureQueryResult = try await table.queryFeatures(using: queryParameters)
                             let identifiedFeatures = Array(featureQueryResult.features()).compactMap { $0 as? ArcGISFeature }
-                            navigationLayerModel.push {
-                                TabularFeatureSelectionView(
-                                    features: identifiedFeatures,
-                                    sourceName: layer.name
-                                )
-                            }
+//                            navigationLayerModel.push {
+//                                TabularFeatureSelectionView(
+//                                    features: identifiedFeatures,
+//                                    sourceName: layer.name
+//                                )
+//                            }
                         } catch {
 #warning("Present errors to user.")
                             print(String(reflecting: error))

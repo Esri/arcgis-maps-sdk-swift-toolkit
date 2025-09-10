@@ -31,7 +31,7 @@ extension FeatureFormView {
         @State private var networkSourceNameQuery = ""
         
         var body: some View {
-            NavigationLayer { navigationLayerModel in
+//            NavigationLayer { navigationLayerModel in
                 List {
                     Section {
                         Button {
@@ -84,11 +84,11 @@ extension FeatureFormView {
                     }
                 }
                 .disabled(featureQueryIsRunning)
-                .navigationLayerTitle("Add Association")
+//                .navigationLayerTitle("Add Association")
                 .onAppear {
-                    addUtilityAssociationViewModel.navigationLayerModel = navigationLayerModel
+//                    addUtilityAssociationViewModel.navigationLayerModel = navigationLayerModel
                 }
-            } headerTrailing: {
+//            } headerTrailing: {
                 Group {
                     if addUtilityAssociationViewModel.utilityAssociationDetailsCoreIsPresented {
                         Button {
@@ -112,7 +112,7 @@ extension FeatureFormView {
                         .font(.title)
                     }
                 }
-            }
+//            }
             // TODO: Combine with similar code in FeatureFormView.UtilityAssociationDetailsScreen.swift
             #if os(visionOS)
             .background(Color(uiColor: .tertiarySystemGroupedBackground))
@@ -128,12 +128,6 @@ extension FeatureFormView {
                 }
             }
             .environment(addUtilityAssociationViewModel)
-            .preference(
-                key: FloatingPanelDetent.Preference.self,
-                // If presented in a Floating Panel and the map view is
-                // hidden because of portrait orientation, reveal it.
-                value: isPortraitOrientation ? addUtilityAssociationViewModel.floatingPanelDetent : nil
-            )
         }
     }
 }

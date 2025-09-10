@@ -20,7 +20,7 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
         /// The display scale of the environment.
         @Environment(\.displayScale) private var displayScale
         
-        @Environment(NavigationLayerModel.self) private var navigationLayerModel
+//        @Environment(NavigationLayerModel.self) private var navigationLayerModel
         
         @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
         
@@ -38,11 +38,11 @@ extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView 
         
         var body: some View {
             Button {
-                navigationLayerModel.push {
-                    FeatureFormView.UtilityAssociationDetailsCore(
-                        addUtilityAssociationViewModel: addUtilityAssociationViewModel
-                    )
-                }
+//                navigationLayerModel.push {
+//                    FeatureFormView.UtilityAssociationDetailsCore(
+//                        addUtilityAssociationViewModel: addUtilityAssociationViewModel
+//                    )
+//                }
             } label: {
                 HStack {
                     if let image {
