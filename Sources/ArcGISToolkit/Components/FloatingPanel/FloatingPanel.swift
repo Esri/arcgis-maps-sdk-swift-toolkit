@@ -25,8 +25,8 @@ struct FloatingPanel<Content>: View where Content: View {
     let attributionBarHeight: CGFloat
     /// The background color of the floating panel.
     let backgroundColor: Color?
-    /// A binding to the current active detent.
-    @Binding var activeDetent: FloatingPanelDetent
+    /// A binding to the currently selected detent.
+    @Binding var selectedDetent: FloatingPanelDetent
     /// A binding to a Boolean value that determines whether the view is presented.
     @Binding var isPresented: Bool
     /// The content shown in the floating panel.
@@ -52,11 +52,6 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .zero
     
-    /// The detent that was the active detent until a FloatingPanelDetentPreference was set.
-    ///
-    /// When the FloatingPanelDetentPreference is unset, this detent should be restored to the active detent..
-    @State private var overriddenDetent: FloatingPanelDetent?
-    
     var body: some View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
@@ -69,45 +64,6 @@ struct FloatingPanel<Content>: View where Content: View {
                         .padding(.bottom, isPortraitOrientation ? keyboardHeight - geometryProxy.safeAreaInsets.bottom : .zero)
                         .frame(height: height)
                         .clipped()
-                        .onPreferenceChange(FloatingPanelDetent.Preference.self) { preference in
-#if swift(<6.0.3) || swift(>=6.1) // Xcode 16.2 (Swift 6.0.3) needs special handling
-                            if let preference {
-                                // Only update the overridden detent if one
-                                // wasn't already saved. This prevents a
-                                // FloatingPanelDetentPreference from being
-                                // saved as the overridden detent.
-                                if overriddenDetent == nil {
-                                    overriddenDetent = activeDetent
-                                }
-                                activeDetent = preference
-                            } else if let overriddenDetent {
-                                // When the FloatingPanelDetentPreference is
-                                // unset, restore the overridden detent as the
-                                // active detent.
-                                activeDetent = overriddenDetent
-                                self.overriddenDetent = nil
-                            }
-#else
-                            Task { @MainActor in
-                                if let preference {
-                                    // Only update the overridden detent if one
-                                    // wasn't already saved. This prevents a
-                                    // FloatingPanelDetentPreference from being
-                                    // saved as the overridden detent.
-                                    if overriddenDetent == nil {
-                                        overriddenDetent = activeDetent
-                                    }
-                                    activeDetent = preference
-                                } else if let overriddenDetent {
-                                    // When the FloatingPanelDetentPreference is
-                                    // unset, restore the overridden detent as the
-                                    // active detent.
-                                    activeDetent = overriddenDetent
-                                    self.overriddenDetent = nil
-                                }
-                            }
-#endif
-                        }
                     if !isPortraitOrientation {
                         Divider()
                         makeHandleView()
@@ -142,7 +98,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .onChange(of: isPresented) {
                 updateHeight()
             }
-            .onChange(of: activeDetent) {
+            .onChange(of: selectedDetent) {
                 updateHeight()
             }
             .onKeyboardStateChanged { state, height in
@@ -182,17 +138,10 @@ struct FloatingPanel<Content>: View where Content: View {
                 let predictedEndLocation = $0.predictedEndLocation.y
                 let inferredHeight = isPortraitOrientation ? maximumHeight - predictedEndLocation : predictedEndLocation
                 
-                activeDetent = [.summary, .half, .full]
+                selectedDetent = [.summary, .half, .full]
                     .map { (detent: $0, height: heightFor(detent: $0)) }
                     .min { abs(inferredHeight - $0.height) < abs(inferredHeight - $1.height) }!
                     .detent
-                
-                if overriddenDetent != nil {
-                    // Update the overridden detent with the user's choice to
-                    // prevent the user's choice from being unset when the
-                    // FloatingPanelDetentPreference is unset.
-                    overriddenDetent = activeDetent
-                }
                 
                 if $0.translation.height.magnitude > 100 {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -231,7 +180,7 @@ struct FloatingPanel<Content>: View where Content: View {
             } else if keyboardState == .opening || keyboardState == .open {
                 return heightFor(detent: .full)
             } else {
-                return heightFor(detent: activeDetent)
+                return heightFor(detent: selectedDetent)
             }
         }()
         withAnimation { height = max(0, (newHeight - .handleFrameHeight)) }
