@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-internal import os
+private import os
 
 struct AssociationRemovalConfirmationDialog: ViewModifier {
     @Environment(\.isPortraitOrientation) var isPortraitOrientation
