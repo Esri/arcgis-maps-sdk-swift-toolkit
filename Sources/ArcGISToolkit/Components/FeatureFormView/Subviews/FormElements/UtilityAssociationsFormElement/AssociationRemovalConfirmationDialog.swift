@@ -32,11 +32,12 @@ struct AssociationRemovalConfirmationDialog: ViewModifier {
     let onRemoval: () -> Void
     
     func body(content: Content) -> some View {
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if isPortraitOrientation {
             content
-                .alert(
+                .confirmationDialog(
                     confirmationTitle,
-                    isPresented: $isPresented
+                    isPresented: $isPresented,
+                    titleVisibility: .visible
                 ) {
                     actions
                 } message: {
@@ -44,10 +45,9 @@ struct AssociationRemovalConfirmationDialog: ViewModifier {
                 }
         } else {
             content
-                .confirmationDialog(
+                .alert(
                     confirmationTitle,
-                    isPresented: $isPresented,
-                    titleVisibility: .visible
+                    isPresented: $isPresented
                 ) {
                     actions
                 } message: {
