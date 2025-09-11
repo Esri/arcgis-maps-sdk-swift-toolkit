@@ -34,9 +34,6 @@ class EmbeddedFeatureFormViewModel {
         }
     }
     
-    /// The currently presented feature form view.
-    var presentedForm: FeatureFormView?
-    
     /// The set of all elements which previously held focus.
     var previouslyFocusedElements = [FormElement]()
     

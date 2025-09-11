@@ -15,47 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-internal import os
-
-struct AssociationRemovalConfirmationDialog: ViewModifier {
-    @Environment(\.isPortraitOrientation) var isPortraitOrientation
-    
-    @Binding var isPresented: Bool
-    
-    /// The association to be removed.
-    let association: UtilityAssociation?
-    /// The element containing the association to remove.
-    let element: UtilityAssociationsFormElement
-    /// The model for the feature form containing the element with the association to be removed.
-    let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
-    /// The action to run when the removal is completed.
-    let onRemoval: () -> Void
-    
-    func body(content: Content) -> some View {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            content
-                .alert(
-                    confirmationTitle,
-                    isPresented: $isPresented
-                ) {
-                    actions
-                } message: {
-                    confirmationMessage
-                }
-        } else {
-            content
-                .confirmationDialog(
-                    confirmationTitle,
-                    isPresented: $isPresented,
-                    titleVisibility: .visible
-                ) {
-                    actions
-                } message: {
-                    confirmationMessage
-                }
-        }
-    }
-}
+private import os
 
 extension View {
     func associationRemovalConfirmationDialog(
@@ -77,24 +37,65 @@ extension View {
     }
 }
 
+private struct AssociationRemovalConfirmationDialog: ViewModifier {
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
+    
+    @Binding var isPresented: Bool
+    
+    /// The association to be removed.
+    let association: UtilityAssociation?
+    /// The element containing the association to remove.
+    let element: UtilityAssociationsFormElement
+    /// The model for the feature form containing the element with the association to be removed.
+    let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
+    /// The action to run when the removal is completed.
+    let onRemoval: () -> Void
+    
+    func body(content: Content) -> some View {
+        if isPortraitOrientation {
+            content
+                .confirmationDialog(
+                    confirmationTitle,
+                    isPresented: $isPresented,
+                    titleVisibility: .visible
+                ) {
+                    actions
+                } message: {
+                    confirmationMessage
+                }
+        } else {
+            content
+                .alert(
+                    confirmationTitle,
+                    isPresented: $isPresented
+                ) {
+                    actions
+                } message: {
+                    confirmationMessage
+                }
+        }
+    }
+}
+
 extension AssociationRemovalConfirmationDialog {
     @ViewBuilder var actions: some View {
-        Button(role: .destructive) {
-            guard let association else { return }
-            do {
-                try element.delete(association)
-                embeddedFeatureFormViewModel.evaluateExpressions()
-                onRemoval()
-                Logger.featureFormView.info("Association removed successfully.")
-            } catch {
-                Logger.featureFormView.error("Failed to remove association: \(error.localizedDescription).")
+        if let association {
+            Button(role: .destructive) {
+                do {
+                    try element.delete(association)
+                    embeddedFeatureFormViewModel.evaluateExpressions()
+                    onRemoval()
+                    Logger.featureFormView.info("Association removed successfully.")
+                } catch {
+                    Logger.featureFormView.error("Failed to remove association: \(error.localizedDescription).")
+                }
+            } label: {
+                Text(
+                    "Remove",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to remove a utility network association."
+                )
             }
-        } label: {
-            Text(
-                "Remove",
-                bundle: .toolkitModule,
-                comment: "A label for a button to remove a utility network association."
-            )
         }
         Button.cancel {}
     }

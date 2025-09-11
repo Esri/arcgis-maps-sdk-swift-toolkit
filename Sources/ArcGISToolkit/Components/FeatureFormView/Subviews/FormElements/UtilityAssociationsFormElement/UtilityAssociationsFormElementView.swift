@@ -104,6 +104,7 @@ extension FeatureFormView {
         
         /// The backing utility association group result.
         var utilityAssociationGroupResult: UtilityAssociationGroupResult? {
+            // TODO: Improve group identification (Apollo 1391).
             try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )?.groupResults.first(where: { $0.name == groupTitle })
         }
         
@@ -298,6 +299,7 @@ extension FeatureFormView {
         var body: some View {
             List {
                 Section {
+                    // TODO: Improve group identification (Apollo 1391).
                     ForEach(groupResults, id: \.name) { utilityAssociationGroupResult in
                         Button {
                             navigationPath?.wrappedValue.append(
