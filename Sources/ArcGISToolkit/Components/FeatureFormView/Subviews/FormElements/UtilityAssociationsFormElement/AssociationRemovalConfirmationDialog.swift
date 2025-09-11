@@ -79,22 +79,23 @@ private struct AssociationRemovalConfirmationDialog: ViewModifier {
 
 extension AssociationRemovalConfirmationDialog {
     @ViewBuilder var actions: some View {
-        Button(role: .destructive) {
-            guard let association else { return }
-            do {
-                try element.delete(association)
-                embeddedFeatureFormViewModel.evaluateExpressions()
-                onRemoval()
-                Logger.featureFormView.info("Association removed successfully.")
-            } catch {
-                Logger.featureFormView.error("Failed to remove association: \(error.localizedDescription).")
+        if let association {
+            Button(role: .destructive) {
+                do {
+                    try element.delete(association)
+                    embeddedFeatureFormViewModel.evaluateExpressions()
+                    onRemoval()
+                    Logger.featureFormView.info("Association removed successfully.")
+                } catch {
+                    Logger.featureFormView.error("Failed to remove association: \(error.localizedDescription).")
+                }
+            } label: {
+                Text(
+                    "Remove",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to remove a utility network association."
+                )
             }
-        } label: {
-            Text(
-                "Remove",
-                bundle: .toolkitModule,
-                comment: "A label for a button to remove a utility network association."
-            )
         }
         Button.cancel {}
     }
