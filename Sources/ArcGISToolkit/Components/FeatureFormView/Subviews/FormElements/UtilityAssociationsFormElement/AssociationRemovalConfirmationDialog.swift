@@ -17,7 +17,27 @@ import SwiftUI
 
 internal import os
 
-struct AssociationRemovalConfirmationDialog: ViewModifier {
+extension View {
+    func associationRemovalConfirmationDialog(
+        isPresented: Binding<Bool>,
+        association: UtilityAssociation?,
+        element: UtilityAssociationsFormElement,
+        embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel,
+        onRemoval: @escaping () -> Void
+    ) -> some View {
+        modifier(
+            AssociationRemovalConfirmationDialog(
+                isPresented: isPresented,
+                association: association,
+                element: element,
+                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                onRemoval: onRemoval
+            )
+        )
+    }
+}
+
+private struct AssociationRemovalConfirmationDialog: ViewModifier {
     @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
     @Binding var isPresented: Bool
@@ -54,26 +74,6 @@ struct AssociationRemovalConfirmationDialog: ViewModifier {
                     confirmationMessage
                 }
         }
-    }
-}
-
-extension View {
-    func associationRemovalConfirmationDialog(
-        isPresented: Binding<Bool>,
-        association: UtilityAssociation?,
-        element: UtilityAssociationsFormElement,
-        embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel,
-        onRemoval: @escaping () -> Void
-    ) -> some View {
-        modifier(
-            AssociationRemovalConfirmationDialog(
-                isPresented: isPresented,
-                association: association,
-                element: element,
-                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                onRemoval: onRemoval
-            )
-        )
     }
 }
 
