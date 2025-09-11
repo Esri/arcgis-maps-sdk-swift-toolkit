@@ -122,6 +122,9 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
                     Image(systemName: model.statusSystemImage)
                 }
                 Text(model.statusText)
+                if model.directorySize > 0 {
+                    Text(model.directorySizeText)
+                }
             }
         }
         .font(.caption2)
@@ -135,8 +138,16 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
     var statusText: LocalizedStringResource { get }
     var statusSystemImage: String { get }
     var jobProgress: Progress? { get }
+    var directorySize: Int { get }
     
     func cancelJob()
+}
+
+extension OfflineMapAreaListItemInfo {
+    var directorySizeText: String {
+        Measurement<UnitInformationStorage>(value: Double(directorySize), unit: .bytes)
+            .formatted(.byteCount(style: .file))
+    }
 }
 
 #Preview {

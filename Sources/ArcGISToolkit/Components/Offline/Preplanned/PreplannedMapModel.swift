@@ -107,6 +107,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             // legacy webmaps that have incomplete metadata.
             // If the area loads, then you know for certain the status is complete.
             status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
+            directorySize = preplannedMapArea.size
         } catch MappingError.packagingNotComplete {
             // Load will throw an `MappingError.packagingNotComplete` error if not complete,
             // this case is not a normal load failure.
@@ -329,6 +330,7 @@ protocol PreplannedMapAreaProtocol: Sendable {
     var thumbnail: LoadableImage? { get }
     /// A Boolean value indicating if this preplanned map area can be re-downloaded.
     var supportsRedownloading: Bool { get }
+    var size: Int { get }
 }
 
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -439,7 +441,7 @@ extension PreplannedMapModel {
                 offlineMapTask: offlineMapTask,
                 mapArea: mapArea,
                 portalItemID: portalItemID,
-                preplannedMapAreaID: mapArea.id!,
+                preplannedMapAreaID: mapArea.areaID,
                 onRemoveDownload: onRemoveDownload
             )
             preplannedMapModels.append(model)
@@ -472,7 +474,8 @@ extension PreplannedMapModel {
         return .init(
             title: item.title,
             description: item.description,
-            id: preplannedMapAreaID,
+            itemID: portalItemID,
+            areaID: preplannedMapAreaID,
             thumbnail: item.thumbnail
         )
     }
@@ -481,14 +484,29 @@ extension PreplannedMapModel {
 private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     var title: String
     var description: String
-    var id: Item.ID?
+    var itemID: Item.ID
+    var areaID: Item.ID
     var packagingStatus: PreplannedMapArea.PackagingStatus?
     var thumbnail: LoadableImage?
     var supportsRedownloading: Bool { false }
+    var size: Int {
+        FileManager.default.sizeOfDirectory(
+            at: .preplannedDirectory(
+                forPortalItemID: itemID,
+                preplannedMapAreaID: areaID
+            )
+        )
+    }
     
     func retryLoad() async throws {}
     
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
         fatalError()
+    }
+}
+
+extension PreplannedMapArea {
+    var size: Int {
+        packageItems.reduce(0, { $0 + $1.size })
     }
 }

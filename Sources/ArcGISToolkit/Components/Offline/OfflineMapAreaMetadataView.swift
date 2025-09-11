@@ -115,7 +115,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 .font(.title2)
                 .fontWeight(.bold)
             
-            if model.isDownloaded {
+            if model.directorySize > 0 {
                 Text(model.directorySizeText)
                     .lineLimit(1)
                     .foregroundStyle(.secondary)
