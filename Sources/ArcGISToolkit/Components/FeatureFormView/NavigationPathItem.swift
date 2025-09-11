@@ -31,6 +31,7 @@ extension FeatureFormView {
                 a1 === b1
                 && a2 == b2
             case let (.utilityAssociationGroupResultView(_, _, a1, a2, a3), .utilityAssociationGroupResultView(_, _, b1, b2, b3)):
+                // TODO: Improve group identification (Apollo 1391).
                 a1 === b1
                 && a2 == b2
                 && a3 == b3
@@ -49,6 +50,7 @@ extension FeatureFormView {
                 hasher.combine(element)
                 hasher.combine(filterTitle)
             case .utilityAssociationGroupResultView(_, _, let element, let filterTitle, let groupTitle):
+                // TODO: Improve group identification (Apollo 1391).
                 hasher.combine(element)
                 hasher.combine(filterTitle)
                 hasher.combine(groupTitle)
