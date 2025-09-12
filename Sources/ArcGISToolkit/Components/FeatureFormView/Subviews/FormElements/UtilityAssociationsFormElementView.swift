@@ -54,7 +54,7 @@ extension FeatureFormView {
                     FeatureFormGroupedContentView(content: [
                         Text.errorFetchingFilterResults(error)
                     ])
-                case nil:
+                case .none:
                     FeatureFormGroupedContentView(content: [ProgressView()])
                 }
             }
