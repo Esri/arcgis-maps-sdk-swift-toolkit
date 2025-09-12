@@ -204,6 +204,7 @@ extension FeatureFormView {
             }
         }
     }
+    
     /// A view referencing a utility associations filter result.
     struct UtilityAssociationsFilterResultListRowView: View {
         /// The view model for the form.
