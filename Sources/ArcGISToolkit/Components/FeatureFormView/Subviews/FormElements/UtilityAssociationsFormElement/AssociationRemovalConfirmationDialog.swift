@@ -114,7 +114,7 @@ extension AssociationRemovalConfirmationDialog {
     
     var confirmationTitle: Text {
         Text(
-            "Remove Association?",
+            "Remove association?",
             bundle: .toolkitModule,
             comment: "A label for a confirmation to remove a utility association."
         )

@@ -570,7 +570,7 @@ The label text for choosing the 'recenter' auto-pan mode in the location button 
 "Remove Association" = "Remove Association";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove Association?" = "Remove Association?";
+"Remove association?" = "Remove association?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Remove Download";
