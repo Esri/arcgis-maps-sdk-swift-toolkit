@@ -122,7 +122,9 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
                     Image(systemName: model.statusSystemImage)
                 }
                 Text(model.statusText)
-                if model.directorySize > 0 {
+                if model.directorySize > 0 && !model.isDownloaded && model.allowsDownload {
+                    Divider()
+                        .frame(height: 12)
                     Text(model.directorySizeText)
                 }
             }
