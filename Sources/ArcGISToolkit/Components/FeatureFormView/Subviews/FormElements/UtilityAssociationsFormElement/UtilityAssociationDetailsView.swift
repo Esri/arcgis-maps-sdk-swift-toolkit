@@ -47,6 +47,19 @@ struct UtilityAssociationDetailsView: View {
         )
     }
     
+    /// The name of the provided terminal as labeled content.
+    func row(for terminal: UtilityTerminal) -> some View {
+        LabeledContent {
+            Text(terminal.name)
+        } label: {
+            Text(
+                "Terminal",
+                bundle: .toolkitModule,
+                comment: "A label in reference to a utility terminal."
+            )
+        }
+    }
+    
     var associationSection: some View {
         Section {
             LabeledContent {
@@ -73,11 +86,7 @@ struct UtilityAssociationDetailsView: View {
                 )
             }
             if let fromElementTerminal = associationResult.association.fromElement.terminal {
-                LabeledContent {
-                    Text(fromElementTerminal.name)
-                } label: {
-                    terminal
-                }
+                row(for: fromElementTerminal)
             }
         }
     }
@@ -94,11 +103,7 @@ struct UtilityAssociationDetailsView: View {
                 )
             }
             if let toElementTerminal = associationResult.association.toElement.terminal {
-                LabeledContent {
-                    Text(toElementTerminal.name)
-                } label: {
-                    terminal
-                }
+                row(for: toElementTerminal)
             }
         }
     }
@@ -125,13 +130,5 @@ struct UtilityAssociationDetailsView: View {
                 navigationPath?.wrappedValue.removeLast()
             }
         }
-    }
-    
-    var terminal: Text {
-        Text(
-            "Terminal",
-            bundle: .toolkitModule,
-            comment: "A label in reference to a utility terminal."
-        )
     }
 }
