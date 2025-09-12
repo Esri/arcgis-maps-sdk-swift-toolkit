@@ -92,6 +92,7 @@ class EmbeddedFeatureFormViewModel {
         }
     }
     
+    /// Starts a task to monitor whether the associated form has edits.
     private func monitorEdits() {
         monitorEditsTask?.cancel()
         monitorEditsTask = Task { [weak self] in
