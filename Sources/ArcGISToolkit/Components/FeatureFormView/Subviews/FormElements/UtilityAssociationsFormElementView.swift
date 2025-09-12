@@ -58,7 +58,7 @@ extension FeatureFormView {
                     FeatureFormGroupedContentView(content: [ProgressView()])
                 }
             }
-            .onChange(of: embeddedFeatureFormViewModel.hasEdits) { oldValue, newValue in
+            .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
                 associationsFilterResultsModel.fetchResults()
             }
         }
