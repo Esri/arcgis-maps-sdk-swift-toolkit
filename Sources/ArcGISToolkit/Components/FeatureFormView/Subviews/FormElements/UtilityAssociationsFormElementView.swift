@@ -156,7 +156,7 @@ extension FeatureFormView {
             }
         }
         
-        func makeDetailsButton(result: UtilityAssociationResult) -> some View {
+        func detailsButton(for result: UtilityAssociationResult) -> some View {
             Button {
                 navigationPath?.wrappedValue.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
@@ -201,7 +201,7 @@ extension FeatureFormView {
             } label: {
                 HStack {
                     UtilityAssociationResultLabel(result: result)
-                    makeDetailsButton(result: result)
+                    detailsButton(for: result)
                         .buttonStyle(.plain)
                         .hoverEffect()
                 }
