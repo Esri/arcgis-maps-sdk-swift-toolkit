@@ -330,6 +330,7 @@ protocol PreplannedMapAreaProtocol: Sendable {
     var thumbnail: LoadableImage? { get }
     /// A Boolean value indicating if this preplanned map area can be re-downloaded.
     var supportsRedownloading: Bool { get }
+    /// The size of the area in bytes.
     var sizeInBytes: Int { get }
 }
 
