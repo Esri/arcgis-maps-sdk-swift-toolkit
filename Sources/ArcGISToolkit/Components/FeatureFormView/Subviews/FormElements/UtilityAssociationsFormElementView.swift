@@ -147,14 +147,7 @@ extension FeatureFormView {
                 removalConfirmationIsPresented = true
             } label: {
                 Label {
-                    Text(
-                        LocalizedStringResource(
-                            "feature-form-view-utility-association-element-delete-button-label",
-                            defaultValue: "Delete",
-                            bundle: .toolkit,
-                            comment: "A label for a button that deletes a utility association."
-                        )
-                    )
+                    Text(LocalizedStringResource.removeAssociation)
                 } icon: {
                     Image(systemName: "trash.fill")
                 }

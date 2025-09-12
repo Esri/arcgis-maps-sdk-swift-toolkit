@@ -327,9 +327,6 @@ to be used as a trace starting point. */
 trace operation. */
 "Feature Results" = "Feature Results";
 
-/* A label for a button that deletes a utility association. */
-"feature-form-view-utility-association-element-delete-button-label" = "Delete";
-
 /* A field in a set of data contained in a popup. */
 "Field" = "Field";
 
@@ -569,7 +566,7 @@ The label text for choosing the 'recenter' auto-pan mode in the location button 
 /* A label for a button to remove a utility network association. */
 "Remove" = "Remove";
 
-/* A label for a button to remove an utility association. */
+/* A label for a button to remove a utility association. */
 "Remove Association" = "Remove Association";
 
 /* A label for a confirmation to remove a utility association. */

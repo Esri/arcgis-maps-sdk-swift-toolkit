@@ -113,12 +113,8 @@ struct UtilityAssociationDetailsView: View {
             Button(role: .destructive) {
                 removalConfirmationIsPresented = true
             } label: {
-                Text(
-                    "Remove Association",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to remove an utility association."
-                )
-                .frame(maxWidth: .infinity, alignment: .center)
+                Text(LocalizedStringResource.removeAssociation)
+                    .frame(maxWidth: .infinity, alignment: .center)
             }
             .associationRemovalConfirmationDialog(
                 isPresented: $removalConfirmationIsPresented,
