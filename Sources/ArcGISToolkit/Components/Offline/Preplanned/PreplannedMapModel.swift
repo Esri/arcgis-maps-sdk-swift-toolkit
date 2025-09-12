@@ -506,6 +506,8 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 }
 
 extension PreplannedMapArea {
+    /// The download size of the preplanned map area in bytes,
+    /// including the basemap.
     var size: Int {
         packageItems.reduce(0, { $0 + $1.size })
     }

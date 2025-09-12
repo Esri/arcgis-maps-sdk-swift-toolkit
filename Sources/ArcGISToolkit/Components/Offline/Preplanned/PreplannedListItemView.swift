@@ -115,14 +115,6 @@ extension PreplannedMapModel: OfflineMapAreaMetadata {
 
 extension PreplannedMapModel: OfflineMapAreaListItemInfo {
     var listItemDescription: String { description }
-//    var listItemDescription: String {
-//        switch status {
-//        case .downloaded:
-//            directorySizeText
-//        default:
-//            ""
-//        }
-//    }
     
     var statusText: LocalizedStringResource {
         switch status {
