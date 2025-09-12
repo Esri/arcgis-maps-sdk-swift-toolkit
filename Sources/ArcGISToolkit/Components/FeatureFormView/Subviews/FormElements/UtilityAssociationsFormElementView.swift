@@ -110,7 +110,7 @@ extension FeatureFormView {
         
         var body: some View {
             List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-                makeMainButton(result: utilityAssociationResult)
+                mainButton(for: utilityAssociationResult)
                     .disabled(navigationIsDisabled)
 #if targetEnvironment(macCatalyst)
                     .contextMenu {
@@ -182,7 +182,7 @@ extension FeatureFormView {
             }
         }
         
-        func makeMainButton(result: UtilityAssociationResult) -> some View {
+        func mainButton(for result: UtilityAssociationResult) -> some View {
             Button {
                 let navigationAction = {
                     navigationPath?.wrappedValue.append(
