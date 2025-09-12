@@ -118,7 +118,7 @@ extension FeatureFormView {
                     }
 #else
                     .swipeActions {
-                        makeDeleteButton(association: utilityAssociationResult.association)
+                        deleteButton(for: utilityAssociationResult.association)
                     }
 #endif
                     .tint(.primary)
@@ -141,7 +141,7 @@ extension FeatureFormView {
             }
         }
         
-        func makeDeleteButton(association: UtilityAssociation) -> some View {
+        func deleteButton(for association: UtilityAssociation) -> some View {
             Button {
                 associationPendingRemoval = association
                 removalConfirmationIsPresented = true
