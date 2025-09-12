@@ -27,7 +27,6 @@ final class AssociationsFilterResultsModel {
     /// The element containing the association filters.
     let element: UtilityAssociationsElement
     
-    /// Fetches the associations filter results from a given associations element.
     /// - Parameter element: The element containing the association filters.
     @MainActor
     init(element: UtilityAssociationsElement) {
@@ -35,6 +34,7 @@ final class AssociationsFilterResultsModel {
         fetchResults()
     }
     
+    /// Fetches the associations filter results from a given associations element.
     @MainActor
     func fetchResults() {
         let element = self.element
