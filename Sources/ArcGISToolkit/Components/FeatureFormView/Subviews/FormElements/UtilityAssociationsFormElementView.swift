@@ -146,9 +146,20 @@ extension FeatureFormView {
                 associationPendingRemoval = association
                 removalConfirmationIsPresented = true
             } label: {
-                Label(String.delete, systemImage: "trash.fill")
-                    .labelStyle(.iconOnly)
-                    .tint(.red)
+                Label {
+                    Text(
+                        LocalizedStringResource(
+                            "feature-form-view-utility-association-element-delete-button-label",
+                            defaultValue: "Delete",
+                            bundle: .toolkit,
+                            comment: "A label for a button that deletes a utility association."
+                        )
+                    )
+                } icon: {
+                    Image(systemName: "trash.fill")
+                }
+                .labelStyle(.iconOnly)
+                .tint(.red)
             }
         }
         

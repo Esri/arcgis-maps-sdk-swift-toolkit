@@ -24,15 +24,6 @@ extension String {
         )
     }
     
-    /// A localized string for the word "Delete".
-    static var delete: Self {
-        .init(
-            localized: "Delete",
-            bundle: .toolkitModule,
-            comment: "A label for a button used to take a destructive action."
-        )
-    }
-    
     /// A localized string for the word "Dismiss".
     static var dismiss: Self {
         .init(

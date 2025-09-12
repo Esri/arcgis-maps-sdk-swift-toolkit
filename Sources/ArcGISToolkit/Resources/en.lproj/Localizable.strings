@@ -197,7 +197,7 @@ The label text for choosing the 'compass navigation' auto-pan mode in the locati
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
 "Date must be on or before %@" = "Date must be on or before %@";
 
-/* A label for a button used to take a destructive action. */
+/* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Delete";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
@@ -326,6 +326,9 @@ to be used as a trace starting point. */
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
 "Feature Results" = "Feature Results";
+
+/* A label for a button that deletes a utility association. */
+"feature-form-view-utility-association-element-delete-button-label" = "Delete";
 
 /* A field in a set of data contained in a popup. */
 "Field" = "Field";
