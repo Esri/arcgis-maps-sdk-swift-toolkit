@@ -294,7 +294,9 @@ extension FeatureFormView {
         
         /// The selected utility associations filter result.
         var filterResult: UtilityAssociationsFilterResult? {
-            try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )
+            try? associationsFilterResultsModel.result?
+                .get()
+                .first(where: { $0.filter.title == filterTitle} )
         }
         
         /// The set of group results within the filter result.
