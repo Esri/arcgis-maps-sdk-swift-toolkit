@@ -69,7 +69,7 @@ struct UtilityAssociationDetailsView: View {
                 Text(
                     "From Element",
                     bundle: .toolkitModule,
-                    comment: "A label for the element on the \"from\" side of a utility association."
+                    comment: #"A label for the element on the "from" side of a utility association."#
                 )
             }
             if let fromElementTerminal = associationResult.association.fromElement.terminal {
@@ -90,7 +90,7 @@ struct UtilityAssociationDetailsView: View {
                 Text(
                     "To Element",
                     bundle: .toolkitModule,
-                    comment: "A label for the element on the \"to\" side of a utility association."
+                    comment: #"A label for the element on the "to" side of a utility association."#
                 )
             }
             if let toElementTerminal = associationResult.association.toElement.terminal {
