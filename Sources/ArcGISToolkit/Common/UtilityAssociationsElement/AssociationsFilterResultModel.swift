@@ -16,7 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// A view model for fetching associations filter results.
-@MainActor @Observable
+@Observable
 final class AssociationsFilterResultsModel {
     /// The result of fetching the associations filter results.
     private(set) var result: Result<[UtilityAssociationsFilterResult], Error>?
@@ -29,12 +29,15 @@ final class AssociationsFilterResultsModel {
     
     /// Fetches the associations filter results from a given associations element.
     /// - Parameter element: The element containing the association filters.
+    @MainActor
     init(element: UtilityAssociationsElement) {
         self.element = element
         fetchResults()
     }
     
+    @MainActor
     func fetchResults() {
+        let element = self.element
         task?.cancel()
         task = Task { [weak self] in
             guard !Task.isCancelled, let self else { return }
