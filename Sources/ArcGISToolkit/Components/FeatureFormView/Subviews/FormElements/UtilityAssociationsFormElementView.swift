@@ -105,7 +105,11 @@ extension FeatureFormView {
         /// The backing utility association group result.
         var utilityAssociationGroupResult: UtilityAssociationGroupResult? {
             // TODO: Improve group identification (Apollo 1391).
-            try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )?.groupResults.first(where: { $0.name == groupTitle })
+            try? associationsFilterResultsModel.result?
+                .get()
+                .first(where: { $0.filter.title == filterTitle} )?
+                .groupResults
+                .first(where: { $0.name == groupTitle })
         }
         
         var body: some View {
