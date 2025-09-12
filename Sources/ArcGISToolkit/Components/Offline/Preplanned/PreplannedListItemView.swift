@@ -72,7 +72,7 @@ struct PreplannedListItemView: View {
         var description: String { "This is the description text" }
         var thumbnail: LoadableImage? { nil }
         var supportsRedownloading: Bool { true }
-        var size: Int { 1234 }
+        var sizeInBytes: Int { 1234 }
         
         func retryLoad() async throws { }
         func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {

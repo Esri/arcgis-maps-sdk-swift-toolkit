@@ -122,10 +122,10 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
                     Image(systemName: model.statusSystemImage)
                 }
                 Text(model.statusText)
-                if model.directorySize > 0 && !model.isDownloaded && model.allowsDownload {
+                if model.sizeInBytes > 0 && !model.isDownloaded && model.allowsDownload {
                     Divider()
                         .frame(height: 12)
-                    Text(model.directorySizeText)
+                    Text(model.sizeText)
                 }
             }
         }
@@ -140,14 +140,14 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
     var statusText: LocalizedStringResource { get }
     var statusSystemImage: String { get }
     var jobProgress: Progress? { get }
-    var directorySize: Int { get }
+    var sizeInBytes: Int { get }
     
     func cancelJob()
 }
 
 extension OfflineMapAreaListItemInfo {
-    var directorySizeText: String {
-        Measurement<UnitInformationStorage>(value: Double(directorySize), unit: .bytes)
+    var sizeText: String {
+        Measurement<UnitInformationStorage>(value: Double(sizeInBytes), unit: .bytes)
             .formatted(.byteCount(style: .file))
     }
 }
@@ -170,7 +170,7 @@ private class MockMetadata: OfflineMapAreaListItemInfo {
     var description: String { "" }
     var isDownloaded: Bool { true }
     var allowsDownload: Bool { true }
-    var directorySize: Int { 1_000_000_000 }
+    var sizeInBytes: Int { 1_000_000_000 }
     var statusText: LocalizedStringResource { "Downloaded" }
     var statusSystemImage: String { "exclamationmark.circle" }
     var jobProgress: Progress? { nil }

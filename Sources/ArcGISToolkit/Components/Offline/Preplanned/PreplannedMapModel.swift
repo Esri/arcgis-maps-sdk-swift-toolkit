@@ -43,7 +43,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     @Published private(set) var mobileMapPackage: MobileMapPackage?
     
     /// The file size of the preplanned map area.
-    @Published private(set) var directorySize = 0
+    @Published private(set) var sizeInBytes = 0
     
     /// The currently running download job.
     @Published private(set) var job: DownloadPreplannedOfflineMapJob?
@@ -107,7 +107,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             // legacy webmaps that have incomplete metadata.
             // If the area loads, then you know for certain the status is complete.
             status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
-            directorySize = preplannedMapArea.size
+            sizeInBytes = preplannedMapArea.sizeInBytes
         } catch MappingError.packagingNotComplete {
             // Load will throw an `MappingError.packagingNotComplete` error if not complete,
             // this case is not a normal load failure.
@@ -125,12 +125,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             try await mmpk.load()
             status = .downloaded
             mobileMapPackage = mmpk
-            directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+            sizeInBytes = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
         } catch {
             status = .mmpkLoadFailure(error)
             mobileMapPackage = nil
-            directorySize = 0
+            sizeInBytes = 0
             map = nil
         }
     }
@@ -330,7 +330,7 @@ protocol PreplannedMapAreaProtocol: Sendable {
     var thumbnail: LoadableImage? { get }
     /// A Boolean value indicating if this preplanned map area can be re-downloaded.
     var supportsRedownloading: Bool { get }
-    var size: Int { get }
+    var sizeInBytes: Int { get }
 }
 
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -489,7 +489,7 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     var packagingStatus: PreplannedMapArea.PackagingStatus?
     var thumbnail: LoadableImage?
     var supportsRedownloading: Bool { false }
-    var size: Int {
+    var sizeInBytes: Int {
         FileManager.default.sizeOfDirectory(
             at: .preplannedDirectory(
                 forPortalItemID: itemID,
@@ -508,7 +508,7 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 extension PreplannedMapArea {
     /// The download size of the preplanned map area in bytes,
     /// including the basemap.
-    var size: Int {
+    var sizeInBytes: Int {
         packageItems.reduce(0, { $0 + $1.size })
     }
 }
