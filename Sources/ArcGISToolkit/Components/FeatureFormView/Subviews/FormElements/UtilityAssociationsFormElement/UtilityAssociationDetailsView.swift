@@ -63,7 +63,7 @@ struct UtilityAssociationDetailsView: View {
     var associationSection: some View {
         Section {
             LabeledContent {
-                associationResult.association.kind.name
+                associationResult.association.kind.label
             } label: {
                 Text(
                     "Association Type",
@@ -131,19 +131,25 @@ struct UtilityAssociationDetailsView: View {
 
 private extension UtilityAssociation.Kind {
     /// A localized label for the association kind.
-    var name: Text {
+    var label: Text {
         switch self {
         case .attachment:
             Text(
-                "Attachment",
-                bundle: .toolkitModule,
-                comment: #"A label for the "Attachment" utility association kind."#
+                LocalizedStringResource(
+                    "utility-association-attachment-label",
+                    defaultValue: "Attachment",
+                    bundle: .toolkit,
+                    comment: #"A label for the "Attachment" utility association kind."#
+                )
             )
         case .connectivity:
             Text(
-                "Connectivity",
-                bundle: .toolkitModule,
-                comment: #"A label for the "Connectivity" utility association kind."#
+                LocalizedStringResource(
+                    "utility-association-connectivity-label",
+                    defaultValue: "Connectivity",
+                    bundle: .toolkit,
+                    comment: #"A label for the "Connectivity" utility association kind."#
+                )
             )
         case .containment:
             Text(
@@ -171,9 +177,12 @@ private extension UtilityAssociation.Kind {
             )
         @unknown default:
             Text(
-                "Unknown",
-                bundle: .toolkitModule,
-                comment: #"A label for an unknown utility association kind."#
+                LocalizedStringResource(
+                    "utility-association-unknown-label",
+                    defaultValue: "Unknown",
+                    bundle: .toolkit,
+                    comment: "A label for an unknown utility association kind."
+                )
             )
         }
     }
