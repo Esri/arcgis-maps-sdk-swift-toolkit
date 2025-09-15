@@ -135,21 +135,15 @@ private extension UtilityAssociation.Kind {
         switch self {
         case .attachment:
             Text(
-                LocalizedStringResource(
-                    "utility-association-attachment-label",
-                    defaultValue: "Attachment",
-                    bundle: .toolkit,
-                    comment: #"A label for the "Attachment" utility association kind."#
-                )
+                "Attachment",
+                bundle: .toolkitModule,
+                comment: #"A label for the "Attachment" utility association kind."#
             )
         case .connectivity:
             Text(
-                LocalizedStringResource(
-                    "utility-association-connectivity-label",
-                    defaultValue: "Connectivity",
-                    bundle: .toolkit,
-                    comment: #"A label for the "Connectivity" utility association kind."#
-                )
+                "Connectivity",
+                bundle: .toolkitModule,
+                comment: #"A label for the "Connectivity" utility association kind."#
             )
         case .containment:
             Text(
