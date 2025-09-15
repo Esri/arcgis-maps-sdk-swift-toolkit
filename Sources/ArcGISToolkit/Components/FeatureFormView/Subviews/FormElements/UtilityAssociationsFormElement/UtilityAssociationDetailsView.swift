@@ -173,7 +173,7 @@ private extension UtilityAssociation.Kind {
             Text(
                 "Unknown",
                 bundle: .toolkitModule,
-                comment: #"A label for an unknown utility association kind."#
+                comment: "A label for an unknown utility association kind."
             )
         }
     }
