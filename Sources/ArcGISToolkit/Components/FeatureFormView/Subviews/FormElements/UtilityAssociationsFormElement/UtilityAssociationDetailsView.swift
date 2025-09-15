@@ -137,28 +137,43 @@ private extension UtilityAssociation.Kind {
             Text(
                 "Attachment",
                 bundle: .toolkitModule,
-                comment: "A label for the attachment utility association kind."
+                comment: #"A label for the "Attachment" utility association kind."#
             )
-        case .connectivity,
-                .junctionEdgeObjectConnectivityFromSide,
-                .junctionEdgeObjectConnectivityMidspan,
-                .junctionEdgeObjectConnectivityToSide:
+        case .connectivity:
             Text(
                 "Connectivity",
                 bundle: .toolkitModule,
-                comment: "A label for the connectivity utility association kind."
+                comment: #"A label for the "Connectivity" utility association kind."#
             )
         case .containment:
             Text(
                 "Containment",
                 bundle: .toolkitModule,
-                comment: "A label for the containment utility association kind."
+                comment: #"A label for the "Containment" utility association kind."#
+            )
+        case .junctionEdgeObjectConnectivityFromSide:
+            Text(
+                "Junction Edge Object Connectivity From Side",
+                bundle: .toolkitModule,
+                comment: #"A label for the "Junction Edge Object Connectivity From Side" utility association kind."#
+            )
+        case .junctionEdgeObjectConnectivityMidspan:
+            Text(
+                "Junction Edge Object Connectivity Midspan",
+                bundle: .toolkitModule,
+                comment: #"A label for the "Junction Edge Object Connectivity Midspan" utility association kind."#
+            )
+        case .junctionEdgeObjectConnectivityToSide:
+            Text(
+                "Junction Edge Object Connectivity To Side",
+                bundle: .toolkitModule,
+                comment: #"A label for the "Junction Edge Object Connectivity To Side" utility association kind."#
             )
         @unknown default:
             Text(
                 "Unknown",
                 bundle: .toolkitModule,
-                comment: "A label for an unknown utility association kind."
+                comment: #"A label for an unknown utility association kind."#
             )
         }
     }

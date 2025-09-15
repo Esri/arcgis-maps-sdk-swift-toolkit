@@ -59,7 +59,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Associations";
 
-/* A label for the attachment utility association kind. */
+/* A label for the "Attachment" utility association kind. */
 "Attachment" = "Attachment";
 
 /* A label in reference to attachments. */
@@ -158,10 +158,10 @@ The label text for choosing the 'compass navigation' auto-pan mode in the locati
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
 "Compass navigation" = "Compass navigation";
 
-/* A label for the connectivity utility association kind. */
+/* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Connectivity";
 
-/* A label for the containment utility association kind. */
+/* A label for the "Containment" utility association kind. */
 "Containment" = "Containment";
 
 /* Continent (Level of Detail) */
@@ -393,6 +393,15 @@ variable is a cardinal or intercardinal direction. */
 
 /* Houses (Level of Detail) */
 "Houses" = "Houses";
+
+/* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
+"Junction Edge Object Connectivity From Side" = "Junction Edge Object Connectivity From Side";
+
+/* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
+"Junction Edge Object Connectivity Midspan" = "Junction Edge Object Connectivity Midspan";
+
+/* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
+"Junction Edge Object Connectivity To Side" = "Junction Edge Object Connectivity To Side";
 
 /* A label for a pie chart legend item label. */
 "Label" = "Label";
