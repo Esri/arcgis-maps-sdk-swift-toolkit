@@ -63,7 +63,7 @@ struct UtilityAssociationDetailsView: View {
     var associationSection: some View {
         Section {
             LabeledContent {
-                Text("\(associationResult.association.kind)".capitalized)
+                associationResult.association.kind.name
             } label: {
                 Text(
                     "Association Type",
@@ -125,6 +125,41 @@ struct UtilityAssociationDetailsView: View {
                 associationsFilterResultsModel.fetchResults()
                 navigationPath?.wrappedValue.removeLast()
             }
+        }
+    }
+}
+
+private extension UtilityAssociation.Kind {
+    /// A localized label for the association kind.
+    var name: Text {
+        switch self {
+        case .attachment:
+            Text(
+                "Attachment",
+                bundle: .toolkitModule,
+                comment: "A label for the attachment utility association kind."
+            )
+        case .connectivity,
+                .junctionEdgeObjectConnectivityFromSide,
+                .junctionEdgeObjectConnectivityMidspan,
+                .junctionEdgeObjectConnectivityToSide:
+            Text(
+                "Connectivity",
+                bundle: .toolkitModule,
+                comment: "A label for the connectivity utility association kind."
+            )
+        case .containment:
+            Text(
+                "Containment",
+                bundle: .toolkitModule,
+                comment: "A label for the containment utility association kind."
+            )
+        @unknown default:
+            Text(
+                "Unknown",
+                bundle: .toolkitModule,
+                comment: "A label for an unknown utility association kind."
+            )
         }
     }
 }

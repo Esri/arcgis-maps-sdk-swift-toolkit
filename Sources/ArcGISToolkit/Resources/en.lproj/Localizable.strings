@@ -59,6 +59,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Associations";
 
+/* A label for the attachment utility association kind. */
+"Attachment" = "Attachment";
+
 /* A label in reference to attachments. */
 "Attachments" = "Attachments";
 
@@ -154,6 +157,12 @@ The label text for choosing the 'compass navigation' auto-pan mode in the locati
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
 "Compass navigation" = "Compass navigation";
+
+/* A label for the connectivity utility association kind. */
+"Connectivity" = "Connectivity";
+
+/* A label for the containment utility association kind. */
+"Containment" = "Containment";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -777,7 +786,8 @@ to be imported as an attachment. */
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
 "Turn off auto-pan" = "Turn off auto-pan";
 
-/* The default title of a map area with an unknown title. */
+/* A label for an unknown utility association kind.
+The default title of a map area with an unknown title. */
 "Unknown" = "Unknown";
 
 /* Text indicating a field has an unknown validation error. */
