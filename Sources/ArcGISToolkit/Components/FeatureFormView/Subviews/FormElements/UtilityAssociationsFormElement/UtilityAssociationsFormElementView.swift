@@ -257,9 +257,7 @@ extension FeatureFormView {
                     .lineLimit(1)
                     Spacer()
                     Group {
-                        if let filterResult {
-                            Text(filterResult.resultCount, format: .number)
-                        }
+                        Text(filterResult?.resultCount ?? 0, format: .number)
                         Image(systemName: "chevron.right")
                     }
                     .foregroundColor(.secondary)
