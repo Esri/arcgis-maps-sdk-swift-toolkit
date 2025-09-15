@@ -33,9 +33,6 @@ class FeatureFormViewModel {
     /// The selected utility association.
     var selectedAssociation: UtilityAssociation?
     
-    /// A Boolean value indicating whether the utility association details screen is presented.
-    var utilityAssociationDetailsScreenIsPresented = false
-    
 #warning("The UtilityNetwork parameter is temporary only.")
     /// Creates a view model for a feature form view.
     /// - Parameters:
