@@ -18,8 +18,8 @@ extension FeatureFormView {
     enum NavigationPathItem: Hashable {
         case form(FeatureForm)
         case utilityAssociationDetailsView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationResult)
-        case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String)
-        case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String, String)
+        case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationsFilter.Kind)
+        case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationsFilter.Kind, String)
         
         static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
@@ -46,13 +46,13 @@ extension FeatureFormView {
                 hasher.combine(ObjectIdentifier(form))
             case .utilityAssociationDetailsView(_, _, let element, _):
                 hasher.combine(element)
-            case .utilityAssociationFilterResultView(_, _, let element, let filterTitle):
+            case .utilityAssociationFilterResultView(_, _, let element, let filterKind):
                 hasher.combine(element)
-                hasher.combine(filterTitle)
-            case .utilityAssociationGroupResultView(_, _, let element, let filterTitle, let groupTitle):
+                hasher.combine(filterKind)
+            case .utilityAssociationGroupResultView(_, _, let element, let filterKind, let groupTitle):
                 // TODO: Improve group identification (Apollo 1391).
                 hasher.combine(element)
-                hasher.combine(filterTitle)
+                hasher.combine(filterKind)
                 hasher.combine(groupTitle)
             }
         }
