@@ -26,6 +26,7 @@ class EmbeddedFeatureFormViewModel {
         }
     }
     
+    /// A Boolean value indicating whether the associated form has edits.
     var hasEdits = false {
         didSet {
             if !hasEdits {
@@ -91,6 +92,7 @@ class EmbeddedFeatureFormViewModel {
         }
     }
     
+    /// Starts a task to monitor whether the associated form has edits.
     private func monitorEdits() {
         monitorEditsTask?.cancel()
         monitorEditsTask = Task { [weak self] in

@@ -17,7 +17,7 @@ import ArcGIS
 extension UtilityAssociationResult {
     /// The utility element which is the associated feature.
     var associatedElement: UtilityElement {
-        associatedFeatureIsToElement ?  association.toElement : association.fromElement
+        associatedFeatureIsToElement ? association.toElement : association.fromElement
     }
     
     /// A Boolean value indicating whether the `associatedFeature` global ID

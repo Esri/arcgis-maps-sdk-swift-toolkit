@@ -109,6 +109,14 @@ extension LocalizedStringResource {
         )
     }
     
+    static var removeAssociation: Self {
+        .init(
+            "Remove Association",
+            bundle: .toolkit,
+            comment: "A label for a button to remove a utility association."
+        )
+    }
+    
     static var removeDownload: Self {
         .init(
             "Remove Download",

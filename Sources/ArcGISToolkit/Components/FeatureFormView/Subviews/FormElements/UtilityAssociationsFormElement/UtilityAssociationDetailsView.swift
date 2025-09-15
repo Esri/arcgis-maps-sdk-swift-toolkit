@@ -47,10 +47,23 @@ struct UtilityAssociationDetailsView: View {
         )
     }
     
+    /// The name of the provided terminal as labeled content.
+    func row(for terminal: UtilityTerminal) -> some View {
+        LabeledContent {
+            Text(terminal.name)
+        } label: {
+            Text(
+                "Terminal",
+                bundle: .toolkitModule,
+                comment: "A label in reference to a utility terminal."
+            )
+        }
+    }
+    
     var associationSection: some View {
         Section {
             LabeledContent {
-                Text("\(associationResult.association.kind)".capitalized)
+                associationResult.association.kind.name
             } label: {
                 Text(
                     "Association Type",
@@ -69,15 +82,11 @@ struct UtilityAssociationDetailsView: View {
                 Text(
                     "From Element",
                     bundle: .toolkitModule,
-                    comment: "A label for the element on the \"from\" side of a utility association."
+                    comment: #"A label for the element on the "from" side of a utility association."#
                 )
             }
             if let fromElementTerminal = associationResult.association.fromElement.terminal {
-                LabeledContent {
-                    Text(fromElementTerminal.name)
-                } label: {
-                    terminal
-                }
+                row(for: fromElementTerminal)
             }
         }
     }
@@ -90,15 +99,11 @@ struct UtilityAssociationDetailsView: View {
                 Text(
                     "To Element",
                     bundle: .toolkitModule,
-                    comment: "A label for the element on the \"to\" side of a utility association."
+                    comment: #"A label for the element on the "to" side of a utility association."#
                 )
             }
             if let toElementTerminal = associationResult.association.toElement.terminal {
-                LabeledContent {
-                    Text(toElementTerminal.name)
-                } label: {
-                    terminal
-                }
+                row(for: toElementTerminal)
             }
         }
     }
@@ -108,12 +113,8 @@ struct UtilityAssociationDetailsView: View {
             Button(role: .destructive) {
                 removalConfirmationIsPresented = true
             } label: {
-                Text(
-                    "Remove Association",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to remove an utility association."
-                )
-                .frame(maxWidth: .infinity, alignment: .center)
+                Text(LocalizedStringResource.removeAssociation)
+                    .frame(maxWidth: .infinity, alignment: .center)
             }
             .associationRemovalConfirmationDialog(
                 isPresented: $removalConfirmationIsPresented,
@@ -126,12 +127,39 @@ struct UtilityAssociationDetailsView: View {
             }
         }
     }
-    
-    var terminal: Text {
-        Text(
-            "Terminal",
-            bundle: .toolkitModule,
-            comment: "A label in reference to a utility terminal."
-        )
+}
+
+private extension UtilityAssociation.Kind {
+    /// A localized label for the association kind.
+    var name: Text {
+        switch self {
+        case .attachment:
+            Text(
+                "Attachment",
+                bundle: .toolkitModule,
+                comment: "A label for the attachment utility association kind."
+            )
+        case .connectivity,
+                .junctionEdgeObjectConnectivityFromSide,
+                .junctionEdgeObjectConnectivityMidspan,
+                .junctionEdgeObjectConnectivityToSide:
+            Text(
+                "Connectivity",
+                bundle: .toolkitModule,
+                comment: "A label for the connectivity utility association kind."
+            )
+        case .containment:
+            Text(
+                "Containment",
+                bundle: .toolkitModule,
+                comment: "A label for the containment utility association kind."
+            )
+        @unknown default:
+            Text(
+                "Unknown",
+                bundle: .toolkitModule,
+                comment: "A label for an unknown utility association kind."
+            )
+        }
     }
 }

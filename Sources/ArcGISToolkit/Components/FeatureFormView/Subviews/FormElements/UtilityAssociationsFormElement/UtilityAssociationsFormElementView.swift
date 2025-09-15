@@ -54,11 +54,11 @@ extension FeatureFormView {
                     FeatureFormGroupedContentView(content: [
                         Text.errorFetchingFilterResults(error)
                     ])
-                case nil:
+                case .none:
                     FeatureFormGroupedContentView(content: [ProgressView()])
                 }
             }
-            .onChange(of: embeddedFeatureFormViewModel.hasEdits) { oldValue, newValue in
+            .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
                 associationsFilterResultsModel.fetchResults()
             }
         }
@@ -105,12 +105,16 @@ extension FeatureFormView {
         /// The backing utility association group result.
         var utilityAssociationGroupResult: UtilityAssociationGroupResult? {
             // TODO: Improve group identification (Apollo 1391).
-            try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )?.groupResults.first(where: { $0.name == groupTitle })
+            try? associationsFilterResultsModel.result?
+                .get()
+                .first(where: { $0.filter.title == filterTitle} )?
+                .groupResults
+                .first(where: { $0.name == groupTitle })
         }
         
         var body: some View {
             List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-                makeMainButton(result: utilityAssociationResult)
+                mainButton(for: utilityAssociationResult)
                     .disabled(navigationIsDisabled)
 #if targetEnvironment(macCatalyst)
                     .contextMenu {
@@ -118,7 +122,7 @@ extension FeatureFormView {
                     }
 #else
                     .swipeActions {
-                        makeDeleteButton(association: utilityAssociationResult.association)
+                        deleteButton(for: utilityAssociationResult.association)
                     }
 #endif
                     .tint(.primary)
@@ -141,18 +145,22 @@ extension FeatureFormView {
             }
         }
         
-        func makeDeleteButton(association: UtilityAssociation) -> some View {
+        func deleteButton(for association: UtilityAssociation) -> some View {
             Button {
                 associationPendingRemoval = association
                 removalConfirmationIsPresented = true
             } label: {
-                Label(String.delete, systemImage: "trash.fill")
-                    .labelStyle(.iconOnly)
-                    .tint(.red)
+                Label {
+                    Text(LocalizedStringResource.removeAssociation)
+                } icon: {
+                    Image(systemName: "trash.fill")
+                }
+                .labelStyle(.iconOnly)
+                .tint(.red)
             }
         }
         
-        func makeDetailsButton(result: UtilityAssociationResult) -> some View {
+        func detailsButton(for result: UtilityAssociationResult) -> some View {
             Button {
                 navigationPath?.wrappedValue.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
@@ -178,7 +186,7 @@ extension FeatureFormView {
             }
         }
         
-        func makeMainButton(result: UtilityAssociationResult) -> some View {
+        func mainButton(for result: UtilityAssociationResult) -> some View {
             Button {
                 let navigationAction = {
                     navigationPath?.wrappedValue.append(
@@ -197,7 +205,7 @@ extension FeatureFormView {
             } label: {
                 HStack {
                     UtilityAssociationResultLabel(result: result)
-                    makeDetailsButton(result: result)
+                    detailsButton(for: result)
                         .buttonStyle(.plain)
                         .hoverEffect()
                 }
@@ -283,7 +291,9 @@ extension FeatureFormView {
         
         /// The selected utility associations filter result.
         var filterResult: UtilityAssociationsFilterResult? {
-            try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle} )
+            try? associationsFilterResultsModel.result?
+                .get()
+                .first(where: { $0.filter.title == filterTitle} )
         }
         
         /// The set of group results within the filter result.

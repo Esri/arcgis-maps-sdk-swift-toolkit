@@ -104,17 +104,16 @@ extension AssociationRemovalConfirmationDialog {
         Text(
             "Only removes the association. The feature remains.",
             bundle: .toolkitModule,
-            comment:
-            """
-            Helper text indicating that an accompanying button only 
-            removes only the association. 
-            """
+            comment: """
+                Helper text indicating that an accompanying button only 
+                removes only the association. 
+                """
         )
     }
     
     var confirmationTitle: Text {
         Text(
-            "Remove Association?",
+            "Remove association?",
             bundle: .toolkitModule,
             comment: "A label for a confirmation to remove a utility association."
         )
