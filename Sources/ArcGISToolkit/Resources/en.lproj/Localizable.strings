@@ -7,6 +7,9 @@ an edge where a utility association is (logically) located. */
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld selected";
 
+/* The number of features identified from tapping on the map. */
+"^[%lld features](inflect: true) selected" = "^[%lld features](inflect: true) selected";
+
 /* A label indicating the number of results of a utility network trace. */
 "^[%lld Results](inflect: true)" = "^[%lld Results](inflect: true)";
 
@@ -20,8 +23,15 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "A map area cannot be downloaded at this time.";
 
-/* A label for an option to add a new utility association. */
+/* Label for a button to add a configured utility association. */
+"Add" = "Add";
+
+/* A label for a button to add a new utility network association. */
 "Add Association" = "Add Association";
+
+/* A label for a button to add a feature filtering condition.
+Label for a button to add a new query condition. */
+"Add Condition" = "Add Condition";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Add Map Area";
@@ -44,6 +54,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "An error occurred while fetching map areas.";
 
+/* A button label to apply the conditions added to the query. */
+"Apply" = "Apply";
+
 /* The title for a map area. */
 "Area %lld" = "Area %lld";
 
@@ -58,9 +71,6 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Associations";
-
-/* A label for the "Attachment" utility association kind. */
-"Attachment" = "Attachment";
 
 /* A label in reference to attachments. */
 "Attachments" = "Attachments";
@@ -158,11 +168,23 @@ The label text for choosing the 'compass navigation' auto-pan mode in the locati
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
 "Compass navigation" = "Compass navigation";
 
-/* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "Connectivity";
+/* A condition by which to compare the value of a feature's attribute. */
+"Condition" = "Condition";
+
+/* A label for the nth feature filtering condition. */
+"Condition %lld" = "Condition %lld";
+
+/* Options for the nth condition */
+"Condition %lld options" = "Condition %lld options";
+
+/* A label for the "Container" utility associations filter kind. */
+"Container" = "Container";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Containment";
+
+/* A label for the "Content" utility associations filter kind. */
+"Content" = "Content";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -175,6 +197,9 @@ The label text for choosing the 'compass navigation' auto-pan mode in the locati
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Could not retrieve map areas for this map.";
+
+/* The number of features to choose from. */
+"Count %lld" = "Count %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Counties";
@@ -336,13 +361,15 @@ to be used as a trace starting point. */
 trace operation. */
 "Feature Results" = "Feature Results";
 
-/* A field in a set of data contained in a popup. */
+/* A field in a feature's attribute table.
+A field in a set of data contained in a popup. */
 "Field" = "Field";
 
 /* A label in reference to fields in a set of data contained in a popup. */
 "Fields" = "Fields";
 
-/* A label for a text entry field that allows the user to filter a list of values by name. */
+/* A filter used to reduce the number of results.
+A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "Filter";
 
 /* A field allowing the user to filter a list of facilities by name. A
@@ -470,6 +497,9 @@ The label text for choosing the 'navigation' auto-pan mode in the location butto
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "No bookmarks";
 
+/* The status text when no conditions have been added. */
+"No conditions added" = "No conditions added";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "No configurations available.";
 
@@ -590,6 +620,9 @@ The label text for choosing the 'recenter' auto-pan mode in the location button 
 /* A label for a confirmation to remove a utility association. */
 "Remove association?" = "Remove association?";
 
+/* Remove the feature filtering condition. */
+"Remove condition" = "Remove condition";
+
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Remove Download";
 
@@ -625,6 +658,12 @@ current visible extent of the map or scene. */
 /* A label for a button to save edits. */
 "Save Edits" = "Save Edits";
 
+/* A label for a feature search field. */
+"Search features" = "Search features";
+
+/* A label for a utility network source search field. */
+"Search Network Source" = "Search Network Source";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Search Query";
 
@@ -638,6 +677,13 @@ or more levels in a floor-aware map or scene. */
 /* A title for the on demand configuration view. */
 "Select Area" = "Select Area";
 
+/* A header label for a list of utility network sources. */
+"Select feature from the Network Source group" = "Select feature from the Network Source group";
+
+/* A label indicating features can be selected by 
+interactively tapping on the map. */
+"Select feature on map" = "Select feature on map";
+
 /* A label for button to select a utility network. */
 "Select Network" = "Select Network";
 
@@ -649,6 +695,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for a button to show all the association results. */
 "Show all" = "Show all";
+
+/* A description of what using adding conditions can do. */
+"Show features that meet all the conditions" = "Show features that meet all the conditions";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
@@ -697,6 +746,9 @@ network trace operation. */
 /* Streets (Level of Detail) */
 "Streets" = "Streets";
 
+/* A label for the "Structure" utility associations filter kind. */
+"Structure" = "Structure";
+
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Take Photo or Video";
 
@@ -707,6 +759,12 @@ place an ArcGIS Scene. */
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "Tap on the image for more information.";
+
+/* A label instructing the user to tap a feature on the map. */
+"Tap the map to select features" = "Tap the map to select features";
+
+/* No comment provided by engineer. */
+"Tap, select area, or draw polygon" = "Tap, select area, or draw polygon";
 
 /* A label in reference to a utility terminal. */
 "Terminal" = "Terminal";
@@ -795,8 +853,7 @@ to be imported as an attachment. */
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
 "Turn off auto-pan" = "Turn off auto-pan";
 
-/* A label for an unknown utility association kind.
-The default title of a map area with an unknown title. */
+/* The default title of a map area with an unknown title. */
 "Unknown" = "Unknown";
 
 /* Text indicating a field has an unknown validation error. */
@@ -819,11 +876,30 @@ without saving. */
 /* A label for a button to view utility association details. */
 "Utility Association Details" = "Utility Association Details";
 
+/* A label for the "Attachment" utility association kind. */
+"utility-association-attachment-label" = "Attachment";
+
+/* A label for the "Connectivity" utility association kind. */
+"utility-association-connectivity-label" = "Connectivity";
+
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "Unknown";
+
+/* A label for the "Attachment" utility associations filter kind. */
+"utility-associations-filter-attachment-label" = "Attachment";
+
+/* A label for the "Connectivity" utility associations filter kind. */
+"utility-associations-filter-connectivity-label" = "Connectivity";
+
+/* A label for an unknown utility associations filter kind. */
+"utility-associations-filter-unknown-label" = "Unknown";
+
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";
 
 /* A label for the value of a pie chart slice.
-A value in a set of data contained in a popup. */
+A value in a set of data contained in a popup.
+A value of a feature's attribute. */
 "Value" = "Value";
 
 /* Text indicating a field's computed value must be within the
@@ -887,6 +963,9 @@ The host is indicated in the variable. */
 
 /* A button to change the map to the extent of the selected trace. */
 "Zoom To" = "Zoom To";
+
+/* No comment provided by engineer. */
+"Zoom to %lld" = "Zoom to %lld";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Zoom To Result";
