@@ -118,7 +118,7 @@ extension FeatureFormView {
                     .disabled(navigationIsDisabled)
 #if targetEnvironment(macCatalyst)
                     .contextMenu {
-                        makeDeleteButton(association: utilityAssociationResult.association)
+                        deleteButton(for: utilityAssociationResult.association)
                     }
 #else
                     .swipeActions {
