@@ -27,6 +27,11 @@ extension FeatureFormView {
         /// The form element.
         let element: UtilityAssociationsFormElement
         
+        /// The set of filter kinds to show, ordered as designed.
+        let filters: [UtilityAssociationsFilter.Kind] = [
+            .connectivity, .attachment, .structure, .container, .content
+        ]
+        
         init(element: UtilityAssociationsFormElement) {
             self.element = element
             self._associationsFilterResultsModel = .init(wrappedValue: .init(element: element))
