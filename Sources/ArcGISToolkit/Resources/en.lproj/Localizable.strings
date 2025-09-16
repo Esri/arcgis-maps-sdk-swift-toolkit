@@ -795,8 +795,7 @@ to be imported as an attachment. */
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
 "Turn off auto-pan" = "Turn off auto-pan";
 
-/* A label for an unknown utility association kind.
-The default title of a map area with an unknown title. */
+/* The default title of a map area with an unknown title. */
 "Unknown" = "Unknown";
 
 /* Text indicating a field has an unknown validation error. */
@@ -818,6 +817,9 @@ without saving. */
 
 /* A label for a button to view utility association details. */
 "Utility Association Details" = "Utility Association Details";
+
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "Unknown";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";

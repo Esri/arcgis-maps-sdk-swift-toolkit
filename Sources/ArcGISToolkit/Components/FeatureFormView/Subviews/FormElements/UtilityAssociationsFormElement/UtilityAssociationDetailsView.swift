@@ -171,9 +171,12 @@ private extension UtilityAssociation.Kind {
             )
         @unknown default:
             Text(
-                "Unknown",
-                bundle: .toolkitModule,
-                comment: "A label for an unknown utility association kind."
+                LocalizedStringResource(
+                    "utility-association-unknown-label",
+                    defaultValue: "Unknown",
+                    bundle: .toolkit,
+                    comment: "A label for an unknown utility association kind."
+                )
             )
         }
     }
