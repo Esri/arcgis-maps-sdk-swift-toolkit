@@ -27,11 +27,6 @@ extension FeatureFormView {
         /// The form element.
         let element: UtilityAssociationsFormElement
         
-        /// The set of filter kinds to show, ordered as designed.
-        let filters: [UtilityAssociationsFilter.Kind] = [
-            .connectivity, .attachment, .structure, .container, .content
-        ]
-        
         init(element: UtilityAssociationsFormElement) {
             self.element = element
             self._associationsFilterResultsModel = .init(wrappedValue: .init(element: element))
@@ -41,11 +36,11 @@ extension FeatureFormView {
             Group {
                 switch associationsFilterResultsModel.result {
                 case .success(_):
-                    FeatureFormGroupedContentView(content: filters.map {
+                    FeatureFormGroupedContentView(content: element.associationFilters.map {
                         UtilityAssociationsFilterResultListRowView(
                             associationsFilterResultsModel: associationsFilterResultsModel,
                             element: element,
-                            filterKind: $0
+                            filter: $0
                         )
                         .environment(embeddedFeatureFormViewModel)
                     })
@@ -90,8 +85,8 @@ extension FeatureFormView {
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
-        /// The kind of the selected utility associations filter.
-        let filterKind: UtilityAssociationsFilter.Kind
+        /// The selected utility associations filter.
+        let filter: UtilityAssociationsFilter
         
         /// The title of the selected utility association group result.
         let groupTitle: String
@@ -106,7 +101,7 @@ extension FeatureFormView {
             // TODO: Improve group identification (Apollo 1391).
             try? associationsFilterResultsModel.result?
                 .get()
-                .first(where: { $0.filter.kind == filterKind })?
+                .first(where: { $0.filter.kind == filter.kind })?
                 .groupResults
                 .first(where: { $0.name == groupTitle })
         }
@@ -226,14 +221,14 @@ extension FeatureFormView {
         /// The form element containing the filter result.
         let element: UtilityAssociationsFormElement
         
-        /// The kind of the referenced utility associations filter.
-        let filterKind: UtilityAssociationsFilter.Kind
+        /// The utility association filter represented by the row.
+        let filter: UtilityAssociationsFilter
         
         /// The referenced utility associations filter result.
         var filterResult: UtilityAssociationsFilterResult? {
             try? associationsFilterResultsModel.result?
                 .get()
-                .first(where: { $0.filter.kind == filterKind } )
+                .first(where: { $0.filter.kind == filter.kind } )
         }
         
         var body: some View {
@@ -243,15 +238,15 @@ extension FeatureFormView {
                         embeddedFeatureFormViewModel,
                         associationsFilterResultsModel,
                         element,
-                        filterKind
+                        filter
                     )
                 )
             } label: {
                 HStack {
                     VStack {
-                        Text(filterResult?.filter.title ?? String(localized: filterKind.label))
-                        if let filterResult, !filterResult.filter.description.isEmpty {
-                            Text(filterResult.filter.description)
+                        Text(filter.title)
+                        if !filter.description.isEmpty {
+                            Text(filter.description)
                                 .font(.caption)
                         }
                     }
@@ -285,14 +280,14 @@ extension FeatureFormView {
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
-        /// The kind of the selected utility associations filter.
-        let filterKind: UtilityAssociationsFilter.Kind
+        /// The selected utility associations filter.
+        let filter: UtilityAssociationsFilter
         
         /// The selected utility associations filter result.
         var filterResult: UtilityAssociationsFilterResult? {
             try? associationsFilterResultsModel.result?
                 .get()
-                .first(where: { $0.filter.kind == filterKind })
+                .first(where: { $0.filter.kind == filter.kind })
         }
         
         /// The set of group results within the filter result.
@@ -316,7 +311,7 @@ extension FeatureFormView {
                                     embeddedFeatureFormViewModel,
                                     associationsFilterResultsModel,
                                     element,
-                                    filterKind,
+                                    filter,
                                     utilityAssociationGroupResult.name
                                 )
                             )

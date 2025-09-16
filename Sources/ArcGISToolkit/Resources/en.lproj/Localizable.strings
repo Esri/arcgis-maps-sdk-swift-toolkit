@@ -72,6 +72,9 @@ Label for a button to add a new query condition. */
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Associations";
 
+/* A label for the "Attachment" utility association kind. */
+"Attachment" = "Attachment";
+
 /* A label in reference to attachments. */
 "Attachments" = "Attachments";
 
@@ -177,14 +180,11 @@ The label text for choosing the 'compass navigation' auto-pan mode in the locati
 /* Options for the nth condition */
 "Condition %lld options" = "Condition %lld options";
 
-/* A label for the "Container" utility associations filter kind. */
-"Container" = "Container";
+/* A label for the "Connectivity" utility association kind. */
+"Connectivity" = "Connectivity";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Containment";
-
-/* A label for the "Content" utility associations filter kind. */
-"Content" = "Content";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -746,9 +746,6 @@ network trace operation. */
 /* Streets (Level of Detail) */
 "Streets" = "Streets";
 
-/* A label for the "Structure" utility associations filter kind. */
-"Structure" = "Structure";
-
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Take Photo or Video";
 
@@ -876,23 +873,8 @@ without saving. */
 /* A label for a button to view utility association details. */
 "Utility Association Details" = "Utility Association Details";
 
-/* A label for the "Attachment" utility association kind. */
-"utility-association-attachment-label" = "Attachment";
-
-/* A label for the "Connectivity" utility association kind. */
-"utility-association-connectivity-label" = "Connectivity";
-
 /* A label for an unknown utility association kind. */
 "utility-association-unknown-label" = "Unknown";
-
-/* A label for the "Attachment" utility associations filter kind. */
-"utility-associations-filter-attachment-label" = "Attachment";
-
-/* A label for the "Connectivity" utility associations filter kind. */
-"utility-associations-filter-connectivity-label" = "Connectivity";
-
-/* A label for an unknown utility associations filter kind. */
-"utility-associations-filter-unknown-label" = "Unknown";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";
