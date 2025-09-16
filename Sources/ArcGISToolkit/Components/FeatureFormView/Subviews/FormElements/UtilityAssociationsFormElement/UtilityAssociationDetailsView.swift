@@ -63,7 +63,7 @@ struct UtilityAssociationDetailsView: View {
     var associationSection: some View {
         Section {
             LabeledContent {
-                associationResult.association.kind.label
+                associationResult.association.kind.name
             } label: {
                 Text(
                     "Association Type",
@@ -131,7 +131,7 @@ struct UtilityAssociationDetailsView: View {
 
 private extension UtilityAssociation.Kind {
     /// A localized label for the association kind.
-    var label: Text {
+    var name: Text {
         switch self {
         case .attachment:
             Text(
