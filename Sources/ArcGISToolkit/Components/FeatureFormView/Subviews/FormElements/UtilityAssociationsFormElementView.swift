@@ -29,7 +29,7 @@ extension FeatureFormView {
         
         init(element: UtilityAssociationsFormElement) {
             self.element = element
-            self._associationsFilterResultsModel = .init(wrappedValue: .init(element: element))
+            self._associationsFilterResultsModel = .init(wrappedValue: .init(element: element, includeEmptyFilterResults: true))
         }
         
         var body: some View {
