@@ -26,6 +26,15 @@ class EmbeddedFeatureFormViewModel {
         }
     }
     
+    /// A Boolean value indicating whether the associated form has edits.
+    var hasEdits = false {
+        didSet {
+            if !hasEdits {
+                previouslyFocusedElements.removeAll()
+            }
+        }
+    }
+    
     /// The set of all elements which previously held focus.
     var previouslyFocusedElements = [FormElement]()
     
@@ -57,11 +66,16 @@ class EmbeddedFeatureFormViewModel {
     @ObservationIgnored
     private var visibilityTask: Task<Void, Never>?
     
+    /// A task to monitor whether the form has edits.
+    @ObservationIgnored
+    private var monitorEditsTask: Task<Void, Never>?
+    
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
     public init(featureForm: FeatureForm) {
         self.featureForm = featureForm
         evaluateExpressions()
+        monitorEdits()
         monitorVisibility()
     }
     
@@ -75,6 +89,17 @@ class EmbeddedFeatureFormViewModel {
         evaluateTask?.cancel()
         evaluateTask = Task {
             _ = try? await featureForm.evaluateExpressions()
+        }
+    }
+    
+    /// Starts a task to monitor whether the associated form has edits.
+    private func monitorEdits() {
+        monitorEditsTask?.cancel()
+        monitorEditsTask = Task { [weak self] in
+            guard !Task.isCancelled, let self else { return }
+            for await hasEdits in featureForm.$hasEdits.dropFirst() {
+                self.hasEdits = hasEdits
+            }
         }
     }
     
