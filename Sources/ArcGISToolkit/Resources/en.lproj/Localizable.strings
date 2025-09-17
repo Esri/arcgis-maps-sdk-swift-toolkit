@@ -151,7 +151,16 @@ for the AR experience. */
 "Color" = "Color";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
+"Compass navigation" = "Compass navigation";
 
+/* The accessibility label of the compass button. */
+"compass-button-accessibility-label" = "Compass";
+
+/* A label for the "Connectivity" utility association kind. */
+"Connectivity" = "Connectivity";
+
+/* A label for the "Containment" utility association kind. */
+"Containment" = "Containment";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
