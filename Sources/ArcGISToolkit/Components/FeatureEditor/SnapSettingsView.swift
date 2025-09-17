@@ -21,10 +21,11 @@ class SnapSettingsModel {
     private let snapSettings: SnapSettings
     fileprivate let sourceSettings: [SnapSourceSettingsModel]
     
-    init(snapSettings: SnapSettings) {        
+    init(snapSettings: SnapSettings) {
         self.snapSettings = snapSettings
         
         // Grab the settings from the snapSettings object.
+        isEnabled = snapSettings.isEnabled
         snapsToFeatures = snapSettings.snapsToFeatures
         snapsToGeometryGuides = snapSettings.snapsToGeometryGuides
         hapticFeedbackIsEnabled = snapSettings.hapticFeedbackIsEnabled
@@ -32,6 +33,12 @@ class SnapSettingsModel {
         sourceSettings = snapSettings.sourceSettings
             .filter { !($0.source is GraphicsOverlay) }
             .map(SnapSourceSettingsModel.init(sourceSettings:))
+    }
+    
+    var isEnabled: Bool {
+        didSet {
+            snapSettings.isEnabled = isEnabled
+        }
     }
     
     var hapticFeedbackIsEnabled: Bool {
@@ -84,20 +91,27 @@ struct SnapSettingsView: View {
     var body: some View {
         List {
             Section {
-                Toggle("Haptics", isOn: $model.hapticFeedbackIsEnabled)
-                Toggle("Guide Snapping", isOn: $model.snapsToGeometryGuides)
+                Toggle("Snapping", isOn: $model.isEnabled)
             }
             
-            Section {
-                Toggle("Feature Snapping", isOn: $model.snapsToFeatures)
+            Group {
+                Section {
+                    Toggle("Haptics", isOn: $model.hapticFeedbackIsEnabled)
+                    Toggle("Guide Snapping", isOn: $model.snapsToGeometryGuides)
+                }
                 
-                if model.snapsToFeatures {
-                    ForEach(model.sourceSettings) { model in
-                        SnapSourceSettingsView(model: model)
-                            .padding(.leading)
+                Section {
+                    Toggle("Feature Snapping", isOn: $model.snapsToFeatures)
+                    
+                    if model.snapsToFeatures {
+                        ForEach(model.sourceSettings) { model in
+                            SnapSourceSettingsView(model: model)
+                                .padding(.leading)
+                        }
                     }
                 }
             }
+            .disabled(!model.isEnabled)
         }
         .animation(.default, value: model.snapsToFeatures)
     }
