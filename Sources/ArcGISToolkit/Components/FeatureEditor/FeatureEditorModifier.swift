@@ -213,15 +213,12 @@ private struct FeatureEditorView: View {
         FeatureFormView(root: featureForm, isPresented: $isPresented)
             .onFeatureFormChanged { selectedFeatureForm = $0 }
             .onFormEditingEvent { event in
-                switch event {
-                case .savedEdits(let willNavigate):
-                    guard !willNavigate else { return }
-                    
+                // Stops the geometry editor  make UI seem more responsive.
+                model.stop()
+                
+                if case .savedEdits(let willNavigate) = event, !willNavigate {
                     // Closes the inspector when the form footer save button is pressed.
                     isPresented = false
-                case .discardedEdits:
-                    // Stops the geometry on discard to make UI seem more responsive.
-                    model.stop()
                 }
             }
 //            .environment(\.canSave, model.canSave)

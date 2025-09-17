@@ -86,7 +86,7 @@ final class GeometryEditorModel {
     ) -> Geometry? {
         print("[model.save] \(file):\(line) \(function)")
 //        return Point(latitude: 0, longitude: 0)
-        return geometryEditor.stop()
+        return geometry
     }
     
     func stop(
