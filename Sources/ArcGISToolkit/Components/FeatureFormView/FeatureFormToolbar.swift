@@ -46,7 +46,7 @@ struct FeatureFormToolbar: ViewModifier {
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
     /// A Boolean value indicating whether the presented feature form has edits.
-    @State private var hasEdits = false
+    @State private var hasFormEdits = false
     
     /// The currently presented feature form.
     let featureForm: FeatureForm
@@ -56,15 +56,28 @@ struct FeatureFormToolbar: ViewModifier {
     /// `UtilityAssociationGroupResultView`.
     let isAForm: Bool
     
+    @Environment(\.hasExternalEdits) var hasExternalEdits
+    @Environment(\.toolbarContent) var toolbarContent
+    
+    private var hasEdits: Bool {
+        hasFormEdits || hasExternalEdits
+    }
+    
     func body(content: Content) -> some View {
         content
             .navigationBarBackButtonHidden()
             .task(id: featureForm.feature.globalID) {
                 for await hasEdits in featureForm.$hasEdits {
-                    withAnimation { self.hasEdits = hasEdits }
+                    withAnimation { self.hasFormEdits = hasEdits }
                 }
             }
             .toolbar {
+                if let toolbarContent {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        AnyView(toolbarContent)
+                    }
+                }
+                
                 if !isRootView {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
@@ -103,7 +116,7 @@ struct FeatureFormToolbar: ViewModifier {
                     }
                 }
                 if hasEdits, editingButtonsVisibility != .hidden {
-                    ToolbarItem(placement: .bottomBar) {
+                    ToolbarItemGroup(placement: .bottomBar) {
                         FormFooter(
                             featureForm: featureForm,
                             formHandlingEventAction: onFormEditingEventAction,

@@ -69,6 +69,12 @@ extension FeatureFormView {
         /// The backing utility association group result.
         let utilityAssociationGroupResult: UtilityAssociationGroupResult
         
+        @Environment(\.hasExternalEdits) var hasExternalEdits
+        
+        var hasEdits: Bool {
+            hasExternalEdits || embeddedFeatureFormViewModel.featureForm.hasEdits
+        }
+        
         var body: some View {
             List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
                 Button {
@@ -79,7 +85,7 @@ extension FeatureFormView {
                             )
                         )
                     }
-                    if embeddedFeatureFormViewModel.featureForm.hasEdits {
+                    if hasEdits {
                         setAlertContinuation?(true) {
                             navigationAction()
                         }

@@ -34,14 +34,17 @@ struct FormFooter: View {
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
+//    @Environment(\.canSave) private var canSave
+    @Environment(\.beforeSaveAction) private var beforeSaveAction
+    
     var body: some View {
-        HStack {
-            discardButton
-                .inspectorTint(.red)
+//        HStack {
+//            discardButton
+//                .inspectorTint(.red)
             Spacer()
             saveButton
                 .inspectorTint(.blue)
-        }
+//        }
     }
     
     var discardButton: some View {
@@ -60,8 +63,12 @@ struct FormFooter: View {
     
     var saveButton: some View {
         Button {
-            if featureForm.validationErrors.isEmpty {
+            if featureForm.validationErrors.isEmpty /*&& (canSave ?? true)*/ {
                 Task {
+                    if let beforeSaveAction {
+                        beforeSaveAction()
+                    }
+                    
                     do {
                         try await featureForm.finishEditing()
                         formHandlingEventAction?(.savedEdits(willNavigate: false))

@@ -112,6 +112,10 @@ public struct FeatureFormView: View {
     /// The internally managed validation error visibility.
     @State private var validationErrorVisibilityInternal = ValidationErrorVisibility.automatic
     
+//    @Environment(\.canSave) private var canSave
+//    @Environment(\.cantSaveMessage) private var cantSaveMessage
+    @Environment(\.beforeSaveAction) private var beforeSaveAction
+    
     /// Initializes a form view.
     /// - Parameters:
     ///   - root: The feature form defining the editing experience.
@@ -176,9 +180,12 @@ public struct FeatureFormView: View {
                                 validationErrorVisibilityInternal = .visible
                             }
                         }
-                        if (presentedForm.validationErrors.isEmpty) {
+                        if presentedForm.validationErrors.isEmpty /*&& (canSave ?? true)*/ {
                             Button {
                                 Task {
+                                    if let beforeSaveAction {
+                                        beforeSaveAction()
+                                    }
                                     do {
                                         try await presentedForm.finishEditing()
                                         onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
@@ -199,6 +206,10 @@ public struct FeatureFormView: View {
                     }
                 },
                 message: {
+//                    if let cantSaveMessage {
+//                        cantSaveMessage
+//                    }
+                    
                     if !presentedForm.validationErrors.isEmpty {
                         Text(
                             "You have ^[\(presentedForm.validationErrors.count) error](inflect: true) that must be fixed before saving.",
@@ -210,6 +221,7 @@ public struct FeatureFormView: View {
                                 saving the feature form.
                                 """
                         )
+//                        + (cantSaveMessage ?? Text(""))
                     } else {
                         Text(
                             "Updates to the form will be lost.",

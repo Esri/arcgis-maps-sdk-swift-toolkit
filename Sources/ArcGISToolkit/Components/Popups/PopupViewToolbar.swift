@@ -25,6 +25,7 @@ extension View {
 private struct PopupViewToolbar: ViewModifier {
     /// A binding to a Boolean value that determines whether a popup view is presented.
     @Environment(\.isPresented) private var isPresented
+    @Environment(\.toolbarContent) private var toolbarContent
     
     func body(content: Content) -> some View {
         content
@@ -35,6 +36,11 @@ private struct PopupViewToolbar: ViewModifier {
                             isPresented.wrappedValue = false
                         }
                         .font(.headline)
+                    }
+                }
+                if let toolbarContent {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        AnyView(toolbarContent)
                     }
                 }
             }
