@@ -74,10 +74,6 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Authentication Required";
 
-/* The accessibility label of the location button when the location display is showing and the button cycles through auto-pan modes.
-The header of the auto-pan section in the location button context menu. */
-"Auto-pan" = "Auto-pan";
-
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Back";
 
@@ -130,6 +126,9 @@ for the AR experience. */
 /* The accessibility hint of the location button. */
 "Change location display options" = "Change location display options";
 
+/* A label of a mark on a chart. */
+"chart-mark-label-value" = "Value";
+
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Choose From Files";
 
@@ -151,12 +150,11 @@ for the AR experience. */
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Color";
 
-/* The accessibility label of the compass component.
-The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Compass" = "Compass";
-
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
 "Compass navigation" = "Compass navigation";
+
+/* The accessibility label of the compass button. */
+"compass-button-accessibility-label" = "Compass";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Connectivity";
@@ -336,7 +334,7 @@ to be used as a trace starting point. */
 trace operation. */
 "Feature Results" = "Feature Results";
 
-/* A field in a set of data contained in a popup. */
+/* A field in a dataset. */
 "Field" = "Field";
 
 /* A label in reference to fields in a set of data contained in a popup. */
@@ -421,6 +419,35 @@ variable is a cardinal or intercardinal direction. */
 /* The accessibility label of the location button when the location display is not showing. */
 "Location display" = "Location display";
 
+/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-compass" = "Compass";
+
+/* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-navigation" = "Navigation";
+
+/* The label text for turning the auto-pan mode off in the location button context menu. */
+"location-button-accessibility-value-off" = "Off";
+
+/* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-recenter" = "Recenter";
+
+/* The accessibility label of the location button when the 
+location display is showing and the button cycles 
+through auto-pan modes. */
+"location-button-auto-pan-accessibility-label" = "Auto-pan";
+
+/* The header of the auto-pan section in the location button context menu. */
+"location-button-auto-pan-section-header-title" = "Auto-pan";
+
+/* The accessibility value of the location button when the auto-pan mode is navigation. */
+"location-button-status-label-navigation" = "Navigation";
+
+/* The accessibility value of the location button when the auto-pan mode is off. */
+"location-button-status-label-off" = "Off";
+
+/* The accessibility value of the location button when the auto-pan mode is recenter. */
+"location-button-status-label-recenter" = "Recenter";
+
 /* A title for the offline map areas view. */
 "Map Areas" = "Map Areas";
 
@@ -447,10 +474,6 @@ variable is a cardinal or intercardinal direction. */
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Name";
-
-/* The accessibility value of the location button when the auto-pan mode is navigation.
-The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Navigation" = "Navigation";
 
 /* Neighborhood (Level of Detail) */
 "Neighborhood" = "Neighborhood";
@@ -515,10 +538,6 @@ The label text for choosing the 'navigation' auto-pan mode in the location butto
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Object ID: %@";
 
-/* The accessibility value of the location button when the auto-pan mode is off.
-The label text for turning the auto-pan mode off in the location button context menu. */
-"Off" = "Off";
-
 /* A label indicating that the map is offline disabled. */
 "Offline Disabled" = "Offline Disabled";
 
@@ -570,10 +589,6 @@ The variable provides additional data. */
 
 /* The status text when a map area is ready to download. */
 "Ready to download" = "Ready to download";
-
-/* The accessibility value of the location button when the auto-pan mode is recenter.
-The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Recenter" = "Recenter";
 
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Record video only";
@@ -823,10 +838,6 @@ without saving. */
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";
-
-/* A label for the value of a pie chart slice.
-A value in a set of data contained in a popup. */
-"Value" = "Value";
 
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter

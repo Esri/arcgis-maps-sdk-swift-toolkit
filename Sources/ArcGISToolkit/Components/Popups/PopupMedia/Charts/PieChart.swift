@@ -36,7 +36,7 @@ struct PieChart: View {
     
     var body: some View {
         Chart(chartData) {
-            SectorMark(angle: .value(.value, $0.value))
+            SectorMark(angle: .value(Text.value, $0.value))
                 .foregroundStyle(by: .value(.label, $0.label))
         }
         .chartForegroundStyleScale(range: chartData.map { Color($0.color) })
@@ -45,15 +45,6 @@ struct PieChart: View {
 }
 
 private extension Text {
-    /// A label for a `SectorMark` angle value.
-    static var value: Self {
-        .init(
-            "Value",
-            bundle: .toolkitModule,
-            comment: "A label for the value of a pie chart slice."
-        )
-    }
-    
     /// A label for a `SectorMark` foreground style value.
     static var label: Self {
         .init(
