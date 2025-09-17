@@ -127,7 +127,7 @@ extension FeatureFormView {
 #endif
                     .tint(.primary)
             }
-            .associationRemovalConfirmationDialog(
+            .associationRemovalConfirmation(
                 isPresented: $removalConfirmationIsPresented,
                 association: associationPendingRemoval,
                 element: element,
