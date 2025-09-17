@@ -357,11 +357,6 @@ extension FeatureFormView {
             .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
                 associationsFilterResultsModel.fetchResults()
             }
-            .onChange(of: groupResults.count) {
-                if groupResults.isEmpty {
-                    navigationPath?.wrappedValue.removeLast()
-                }
-            }
         }
     }
 }
