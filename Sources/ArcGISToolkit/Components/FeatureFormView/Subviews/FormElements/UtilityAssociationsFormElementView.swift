@@ -22,31 +22,44 @@ extension FeatureFormView {
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
         
         /// The model for fetching the form element's associations filter results.
-        @State private var associationsFilterResultModel: AssociationsFilterResultsModel
+        @State private var associationsFilterResultsModel: AssociationsFilterResultsModel
+        
+        /// The form element.
+        let element: UtilityAssociationsFormElement
         
         init(element: UtilityAssociationsFormElement) {
-            self._associationsFilterResultModel = .init(wrappedValue: .init(element: element))
+            self.element = element
+            self._associationsFilterResultsModel = .init(wrappedValue: .init(element: element))
         }
         
         var body: some View {
-            switch associationsFilterResultModel.result {
-            case .success(let results):
-                if results.isEmpty {
-                    FeatureFormGroupedContentView(
-                        content: [Text.noAssociations]
-                    )
-                } else {
-                    FeatureFormGroupedContentView(content: results.map {
-                        UtilityAssociationsFilterResultListRowView(utilityAssociationsFilterResult: $0)
+            Group {
+                switch associationsFilterResultsModel.result {
+                case .success(let results):
+                    if results.isEmpty {
+                        FeatureFormGroupedContentView(
+                            content: [Text.noAssociations]
+                        )
+                    } else {
+                        FeatureFormGroupedContentView(content: results.map {
+                            UtilityAssociationsFilterResultListRowView(
+                                associationsFilterResultsModel: associationsFilterResultsModel,
+                                element: element,
+                                filterTitle: $0.filter.title
+                            )
                             .environment(embeddedFeatureFormViewModel)
-                    })
+                        })
+                    }
+                case .failure(let error):
+                    FeatureFormGroupedContentView(content: [
+                        Text.errorFetchingFilterResults(error)
+                    ])
+                case .none:
+                    FeatureFormGroupedContentView(content: [ProgressView()])
                 }
-            case .failure(let error):
-                FeatureFormGroupedContentView(content: [
-                    Text.errorFetchingFilterResults(error)
-                ])
-            case nil:
-                FeatureFormGroupedContentView(content: [ProgressView()])
+            }
+            .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
+                associationsFilterResultsModel.fetchResults()
             }
         }
     }
@@ -63,34 +76,139 @@ extension FeatureFormView {
         /// The environment value to set the continuation to use when the user responds to the alert.
         @Environment(\.setAlertContinuation) var setAlertContinuation
         
+        /// The association to be potentially removed.
+        @State private var associationPendingRemoval: UtilityAssociation?
+        
+        /// A Boolean value indicating whether the removal confirmation is presented.
+        @State private var removalConfirmationIsPresented = false
+        
+        /// The model containing the latest association filter results.
+        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        
+        /// The form element containing the group result.
+        let element: UtilityAssociationsFormElement
+        
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
+        /// The title of the selected utility associations filter result.
+        let filterTitle: String
+        
+        /// The title of the selected utility association group result.
+        let groupTitle: String
+        
+        /// The set of association results within the group result.
+        var associationResults: [UtilityAssociationResult] {
+            utilityAssociationGroupResult?.associationResults ?? []
+        }
+        
         /// The backing utility association group result.
-        let utilityAssociationGroupResult: UtilityAssociationGroupResult
+        var utilityAssociationGroupResult: UtilityAssociationGroupResult? {
+            // TODO: Improve group identification (Apollo 1391).
+            try? associationsFilterResultsModel.result?
+                .get()
+                .first(where: { $0.filter.title == filterTitle} )?
+                .groupResults
+                .first(where: { $0.name == groupTitle })
+        }
         
         var body: some View {
-            List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-                Button {
-                    let navigationAction = {
-                        navigationPath?.wrappedValue.append(
-                            FeatureFormView.NavigationPathItem.form(
-                                FeatureForm(feature: utilityAssociationResult.associatedFeature)
-                            )
-                        )
+            List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
+                mainButton(for: utilityAssociationResult)
+                    .disabled(navigationIsDisabled)
+#if targetEnvironment(macCatalyst)
+                    .contextMenu {
+                        deleteButton(for: utilityAssociationResult.association)
                     }
-                    if embeddedFeatureFormViewModel.featureForm.hasEdits {
-                        setAlertContinuation?(true) {
-                            navigationAction()
-                        }
-                    } else {
+#else
+                    .swipeActions {
+                        deleteButton(for: utilityAssociationResult.association)
+                    }
+#endif
+                    .tint(.primary)
+            }
+            .associationRemovalConfirmationDialog(
+                isPresented: $removalConfirmationIsPresented,
+                association: associationPendingRemoval,
+                element: element,
+                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+            ) {
+                associationsFilterResultsModel.fetchResults()
+            }
+            .onChange(of: associationResults.count) {
+                if associationResults.isEmpty {
+                    navigationPath?.wrappedValue.removeLast()
+                }
+            }
+            .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
+                associationsFilterResultsModel.fetchResults()
+            }
+        }
+        
+        func deleteButton(for association: UtilityAssociation) -> some View {
+            Button {
+                associationPendingRemoval = association
+                removalConfirmationIsPresented = true
+            } label: {
+                Label {
+                    Text(LocalizedStringResource.removeAssociation)
+                } icon: {
+                    Image(systemName: "trash.fill")
+                }
+                .labelStyle(.iconOnly)
+                .tint(.red)
+            }
+        }
+        
+        func detailsButton(for result: UtilityAssociationResult) -> some View {
+            Button {
+                navigationPath?.wrappedValue.append(
+                    FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
+                        embeddedFeatureFormViewModel,
+                        associationsFilterResultsModel,
+                        element,
+                        result
+                    )
+                )
+            } label: {
+                Label {
+                    Text(
+                        "Utility Association Details",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to view utility association details."
+                    )
+                } icon: {
+                    Image(systemName: "ellipsis.circle")
+                }
+                .contentShape(.circle)
+                .labelStyle(.iconOnly)
+                .tint(.blue)
+            }
+        }
+        
+        func mainButton(for result: UtilityAssociationResult) -> some View {
+            Button {
+                let navigationAction = {
+                    navigationPath?.wrappedValue.append(
+                        FeatureFormView.NavigationPathItem.form(
+                            FeatureForm(feature: result.associatedFeature)
+                        )
+                    )
+                }
+                if embeddedFeatureFormViewModel.featureForm.hasEdits {
+                    setAlertContinuation?(true) {
                         navigationAction()
                     }
-                } label: {
-                    UtilityAssociationResultLabel(result: utilityAssociationResult)
+                } else {
+                    navigationAction()
                 }
-                .disabled(navigationIsDisabled)
-                .tint(.primary)
+            } label: {
+                HStack {
+                    UtilityAssociationResultLabel(result: result)
+                    detailsButton(for: result)
+                        .buttonStyle(.plain)
+                        .hoverEffect()
+                }
             }
         }
     }
@@ -103,30 +221,45 @@ extension FeatureFormView {
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
+        /// The model containing the latest association filter results.
+        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        
+        /// The form element containing the filter result.
+        let element: UtilityAssociationsFormElement
+        
+        /// The title of the referenced utility associations filter result.
+        let filterTitle: String
+        
         /// The referenced utility associations filter result.
-        let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
+        var filterResult: UtilityAssociationsFilterResult? {
+            try? associationsFilterResultsModel.result?.get().first(where: { $0.filter.title == filterTitle } )
+        }
         
         var body: some View {
             Button {
                 navigationPath?.wrappedValue.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
-                        utilityAssociationsFilterResult,
-                        embeddedFeatureFormViewModel
+                        embeddedFeatureFormViewModel,
+                        associationsFilterResultsModel,
+                        element,
+                        filterTitle
                     )
                 )
             } label: {
                 HStack {
                     VStack {
-                        Text(utilityAssociationsFilterResult.filter.title.capitalized)
-                        if !utilityAssociationsFilterResult.filter.description.isEmpty {
-                            Text(utilityAssociationsFilterResult.filter.description)
+                        Text(filterTitle.capitalized)
+                        if let filterResult, !filterResult.filter.description.isEmpty {
+                            Text(filterResult.filter.description)
                                 .font(.caption)
                         }
                     }
                     .lineLimit(1)
                     Spacer()
                     Group {
-                        Text(utilityAssociationsFilterResult.resultCount, format: .number)
+                        if let filterResult {
+                            Text(filterResult.resultCount, format: .number)
+                        }
                         Image(systemName: "chevron.right")
                     }
                     .foregroundColor(.secondary)
@@ -147,11 +280,29 @@ extension FeatureFormView {
         /// Add association support is not yet currently supported.
         let futureAddAssociationSupportIsEnabled = false
         
+        /// The model containing the latest association filter results.
+        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        
+        /// The form element containing the filter result.
+        let element: UtilityAssociationsFormElement
+        
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
-        /// The backing utility associations filter result.
-        let utilityAssociationsFilterResult: UtilityAssociationsFilterResult
+        /// The title of the selected utility associations filter result.
+        let filterTitle: String
+        
+        /// The selected utility associations filter result.
+        var filterResult: UtilityAssociationsFilterResult? {
+            try? associationsFilterResultsModel.result?
+                .get()
+                .first(where: { $0.filter.title == filterTitle} )
+        }
+        
+        /// The set of group results within the filter result.
+        var groupResults: [UtilityAssociationGroupResult] {
+            filterResult?.groupResults ?? []
+        }
         
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
@@ -161,12 +312,16 @@ extension FeatureFormView {
         var body: some View {
             List {
                 Section {
-                    ForEach(utilityAssociationsFilterResult.groupResults, id: \.name) { utilityAssociationGroupResult in
+                    // TODO: Improve group identification (Apollo 1391).
+                    ForEach(groupResults, id: \.name) { utilityAssociationGroupResult in
                         Button {
                             navigationPath?.wrappedValue.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
-                                    utilityAssociationGroupResult,
-                                    embeddedFeatureFormViewModel
+                                    embeddedFeatureFormViewModel,
+                                    associationsFilterResultsModel,
+                                    element,
+                                    filterTitle,
+                                    utilityAssociationGroupResult.name
                                 )
                             )
                         } label: {
@@ -199,6 +354,14 @@ extension FeatureFormView {
                     }
                 }
             }
+            .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
+                associationsFilterResultsModel.fetchResults()
+            }
+            .onChange(of: groupResults.count) {
+                if groupResults.isEmpty {
+                    navigationPath?.wrappedValue.removeLast()
+                }
+            }
         }
     }
 }
@@ -210,16 +373,5 @@ private extension String {
             bundle: .toolkitModule,
             comment: "A label for an option to add a new utility association."
         )
-    }
-}
-
-private extension UtilityAssociationResult {
-    /// The utility element for the association.
-    var associatedElement: UtilityElement {
-        if associatedFeature.globalID == association.toElement.globalID {
-            association.toElement
-        } else {
-            association.fromElement
-        }
     }
 }

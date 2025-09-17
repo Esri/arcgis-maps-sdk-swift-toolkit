@@ -50,8 +50,17 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "Area Name";
 
+/* A navigation title for the Association Settings page. */
+"Association Settings" = "Association Settings";
+
+/* A label in reference to a utility association type. */
+"Association Type" = "Association Type";
+
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Associations";
+
+/* A label for the "Attachment" utility association kind. */
+"Attachment" = "Attachment";
 
 /* A label in reference to attachments. */
 "Attachments" = "Attachments";
@@ -142,10 +151,7 @@ for the AR experience. */
 "Color" = "Color";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "Compass navigation";
 
-/* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "Compass";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -349,6 +355,9 @@ submitted with additional details. */
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
 
+/* A label for the element on the "from" side of a utility association. */
+"From Element" = "From Element";
+
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Function Results";
@@ -373,6 +382,15 @@ variable is a cardinal or intercardinal direction. */
 
 /* Houses (Level of Detail) */
 "Houses" = "Houses";
+
+/* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
+"Junction Edge Object Connectivity From Side" = "Junction Edge Object Connectivity From Side";
+
+/* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
+"Junction Edge Object Connectivity Midspan" = "Junction Edge Object Connectivity Midspan";
+
+/* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
+"Junction Edge Object Connectivity To Side" = "Junction Edge Object Connectivity To Side";
 
 /* A label for a pie chart legend item label. */
 "Label" = "Label";
@@ -520,6 +538,10 @@ through auto-pan modes. */
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Online Map Failed to Load";
 
+/* Helper text indicating that an accompanying button only 
+removes only the association.  */
+"Only removes the association. The feature remains." = "Only removes the association. The feature remains.";
+
 /* A label for a button to open a map area. */
 "Open" = "Open";
 
@@ -564,6 +586,15 @@ The variable provides additional data. */
 
 /* A label for a button to refresh map area content. */
 "Refresh" = "Refresh";
+
+/* A label for a button to remove a utility network association. */
+"Remove" = "Remove";
+
+/* A label for a button to remove a utility association. */
+"Remove Association" = "Remove Association";
+
+/* A label for a confirmation to remove a utility association. */
+"Remove association?" = "Remove association?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Remove Download";
@@ -683,6 +714,9 @@ place an ArcGIS Scene. */
 additional information. */
 "Tap on the image for more information." = "Tap on the image for more information.";
 
+/* A label in reference to a utility terminal. */
+"Terminal" = "Terminal";
+
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminal Configuration";
 
@@ -737,6 +771,9 @@ to be imported as an attachment. */
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Title";
 
+/* A label for the element on the "to" side of a utility association. */
+"To Element" = "To Element";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "Today";
 
@@ -783,6 +820,12 @@ without saving. */
 
 /* A label in reference to a credential username. */
 "Username" = "Username";
+
+/* A label for a button to view utility association details. */
+"Utility Association Details" = "Utility Association Details";
+
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "Unknown";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";

@@ -243,6 +243,7 @@ private extension FeatureFormTestView {
         .init("testCase_12_3", objectID: 2, layerName: "Structure Boundary", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_12_4", objectID: 2584, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_12_5", objectID: 3321, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_12_6", objectID: 3321, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
     ]}
 }
 
