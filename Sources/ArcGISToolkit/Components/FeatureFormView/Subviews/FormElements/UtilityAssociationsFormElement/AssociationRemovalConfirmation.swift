@@ -55,7 +55,7 @@ private struct AssociationRemovalConfirmation: ViewModifier {
                 confirmationTitle,
                 isPresented: $isPresented
             ) {
-                action
+                actions
             } message: {
                 confirmationMessage
             }
@@ -63,7 +63,7 @@ private struct AssociationRemovalConfirmation: ViewModifier {
 }
 
 extension AssociationRemovalConfirmation {
-    @ViewBuilder var action: some View {
+    @ViewBuilder var actions: some View {
         if let association {
             Button(role: .destructive) {
                 do {
@@ -82,6 +82,7 @@ extension AssociationRemovalConfirmation {
                 )
             }
         }
+        Button.cancel {}
     }
     
     var confirmationMessage: Text {
