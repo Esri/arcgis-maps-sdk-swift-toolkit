@@ -29,7 +29,7 @@ extension FeatureFormView {
         
         init(element: UtilityAssociationsFormElement) {
             self.element = element
-            self._associationsFilterResultsModel = .init(wrappedValue: .init(element: element))
+            self._associationsFilterResultsModel = .init(wrappedValue: .init(element: element, includeEmptyFilterResults: true))
         }
         
         var body: some View {
@@ -121,7 +121,7 @@ extension FeatureFormView {
 #endif
                     .tint(.primary)
             }
-            .associationRemovalConfirmationDialog(
+            .associationRemovalConfirmation(
                 isPresented: $removalConfirmationIsPresented,
                 association: associationPendingRemoval,
                 element: element,
@@ -346,11 +346,6 @@ extension FeatureFormView {
                 }
                 .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
                     associationsFilterResultsModel.fetchResults()
-                }
-                .onChange(of: groupResults.count) {
-                    if groupResults.isEmpty {
-                        navigationPath?.wrappedValue.removeLast()
-                    }
                 }
             }
         }

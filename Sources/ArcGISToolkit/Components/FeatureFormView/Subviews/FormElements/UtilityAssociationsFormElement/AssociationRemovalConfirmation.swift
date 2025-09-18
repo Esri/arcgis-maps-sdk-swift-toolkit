@@ -18,7 +18,7 @@ import SwiftUI
 private import os
 
 extension View {
-    func associationRemovalConfirmationDialog(
+    func associationRemovalConfirmation(
         isPresented: Binding<Bool>,
         association: UtilityAssociation?,
         element: UtilityAssociationsFormElement,
@@ -26,7 +26,7 @@ extension View {
         onRemoval: @escaping () -> Void
     ) -> some View {
         modifier(
-            AssociationRemovalConfirmationDialog(
+            AssociationRemovalConfirmation(
                 isPresented: isPresented,
                 association: association,
                 element: element,
@@ -37,9 +37,7 @@ extension View {
     }
 }
 
-private struct AssociationRemovalConfirmationDialog: ViewModifier {
-    @Environment(\.isPortraitOrientation) var isPortraitOrientation
-    
+private struct AssociationRemovalConfirmation: ViewModifier {
     @Binding var isPresented: Bool
     
     /// The association to be removed.
@@ -52,32 +50,19 @@ private struct AssociationRemovalConfirmationDialog: ViewModifier {
     let onRemoval: () -> Void
     
     func body(content: Content) -> some View {
-        if isPortraitOrientation {
-            content
-                .confirmationDialog(
-                    confirmationTitle,
-                    isPresented: $isPresented,
-                    titleVisibility: .visible
-                ) {
-                    actions
-                } message: {
-                    confirmationMessage
-                }
-        } else {
-            content
-                .alert(
-                    confirmationTitle,
-                    isPresented: $isPresented
-                ) {
-                    actions
-                } message: {
-                    confirmationMessage
-                }
-        }
+        content
+            .alert(
+                confirmationTitle,
+                isPresented: $isPresented
+            ) {
+                actions
+            } message: {
+                confirmationMessage
+            }
     }
 }
 
-extension AssociationRemovalConfirmationDialog {
+extension AssociationRemovalConfirmation {
     @ViewBuilder var actions: some View {
         if let association {
             Button(role: .destructive) {

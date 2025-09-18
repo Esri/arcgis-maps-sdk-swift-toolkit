@@ -1709,7 +1709,7 @@ final class FeatureFormViewTests: XCTestCase {
         let cancelButton = app.buttons["Cancel"].firstMatch
         let discardButton = app.buttons["Discard"].firstMatch
         let elementTitle = app.staticTexts["Associations"]
-        let filterResults = app.staticTexts["Connected"]
+        let connectedFilterTitle = app.staticTexts["Connected"]
         let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
         let removeAssociationButton = app.buttons["Remove Association"]
@@ -1717,9 +1717,9 @@ final class FeatureFormViewTests: XCTestCase {
         let transformerButton = app.buttons["Transformer, High"]
         
 #if targetEnvironment(macCatalyst)
-        let deleteButton = app.menuItems["delete"]
+        let inlineRemoveAssociationButton = app.menuItems["remove_association"]
 #else
-        let deleteButton = app.buttons["Delete"]
+        let inlineRemoveAssociationButton = app.buttons["Remove Association"]
 #endif
         
         openTestCase()
@@ -1731,11 +1731,11 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            filterResults.waitForExistence(timeout: 5),
+            connectedFilterTitle.waitForExistence(timeout: 5),
             "The filter result \"Connected\" doesn't exist."
         )
         
-        filterResults.tap()
+        connectedFilterTitle.tap()
         
         XCTAssertTrue(
             networkSourceGroupButton.waitForExistence(timeout: 5),
@@ -1780,8 +1780,8 @@ final class FeatureFormViewTests: XCTestCase {
         removeButton.tap()
         
         XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
+            connectedFilterTitle.waitForExistence(timeout: 5),
+            #"Navigation did not return to the "Connected" filter results page."#
         )
         
         XCTAssertTrue(
@@ -1790,13 +1790,6 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         discardButton.tap()
-        
-        XCTAssertTrue(
-            filterResults.waitForExistence(timeout: 5),
-            "The filter result \"Connected\" doesn't exist."
-        )
-        
-        filterResults.tap()
         
         XCTAssertTrue(
             networkSourceGroupButton.waitForExistence(timeout: 5),
@@ -1817,11 +1810,11 @@ final class FeatureFormViewTests: XCTestCase {
 #endif
         
         XCTAssertTrue(
-            deleteButton.waitForExistence(timeout: 5),
+            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
             "The delete button doesn't exist."
         )
         
-        deleteButton.tap()
+        inlineRemoveAssociationButton.tap()
         
         XCTAssertTrue(
             cancelButton.waitForExistence(timeout: 5),
@@ -1837,11 +1830,11 @@ final class FeatureFormViewTests: XCTestCase {
 #endif
         
         XCTAssertTrue(
-            deleteButton.waitForExistence(timeout: 5),
+            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
             "The delete button doesn't exist."
         )
         
-        deleteButton.tap()
+        inlineRemoveAssociationButton.tap()
         
         XCTAssertTrue(
             removeButton.waitForExistence(timeout: 5),
@@ -1856,8 +1849,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
+            connectedFilterTitle.waitForExistence(timeout: 5),
+            #"Navigation did not return to the "Connected" filter results page."#
         )
     }
 }
