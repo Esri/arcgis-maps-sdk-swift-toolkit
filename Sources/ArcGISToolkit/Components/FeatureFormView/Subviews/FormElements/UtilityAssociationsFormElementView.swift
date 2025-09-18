@@ -91,6 +91,9 @@ extension FeatureFormView {
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
+        /// The feature form source of the group result, useful for identifying a group result.
+        let featureFormSource: FeatureFormSource
+        
         /// The title of the selected utility associations filter result.
         let filterTitle: String
         
@@ -104,12 +107,11 @@ extension FeatureFormView {
         
         /// The backing utility association group result.
         var utilityAssociationGroupResult: UtilityAssociationGroupResult? {
-            // TODO: Improve group identification (Apollo 1391).
             try? associationsFilterResultsModel.result?
                 .get()
                 .first(where: { $0.filter.title == filterTitle} )?
                 .groupResults
-                .first(where: { $0.name == groupTitle })
+                .first(where: { $0.featureFormSource === featureFormSource })
         }
         
         var body: some View {
@@ -312,7 +314,6 @@ extension FeatureFormView {
         var body: some View {
             List {
                 Section {
-                    // TODO: Improve group identification (Apollo 1391).
                     ForEach(groupResults, id: \.name) { utilityAssociationGroupResult in
                         Button {
                             navigationPath?.wrappedValue.append(
@@ -320,6 +321,7 @@ extension FeatureFormView {
                                     embeddedFeatureFormViewModel,
                                     associationsFilterResultsModel,
                                     element,
+                                    utilityAssociationGroupResult.featureFormSource,
                                     filterTitle,
                                     utilityAssociationGroupResult.name
                                 )

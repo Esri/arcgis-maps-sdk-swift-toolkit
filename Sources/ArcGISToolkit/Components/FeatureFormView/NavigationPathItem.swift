@@ -19,7 +19,7 @@ extension FeatureFormView {
         case form(FeatureForm)
         case utilityAssociationDetailsView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationResult)
         case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String)
-        case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String, String)
+        case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, FeatureFormSource, String, String)
         
         static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
@@ -30,9 +30,9 @@ extension FeatureFormView {
             case let (.utilityAssociationFilterResultView(_, _, a1, a2), .utilityAssociationFilterResultView(_, _, b1, b2)):
                 a1 === b1
                 && a2 == b2
-            case let (.utilityAssociationGroupResultView(_, _, a1, a2, a3), .utilityAssociationGroupResultView(_, _, b1, b2, b3)):
-                // TODO: Improve group identification (Apollo 1391).
+            case let (.utilityAssociationGroupResultView(_, _, a1, a_, a2, a3), .utilityAssociationGroupResultView(_, _, b1, b_, b2, b3)):
                 a1 === b1
+                && a_ === b_
                 && a2 == b2
                 && a3 == b3
             default:
@@ -49,9 +49,9 @@ extension FeatureFormView {
             case .utilityAssociationFilterResultView(_, _, let element, let filterTitle):
                 hasher.combine(element)
                 hasher.combine(filterTitle)
-            case .utilityAssociationGroupResultView(_, _, let element, let filterTitle, let groupTitle):
-                // TODO: Improve group identification (Apollo 1391).
+            case .utilityAssociationGroupResultView(_, _, let element, let source, let filterTitle, let groupTitle):
                 hasher.combine(element)
+                hasher.combine(ObjectIdentifier(source))
                 hasher.combine(filterTitle)
                 hasher.combine(groupTitle)
             }
