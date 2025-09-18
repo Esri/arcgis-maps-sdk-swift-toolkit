@@ -210,10 +210,14 @@ private struct ToolPicker: View {
     
     @Environment(GeometryEditorModel.self) private var model
     
+    private var toolOptions: [Tool] {
+        model.initialGeometry is Point ? [.vertex, .reticle] : Tool.allCases
+    }
+    
     var body: some View {
         Menu("Tool", systemImage: selectedTool.systemImage) {
             Picker("Tool", systemImage: "wrench.and.screwdriver", selection: $selectedTool) {
-                ForEach(Tool.allCases, id: \.self) { tool in
+                ForEach(toolOptions, id: \.self) { tool in
                     Label(tool.label, systemImage: tool.systemImage)
                 }
             }
@@ -222,7 +226,10 @@ private struct ToolPicker: View {
             model.geometryEditor.tool = selectedTool.geometryEditorTool
         }
         .onChange(of: ObjectIdentifier(model.geometryEditor), initial: true) {
-            selectedTool = Tool(geometryEditorTool:  model.geometryEditor.tool) ?? .vertex
+            // Sets the selected tool based on the current geometry editor tool.
+            let tool = Tool(geometryEditorTool:  model.geometryEditor.tool) ?? .vertex
+            selectedTool = toolOptions.contains(tool) ? tool : toolOptions.first!
+            
             // Overwrites developer set tool with a default.
             model.geometryEditor.tool = selectedTool.geometryEditorTool
         }

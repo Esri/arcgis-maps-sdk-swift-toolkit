@@ -21,7 +21,7 @@ import SwiftUI
 @Observable
 final class GeometryEditorModel {
     var geometryEditor = GeometryEditor()
-//    var initialGeometry: Geometry?
+    private(set) var initialGeometry: Geometry?
     
     // MARK: GeometryEditor
     
@@ -53,6 +53,10 @@ final class GeometryEditorModel {
             group.addTask { @MainActor @Sendable in
                 for await geometry in self.geometryEditor.$geometry {
                     self.geometry = geometry
+                    
+                    // Sets the initial geometry when the editor is started.
+                    guard self.initialGeometry == nil else { continue }
+                    self.initialGeometry = geometry
                 }
             }
             group.addTask { @MainActor @Sendable in
@@ -63,6 +67,10 @@ final class GeometryEditorModel {
             group.addTask { @MainActor @Sendable in
                 for await isStarted in self.geometryEditor.$isStarted {
                     self.isStarted = isStarted
+                    
+                    // Resets the initial geometry when the editor is stopped.
+                    guard !isStarted else { continue }
+                    self.initialGeometry = nil
                 }
             }
         }
@@ -75,7 +83,6 @@ final class GeometryEditorModel {
         function: StaticString = #function
     ) {
         print("[model.start] \(file):\(line) \(function)")
-//        initialGeometry = geometry
         geometryEditor.start(withInitial: geometry)
     }
     
