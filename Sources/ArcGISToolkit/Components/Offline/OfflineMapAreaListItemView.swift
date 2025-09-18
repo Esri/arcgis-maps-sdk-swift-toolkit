@@ -125,7 +125,7 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
                 if model.sizeInBytes > 0 && !model.isDownloaded && model.allowsDownload {
                     Divider()
                         .frame(height: 12)
-                    Text(model.sizeText)
+                    Text(model.size, format: .byteCount(style: .file))
                 }
             }
         }
