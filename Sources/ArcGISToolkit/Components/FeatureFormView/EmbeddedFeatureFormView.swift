@@ -30,13 +30,6 @@ struct EmbeddedFeatureFormView: View {
             List(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
                 makeElement(element)
             }
-            .task {
-                for await hasEdits in embeddedFeatureFormViewModel.featureForm.$hasEdits.dropFirst() {
-                    if !hasEdits {
-                        embeddedFeatureFormViewModel.previouslyFocusedElements.removeAll()
-                    }
-                }
-            }
             .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
                 if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
                     // Navigation bars will unfortunately cover or obscure

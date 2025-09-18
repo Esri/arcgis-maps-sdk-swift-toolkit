@@ -24,10 +24,21 @@ final class AssociationsFilterResultsModel {
     /// The task for fetching the associations filter results.
     @ObservationIgnored private var task: Task<Void, Never>?
     
-    /// Fetches the associations filter results from a given associations element.
-    /// - Parameter element: The element containing the associations filter results.
+    /// The element containing the association filters.
+    let element: UtilityAssociationsElement
+    
+    /// - Parameter element: The element containing the association filters.
     @MainActor
     init(element: UtilityAssociationsElement) {
+        self.element = element
+        fetchResults()
+    }
+    
+    /// Fetches the associations filter results from a given associations element.
+    @MainActor
+    func fetchResults() {
+        let element = self.element
+        task?.cancel()
         task = Task { [weak self] in
             guard !Task.isCancelled, let self else { return }
             let result = await Result {

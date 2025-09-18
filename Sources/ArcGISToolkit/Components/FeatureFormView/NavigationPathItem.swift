@@ -17,17 +17,24 @@ import ArcGIS
 extension FeatureFormView {
     enum NavigationPathItem: Hashable {
         case form(FeatureForm)
-        case utilityAssociationFilterResultView(UtilityAssociationsFilterResult, EmbeddedFeatureFormViewModel)
-        case utilityAssociationGroupResultView(UtilityAssociationGroupResult, EmbeddedFeatureFormViewModel)
+        case utilityAssociationDetailsView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationResult)
+        case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String)
+        case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String, String)
         
         static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case let (.form(a), .form(b)):
                 a === b
-            case let (.utilityAssociationFilterResultView(a, _), .utilityAssociationFilterResultView(b, _)):
+            case let (.utilityAssociationDetailsView(_, _, _, a), .utilityAssociationDetailsView(_, _, _, b)):
                 a === b
-            case let (.utilityAssociationGroupResultView(a, _), .utilityAssociationGroupResultView(b, _)):
-                a === b
+            case let (.utilityAssociationFilterResultView(_, _, a1, a2), .utilityAssociationFilterResultView(_, _, b1, b2)):
+                a1 === b1
+                && a2 == b2
+            case let (.utilityAssociationGroupResultView(_, _, a1, a2, a3), .utilityAssociationGroupResultView(_, _, b1, b2, b3)):
+                // TODO: Improve group identification (Apollo 1391).
+                a1 === b1
+                && a2 == b2
+                && a3 == b3
             default:
                 false
             }
@@ -37,10 +44,16 @@ extension FeatureFormView {
             switch self {
             case .form(let form):
                 hasher.combine(ObjectIdentifier(form))
-            case .utilityAssociationFilterResultView(let result, _):
-                hasher.combine(ObjectIdentifier(result))
-            case .utilityAssociationGroupResultView(let result, _):
-                hasher.combine(ObjectIdentifier(result))
+            case .utilityAssociationDetailsView(_, _, let element, _):
+                hasher.combine(element)
+            case .utilityAssociationFilterResultView(_, _, let element, let filterTitle):
+                hasher.combine(element)
+                hasher.combine(filterTitle)
+            case .utilityAssociationGroupResultView(_, _, let element, let filterTitle, let groupTitle):
+                // TODO: Improve group identification (Apollo 1391).
+                hasher.combine(element)
+                hasher.combine(filterTitle)
+                hasher.combine(groupTitle)
             }
         }
     }

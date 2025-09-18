@@ -134,26 +134,40 @@ public struct FeatureFormView: View {
                         switch itemType {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
-                        case let .utilityAssociationFilterResultView(result, embeddedFeatureFormViewModel):
-                            UtilityAssociationsFilterResultView(
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                utilityAssociationsFilterResult: result
+                        case let .utilityAssociationDetailsView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, associationResult):
+                            UtilityAssociationDetailsView(
+                                associationResult: associationResult,
+                                associationsFilterResultsModel: associationsFilterResultsModel,
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(result.filter.title, subtitle: embeddedFeatureFormViewModel.title)
+                        case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, resultTitle):
+                            UtilityAssociationsFilterResultView(
+                                associationsFilterResultsModel: associationsFilterResultsModel,
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                filterTitle: resultTitle
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(resultTitle, subtitle: embeddedFeatureFormViewModel.title)
                             .preference(
                                 key: PresentedFeatureFormPreferenceKey.self,
                                 value: .init(object: embeddedFeatureFormViewModel.featureForm)
                             )
-                        case let .utilityAssociationGroupResultView(result, embeddedFeatureFormViewModel):
+                        case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filterTitle, groupTitle):
                             UtilityAssociationGroupResultView(
+                                associationsFilterResultsModel: associationsFilterResultsModel,
+                                element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                utilityAssociationGroupResult: result
+                                filterTitle: filterTitle,
+                                groupTitle: groupTitle
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(result.name, subtitle: embeddedFeatureFormViewModel.title)
+                            .navigationTitle(groupTitle, subtitle: embeddedFeatureFormViewModel.title)
                         }
                     }
             }
