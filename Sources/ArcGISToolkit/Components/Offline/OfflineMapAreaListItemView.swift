@@ -146,9 +146,8 @@ protocol OfflineMapAreaListItemInfo: ObservableObject, OfflineMapAreaMetadata {
 }
 
 extension OfflineMapAreaListItemInfo {
-    var sizeText: String {
-        Measurement<UnitInformationStorage>(value: Double(sizeInBytes), unit: .bytes)
-            .formatted(.byteCount(style: .file))
+    var size: Measurement<UnitInformationStorage> {
+        Measurement(value: Double(sizeInBytes), unit: .bytes)
     }
 }
 
