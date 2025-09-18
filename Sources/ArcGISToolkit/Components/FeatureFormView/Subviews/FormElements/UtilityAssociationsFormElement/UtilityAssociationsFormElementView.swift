@@ -35,12 +35,12 @@ extension FeatureFormView {
         var body: some View {
             Group {
                 switch associationsFilterResultsModel.result {
-                case .success(_):
-                    FeatureFormGroupedContentView(content: element.associationFilters.map {
+                case .success(let results):
+                    FeatureFormGroupedContentView(content: results.map {
                         UtilityAssociationsFilterResultListRowView(
                             associationsFilterResultsModel: associationsFilterResultsModel,
                             element: element,
-                            filter: $0
+                            filterTitle: $0.filter.title
                         )
                         .environment(embeddedFeatureFormViewModel)
                     })
@@ -85,8 +85,8 @@ extension FeatureFormView {
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
-        /// The selected utility associations filter.
-        let filter: UtilityAssociationsFilter
+        /// The title of the selected utility associations filter result.
+        let filterTitle: String
         
         /// The title of the selected utility association group result.
         let groupTitle: String
@@ -101,7 +101,7 @@ extension FeatureFormView {
             // TODO: Improve group identification (Apollo 1391).
             try? associationsFilterResultsModel.result?
                 .get()
-                .first(where: { $0.filter.kind == filter.kind })?
+                .first(where: { $0.filter.title == filterTitle} )?
                 .groupResults
                 .first(where: { $0.name == groupTitle })
         }
@@ -221,14 +221,14 @@ extension FeatureFormView {
         /// The form element containing the filter result.
         let element: UtilityAssociationsFormElement
         
-        /// The utility association filter represented by the row.
-        let filter: UtilityAssociationsFilter
+        /// The title of the referenced utility associations filter result.
+        let filterTitle: String
         
         /// The referenced utility associations filter result.
         var filterResult: UtilityAssociationsFilterResult? {
             try? associationsFilterResultsModel.result?
                 .get()
-                .first(where: { $0.filter.kind == filter.kind } )
+                .first(where: { $0.filter.title == filterTitle } )
         }
         
         var body: some View {
@@ -238,22 +238,24 @@ extension FeatureFormView {
                         embeddedFeatureFormViewModel,
                         associationsFilterResultsModel,
                         element,
-                        filter
+                        filterTitle
                     )
                 )
             } label: {
                 HStack {
                     VStack {
-                        Text(filter.title)
-                        if !filter.description.isEmpty {
-                            Text(filter.description)
+                        Text(filterTitle.capitalized)
+                        if let filterResult, !filterResult.filter.description.isEmpty {
+                            Text(filterResult.filter.description)
                                 .font(.caption)
                         }
                     }
                     .lineLimit(1)
                     Spacer()
                     Group {
-                        Text(filterResult?.resultCount ?? 0, format: .number)
+                        if let filterResult {
+                            Text(filterResult.resultCount, format: .number)
+                        }
                         Image(systemName: "chevron.right")
                     }
                     .foregroundColor(.secondary)
@@ -280,14 +282,14 @@ extension FeatureFormView {
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
-        /// The selected utility associations filter.
-        let filter: UtilityAssociationsFilter
+        /// The title of the selected utility associations filter result.
+        let filterTitle: String
         
         /// The selected utility associations filter result.
         var filterResult: UtilityAssociationsFilterResult? {
             try? associationsFilterResultsModel.result?
                 .get()
-                .first(where: { $0.filter.kind == filter.kind })
+            .first(where: { $0.filter.title == filterTitle} )
         }
         
         /// The set of group results within the filter result.
@@ -311,7 +313,7 @@ extension FeatureFormView {
                                     embeddedFeatureFormViewModel,
                                     associationsFilterResultsModel,
                                     element,
-                                    filter,
+                                    filterTitle,
                                     utilityAssociationGroupResult.name
                                 )
                             )
