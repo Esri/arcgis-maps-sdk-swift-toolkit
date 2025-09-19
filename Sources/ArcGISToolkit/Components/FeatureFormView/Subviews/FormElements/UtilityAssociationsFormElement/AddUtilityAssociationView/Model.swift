@@ -29,15 +29,5 @@ extension FeatureFormView.UtilityAssociationNetworkSourcesView {
         var utilityAssociationDetailsCoreIsPresented = false
         var featureQueryConditionsViewIsPresented = false
         var spatialFeatureSelectionViewIsPresented = false
-        
-        var floatingPanelDetent: FloatingPanelDetent? {
-            if spatialFeatureSelectionViewIsPresented {
-                return .fraction(0.2)
-            } else if featureIsBeingInspected && !featureQueryConditionsViewIsPresented {
-                return .half
-            } else {
-                return nil
-            }
-        }
     }
 }
