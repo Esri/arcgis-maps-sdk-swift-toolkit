@@ -321,11 +321,6 @@ public struct FeatureFormView: View {
                 guard let wrappedFeatureForm else { return }
                 formChangedAction(wrappedFeatureForm.object)
             }
-            .overlay {
-                if featureFormViewModel.addUtilityAssociationScreenIsPresented {
-                    AddUtilityAssociationView()
-                }
-            }
         }
     }
 }
