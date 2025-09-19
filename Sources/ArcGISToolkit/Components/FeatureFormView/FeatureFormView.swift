@@ -157,18 +157,17 @@ public struct FeatureFormView: View {
                                 key: PresentedFeatureFormPreferenceKey.self,
                                 value: .init(object: embeddedFeatureFormViewModel.featureForm)
                             )
-                        case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, source, filterTitle, groupTitle):
+                        case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filterTitle, groupResult):
                             UtilityAssociationGroupResultView(
                                 associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                featureFormSource: source,
+                                featureFormSource: groupResult.featureFormSource,
                                 filterTitle: filterTitle,
-                                groupTitle: groupTitle
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(groupTitle, subtitle: embeddedFeatureFormViewModel.title)
+                            .navigationTitle(groupResult.name, subtitle: embeddedFeatureFormViewModel.title)
                         }
                     }
             }

@@ -97,9 +97,6 @@ extension FeatureFormView {
         /// The title of the selected utility associations filter result.
         let filterTitle: String
         
-        /// The title of the selected utility association group result.
-        let groupTitle: String
-        
         /// The set of association results within the group result.
         var associationResults: [UtilityAssociationResult] {
             utilityAssociationGroupResult?.associationResults ?? []
@@ -321,9 +318,8 @@ extension FeatureFormView {
                                     embeddedFeatureFormViewModel,
                                     associationsFilterResultsModel,
                                     element,
-                                    utilityAssociationGroupResult.featureFormSource,
                                     filterTitle,
-                                    utilityAssociationGroupResult.name
+                                    utilityAssociationGroupResult
                                 )
                             )
                         } label: {
