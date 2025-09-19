@@ -20,11 +20,14 @@ extension FeatureFormView {
         case utilityAssociationDetailsView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationResult)
         case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String)
         case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String, String)
+        case utilityAssociationNetworkSourcesView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilter)
         
         static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case let (.form(a), .form(b)):
                 a === b
+            case let (.utilityAssociationNetworkSourcesView(_, _, filterA), .utilityAssociationNetworkSourcesView(_, _, filterB)):
+                filterA === filterB
             case let (.utilityAssociationDetailsView(_, _, _, a), .utilityAssociationDetailsView(_, _, _, b)):
                 a === b
             case let (.utilityAssociationFilterResultView(_, _, a1, a2), .utilityAssociationFilterResultView(_, _, b1, b2)):
@@ -54,6 +57,8 @@ extension FeatureFormView {
                 hasher.combine(element)
                 hasher.combine(filterTitle)
                 hasher.combine(groupTitle)
+            case .utilityAssociationNetworkSourcesView(_, _, let filter):
+                hasher.combine(ObjectIdentifier(filter))
             }
         }
     }
