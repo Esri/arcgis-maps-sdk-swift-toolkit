@@ -16,7 +16,20 @@ import ArcGIS
 import SwiftUI
 
 struct UtilityAssociationFeatureCandidatesView: View {
+    /// <#Description#>
+    let source: UtilityAssociationFeatureSource
+    
+    /// <#Description#>
+    @State private var candidates: [UtilityAssociationFeatureCandidate] = []
+    
     var body: some View {
-        
+        List(candidates, id: \.title) { candidate in
+            Text(candidate.title)
+        }
+        .task {
+            let parameters = QueryParameters()
+            parameters.whereClause = "1=1"
+            candidates = (try? await source.queryFeatures(parameters: parameters).candidates) ?? []
+        }
     }
 }

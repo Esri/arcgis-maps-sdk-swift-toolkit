@@ -18,6 +18,7 @@ extension FeatureFormView {
     enum NavigationPathItem: Hashable {
         case form(FeatureForm)
         case utilityAssociationDetailsView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationResult)
+        case utilityAssociationFeatureCandidatesView(UtilityAssociationFeatureSource)
         case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String)
         case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String, String)
         case utilityAssociationNetworkSourcesView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilter)
@@ -49,6 +50,8 @@ extension FeatureFormView {
                 hasher.combine(ObjectIdentifier(form))
             case .utilityAssociationDetailsView(_, _, let element, _):
                 hasher.combine(element)
+            case .utilityAssociationFeatureCandidatesView(let source):
+                hasher.combine(ObjectIdentifier(source))
             case .utilityAssociationFilterResultView(_, _, let element, let filterTitle):
                 hasher.combine(element)
                 hasher.combine(filterTitle)

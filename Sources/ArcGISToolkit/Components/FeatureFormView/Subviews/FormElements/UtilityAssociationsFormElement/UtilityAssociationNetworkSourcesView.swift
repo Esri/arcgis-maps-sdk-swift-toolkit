@@ -20,6 +20,9 @@ extension FeatureFormView {
         /// The view model for the feature form view.
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         
+        /// The navigation path for the navigation stack presenting this view.
+        @Environment(\.navigationPath) var navigationPath
+        
         /// <#Description#>
         @State private var addUtilityAssociationViewModel = Model()
         /// A Boolean value that indicates if a feature query is running.
@@ -45,26 +48,16 @@ extension FeatureFormView {
         
         var body: some View {
             List {
-                LabeledContent("Asset Type") {
-                    Text(filter.assetType?.name ?? "N/A")
-                }
                 Section {
                     ForEach(filteredSources, id: \.name) { source in
-                        Button(source.name) {
-                            let parameters = QueryParameters()
-                            parameters.whereClause = "1=1"
-                            Task {
-                                let r = try await source.queryFeatures(parameters: parameters)
-                                r.candidates.forEach { candidate in
-                                    print(candidate.title)
-                                }
+                        HStack {
+                            Button(source.name) {
+                                navigationPath?.wrappedValue.append(
+                                    FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(source)
+                                )
                             }
-                            
+                            Image(systemName: "chevron.right")
                         }
-//                        NetworkSourceListRow(
-//                            layer: source.featureFormSource.,
-//                            featureQueryIsRunning: $featureQueryIsRunning
-//                        )
                     }
                 }
             }
