@@ -56,6 +56,7 @@ extension FeatureFormView {
                                     FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(source)
                                 )
                             }
+                            Spacer()
                             Image(systemName: "chevron.right")
                         }
                     }
