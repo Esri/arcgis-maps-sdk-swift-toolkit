@@ -198,6 +198,11 @@ public struct FeatureFormView: View {
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(groupTitle, subtitle: embeddedFeatureFormViewModel.title)
+                        case let .utilityAssociationNetworkSourcesView(embeddedFeatureFormViewModel, element, filter):
+                            UtilityAssociationNetworkSourcesView(element: element, filter: filter)
+                                .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                                .navigationBarTitleDisplayMode(.inline)
+                                .navigationTitle(filter.title)
                         }
                     }
             }
