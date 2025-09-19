@@ -18,8 +18,8 @@ extension FeatureFormView {
     enum NavigationPathItem: Hashable {
         case form(FeatureForm)
         case utilityAssociationDetailsView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationResult)
-        case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String)
-        case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String, UtilityAssociationGroupResult)
+        case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationsFilter)
+        case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationsFilter, FeatureFormSource, String)
         
         static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
@@ -29,11 +29,11 @@ extension FeatureFormView {
                 a === b
             case let (.utilityAssociationFilterResultView(_, _, a1, a2), .utilityAssociationFilterResultView(_, _, b1, b2)):
                 a1 === b1
-                && a2 == b2
-            case let (.utilityAssociationGroupResultView(_, _, a1, a2, a3), .utilityAssociationGroupResultView(_, _, b1, b2, b3)):
+                && a2.kind == b2.kind
+            case let (.utilityAssociationGroupResultView(_, _, a1, a2, a3, _), .utilityAssociationGroupResultView(_, _, b1, b2, b3, _)):
                 a1 === b1
-                && a2 == b2
-                && a3.featureFormSource === b3.featureFormSource
+                && a2.kind == b2.kind
+                && a3 === b3
             default:
                 false
             }
@@ -45,13 +45,13 @@ extension FeatureFormView {
                 hasher.combine(ObjectIdentifier(form))
             case .utilityAssociationDetailsView(_, _, let element, _):
                 hasher.combine(element)
-            case .utilityAssociationFilterResultView(_, _, let element, let filterTitle):
+            case .utilityAssociationFilterResultView(_, _, let element, let filter):
                 hasher.combine(element)
-                hasher.combine(filterTitle)
-            case .utilityAssociationGroupResultView(_, _, let element, let filterTitle, let groupResult):
+                hasher.combine(filter.kind)
+            case .utilityAssociationGroupResultView(_, _, let element, let filter, let formSource, _):
                 hasher.combine(element)
-                hasher.combine(filterTitle)
-                hasher.combine(ObjectIdentifier(groupResult.featureFormSource))
+                hasher.combine(filter.kind)
+                hasher.combine(ObjectIdentifier(formSource))
             }
         }
     }

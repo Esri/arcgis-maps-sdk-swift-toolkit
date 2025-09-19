@@ -143,31 +143,31 @@ public struct FeatureFormView: View {
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                        case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, resultTitle):
+                        case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filter):
                             UtilityAssociationsFilterResultView(
                                 associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                filterTitle: resultTitle
+                                filter: filter
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(resultTitle, subtitle: embeddedFeatureFormViewModel.title)
+                            .navigationTitle(filter.title, subtitle: embeddedFeatureFormViewModel.title)
                             .preference(
                                 key: PresentedFeatureFormPreferenceKey.self,
                                 value: .init(object: embeddedFeatureFormViewModel.featureForm)
                             )
-                        case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filterTitle, groupResult):
+                        case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filter, formSource, groupResultName):
                             UtilityAssociationGroupResultView(
                                 associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                featureFormSource: groupResult.featureFormSource,
-                                filterTitle: filterTitle,
+                                featureFormSource: formSource,
+                                filter: filter
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(groupResult.name, subtitle: embeddedFeatureFormViewModel.title)
+                            .navigationTitle(groupResultName, subtitle: embeddedFeatureFormViewModel.title)
                         }
                     }
             }
