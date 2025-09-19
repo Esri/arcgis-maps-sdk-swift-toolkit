@@ -29,10 +29,10 @@ extension FeatureFormView {
                 a === b
             case let (.utilityAssociationFilterResultView(_, _, a1, a2), .utilityAssociationFilterResultView(_, _, b1, b2)):
                 a1 === b1
-                && a2.kind == b2.kind
+                && a2 === b2
             case let (.utilityAssociationGroupResultView(_, _, a1, a2, a3, _), .utilityAssociationGroupResultView(_, _, b1, b2, b3, _)):
                 a1 === b1
-                && a2.kind == b2.kind
+                && a2 === b2
                 && a3 === b3
             default:
                 false
@@ -47,10 +47,10 @@ extension FeatureFormView {
                 hasher.combine(element)
             case .utilityAssociationFilterResultView(_, _, let element, let filter):
                 hasher.combine(element)
-                hasher.combine(filter.kind)
+                hasher.combine(ObjectIdentifier(filter))
             case .utilityAssociationGroupResultView(_, _, let element, let filter, let formSource, _):
                 hasher.combine(element)
-                hasher.combine(filter.kind)
+                hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(formSource))
             }
         }

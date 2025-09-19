@@ -106,7 +106,7 @@ extension FeatureFormView {
         var utilityAssociationGroupResult: UtilityAssociationGroupResult? {
             try? associationsFilterResultsModel.result?
                 .get()
-                .first(where: { $0.filter.kind == filter.kind })?
+                .first(where: { $0.filter === filter })?
                 .groupResults
                 .first(where: { $0.featureFormSource === featureFormSource })
         }
@@ -233,7 +233,7 @@ extension FeatureFormView {
         var result: UtilityAssociationsFilterResult? {
             try? associationsFilterResultsModel.result?
                 .get()
-                .first(where: { $0.filter.kind == filter.kind } )
+                .first(where: { $0.filter === filter } )
         }
         
         var body: some View {
@@ -297,7 +297,7 @@ extension FeatureFormView {
         var groupResults: [UtilityAssociationGroupResult] {
             (try? associationsFilterResultsModel.result?
                 .get()
-                .first(where: { $0.filter.kind == filter.kind } )?
+                .first(where: { $0.filter === filter } )?
                 .groupResults) ?? []
         }
         
