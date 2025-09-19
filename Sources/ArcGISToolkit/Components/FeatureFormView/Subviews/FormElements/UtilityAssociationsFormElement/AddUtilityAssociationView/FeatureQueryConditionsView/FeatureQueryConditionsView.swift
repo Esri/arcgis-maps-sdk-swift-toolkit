@@ -15,7 +15,7 @@
 import SwiftUI
 
 struct FeatureQueryConditionsView: View {
-    @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
+    @Environment(FeatureFormView.UtilityAssociationNetworkSourcesView.Model.self) private var addUtilityAssociationViewModel
     
     var body: some View {
 //        NavigationLayer { _ in

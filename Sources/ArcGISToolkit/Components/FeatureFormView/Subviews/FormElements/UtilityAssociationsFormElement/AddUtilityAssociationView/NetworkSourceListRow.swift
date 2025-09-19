@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-extension FeatureFormView.AddUtilityAssociationView {
+extension FeatureFormView.UtilityAssociationNetworkSourcesView {
     struct NetworkSourceListRow: View {
         /// The model for the navigation layer.
 //        @Environment(NavigationLayerModel.self) private var navigationLayerModel

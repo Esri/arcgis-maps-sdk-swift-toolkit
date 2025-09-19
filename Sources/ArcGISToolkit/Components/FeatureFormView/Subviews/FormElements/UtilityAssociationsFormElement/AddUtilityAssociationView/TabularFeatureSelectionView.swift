@@ -15,11 +15,11 @@
 import ArcGIS
 import SwiftUI
 
-extension FeatureFormView.AddUtilityAssociationView {
+extension FeatureFormView.UtilityAssociationNetworkSourcesView {
     struct TabularFeatureSelectionView: View {
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         
-        @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
+        @Environment(FeatureFormView.UtilityAssociationNetworkSourcesView.Model.self) private var addUtilityAssociationViewModel
         
         /// The set of all possible features to add as an association.
         let features: [ArcGISFeature]
@@ -120,7 +120,7 @@ extension FeatureFormView.AddUtilityAssociationView {
     }
 }
 
-private extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView {
+private extension FeatureFormView.UtilityAssociationNetworkSourcesView.TabularFeatureSelectionView {
 #warning("Object ID is used temporarily")
     /// The set of features matching the current filters to add as an association.
     var filteredFeatures: [ArcGISFeature] {

@@ -14,7 +14,7 @@
 
 import Observation
 
-extension FeatureFormView.AddUtilityAssociationView {
+extension FeatureFormView.UtilityAssociationNetworkSourcesView {
     /// A model to hold properties common to the views in the "add utility association" workflow.
     @Observable
     class Model {

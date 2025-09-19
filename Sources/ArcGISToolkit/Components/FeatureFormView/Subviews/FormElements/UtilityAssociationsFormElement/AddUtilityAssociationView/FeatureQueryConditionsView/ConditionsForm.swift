@@ -16,7 +16,7 @@ import SwiftUI
 
 extension FeatureQueryConditionsView {
     struct ConditionsForm: View {
-        @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
+        @Environment(FeatureFormView.UtilityAssociationNetworkSourcesView.Model.self) private var addUtilityAssociationViewModel
         
         var body: some View {
             addConditionButton
@@ -54,7 +54,7 @@ extension FeatureQueryConditionsView {
 struct ConditionConfigurationSection: View {
     let sectionNumber: Int
     
-    @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
+    @Environment(FeatureFormView.UtilityAssociationNetworkSourcesView.Model.self) private var addUtilityAssociationViewModel
     
     var body: some View {
         Section {

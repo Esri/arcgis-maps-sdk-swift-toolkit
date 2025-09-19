@@ -15,14 +15,14 @@
 import ArcGIS
 import SwiftUI
 
-extension FeatureFormView.AddUtilityAssociationView.TabularFeatureSelectionView {
+extension FeatureFormView.UtilityAssociationNetworkSourcesView.TabularFeatureSelectionView {
     struct Row: View {
         /// The display scale of the environment.
         @Environment(\.displayScale) private var displayScale
         
 //        @Environment(NavigationLayerModel.self) private var navigationLayerModel
         
-        @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
+        @Environment(FeatureFormView.UtilityAssociationNetworkSourcesView.Model.self) private var addUtilityAssociationViewModel
         
         /// The feature represented by the row.
         let feature: ArcGISFeature

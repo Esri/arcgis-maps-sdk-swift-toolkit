@@ -15,12 +15,12 @@
 import ArcGIS
 import SwiftUI
 
-extension FeatureFormView.AddUtilityAssociationView {
+extension FeatureFormView {
     struct SpatialFeatureSelectionView: View {
         /// The view model for the feature form view.
         @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         
-        @Environment(FeatureFormView.AddUtilityAssociationView.Model.self) private var addUtilityAssociationViewModel
+        @Environment(FeatureFormView.UtilityAssociationNetworkSourcesView.Model.self) private var addUtilityAssociationViewModel
         
         /// The set of identified/selected features.
         @State private var identifiedFeatures = [ArcGISFeature]()
