@@ -16,6 +16,13 @@ import ArcGIS
 import SwiftUI
 
 struct UtilityAssociationFeatureCandidatesView: View {
+    /// The navigation path for the navigation stack presenting this view.
+    @Environment(\.navigationPath) var navigationPath
+    
+    /// <#Description#>
+    let element: UtilityAssociationsFormElement
+    /// <#Description#>
+    let filter: UtilityAssociationsFilter
     /// <#Description#>
     let source: UtilityAssociationFeatureSource
     
@@ -24,7 +31,13 @@ struct UtilityAssociationFeatureCandidatesView: View {
     
     var body: some View {
         List(candidates, id: \.title) { candidate in
-            Text(candidate.title)
+            Button {
+                navigationPath?.wrappedValue.append(
+                    FeatureFormView.NavigationPathItem.utilityAssociationCreationView(candidate, element, filter)
+                )
+            } label: {
+                Text(candidate.title)
+            }
         }
         .task {
             let parameters = QueryParameters()
