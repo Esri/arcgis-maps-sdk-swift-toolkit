@@ -204,7 +204,7 @@ public struct FeatureFormView: View {
                             UtilityAssociationNetworkSourcesView(element: element, filter: filter)
                                 .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                                 .navigationBarTitleDisplayMode(.inline)
-                                .navigationTitle(filter.title)
+                                .navigationTitle(networkDataSource)
                         }
                     }
             }
@@ -459,6 +459,17 @@ extension FeatureFormView {
             "Discard Edits?",
             bundle: .toolkitModule,
             comment: "A question asking if the user would like to discard their unsaved edits."
+        )
+    }
+    
+    var networkDataSource: Text {
+        .init(
+            "Network Data Source",
+            bundle: .toolkitModule,
+            comment: """
+                A navigation title for a page listing
+                data sources in a utility network.
+                """
         )
     }
     
