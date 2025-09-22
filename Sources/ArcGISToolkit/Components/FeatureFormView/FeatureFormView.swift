@@ -164,6 +164,13 @@ public struct FeatureFormView: View {
                         switch itemType {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
+                        case let .utilityAssociationCreationView(candidate, element, filter):
+                            UtilityAssociationCreationView(candidate: candidate, element: element, filter: filter)
+                            // TODO: Complete featureFormToolbar modifier
+//                                .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                                .navigationBarTitleDisplayMode(.inline)
+                            // TODO: Complete navigationTitle modifier
+//                                .navigationTitle()
                         case let .utilityAssociationDetailsView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, associationResult):
                             UtilityAssociationDetailsView(
                                 associationResult: associationResult,
@@ -173,8 +180,8 @@ public struct FeatureFormView: View {
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                        case let .utilityAssociationFeatureCandidatesView(source):
-                            UtilityAssociationFeatureCandidatesView(source: source)
+                        case let .utilityAssociationFeatureCandidatesView(element, filter, source):
+                            UtilityAssociationFeatureCandidatesView(element: element, filter: filter, source: source)
                             // TODO: Complete featureFormToolbar modifier
 //                                .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                                 .navigationBarTitleDisplayMode(.inline)
