@@ -17,8 +17,9 @@ import ArcGIS
 extension FeatureFormView {
     enum NavigationPathItem: Hashable {
         case form(FeatureForm)
+        case utilityAssociationCreationView(UtilityAssociationFeatureCandidate, UtilityAssociationsFormElement, UtilityAssociationsFilter)
         case utilityAssociationDetailsView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationResult)
-        case utilityAssociationFeatureCandidatesView(UtilityAssociationFeatureSource)
+        case utilityAssociationFeatureCandidatesView(UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource)
         case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String)
         case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String, String)
         case utilityAssociationNetworkSourcesView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilter)
@@ -27,18 +28,30 @@ extension FeatureFormView {
             switch (lhs, rhs) {
             case let (.form(a), .form(b)):
                 a === b
-            case let (.utilityAssociationNetworkSourcesView(_, _, filterA), .utilityAssociationNetworkSourcesView(_, _, filterB)):
+            case let (.utilityAssociationCreationView(_, _, filterA),
+                      .utilityAssociationCreationView(_, _, filterB)):
                 filterA === filterB
-            case let (.utilityAssociationDetailsView(_, _, _, a), .utilityAssociationDetailsView(_, _, _, b)):
-                a === b
-            case let (.utilityAssociationFilterResultView(_, _, a1, a2), .utilityAssociationFilterResultView(_, _, b1, b2)):
-                a1 === b1
-                && a2 == b2
-            case let (.utilityAssociationGroupResultView(_, _, a1, a2, a3), .utilityAssociationGroupResultView(_, _, b1, b2, b3)):
+            case let (.utilityAssociationDetailsView(_, _, _, resultA),
+                      .utilityAssociationDetailsView(_, _, _, resultB)):
+                resultA === resultB
+            case let (.utilityAssociationFeatureCandidatesView(_, filterA, sourceA),
+                      .utilityAssociationFeatureCandidatesView(_, filterB, sourceB)):
+                filterA === filterB
+                && sourceA === sourceB
+            case let (.utilityAssociationFilterResultView(_, _, elementA, titleA),
+                      .utilityAssociationFilterResultView(_, _, elementB, titleB)):
+                elementA === elementB
+                && titleA == titleB
+            case let (.utilityAssociationGroupResultView(_, _, elementA, filterTitleA, groupTitleA),
+                      .utilityAssociationGroupResultView(_, _, elementB, filterTitleB, groupTitleB)):
                 // TODO: Improve group identification (Apollo 1391).
-                a1 === b1
-                && a2 == b2
-                && a3 == b3
+                elementA === elementB
+                && filterTitleA == filterTitleB
+                && groupTitleA == groupTitleB
+            case let (.utilityAssociationNetworkSourcesView(_, elementA, filterA),
+                      .utilityAssociationNetworkSourcesView(_, elementB, filterB)):
+                elementA === elementB
+                && filterA === filterB
             default:
                 false
             }
@@ -48,9 +61,11 @@ extension FeatureFormView {
             switch self {
             case .form(let form):
                 hasher.combine(ObjectIdentifier(form))
+            case .utilityAssociationCreationView(let candidate, _, _):
+                hasher.combine(ObjectIdentifier(candidate))
             case .utilityAssociationDetailsView(_, _, let element, _):
                 hasher.combine(element)
-            case .utilityAssociationFeatureCandidatesView(let source):
+            case .utilityAssociationFeatureCandidatesView(_, _, let source):
                 hasher.combine(ObjectIdentifier(source))
             case .utilityAssociationFilterResultView(_, _, let element, let filterTitle):
                 hasher.combine(element)
