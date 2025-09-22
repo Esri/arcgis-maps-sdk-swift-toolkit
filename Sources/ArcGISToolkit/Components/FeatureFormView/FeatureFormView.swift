@@ -164,13 +164,11 @@ public struct FeatureFormView: View {
                         switch itemType {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
-                        case let .utilityAssociationCreationView(candidate, element, filter):
+                        case let .utilityAssociationCreationView(embeddedFeatureFormViewModel, candidate, element, filter):
                             UtilityAssociationCreationView(candidate: candidate, element: element, filter: filter)
-                            // TODO: Complete featureFormToolbar modifier
-//                                .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                                .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                                 .navigationBarTitleDisplayMode(.inline)
-                            // TODO: Complete navigationTitle modifier
-//                                .navigationTitle()
+                                .navigationTitle(newAssociation)
                         case let .utilityAssociationDetailsView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, associationResult):
                             UtilityAssociationDetailsView(
                                 associationResult: associationResult,
@@ -180,13 +178,17 @@ public struct FeatureFormView: View {
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                        case let .utilityAssociationFeatureCandidatesView(element, filter, source):
-                            UtilityAssociationFeatureCandidatesView(element: element, filter: filter, source: source)
-                            // TODO: Complete featureFormToolbar modifier
-//                                .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
-                                .navigationBarTitleDisplayMode(.inline)
-                            // TODO: Complete navigationTitle modifier
-//                                .navigationTitle()
+                        case let .utilityAssociationFeatureCandidatesView(embeddedFeatureFormViewModel, element, filter, source):
+                            UtilityAssociationFeatureCandidatesView(
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                filter: filter,
+                                source: source
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+//                            TODO: Complete navigationTitle modifier
+//                            .navigationTitle()
                         case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, resultTitle):
                             UtilityAssociationsFilterResultView(
                                 associationsFilterResultsModel: associationsFilterResultsModel,
@@ -213,10 +215,14 @@ public struct FeatureFormView: View {
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(groupTitle, subtitle: embeddedFeatureFormViewModel.title)
                         case let .utilityAssociationNetworkSourcesView(embeddedFeatureFormViewModel, element, filter):
-                            UtilityAssociationNetworkSourcesView(element: element, filter: filter)
-                                .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
-                                .navigationBarTitleDisplayMode(.inline)
-                                .navigationTitle(networkDataSource)
+                            UtilityAssociationNetworkSourcesView(
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                filter: filter
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(networkDataSource)
                         }
                     }
             }
@@ -481,6 +487,16 @@ extension FeatureFormView {
             comment: """
                 A navigation title for a page listing
                 data sources in a utility network.
+                """
+        )
+    }
+    
+    var newAssociation: Text {
+        .init(
+            "New Association",
+            bundle: .toolkitModule,
+            comment: """
+                A navigation title for a view to create a new association in.
                 """
         )
     }

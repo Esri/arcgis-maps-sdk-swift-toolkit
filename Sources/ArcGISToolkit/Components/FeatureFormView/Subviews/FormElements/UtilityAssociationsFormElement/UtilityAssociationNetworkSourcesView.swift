@@ -34,6 +34,8 @@ extension FeatureFormView {
         
         /// <#Description#>
         let element: UtilityAssociationsFormElement
+        /// The view model for the form.
+        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// <#Description#>
         let filter: UtilityAssociationsFilter
         
@@ -53,7 +55,7 @@ extension FeatureFormView {
                         HStack {
                             Button(source.name) {
                                 navigationPath?.wrappedValue.append(
-                                    FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(element, filter, source)
+                                    FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(embeddedFeatureFormViewModel, element, filter, source)
                                 )
                             }
                             Spacer()

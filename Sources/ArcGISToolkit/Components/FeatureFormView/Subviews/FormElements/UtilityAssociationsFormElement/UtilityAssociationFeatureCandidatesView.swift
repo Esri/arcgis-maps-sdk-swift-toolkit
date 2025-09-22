@@ -21,6 +21,8 @@ struct UtilityAssociationFeatureCandidatesView: View {
     
     /// <#Description#>
     let element: UtilityAssociationsFormElement
+    /// The view model for the form.
+    let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     /// <#Description#>
     let filter: UtilityAssociationsFilter
     /// <#Description#>
@@ -33,7 +35,7 @@ struct UtilityAssociationFeatureCandidatesView: View {
         List(candidates, id: \.title) { candidate in
             Button {
                 navigationPath?.wrappedValue.append(
-                    FeatureFormView.NavigationPathItem.utilityAssociationCreationView(candidate, element, filter)
+                    FeatureFormView.NavigationPathItem.utilityAssociationCreationView(embeddedFeatureFormViewModel, candidate, element, filter)
                 )
             } label: {
                 Text(candidate.title)
