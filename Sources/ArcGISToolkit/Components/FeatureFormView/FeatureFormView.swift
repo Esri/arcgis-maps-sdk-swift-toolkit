@@ -175,6 +175,11 @@ public struct FeatureFormView: View {
                             .navigationBarTitleDisplayMode(.inline)
                         case let .utilityAssociationFeatureCandidatesView(source):
                             UtilityAssociationFeatureCandidatesView(source: source)
+                            // TODO: Complete featureFormToolbar modifier
+//                                .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                                .navigationBarTitleDisplayMode(.inline)
+                            // TODO: Complete navigationTitle modifier
+//                                .navigationTitle()
                         case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, resultTitle):
                             UtilityAssociationsFilterResultView(
                                 associationsFilterResultsModel: associationsFilterResultsModel,
