@@ -85,7 +85,7 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
                 VStack(spacing: 0) {
                     if let featureForm {
                         FeatureEditorView(
-                            featureForm: featureForm,
+                            rootFeatureForm: featureForm,
                             model: model,
                             mapViewProxy: mapViewProxy,
                             isPresented: .init(optionalValue: $featureForm),
@@ -191,7 +191,7 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
 // MARK: - FeatureEditorView
 
 private struct FeatureEditorView: View {
-    let featureForm: FeatureForm
+    let rootFeatureForm: FeatureForm
     let model: GeometryEditorModel
     let mapViewProxy: MapViewProxy?
     
@@ -199,25 +199,26 @@ private struct FeatureEditorView: View {
     let presentationDetent: PresentationDetent
     
     @State private var backgroundIsIntractable = UIDevice.current.backgroundIsIntractable
-    @State private var selectedFeatureForm: FeatureForm?
+    @State private var presentedFeatureForm: FeatureForm?
+    @State private var isSaving = false
     
+    private var featureForm: FeatureForm { presentedFeatureForm ?? rootFeatureForm }
     private var startEditingID: Int {
-        Hasher.hash(
-            ObjectIdentifier(model.geometryEditor),
-            ObjectIdentifier(featureForm),
-            selectedFeatureForm.map(ObjectIdentifier.init)
-        )
+        Hasher.hash(ObjectIdentifier(model.geometryEditor), ObjectIdentifier(featureForm))
     }
     
     var body: some View {
         FeatureFormView(root: featureForm, isPresented: $isPresented)
-            .onFeatureFormChanged { selectedFeatureForm = $0 }
+            .onFeatureFormChanged { presentedFeatureForm = $0 }
             .onFormEditingEvent { event in
-                // Stops the geometry editor  make UI seem more responsive.
+                // Stops the geometry editor to make UI seem more responsive.
                 model.stop()
                 
-                if case .savedEdits(let willNavigate) = event, !willNavigate {
+                if case .savedEdits(let willNavigate) = event {
+                    isSaving = false
+                    
                     // Closes the inspector when the form footer save button is pressed.
+                    guard !willNavigate else { return }
                     isPresented = false
                 }
             }
@@ -228,20 +229,34 @@ private struct FeatureEditorView: View {
             .environment(\.toolbarContent, toolbarContent)
             .task(id: ObjectIdentifier(model.geometryEditor), model.monitorStreams)
             .task(id: startEditingID) {
-                let presentedFeatureForm = selectedFeatureForm ?? featureForm
-                let feature = presentedFeatureForm.feature
+                let feature = featureForm.feature
                 try? await feature.load()
                 
                 if feature.canUpdateGeometry {
-                    if let geometry = presentedFeatureForm.feature.geometry {
+                    if let geometry = feature.geometry {
                         model.start(withInitial: geometry)
                         await mapViewProxy?.setViewpointGeometry(geometry, padding: 20)
                     } else {
                         // TODO: Handle no geometry
+                        print("No geometry")
                     }
                 } else if model.isStarted {
                     // Stops the geometry editor if the new feature's geometry can't be edited.
                     model.stop()
+                    print("Can't edit geometry")
+                }
+            }
+            .task(id: model.geometry) {
+                guard model.isStarted, !isSaving, model.geometry != featureForm.feature.geometry else {
+                    return
+                }
+                
+                do {
+                    // Updates the form when the geometry changes
+                    featureForm.feature.geometry = model.geometry
+                    try await featureForm.evaluateExpressions()
+                } catch {
+                    print("Error evaluating expressions: \(error)")
                 }
             }
     }
@@ -260,8 +275,8 @@ private struct FeatureEditorView: View {
     private func save() {
         guard model.canUndo else { return }
         
-        let presentedFeatureForm = selectedFeatureForm ?? featureForm
-        presentedFeatureForm.feature.geometry = model.save()
+        isSaving = true
+        featureForm.feature.geometry = model.save()
     }
     
 //    @ViewBuilder
