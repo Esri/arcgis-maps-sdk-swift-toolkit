@@ -187,8 +187,6 @@ public struct FeatureFormView: View {
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-//                            TODO: Complete navigationTitle modifier
-//                            .navigationTitle()
                         case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, resultTitle):
                             UtilityAssociationsFilterResultView(
                                 associationsFilterResultsModel: associationsFilterResultsModel,
