@@ -23,8 +23,6 @@ extension FeatureFormView {
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
-        /// <#Description#>
-        @State private var addUtilityAssociationViewModel = Model()
         /// A Boolean value that indicates if a feature query is running.
         @State private var featureQueryIsRunning = false
         /// <#Description#>
