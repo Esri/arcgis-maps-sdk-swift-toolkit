@@ -73,57 +73,55 @@ extension FeatureFormView {
                             }
                             .tint(.primary)
                         }
+                    } footer: {
+                        addAssociationMenu
                     }
                     .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
                         associationsFilterResultsModel.fetchResults()
                     }
                 }
-                HStack {
-                    Menu(
-                        "Add Association",
-                        systemImage: "plus.circle.fill"
-                    ) {
-                        Button {
-                            navigationPath?.wrappedValue.append(
-                                FeatureFormView.NavigationPathItem.utilityAssociationNetworkSourcesView(
-                                    embeddedFeatureFormViewModel,
-                                    element,
-                                    filterResult!.filter
-                                )
-                            )
-                        } label: {
-                            #warning("Comment needed")
-                            Text(
-                                "From Network Data Source",
-                                bundle: .toolkitModule,
-                                comment: ""
-                            )
-                        }
-                        Button {
-                            withAnimation {
-//                                addUtilityAssociationViewModel.spatialFeatureSelectionViewIsPresented = true
-                            }
-                        } label: {
-                            HStack {
-                                Image(systemName: "mappin.circle.fill")
-                                    .font(.title)
-                                VStack(alignment: .leading) {
-                                    Text.selectFeatureOnMap
-                                    Text.tapSelectAreaOrDrawPolygon
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                                .tint(.primary)
-                            }
-                        }
-                        .disabled(true)
-                    }
-                    .disabled(!isEditable)
-                    .onIsEditableChange(of: element) { newIsEditable in
-                        isEditable = newIsEditable
-                    }
-                    Spacer()
+            }
+        }
+        
+        var addAssociationMenu: some View {
+            Menu(
+                "Add Association",
+                systemImage: "plus.circle.fill"
+            ) {
+                Button {
+                    navigationPath?.wrappedValue.append(
+                        FeatureFormView.NavigationPathItem.utilityAssociationNetworkSourcesView(
+                            embeddedFeatureFormViewModel,
+                            element,
+                            filterResult!.filter
+                        )
+                    )
+                } label: {
+                    #warning("Comment needed")
+                    Text(
+                        "From Network Data Source",
+                        bundle: .toolkitModule,
+                        comment: ""
+                    )
                 }
+                Button {} label: {
+                    HStack {
+                        Image(systemName: "mappin.circle.fill")
+                            .font(.title)
+                        VStack(alignment: .leading) {
+                            Text.selectFeatureOnMap
+                            Text.tapSelectAreaOrDrawPolygon
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .tint(.primary)
+                    }
+                }
+                .disabled(true)
+            }
+            .disabled(!isEditable)
+            .onIsEditableChange(of: element) { newIsEditable in
+                isEditable = newIsEditable
             }
         }
     }
