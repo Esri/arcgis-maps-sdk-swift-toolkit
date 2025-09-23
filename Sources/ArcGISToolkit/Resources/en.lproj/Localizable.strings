@@ -25,7 +25,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "A map area cannot be downloaded at this time.";
 
-/* No comment provided by engineer. */
+/* A label for a button to add a new utility association. */
 "Add" = "Add";
 
 /* A label for a button to add a new utility network association. */
@@ -163,9 +163,6 @@ for the AR experience. */
 
 /* The accessibility label of the compass button. */
 "compass-button-accessibility-label" = "Compass";
-
-/* A condition by which to compare the value of a feature's attribute. */
-"Condition" = "Condition";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Connectivity";
@@ -345,8 +342,7 @@ to be used as a trace starting point. */
 trace operation. */
 "Feature Results" = "Feature Results";
 
-/* A field in a dataset.
-A field in a feature's attribute table. */
+/* A field in a dataset. */
 "Field" = "Field";
 
 /* A label in reference to fields in a set of data contained in a popup. */
@@ -379,7 +375,8 @@ submitted with additional details. */
 /* A label for the element on the "from" side of a utility association. */
 "From Element" = "From Element";
 
-/* No comment provided by engineer. */
+/* A label for a button to choose a feature for a new
+utility association from a network data source. */
 "From Network Data Source" = "From Network Data Source";
 
 /* A label in reference to function outputs returned as results of a utility network
@@ -566,7 +563,7 @@ data sources in a utility network. */
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
-/* A label indicating features can be selected by 
+/* A label indicating features can be selected by
 interactively tapping on the map. */
 "On Map" = "On Map";
 
@@ -666,7 +663,8 @@ current visible extent of the map or scene. */
 /* A label for a button to save edits. */
 "Save Edits" = "Save Edits";
 
-/* No comment provided by engineer. */
+/* A label for a search bar to search through utility 
+association feature sources. */
 "Search" = "Search";
 
 /* A label in reference to a search query entered by the user. */
@@ -751,9 +749,6 @@ place an ArcGIS Scene. */
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "Tap on the image for more information.";
-
-/* No comment provided by engineer. */
-"Tap, select area, or draw polygon" = "Tap, select area, or draw polygon";
 
 /* A label in reference to a utility terminal. */
 "Terminal" = "Terminal";
@@ -870,9 +865,6 @@ without saving. */
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";
-
-/* A value of a feature's attribute. */
-"Value" = "Value";
 
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
