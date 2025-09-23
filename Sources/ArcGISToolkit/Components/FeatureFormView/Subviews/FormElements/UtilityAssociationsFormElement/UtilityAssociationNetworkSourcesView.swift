@@ -70,31 +70,6 @@ extension FeatureFormView {
                 defer { featureQueryIsRunning = false }
                 sources = (try? await element.associationFeatureSources(filter: filter)) ?? []
             }
-            Group {
-                if addUtilityAssociationViewModel.utilityAssociationDetailsCoreIsPresented {
-                    Button {
-#warning("ADD API NOT IMPLEMENTED")
-                        withAnimation {
-                            featureFormViewModel.addUtilityAssociationScreenIsPresented = false
-                        }
-                    } label: {
-                        Text(
-                            "Add",
-                            bundle: .toolkitModule,
-                            comment: "Label for a button to add a configured utility association."
-                        )
-                    }
-                }
-            }
-            // TODO: Combine with similar code in FeatureFormView.UtilityAssociationDetailsScreen.swift
-            .overlay {
-                if addUtilityAssociationViewModel.spatialFeatureSelectionViewIsPresented {
-                    SpatialFeatureSelectionView()
-                } else if addUtilityAssociationViewModel.featureQueryConditionsViewIsPresented {
-                    FeatureQueryConditionsView()
-                }
-            }
-            .environment(addUtilityAssociationViewModel)
         }
     }
 }
