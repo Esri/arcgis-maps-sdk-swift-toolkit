@@ -98,21 +98,3 @@ extension FeatureFormView {
         }
     }
 }
-
-private extension Text {
-    static var searchNetworkSource: Self {
-        .init(
-            "Search Network Source",
-            bundle: .toolkitModule,
-            comment: "A label for a utility network source search field."
-        )
-    }
-    
-    static var selectFeatureFromTheNetworkSourceGroup: Self {
-        .init(
-            "Select feature from the Network Source group",
-            bundle: .toolkitModule,
-            comment: "A header label for a list of utility network sources."
-        )
-    }
-}
