@@ -73,6 +73,9 @@ extension FeatureFormView {
         /// The association to be potentially removed.
         @State private var associationPendingRemoval: UtilityAssociation?
         
+        /// A Boolean value indicating whether the element is editable.
+        @State private var isEditable = false
+        
         /// A Boolean value indicating whether the removal confirmation is presented.
         @State private var removalConfirmationIsPresented = false
         
@@ -137,20 +140,25 @@ extension FeatureFormView {
             .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
                 associationsFilterResultsModel.fetchResults()
             }
+            .onIsEditableChange(of: element) { newIsEditable in
+                isEditable = newIsEditable
+            }
         }
         
-        func deleteButton(for association: UtilityAssociation) -> some View {
-            Button {
-                associationPendingRemoval = association
-                removalConfirmationIsPresented = true
-            } label: {
-                Label {
-                    Text(LocalizedStringResource.removeAssociation)
-                } icon: {
-                    Image(systemName: "trash.fill")
+        @ViewBuilder func deleteButton(for association: UtilityAssociation) -> some View {
+            if isEditable {
+                Button {
+                    associationPendingRemoval = association
+                    removalConfirmationIsPresented = true
+                } label: {
+                    Label {
+                        Text(LocalizedStringResource.removeAssociation)
+                    } icon: {
+                        Image(systemName: "trash.fill")
+                    }
+                    .labelStyle(.iconOnly)
+                    .tint(.red)
                 }
-                .labelStyle(.iconOnly)
-                .tint(.red)
             }
         }
         

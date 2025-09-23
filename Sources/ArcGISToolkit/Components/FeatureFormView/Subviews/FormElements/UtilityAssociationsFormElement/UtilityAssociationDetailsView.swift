@@ -19,6 +19,8 @@ struct UtilityAssociationDetailsView: View {
     /// The navigation path for the navigation stack presenting this view.
     @Environment(\.navigationPath) var navigationPath
     
+    /// A Boolean value indicating whether the element is editable.
+    @State private var isEditable = false
     /// A Boolean value indicating whether the removal confirmation is presented.
     @State private var removalConfirmationIsPresented = false
     
@@ -45,6 +47,9 @@ struct UtilityAssociationDetailsView: View {
                 comment: "A navigation title for the Association Settings page."
             )
         )
+        .onIsEditableChange(of: element) { newIsEditable in
+            isEditable = newIsEditable
+        }
     }
     
     /// The name of the provided terminal as labeled content.
@@ -108,22 +113,24 @@ struct UtilityAssociationDetailsView: View {
         }
     }
     
-    var removalSection: some View {
-        Section {
-            Button(role: .destructive) {
-                removalConfirmationIsPresented = true
-            } label: {
-                Text(LocalizedStringResource.removeAssociation)
-                    .frame(maxWidth: .infinity, alignment: .center)
-            }
-            .associationRemovalConfirmation(
-                isPresented: $removalConfirmationIsPresented,
-                association: associationResult.association,
-                element: element,
-                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
-            ) {
-                associationsFilterResultsModel.fetchResults()
-                navigationPath?.wrappedValue.removeLast()
+    @ViewBuilder var removalSection: some View {
+        if isEditable {
+            Section {
+                Button(role: .destructive) {
+                    removalConfirmationIsPresented = true
+                } label: {
+                    Text(LocalizedStringResource.removeAssociation)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+                .associationRemovalConfirmation(
+                    isPresented: $removalConfirmationIsPresented,
+                    association: associationResult.association,
+                    element: element,
+                    embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+                ) {
+                    associationsFilterResultsModel.fetchResults()
+                    navigationPath?.wrappedValue.removeLast()
+                }
             }
         }
     }

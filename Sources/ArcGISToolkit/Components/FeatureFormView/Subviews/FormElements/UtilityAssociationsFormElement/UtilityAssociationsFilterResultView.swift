@@ -20,13 +20,10 @@ extension FeatureFormView {
     struct UtilityAssociationsFilterResultView: View {
         /// The model containing the latest association filter results.
         let associationsFilterResultsModel: AssociationsFilterResultsModel
-        
         /// The form element containing the filter result.
         let element: UtilityAssociationsFormElement
-        
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
-        
         /// The title of the selected utility associations filter result.
         let filterTitle: String
         
@@ -36,7 +33,6 @@ extension FeatureFormView {
                 .get()
             .first(where: { $0.filter.title == filterTitle} )
         }
-        
         /// The set of group results within the filter result.
         var groupResults: [UtilityAssociationGroupResult] {
             filterResult?.groupResults ?? []
@@ -46,6 +42,9 @@ extension FeatureFormView {
         @Environment(\.navigationPath) var navigationPath
         
         @Namespace private var namespace
+        
+        /// A Boolean value indicating whether the element is editable.
+        @State private var isEditable = false
         
         var body: some View {
             VStack {
@@ -120,6 +119,10 @@ extension FeatureFormView {
                             }
                         }
                         .disabled(true)
+                    }
+                    .disabled(!isEditable)
+                    .onIsEditableChange(of: element) { newIsEditable in
+                        isEditable = newIsEditable
                     }
                     Spacer()
                 }

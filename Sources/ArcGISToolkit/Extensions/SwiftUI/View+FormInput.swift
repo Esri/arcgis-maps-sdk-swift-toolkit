@@ -16,13 +16,30 @@ import ArcGIS
 import SwiftUI
 
 extension View {
-    /// Modifier for watching ``FormElement.isEditableChanged`` events.
+    /// Modifier for watching ``FieldFormElement.isEditableChanged`` events.
     /// - Parameters:
     ///   - element: The form element to watch for changes on.
     ///   - action: The action which watches for changes.
     /// - Returns: The modified view.
     func onIsEditableChange(
         of element: FieldFormElement,
+        action: @escaping (_ newIsEditable: Bool) -> Void
+    ) -> some View {
+        return self
+            .task(id: ObjectIdentifier(element)) {
+                for await isEditable in element.$isEditable {
+                    action(isEditable)
+                }
+            }
+    }
+    
+    /// Modifier for watching ``UtilityAssociationsFormElement.isEditableChanged`` events.
+    /// - Parameters:
+    ///   - element: The form element to watch for changes on.
+    ///   - action: The action which watches for changes.
+    /// - Returns: The modified view.
+    func onIsEditableChange(
+        of element: UtilityAssociationsFormElement,
         action: @escaping (_ newIsEditable: Bool) -> Void
     ) -> some View {
         return self
