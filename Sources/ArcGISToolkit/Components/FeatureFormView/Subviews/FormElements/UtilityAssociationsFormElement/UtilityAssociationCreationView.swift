@@ -27,10 +27,55 @@ struct UtilityAssociationCreationView: View {
     let filter: UtilityAssociationsFilter
     
     /// <#Description#>
+    @State private var contentIsVisible: Bool = false
+    /// <#Description#>
+    @State private var fractionAlongEdge: Double = 0.5
+    /// <#Description#>
+    @State private var options: UtilityAssociationFeatureOptions? = nil
+    /// <#Description#>
     @State private var isAddingAssociation = false
     
     var body: some View {
         List {
+            sectionForAssociation
+            sectionForFromElement
+            sectionForToElement
+            sectionForFractionAlongEdge
+            sectionForAddButton
+        }
+        .task {
+            options = try? await element.options(forAssociationCandidate: candidate.feature)
+            print(options, options?.terminalConfiguration, options?.isFractionAlongEdgeValid)
+        }
+        .task(id: isAddingAssociation) {
+            guard isAddingAssociation else { return }
+            defer { isAddingAssociation = false }
+            await addAssociation()
+        }
+    }
+    
+    func addAssociation() async {
+        guard let options else { return }
+        do {
+            switch (options.isFractionAlongEdgeValid, options.terminalConfiguration) {
+            case (false, .none):
+                try await element.addAssociation(feature: candidate.feature, filter: filter)
+            case let (false, .some(configuration)):
+                try await element.addAssociation(feature: candidate.feature, filter: filter)
+            case (true, .none):
+                try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
+            case let (true, .some(configuration)):
+                try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
+            }
+            navigationPath?.wrappedValue.removeLast(3)
+        } catch {
+            #warning("Logger needed")
+            print(error.localizedDescription)
+        }
+    }
+    
+    var sectionForAddButton: some View {
+        Section {
             Button {
                 isAddingAssociation = true
             } label: {
@@ -40,17 +85,76 @@ struct UtilityAssociationCreationView: View {
                     comment: "A label for a button to add a new utility association."
                 )
             }
-            .disabled(isAddingAssociation)
+            .disabled(options == nil || isAddingAssociation)
         }
-        .task(id: isAddingAssociation) {
-            guard isAddingAssociation else { return }
-            defer { isAddingAssociation = false }
-            do {
-                try await element.addAssociation(feature: candidate.feature, filter: filter)
-                navigationPath?.wrappedValue.removeLast(3)
-            } catch {
-                #warning("Logger needed")
-                print(error.localizedDescription)
+    }
+    
+    var sectionForAssociation: some View {
+        Section {
+            LabeledContent {
+                
+            } label: {
+                Text(
+                    "Association Type",
+                    bundle: .toolkitModule,
+                    comment: "A label in reference to a utility association type."
+                )
+            }
+            // TODO: Only show toggle when needed
+            if true {
+                Toggle(isOn: $contentIsVisible) {
+                    Text(
+                        "Content Visible",
+                        bundle: .toolkitModule,
+                        comment: """
+                            A label indicating whether content in the new
+                            association is visible or not.
+                            """
+                    )
+                }
+            }
+        }
+    }
+    
+    var sectionForFromElement: some View {
+        Section {
+            LabeledContent {
+                
+            } label: {
+                Text(
+                    "From Element",
+                    bundle: .toolkitModule,
+                    comment: #"A label for the element on the "from" side of a utility association."#
+                )
+            }
+        }
+    }
+    
+    var sectionForToElement: some View {
+        Section {
+            LabeledContent {
+                
+            } label: {
+                Text(
+                    "To Element",
+                    bundle: .toolkitModule,
+                    comment: #"A label for the element on the "to" side of a utility association."#
+                )
+            }
+        }
+    }
+    
+    @ViewBuilder var sectionForFractionAlongEdge: some View {
+        if options?.isFractionAlongEdgeValid ?? false {
+            Section {
+                LabeledContent {
+                    Text(fractionAlongEdge, format: .percent)
+                } label: {
+                    Text(LocalizedStringResource.fractionAlongEdge)
+                }
+                Slider(value: $fractionAlongEdge, in: 0...1) { _ in
+                    LocalizedStringResource.fractionAlongEdge
+                }
             }
         }
     }

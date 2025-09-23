@@ -569,7 +569,7 @@ public struct UtilityNetworkTrace: View {
         .catalystPadding()
         List {
             if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
-                Section(String.fractionAlongEdgeSectionTitle) {
+                Section(LocalizedStringResource.fractionAlongEdge) {
                     Slider(
                         value: Binding {
                             viewModel.pendingTrace.startingPoints.first {
@@ -936,14 +936,6 @@ private extension String {
                 A label in reference to utility elements returned as results of a utility network
                 trace operation.
                 """
-        )
-    }
-    
-    static var fractionAlongEdgeSectionTitle: Self {
-        .init(
-            localized: "Fraction Along Edge",
-            bundle: .toolkitModule,
-            comment: "A label in reference to a fractional distance along an edge style utility network element."
         )
     }
     

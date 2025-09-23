@@ -35,10 +35,10 @@ struct UtilityAssociationDetailsView: View {
     
     var body: some View {
         List {
-            associationSection
-            elementFromSection
-            elementToSection
-            removalSection
+            sectionForAssociation
+            sectionForFromElement
+            sectionForToElement
+            sectionForRemoveButton
         }
         .navigationTitle(
             Text(
@@ -65,7 +65,7 @@ struct UtilityAssociationDetailsView: View {
         }
     }
     
-    var associationSection: some View {
+    var sectionForAssociation: some View {
         Section {
             LabeledContent {
                 associationResult.association.kind.name
@@ -79,7 +79,7 @@ struct UtilityAssociationDetailsView: View {
         }
     }
     
-    var elementFromSection: some View {
+    var sectionForFromElement: some View {
         Section {
             LabeledContent {
                 Text(associationResult.associatedFeatureIsToElement ? embeddedFeatureFormViewModel.title : associationResult.title)
@@ -96,7 +96,7 @@ struct UtilityAssociationDetailsView: View {
         }
     }
     
-    var elementToSection: some View {
+    var sectionForToElement: some View {
         Section {
             LabeledContent {
                 Text(associationResult.associatedFeatureIsToElement ? associationResult.title : embeddedFeatureFormViewModel.title)
@@ -113,7 +113,7 @@ struct UtilityAssociationDetailsView: View {
         }
     }
     
-    @ViewBuilder var removalSection: some View {
+    @ViewBuilder var sectionForRemoveButton: some View {
         if isEditable {
             Section {
                 Button(role: .destructive) {
