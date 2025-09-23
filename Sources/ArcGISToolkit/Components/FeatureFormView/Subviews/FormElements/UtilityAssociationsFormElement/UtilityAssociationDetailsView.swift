@@ -130,7 +130,7 @@ extension FeatureFormView {
         }
     }
 }
-    
+
 private extension UtilityAssociation.Kind {
     /// A localized label for the association kind.
     var name: Text {
