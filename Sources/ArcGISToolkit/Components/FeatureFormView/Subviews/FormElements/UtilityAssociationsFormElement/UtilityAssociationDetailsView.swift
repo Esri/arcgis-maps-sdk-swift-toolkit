@@ -116,7 +116,7 @@ struct UtilityAssociationDetailsView: View {
                 Text(LocalizedStringResource.removeAssociation)
                     .frame(maxWidth: .infinity, alignment: .center)
             }
-            .associationRemovalConfirmationDialog(
+            .associationRemovalConfirmation(
                 isPresented: $removalConfirmationIsPresented,
                 association: associationResult.association,
                 element: element,

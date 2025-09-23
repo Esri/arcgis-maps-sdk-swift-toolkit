@@ -27,10 +27,16 @@ final class AssociationsFilterResultsModel {
     /// The element containing the association filters.
     let element: UtilityAssociationsElement
     
-    /// - Parameter element: The element containing the association filters.
+    /// A Boolean value which determines if empty filter results are included.
+    let includeEmptyFilterResults: Bool
+    
+    /// - Parameters:
+    ///   - element: The element containing the association filters.
+    ///   - includeEmptyFilterResults: A Boolean value which determines if empty filter results are included. `False` by default.
     @MainActor
-    init(element: UtilityAssociationsElement) {
+    init(element: UtilityAssociationsElement, includeEmptyFilterResults: Bool = false) {
         self.element = element
+        self.includeEmptyFilterResults = includeEmptyFilterResults
         fetchResults()
     }
     
@@ -39,10 +45,15 @@ final class AssociationsFilterResultsModel {
     func fetchResults() {
         let element = self.element
         task?.cancel()
-        task = Task { [weak self] in
+        task = Task { [weak self, includeEmptyFilterResults] in
             guard !Task.isCancelled, let self else { return }
             let result = await Result {
-                try await element.associationsFilterResults.filter { $0.resultCount > 0 }
+                let allResults = try await element.associationsFilterResults
+                return if includeEmptyFilterResults {
+                    allResults
+                } else {
+                    allResults.filter { $0.resultCount > 0 }
+                }
             }
             withAnimation { self.result = result }
         }
