@@ -145,7 +145,7 @@ extension FeatureFormView {
             if options?.isFractionAlongEdgeValid ?? false {
                 Section {
                     LabeledContent {
-                        Text(fractionAlongEdge, format: .percent)
+                        Text(fractionAlongEdge, format: .percent.precision(.fractionLength(0)))
                     } label: {
                         Text(LocalizedStringResource.fractionAlongEdge)
                     }
