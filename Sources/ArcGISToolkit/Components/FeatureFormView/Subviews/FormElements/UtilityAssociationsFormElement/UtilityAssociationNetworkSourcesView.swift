@@ -17,8 +17,6 @@ import SwiftUI
 
 extension FeatureFormView {
     struct UtilityAssociationNetworkSourcesView: View {
-        /// The view model for the feature form view.
-        @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         

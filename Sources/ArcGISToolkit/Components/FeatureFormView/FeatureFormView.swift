@@ -75,9 +75,6 @@ internal import os
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
-    /// The point at which to run feature identification when adding utility associations.
-    private let mapPoint: Point?
-    
     /// A binding to a Boolean value that determines whether the view is presented.
     private let isPresented: Binding<Bool>?
     
@@ -103,9 +100,6 @@ public struct FeatureFormView: View {
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
-    /// The view model for the feature form view.
-    @State private var featureFormViewModel: FeatureFormViewModel
-    
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
     
@@ -118,37 +112,13 @@ public struct FeatureFormView: View {
     /// The internally managed validation error visibility.
     @State private var validationErrorVisibilityInternal = ValidationErrorVisibility.automatic
     
-    /// Creates a feature form view.
-    /// - Parameters:
-    ///   - root: The feature form defining the editing experience.
-    ///   - mapPoint: The point at which to run feature identification when adding utility associations.
-    ///   - mapViewProxy: The proxy to provide access to map view operations.
-    /// - Since: 200.8
-    public init(
-        root: FeatureForm,
-        mapPoint: Point? = nil,
-        mapViewProxy: MapViewProxy? = nil,
-        _ utilityNetwork: UtilityNetwork? = nil /* Temporary parameter only */
-    ) {
-        self.featureFormViewModel = FeatureFormViewModel(
-            mapViewProxy: mapViewProxy,
-            utilityNetwork: utilityNetwork
-        )
-        self.isPresented = .constant(true)
-        self.mapPoint = mapPoint
-        self.presentedForm = root
-        self.rootFeatureForm = root
-    }
-    
     /// Initializes a form view.
     /// - Parameters:
     ///   - root: The feature form defining the editing experience.
     ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Since: 200.8
     public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
-        self.featureFormViewModel = FeatureFormViewModel()
         self.isPresented = isPresented
-        self.mapPoint = nil
         self.presentedForm = root
         self.rootFeatureForm = root
     }
@@ -325,7 +295,6 @@ public struct FeatureFormView: View {
             )
             .animation(.default, value: ObjectIdentifier(rootFeatureForm))
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
-            .environment(featureFormViewModel)
             .environment(\.finishEditingError, $finishEditingError)
             .environment(\.isPresented, isPresented)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
@@ -334,9 +303,6 @@ public struct FeatureFormView: View {
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
             .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
-            .onChange(of: mapPoint) { _, newValue in
-                featureFormViewModel.mapPoint = newValue
-            }
             .onChange(of: ObjectIdentifier(rootFeatureForm)) {
                 presentedForm = rootFeatureForm
             }
