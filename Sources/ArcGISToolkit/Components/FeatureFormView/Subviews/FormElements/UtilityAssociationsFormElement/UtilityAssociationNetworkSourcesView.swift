@@ -65,9 +65,17 @@ extension FeatureFormView {
             }
             .searchable(
                 text: $query,
-                placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "Search"
-            )
+                placement: .navigationBarDrawer(displayMode: .always)
+            ) {
+                Text(
+                    "Search",
+                    bundle: .toolkitModule,
+                    comment: """
+                        A label for a search bar to search through utility 
+                        association feature sources.
+                        """
+                )
+            }
             .task {
                 featureQueryIsRunning = true
                 defer { featureQueryIsRunning = false }
