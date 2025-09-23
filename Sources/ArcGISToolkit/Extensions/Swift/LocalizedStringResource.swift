@@ -28,14 +28,6 @@ extension LocalizedStringResource {
         )
     }
     
-    static var condition: Self {
-        .init(
-            "Condition",
-            bundle: .toolkit,
-            comment: "A condition by which to compare the value of a feature's attribute."
-        )
-    }
-    
     static var deleteDownload: Self {
         .init(
             "Delete Download",
@@ -65,14 +57,6 @@ extension LocalizedStringResource {
             "Downloading",
             bundle: .toolkit,
             comment: "The status text when a map area is downloading."
-        )
-    }
-    
-    static var field: Self {
-        .init(
-            "Field",
-            bundle: .toolkit,
-            comment: "A field in a feature's attribute table."
         )
     }
     
