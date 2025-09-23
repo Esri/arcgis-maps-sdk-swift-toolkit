@@ -108,12 +108,4 @@ extension LocalizedStringResource {
             comment: "A label for a button to remove a map area download."
         )
     }
-    
-    static var value: Self {
-        .init(
-            "Value",
-            bundle: .toolkit,
-            comment: "A value of a feature's attribute."
-        )
-    }
 }
