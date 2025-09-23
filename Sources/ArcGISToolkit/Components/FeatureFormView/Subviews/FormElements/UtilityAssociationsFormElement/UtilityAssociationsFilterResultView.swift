@@ -45,49 +45,44 @@ extension FeatureFormView {
         @State private var isEditable = false
         
         var body: some View {
-            VStack {
-                List {
-                    Section {
-                        // TODO: Improve group identification (Apollo 1391).
-                        ForEach(groupResults, id: \.name) { utilityAssociationGroupResult in
-                            Button {
-                                navigationPath?.wrappedValue.append(
-                                    FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
-                                        embeddedFeatureFormViewModel,
-                                        associationsFilterResultsModel,
-                                        element,
-                                        filterTitle,
-                                        utilityAssociationGroupResult.name
-                                    )
+            List {
+                Section {
+                    // TODO: Improve group identification (Apollo 1391).
+                    ForEach(groupResults, id: \.name) { utilityAssociationGroupResult in
+                        Button {
+                            navigationPath?.wrappedValue.append(
+                                FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
+                                    embeddedFeatureFormViewModel,
+                                    associationsFilterResultsModel,
+                                    element,
+                                    filterTitle,
+                                    utilityAssociationGroupResult.name
                                 )
-                            } label: {
-                                HStack {
-                                    Text(utilityAssociationGroupResult.name)
-                                    Spacer()
-                                    Group {
-                                        Text(utilityAssociationGroupResult.associationResults.count, format: .number)
-                                        Image(systemName: "chevron.right")
-                                    }
-                                    .foregroundColor(.secondary)
+                            )
+                        } label: {
+                            HStack {
+                                Text(utilityAssociationGroupResult.name)
+                                Spacer()
+                                Group {
+                                    Text(utilityAssociationGroupResult.associationResults.count, format: .number)
+                                    Image(systemName: "chevron.right")
                                 }
+                                .foregroundColor(.secondary)
                             }
-                            .tint(.primary)
                         }
-                    } footer: {
-                        addAssociationMenu
+                        .tint(.primary)
                     }
-                    .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
-                        associationsFilterResultsModel.fetchResults()
-                    }
+                } footer: {
+                    addAssociationMenu
+                }
+                .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
+                    associationsFilterResultsModel.fetchResults()
                 }
             }
         }
         
         var addAssociationMenu: some View {
-            Menu(
-                "Add Association",
-                systemImage: "plus.circle.fill"
-            ) {
+            Menu {
                 Button {
                     navigationPath?.wrappedValue.append(
                         FeatureFormView.NavigationPathItem.utilityAssociationNetworkSourcesView(
@@ -97,62 +92,41 @@ extension FeatureFormView {
                         )
                     )
                 } label: {
-                    #warning("Comment needed")
                     Text(
                         "From Network Data Source",
                         bundle: .toolkitModule,
-                        comment: ""
+                        comment: """
+                            A label for a button to choose a feature for a new
+                            utility association from a network data source.
+                            """
                     )
                 }
                 Button {} label: {
-                    HStack {
-                        Image(systemName: "mappin.circle.fill")
-                            .font(.title)
-                        VStack(alignment: .leading) {
-                            Text.selectFeatureOnMap
-                            Text.tapSelectAreaOrDrawPolygon
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        .tint(.primary)
-                    }
+                    Text(
+                        "On Map",
+                        bundle: .toolkitModule,
+                        comment: """
+                            A label indicating features can be selected by
+                            interactively tapping on the map.
+                            """
+                    )
                 }
                 .disabled(true)
+            } label: {
+                Label {
+                    Text(
+                        "Add Association",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to add a new utility network association."
+                    )
+                } icon: {
+                    Image(systemName: "plus.circle.fill")
+                }
             }
             .disabled(!isEditable)
             .onIsEditableChange(of: element) { newIsEditable in
                 isEditable = newIsEditable
             }
         }
-    }
-}
-
-private extension Text {
-    static var addAssociation: Self {
-        .init(
-            "Add Association",
-            bundle: .toolkitModule,
-            comment: "A label for a button to add a new utility network association."
-        )
-    }
-    
-    static var selectFeatureOnMap: Self {
-        .init(
-            "On Map",
-            bundle: .toolkitModule,
-            comment: """
-                     A label indicating features can be selected by 
-                     interactively tapping on the map.
-                     """
-        )
-    }
-    
-    #warning("Comment needed")
-    static var tapSelectAreaOrDrawPolygon: Self {
-        .init(
-            "Tap, select area, or draw polygon",
-            bundle: .toolkitModule,
-            comment: ""
-        )
     }
 }
