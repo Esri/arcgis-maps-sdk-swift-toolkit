@@ -41,8 +41,6 @@ extension FeatureFormView {
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
-        @Namespace private var namespace
-        
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
         
