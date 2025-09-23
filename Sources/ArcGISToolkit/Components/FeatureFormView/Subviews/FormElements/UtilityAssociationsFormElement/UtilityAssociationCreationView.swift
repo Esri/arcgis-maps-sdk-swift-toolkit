@@ -34,8 +34,11 @@ struct UtilityAssociationCreationView: View {
             Button {
                 isAddingAssociation = true
             } label: {
-                #warning("Localization needed")
-                Text("Add")
+                Text(
+                    "Add",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to add a new utility association."
+                )
             }
             .disabled(isAddingAssociation)
         }
