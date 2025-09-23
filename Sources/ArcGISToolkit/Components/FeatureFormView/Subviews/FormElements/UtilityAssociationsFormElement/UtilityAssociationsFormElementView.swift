@@ -37,7 +37,7 @@ extension FeatureFormView {
                 switch associationsFilterResultsModel.result {
                 case .success(let results):
                     FeatureFormGroupedContentView(content: results.map {
-                        UtilityAssociationsFilterResultListRowView(
+                        Row(
                             associationsFilterResultsModel: associationsFilterResultsModel,
                             element: element,
                             filterTitle: $0.filter.title
@@ -59,7 +59,7 @@ extension FeatureFormView {
     }
     
     /// A view referencing a utility associations filter result.
-    struct UtilityAssociationsFilterResultListRowView: View {
+    private struct Row: View {
         /// The view model for the form.
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
         
