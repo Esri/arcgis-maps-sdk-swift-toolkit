@@ -30,21 +30,14 @@ final class FeatureFormViewTests: XCTestCase {
     func openTestCase(id: String = #function) {
         let app = XCUIApplication()
         let formViewTestsButton = app.buttons["Feature Form Tests"]
+        
+        // Pass the name of the test function as the testCase, dropping the parentheses.
+        let testCaseArgument = ["-testCase", "\(id.dropLast(2))"]
+        app.launchArguments.append(contentsOf: testCaseArgument)
+        
         // Open tests
         app.launch()
         formViewTestsButton.tap()
-        
-        // Select test case
-        let testCase = String(id.dropLast(2))
-        let textField = app.textFields["Search"]
-        textField.tap()
-        textField.typeText(testCase)
-        let testCaseButton = app.buttons[testCase]
-        XCTAssertTrue(
-            testCaseButton.waitForExistence(timeout: 5),
-            "The button doesn't exist for \(testCase)"
-        )
-        testCaseButton.tap()
     }
     
     func testAttachmentRenaming() {
