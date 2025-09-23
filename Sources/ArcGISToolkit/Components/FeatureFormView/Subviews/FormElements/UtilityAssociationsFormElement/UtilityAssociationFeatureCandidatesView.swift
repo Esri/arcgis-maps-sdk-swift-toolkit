@@ -67,17 +67,16 @@ extension FeatureFormView {
             )
             .searchable(
                 text: $filterPhrase,
-                placement: .navigationBarDrawer(displayMode: .always)
-            ) {
-                Text(
-                    "Search Features",
-                    bundle: .toolkitModule,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: LocalizedStringResource(
+                    "Search Features",,
+                    bundle: .toolkit,
                     comment: """
                         A label for a search bar to search through feature 
                         candidates to use in a new utility association.
                         """
                 )
-            }
+            )
             .task {
                 let parameters = QueryParameters()
                 parameters.whereClause = "1=1"

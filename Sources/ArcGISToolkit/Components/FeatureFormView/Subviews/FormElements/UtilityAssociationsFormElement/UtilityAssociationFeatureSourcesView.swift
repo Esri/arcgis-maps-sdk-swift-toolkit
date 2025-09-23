@@ -64,17 +64,16 @@ extension FeatureFormView {
             }
             .searchable(
                 text: $filterPhrase,
-                placement: .navigationBarDrawer(displayMode: .always)
-            ) {
-                Text(
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: LocalizedStringResource(
                     "Search",
-                    bundle: .toolkitModule,
+                    bundle: .toolkit,
                     comment: """
                         A label for a search bar to search through utility 
                         association feature sources.
                         """
                 )
-            }
+            )
             .task {
                 featureQueryIsRunning = true
                 defer { featureQueryIsRunning = false }
