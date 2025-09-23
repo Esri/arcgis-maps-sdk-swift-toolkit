@@ -69,7 +69,7 @@ extension FeatureFormView {
                 text: $filterPhrase,
                 placement: .navigationBarDrawer(displayMode: .always),
                 prompt: LocalizedStringResource(
-                    "Search Features",,
+                    "Search Features",
                     bundle: .toolkit,
                     comment: """
                         A label for a search bar to search through feature 
