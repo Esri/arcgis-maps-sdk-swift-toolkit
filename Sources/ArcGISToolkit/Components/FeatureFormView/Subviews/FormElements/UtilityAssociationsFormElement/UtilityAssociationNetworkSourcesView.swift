@@ -55,7 +55,9 @@ extension FeatureFormView {
                         HStack {
                             Button(source.name) {
                                 navigationPath?.wrappedValue.append(
-                                    FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(embeddedFeatureFormViewModel, element, filter, source)
+                                    FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(
+                                        embeddedFeatureFormViewModel, element, filter, source
+                                    )
                                 )
                             }
                             Spacer()
