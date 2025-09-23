@@ -64,7 +64,11 @@ extension FeatureFormView {
                     }
                 }
             }
-            .searchable(text: $query, prompt: "Search")
+            .searchable(
+                text: $query,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Search"
+            )
             .task {
                 featureQueryIsRunning = true
                 defer { featureQueryIsRunning = false }
