@@ -15,47 +15,74 @@
 import ArcGIS
 import SwiftUI
 
-struct UtilityAssociationFeatureCandidatesView: View {
-    /// The navigation path for the navigation stack presenting this view.
-    @Environment(\.navigationPath) var navigationPath
-    
-    /// <#Description#>
-    let element: UtilityAssociationsFormElement
-    /// The view model for the form.
-    let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
-    /// <#Description#>
-    let filter: UtilityAssociationsFilter
-    /// <#Description#>
-    let source: UtilityAssociationFeatureSource
-    
-    /// <#Description#>
-    @State private var candidates: [UtilityAssociationFeatureCandidate] = []
-    
-    var body: some View {
-        List(candidates, id: \.title) { candidate in
-            Button {
-                navigationPath?.wrappedValue.append(
-                    FeatureFormView.NavigationPathItem.utilityAssociationCreationView(embeddedFeatureFormViewModel, candidate, element, filter)
-                )
-            } label: {
-                Text(candidate.title)
+extension FeatureFormView {
+    /// A view to choose a feature source when selecting a feature to create a utility association with.
+    struct UtilityAssociationFeatureCandidatesView: View {
+        /// The navigation path for the navigation stack presenting this view.
+        @Environment(\.navigationPath) var navigationPath
+        
+        /// The candidates that can be used to create an association.
+        @State private var candidates: [UtilityAssociationFeatureCandidate] = []
+        /// The phrase used to filter candidates by name.
+        @State private var filterPhrase = ""
+        
+        /// The element to add the new association to.
+        let element: UtilityAssociationsFormElement
+        /// The view model for the form.
+        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
+        /// The filter to use when creating the association.
+        let filter: UtilityAssociationsFilter
+        /// The feature source to query and obtain candidates from.
+        let source: UtilityAssociationFeatureSource
+        
+        /// The candidates that can be used to create an association filtered by name.
+        private var filteredCandidates: [UtilityAssociationFeatureCandidate] {
+            if filterPhrase.isEmpty {
+                candidates
+            } else {
+                candidates.filter({ $0.title.localizedStandardContains(filterPhrase) })
             }
         }
-        .navigationTitle(
-            Text(
-                "^[\(candidates.count) Available Features](inflect: true)",
-                bundle: .toolkitModule,
-                comment: """
-                    A navigation title for a page listing utility association
-                    feature candidates where the variable represents the number
-                    of available candidates.
-                    """
+        
+        var body: some View {
+            List(filteredCandidates, id: \.title) { candidate in
+                Button {
+                    navigationPath?.wrappedValue.append(
+                        FeatureFormView.NavigationPathItem.utilityAssociationCreationView(embeddedFeatureFormViewModel, candidate, element, filter)
+                    )
+                } label: {
+                    Text(candidate.title)
+                }
+            }
+            .navigationTitle(
+                Text(
+                    "^[\(candidates.count) Available Features](inflect: true)",
+                    bundle: .toolkitModule,
+                    comment: """
+                        A navigation title for a page listing utility association
+                        feature candidates where the variable represents the number
+                        of available candidates.
+                        """
+                )
             )
-        )
-        .task {
-            let parameters = QueryParameters()
-            parameters.whereClause = "1=1"
-            candidates = (try? await source.queryFeatures(parameters: parameters).candidates) ?? []
+            .searchable(
+                text: $filterPhrase,
+                placement: .navigationBarDrawer(displayMode: .always)
+            ) {
+                Text(
+                    "Search Features",
+                    bundle: .toolkitModule,
+                    comment: """
+                        A label for a search bar to search through feature 
+                        candidates to use in a new utility association.
+                        """
+                )
+            }
+            .task {
+                let parameters = QueryParameters()
+                parameters.whereClause = "1=1"
+                candidates = (try? await source.queryFeatures(parameters: parameters).candidates) ?? []
+            }
         }
     }
 }

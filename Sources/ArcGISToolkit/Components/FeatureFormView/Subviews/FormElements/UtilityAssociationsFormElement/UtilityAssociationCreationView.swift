@@ -15,139 +15,143 @@
 import ArcGIS
 import SwiftUI
 
-struct UtilityAssociationCreationView: View {
-    /// The navigation path for the navigation stack presenting this view.
-    @Environment(\.navigationPath) var navigationPath
-    
-    /// <#Description#>
-    let candidate: UtilityAssociationFeatureCandidate
-    /// The element to add the new association to.
-    let element: UtilityAssociationsFormElement
-    /// <#Description#>
-    let filter: UtilityAssociationsFilter
-    
-    /// <#Description#>
-    @State private var contentIsVisible: Bool = false
-    /// <#Description#>
-    @State private var fractionAlongEdge: Double = 0.5
-    /// <#Description#>
-    @State private var options: UtilityAssociationFeatureOptions? = nil
-    /// <#Description#>
-    @State private var isAddingAssociation = false
-    
-    var body: some View {
-        List {
-            sectionForAssociation
-            sectionForFromElement
-            sectionForToElement
-            sectionForFractionAlongEdge
-            sectionForAddButton
-        }
-        .task {
-            options = try? await element.options(forAssociationCandidate: candidate.feature)
-            print(options, options?.terminalConfiguration, options?.isFractionAlongEdgeValid)
-        }
-        .task(id: isAddingAssociation) {
-            guard isAddingAssociation else { return }
-            defer { isAddingAssociation = false }
-            await addAssociation()
-        }
-    }
-    
-    /// <#Description#>
-    func addAssociation() async {
-        guard let options else { return }
-        do {
-            switch (options.isFractionAlongEdgeValid, options.terminalConfiguration) {
-            case (false, .none):
-                try await element.addAssociation(feature: candidate.feature, filter: filter)
-            case let (false, .some(configuration)):
-                try await element.addAssociation(feature: candidate.feature, filter: filter)
-            case (true, .none):
-                try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
-            case let (true, .some(configuration)):
-                try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
+extension FeatureFormView {
+    /// A view to configure and add a utility network association.
+    struct UtilityAssociationCreationView: View {
+        /// The navigation path for the navigation stack presenting this view.
+        @Environment(\.navigationPath) var navigationPath
+        
+        /// A Boolean value indicating if the content in a containment association is visible.
+        @State private var contentIsVisible: Bool = false
+        /// How far along an edge the association is located.
+        @State private var fractionAlongEdge: Double = 0.5
+        /// The options for a utility network feature when creating an association.
+        @State private var options: UtilityAssociationFeatureOptions? = nil
+        /// A Boolean value which indicates when the configured association is being added.
+        @State private var isAddingAssociation = false
+        
+        /// The candidate feature for the new association to be created.
+        let candidate: UtilityAssociationFeatureCandidate
+        /// The element to add the new association to.
+        let element: UtilityAssociationsFormElement
+        /// The filter to use when creating the association.
+        let filter: UtilityAssociationsFilter
+        
+        var body: some View {
+            List {
+                sectionForAssociation
+                sectionForFromElement
+                sectionForToElement
+                sectionForFractionAlongEdge
+                sectionForAddButton
             }
-            navigationPath?.wrappedValue.removeLast(3)
-        } catch {
-            // TODO: Log or alert this error.
-            print(error.localizedDescription)
-        }
-    }
-    
-    /// <#Description#>
-    var sectionForAddButton: some View {
-        Section {
-            Button {
-                isAddingAssociation = true
-            } label: {
-                Text(
-                    "Add",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to add a new utility association."
-                )
+            .task {
+                options = try? await element.options(forAssociationCandidate: candidate.feature)
+                print(options, options?.terminalConfiguration, options?.isFractionAlongEdgeValid)
             }
-            .disabled(options == nil || isAddingAssociation)
-        }
-    }
-    
-    /// <#Description#>
-    var sectionForAssociation: some View {
-        Section {
-            LabeledContent {
-                // TODO: Determine association type.
-            } label: {
-                Text.associationType
+            .task(id: isAddingAssociation) {
+                guard isAddingAssociation else { return }
+                defer { isAddingAssociation = false }
+                await addAssociation()
             }
-            // TODO: Only show toggle when needed
-            if true {
-                Toggle(isOn: $contentIsVisible) {
+        }
+        
+        /// Adds the configured association and modifies the navigation path to return the user to the correct
+        /// location.
+        func addAssociation() async {
+            guard let options else { return }
+            do {
+                switch (options.isFractionAlongEdgeValid, options.terminalConfiguration) {
+                case (false, .none):
+                    try await element.addAssociation(feature: candidate.feature, filter: filter)
+                case let (false, .some(configuration)):
+                    try await element.addAssociation(feature: candidate.feature, filter: filter)
+                case (true, .none):
+                    try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
+                case let (true, .some(configuration)):
+                    try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
+                }
+                navigationPath?.wrappedValue.removeLast(3)
+            } catch {
+                // TODO: Log or alert this error.
+                print(error.localizedDescription)
+            }
+        }
+        
+        /// A section with a button to add the association.
+        var sectionForAddButton: some View {
+            Section {
+                Button {
+                    isAddingAssociation = true
+                } label: {
                     Text(
-                        "Content Visible",
+                        "Add",
                         bundle: .toolkitModule,
-                        comment: """
+                        comment: "A label for a button to add a new utility association."
+                    )
+                }
+                .disabled(options == nil || isAddingAssociation)
+            }
+        }
+        
+        /// A section which contains the association type label and the containment visibility toggle.
+        var sectionForAssociation: some View {
+            Section {
+                LabeledContent {
+                    // TODO: Determine association type.
+                } label: {
+                    Text.associationType
+                }
+                // TODO: Only show toggle when needed
+                if true {
+                    Toggle(isOn: $contentIsVisible) {
+                        Text(
+                            "Content Visible",
+                            bundle: .toolkitModule,
+                            comment: """
                             A label indicating whether content in the new
                             association is visible or not.
                             """
-                    )
+                        )
+                    }
                 }
             }
         }
-    }
-    
-    /// <#Description#>
-    var sectionForFromElement: some View {
-        Section {
-            LabeledContent {
-                // TODO: Determine what is considered the from element.
-            } label: {
-                Text.fromElement
-            }
-        }
-    }
-    
-    /// <#Description#>
-    var sectionForToElement: some View {
-        Section {
-            LabeledContent {
-                // TODO: Determine what is considered the to element.
-            } label: {
-                Text.toElement
-            }
-        }
-    }
-    
-    /// <#Description#>
-    @ViewBuilder var sectionForFractionAlongEdge: some View {
-        if options?.isFractionAlongEdgeValid ?? false {
+        
+        /// A section which contains a label for the feature on the from side of the association.
+        var sectionForFromElement: some View {
             Section {
                 LabeledContent {
-                    Text(fractionAlongEdge, format: .percent)
+                    // TODO: Determine what is considered the from element.
                 } label: {
-                    Text(LocalizedStringResource.fractionAlongEdge)
+                    Text.fromElement
                 }
-                Slider(value: $fractionAlongEdge, in: 0...1) { _ in
-                    LocalizedStringResource.fractionAlongEdge
+            }
+        }
+        
+        /// A section which contains a label for the feature on the to side of the association.
+        var sectionForToElement: some View {
+            Section {
+                LabeledContent {
+                    // TODO: Determine what is considered the to element.
+                } label: {
+                    Text.toElement
+                }
+            }
+        }
+        
+        /// A section which contains the fraction along edge slider.
+        @ViewBuilder var sectionForFractionAlongEdge: some View {
+            if options?.isFractionAlongEdgeValid ?? false {
+                Section {
+                    LabeledContent {
+                        Text(fractionAlongEdge, format: .percent)
+                    } label: {
+                        Text(LocalizedStringResource.fractionAlongEdge)
+                    }
+                    Slider(value: $fractionAlongEdge, in: 0...1) { _ in
+                        LocalizedStringResource.fractionAlongEdge
+                    }
                 }
             }
         }

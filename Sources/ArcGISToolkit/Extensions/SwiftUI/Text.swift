@@ -15,7 +15,7 @@
 import SwiftUI
 
 extension Text {
-    /// <#Description#>
+    /// Localized text for the phrase "Association Type".
     static var associationType: Self {
         .init(
             "Association Type",
@@ -47,7 +47,7 @@ extension Text {
         )
     }
     
-    /// <#Description#>
+    /// Localized text for the phrase "From Element".
     static var fromElement: Self {
         .init(
             "From Element",
@@ -83,7 +83,7 @@ extension Text {
         )
     }
     
-    /// <#Description#>
+    /// Localized text for the phrase "To Element".
     static var toElement: Self {
         .init(
             "To Element",

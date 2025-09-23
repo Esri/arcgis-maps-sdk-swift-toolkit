@@ -157,6 +157,15 @@ public struct FeatureFormView: View {
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
+                        case let .utilityAssociationFeatureSourcesView(embeddedFeatureFormViewModel, element, filter):
+                            UtilityAssociationFeatureSourcesView(
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                filter: filter
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(networkDataSource)
                         case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, resultTitle):
                             UtilityAssociationsFilterResultView(
                                 associationsFilterResultsModel: associationsFilterResultsModel,
@@ -182,15 +191,6 @@ public struct FeatureFormView: View {
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(groupTitle, subtitle: embeddedFeatureFormViewModel.title)
-                        case let .utilityAssociationNetworkSourcesView(embeddedFeatureFormViewModel, element, filter):
-                            UtilityAssociationNetworkSourcesView(
-                                element: element,
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                filter: filter
-                            )
-                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
-                            .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(networkDataSource)
                         }
                     }
             }

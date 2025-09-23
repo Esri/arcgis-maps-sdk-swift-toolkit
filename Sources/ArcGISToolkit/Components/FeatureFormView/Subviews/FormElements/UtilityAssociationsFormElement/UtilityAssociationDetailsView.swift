@@ -15,119 +15,122 @@
 import ArcGIS
 import SwiftUI
 
-struct UtilityAssociationDetailsView: View {
-    /// The navigation path for the navigation stack presenting this view.
-    @Environment(\.navigationPath) var navigationPath
-    
-    /// A Boolean value indicating whether the element is editable.
-    @State private var isEditable = false
-    /// A Boolean value indicating whether the removal confirmation is presented.
-    @State private var removalConfirmationIsPresented = false
-    
-    /// The association result.
-    let associationResult: UtilityAssociationResult
-    /// The model containing the latest association filter results.
-    let associationsFilterResultsModel: AssociationsFilterResultsModel
-    /// The element containing the association.
-    let element: UtilityAssociationsFormElement
-    /// The model for the feature form containing the element with the association.
-    let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
-    
-    var body: some View {
-        List {
-            sectionForAssociation
-            sectionForFromElement
-            sectionForToElement
-            sectionForRemoveButton
-        }
-        .navigationTitle(
-            Text(
-                "Association Settings",
-                bundle: .toolkitModule,
-                comment: "A navigation title for the Association Settings page."
+extension FeatureFormView {
+    /// A view to inspect and delete a utility network association.
+    struct UtilityAssociationDetailsView: View {
+        /// The navigation path for the navigation stack presenting this view.
+        @Environment(\.navigationPath) var navigationPath
+        
+        /// A Boolean value indicating whether the element is editable.
+        @State private var isEditable = false
+        /// A Boolean value indicating whether the removal confirmation is presented.
+        @State private var removalConfirmationIsPresented = false
+        
+        /// The association result.
+        let associationResult: UtilityAssociationResult
+        /// The model containing the latest association filter results.
+        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        /// The element containing the association.
+        let element: UtilityAssociationsFormElement
+        /// The model for the feature form containing the element with the association.
+        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
+        
+        var body: some View {
+            List {
+                sectionForAssociation
+                sectionForFromElement
+                sectionForToElement
+                sectionForRemoveButton
+            }
+            .navigationTitle(
+                Text(
+                    "Association Settings",
+                    bundle: .toolkitModule,
+                    comment: "A navigation title for the Association Settings page."
+                )
             )
-        )
-        .onIsEditableChange(of: element) { newIsEditable in
-            isEditable = newIsEditable
+            .onIsEditableChange(of: element) { newIsEditable in
+                isEditable = newIsEditable
+            }
         }
-    }
-    
-    /// The name of the provided terminal as labeled content.
-    func row(for terminal: UtilityTerminal) -> some View {
-        LabeledContent {
-            Text(terminal.name)
-        } label: {
-            Text(
-                "Terminal",
-                bundle: .toolkitModule,
-                comment: "A label in reference to a utility terminal."
-            )
-        }
-    }
-    
-    /// <#Description#>
-    var sectionForAssociation: some View {
-        Section {
+        
+        /// The name of the provided terminal as labeled content.
+        func row(for terminal: UtilityTerminal) -> some View {
             LabeledContent {
-                associationResult.association.kind.name
+                Text(terminal.name)
             } label: {
-                Text.associationType
+                Text(
+                    "Terminal",
+                    bundle: .toolkitModule,
+                    comment: "A label in reference to a utility terminal."
+                )
             }
         }
-    }
-    
-    /// <#Description#>
-    var sectionForFromElement: some View {
-        Section {
-            LabeledContent {
-                Text(associationResult.associatedFeatureIsToElement ? embeddedFeatureFormViewModel.title : associationResult.title)
-            } label: {
-                Text.fromElement
-            }
-            if let fromElementTerminal = associationResult.association.fromElement.terminal {
-                row(for: fromElementTerminal)
-            }
-        }
-    }
-    
-    /// <#Description#>
-    var sectionForToElement: some View {
-        Section {
-            LabeledContent {
-                Text(associationResult.associatedFeatureIsToElement ? associationResult.title : embeddedFeatureFormViewModel.title)
-            } label: {
-                Text.toElement
-            }
-            if let toElementTerminal = associationResult.association.toElement.terminal {
-                row(for: toElementTerminal)
-            }
-        }
-    }
-    
-    /// <#Description#>
-    @ViewBuilder var sectionForRemoveButton: some View {
-        if isEditable {
+        
+        /// A section which contains the association type label.
+        var sectionForAssociation: some View {
             Section {
-                Button(role: .destructive) {
-                    removalConfirmationIsPresented = true
+                LabeledContent {
+                    associationResult.association.kind.name
                 } label: {
-                    Text(LocalizedStringResource.removeAssociation)
-                        .frame(maxWidth: .infinity, alignment: .center)
+                    Text.associationType
                 }
-                .associationRemovalConfirmation(
-                    isPresented: $removalConfirmationIsPresented,
-                    association: associationResult.association,
-                    element: element,
-                    embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
-                ) {
-                    associationsFilterResultsModel.fetchResults()
-                    navigationPath?.wrappedValue.removeLast()
+            }
+        }
+        
+        /// A section which contains a label for the feature on the from side of the association.
+        var sectionForFromElement: some View {
+            Section {
+                LabeledContent {
+                    Text(associationResult.associatedFeatureIsToElement ? embeddedFeatureFormViewModel.title : associationResult.title)
+                } label: {
+                    Text.fromElement
+                }
+                if let fromElementTerminal = associationResult.association.fromElement.terminal {
+                    row(for: fromElementTerminal)
+                }
+            }
+        }
+        
+        /// A section which contains a label for the feature on the to side of the association.
+        var sectionForToElement: some View {
+            Section {
+                LabeledContent {
+                    Text(associationResult.associatedFeatureIsToElement ? associationResult.title : embeddedFeatureFormViewModel.title)
+                } label: {
+                    Text.toElement
+                }
+                if let toElementTerminal = associationResult.association.toElement.terminal {
+                    row(for: toElementTerminal)
+                }
+            }
+        }
+        
+        /// A section with a button to remove the association.
+        @ViewBuilder var sectionForRemoveButton: some View {
+            if isEditable {
+                Section {
+                    Button(role: .destructive) {
+                        removalConfirmationIsPresented = true
+                    } label: {
+                        Text(LocalizedStringResource.removeAssociation)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    .associationRemovalConfirmation(
+                        isPresented: $removalConfirmationIsPresented,
+                        association: associationResult.association,
+                        element: element,
+                        embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+                    ) {
+                        associationsFilterResultsModel.fetchResults()
+                        navigationPath?.wrappedValue.removeLast()
+                    }
                 }
             }
         }
     }
 }
-
+    
 private extension UtilityAssociation.Kind {
     /// A localized label for the association kind.
     var name: Text {

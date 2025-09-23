@@ -18,6 +18,12 @@ import SwiftUI
 extension FeatureFormView {
     /// A view for a utility associations filter result.
     struct UtilityAssociationsFilterResultView: View {
+        /// The navigation path for the navigation stack presenting this view.
+        @Environment(\.navigationPath) var navigationPath
+        
+        /// A Boolean value indicating whether the element is editable.
+        @State private var isEditable = false
+        
         /// The model containing the latest association filter results.
         let associationsFilterResultsModel: AssociationsFilterResultsModel
         /// The form element containing the filter result.
@@ -37,12 +43,6 @@ extension FeatureFormView {
         var groupResults: [UtilityAssociationGroupResult] {
             filterResult?.groupResults ?? []
         }
-        
-        /// The navigation path for the navigation stack presenting this view.
-        @Environment(\.navigationPath) var navigationPath
-        
-        /// A Boolean value indicating whether the element is editable.
-        @State private var isEditable = false
         
         var body: some View {
             List {
@@ -85,7 +85,7 @@ extension FeatureFormView {
             Menu {
                 Button {
                     navigationPath?.wrappedValue.append(
-                        FeatureFormView.NavigationPathItem.utilityAssociationNetworkSourcesView(
+                        FeatureFormView.NavigationPathItem.utilityAssociationFeatureSourcesView(
                             embeddedFeatureFormViewModel,
                             element,
                             filterResult!.filter

@@ -16,30 +16,31 @@ import ArcGIS
 import SwiftUI
 
 extension FeatureFormView {
-    struct UtilityAssociationNetworkSourcesView: View {
+    /// A view to choose a feature source when selecting a feature to create a utility association with.
+    struct UtilityAssociationFeatureSourcesView: View {
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
         /// A Boolean value that indicates if a feature query is running.
         @State private var featureQueryIsRunning = false
-        /// <#Description#>
-        @State private var query = ""
-        /// <#Description#>
+        /// The phrase used to filter feature sources by name.
+        @State private var filterPhrase = ""
+        /// The feature sources that can be used to create an association.
         @State private var sources: [UtilityAssociationFeatureSource] = []
         
-        /// <#Description#>
+        /// The element to add the new association to.
         let element: UtilityAssociationsFormElement
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
-        /// <#Description#>
+        /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
         
-        /// <#Description#>
+        /// The feature sources that can be used to create an association filtered by name.
         private var filteredSources: [UtilityAssociationFeatureSource] {
-            if query.isEmpty {
+            if filterPhrase.isEmpty {
                 sources
             } else {
-                sources.filter({ $0.name.localizedStandardContains(query) })
+                sources.filter({ $0.name.localizedStandardContains(filterPhrase) })
             }
         }
         
@@ -62,7 +63,7 @@ extension FeatureFormView {
                 }
             }
             .searchable(
-                text: $query,
+                text: $filterPhrase,
                 placement: .navigationBarDrawer(displayMode: .always)
             ) {
                 Text(

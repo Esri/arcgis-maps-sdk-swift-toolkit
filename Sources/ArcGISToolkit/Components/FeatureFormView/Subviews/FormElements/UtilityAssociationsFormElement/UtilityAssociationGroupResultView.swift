@@ -21,34 +21,26 @@ extension FeatureFormView {
         /// A Boolean which declares whether navigation to forms for features associated via utility
         /// association form elements is disabled.
         @Environment(\.navigationIsDisabled) var navigationIsDisabled
-        
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
-        
         /// The environment value to set the continuation to use when the user responds to the alert.
         @Environment(\.setAlertContinuation) var setAlertContinuation
         
         /// The association to be potentially removed.
         @State private var associationPendingRemoval: UtilityAssociation?
-        
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
-        
         /// A Boolean value indicating whether the removal confirmation is presented.
         @State private var removalConfirmationIsPresented = false
         
         /// The model containing the latest association filter results.
         let associationsFilterResultsModel: AssociationsFilterResultsModel
-        
         /// The form element containing the group result.
         let element: UtilityAssociationsFormElement
-        
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
-        
         /// The title of the selected utility associations filter result.
         let filterTitle: String
-        
         /// The title of the selected utility association group result.
         let groupTitle: String
         
