@@ -15,6 +15,15 @@
 import SwiftUI
 
 extension Text {
+    /// <#Description#>
+    static var associationType: Self {
+        .init(
+            "Association Type",
+            bundle: .toolkitModule,
+            comment: "A label in reference to a utility association type."
+        )
+    }
+    
     /// Localized text for the word "Cancel".
     static var cancel: Self {
         .init(LocalizedStringResource.cancel)
@@ -35,6 +44,15 @@ extension Text {
             "Field",
             bundle: .toolkitModule,
             comment: "A field in a dataset."
+        )
+    }
+    
+    /// <#Description#>
+    static var fromElement: Self {
+        .init(
+            "From Element",
+            bundle: .toolkitModule,
+            comment: #"A label for the element on the "from" side of a utility association."#
         )
     }
     
@@ -62,6 +80,15 @@ extension Text {
             "Required",
             bundle: .toolkitModule,
             comment: "A label indicating a field is required"
+        )
+    }
+    
+    /// <#Description#>
+    static var toElement: Self {
+        .init(
+            "To Element",
+            bundle: .toolkitModule,
+            comment: #"A label for the element on the "to" side of a utility association."#
         )
     }
     

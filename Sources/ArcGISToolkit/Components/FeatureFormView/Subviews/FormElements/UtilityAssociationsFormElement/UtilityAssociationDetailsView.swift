@@ -65,30 +65,24 @@ struct UtilityAssociationDetailsView: View {
         }
     }
     
+    /// <#Description#>
     var sectionForAssociation: some View {
         Section {
             LabeledContent {
                 associationResult.association.kind.name
             } label: {
-                Text(
-                    "Association Type",
-                    bundle: .toolkitModule,
-                    comment: "A label in reference to a utility association type."
-                )
+                Text.associationType
             }
         }
     }
     
+    /// <#Description#>
     var sectionForFromElement: some View {
         Section {
             LabeledContent {
                 Text(associationResult.associatedFeatureIsToElement ? embeddedFeatureFormViewModel.title : associationResult.title)
             } label: {
-                Text(
-                    "From Element",
-                    bundle: .toolkitModule,
-                    comment: #"A label for the element on the "from" side of a utility association."#
-                )
+                Text.fromElement
             }
             if let fromElementTerminal = associationResult.association.fromElement.terminal {
                 row(for: fromElementTerminal)
@@ -96,16 +90,13 @@ struct UtilityAssociationDetailsView: View {
         }
     }
     
+    /// <#Description#>
     var sectionForToElement: some View {
         Section {
             LabeledContent {
                 Text(associationResult.associatedFeatureIsToElement ? associationResult.title : embeddedFeatureFormViewModel.title)
             } label: {
-                Text(
-                    "To Element",
-                    bundle: .toolkitModule,
-                    comment: #"A label for the element on the "to" side of a utility association."#
-                )
+                Text.toElement
             }
             if let toElementTerminal = associationResult.association.toElement.terminal {
                 row(for: toElementTerminal)
@@ -113,6 +104,7 @@ struct UtilityAssociationDetailsView: View {
         }
     }
     
+    /// <#Description#>
     @ViewBuilder var sectionForRemoveButton: some View {
         if isEditable {
             Section {

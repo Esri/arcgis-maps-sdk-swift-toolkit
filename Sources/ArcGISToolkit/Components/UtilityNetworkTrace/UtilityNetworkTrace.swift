@@ -569,7 +569,7 @@ public struct UtilityNetworkTrace: View {
         .catalystPadding()
         List {
             if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
-                Section(LocalizedStringResource.fractionAlongEdge) {
+                Section(String(localized: .fractionAlongEdge)) {
                     Slider(
                         value: Binding {
                             viewModel.pendingTrace.startingPoints.first {

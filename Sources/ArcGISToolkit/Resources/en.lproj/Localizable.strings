@@ -170,6 +170,10 @@ for the AR experience. */
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Containment";
 
+/* A label indicating whether content in the new
+association is visible or not. */
+"Content Visible" = "Content Visible";
+
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
 
@@ -369,7 +373,8 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "Finish editing failed.\n%@";
 
-/* A label in reference to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an
+edge style utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
 
 /* A label for the element on the "from" side of a utility association. */

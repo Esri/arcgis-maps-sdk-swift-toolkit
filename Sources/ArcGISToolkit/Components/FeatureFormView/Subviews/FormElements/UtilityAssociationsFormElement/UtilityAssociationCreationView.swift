@@ -21,7 +21,7 @@ struct UtilityAssociationCreationView: View {
     
     /// <#Description#>
     let candidate: UtilityAssociationFeatureCandidate
-    /// <#Description#>
+    /// The element to add the new association to.
     let element: UtilityAssociationsFormElement
     /// <#Description#>
     let filter: UtilityAssociationsFilter
@@ -54,6 +54,7 @@ struct UtilityAssociationCreationView: View {
         }
     }
     
+    /// <#Description#>
     func addAssociation() async {
         guard let options else { return }
         do {
@@ -69,11 +70,12 @@ struct UtilityAssociationCreationView: View {
             }
             navigationPath?.wrappedValue.removeLast(3)
         } catch {
-            #warning("Logger needed")
+            // TODO: Log or alert this error.
             print(error.localizedDescription)
         }
     }
     
+    /// <#Description#>
     var sectionForAddButton: some View {
         Section {
             Button {
@@ -89,16 +91,13 @@ struct UtilityAssociationCreationView: View {
         }
     }
     
+    /// <#Description#>
     var sectionForAssociation: some View {
         Section {
             LabeledContent {
-                
+                // TODO: Determine association type.
             } label: {
-                Text(
-                    "Association Type",
-                    bundle: .toolkitModule,
-                    comment: "A label in reference to a utility association type."
-                )
+                Text.associationType
             }
             // TODO: Only show toggle when needed
             if true {
@@ -116,34 +115,29 @@ struct UtilityAssociationCreationView: View {
         }
     }
     
+    /// <#Description#>
     var sectionForFromElement: some View {
         Section {
             LabeledContent {
-                
+                // TODO: Determine what is considered the from element.
             } label: {
-                Text(
-                    "From Element",
-                    bundle: .toolkitModule,
-                    comment: #"A label for the element on the "from" side of a utility association."#
-                )
+                Text.fromElement
             }
         }
     }
     
+    /// <#Description#>
     var sectionForToElement: some View {
         Section {
             LabeledContent {
-                
+                // TODO: Determine what is considered the to element.
             } label: {
-                Text(
-                    "To Element",
-                    bundle: .toolkitModule,
-                    comment: #"A label for the element on the "to" side of a utility association."#
-                )
+                Text.toElement
             }
         }
     }
     
+    /// <#Description#>
     @ViewBuilder var sectionForFractionAlongEdge: some View {
         if options?.isFractionAlongEdgeValid ?? false {
             Section {
