@@ -65,9 +65,9 @@ extension FeatureFormView {
             .searchable(
                 text: $filterPhrase,
                 placement: .navigationBarDrawer(displayMode: .always),
-                prompt: LocalizedStringResource(
+                prompt: Text(
                     "Search",
-                    bundle: .toolkit,
+                    bundle: .toolkitModule,
                     comment: """
                         A label for a search bar to search through utility 
                         association feature sources.

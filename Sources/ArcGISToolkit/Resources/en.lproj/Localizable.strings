@@ -672,6 +672,10 @@ current visible extent of the map or scene. */
 association feature sources. */
 "Search" = "Search";
 
+/* A label for a search bar to search through feature 
+candidates to use in a new utility association. */
+"Search Features" = "Search Features";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Search Query";
 
