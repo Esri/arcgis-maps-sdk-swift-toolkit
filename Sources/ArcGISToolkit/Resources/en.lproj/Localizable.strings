@@ -143,6 +143,10 @@ for the AR experience. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Choose From Library";
 
+/* Instructional text for the user to choose a feature
+candidate to add as a utility association. */
+"Choose to add" = "Choose to add";
+
 /* Cities (Level of Detail) */
 "Cities" = "Cities";
 

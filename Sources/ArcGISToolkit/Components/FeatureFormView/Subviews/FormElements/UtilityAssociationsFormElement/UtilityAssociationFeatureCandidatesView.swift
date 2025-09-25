@@ -45,13 +45,29 @@ extension FeatureFormView {
         }
         
         var body: some View {
-            List(filteredCandidates, id: \.title) { candidate in
-                Button {
-                    navigationPath?.wrappedValue.append(
-                        FeatureFormView.NavigationPathItem.utilityAssociationCreationView(embeddedFeatureFormViewModel, candidate, element, filter)
+            List {
+                Section {
+                    ForEach(filteredCandidates, id: \.title) { candidate in
+                        NavigationLink(
+                            candidate.title,
+                            value: FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
+                                embeddedFeatureFormViewModel,
+                                candidate,
+                                element,
+                                filter
+                            )
+                        )
+                    }
+                } header: {
+                    Text(
+                        "Choose to add",
+                        bundle: .toolkitModule,
+                        comment: """
+                            Instructional text for the user to choose a feature
+                            candidate to add as a utility association.
+                            """
                     )
-                } label: {
-                    Text(candidate.title)
+                    .font(.caption)
                 }
             }
             .navigationTitle(
