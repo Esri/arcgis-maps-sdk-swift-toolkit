@@ -68,16 +68,12 @@ extension FeatureFormView {
                 if includeContentVisibility {
                     try await element.addAssociation(feature: candidate.feature, filter: filter, isContainmentVisible: contentIsVisible)
                 } else {
-                    // TODO: Use addAssociation(feature:featureTerminal:filter: currentFeatureTerminal:) when neither formFeatureTerminalConfiguration and candidateFeatureTerminalConfiguration are null
-                    // TODO: Use addAssociation(feature:filter:fractionAlongEdge:terminal:) when when isFractionAlongEdgeValid AND either formFeatureTerminalConfiguration is set or candidateFeatureTerminalConfiguration is set; but not both.
+                    // TODO: (Ref: Apollo 1368) Use addAssociation(feature:featureTerminal:filter: currentFeatureTerminal:) when neither formFeatureTerminalConfiguration and candidateFeatureTerminalConfiguration are null
+                    // TODO: (Ref: Apollo 1368) Use addAssociation(feature:filter:fractionAlongEdge:terminal:) when when isFractionAlongEdgeValid AND either formFeatureTerminalConfiguration is set or candidateFeatureTerminalConfiguration is set; but not both.
                     switch (options.isFractionAlongEdgeValid, options.terminalConfiguration) {
-                    case (false, .none):
+                    case (false, _):
                         try await element.addAssociation(feature: candidate.feature, filter: filter)
-                    case let (false, .some(configuration)):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter)
-                    case (true, .none):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
-                    case let (true, .some(configuration)):
+                    case (true, _):
                         try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
                     }
                 }
@@ -89,16 +85,15 @@ extension FeatureFormView {
         }
         
         /// A Boolean value indicating whether the candidate feature is on the "to" side of the new association.
+        ///
+        /// - Note: For connectivity filters, "From" and "To" doesn't have a strong meaning but we
+        /// consider the candidate as "to" anyway.
         var candidateIsToElement: Bool {
             switch filter.kind {
-            case .attachment, .content:
+            case .attachment, .connectivity, .content:
                 true
             case .structure, .container:
                 false
-            case .connectivity:
-                // For connectivity filters, "From" and "To" doesn't have a
-                // strong meaning but we consider the candidate as "to" anyway.
-                true
             @unknown default:
                 true
             }
@@ -163,6 +158,7 @@ extension FeatureFormView {
                 } label: {
                     Text.fromElement
                 }
+                // TODO: (Ref: Apollo 1368) Add terminal configuration settings depending on value of formFeatureTerminalConfiguration and candidateFeatureTerminalConfiguration
             }
         }
         
@@ -174,6 +170,7 @@ extension FeatureFormView {
                 } label: {
                     Text.toElement
                 }
+                // TODO: (Ref: Apollo 1368) Add terminal configuration settings depending on value of formFeatureTerminalConfiguration and candidateFeatureTerminalConfiguration
             }
         }
         
