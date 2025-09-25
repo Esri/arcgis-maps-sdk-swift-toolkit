@@ -72,12 +72,14 @@ extension FeatureFormView {
                         }
                         .tint(.primary)
                     }
-                } footer: {
-                    addAssociationMenu
                 }
                 .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
                     associationsFilterResultsModel.fetchResults()
                 }
+            }
+            .overlay(alignment: .bottomLeading) {
+                addAssociationMenu
+                    .padding()
             }
         }
         
