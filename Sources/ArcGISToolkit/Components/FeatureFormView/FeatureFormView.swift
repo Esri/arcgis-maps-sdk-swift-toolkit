@@ -459,9 +459,7 @@ extension FeatureFormView {
         .init(
             "New Association",
             bundle: .toolkitModule,
-            comment: """
-                A navigation title for a view to create a new association in.
-                """
+            comment: "A navigation title for a view to create a new association in."
         )
     }
     
