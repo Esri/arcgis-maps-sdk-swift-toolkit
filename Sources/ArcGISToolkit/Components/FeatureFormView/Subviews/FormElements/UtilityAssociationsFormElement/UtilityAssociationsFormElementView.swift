@@ -62,16 +62,13 @@ extension FeatureFormView {
     private struct Row: View {
         /// The view model for the form.
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
-        
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
         /// The model containing the latest association filter results.
         let associationsFilterResultsModel: AssociationsFilterResultsModel
-        
         /// The form element containing the filter result.
         let element: UtilityAssociationsFormElement
-        
         /// The title of the referenced utility associations filter result.
         let filterTitle: String
         
