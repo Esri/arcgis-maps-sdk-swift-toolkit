@@ -111,7 +111,14 @@ extension FeatureFormView {
         var sectionForAssociation: some View {
             Section {
                 LabeledContent {
-                    // TODO: Determine association type.
+                    switch filter.kind {
+                    case .attachment, .structure:
+                        UtilityAssociation.Kind.attachment.name
+                    case .container, .content:
+                        UtilityAssociation.Kind.containment.name
+                    default:
+                        UtilityAssociation.Kind.connectivity.name
+                    }
                 } label: {
                     Text.associationType
                 }
