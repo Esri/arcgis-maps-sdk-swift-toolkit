@@ -36,6 +36,8 @@ extension FeatureFormView {
         let candidate: UtilityAssociationFeatureCandidate
         /// The element to add the new association to.
         let element: UtilityAssociationsFormElement
+        /// The model for the form with the element to add the new association to.
+        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
         
@@ -83,6 +85,22 @@ extension FeatureFormView {
             } catch {
                 // TODO: Log or alert this error.
                 print(error.localizedDescription)
+            }
+        }
+        
+        /// A Boolean value indicating whether the candidate feature is on the "to" side of the new association.
+        var candidateIsToElement: Bool {
+            switch filter.kind {
+            case .attachment, .content:
+                true
+            case .structure, .container:
+                false
+            case .connectivity:
+                // For connectivity filters, "From" and "To" doesn't have a
+                // strong meaning but we consider the candidate as "to" anyway.
+                true
+            @unknown default:
+                true
             }
         }
         
@@ -141,7 +159,7 @@ extension FeatureFormView {
         var sectionForFromElement: some View {
             Section {
                 LabeledContent {
-                    // TODO: Determine what is considered the from element.
+                    Text(candidateIsToElement ? embeddedFeatureFormViewModel.title : candidate.title)
                 } label: {
                     Text.fromElement
                 }
@@ -152,7 +170,7 @@ extension FeatureFormView {
         var sectionForToElement: some View {
             Section {
                 LabeledContent {
-                    // TODO: Determine what is considered the to element.
+                    Text(candidateIsToElement ? candidate.title : embeddedFeatureFormViewModel.title)
                 } label: {
                     Text.toElement
                 }

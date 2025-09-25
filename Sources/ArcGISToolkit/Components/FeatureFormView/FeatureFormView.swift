@@ -135,7 +135,7 @@ public struct FeatureFormView: View {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
                         case let .utilityAssociationCreationView(embeddedFeatureFormViewModel, candidate, element, filter):
-                            UtilityAssociationCreationView(candidate: candidate, element: element, filter: filter)
+                            UtilityAssociationCreationView(candidate: candidate, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel, filter: filter)
                                 .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                                 .navigationBarTitleDisplayMode(.inline)
                                 .navigationTitle(newAssociation)
