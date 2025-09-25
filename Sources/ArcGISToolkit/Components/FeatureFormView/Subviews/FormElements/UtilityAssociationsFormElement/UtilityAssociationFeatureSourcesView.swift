@@ -18,9 +18,6 @@ import SwiftUI
 extension FeatureFormView {
     /// A view to choose a feature source when selecting a feature to create a utility association with.
     struct UtilityAssociationFeatureSourcesView: View {
-        /// The navigation path for the navigation stack presenting this view.
-        @Environment(\.navigationPath) var navigationPath
-        
         /// A Boolean value that indicates if a feature query is running.
         @State private var featureQueryIsRunning = false
         /// The phrase used to filter feature sources by name.

@@ -18,9 +18,6 @@ import SwiftUI
 extension FeatureFormView {
     /// A view to choose a feature source when selecting a feature to create a utility association with.
     struct UtilityAssociationFeatureCandidatesView: View {
-        /// The navigation path for the navigation stack presenting this view.
-        @Environment(\.navigationPath) var navigationPath
-        
         /// The candidates that can be used to create an association.
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
         /// The phrase used to filter candidates by name.
