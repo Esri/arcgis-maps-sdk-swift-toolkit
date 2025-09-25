@@ -21,9 +21,13 @@ extension FeatureFormView {
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
+        /// The error to be presented when adding an association failed.
+        @State private var addAssociationError: AddAssociationError?
+        /// A Boolean value indicating if the alert is presented.
+        @State private var alertIsPresented = false
         /// A Boolean value indicating if the content in a containment association is visible.
         ///
-        /// See also `includeContentVisibility`.
+        /// See also: `includeContentVisibility`.
         @State private var contentIsVisible: Bool = false
         /// How far along an edge the association is located.
         @State private var fractionAlongEdge: Double = 0.5
@@ -49,6 +53,7 @@ extension FeatureFormView {
                 sectionForFractionAlongEdge
                 sectionForAddButton
             }
+            .alert(isPresented: $alertIsPresented, error: addAssociationError) {}
             .task {
                 options = try? await element.options(forAssociationCandidate: candidate.feature)
                 print(options, options?.terminalConfiguration, options?.isFractionAlongEdgeValid)
@@ -79,8 +84,8 @@ extension FeatureFormView {
                 }
                 navigationPath?.wrappedValue.removeLast(3)
             } catch {
-                // TODO: Log or alert this error.
-                print(error.localizedDescription)
+                addAssociationError = .anyError(error)
+                alertIsPresented = true
             }
         }
         
@@ -187,6 +192,20 @@ extension FeatureFormView {
                         LocalizedStringResource.fractionAlongEdge
                     }
                 }
+            }
+        }
+    }
+    
+    private enum AddAssociationError: LocalizedError {
+        case anyError(any Error)
+        case other(String)
+        
+        var errorDescription: String? {
+            switch self {
+            case .anyError(let error):
+                error.localizedDescription
+            case .other(let message):
+                message
             }
         }
     }
