@@ -36,7 +36,7 @@ extension FeatureFormView {
         let candidate: UtilityAssociationFeatureCandidate
         /// The element to add the new association to.
         let element: UtilityAssociationsFormElement
-        /// The model for the form with the element to add the new association to.
+        /// The model for the feature form containing the element to add the association to.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
