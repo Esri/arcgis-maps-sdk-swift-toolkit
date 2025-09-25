@@ -92,7 +92,7 @@ extension FeatureFormView {
         /// A Boolean value indicating whether the candidate feature is on the "to" side of the new association.
         ///
         /// - Note: For connectivity filters, "From" and "To" doesn't have a strong meaning but we
-        /// consider the candidate as "to" anyway.
+        /// consider the candidate as "To" anyway.
         var candidateIsToElement: Bool {
             switch filter.kind {
             case .attachment, .connectivity, .content:
