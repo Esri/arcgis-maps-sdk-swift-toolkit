@@ -196,6 +196,7 @@ extension FeatureFormView {
         }
     }
     
+    /// A error that occurred while adding a utility association.
     private enum AddAssociationError: LocalizedError {
         case anyError(any Error)
         case other(String)
