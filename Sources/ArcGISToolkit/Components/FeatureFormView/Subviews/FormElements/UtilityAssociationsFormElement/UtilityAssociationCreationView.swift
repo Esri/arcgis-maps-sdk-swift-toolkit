@@ -22,6 +22,8 @@ extension FeatureFormView {
         @Environment(\.navigationPath) var navigationPath
         
         /// A Boolean value indicating if the content in a containment association is visible.
+        ///
+        /// See also `includeContentVisibility`.
         @State private var contentIsVisible: Bool = false
         /// How far along an edge the association is located.
         @State private var fractionAlongEdge: Double = 0.5
@@ -61,21 +63,30 @@ extension FeatureFormView {
         func addAssociation() async {
             guard let options else { return }
             do {
-                switch (options.isFractionAlongEdgeValid, options.terminalConfiguration) {
-                case (false, .none):
-                    try await element.addAssociation(feature: candidate.feature, filter: filter)
-                case let (false, .some(configuration)):
-                    try await element.addAssociation(feature: candidate.feature, filter: filter)
-                case (true, .none):
-                    try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
-                case let (true, .some(configuration)):
-                    try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
+                if includeContentVisibility {
+                    try await element.addAssociation(feature: candidate.feature, filter: filter, isContainmentVisible: contentIsVisible)
+                } else {
+                    switch (options.isFractionAlongEdgeValid, options.terminalConfiguration) {
+                    case (false, .none):
+                        try await element.addAssociation(feature: candidate.feature, filter: filter)
+                    case let (false, .some(configuration)):
+                        try await element.addAssociation(feature: candidate.feature, filter: filter)
+                    case (true, .none):
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
+                    case let (true, .some(configuration)):
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
+                    }
                 }
                 navigationPath?.wrappedValue.removeLast(3)
             } catch {
                 // TODO: Log or alert this error.
                 print(error.localizedDescription)
             }
+        }
+        
+        /// A Boolean value indicating whether content visibility should be specified for the new association.
+        var includeContentVisibility: Bool {
+            filter.kind == .container || filter.kind == .content
         }
         
         /// A section with a button to add the association.
@@ -102,8 +113,7 @@ extension FeatureFormView {
                 } label: {
                     Text.associationType
                 }
-                // TODO: Only show toggle when needed
-                if true {
+                if includeContentVisibility {
                     Toggle(isOn: $contentIsVisible) {
                         Text(
                             "Content Visible",
