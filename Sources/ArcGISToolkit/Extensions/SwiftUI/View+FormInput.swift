@@ -16,7 +16,7 @@ import ArcGIS
 import SwiftUI
 
 extension View {
-    /// Modifier for watching ``FieldFormElement.isEditableChanged`` events.
+    /// Modifier for watching ``FieldFormElement.isEditable``.
     /// - Parameters:
     ///   - element: The form element to watch for changes on.
     ///   - action: The action which watches for changes.
@@ -33,7 +33,7 @@ extension View {
             }
     }
     
-    /// Modifier for watching ``UtilityAssociationsFormElement.isEditableChanged`` events.
+    /// Modifier for watching ``UtilityAssociationsFormElement.isEditable``.
     /// - Parameters:
     ///   - element: The form element to watch for changes on.
     ///   - action: The action which watches for changes.
@@ -50,7 +50,7 @@ extension View {
             }
     }
     
-    /// Modifier for watching ``FormElement.isRequiredChanged`` events.
+    /// Modifier for watching ``FieldFormElement.isRequired``.
     /// - Parameters:
     ///   - element: The form element to watch for changes on.
     ///   - action: The action which watches for changes.
@@ -67,7 +67,7 @@ extension View {
             }
     }
     
-    /// Modifier for watching ``FormElement.valueChanged`` events.
+    /// Modifier for watching ``FieldFormElement.value``.
     /// - Parameters:
     ///   - element: The form element to watch for changes on.
     ///   - action: The action which watches for changes.
