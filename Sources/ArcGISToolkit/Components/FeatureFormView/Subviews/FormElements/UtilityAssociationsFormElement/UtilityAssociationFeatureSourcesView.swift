@@ -48,17 +48,12 @@ extension FeatureFormView {
             List {
                 Section {
                     ForEach(filteredSources, id: \.name) { source in
-                        HStack {
-                            Button(source.name) {
-                                navigationPath?.wrappedValue.append(
-                                    FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(
-                                        embeddedFeatureFormViewModel, element, filter, source
-                                    )
-                                )
-                            }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                        }
+                        NavigationLink(
+                            source.name,
+                            value: FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(
+                                embeddedFeatureFormViewModel, element, filter, source
+                            )
+                        )
                     }
                 }
             }
