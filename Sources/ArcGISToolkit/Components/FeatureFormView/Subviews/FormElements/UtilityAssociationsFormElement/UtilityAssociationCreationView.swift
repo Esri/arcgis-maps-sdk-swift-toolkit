@@ -67,6 +67,9 @@ extension FeatureFormView {
         
         /// Adds the configured association and modifies the navigation path to return the user to the
         /// correct location.
+        ///
+        /// Upon a successful add, 3 items are removed from the navigation path to return the user to
+        /// where the add workflow begins.
         func addAssociation() async {
             guard let options else { return }
             do {
