@@ -186,6 +186,9 @@ association is visible or not. */
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Could not retrieve map areas for this map.";
 
+/* Localized text to display the number of items in a collection. */
+"Count %lld" = "Count %lld";
+
 /* Counties (Level of Detail) */
 "Counties" = "Counties";
 

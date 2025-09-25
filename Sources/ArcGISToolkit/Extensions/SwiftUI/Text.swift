@@ -15,6 +15,15 @@
 import SwiftUI
 
 extension Text {
+    /// Localized text to display the number of items in a collection.
+    static func count(_ count: Int) -> Self {
+        .init(
+            "Count \(count)",
+            bundle: .toolkitModule,
+            comment: "Localized text to display the number of items in a collection."
+        )
+    }
+    
     /// Localized text for the phrase "Association Type".
     static var associationType: Self {
         .init(

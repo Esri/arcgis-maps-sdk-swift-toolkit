@@ -55,6 +55,10 @@ extension FeatureFormView {
                             )
                         )
                     }
+                } header: {
+                    Text.count(filteredSources.count)
+                        .font(.caption)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
             .searchable(
