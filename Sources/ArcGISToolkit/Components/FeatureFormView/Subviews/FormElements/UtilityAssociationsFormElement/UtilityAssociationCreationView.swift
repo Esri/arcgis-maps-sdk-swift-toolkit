@@ -65,22 +65,19 @@ extension FeatureFormView {
             }
         }
         
-        /// Adds the configured association and modifies the navigation path to return the user to the correct
-        /// location.
+        /// Adds the configured association and modifies the navigation path to return the user to the
+        /// correct location.
         func addAssociation() async {
             guard let options else { return }
             do {
+                // TODO: (Ref: Apollo 1368) Use addAssociation(feature:featureTerminal:filter: currentFeatureTerminal:) when neither formFeatureTerminalConfiguration and candidateFeatureTerminalConfiguration are null
+                // TODO: (Ref: Apollo 1368) Use addAssociation(feature:filter:fractionAlongEdge:terminal:) when when isFractionAlongEdgeValid AND either formFeatureTerminalConfiguration is set or candidateFeatureTerminalConfiguration is set; but not both.
                 if includeContentVisibility {
                     try await element.addAssociation(feature: candidate.feature, filter: filter, isContainmentVisible: contentIsVisible)
+                } else if options.isFractionAlongEdgeValid {
+                    try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
                 } else {
-                    // TODO: (Ref: Apollo 1368) Use addAssociation(feature:featureTerminal:filter: currentFeatureTerminal:) when neither formFeatureTerminalConfiguration and candidateFeatureTerminalConfiguration are null
-                    // TODO: (Ref: Apollo 1368) Use addAssociation(feature:filter:fractionAlongEdge:terminal:) when when isFractionAlongEdgeValid AND either formFeatureTerminalConfiguration is set or candidateFeatureTerminalConfiguration is set; but not both.
-                    switch (options.isFractionAlongEdgeValid, options.terminalConfiguration) {
-                    case (false, _):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter)
-                    case (true, _):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
-                    }
+                    try await element.addAssociation(feature: candidate.feature, filter: filter)
                 }
                 navigationPath?.wrappedValue.removeLast(3)
             } catch {
