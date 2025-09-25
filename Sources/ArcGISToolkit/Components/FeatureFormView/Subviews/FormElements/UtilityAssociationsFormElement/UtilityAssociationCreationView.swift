@@ -66,6 +66,8 @@ extension FeatureFormView {
                 if includeContentVisibility {
                     try await element.addAssociation(feature: candidate.feature, filter: filter, isContainmentVisible: contentIsVisible)
                 } else {
+                    // TODO: Use addAssociation(feature:featureTerminal:filter: currentFeatureTerminal:) when neither formFeatureTerminalConfiguration and candidateFeatureTerminalConfiguration are null
+                    // TODO: Use addAssociation(feature:filter:fractionAlongEdge:terminal:) when when isFractionAlongEdgeValid AND either formFeatureTerminalConfiguration is set or candidateFeatureTerminalConfiguration is set; but not both.
                     switch (options.isFractionAlongEdgeValid, options.terminalConfiguration) {
                     case (false, .none):
                         try await element.addAssociation(feature: candidate.feature, filter: filter)
