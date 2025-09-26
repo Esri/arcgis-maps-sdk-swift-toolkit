@@ -675,10 +675,6 @@ current visible extent of the map or scene. */
 /* A label for a button to save edits. */
 "Save Edits" = "Save Edits";
 
-/* A label for a search bar to search through utility 
-association feature sources. */
-"Search" = "Search";
-
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
 "Search Features" = "Search Features";

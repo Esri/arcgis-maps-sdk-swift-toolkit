@@ -60,15 +60,7 @@ extension FeatureFormView {
             }
             .searchable(
                 text: $filterPhrase,
-                placement: .navigationBarDrawer(displayMode: .always),
-                prompt: Text(
-                    "Search",
-                    bundle: .toolkitModule,
-                    comment: """
-                        A label for a search bar to search through utility 
-                        association feature sources.
-                        """
-                )
+                placement: .navigationBarDrawer(displayMode: .always)
             )
             .task {
                 featureQueryIsRunning = true
