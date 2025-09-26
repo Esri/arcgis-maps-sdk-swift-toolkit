@@ -118,6 +118,7 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
                 }
                 .interactiveDismissDisabled()
                 .presentationContentInteraction(.scrolls)
+                .presentationBackgroundInteraction(.enabled)
                 .presentationDetents(
                     [.small, .medium, .large],
                     selection: $selectedPresentationDetent
@@ -270,6 +271,7 @@ private struct FeatureEditorView: View {
             ) { _ in
                 backgroundIsIntractable = UIDevice.current.backgroundIsIntractable
             }
+        Spacer()
     }
     
     private func save() {
