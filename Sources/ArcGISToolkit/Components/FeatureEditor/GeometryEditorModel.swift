@@ -83,6 +83,16 @@ final class GeometryEditorModel {
         geometryEditor.start(withInitial: geometry)
     }
     
+    func start(
+        withType geometryType: Geometry.Type,
+        file: StaticString = #fileID,
+        line: UInt = #line,
+        function: StaticString = #function
+    ) {
+        print("[model.start \(geometryType)] \(file):\(line) \(function)")
+        geometryEditor.start(withType: geometryType)
+    }
+    
     func save(
         file: StaticString = #fileID,
         line: UInt = #line,

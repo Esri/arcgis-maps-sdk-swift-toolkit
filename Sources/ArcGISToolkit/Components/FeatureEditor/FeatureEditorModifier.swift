@@ -230,21 +230,25 @@ private struct FeatureEditorView: View {
             .environment(\.toolbarContent, toolbarContent)
             .task(id: ObjectIdentifier(model.geometryEditor), model.monitorStreams)
             .task(id: startEditingID) {
-                let feature = featureForm.feature
-                try? await feature.load()
-                
-                if feature.canUpdateGeometry {
+                do {
+                    let feature = featureForm.feature
+                    // Needed because canUpdateGeometry is always false when the feature is not loaded.
+                    try await feature.load()
+                    
+                    guard feature.canUpdateGeometry else { return }
+                    
                     if let geometry = feature.geometry {
                         model.start(withInitial: geometry)
                         await mapViewProxy?.setViewpointGeometry(geometry, padding: 20)
-                    } else {
-                        // TODO: Handle no geometry
-                        print("No geometry")
+                    } else if let featureTable = feature.table {
+                        // Needed because geometryType is always nil when the table is not loaded.
+                        try await featureTable.load()
+                        
+                        guard let geometryType = featureTable.geometryType else { return }
+                        model.start(withType: geometryType)
                     }
-                } else if model.isStarted {
-                    // Stops the geometry editor if the new feature's geometry can't be edited.
-                    model.stop()
-                    print("Can't edit geometry")
+                } catch {
+                    print("Error starting: \(error)")
                 }
             }
             .task(id: model.geometry) {
