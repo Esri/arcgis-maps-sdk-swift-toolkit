@@ -68,6 +68,7 @@ extension FeatureFormView {
                             """
                     )
                     .font(.caption)
+                    .textCase(nil)
                 }
             }
             .navigationTitle(

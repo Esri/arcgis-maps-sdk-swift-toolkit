@@ -56,6 +56,7 @@ extension FeatureFormView {
                     Text.count(filteredSources.count)
                         .font(.caption)
                         .frame(maxWidth: .infinity, alignment: .trailing)
+                        .textCase(nil)
                 }
             }
             .searchable(
