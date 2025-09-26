@@ -33,10 +33,10 @@ public extension View {
 public enum GeometryEditorToolbarPlacement {
     case overlay(alignment: Alignment, orientation: Orientation)
     case toolbar(placement: ToolbarItemPlacement = .automatic)
-    
-    public enum Orientation {
-        case vertical, horizontal
-    }
+}
+
+public enum Orientation {
+    case vertical, horizontal
 }
 
 private struct GeometryEditorToolbarModifier: ViewModifier {
@@ -52,11 +52,9 @@ private struct GeometryEditorToolbarModifier: ViewModifier {
                 content
                     .overlay(alignment: alignment) {
                         if model.isStarted {
-                            EmbeddedGeometryEditorToolbar(
-                                style: orientation == .vertical ? .vertical : .horizontal
-                            )
-                            .environment(model)
-                            .padding()
+                            EmbeddedGeometryEditorToolbar(orientation: orientation)
+                                .environment(model)
+                                .padding()
                         }
                     }
             case .toolbar(let placement):
@@ -64,7 +62,7 @@ private struct GeometryEditorToolbarModifier: ViewModifier {
                     .toolbar {
                         if model.isStarted {
                             ToolbarItemGroup(placement: placement) {
-                                EmbeddedGeometryEditorToolbar(style: .none)
+                                EmbeddedGeometryEditorToolbar(orientation: nil)
                                     .environment(model)
                             }
                         }
@@ -85,7 +83,8 @@ private struct GeometryEditorToolbarModifier: ViewModifier {
 /// - Note: View will be displayed when the geometry editor starts...
 public struct GeometryEditorToolbar: View {
     let geometryEditor: GeometryEditor
-    private var style: Style = .vertical
+    
+    private var orientation: Orientation? = .vertical
     
     @State private var model = GeometryEditorModel()
     
@@ -96,7 +95,7 @@ public struct GeometryEditorToolbar: View {
     public var body: some View {
         Group {
             if model.isStarted {
-                EmbeddedGeometryEditorToolbar(style: style)
+                EmbeddedGeometryEditorToolbar(orientation: orientation)
                     .environment(model)
             } else {
                 Color.clear
@@ -112,13 +111,9 @@ public struct GeometryEditorToolbar: View {
 }
 
 public extension GeometryEditorToolbar {
-    enum Style {
-        case vertical, horizontal, none
-    }
-    
-    func style(_ style: Style) -> Self {
+    func orientation(_ orientation: Orientation?) -> Self {
         var copy = self
-        copy.style = style
+        copy.orientation = orientation
         return copy
     }
 }
@@ -126,12 +121,12 @@ public extension GeometryEditorToolbar {
 // MARK: - EmbeddedGeometryEditorToolbar
 
 private struct EmbeddedGeometryEditorToolbar: View {
-    let style: GeometryEditorToolbar.Style
+    let orientation: Orientation?
     
     private let controlPadding = 12.0
     
     public var body: some View {
-        switch style {
+        switch orientation {
         case .vertical:
             VStack(spacing: controlPadding) {
                 ToolPicker()
@@ -162,7 +157,7 @@ private struct EmbeddedGeometryEditorToolbar: View {
             .padding(.horizontal, controlPadding)
             .stackStyle()
             
-        case .none:
+        case nil:
             ToolPicker()
             DeleteButton()
             UndoButton()
@@ -197,18 +192,17 @@ private struct DeleteButton: View {
     @Environment(GeometryEditorModel.self) private var model
     
     var body: some View {
-        Button("Delete Selected Element", systemImage: "circle.badge.minus", role: .destructive) {
+        Button("Delete Selected Element", systemImage: "circle.badge.minus") {
             model.geometryEditor.deleteSelectedElement()
         }
         .disabled(!model.canDeleteSelectedElement)
     }
 }
 
-
 private struct ToolPicker: View {
-    @State private var selectedTool = Tool.vertex
-    
     @Environment(GeometryEditorModel.self) private var model
+    
+    @State private var selectedTool = Tool.vertex
     
     private var toolOptions: [Tool] {
         model.initialGeometry is Point ? [.vertex, .reticle] : Tool.allCases
@@ -277,17 +271,13 @@ private struct ToolPicker: View {
     }
 }
 
-
-// MARK: - Extensions
+// MARK: - Helper
 
 private extension View {
     func stackStyle() -> some View {
         self.fixedSize()
             .labelStyle(.iconOnly)
-            .font(.headline.weight(.regular))
-//            .font(.system(size: 18))
-//            .foregroundStyle(.secondary)
-//            .buttonStyle(.plain)
+            .tint(.secondary)
             .background()
             .clipShape(.rect(cornerRadius: 8))
             .shadow(radius: 1)
