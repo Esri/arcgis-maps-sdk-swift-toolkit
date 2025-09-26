@@ -56,7 +56,6 @@ extension FeatureFormView {
             .alert(isPresented: $alertIsPresented, error: addAssociationError) {}
             .task {
                 options = try? await element.options(forAssociationCandidate: candidate.feature)
-                print(options, options?.terminalConfiguration, options?.isFractionAlongEdgeValid)
             }
             .task(id: isAddingAssociation) {
                 guard isAddingAssociation else { return }
