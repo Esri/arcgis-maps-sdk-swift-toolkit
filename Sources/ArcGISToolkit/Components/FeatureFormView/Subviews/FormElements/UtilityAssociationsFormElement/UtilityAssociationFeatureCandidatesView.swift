@@ -46,14 +46,17 @@ extension FeatureFormView {
                 Section {
                     ForEach(filteredCandidates, id: \.title) { candidate in
                         NavigationLink(
-                            candidate.title,
                             value: FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
                                 embeddedFeatureFormViewModel,
                                 candidate,
                                 element,
                                 filter
                             )
-                        )
+                        ) {
+                            CandidateLabel(candidate: candidate)
+                                .lineLimit(4)
+                                .truncationMode(.middle)
+                        }
                     }
                 } header: {
                     Text(
@@ -94,6 +97,30 @@ extension FeatureFormView {
                 let parameters = QueryParameters()
                 parameters.whereClause = "1=1"
                 candidates = (try? await source.queryFeatures(parameters: parameters).candidates) ?? []
+            }
+        }
+    }
+    
+    /// A label for a utility association feature candidate in a set of candidates.
+    private struct CandidateLabel: View {
+        /// The symbol for the candidate feature.
+        @State private var symbol: Image? = nil
+        
+        /// The represented candidate.
+        let candidate: UtilityAssociationFeatureCandidate
+        
+        var body: some View {
+            Label {
+                Text(candidate.title)
+            } icon: {
+                if let symbol {
+                    symbol
+                } else {
+                    ProgressView()
+                        .task {
+                            symbol = await candidate.feature.symbol
+                        }
+                }
             }
         }
     }

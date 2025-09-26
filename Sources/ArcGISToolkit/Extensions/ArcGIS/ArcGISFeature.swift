@@ -13,9 +13,14 @@
 // limitations under the License.
 
 import ArcGIS
-import Foundation
+import SwiftUI
 
 extension ArcGISFeature {
+    /// The feature's feature layer.
+    var featureLayer: FeatureLayer? {
+        table?.layer as? FeatureLayer
+    }
+    
     /// The global ID of the feature.
     ///
     /// This property is `nil` if there is no global ID.
@@ -26,6 +31,19 @@ extension ArcGISFeature {
             return id
         } else {
             return nil
+        }
+    }
+    
+    /// The symbol for the feature from its layer.
+    var symbol: Image? {
+        get async {
+            guard let swatch = try? await featureLayer?
+                .renderer?
+                .symbol(for: self)?
+                .makeSwatch(scale: 1.0) else {
+                return nil
+            }
+            return Image(uiImage: swatch)
         }
     }
 }
