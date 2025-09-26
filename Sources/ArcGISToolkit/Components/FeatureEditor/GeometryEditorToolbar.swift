@@ -205,7 +205,7 @@ private struct ToolPicker: View {
     @State private var selectedTool = Tool.vertex
     
     private var toolOptions: [Tool] {
-        model.initialGeometry is Point ? [.vertex, .reticle] : Tool.allCases
+        model.geometryType == Point.self ? [.vertex, .reticle] : Tool.allCases
     }
     
     var body: some View {

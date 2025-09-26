@@ -21,7 +21,7 @@ import SwiftUI
 @Observable
 final class GeometryEditorModel {
     var geometryEditor = GeometryEditor()
-    private(set) var initialGeometry: Geometry?
+    private(set) var geometryType: Geometry.Type?
     
     // MARK: GeometryEditor
     
@@ -51,9 +51,9 @@ final class GeometryEditorModel {
                 for await geometry in self.geometryEditor.$geometry {
                     self.geometry = geometry
                     
-                    // Sets the initial geometry when the editor is started.
-                    guard self.initialGeometry == nil else { continue }
-                    self.initialGeometry = geometry
+                    // Sets the geometry type when the editor is started.
+                    guard let geometry else { continue }
+                    self.geometryType = type(of: geometry)
                 }
             }
             group.addTask { @MainActor @Sendable in
@@ -65,9 +65,9 @@ final class GeometryEditorModel {
                 for await isStarted in self.geometryEditor.$isStarted {
                     self.isStarted = isStarted
                     
-                    // Resets the initial geometry when the editor is stopped.
+                    // Clears the geometry type when the editor is stopped.
                     guard !isStarted else { continue }
-                    self.initialGeometry = nil
+                    self.geometryType = nil
                 }
             }
         }
