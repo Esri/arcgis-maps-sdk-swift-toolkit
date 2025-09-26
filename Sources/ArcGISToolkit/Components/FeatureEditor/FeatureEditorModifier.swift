@@ -223,7 +223,7 @@ private struct FeatureEditorView: View {
                     isPresented = false
                 }
             }
-//            .environment(\.canSave, model.canSave)
+            .environment(\.canSave, model.geometry?.sketchIsValid)
 //            .environment(\.cantSaveMessage, cantSaveMessage)
             .environment(\.beforeSaveAction, save)
             .environment(\.hasExternalEdits, model.canUndo)
@@ -327,12 +327,13 @@ private struct SnapSettingsButton: View {
 extension EnvironmentValues {
     @Entry var hasExternalEdits = false
     @Entry var toolbarContent: (any View)?
-//    @Entry var canSave: Bool?
+    @Entry var canSave: Bool?
 //    @Entry var cantSaveMessage: Text?
     @Entry var beforeSaveAction: (() -> Void)?
 }
 
 private extension PresentationDetent {
+    // TODO: set based on navigation title?
     static let small = Self.fraction(0.14)
 }
 

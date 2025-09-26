@@ -34,7 +34,7 @@ struct FormFooter: View {
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
-//    @Environment(\.canSave) private var canSave
+    @Environment(\.canSave) private var canSave
     @Environment(\.beforeSaveAction) private var beforeSaveAction
     
     var body: some View {
@@ -63,7 +63,7 @@ struct FormFooter: View {
     
     var saveButton: some View {
         Button {
-            if featureForm.validationErrors.isEmpty /*&& (canSave ?? true)*/ {
+            if featureForm.validationErrors.isEmpty && (canSave ?? true) {
                 Task {
                     if let beforeSaveAction {
                         beforeSaveAction()

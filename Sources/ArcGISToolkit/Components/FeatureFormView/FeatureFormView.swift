@@ -112,7 +112,7 @@ public struct FeatureFormView: View {
     /// The internally managed validation error visibility.
     @State private var validationErrorVisibilityInternal = ValidationErrorVisibility.automatic
     
-//    @Environment(\.canSave) private var canSave
+    @Environment(\.canSave) private var canSave
 //    @Environment(\.cantSaveMessage) private var cantSaveMessage
     @Environment(\.beforeSaveAction) private var beforeSaveAction
     
@@ -180,7 +180,7 @@ public struct FeatureFormView: View {
                                 validationErrorVisibilityInternal = .visible
                             }
                         }
-                        if presentedForm.validationErrors.isEmpty /*&& (canSave ?? true)*/ {
+                        if presentedForm.validationErrors.isEmpty && (canSave ?? true) {
                             Button {
                                 Task {
                                     if let beforeSaveAction {

@@ -34,9 +34,6 @@ final class GeometryEditorModel {
     var canDeleteSelectedElement: Bool {
         selectedElement?.canBeDeleted ?? false
     }
-    var canSave: Bool {
-        canUndo && (geometry.map { $0.sketchIsValid } ?? true)
-    }
     
     func monitorStreams() async {
         await withTaskGroup { group in
