@@ -81,6 +81,9 @@ extension FeatureFormView {
                 } else {
                     try await element.addAssociation(feature: candidate.feature, filter: filter)
                 }
+                // Bug: Path removal is known to fail if the search bar was used
+                // in previous views. (FB20395585)
+                // https://developer.apple.com/forums/thread/802221#802221021
                 navigationPath?.wrappedValue.removeLast(3)
             } catch {
                 addAssociationError = .anyError(error)
