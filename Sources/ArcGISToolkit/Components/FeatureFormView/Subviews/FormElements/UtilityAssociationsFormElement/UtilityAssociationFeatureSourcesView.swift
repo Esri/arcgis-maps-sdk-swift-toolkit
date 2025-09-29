@@ -44,6 +44,20 @@ extension FeatureFormView {
         var body: some View {
             List {
                 Section {
+                    Searchable(
+                        text: $filterPhrase,
+                        label: Text(
+                            "Filter feature sources by name",
+                            bundle: .toolkitModule,
+                            comment: """
+                                A label for a search field to filter utility 
+                                association feature sources by name.
+                                """,
+                        ),
+                        prompt: nil
+                    )
+                }
+                Section {
                     ForEach(filteredSources, id: \.name) { source in
                         NavigationLink(
                             source.name,
@@ -59,10 +73,6 @@ extension FeatureFormView {
                         .textCase(nil)
                 }
             }
-            .searchable(
-                text: $filterPhrase,
-                placement: .navigationBarDrawer(displayMode: .always)
-            )
             .task {
                 featureQueryIsRunning = true
                 defer { featureQueryIsRunning = false }

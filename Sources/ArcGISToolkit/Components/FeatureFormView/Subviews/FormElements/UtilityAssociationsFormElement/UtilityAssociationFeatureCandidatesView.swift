@@ -43,6 +43,7 @@ extension FeatureFormView {
         
         var body: some View {
             List {
+                sectionForFilter
                 Section {
                     ForEach(filteredCandidates, id: \.title) { candidate in
                         NavigationLink(
@@ -82,22 +83,35 @@ extension FeatureFormView {
                         """
                 )
             )
-            .searchable(
-                text: $filterPhrase,
-                placement: .navigationBarDrawer(displayMode: .always),
-                prompt: Text(
-                    "Search Features",
-                    bundle: .toolkitModule,
-                    comment: """
-                        A label for a search bar to search through feature 
-                        candidates to use in a new utility association.
-                        """
-                )
-            )
             .task {
                 let parameters = QueryParameters()
                 parameters.whereClause = "1=1"
                 candidates = (try? await source.queryFeatures(parameters: parameters).candidates) ?? []
+            }
+        }
+        
+        /// A section with a text field to filter the candidates by name.
+        var sectionForFilter: some View {
+            Section {
+                Searchable(
+                    text: $filterPhrase,
+                    label: Text(
+                        "Filter candidates by name",
+                        bundle: .toolkitModule,
+                        comment: """
+                            A label for a search field to filter utility 
+                            association candidate features by name.
+                            """,
+                    ),
+                    prompt: Text(
+                        "Search Features",
+                        bundle: .toolkitModule,
+                        comment: """
+                            A label for a search bar to search through feature 
+                            candidates to use in a new utility association.
+                            """
+                    )
+                )
             }
         }
     }
