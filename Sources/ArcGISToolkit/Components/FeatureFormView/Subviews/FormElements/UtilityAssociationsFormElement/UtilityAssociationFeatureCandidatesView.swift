@@ -72,17 +72,6 @@ extension FeatureFormView {
                     .textCase(nil)
                 }
             }
-            .navigationTitle(
-                Text(
-                    "^[\(candidates.count) Available Features](inflect: true)",
-                    bundle: .toolkitModule,
-                    comment: """
-                        A navigation title for a page listing utility association
-                        feature candidates where the variable represents the number
-                        of available candidates.
-                        """
-                )
-            )
             .task {
                 let parameters = QueryParameters()
                 parameters.whereClause = "1=1"

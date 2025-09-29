@@ -157,6 +157,7 @@ public struct FeatureFormView: View {
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(source.name)
                         case let .utilityAssociationFeatureSourcesView(embeddedFeatureFormViewModel, element, filter):
                             UtilityAssociationFeatureSourcesView(
                                 element: element,
