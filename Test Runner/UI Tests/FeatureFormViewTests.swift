@@ -47,12 +47,11 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["Esri Location"]
         let nameField = app.textFields["New name"]
         let okButton = app.buttons["OK"]
+        let renamedAttachmentLabel = app.staticTexts["EsriHQ\(#function).jpeg"]
 #if targetEnvironment(macCatalyst)
         let rename = app.menuItems["Rename"]
-        let renamedAttachmentLabel = app.staticTexts["EsriHQ\(#function).jpeg"]
 #else
         let rename = app.buttons["Rename"]
-        let renamedAttachmentLabel = app.staticTexts["\(#function).jpeg"]
 #endif
         
         openTestCase()
