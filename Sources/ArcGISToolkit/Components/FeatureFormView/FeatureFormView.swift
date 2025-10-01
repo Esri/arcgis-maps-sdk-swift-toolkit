@@ -134,6 +134,11 @@ public struct FeatureFormView: View {
                         switch itemType {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
+                        case let .utilityAssociationCreationView(embeddedFeatureFormViewModel, candidate, element, filter):
+                            UtilityAssociationCreationView(candidate: candidate, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel, filter: filter)
+                                .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                                .navigationBarTitleDisplayMode(.inline)
+                                .navigationTitle(newAssociation)
                         case let .utilityAssociationDetailsView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, associationResult):
                             UtilityAssociationDetailsView(
                                 associationResult: associationResult,
@@ -143,16 +148,35 @@ public struct FeatureFormView: View {
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                        case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, resultTitle):
+                        case let .utilityAssociationFeatureCandidatesView(embeddedFeatureFormViewModel, element, filter, source):
+                            UtilityAssociationFeatureCandidatesView(
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                filter: filter,
+                                source: source
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(source.name)
+                        case let .utilityAssociationFeatureSourcesView(embeddedFeatureFormViewModel, element, filter):
+                            UtilityAssociationFeatureSourcesView(
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                filter: filter
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(networkDataSource)
+                        case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filterTitle):
                             UtilityAssociationsFilterResultView(
                                 associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                filterTitle: resultTitle
+                                filterTitle: filterTitle
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(resultTitle, subtitle: embeddedFeatureFormViewModel.title)
+                            .navigationTitle(filterTitle, subtitle: embeddedFeatureFormViewModel.title)
                             .preference(
                                 key: PresentedFeatureFormPreferenceKey.self,
                                 value: .init(object: embeddedFeatureFormViewModel.featureForm)
@@ -418,6 +442,25 @@ extension FeatureFormView {
             "Discard Edits?",
             bundle: .toolkitModule,
             comment: "A question asking if the user would like to discard their unsaved edits."
+        )
+    }
+    
+    var networkDataSource: Text {
+        .init(
+            "Network Data Source",
+            bundle: .toolkitModule,
+            comment: """
+                A navigation title for a page listing
+                data sources in a utility network.
+                """
+        )
+    }
+    
+    var newAssociation: Text {
+        .init(
+            "New Association",
+            bundle: .toolkitModule,
+            comment: "A navigation title for a view to create a new association in."
         )
     }
     

@@ -20,7 +20,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "A map area cannot be downloaded at this time.";
 
-/* A label for an option to add a new utility association. */
+/* A label for a button to add a new utility association. */
+"Add" = "Add";
+
+/* A label for a button to add a new utility network association. */
 "Add Association" = "Add Association";
 
 /* A label for a button to add a map area. */
@@ -135,6 +138,10 @@ for the AR experience. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Choose From Library";
 
+/* Instructional text for the user to choose a feature
+candidate to add as a utility association. */
+"Choose to add" = "Choose to add";
+
 /* Cities (Level of Detail) */
 "Cities" = "Cities";
 
@@ -162,6 +169,10 @@ for the AR experience. */
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Containment";
 
+/* A label indicating whether content in the new
+association is visible or not. */
+"Content Visible" = "Content Visible";
+
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
 
@@ -173,6 +184,9 @@ for the AR experience. */
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Could not retrieve map areas for this map.";
+
+/* Localized text to display the number of items in a collection. */
+"Count %lld" = "Count %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Counties";
@@ -343,9 +357,17 @@ trace operation. */
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "Filter";
 
+/* A label for a search field to filter utility 
+association candidate features by name. */
+"Filter candidates by name" = "Filter candidates by name";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "Filter facilities";
+
+/* A label for a search field to filter utility 
+association feature sources by name. */
+"Filter feature sources by name" = "Filter feature sources by name";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -361,11 +383,16 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "Finish editing failed.\n%@";
 
-/* A label in reference to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an
+edge style utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
 
 /* A label for the element on the "from" side of a utility association. */
 "From Element" = "From Element";
+
+/* A label for a button to choose a feature for a new
+utility association from a network data source. */
+"From Network Data Source" = "From Network Data Source";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -481,6 +508,13 @@ through auto-pan modes. */
 /* A label in reference to a specific utility network. */
 "Network" = "Network";
 
+/* A navigation title for a page listing
+data sources in a utility network. */
+"Network Data Source" = "Network Data Source";
+
+/* A navigation title for a view to create a new association in. */
+"New Association" = "New Association";
+
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "New name";
 
@@ -543,6 +577,10 @@ through auto-pan modes. */
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
+
+/* A label indicating features can be selected by
+interactively tapping on the map. */
+"On Map" = "On Map";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Online Map Failed to Load";
@@ -639,6 +677,14 @@ current visible extent of the map or scene. */
 
 /* A label for a button to save edits. */
 "Save Edits" = "Save Edits";
+
+/* A generic prompt for a search field where a more
+specific prompt has not been provided. */
+"Search" = "Search";
+
+/* A label for a search bar to search through feature 
+candidates to use in a new utility association. */
+"Search Features" = "Search Features";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Search Query";
