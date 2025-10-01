@@ -92,6 +92,15 @@ extension Text {
         )
     }
     
+    /// Localized text for the word "Terminal".
+    static var terminal: Self {
+        .init(
+            "Terminal",
+            bundle: .toolkitModule,
+            comment: "A label in reference to a utility terminal."
+        )
+    }
+    
     /// Localized text for the phrase "To Element".
     static var toElement: Self {
         .init(
