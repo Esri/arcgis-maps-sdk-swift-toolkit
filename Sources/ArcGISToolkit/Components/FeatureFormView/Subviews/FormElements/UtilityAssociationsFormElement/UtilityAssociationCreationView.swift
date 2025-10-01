@@ -107,12 +107,19 @@ extension FeatureFormView {
                         try await element.addAssociation(feature: candidate.feature, filter: filter)
                     }
                 }
+                // After the association is created, remove the creation
+                // workflow views from the navigation path. This includes:
+                //  1. UtilityAssociationCreationView
+                //  2. UtilityAssociationFeatureCandidatesView
+                //  3. UtilityAssociationAssetTypesView
+                //  4. UtilityAssociationFeatureSourcesView
+                //
                 // Bug: Path removal is known to fail if a searchable was
                 // focused in any intermediate path items. Avoid using
-                // View.searchable(text:placement:prompt:) in intermediate
+                // View.searchable(text:placement:prompt:) in these intermediate
                 // views to avoid errors here. (FB20395585)
                 // https://developer.apple.com/forums/thread/802221#802221021
-                navigationPath?.wrappedValue.removeLast(3)
+                navigationPath?.wrappedValue.removeLast(4)
             } catch {
                 addAssociationError = .anyError(error)
                 alertIsPresented = true

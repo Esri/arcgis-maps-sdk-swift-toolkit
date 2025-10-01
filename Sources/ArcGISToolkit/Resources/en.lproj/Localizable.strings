@@ -77,6 +77,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Authentication Required";
 
+/* A section header label in reference to the asset
+types available to use when querying for utility
+association feature candidates. */
+"Available Asset Types" = "Available Asset Types";
+
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Back";
 
@@ -356,6 +361,10 @@ trace operation. */
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "Filter";
+
+/* A label for a search field to filter utility 
+asset types by name. */
+"Filter asset types by name" = "Filter asset types by name";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
