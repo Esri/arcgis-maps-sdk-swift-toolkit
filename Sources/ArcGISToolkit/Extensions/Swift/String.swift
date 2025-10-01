@@ -42,15 +42,6 @@ extension String {
         )
     }
     
-    /// A localized string for the word "Field".
-    static var field: Self {
-        .init(
-            localized: "Field",
-            bundle: .toolkitModule,
-            comment: "A field in a set of data contained in a popup."
-        )
-    }
-    
     /// A localized string for the phrase "No Value".
     static var noValue: Self {
         .init(
@@ -66,15 +57,6 @@ extension String {
             localized: "Settings",
             bundle: .toolkitModule,
             comment: "A label for a button to take the user to a contextually inferred settings page."
-        )
-    }
-    
-    /// A localized string for the word "Value".
-    static var value: Self {
-        .init(
-            localized: "Value",
-            bundle: .toolkitModule,
-            comment: "A value in a set of data contained in a popup."
         )
     }
 }

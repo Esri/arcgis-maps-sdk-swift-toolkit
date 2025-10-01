@@ -49,10 +49,10 @@ final class AssociationsFilterResultsModel {
             guard !Task.isCancelled, let self else { return }
             let result = await Result {
                 let allResults = try await element.associationsFilterResults
-                if includeEmptyFilterResults {
-                    return allResults
+                return if includeEmptyFilterResults {
+                    allResults
                 } else {
-                    return allResults.filter { $0.resultCount > 0 }
+                    allResults.filter { $0.resultCount > 0 }
                 }
             }
             withAnimation { self.result = result }

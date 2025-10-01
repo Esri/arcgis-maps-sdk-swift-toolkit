@@ -15,6 +15,24 @@
 import SwiftUI
 
 extension Text {
+    /// Localized text to display the number of items in a collection.
+    static func count(_ count: Int) -> Self {
+        .init(
+            "Count \(count)",
+            bundle: .toolkitModule,
+            comment: "Localized text to display the number of items in a collection."
+        )
+    }
+    
+    /// Localized text for the phrase "Association Type".
+    static var associationType: Self {
+        .init(
+            "Association Type",
+            bundle: .toolkitModule,
+            comment: "A label in reference to a utility association type."
+        )
+    }
+    
     /// Localized text for the word "Cancel".
     static var cancel: Self {
         .init(LocalizedStringResource.cancel)
@@ -26,6 +44,24 @@ extension Text {
             "Done",
             bundle: .toolkitModule,
             comment: "A label for a button for the user to indicate completion of the current task."
+        )
+    }
+    
+    /// Localized text for the word "Field".
+    static var field: Self {
+        .init(
+            "Field",
+            bundle: .toolkitModule,
+            comment: "A field in a dataset."
+        )
+    }
+    
+    /// Localized text for the phrase "From Element".
+    static var fromElement: Self {
+        .init(
+            "From Element",
+            bundle: .toolkitModule,
+            comment: #"A label for the element on the "from" side of a utility association."#
         )
     }
     
@@ -56,12 +92,33 @@ extension Text {
         )
     }
     
+    /// Localized text for the phrase "To Element".
+    static var toElement: Self {
+        .init(
+            "To Element",
+            bundle: .toolkitModule,
+            comment: #"A label for the element on the "to" side of a utility association."#
+        )
+    }
+    
     /// Localized text for the phrase "Try Again".
     static var tryAgain: Self {
         .init(
             "Try Again",
             bundle: .toolkitModule,
             comment: "A label for a button allowing the user to retry an operation."
+        )
+    }
+    
+    /// Localized text for the word "Value".
+    static var value: Self {
+        .init(
+            LocalizedStringResource(
+                "chart-mark-label-value",
+                defaultValue: "Value",
+                bundle: .toolkit,
+                comment: "A label of a mark on a chart."
+            )
         )
     }
     
