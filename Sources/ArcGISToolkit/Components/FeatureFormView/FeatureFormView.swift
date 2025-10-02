@@ -166,6 +166,7 @@ public struct FeatureFormView: View {
                                 filter: filter,
                                 source: source
                             )
+                            .environment(\.onFormEditingEventAction, onFormEditingEventAction)
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(assetType.name)
