@@ -77,7 +77,7 @@ extension FeatureFormView {
                                     }
                             }
                         }
-                        .navigationLinkIndicatorVisibility(.hidden)
+                        ._navigationLinkIndicatorVisibility(.hidden)
                     }
                 } header: {
                     Text(
