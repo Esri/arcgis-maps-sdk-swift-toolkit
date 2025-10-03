@@ -134,6 +134,16 @@ public struct FeatureFormView: View {
                         switch itemType {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
+                        case let .utilityAssociationAssetTypesView(embeddedFeatureFormViewModel, element, filter, source):
+                            UtilityAssociationAssetTypesView(
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                filter: filter,
+                                source: source
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(source.name)
                         case let .utilityAssociationCreationView(embeddedFeatureFormViewModel, candidate, element, filter):
                             UtilityAssociationCreationView(candidate: candidate, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel, filter: filter)
                                 .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
@@ -148,8 +158,9 @@ public struct FeatureFormView: View {
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                        case let .utilityAssociationFeatureCandidatesView(embeddedFeatureFormViewModel, element, filter, source):
+                        case let .utilityAssociationFeatureCandidatesView(embeddedFeatureFormViewModel, element, filter, source, assetType):
                             UtilityAssociationFeatureCandidatesView(
+                                assetType: assetType,
                                 element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
                                 filter: filter,
@@ -157,7 +168,7 @@ public struct FeatureFormView: View {
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(source.name)
+                            .navigationTitle(assetType.name)
                         case let .utilityAssociationFeatureSourcesView(embeddedFeatureFormViewModel, element, filter):
                             UtilityAssociationFeatureSourcesView(
                                 element: element,

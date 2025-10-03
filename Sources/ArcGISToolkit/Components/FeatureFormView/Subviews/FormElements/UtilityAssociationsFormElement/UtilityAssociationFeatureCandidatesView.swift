@@ -23,6 +23,8 @@ extension FeatureFormView {
         /// The phrase used to filter candidates by name.
         @State private var filterPhrase = ""
         
+        /// The asset type to use when querying for feature candidates.
+        let assetType: UtilityAssetType
         /// The element to add the new association to.
         let element: UtilityAssociationsFormElement
         /// The model for the feature form containing the element to add the association to.
@@ -75,7 +77,7 @@ extension FeatureFormView {
             .task {
                 let parameters = QueryParameters()
                 parameters.whereClause = "1=1"
-                candidates = (try? await source.queryFeatures(parameters: parameters).candidates) ?? []
+                candidates = (try? await source.queryFeatures(assetType: assetType, parameters: parameters).candidates) ?? []
             }
         }
         

@@ -35,6 +35,10 @@ extension FeatureFormView {
         @State private var options: UtilityAssociationFeatureOptions? = nil
         /// A Boolean value which indicates when the configured association is being added.
         @State private var isAddingAssociation = false
+        /// The terminal selection for the "from" side of the association.
+        @State private var terminalForFromSide: UtilityTerminal? = nil
+        /// The terminal selection for the "to" side of the association.
+        @State private var terminalForToSide: UtilityTerminal? = nil
         
         /// The candidate feature for the new association to be created.
         let candidate: UtilityAssociationFeatureCandidate
@@ -56,6 +60,12 @@ extension FeatureFormView {
             .alert(isPresented: $alertIsPresented, error: addAssociationError) {}
             .task {
                 options = try? await element.options(forAssociationCandidate: candidate.feature)
+                terminalForFromSide = candidateIsToElement
+                ? options?.formFeatureTerminalConfiguration?.terminals.first
+                : options?.candidateFeatureTerminalConfiguration?.terminals.first
+                terminalForToSide = candidateIsToElement
+                ? options?.candidateFeatureTerminalConfiguration?.terminals.first
+                : options?.formFeatureTerminalConfiguration?.terminals.first
             }
             .task(id: isAddingAssociation) {
                 guard isAddingAssociation else { return }
@@ -72,21 +82,44 @@ extension FeatureFormView {
         func addAssociation() async {
             guard let options else { return }
             do {
-                // TODO: (Ref: Apollo 1368) Use addAssociation(feature:featureTerminal:filter: currentFeatureTerminal:) when neither formFeatureTerminalConfiguration and candidateFeatureTerminalConfiguration are null
-                // TODO: (Ref: Apollo 1368) Use addAssociation(feature:filter:fractionAlongEdge:terminal:) when when isFractionAlongEdgeValid AND either formFeatureTerminalConfiguration is set or candidateFeatureTerminalConfiguration is set; but not both.
                 if includeContentVisibility {
                     try await element.addAssociation(feature: candidate.feature, filter: filter, isContainmentVisible: contentIsVisible)
-                } else if options.isFractionAlongEdgeValid {
-                    try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
                 } else {
-                    try await element.addAssociation(feature: candidate.feature, filter: filter)
+                    switch (options.isFractionAlongEdgeValid, terminalForFromSide, terminalForToSide) {
+                    case let (true, .some(terminal), .none):
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge, terminal: terminal)
+                    case let (true, .none, .some(terminal)):
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge, terminal: terminal)
+                    case (true, .none, .none):
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
+                    case (false, .some, .some):
+                        try await element.addAssociation(
+                            feature: candidate.feature,
+                            featureTerminal: candidateIsToElement
+                            ? terminalForToSide
+                            : terminalForFromSide,
+                            filter: filter,
+                            currentFeatureTerminal: candidateIsToElement
+                            ? terminalForFromSide
+                            : terminalForToSide
+                        )
+                    default:
+                        try await element.addAssociation(feature: candidate.feature, filter: filter)
+                    }
                 }
+                // After the association is created, remove the creation
+                // workflow views from the navigation path. This includes:
+                //  1. UtilityAssociationCreationView
+                //  2. UtilityAssociationFeatureCandidatesView
+                //  3. UtilityAssociationAssetTypesView
+                //  4. UtilityAssociationFeatureSourcesView
+                //
                 // Bug: Path removal is known to fail if a searchable was
                 // focused in any intermediate path items. Avoid using
-                // View.searchable(text:placement:prompt:) in intermediate
+                // View.searchable(text:placement:prompt:) in these intermediate
                 // views to avoid errors here. (FB20395585)
                 // https://developer.apple.com/forums/thread/802221#802221021
-                navigationPath?.wrappedValue.removeLast(3)
+                navigationPath?.wrappedValue.removeLast(4)
             } catch {
                 addAssociationError = .anyError(error)
                 alertIsPresented = true
@@ -95,8 +128,8 @@ extension FeatureFormView {
         
         /// A Boolean value indicating whether the candidate feature is on the "to" side of the new association.
         ///
-        /// - Note: For connectivity filters, "From" and "To" doesn't have a strong meaning but we
-        /// consider the candidate as "To" anyway.
+        /// - Note: For connectivity filters, "from" and "to" doesn't have a strong meaning but we
+        /// consider the candidate as "to" anyway.
         var candidateIsToElement: Bool {
             switch filter.kind {
             case .attachment, .connectivity, .content:
@@ -167,7 +200,16 @@ extension FeatureFormView {
                 } label: {
                     Text.fromElement
                 }
-                // TODO: (Ref: Apollo 1368) Add terminal configuration settings depending on value of formFeatureTerminalConfiguration and candidateFeatureTerminalConfiguration
+                if let configuration = candidateIsToElement ? options?.formFeatureTerminalConfiguration : options?.candidateFeatureTerminalConfiguration {
+                    Picker(selection: $terminalForFromSide) {
+                        ForEach(configuration.terminals) {
+                            Text($0.name)
+                                .tag($0)
+                        }
+                    } label: {
+                        Text.terminal
+                    }
+                }
             }
         }
         
@@ -179,7 +221,16 @@ extension FeatureFormView {
                 } label: {
                     Text.toElement
                 }
-                // TODO: (Ref: Apollo 1368) Add terminal configuration settings depending on value of formFeatureTerminalConfiguration and candidateFeatureTerminalConfiguration
+                if let configuration = candidateIsToElement ? options?.candidateFeatureTerminalConfiguration : options?.formFeatureTerminalConfiguration {
+                    Picker(selection: $terminalForToSide) {
+                        ForEach(configuration.terminals) {
+                            Text($0.name)
+                                .tag($0)
+                        }
+                    } label: {
+                        Text.terminal
+                    }
+                }
             }
         }
         

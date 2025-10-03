@@ -17,9 +17,10 @@ import ArcGIS
 extension FeatureFormView {
     enum NavigationPathItem: Hashable {
         case form(FeatureForm)
+        case utilityAssociationAssetTypesView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource)
         case utilityAssociationCreationView(EmbeddedFeatureFormViewModel, UtilityAssociationFeatureCandidate, UtilityAssociationsFormElement, UtilityAssociationsFilter)
         case utilityAssociationDetailsView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationResult)
-        case utilityAssociationFeatureCandidatesView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource)
+        case utilityAssociationFeatureCandidatesView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource, UtilityAssetType)
         case utilityAssociationFeatureSourcesView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilter)
         case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String)
         case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, String, String)
@@ -28,6 +29,11 @@ extension FeatureFormView {
             switch (lhs, rhs) {
             case let (.form(a), .form(b)):
                 a === b
+            case let (.utilityAssociationAssetTypesView(_, elementA, filterA, sourceA),
+                      .utilityAssociationAssetTypesView(_, elementB, filterB, sourceB)):
+                elementA === elementB
+                && filterA === filterB
+                && sourceA === sourceB
             case let (.utilityAssociationCreationView(_, candidateA, elementA, filterA),
                       .utilityAssociationCreationView(_, candidateB, elementB, filterB)):
                 candidateA === candidateB
@@ -37,8 +43,8 @@ extension FeatureFormView {
                       .utilityAssociationDetailsView(_, _, elementB, resultB)):
                 elementA === elementB
                 && resultA === resultB
-            case let (.utilityAssociationFeatureCandidatesView(_, elementA, filterA, sourceA),
-                      .utilityAssociationFeatureCandidatesView(_, elementB, filterB, sourceB)):
+            case let (.utilityAssociationFeatureCandidatesView(_, elementA, filterA, sourceA, _),
+                      .utilityAssociationFeatureCandidatesView(_, elementB, filterB, sourceB, _)):
                 elementA === elementB
                 && filterA === filterB
                 && sourceA === sourceB
@@ -65,6 +71,10 @@ extension FeatureFormView {
             switch self {
             case let .form(form):
                 hasher.combine(ObjectIdentifier(form))
+            case let .utilityAssociationAssetTypesView(_, element, filter, source):
+                hasher.combine(element)
+                hasher.combine(ObjectIdentifier(filter))
+                hasher.combine(ObjectIdentifier(source))
             case let .utilityAssociationCreationView(_, candidate, element, filter):
                 hasher.combine(ObjectIdentifier(candidate))
                 hasher.combine(element)
@@ -72,7 +82,7 @@ extension FeatureFormView {
             case let .utilityAssociationDetailsView(_, _, element, result):
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(result))
-            case let .utilityAssociationFeatureCandidatesView(_, element, filter, source):
+            case let .utilityAssociationFeatureCandidatesView(_, element, filter, source, _):
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(source))

@@ -59,11 +59,7 @@ extension FeatureFormView {
             LabeledContent {
                 Text(terminal.name)
             } label: {
-                Text(
-                    "Terminal",
-                    bundle: .toolkitModule,
-                    comment: "A label in reference to a utility terminal."
-                )
+                Text.terminal
             }
         }
         

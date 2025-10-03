@@ -16,14 +16,10 @@ import ArcGIS
 import SwiftUI
 
 extension FeatureFormView {
-    /// A view to choose a feature source when selecting a feature to create a utility association with.
-    struct UtilityAssociationFeatureSourcesView: View {
-        /// A Boolean value that indicates if a feature query is running.
-        @State private var featureQueryIsRunning = false
-        /// The phrase used to filter feature sources by name.
+    /// A view to choose a utility asset type when selecting a feature to create a utility association with.
+    struct UtilityAssociationAssetTypesView: View {
+        /// The phrase used to filter asset types by name.
         @State private var filterPhrase = ""
-        /// The feature sources that can be used to create an association.
-        @State private var sources: [UtilityAssociationFeatureSource] = []
         
         /// The element to add the new association to.
         let element: UtilityAssociationsFormElement
@@ -31,13 +27,15 @@ extension FeatureFormView {
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
+        /// The feature source to obtain asset types from.
+        let source: UtilityAssociationFeatureSource
         
-        /// The feature sources that can be used to create an association filtered by name.
-        private var filteredSources: [UtilityAssociationFeatureSource] {
+        /// The filtered asset types that can be used to query for association candidates.
+        private var filteredTypes: [UtilityAssetType] {
             if filterPhrase.isEmpty {
-                sources
+                source.assetTypes
             } else {
-                sources.filter({ $0.name.localizedStandardContains(filterPhrase) })
+                source.assetTypes.filter({ $0.name.localizedStandardContains(filterPhrase) })
             }
         }
         
@@ -47,36 +45,42 @@ extension FeatureFormView {
                     Searchable(
                         text: $filterPhrase,
                         label: Text(
-                            "Filter feature sources by name",
+                            "Filter asset types by name",
                             bundle: .toolkitModule,
                             comment: """
                                 A label for a search field to filter utility 
-                                association feature sources by name.
+                                asset types by name.
                                 """,
                         ),
                         prompt: nil
                     )
                 }
                 Section {
-                    ForEach(filteredSources, id: \.name) { source in
+                    ForEach(filteredTypes, id: \.code) { assetType in
                         NavigationLink(
-                            source.name,
-                            value: FeatureFormView.NavigationPathItem.utilityAssociationAssetTypesView(
-                                embeddedFeatureFormViewModel, element, filter, source
+                            assetType.name,
+                            value: FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(
+                                embeddedFeatureFormViewModel, element, filter, source, assetType
                             )
                         )
                     }
                 } header: {
-                    Text.count(filteredSources.count)
-                        .font(.caption)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .textCase(nil)
+                    HStack {
+                        Text(
+                            "Available Asset Types",
+                            bundle: .toolkitModule,
+                            comment: """
+                                A section header label in reference to the asset
+                                types available to use when querying for utility
+                                association feature candidates.
+                                """
+                        )
+                        Spacer()
+                        Text.count(filteredTypes.count)
+                    }
+                    .font(.caption)
+                    .textCase(nil)
                 }
-            }
-            .task {
-                featureQueryIsRunning = true
-                defer { featureQueryIsRunning = false }
-                sources = (try? await element.associationFeatureSources(filter: filter)) ?? []
             }
         }
     }
