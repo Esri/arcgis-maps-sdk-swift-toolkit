@@ -59,10 +59,25 @@ extension FeatureFormView {
                                 filter
                             )
                         ) {
-                            CandidateLabel(candidate: candidate)
-                                .lineLimit(4)
-                                .truncationMode(.middle)
+                            HStack {
+                                CandidateLabel(candidate: candidate)
+                                    .lineLimit(4)
+                                    .truncationMode(.middle)
+                                Spacer()
+                                Image(systemName: "scope")
+                                    .padding()
+                                    .clipShape(.circle)
+                                    .hoverEffect()
+                                    .onTapGesture {
+                                        // onTapGesture is not optimal but is
+                                        // the only configuration found to work
+                                        // so far that avoids selecting the
+                                        // navigation link
+                                        onFormEditingEventAction?(.utilityAssociationFeaturedCandidateTapped(candidate))
+                                    }
+                            }
                         }
+                        .navigationLinkIndicatorVisibility(.hidden)
                     }
                 } header: {
                     Text(
