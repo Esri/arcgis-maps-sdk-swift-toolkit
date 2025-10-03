@@ -139,10 +139,14 @@ extension FeatureFormView {
             } icon: {
                 if let symbol {
                     symbol
+                        .foregroundStyle(.secondary)
                 } else {
                     ProgressView()
                         .task {
-                            symbol = await candidate.feature.symbol
+                            symbol = await candidate
+                                .feature
+                                .symbol
+                            ?? Image(systemName: "questionmark.circle")
                         }
                 }
             }
