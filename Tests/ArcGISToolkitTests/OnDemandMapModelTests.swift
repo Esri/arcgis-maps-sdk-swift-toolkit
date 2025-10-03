@@ -42,7 +42,7 @@ class OnDemandMapModelTests: XCTestCase {
         XCTAssertNotNil(model.thumbnail)
         XCTAssertNil(model.mobileMapPackage)
         XCTAssertNil(model.job)
-        XCTAssertEqual(model.directorySize, 0)
+        XCTAssertEqual(model.sizeInBytes, 0)
         XCTAssertEqual(model.status, .initialized)
     }
     
@@ -79,7 +79,7 @@ class OnDemandMapModelTests: XCTestCase {
         XCTAssertNil(model.thumbnail)
         XCTAssertNil(model.mobileMapPackage)
         XCTAssertNotNil(model.job)
-        XCTAssertEqual(model.directorySize, 0)
+        XCTAssertEqual(model.sizeInBytes, 0)
         XCTAssertEqual(model.status, .downloading)
         
         // Cancel the job to be a good citizen.
