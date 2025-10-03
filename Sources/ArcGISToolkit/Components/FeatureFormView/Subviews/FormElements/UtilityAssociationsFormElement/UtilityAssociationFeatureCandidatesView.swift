@@ -25,6 +25,8 @@ extension FeatureFormView {
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
         /// The phrase used to filter candidates by name.
         @State private var filterPhrase = ""
+        /// A Boolean value indicating if a candidate query is running.
+        @State private var queryIsRunning = false
         
         /// The asset type to use when querying for feature candidates.
         let assetType: UtilityAssetType
@@ -49,53 +51,86 @@ extension FeatureFormView {
         var body: some View {
             List {
                 sectionForFilter
-                Section {
-                    ForEach(filteredCandidates, id: \.title) { candidate in
-                        NavigationLink(
-                            value: FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
-                                embeddedFeatureFormViewModel,
-                                candidate,
-                                element,
-                                filter
-                            )
-                        ) {
-                            HStack {
-                                CandidateLabel(candidate: candidate)
-                                    .lineLimit(4)
-                                    .truncationMode(.middle)
-                                Spacer()
-                                Image(systemName: "scope")
-                                    .padding()
-                                    .clipShape(.circle)
-                                    .hoverEffect()
-                                    .onTapGesture {
-                                        // onTapGesture is not optimal but is
-                                        // the only configuration found to work
-                                        // so far that avoids selecting the
-                                        // navigation link
-                                        onFormEditingEventAction?(.utilityAssociationFeaturedCandidateTapped(candidate))
-                                    }
-                            }
-                        }
-                        ._navigationLinkIndicatorVisibility(.hidden)
+                if queryIsRunning {
+                    ProgressView()
+                } else {
+                    if filteredCandidates.isEmpty {
+                        contentUnavailableView
+                    } else {
+                        sectionForCandidates
                     }
-                } header: {
-                    Text(
-                        "Choose to add",
-                        bundle: .toolkitModule,
-                        comment: """
-                            Instructional text for the user to choose a feature
-                            candidate to add as a utility association.
-                            """
-                    )
-                    .font(.caption)
-                    .textCase(nil)
                 }
             }
             .task {
+                queryIsRunning = true
+                defer { queryIsRunning = false }
                 let parameters = QueryParameters()
                 parameters.whereClause = "1=1"
                 candidates = (try? await source.queryFeatures(assetType: assetType, parameters: parameters).candidates) ?? []
+            }
+        }
+        
+        /// A view to indicate no utility association candidate results were found.
+        var contentUnavailableView: some View {
+            ContentUnavailableView(
+                String(
+                    localized: LocalizedStringResource(
+                        "No Candidates Found",
+                        bundle: .toolkit,
+                        comment: """
+                        A label indicating no utility association 
+                        candidates matching the filter criteria were
+                        found.
+                        """
+                    )
+                ),
+                systemImage: "exclamationmark.magnifyingglass"
+            )
+        }
+        
+        /// A section with the candidate results.
+        var sectionForCandidates: some View {
+            Section {
+                ForEach(filteredCandidates, id: \.title) { candidate in
+                    NavigationLink(
+                        value: FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
+                            embeddedFeatureFormViewModel,
+                            candidate,
+                            element,
+                            filter
+                        )
+                    ) {
+                        HStack {
+                            CandidateLabel(candidate: candidate)
+                                .lineLimit(4)
+                                .truncationMode(.middle)
+                            Spacer()
+                            Image(systemName: "scope")
+                                .padding()
+                                .clipShape(.circle)
+                                .hoverEffect()
+                                .onTapGesture {
+                                    // onTapGesture is not optimal but is
+                                    // the only configuration found to work
+                                    // so far that avoids selecting the
+                                    // navigation link
+                                    onFormEditingEventAction?(.utilityAssociationFeaturedCandidateTapped(candidate))
+                                }
+                        }
+                    }
+                    ._navigationLinkIndicatorVisibility(.hidden)
+                }
+            } header: {
+                Text(
+                    "Choose to add",
+                    bundle: .toolkitModule,
+                    comment: """
+                        Instructional text for the user to choose a feature
+                        candidate to add as a utility association.
+                        """
+                )
+                .font(.caption)
+                .textCase(nil)
             }
         }
         

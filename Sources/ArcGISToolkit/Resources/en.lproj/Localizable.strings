@@ -536,6 +536,11 @@ data sources in a utility network. */
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "No bookmarks";
 
+/* A label indicating no utility association 
+candidates matching the filter criteria were
+found. */
+"No Candidates Found" = "No Candidates Found";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "No configurations available.";
 
