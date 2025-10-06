@@ -41,6 +41,8 @@ struct Examples: View {
             }
             .navigationTitle("Toolkit Examples")
         } detail: {
+            // Workaround for https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/1249 with
+            // Apple Feedback #FB19470509 "Inconsistent task(priority:_:) behavior on views shown in NavigationSplitView detail column".
             NavigationStack {
                 if let selectedExample {
                     selectedExample.view
