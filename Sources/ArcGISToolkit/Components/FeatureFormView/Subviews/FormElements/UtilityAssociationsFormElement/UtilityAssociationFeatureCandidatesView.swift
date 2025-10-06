@@ -114,7 +114,7 @@ extension FeatureFormView {
                                     // the only configuration found to work
                                     // so far that avoids selecting the
                                     // navigation link
-                                    onFormEditingEventAction?(.utilityAssociationFeaturedCandidateTapped(candidate))
+                                    onFormEditingEventAction?(.utilityAssociationFeatureCandidateTapped(candidate))
                                 }
                         }
                     }

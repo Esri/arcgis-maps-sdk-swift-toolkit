@@ -339,7 +339,7 @@ public extension FeatureFormView {
         /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after saving.
         case savedEdits(willNavigate: Bool)
         /// Indicates that the user has tapped on a utility association feature candidate to visualize it on the map.
-        case utilityAssociationFeaturedCandidateTapped(UtilityAssociationFeatureCandidate)
+        case utilityAssociationFeatureCandidateTapped(UtilityAssociationFeatureCandidate)
     }
     
     /// Sets the visibility of the save and discard buttons on the form.
