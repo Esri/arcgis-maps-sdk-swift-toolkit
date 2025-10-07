@@ -196,10 +196,6 @@ public struct FeatureFormView: View {
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(filterTitle, subtitle: embeddedFeatureFormViewModel.title)
-                            .preference(
-                                key: PresentedFeatureFormPreferenceKey.self,
-                                value: .init(object: embeddedFeatureFormViewModel.featureForm)
-                            )
                             .navigationTitle(filterTitle, subtitle: embeddedFeatureFormViewModel.title)
                         case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filterTitle, groupTitle):
                             UtilityAssociationGroupResultView(
