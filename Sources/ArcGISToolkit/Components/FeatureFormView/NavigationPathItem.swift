@@ -49,7 +49,7 @@ extension FeatureFormView {
             case let (.utilityAssociationFilterResultView(_, _, elementA, filterA),
                       .utilityAssociationFilterResultView(_, _, elementB, filterB)):
                 elementA === elementB
-                && filterA == filterB
+                && filterA === filterB
             case let (.utilityAssociationGroupResultView(_, _, elementA, filterA, sourceA, _),
                       .utilityAssociationGroupResultView(_, _, elementB, filterB, sourceB, _)):
                 elementA === elementB

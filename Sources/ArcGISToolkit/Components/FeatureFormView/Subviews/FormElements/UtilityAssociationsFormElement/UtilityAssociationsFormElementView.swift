@@ -76,7 +76,7 @@ extension FeatureFormView {
         var result: UtilityAssociationsFilterResult? {
             try? associationsFilterResultsModel.result?
                 .get()
-                .first(where: { $0.filter == filter } )
+                .first(where: { $0.filter === filter } )
         }
         
         var body: some View {
