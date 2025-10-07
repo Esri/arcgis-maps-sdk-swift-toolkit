@@ -105,7 +105,7 @@ public struct FeatureFormView: View {
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
     /// <#Description#>
-    @State private var model = FeatureFormViewModel()
+    @State private var featureFormViewModel = FeatureFormViewModel()
     
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
@@ -312,7 +312,7 @@ public struct FeatureFormView: View {
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.finishEditingError, $finishEditingError)
             .environment(\.isPresented, isPresented)
-            .environment(model)
+            .environment(featureFormViewModel)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
             .environment(\.navigationPath, $navigationPath)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
@@ -325,11 +325,11 @@ public struct FeatureFormView: View {
             .onPreferenceChange(CurrentEmbeddedFeatureForm.self) { wrappedEmbeddedFeatureFormViewModel in
                 guard let embeddedModel = wrappedEmbeddedFeatureFormViewModel?.object else { return }
                 formChangedAction(embeddedModel.featureForm)
-                model.currentFormModel = embeddedModel
-                if let innerModel = model.currentFormModel {
-                    print("DTF", "FEATURE FORM CHANGED", ObjectIdentifier(model), ObjectIdentifier(innerModel), ObjectIdentifier(innerModel.featureForm))
+                featureFormViewModel.currentFormModel = embeddedModel
+                if let innerModel = featureFormViewModel.currentFormModel {
+                    print("DTF", "FEATURE FORM CHANGED", ObjectIdentifier(featureFormViewModel), ObjectIdentifier(innerModel), ObjectIdentifier(innerModel.featureForm))
                 } else {
-                    print("DTF", "FEATURE FORM CHANGED", ObjectIdentifier(model), "NO EMBEDDED MODEL")
+                    print("DTF", "FEATURE FORM CHANGED", ObjectIdentifier(featureFormViewModel), "NO EMBEDDED MODEL")
                 }
             }
         }
