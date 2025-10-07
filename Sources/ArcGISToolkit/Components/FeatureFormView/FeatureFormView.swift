@@ -210,7 +210,6 @@ public struct FeatureFormView: View {
                         }
                     }
             }
-            .environment(model)
             // Alert for abandoning unsaved edits
             .alert(
                 presentedForm.validationErrors.isEmpty ? discardEditsQuestion : validationErrors,
@@ -314,6 +313,7 @@ public struct FeatureFormView: View {
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.finishEditingError, $finishEditingError)
             .environment(\.isPresented, isPresented)
+            .environment(model)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
             .environment(\.navigationPath, $navigationPath)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
