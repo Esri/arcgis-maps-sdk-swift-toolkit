@@ -309,10 +309,10 @@ public struct FeatureFormView: View {
                 }
             )
             .animation(.default, value: ObjectIdentifier(rootFeatureForm))
+            .environment(featureFormViewModel)
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.finishEditingError, $finishEditingError)
             .environment(\.isPresented, isPresented)
-            .environment(featureFormViewModel)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
             .environment(\.navigationPath, $navigationPath)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
