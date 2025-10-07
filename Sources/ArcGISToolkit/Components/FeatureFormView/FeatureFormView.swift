@@ -17,6 +17,10 @@ import SwiftUI
 
 internal import os
 
+@Observable class FeatureFormViewModel {
+    weak var currentFormModel: EmbeddedFeatureFormViewModel?
+}
+
 /// The `FeatureFormView` component enables users to edit field values of a feature using
 /// pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
 ///
@@ -99,6 +103,9 @@ public struct FeatureFormView: View {
     
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
+    
+    /// <#Description#>
+    @State private var model = FeatureFormViewModel()
     
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
@@ -193,6 +200,7 @@ public struct FeatureFormView: View {
                                 key: PresentedFeatureFormPreferenceKey.self,
                                 value: .init(object: embeddedFeatureFormViewModel.featureForm)
                             )
+                            .navigationTitle(filterTitle, subtitle: embeddedFeatureFormViewModel.title)
                         case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filterTitle, groupTitle):
                             UtilityAssociationGroupResultView(
                                 associationsFilterResultsModel: associationsFilterResultsModel,
@@ -207,6 +215,7 @@ public struct FeatureFormView: View {
                         }
                     }
             }
+            .environment(model)
             // Alert for abandoning unsaved edits
             .alert(
                 presentedForm.validationErrors.isEmpty ? discardEditsQuestion : validationErrors,
@@ -319,9 +328,15 @@ public struct FeatureFormView: View {
             .onChange(of: ObjectIdentifier(rootFeatureForm)) {
                 presentedForm = rootFeatureForm
             }
-            .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) { wrappedFeatureForm in
-                guard let wrappedFeatureForm else { return }
-                formChangedAction(wrappedFeatureForm.object)
+            .onPreferenceChange(CurrentEmbeddedFeatureForm.self) { wrappedEmbeddedFeatureFormViewModel in
+                guard let embeddedModel = wrappedEmbeddedFeatureFormViewModel?.object else { return }
+                formChangedAction(embeddedModel.featureForm)
+                model.currentFormModel = embeddedModel
+                if let innerModel = model.currentFormModel {
+                    print("DTF", "FEATURE FORM CHANGED", ObjectIdentifier(model), ObjectIdentifier(innerModel), ObjectIdentifier(innerModel.featureForm))
+                } else {
+                    print("DTF", "FEATURE FORM CHANGED", ObjectIdentifier(model), "NO EMBEDDED MODEL")
+                }
             }
         }
     }

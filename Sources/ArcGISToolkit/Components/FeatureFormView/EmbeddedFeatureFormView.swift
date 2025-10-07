@@ -19,6 +19,8 @@ struct EmbeddedFeatureFormView: View {
     /// The view model for the form.
     @State private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
     
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel: FeatureFormViewModel?
+    
     /// Initializes a form view.
     /// - Parameter featureForm: The feature form defining the editing experience.
     init(featureForm: FeatureForm) {
@@ -51,8 +53,8 @@ struct EmbeddedFeatureFormView: View {
         .environment(embeddedFeatureFormViewModel)
         .padding(.horizontal)
         .preference(
-            key: PresentedFeatureFormPreferenceKey.self,
-            value: .init(object: embeddedFeatureFormViewModel.featureForm)
+            key: CurrentEmbeddedFeatureForm.self,
+            value: .init(object: embeddedFeatureFormViewModel)
         )
         .featureFormToolbar(embeddedFeatureFormViewModel.featureForm, isAForm: true)
     }

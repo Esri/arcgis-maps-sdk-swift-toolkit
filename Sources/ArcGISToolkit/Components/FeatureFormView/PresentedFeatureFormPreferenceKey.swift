@@ -27,3 +27,15 @@ struct PresentedFeatureFormPreferenceKey: PreferenceKey {
         value = nextValue
     }
 }
+
+struct CurrentEmbeddedFeatureForm: PreferenceKey {
+    static let defaultValue: EquatableObject<EmbeddedFeatureFormViewModel>? = nil
+    
+    static func reduce(
+        value: inout EquatableObject<EmbeddedFeatureFormViewModel>?,
+        nextValue: () -> EquatableObject<EmbeddedFeatureFormViewModel>?
+    ) {
+        guard let nextValue = nextValue() else { return }
+        value = nextValue
+    }
+}
