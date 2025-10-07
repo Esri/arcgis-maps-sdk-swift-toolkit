@@ -78,10 +78,10 @@ extension FeatureFormView {
             case let .utilityAssociationFeatureSourcesView(_, element, filter):
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
-            case .utilityAssociationFilterResultView(_, _, let element, let filter):
+            case let .utilityAssociationFilterResultView(_, _, element, filter):
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
-            case .utilityAssociationGroupResultView(_, _, let element, let filter, let formSource, _):
+            case let .utilityAssociationGroupResultView(_, _, element, filter, formSource, _):
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(formSource))
