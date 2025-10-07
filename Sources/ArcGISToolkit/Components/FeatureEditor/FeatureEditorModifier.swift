@@ -19,14 +19,14 @@ public extension View {
     func featureEditor(
         featureForm: Binding<FeatureForm?>,
         geometryEditor: GeometryEditor,
-        mapViewProxy: MapViewProxy? = nil,
+        viewpoint: Binding<Viewpoint?>? = nil,
         contentInsets: Binding<EdgeInsets?>? = nil
     ) -> some View {
         modifier(
             FeatureEditorModifier(
                 item: featureForm,
                 geometryEditor: geometryEditor,
-                mapViewProxy: mapViewProxy,
+                viewpoint: viewpoint,
                 contentInsets: contentInsets
             )
         )
@@ -35,14 +35,14 @@ public extension View {
     func featureEditor(
         feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
-        mapViewProxy: MapViewProxy? = nil,
+        viewpoint: Binding<Viewpoint?>? = nil,
         contentInsets: Binding<EdgeInsets?>? = nil
     ) -> some View {
         modifier(
             FeatureEditorModifier(
                 item: feature,
                 geometryEditor: geometryEditor,
-                mapViewProxy: mapViewProxy,
+                viewpoint: viewpoint,
                 contentInsets: contentInsets
             )
         )
@@ -51,14 +51,14 @@ public extension View {
     func featureEditor(
         popup: Binding<Popup?>,
         geometryEditor: GeometryEditor,
-        mapViewProxy: MapViewProxy? = nil,
+        viewpoint: Binding<Viewpoint?>? = nil,
         contentInsets: Binding<EdgeInsets?>? = nil
     ) -> some View {
         modifier(
             FeatureEditorModifier(
                 item: popup,
                 geometryEditor: geometryEditor,
-                mapViewProxy: mapViewProxy,
+                viewpoint: viewpoint,
                 contentInsets: contentInsets
             )
         )
@@ -68,7 +68,7 @@ public extension View {
 private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
     @Binding var item: Item?
     let geometryEditor: GeometryEditor
-    let mapViewProxy: MapViewProxy?
+    let viewpoint: Binding<Viewpoint?>?
     let contentInsets: Binding<EdgeInsets?>?
     
     /// This is needed here so that the geometry editor can be stopped outside of FeatureEditorView.
@@ -87,7 +87,7 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
                         FeatureEditorView(
                             rootFeatureForm: featureForm,
                             model: model,
-                            mapViewProxy: mapViewProxy,
+                            viewpoint: viewpoint,
                             isPresented: .init(optionalValue: $featureForm),
                             presentationDetent: selectedPresentationDetent
                         )
@@ -194,7 +194,7 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
 private struct FeatureEditorView: View {
     let rootFeatureForm: FeatureForm
     let model: GeometryEditorModel
-    let mapViewProxy: MapViewProxy?
+    let viewpoint: Binding<Viewpoint?>?
     
     @Binding var isPresented: Bool
     let presentationDetent: PresentationDetent
@@ -212,7 +212,8 @@ private struct FeatureEditorView: View {
         FeatureFormView(root: featureForm, isPresented: $isPresented)
             .onFeatureFormChanged { presentedFeatureForm = $0 }
             .onFormEditingEvent { event in
-                // Stops the geometry editor to make UI seem more responsive.
+                // Stops the geometry editor in preparation for startEditing() to run again
+                // and to make UI seem more responsive.
                 model.stop()
                 
                 if case .savedEdits(let willNavigate) = event {
@@ -229,28 +230,7 @@ private struct FeatureEditorView: View {
             .environment(\.hasExternalEdits, model.canUndo)
             .environment(\.toolbarContent, toolbarContent)
             .task(id: ObjectIdentifier(model.geometryEditor), model.monitorStreams)
-            .task(id: startEditingID) {
-                do {
-                    let feature = featureForm.feature
-                    // Needed because canUpdateGeometry is always false when the feature is not loaded.
-                    try await feature.load()
-                    
-                    guard feature.canUpdateGeometry else { return }
-                    
-                    if let geometry = feature.geometry {
-                        model.start(withInitial: geometry)
-                        await mapViewProxy?.setViewpointGeometry(geometry, padding: 20)
-                    } else if let featureTable = feature.table {
-                        // Needed because geometryType is always nil when the table is not loaded.
-                        try await featureTable.load()
-                        
-                        guard let geometryType = featureTable.geometryType else { return }
-                        model.start(withType: geometryType)
-                    }
-                } catch {
-                    print("Error starting: \(error)")
-                }
-            }
+            .task(id: startEditingID, startGeometryEditor)
             .task(id: model.geometry) {
                 guard model.isStarted, !isSaving, model.geometry != featureForm.feature.geometry else {
                     return
@@ -276,6 +256,34 @@ private struct FeatureEditorView: View {
                 backgroundIsIntractable = UIDevice.current.backgroundIsIntractable
             }
         Spacer()
+    }
+    
+    /// Starts the geometry editor using the feature form's feature.
+    private func startGeometryEditor() async {
+        do {
+            // Load needed because canUpdateGeometry is always false otherwise.
+            let feature = featureForm.feature
+            try await feature.load()
+            
+            if let geometry = feature.geometry {
+                let buffer = geometry.extent.withBuilder { $0.expand(by: 1.1) }
+                viewpoint?.wrappedValue = Viewpoint(boundingGeometry: buffer)
+            }
+            
+            guard feature.canUpdateGeometry else { return }
+            
+            if let geometry = feature.geometry {
+                model.start(withInitial: geometry)
+            } else if let featureTable = feature.table {
+                // Load needed because geometryType is always nil otherwise.
+                try await featureTable.load()
+                
+                guard let geometryType = featureTable.geometryType else { return }
+                model.start(withType: geometryType)
+            }
+        } catch {
+            print("Error starting: \(error)")
+        }
     }
     
     private func save() {
