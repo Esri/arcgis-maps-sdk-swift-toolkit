@@ -111,7 +111,7 @@ public struct FeatureFormView: View {
     @State private var finishEditingError: (any Error)?
     
     /// The navigation path used by the navigation stack in the root feature form view.
-    @State private var navigationPath = NavigationPath()
+    @State private var navigationPath: [NavigationPathItem] = []
     
     /// The feature form currently visible in the navigation stack.
     @State private var presentedForm: FeatureForm
