@@ -17,10 +17,6 @@ import SwiftUI
 
 internal import os
 
-@Observable class FeatureFormViewModel {
-    weak var currentFormModel: EmbeddedFeatureFormViewModel?
-}
-
 /// The `FeatureFormView` component enables users to edit field values of a feature using
 /// pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
 ///
