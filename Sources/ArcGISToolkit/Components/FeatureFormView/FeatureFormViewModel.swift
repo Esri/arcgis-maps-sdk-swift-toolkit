@@ -17,9 +17,9 @@ import Observation
 
 @Observable class FeatureFormViewModel {
     /// <#Description#>
+    var embeddedFeatureFormViewModels: [EmbeddedFeatureFormViewModel] = []
     
     /// <#Description#>
-    var models: [EmbeddedFeatureFormViewModel] = []
     var presentedEmbeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
         embeddedFeatureFormViewModels.last
     }
