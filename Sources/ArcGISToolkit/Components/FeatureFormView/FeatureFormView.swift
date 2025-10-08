@@ -140,7 +140,6 @@ public struct FeatureFormView: View {
                         case let .utilityAssociationAssetTypesView(element, filter, source):
                             UtilityAssociationAssetTypesView(
                                 element: element,
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
                                 filter: filter,
                                 source: source
                             )
