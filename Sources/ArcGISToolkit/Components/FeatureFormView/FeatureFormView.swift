@@ -319,6 +319,7 @@ public struct FeatureFormView: View {
             }
             .onChange(of: ObjectIdentifier(rootFeatureForm)) {
                 presentedForm = rootFeatureForm
+                // - TODO: Reset the set of EmbeddedFeatureFormViewModels in FeatureFormViewModel
             }
             .onPreferenceChange(CurrentEmbeddedFeatureForm.self) { wrappedEmbeddedFeatureFormViewModel in
                 guard let embeddedModel = wrappedEmbeddedFeatureFormViewModel?.object else { return }
