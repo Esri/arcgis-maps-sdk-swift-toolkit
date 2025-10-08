@@ -18,6 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
+        /// The model for the FeatureFormView containing the view.
+        @Environment(FeatureFormViewModel.self) var featureFormViewModel
         /// A Boolean which declares whether navigation to forms for features associated via utility
         /// association form elements is disabled.
         @Environment(\.navigationIsDisabled) var navigationIsDisabled
@@ -33,12 +35,8 @@ extension FeatureFormView {
         /// A Boolean value indicating whether the removal confirmation is presented.
         @State private var removalConfirmationIsPresented = false
         
-        /// The model containing the latest association filter results.
-        let associationsFilterResultsModel: AssociationsFilterResultsModel
         /// The form element containing the group result.
         let element: UtilityAssociationsFormElement
-        /// The view model for the form.
-        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// The title of the selected utility associations filter result.
         let filterTitle: String
         /// The title of the selected utility association group result.
@@ -52,7 +50,7 @@ extension FeatureFormView {
         /// The backing utility association group result.
         var utilityAssociationGroupResult: UtilityAssociationGroupResult? {
             // TODO: Improve group identification (Apollo 1391).
-            try? associationsFilterResultsModel.result?
+            try? associationsFilterResultsModel?.result?
                 .get()
                 .first(where: { $0.filter.title == filterTitle} )?
                 .groupResults
@@ -80,7 +78,7 @@ extension FeatureFormView {
                 element: element,
                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
             ) {
-                associationsFilterResultsModel.fetchResults()
+                associationsFilterResultsModel?.fetchResults()
             }
             .onChange(of: associationResults.count) {
                 if associationResults.isEmpty {
@@ -88,11 +86,21 @@ extension FeatureFormView {
                 }
             }
             .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
-                associationsFilterResultsModel.fetchResults()
+                associationsFilterResultsModel?.fetchResults()
             }
             .onIsEditableChange(of: element) { newIsEditable in
                 isEditable = newIsEditable
             }
+        }
+        
+        /// The model containing the latest association filter results.
+        var associationsFilterResultsModel: AssociationsFilterResultsModel? {
+            embeddedFeatureFormViewModel.associationsFilterResultsModels[element]
+        }
+        
+        /// The view model for the form.
+        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
+            featureFormViewModel.currentFormModel!
         }
         
         @ViewBuilder func deleteButton(for association: UtilityAssociation) -> some View {
@@ -116,8 +124,6 @@ extension FeatureFormView {
             Button {
                 navigationPath?.wrappedValue.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
-                        embeddedFeatureFormViewModel,
-                        associationsFilterResultsModel,
                         element,
                         result
                     )
@@ -141,10 +147,12 @@ extension FeatureFormView {
         func mainButton(for result: UtilityAssociationResult) -> some View {
             Button {
                 let navigationAction = {
+                    let form = FeatureForm(feature: result.associatedFeature)
                     navigationPath?.wrappedValue.append(
-                        FeatureFormView.NavigationPathItem.form(
-                            FeatureForm(feature: result.associatedFeature)
-                        )
+                        FeatureFormView.NavigationPathItem.form(form)
+                    )
+                    featureFormViewModel.models.append(
+                        EmbeddedFeatureFormViewModel(featureForm: form)
                     )
                 }
                 if embeddedFeatureFormViewModel.featureForm.hasEdits {

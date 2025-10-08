@@ -137,7 +137,7 @@ public struct FeatureFormView: View {
                         switch itemType {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
-                        case let .utilityAssociationAssetTypesView(embeddedFeatureFormViewModel, element, filter, source):
+                        case let .utilityAssociationAssetTypesView(element, filter, source):
                             UtilityAssociationAssetTypesView(
                                 element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
@@ -147,55 +147,50 @@ public struct FeatureFormView: View {
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(source.name)
-                        case let .utilityAssociationCreationView(embeddedFeatureFormViewModel, candidate, element, filter):
-                            UtilityAssociationCreationView(candidate: candidate, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel, filter: filter)
-                                .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
-                                .navigationBarTitleDisplayMode(.inline)
-                                .navigationTitle(newAssociation)
-                        case let .utilityAssociationDetailsView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, associationResult):
+                        case let .utilityAssociationCreationView(candidate, element, filter):
+                            UtilityAssociationCreationView(
+                                candidate: candidate,
+                                element: element,
+                                filter: filter
+                            )
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(newAssociation)
+                        case let .utilityAssociationDetailsView(element, associationResult):
                             UtilityAssociationDetailsView(
                                 associationResult: associationResult,
-                                associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                        case let .utilityAssociationFeatureCandidatesView(embeddedFeatureFormViewModel, element, filter, source, assetType):
+                        case let .utilityAssociationFeatureCandidatesView(element, filter, source, assetType):
                             UtilityAssociationFeatureCandidatesView(
                                 assetType: assetType,
                                 element: element,
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
                                 filter: filter,
                                 source: source
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(assetType.name)
-                        case let .utilityAssociationFeatureSourcesView(embeddedFeatureFormViewModel, element, filter):
+                        case let .utilityAssociationFeatureSourcesView(element, filter):
                             UtilityAssociationFeatureSourcesView(
                                 element: element,
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
                                 filter: filter
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(networkDataSource)
-                        case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filterTitle):
+                        case let .utilityAssociationFilterResultView(element, filterTitle):
                             UtilityAssociationsFilterResultView(
-                                associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
                                 filterTitle: filterTitle
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(filterTitle, subtitle: embeddedFeatureFormViewModel.title)
-                        case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filterTitle, groupTitle):
+                        case let .utilityAssociationGroupResultView(element, filterTitle, groupTitle):
                             UtilityAssociationGroupResultView(
-                                associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
                                 filterTitle: filterTitle,
                                 groupTitle: groupTitle
                             )

@@ -17,6 +17,9 @@ import Observation
 
 @MainActor @Observable
 class EmbeddedFeatureFormViewModel {
+    /// The models for fetching association filter results for each utility associations form element in the form.
+    var associationsFilterResultsModels: [UtilityAssociationsFormElement: AssociationsFilterResultsModel] = [:]
+    
     /// The current focused element, if one exists.
     var focusedElement: FormElement? {
         didSet {

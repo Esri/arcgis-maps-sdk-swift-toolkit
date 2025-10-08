@@ -18,6 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view to choose a feature source when selecting a feature to create a utility association with.
     struct UtilityAssociationFeatureCandidatesView: View {
+        /// The model for the FeatureFormView containing the view.
+        @Environment(FeatureFormViewModel.self) var featureFormViewModel
         /// The closure to perform when a ``EditingEvent`` occurs.
         @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
         
@@ -32,21 +34,10 @@ extension FeatureFormView {
         let assetType: UtilityAssetType
         /// The element to add the new association to.
         let element: UtilityAssociationsFormElement
-        /// The model for the feature form containing the element to add the association to.
-        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
         /// The feature source to query and obtain candidates from.
         let source: UtilityAssociationFeatureSource
-        
-        /// The candidates that can be used to create an association filtered by name.
-        private var filteredCandidates: [UtilityAssociationFeatureCandidate] {
-            if filterPhrase.isEmpty {
-                candidates
-            } else {
-                candidates.filter({ $0.title.localizedStandardContains(filterPhrase) })
-            }
-        }
         
         var body: some View {
             List {
@@ -88,13 +79,26 @@ extension FeatureFormView {
             )
         }
         
+        /// The model for the feature form containing the element to add the association to.
+        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
+            featureFormViewModel.currentFormModel!
+        }
+        
+        /// The candidates that can be used to create an association filtered by name.
+        var filteredCandidates: [UtilityAssociationFeatureCandidate] {
+            if filterPhrase.isEmpty {
+                candidates
+            } else {
+                candidates.filter({ $0.title.localizedStandardContains(filterPhrase) })
+            }
+        }
+        
         /// A section with the candidate results.
         var sectionForCandidates: some View {
             Section {
                 ForEach(filteredCandidates, id: \.title) { candidate in
                     NavigationLink(
                         value: FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
-                            embeddedFeatureFormViewModel,
                             candidate,
                             element,
                             filter

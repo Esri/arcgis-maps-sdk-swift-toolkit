@@ -27,8 +27,6 @@ extension FeatureFormView {
         
         /// The element to add the new association to.
         let element: UtilityAssociationsFormElement
-        /// The model for the feature form containing the element to add the association to.
-        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
         
@@ -62,7 +60,7 @@ extension FeatureFormView {
                         NavigationLink(
                             source.name,
                             value: FeatureFormView.NavigationPathItem.utilityAssociationAssetTypesView(
-                                embeddedFeatureFormViewModel, element, filter, source
+                                element, filter, source
                             )
                         )
                     }

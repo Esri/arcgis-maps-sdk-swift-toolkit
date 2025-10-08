@@ -18,24 +18,32 @@ import SwiftUI
 extension FeatureFormView {
     /// A view for a utility associations filter result.
     struct UtilityAssociationsFilterResultView: View {
+        /// The model for the FeatureFormView containing the view.
+        @Environment(FeatureFormViewModel.self) var featureFormViewModel
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
         
-        /// The model containing the latest association filter results.
-        let associationsFilterResultsModel: AssociationsFilterResultsModel
         /// The form element containing the filter result.
         let element: UtilityAssociationsFormElement
-        /// The view model for the form.
-        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// The title of the selected utility associations filter result.
         let filterTitle: String
         
+        /// The model containing the latest association filter results.
+        var associationsFilterResultsModel: AssociationsFilterResultsModel? {
+            embeddedFeatureFormViewModel?.associationsFilterResultsModels[element]
+        }
+        
+        /// The view model for the form.
+        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+            featureFormViewModel.currentFormModel
+        }
+        
         /// The selected utility associations filter result.
         var filterResult: UtilityAssociationsFilterResult? {
-            try? associationsFilterResultsModel.result?
+            try? associationsFilterResultsModel?.result?
                 .get()
                 .first(where: { $0.filter.title == filterTitle} )
         }
@@ -52,8 +60,6 @@ extension FeatureFormView {
                         Button {
                             navigationPath?.wrappedValue.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
-                                    embeddedFeatureFormViewModel,
-                                    associationsFilterResultsModel,
                                     element,
                                     filterTitle,
                                     utilityAssociationGroupResult.name
@@ -73,8 +79,8 @@ extension FeatureFormView {
                         .tint(.primary)
                     }
                 }
-                .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
-                    associationsFilterResultsModel.fetchResults()
+                .onChange(of: embeddedFeatureFormViewModel?.hasEdits) {
+                    associationsFilterResultsModel?.fetchResults()
                 }
             }
             .overlay(alignment: .bottomLeading) {
@@ -88,7 +94,6 @@ extension FeatureFormView {
                 Button {
                     navigationPath?.wrappedValue.append(
                         FeatureFormView.NavigationPathItem.utilityAssociationFeatureSourcesView(
-                            embeddedFeatureFormViewModel,
                             element,
                             filterResult!.filter
                         )

@@ -18,6 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view to configure and add a utility network association.
     struct UtilityAssociationCreationView: View {
+        /// The model for the FeatureFormView containing the view.
+        @Environment(FeatureFormViewModel.self) var featureFormViewModel
         /// The navigation path for the navigation stack presenting this view.
         @Environment(\.navigationPath) var navigationPath
         
@@ -44,8 +46,6 @@ extension FeatureFormView {
         let candidate: UtilityAssociationFeatureCandidate
         /// The element to add the new association to.
         let element: UtilityAssociationsFormElement
-        /// The model for the feature form containing the element to add the association to.
-        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
         
@@ -139,6 +139,11 @@ extension FeatureFormView {
             @unknown default:
                 true
             }
+        }
+        
+        /// The model for the feature form containing the element to add the association to.
+        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
+            featureFormViewModel.currentFormModel!
         }
         
         /// A Boolean value indicating whether content visibility should be specified for the new association.

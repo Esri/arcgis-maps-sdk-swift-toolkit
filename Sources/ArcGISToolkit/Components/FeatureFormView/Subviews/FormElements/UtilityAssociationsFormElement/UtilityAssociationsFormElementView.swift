@@ -21,24 +21,25 @@ extension FeatureFormView {
         /// The view model for the form.
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
         
-        /// The model for fetching the form element's associations filter results.
-        @State private var associationsFilterResultsModel: AssociationsFilterResultsModel
-        
         /// The form element.
         let element: UtilityAssociationsFormElement
         
         init(element: UtilityAssociationsFormElement) {
             self.element = element
-            self._associationsFilterResultsModel = .init(wrappedValue: .init(element: element, includeEmptyFilterResults: true))
+        }
+        
+        /// The model for fetching the form element's associations filter results.
+        var associationsFilterResultsModel: AssociationsFilterResultsModel? {
+            embeddedFeatureFormViewModel.associationsFilterResultsModels[element]
         }
         
         var body: some View {
             Group {
-                switch associationsFilterResultsModel.result {
+                switch associationsFilterResultsModel?.result {
                 case .success(let results):
                     FeatureFormGroupedContentView(content: results.map {
                         Row(
-                            associationsFilterResultsModel: associationsFilterResultsModel,
+                            associationsFilterResultsModel: associationsFilterResultsModel!,
                             element: element,
                             filterTitle: $0.filter.title
                         )
@@ -53,7 +54,13 @@ extension FeatureFormView {
                 }
             }
             .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
-                associationsFilterResultsModel.fetchResults()
+                associationsFilterResultsModel?.fetchResults()
+            }
+            .task {
+                self.embeddedFeatureFormViewModel.associationsFilterResultsModels[element] = .init(
+                    element: element,
+                    includeEmptyFilterResults: true
+                )
             }
         }
     }
@@ -83,8 +90,6 @@ extension FeatureFormView {
             Button {
                 navigationPath?.wrappedValue.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
-                        embeddedFeatureFormViewModel,
-                        associationsFilterResultsModel,
                         element,
                         filterTitle
                     )
