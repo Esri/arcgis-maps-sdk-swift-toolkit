@@ -315,6 +315,8 @@ public struct FeatureFormView: View {
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
             .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
+            .onChange(of: navigationPath) {
+            }
             .onChange(of: ObjectIdentifier(rootFeatureForm)) {
                 presentedForm = rootFeatureForm
             }
