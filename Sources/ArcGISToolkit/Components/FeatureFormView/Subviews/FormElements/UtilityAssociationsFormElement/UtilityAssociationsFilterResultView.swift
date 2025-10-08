@@ -30,41 +30,38 @@ extension FeatureFormView {
         let element: UtilityAssociationsFormElement
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
-        /// The title of the selected utility associations filter result.
-        let filterTitle: String
+        /// The selected utility associations filter.
+        let filter: UtilityAssociationsFilter
         
-        /// The selected utility associations filter result.
-        var filterResult: UtilityAssociationsFilterResult? {
-            try? associationsFilterResultsModel.result?
-                .get()
-                .first(where: { $0.filter.title == filterTitle} )
-        }
         /// The set of group results within the filter result.
         var groupResults: [UtilityAssociationGroupResult] {
-            filterResult?.groupResults ?? []
+            (try? associationsFilterResultsModel.result?
+                .get()
+                .first(where: { $0.filter === filter } )?
+                .groupResults) ?? []
         }
         
         var body: some View {
             List {
                 Section {
-                    // TODO: Improve group identification (Apollo 1391).
-                    ForEach(groupResults, id: \.name) { utilityAssociationGroupResult in
+                    ForEach(groupResults, id: \.name) { groupResult in
                         Button {
                             navigationPath?.wrappedValue.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
                                     embeddedFeatureFormViewModel,
                                     associationsFilterResultsModel,
                                     element,
-                                    filterTitle,
-                                    utilityAssociationGroupResult.name
+                                    filter,
+                                    groupResult.featureFormSource,
+                                    groupResult.name
                                 )
                             )
                         } label: {
                             HStack {
-                                Text(utilityAssociationGroupResult.name)
+                                Text(groupResult.name)
                                 Spacer()
                                 Group {
-                                    Text(utilityAssociationGroupResult.associationResults.count, format: .number)
+                                    Text(groupResult.associationResults.count, format: .number)
                                     Image(systemName: "chevron.right")
                                 }
                                 .foregroundColor(.secondary)
@@ -90,7 +87,7 @@ extension FeatureFormView {
                         FeatureFormView.NavigationPathItem.utilityAssociationFeatureSourcesView(
                             embeddedFeatureFormViewModel,
                             element,
-                            filterResult!.filter
+                            filter
                         )
                     )
                 } label: {
