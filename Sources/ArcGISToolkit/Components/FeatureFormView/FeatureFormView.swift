@@ -143,7 +143,7 @@ public struct FeatureFormView: View {
                                 filter: filter,
                                 source: source
                             )
-                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .featureFormToolbar(featureFormViewModel.presentedEmbeddedFeatureFormViewModel!.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(source.name)
                         case let .utilityAssociationCreationView(candidate, element, filter):
@@ -152,6 +152,7 @@ public struct FeatureFormView: View {
                                 element: element,
                                 filter: filter
                             )
+                            .featureFormToolbar(featureFormViewModel.presentedEmbeddedFeatureFormViewModel!.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(newAssociation)
                         case let .utilityAssociationDetailsView(element, associationResult):
@@ -159,7 +160,7 @@ public struct FeatureFormView: View {
                                 associationResult: associationResult,
                                 element: element,
                             )
-                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .featureFormToolbar(featureFormViewModel.presentedEmbeddedFeatureFormViewModel!.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                         case let .utilityAssociationFeatureCandidatesView(element, filter, source, assetType):
                             UtilityAssociationFeatureCandidatesView(
@@ -168,7 +169,7 @@ public struct FeatureFormView: View {
                                 filter: filter,
                                 source: source
                             )
-                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .featureFormToolbar(featureFormViewModel.presentedEmbeddedFeatureFormViewModel!.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(assetType.name)
                         case let .utilityAssociationFeatureSourcesView(element, filter):
@@ -176,7 +177,7 @@ public struct FeatureFormView: View {
                                 element: element,
                                 filter: filter
                             )
-                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .featureFormToolbar(featureFormViewModel.presentedEmbeddedFeatureFormViewModel!.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(networkDataSource)
                         case let .utilityAssociationFilterResultView(element, filterTitle):
@@ -184,18 +185,18 @@ public struct FeatureFormView: View {
                                 element: element,
                                 filterTitle: filterTitle
                             )
-                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .featureFormToolbar(featureFormViewModel.presentedEmbeddedFeatureFormViewModel!.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(filterTitle, subtitle: embeddedFeatureFormViewModel.title)
+                            .navigationTitle(filterTitle, subtitle: featureFormViewModel.presentedEmbeddedFeatureFormViewModel!.title)
                         case let .utilityAssociationGroupResultView(element, filterTitle, groupTitle):
                             UtilityAssociationGroupResultView(
                                 element: element,
                                 filterTitle: filterTitle,
                                 groupTitle: groupTitle
                             )
-                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .featureFormToolbar(featureFormViewModel.presentedEmbeddedFeatureFormViewModel!.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(groupTitle, subtitle: embeddedFeatureFormViewModel.title)
+                            .navigationTitle(groupTitle, subtitle: featureFormViewModel.presentedEmbeddedFeatureFormViewModel!.title)
                         }
                     }
             }
@@ -311,13 +312,14 @@ public struct FeatureFormView: View {
             .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
             .onChange(of: navigationPath) {
             }
-            .onChange(of: ObjectIdentifier(rootFeatureForm)) {
+            .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
+                featureFormViewModel.embeddedFeatureFormViewModels = [
+                    EmbeddedFeatureFormViewModel(featureForm: rootFeatureForm)
+                ]
                 presentedForm = rootFeatureForm
-                featureFormViewModel.models.removeLast(
-                    featureFormViewModel.models.count - 1
-                )
             }
             .onPreferenceChange(CurrentEmbeddedFeatureForm.self) { wrappedEmbeddedFeatureFormViewModel in
+                // TODO: See if the preference approach can be replaced by monitoring the navigation path
                 guard let embeddedModel = wrappedEmbeddedFeatureFormViewModel?.object else { return }
                 formChangedAction(embeddedModel.featureForm)
             }
