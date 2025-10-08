@@ -324,12 +324,6 @@ public struct FeatureFormView: View {
             .onPreferenceChange(CurrentEmbeddedFeatureForm.self) { wrappedEmbeddedFeatureFormViewModel in
                 guard let embeddedModel = wrappedEmbeddedFeatureFormViewModel?.object else { return }
                 formChangedAction(embeddedModel.featureForm)
-                featureFormViewModel.currentFormModel = embeddedModel
-                if let innerModel = featureFormViewModel.currentFormModel {
-                    print("DTF", "FEATURE FORM CHANGED", ObjectIdentifier(featureFormViewModel), ObjectIdentifier(innerModel), ObjectIdentifier(innerModel.featureForm))
-                } else {
-                    print("DTF", "FEATURE FORM CHANGED", ObjectIdentifier(featureFormViewModel), "NO EMBEDDED MODEL")
-                }
             }
         }
     }
