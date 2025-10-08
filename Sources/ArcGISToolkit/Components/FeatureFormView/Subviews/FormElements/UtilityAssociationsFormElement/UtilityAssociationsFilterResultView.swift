@@ -38,7 +38,7 @@ extension FeatureFormView {
         
         /// The view model for the form.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
-            featureFormViewModel.currentFormModel
+            featureFormViewModel.presentedEmbeddedFeatureFormViewModel
         }
         
         /// The selected utility associations filter result.

@@ -81,7 +81,7 @@ extension FeatureFormView {
         
         /// The model for the feature form containing the element to add the association to.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.currentFormModel!
+            featureFormViewModel.presentedEmbeddedFeatureFormViewModel!
         }
         
         /// The candidates that can be used to create an association filtered by name.

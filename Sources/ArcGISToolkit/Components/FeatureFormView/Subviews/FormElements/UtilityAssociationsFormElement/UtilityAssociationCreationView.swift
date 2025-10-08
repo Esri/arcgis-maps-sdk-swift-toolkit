@@ -143,7 +143,7 @@ extension FeatureFormView {
         
         /// The model for the feature form containing the element to add the association to.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.currentFormModel!
+            featureFormViewModel.presentedEmbeddedFeatureFormViewModel!
         }
         
         /// A Boolean value indicating whether content visibility should be specified for the new association.

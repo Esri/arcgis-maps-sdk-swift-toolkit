@@ -68,7 +68,7 @@ extension FeatureFormView {
         
         /// The model for the feature form containing the element with the association.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.currentFormModel!
+            featureFormViewModel.presentedEmbeddedFeatureFormViewModel!
         }
         
         /// A section which contains the association type label.

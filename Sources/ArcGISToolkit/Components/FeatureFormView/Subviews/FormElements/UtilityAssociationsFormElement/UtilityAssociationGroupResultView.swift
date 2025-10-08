@@ -100,7 +100,7 @@ extension FeatureFormView {
         
         /// The view model for the form.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.currentFormModel!
+            featureFormViewModel.presentedEmbeddedFeatureFormViewModel!
         }
         
         @ViewBuilder func deleteButton(for association: UtilityAssociation) -> some View {
@@ -148,11 +148,11 @@ extension FeatureFormView {
             Button {
                 let navigationAction = {
                     let form = FeatureForm(feature: result.associatedFeature)
+                    featureFormViewModel.embeddedFeatureFormViewModels.append(
+                        EmbeddedFeatureFormViewModel(featureForm: form)
+                    )
                     navigationPath?.wrappedValue.append(
                         FeatureFormView.NavigationPathItem.form(form)
-                    )
-                    featureFormViewModel.models.append(
-                        EmbeddedFeatureFormViewModel(featureForm: form)
                     )
                 }
                 if embeddedFeatureFormViewModel.featureForm.hasEdits {
