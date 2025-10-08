@@ -82,7 +82,10 @@ extension View {
     
     /// Configures whether navigation links show a disclosure indicator
     @ViewBuilder func _navigationLinkIndicatorVisibility(_ visibility: Visibility) -> some View {
-#if compiler(>=6.2)
+        // navigationLinkIndicatorVisibility should be available on Catalyst but
+        // apps built with Xcode 26.0.1 seem to crash on launch on Catalyst with
+        // it included.
+#if compiler(>=6.2) && !targetEnvironment(macCatalyst)
         self
             .navigationLinkIndicatorVisibility(visibility)
 #else
