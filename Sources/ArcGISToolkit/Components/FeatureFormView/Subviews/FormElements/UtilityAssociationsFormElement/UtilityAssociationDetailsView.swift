@@ -32,6 +32,8 @@ extension FeatureFormView {
         let associationResult: UtilityAssociationResult
         /// The element containing the association.
         let element: UtilityAssociationsFormElement
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         
         var body: some View {
             List {
@@ -68,7 +70,7 @@ extension FeatureFormView {
         
         /// The model for the feature form containing the element with the association.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.presentedEmbeddedFeatureFormViewModel!
+            featureFormViewModel.getModel(form)!
         }
         
         /// A section which contains the association type label.
