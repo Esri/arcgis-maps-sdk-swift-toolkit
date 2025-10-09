@@ -319,6 +319,9 @@ public struct FeatureFormView: View {
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
             .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
             .onChange(of: navigationPath) {
+                if let presentedItem = navigationPath.last {
+                    onFormEditingEventAction?(.navigationChanged(presentedItem))
+                }
             }
             .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
                 featureFormViewModel.clearModels()
