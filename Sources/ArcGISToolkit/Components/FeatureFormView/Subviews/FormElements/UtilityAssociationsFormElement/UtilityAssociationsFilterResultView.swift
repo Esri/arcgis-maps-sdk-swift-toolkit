@@ -30,6 +30,8 @@ extension FeatureFormView {
         let element: UtilityAssociationsFormElement
         /// The title of the selected utility associations filter result.
         let filterTitle: String
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         
         /// The model containing the latest association filter results.
         var associationsFilterResultsModel: AssociationsFilterResultsModel? {
@@ -38,7 +40,7 @@ extension FeatureFormView {
         
         /// The view model for the form.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
-            featureFormViewModel.presentedEmbeddedFeatureFormViewModel
+            featureFormViewModel.getModel(form)
         }
         
         /// The selected utility associations filter result.
@@ -60,6 +62,7 @@ extension FeatureFormView {
                         Button {
                             navigationPath?.wrappedValue.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
+                                    form,
                                     element,
                                     filterTitle,
                                     utilityAssociationGroupResult.name
@@ -94,6 +97,7 @@ extension FeatureFormView {
                 Button {
                     navigationPath?.wrappedValue.append(
                         FeatureFormView.NavigationPathItem.utilityAssociationFeatureSourcesView(
+                            form,
                             element,
                             filterResult!.filter
                         )
