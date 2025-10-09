@@ -39,6 +39,8 @@ extension FeatureFormView {
         let element: UtilityAssociationsFormElement
         /// The title of the selected utility associations filter result.
         let filterTitle: String
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         /// The title of the selected utility association group result.
         let groupTitle: String
         
@@ -100,7 +102,7 @@ extension FeatureFormView {
         
         /// The view model for the form.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.presentedEmbeddedFeatureFormViewModel!
+            featureFormViewModel.getModel(form)!
         }
         
         @ViewBuilder func deleteButton(for association: UtilityAssociation) -> some View {
@@ -124,6 +126,7 @@ extension FeatureFormView {
             Button {
                 navigationPath?.wrappedValue.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
+                        form,
                         element,
                         result
                     )
@@ -148,9 +151,7 @@ extension FeatureFormView {
             Button {
                 let navigationAction = {
                     let form = FeatureForm(feature: result.associatedFeature)
-                    featureFormViewModel.embeddedFeatureFormViewModels.append(
-                        EmbeddedFeatureFormViewModel(featureForm: form)
-                    )
+                    featureFormViewModel.addModel(form)
                     navigationPath?.wrappedValue.append(
                         FeatureFormView.NavigationPathItem.form(form)
                     )
