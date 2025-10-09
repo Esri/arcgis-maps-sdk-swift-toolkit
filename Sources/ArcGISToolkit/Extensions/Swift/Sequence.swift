@@ -23,10 +23,10 @@ extension Sequence {
     ///     // Prints '["dog", "pig", "cat", "ox"]'
     ///
     /// - Returns: A sequence with only the unique elements of this sequence.
-    ///  .
-    /// - Complexity: O(1).
+    ///
+    /// - Complexity: O(*n*), where *n* is the length of the sequence.
     @inlinable
-    public func uniqued() -> [Element] where Element: Hashable {
+    func uniqued() -> [Element] where Element: Hashable {
         var seen: Set<Element> = []
         var result: [Element] = []
         for element in self {
