@@ -16,7 +16,8 @@ import ArcGIS
 import SwiftUI
 
 struct EmbeddedFeatureFormView: View {
-    @Environment(FeatureFormViewModel.self) var featureFormViewModel: FeatureFormViewModel?
+    /// The model for the FeatureFormView containing the view.
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel: FeatureFormViewModel
     
     /// The feature form defining the editing experience.
     let form: FeatureForm
