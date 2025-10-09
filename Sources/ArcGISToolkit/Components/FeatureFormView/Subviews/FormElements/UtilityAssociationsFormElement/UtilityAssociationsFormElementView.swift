@@ -41,7 +41,7 @@ extension FeatureFormView {
                         Row(
                             associationsFilterResultsModel: associationsFilterResultsModel!,
                             element: element,
-                            filterTitle: $0.filter.title,
+                            filter: $0.filter,
                             form: embeddedFeatureFormViewModel.featureForm
                         )
                         .environment(embeddedFeatureFormViewModel)
@@ -77,16 +77,16 @@ extension FeatureFormView {
         let associationsFilterResultsModel: AssociationsFilterResultsModel
         /// The form element containing the filter result.
         let element: UtilityAssociationsFormElement
-        /// The title of the referenced utility associations filter result.
-        let filterTitle: String
+        /// The referenced utility associations filter.
+        let filter: UtilityAssociationsFilter
         /// The feature form defining the editing experience.
         let form: FeatureForm
         
         /// The referenced utility associations filter result.
-        var filterResult: UtilityAssociationsFilterResult? {
+        var result: UtilityAssociationsFilterResult? {
             try? associationsFilterResultsModel.result?
                 .get()
-                .first(where: { $0.filter.title == filterTitle } )
+                .first(where: { $0.filter === filter } )
         }
         
         var body: some View {
@@ -95,23 +95,23 @@ extension FeatureFormView {
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
                         form,
                         element,
-                        filterTitle
+                        filter
                     )
                 )
             } label: {
                 HStack {
                     VStack {
-                        Text(filterTitle.capitalized)
-                        if let filterResult, !filterResult.filter.description.isEmpty {
-                            Text(filterResult.filter.description)
+                        Text(filter.title)
+                        if !filter.description.isEmpty {
+                            Text(filter.description)
                                 .font(.caption)
                         }
                     }
                     .lineLimit(1)
                     Spacer()
                     Group {
-                        if let filterResult {
-                            Text(filterResult.resultCount, format: .number)
+                        if let result {
+                            Text(result.resultCount, format: .number)
                         }
                         Image(systemName: "chevron.right")
                     }

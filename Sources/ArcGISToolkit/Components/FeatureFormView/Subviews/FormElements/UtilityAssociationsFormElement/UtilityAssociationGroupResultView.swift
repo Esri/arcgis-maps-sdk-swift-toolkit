@@ -37,8 +37,10 @@ extension FeatureFormView {
         
         /// The form element containing the group result.
         let element: UtilityAssociationsFormElement
-        /// The title of the selected utility associations filter result.
-        let filterTitle: String
+        /// The feature form source of the group result, useful for identifying a group result.
+        let featureFormSource: FeatureFormSource
+        /// The selected utility associations filter.
+        let filter: UtilityAssociationsFilter
         /// The feature form defining the editing experience.
         let form: FeatureForm
         /// The title of the selected utility association group result.
@@ -51,12 +53,11 @@ extension FeatureFormView {
         
         /// The backing utility association group result.
         var utilityAssociationGroupResult: UtilityAssociationGroupResult? {
-            // TODO: Improve group identification (Apollo 1391).
             try? associationsFilterResultsModel?.result?
                 .get()
-                .first(where: { $0.filter.title == filterTitle} )?
+                .first(where: { $0.filter === filter })?
                 .groupResults
-                .first(where: { $0.name == groupTitle })
+                .first(where: { $0.featureFormSource === featureFormSource })
         }
         
         var body: some View {

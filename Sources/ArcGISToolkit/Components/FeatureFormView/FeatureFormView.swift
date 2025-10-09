@@ -185,25 +185,26 @@ public struct FeatureFormView: View {
                             .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(networkDataSource)
-                        case let .utilityAssociationFilterResultView(form, element, filterTitle):
+                        case let .utilityAssociationFilterResultView(form, element, filter):
                             UtilityAssociationsFilterResultView(
                                 element: element,
-                                filterTitle: filterTitle,
+                                filter: filter,
                                 form: form
                             )
                             .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)
-//                            .navigationTitle(filterTitle, subtitle: featureFormViewModel.presentedEmbeddedFeatureFormViewModel!.title)
-                        case let .utilityAssociationGroupResultView(form, element, filterTitle, groupTitle):
+                            .navigationTitle(filter.title, subtitle: embeddedFeatureFormViewModel.title)
+                        case let .utilityAssociationGroupResultView(form, element, filter, formSource, groupResultName):
                             UtilityAssociationGroupResultView(
                                 element: element,
-                                filterTitle: filterTitle,
+                                featureFormSource: formSource,
+                                filter: filter,
                                 form: form,
-                                groupTitle: groupTitle
+                                groupTitle: groupResultName
                             )
                             .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)
-//                            .navigationTitle(groupTitle, subtitle: featureFormViewModel.presentedEmbeddedFeatureFormViewModel!.title)
+                            .navigationTitle(groupResultName, subtitle: embeddedFeatureFormViewModel.title)
                         }
                     }
             }

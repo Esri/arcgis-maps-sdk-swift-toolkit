@@ -22,8 +22,8 @@ extension FeatureFormView {
         case utilityAssociationDetailsView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationResult)
         case utilityAssociationFeatureCandidatesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource, UtilityAssetType)
         case utilityAssociationFeatureSourcesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter)
-        case utilityAssociationFilterResultView(FeatureForm, UtilityAssociationsFormElement, String)
-        case utilityAssociationGroupResultView(FeatureForm, UtilityAssociationsFormElement, String, String)
+        case utilityAssociationFilterResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter)
+        case utilityAssociationGroupResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, FeatureFormSource, String)
         
         public static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
@@ -52,16 +52,15 @@ extension FeatureFormView {
                       .utilityAssociationFeatureSourcesView(_, elementB, filterB)):
                 elementA === elementB
                 && filterA === filterB
-            case let (.utilityAssociationFilterResultView(_, elementA, titleA),
-                      .utilityAssociationFilterResultView(_, elementB, titleB)):
+            case let (.utilityAssociationFilterResultView(_, elementA, filterA),
+                      .utilityAssociationFilterResultView(_, elementB, filterB)):
                 elementA === elementB
-                && titleA == titleB
-            case let (.utilityAssociationGroupResultView(_, elementA, filterTitleA, groupTitleA),
-                      .utilityAssociationGroupResultView(_, elementB, filterTitleB, groupTitleB)):
-                // TODO: Improve group identification (Apollo 1391).
+                && filterA === filterB
+            case let (.utilityAssociationGroupResultView(_, elementA, filterA, sourceA),
+                      .utilityAssociationGroupResultView(_, elementB, filterB, sourceB)):
                 elementA === elementB
-                && filterTitleA == filterTitleB
-                && groupTitleA == groupTitleB
+                && filterA === filterB
+                && sourceA === sourceB
             default:
                 false
             }
@@ -89,14 +88,13 @@ extension FeatureFormView {
             case let .utilityAssociationFeatureSourcesView(_, element, filter):
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
-            case let .utilityAssociationFilterResultView(_, element, filterTitle):
+            case let .utilityAssociationFilterResultView(_, element, filter):
                 hasher.combine(element)
-                hasher.combine(filterTitle)
-            case let .utilityAssociationGroupResultView(_, element, filterTitle, groupTitle):
-                // TODO: Improve group identification (Apollo 1391).
+                hasher.combine(ObjectIdentifier(filter))
+            case let .utilityAssociationGroupResultView(_, element, filter, formSource):
                 hasher.combine(element)
-                hasher.combine(filterTitle)
-                hasher.combine(groupTitle)
+                hasher.combine(ObjectIdentifier(filter))
+                hasher.combine(ObjectIdentifier(formSource))
             }
         }
     }
