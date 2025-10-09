@@ -75,20 +75,22 @@ extension EmbeddedFeatureFormView {
     /// Makes UI for a field form element or a text form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
-        switch element {
-        case let element as AttachmentsFormElement:
-            AttachmentsFeatureElementView(
-                formElement: element,
-                formViewModel: embeddedFeatureFormViewModel
-            )
-        case let element as FieldFormElement:
-            makeFieldElement(element)
-        case let element as TextFormElement:
-            makeTextElement(element)
-        case let element as UtilityAssociationsFormElement:
-            makeUtilityAssociationsFormElement(element)
-        default:
-            EmptyView()
+        if let embeddedFeatureFormViewModel {
+            switch element {
+            case let element as AttachmentsFormElement:
+                AttachmentsFeatureElementView(
+                    formElement: element,
+                    formViewModel: embeddedFeatureFormViewModel
+                )
+            case let element as FieldFormElement:
+                makeFieldElement(element)
+            case let element as TextFormElement:
+                makeTextElement(element)
+            case let element as UtilityAssociationsFormElement:
+                makeUtilityAssociationsFormElement(element)
+            default:
+                EmptyView()
+            }
         }
     }
     
