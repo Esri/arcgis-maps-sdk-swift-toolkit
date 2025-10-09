@@ -18,11 +18,8 @@ import SwiftUI
 struct EmbeddedFeatureFormView: View {
     @Environment(FeatureFormViewModel.self) var featureFormViewModel: FeatureFormViewModel?
     
-    /// Initializes a form view.
-    /// - Parameter featureForm: The feature form defining the editing experience.
-    init(featureForm: FeatureForm) {
-        self.embeddedFeatureFormViewModel = EmbeddedFeatureFormViewModel(featureForm: featureForm)
-    }
+    /// The feature form defining the editing experience.
+    let form: FeatureForm
     
     var body: some View {
         ScrollViewReader { scrollViewProxy in
