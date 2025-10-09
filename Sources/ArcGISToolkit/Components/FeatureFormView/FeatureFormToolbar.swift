@@ -16,8 +16,8 @@ import ArcGIS
 import SwiftUI
 
 extension View {
-    func featureFormToolbar(_ featureForm: FeatureForm, isAForm: Bool = false) -> some View {
-        self.modifier(FeatureFormToolbar(featureForm: featureForm, isAForm: isAForm))
+    func featureFormToolbar(_ featureForm: FeatureForm, isAForm: Bool = false, onBackNavigation: (() -> Void)? = nil) -> some View {
+        self.modifier(FeatureFormToolbar(featureForm: featureForm, isAForm: isAForm, onBackNavigation: onBackNavigation))
     }
 }
 
@@ -56,6 +56,9 @@ struct FeatureFormToolbar: ViewModifier {
     /// `UtilityAssociationGroupResultView`.
     let isAForm: Bool
     
+    /// A closure to perform when back navigation completes.
+    let onBackNavigation: (() -> Void)?
+    
     func body(content: Content) -> some View {
         content
             .navigationBarBackButtonHidden()
@@ -71,9 +74,11 @@ struct FeatureFormToolbar: ViewModifier {
                             if alertBeforeDismissing {
                                 setAlertContinuation?(true) {
                                     dismiss()
+                                    onBackNavigation?()
                                 }
                             } else {
                                 dismiss()
+                                onBackNavigation?()
                             }
                         } label: {
                             Label {
