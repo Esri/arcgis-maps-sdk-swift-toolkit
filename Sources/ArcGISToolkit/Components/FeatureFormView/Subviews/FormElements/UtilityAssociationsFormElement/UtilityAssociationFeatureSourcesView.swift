@@ -29,6 +29,8 @@ extension FeatureFormView {
         let element: UtilityAssociationsFormElement
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         
         /// The feature sources that can be used to create an association filtered by name.
         private var filteredSources: [UtilityAssociationFeatureSource] {
@@ -60,7 +62,7 @@ extension FeatureFormView {
                         NavigationLink(
                             source.name,
                             value: FeatureFormView.NavigationPathItem.utilityAssociationAssetTypesView(
-                                element, filter, source
+                                form, element, filter, source
                             )
                         )
                     }
