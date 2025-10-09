@@ -22,7 +22,7 @@ public extension View {
     @ViewBuilder
     func geometryEditorToolbar(
         geometryEditor: GeometryEditor,
-        placement: GeometryEditorToolbarPlacement = .overlay(alignment: .topTrailing, orientation: .vertical)
+        placement: GeometryEditorToolbar.Placement = .overlay(alignment: .topTrailing, orientation: .vertical)
     ) -> some View {
         modifier(
             GeometryEditorToolbarModifier(geometryEditor: geometryEditor, placement: placement)
@@ -30,18 +30,9 @@ public extension View {
     }
 }
 
-public enum GeometryEditorToolbarPlacement {
-    case overlay(alignment: Alignment, orientation: Orientation)
-    case toolbar(placement: ToolbarItemPlacement = .automatic)
-}
-
-public enum Orientation {
-    case vertical, horizontal
-}
-
 private struct GeometryEditorToolbarModifier: ViewModifier {
     let geometryEditor: GeometryEditor
-    let placement: GeometryEditorToolbarPlacement
+    let placement: GeometryEditorToolbar.Placement
     
     @State private var model = GeometryEditorModel()
     
@@ -111,6 +102,15 @@ public struct GeometryEditorToolbar: View {
 }
 
 public extension GeometryEditorToolbar {
+    enum Orientation {
+        case vertical, horizontal
+    }
+    
+    enum Placement {
+        case overlay(alignment: Alignment, orientation: Orientation)
+        case toolbar(placement: ToolbarItemPlacement = .automatic)
+    }
+    
     func orientation(_ orientation: Orientation?) -> Self {
         var copy = self
         copy.orientation = orientation
@@ -118,43 +118,56 @@ public extension GeometryEditorToolbar {
     }
 }
 
+
 // MARK: - EmbeddedGeometryEditorToolbar
 
 private struct EmbeddedGeometryEditorToolbar: View {
-    let orientation: Orientation?
+    let orientation: GeometryEditorToolbar.Orientation?
     
-    private let controlPadding = 12.0
+    private let padding = 6.0
     
     public var body: some View {
         switch orientation {
         case .vertical:
-            VStack(spacing: controlPadding) {
-                ToolPicker()
-                    .padding(.horizontal, controlPadding)
-                DeleteButton()
-                    .padding(.horizontal, controlPadding)
+            VStack(spacing: 0) {
+                Group {
+                    ToolPicker()
+                    DeleteButton()
+                }
+                .padding(.horizontal, padding)
+                
                 Divider()
-                UndoButton()
-                    .padding(.horizontal, controlPadding)
-                RedoButton()
-                    .padding(.horizontal, controlPadding)
+                    .padding(.vertical, padding)
+                
+                Group {
+                    UndoButton()
+                    RedoButton()
+                }
+                .padding(.horizontal, padding)
             }
-            .padding(.vertical, controlPadding)
+            .environment(\.labelPadding, padding)
+            .padding(.vertical, padding)
             .stackStyle()
             
         case .horizontal:
-            HStack(spacing: controlPadding) {
-                ToolPicker()
-                    .padding(.vertical, controlPadding)
-                DeleteButton()
-                    .padding(.vertical, controlPadding)
+            HStack(spacing: 0) {
+                Group {
+                    ToolPicker()
+                    DeleteButton()
+                }
+                .padding(.vertical, padding)
+                
                 Divider()
-                UndoButton()
-                    .padding(.vertical, controlPadding)
-                RedoButton()
-                    .padding(.vertical, controlPadding)
+                    .padding(.horizontal, padding)
+                
+                Group {
+                    UndoButton()
+                    RedoButton()
+                }
+                .padding(.vertical, padding)
             }
-            .padding(.horizontal, controlPadding)
+            .environment(\.labelPadding, padding)
+            .padding(.horizontal, padding)
             .stackStyle()
             
         case nil:
@@ -166,112 +179,58 @@ private struct EmbeddedGeometryEditorToolbar: View {
     }
 }
 
+
 // MARK: - Components
 
 private struct UndoButton: View {
     @Environment(GeometryEditorModel.self) private var model
+    @Environment(\.labelPadding) private var labelPadding
     
     var body: some View {
-        Button("Undo", systemImage: "arrow.uturn.backward") {
+        Button {
             model.geometryEditor.undo()
+        } label: {
+            Label("Undo", systemImage: "arrow.uturn.backward")
+                .padding(labelPadding)
         }
         .disabled(!model.canUndo)
     }
 }
 private struct RedoButton: View {
     @Environment(GeometryEditorModel.self) private var model
+    @Environment(\.labelPadding) private var labelPadding
     
     var body: some View {
-        Button("Redo", systemImage: "arrow.uturn.forward") {
+        Button {
             model.geometryEditor.redo()
+        }  label: {
+            Label("Redo", systemImage: "arrow.uturn.forward")
+                .padding(labelPadding)
         }
         .disabled(!model.canRedo)
     }
 }
 private struct DeleteButton: View {
     @Environment(GeometryEditorModel.self) private var model
+    @Environment(\.labelPadding) private var labelPadding
     
     var body: some View {
-        Button("Delete Selected Element", systemImage: "circle.badge.minus") {
+        Button {
             model.geometryEditor.deleteSelectedElement()
+        } label: {
+            Label("Delete Selected Element", systemImage: "circle.badge.minus")
+                .padding(labelPadding)
         }
         .disabled(!model.canDeleteSelectedElement)
     }
 }
 
-private struct ToolPicker: View {
-    @Environment(GeometryEditorModel.self) private var model
-    
-    @State private var selectedTool = Tool.vertex
-    
-    private var toolOptions: [Tool] {
-        model.geometryType == Point.self ? [.vertex, .reticle] : Tool.allCases
-    }
-    
-    var body: some View {
-        Menu("Tool", systemImage: selectedTool.systemImage) {
-            Picker("Tool", systemImage: "wrench.and.screwdriver", selection: $selectedTool) {
-                ForEach(toolOptions, id: \.self) { tool in
-                    Label(tool.label, systemImage: tool.systemImage)
-                }
-            }
-        }
-        .onChange(of: selectedTool) {
-            model.geometryEditor.tool = selectedTool.geometryEditorTool
-        }
-        .onChange(of: ObjectIdentifier(model.geometryEditor), initial: true) {
-            // Sets the selected tool based on the current geometry editor tool.
-            let tool = Tool(geometryEditorTool:  model.geometryEditor.tool) ?? .vertex
-            selectedTool = toolOptions.contains(tool) ? tool : toolOptions.first!
-            
-            // Overwrites developer set tool with a default.
-            model.geometryEditor.tool = selectedTool.geometryEditorTool
-        }
-    }
-    
-    private enum Tool: CaseIterable {
-        case vertex, freehand, reticle
-        
-        init?(geometryEditorTool: GeometryEditorTool) {
-            switch geometryEditorTool {
-            case is VertexTool:
-                self = .vertex
-            case is FreehandTool:
-                self = .freehand
-            case is ReticleVertexTool:
-                self = .reticle
-            default:
-                return nil
-            }
-        }
-        
-        var geometryEditorTool: GeometryEditorTool {
-            switch self {
-            case .vertex: VertexTool()
-            case .freehand: FreehandTool()
-            case .reticle: ReticleVertexTool()
-            }
-        }
-        
-        var label: String {
-            switch self {
-            case .vertex: "Vertex"
-            case .freehand: "Freehand"
-            case .reticle: "Reticle"
-            }
-        }
-        
-        var systemImage: String {
-            switch self {
-            case .vertex: "point.3.connected.trianglepath.dotted"
-            case .freehand: "scribble"
-            case .reticle: "dot.viewfinder"
-            }
-        }
-    }
-}
 
 // MARK: - Helper
+
+extension EnvironmentValues {
+    @Entry var labelPadding = 0.0
+}
 
 private extension View {
     func stackStyle() -> some View {
