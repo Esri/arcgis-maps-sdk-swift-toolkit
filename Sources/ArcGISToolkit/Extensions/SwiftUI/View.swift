@@ -79,16 +79,6 @@ extension View {
     func inspectorTint<S>(_ tint: S) -> some View where S: ShapeStyle {
         self.tint(tint)
     }
-    
-    /// Configures whether navigation links show a disclosure indicator
-    @ViewBuilder func _navigationLinkIndicatorVisibility(_ visibility: Visibility) -> some View {
-#if compiler(>=6.2)
-        self
-            .navigationLinkIndicatorVisibility(visibility)
-#else
-        self
-#endif
-    }
 }
 
 extension View {
