@@ -47,12 +47,12 @@ extension FeatureFormView {
         var filterResult: UtilityAssociationsFilterResult? {
             try? associationsFilterResultsModel?.result?
                 .get()
-                .first(where: { $0.filter.title == filterTitle} )
+                .first(where: { $0.filter.title == filter.title } )
         }
         
         /// The set of group results within the filter result.
         var groupResults: [UtilityAssociationGroupResult] {
-            (try? associationsFilterResultsModel.result?
+            (try? associationsFilterResultsModel?.result?
                 .get()
                 .first(where: { $0.filter === filter } )?
                 .groupResults) ?? []

@@ -56,8 +56,8 @@ extension FeatureFormView {
                       .utilityAssociationFilterResultView(_, elementB, filterB)):
                 elementA === elementB
                 && filterA === filterB
-            case let (.utilityAssociationGroupResultView(_, elementA, filterA, sourceA),
-                      .utilityAssociationGroupResultView(_, elementB, filterB, sourceB)):
+            case let (.utilityAssociationGroupResultView(_, elementA, filterA, sourceA, _),
+                      .utilityAssociationGroupResultView(_, elementB, filterB, sourceB, _)):
                 elementA === elementB
                 && filterA === filterB
                 && sourceA === sourceB
@@ -91,7 +91,7 @@ extension FeatureFormView {
             case let .utilityAssociationFilterResultView(_, element, filter):
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
-            case let .utilityAssociationGroupResultView(_, element, filter, formSource):
+            case let .utilityAssociationGroupResultView(_, element, filter, formSource, _):
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(formSource))
