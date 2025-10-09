@@ -102,9 +102,9 @@ extension FeatureFormView {
                     NavigationLink(
                         value: FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
                             form,
-                            candidate,
                             element,
-                            filter
+                            filter,
+                            candidate
                         )
                     ) {
                         HStack {

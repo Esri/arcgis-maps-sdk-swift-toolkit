@@ -147,7 +147,7 @@ public struct FeatureFormView: View {
                             .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(source.name)
-                        case let .utilityAssociationCreationView(form, candidate, element, filter):
+                        case let .utilityAssociationCreationView(form, element, filter, candidate):
                             UtilityAssociationCreationView(
                                 candidate: candidate,
                                 element: element,
