@@ -36,6 +36,8 @@ extension FeatureFormView {
         let element: UtilityAssociationsFormElement
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         /// The feature source to query and obtain candidates from.
         let source: UtilityAssociationFeatureSource
         
@@ -81,7 +83,7 @@ extension FeatureFormView {
         
         /// The model for the feature form containing the element to add the association to.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.presentedEmbeddedFeatureFormViewModel!
+            featureFormViewModel.getModel(form)!
         }
         
         /// The candidates that can be used to create an association filtered by name.
@@ -99,6 +101,7 @@ extension FeatureFormView {
                 ForEach(filteredCandidates, id: \.title) { candidate in
                     NavigationLink(
                         value: FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
+                            form,
                             candidate,
                             element,
                             filter
