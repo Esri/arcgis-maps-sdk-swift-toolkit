@@ -17,10 +17,29 @@ import Observation
 
 @Observable class FeatureFormViewModel {
     /// <#Description#>
-    var embeddedFeatureFormViewModels: [EmbeddedFeatureFormViewModel] = []
+    private var formModels: [ObjectIdentifier: EmbeddedFeatureFormViewModel] = [:]
     
     /// <#Description#>
-    var presentedEmbeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
-        embeddedFeatureFormViewModels.last
+    /// - Parameter form: <#form description#>
+    @MainActor func addModel(_ form: FeatureForm) {
+        formModels[ObjectIdentifier(form)] = EmbeddedFeatureFormViewModel(featureForm: form)
+    }
+    
+    /// <#Description#>
+    func clearModels() {
+        formModels.removeAll()
+    }
+    
+    /// <#Description#>
+    /// - Parameter form: <#form description#>
+    /// - Returns: <#description#>
+    func getModel(_ form: FeatureForm) -> EmbeddedFeatureFormViewModel? {
+        formModels[ObjectIdentifier(form)]
+    }
+    
+    /// <#Description#>
+    /// - Parameter form: <#form description#>
+    func removeModel(_ form: FeatureForm) {
+        formModels.removeValue(forKey: ObjectIdentifier(form))
     }
 }
