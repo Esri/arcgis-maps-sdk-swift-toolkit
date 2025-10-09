@@ -118,11 +118,7 @@ extension FeatureFormView {
                                 }
                         }
                     }
-                    // The design spec has the indicators hidden, but as of
-                    // Xcode 26.0.1 the modifier to do so crashes apps on launch
-                    // running on iOS 18.3.1.
-                    // (FB20596543) https://developer.apple.com/forums/thread/803507
-                    // .navigationLinkIndicatorVisibility(.hidden)
+                    ._navigationLinkIndicatorVisibility(.hidden)
                 }
             } header: {
                 Text(
