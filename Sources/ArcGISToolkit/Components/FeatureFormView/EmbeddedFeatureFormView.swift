@@ -23,35 +23,40 @@ struct EmbeddedFeatureFormView: View {
     let form: FeatureForm
     
     var body: some View {
-        ScrollViewReader { scrollViewProxy in
-            ScrollView {
-                VStack(alignment: .leading) {
-                    ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
-                        makeElement(element)
+        if let embeddedFeatureFormViewModel {
+            ScrollViewReader { scrollViewProxy in
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
+                            makeElement(element)
+                        }
+                    }
+                }
+                .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
+                    if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
+                        withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                     }
                 }
             }
-            .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
-                if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
-                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
-                }
-            }
-            .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
-                embeddedFeatureFormViewModel.title = newTitle
+            .environment(embeddedFeatureFormViewModel)
+            .featureFormToolbar(form, isAForm: true) {
+                featureFormViewModel.removeModel(form)
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(embeddedFeatureFormViewModel.title)
-        }
+            .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
+                embeddedFeatureFormViewModel.title = newTitle
+            }
+            .padding(.horizontal)
+            .preference(
+                key: CurrentEmbeddedFeatureForm.self,
+                value: .init(object: embeddedFeatureFormViewModel)
+            )
 #if os(iOS)
-        .scrollDismissesKeyboard(.immediately)
+            .scrollDismissesKeyboard(.immediately)
 #endif
-        .environment(embeddedFeatureFormViewModel)
-        .padding(.horizontal)
-        .preference(
-            key: CurrentEmbeddedFeatureForm.self,
-            value: .init(object: embeddedFeatureFormViewModel)
-        )
-        .featureFormToolbar(embeddedFeatureFormViewModel.featureForm, isAForm: true)
+        }
+    }
     
     /// The view model for the form.
     var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
