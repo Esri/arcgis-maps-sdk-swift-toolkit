@@ -189,6 +189,7 @@ public struct FeatureFormView: View {
                             UtilityAssociationsFilterResultView(
                                 element: element,
                                 filterTitle: filterTitle,
+                                form: form
                             )
                             .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)
