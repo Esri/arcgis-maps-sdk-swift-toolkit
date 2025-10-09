@@ -16,9 +16,6 @@ import ArcGIS
 import SwiftUI
 
 struct EmbeddedFeatureFormView: View {
-    /// The view model for the form.
-    @State private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
-    
     @Environment(FeatureFormViewModel.self) var featureFormViewModel: FeatureFormViewModel?
     
     /// Initializes a form view.
@@ -57,6 +54,10 @@ struct EmbeddedFeatureFormView: View {
             value: .init(object: embeddedFeatureFormViewModel)
         )
         .featureFormToolbar(embeddedFeatureFormViewModel.featureForm, isAForm: true)
+    
+    /// The view model for the form.
+    var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+        featureFormViewModel.getModel(form)
     }
 }
 
