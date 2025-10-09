@@ -41,7 +41,8 @@ extension FeatureFormView {
                         Row(
                             associationsFilterResultsModel: associationsFilterResultsModel!,
                             element: element,
-                            filterTitle: $0.filter.title
+                            filterTitle: $0.filter.title,
+                            form: embeddedFeatureFormViewModel.featureForm
                         )
                         .environment(embeddedFeatureFormViewModel)
                     })
@@ -78,6 +79,8 @@ extension FeatureFormView {
         let element: UtilityAssociationsFormElement
         /// The title of the referenced utility associations filter result.
         let filterTitle: String
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         
         /// The referenced utility associations filter result.
         var filterResult: UtilityAssociationsFilterResult? {
@@ -90,6 +93,7 @@ extension FeatureFormView {
             Button {
                 navigationPath?.wrappedValue.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
+                        form,
                         element,
                         filterTitle
                     )
