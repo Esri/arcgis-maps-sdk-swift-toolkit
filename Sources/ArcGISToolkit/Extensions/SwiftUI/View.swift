@@ -79,19 +79,6 @@ extension View {
     func inspectorTint<S>(_ tint: S) -> some View where S: ShapeStyle {
         self.tint(tint)
     }
-    
-    /// Configures whether navigation links show a disclosure indicator
-    @ViewBuilder func _navigationLinkIndicatorVisibility(_ visibility: Visibility) -> some View {
-        // navigationLinkIndicatorVisibility should be available on Catalyst but
-        // apps built with Xcode 26.0.1 seem to crash on launch on Catalyst with
-        // it included.
-#if compiler(>=6.2) && !targetEnvironment(macCatalyst)
-        self
-            .navigationLinkIndicatorVisibility(visibility)
-#else
-        self
-#endif
-    }
 }
 
 extension View {
