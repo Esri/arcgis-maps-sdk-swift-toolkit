@@ -48,6 +48,8 @@ extension FeatureFormView {
         let element: UtilityAssociationsFormElement
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         
         var body: some View {
             List {
@@ -143,7 +145,7 @@ extension FeatureFormView {
         
         /// The model for the feature form containing the element to add the association to.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.presentedEmbeddedFeatureFormViewModel!
+            featureFormViewModel.getModel(form)!
         }
         
         /// A Boolean value indicating whether content visibility should be specified for the new association.
