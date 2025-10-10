@@ -222,7 +222,7 @@ private struct FeatureEditorView: View {
                     featureForm.feature.geometry = model.geometry
                     try await featureForm.evaluateExpressions()
                 } catch {
-                    print("Error evaluating expressions: \(error)")
+                    print("FE error evaluating expressions: \(error)")
                 }
             }
     }
@@ -263,7 +263,7 @@ private struct FeatureEditorView: View {
                 model.start(withType: geometryType)
             }
         } catch {
-            print("Error starting: \(error)")
+            print("FE error starting: \(error)")
         }
     }
     
@@ -297,7 +297,7 @@ private struct SnapSettingsButton: View {
                 try snapSettings.syncSourceSettings()
                 isPresented = true
             } catch {
-                print("Error syncing snap source settings: \(error)")
+                print("FE error syncing snap source settings: \(error)")
             }
         }
         .sheet(isPresented: $isPresented) {
