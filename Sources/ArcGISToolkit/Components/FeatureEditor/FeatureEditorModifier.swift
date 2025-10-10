@@ -77,8 +77,6 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
     @State private var isShowingInspector = false
     @State private var selectedPresentationDetent = PresentationDetent.medium
     
-    @State private var popupIsEditable: Bool = false
-    
     func body(content: Content) -> some View {
         content
             .inspector(isPresented: $isShowingInspector) {
@@ -167,23 +165,6 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
                 return
             }
             featureForm = FeatureForm(feature: feature)
-        }
-        .disabled(!popupIsEditable)
-        .task(id: item.map(ObjectIdentifier.init)) {
-            if let item = item as? Popup, let feature = item.geoElement as? ArcGISFeature {
-                // TODO: Should set to false or true if throws?
-                try? await feature.load()
-                
-                if let table = feature.table {
-                    try? await table.load()
-                    popupIsEditable = table.isEditable && table.canUpdate(feature)
-                } else {
-                    // TODO: Correct logic? Should be false instead?
-                    popupIsEditable = true
-                }
-            } else {
-                popupIsEditable = false
-            }
         }
     }
 }
