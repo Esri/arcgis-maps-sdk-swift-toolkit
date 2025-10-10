@@ -22,27 +22,34 @@ public extension View {
     @ViewBuilder
     func geometryEditorToolbar(
         geometryEditor: GeometryEditor,
+        isPresented: Binding<Bool>? = nil,
         placement: GeometryEditorToolbar.Placement = .overlay(alignment: .topTrailing, orientation: .vertical)
     ) -> some View {
         modifier(
-            GeometryEditorToolbarModifier(geometryEditor: geometryEditor, placement: placement)
+            GeometryEditorToolbarModifier(
+                geometryEditor: geometryEditor,
+                isPresented: isPresented,
+                placement: placement
+            )
         )
     }
 }
 
 private struct GeometryEditorToolbarModifier: ViewModifier {
     let geometryEditor: GeometryEditor
+    let isPresented: Binding<Bool>?
     let placement: GeometryEditorToolbar.Placement
     
     @State private var model = GeometryEditorModel()
     
     func body(content: Content) -> some View {
         Group {
+            // TODO: will changing placement reload parent view?
             switch placement {
             case .overlay(let alignment, let orientation):
                 content
                     .overlay(alignment: alignment) {
-                        if model.isStarted {
+                        if isPresented?.wrappedValue ?? model.isStarted {
                             EmbeddedGeometryEditorToolbar(orientation: orientation)
                                 .environment(model)
                                 .padding()
@@ -51,7 +58,7 @@ private struct GeometryEditorToolbarModifier: ViewModifier {
             case .toolbar(let placement):
                 content
                     .toolbar {
-                        if model.isStarted {
+                        if isPresented?.wrappedValue ?? model.isStarted {
                             ToolbarItemGroup(placement: placement) {
                                 EmbeddedGeometryEditorToolbar(orientation: nil)
                                     .environment(model)
@@ -60,7 +67,7 @@ private struct GeometryEditorToolbarModifier: ViewModifier {
                     }
             }
         }
-        .animation(.default, value: model.isStarted)
+        .animation(.default, value: isPresented?.wrappedValue ?? model.isStarted)
         .task(id: ObjectIdentifier(geometryEditor)) {
             model.geometryEditor = geometryEditor
             await model.monitorStreams()
@@ -73,19 +80,21 @@ private struct GeometryEditorToolbarModifier: ViewModifier {
 
 /// - Note: View will be displayed when the geometry editor starts...
 public struct GeometryEditorToolbar: View {
-    let geometryEditor: GeometryEditor
+    private let geometryEditor: GeometryEditor
+    private let isPresented: Binding<Bool>?
+    
+    public init(geometryEditor: GeometryEditor, isPresented: Binding<Bool>? = nil) {
+        self.geometryEditor = geometryEditor
+        self.isPresented = isPresented
+    }
     
     private var orientation: Orientation? = .vertical
     
     @State private var model = GeometryEditorModel()
     
-    public init(geometryEditor: GeometryEditor) {
-        self.geometryEditor = geometryEditor
-    }
-    
     public var body: some View {
         Group {
-            if model.isStarted {
+            if isPresented?.wrappedValue ?? model.isStarted {
                 EmbeddedGeometryEditorToolbar(orientation: orientation)
                     .environment(model)
             } else {
@@ -93,7 +102,7 @@ public struct GeometryEditorToolbar: View {
                     .frame(width: 0, height: 0)
             }
         }
-        .animation(.default, value: model.isStarted)
+        .animation(.default, value: isPresented?.wrappedValue ?? model.isStarted)
         .task(id: ObjectIdentifier(geometryEditor)) {
             model.geometryEditor = geometryEditor
             await model.monitorStreams()
