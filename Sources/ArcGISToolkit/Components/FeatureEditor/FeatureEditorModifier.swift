@@ -17,22 +17,6 @@ import SwiftUI
 
 public extension View {
     func featureEditor(
-        featureForm: Binding<FeatureForm?>,
-        geometryEditor: GeometryEditor,
-        viewpoint: Binding<Viewpoint?>? = nil,
-        contentInsets: Binding<EdgeInsets?>? = nil
-    ) -> some View {
-        modifier(
-            FeatureEditorModifier(
-                item: featureForm,
-                geometryEditor: geometryEditor,
-                viewpoint: viewpoint,
-                contentInsets: contentInsets
-            )
-        )
-    }
-    
-    func featureEditor(
         feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
         viewpoint: Binding<Viewpoint?>? = nil,
@@ -41,6 +25,22 @@ public extension View {
         modifier(
             FeatureEditorModifier(
                 item: feature,
+                geometryEditor: geometryEditor,
+                viewpoint: viewpoint,
+                contentInsets: contentInsets
+            )
+        )
+    }
+    
+    func featureEditor(
+        featureForm: Binding<FeatureForm?>,
+        geometryEditor: GeometryEditor,
+        viewpoint: Binding<Viewpoint?>? = nil,
+        contentInsets: Binding<EdgeInsets?>? = nil
+    ) -> some View {
+        modifier(
+            FeatureEditorModifier(
+                item: featureForm,
                 geometryEditor: geometryEditor,
                 viewpoint: viewpoint,
                 contentInsets: contentInsets
