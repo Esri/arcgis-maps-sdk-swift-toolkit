@@ -40,7 +40,7 @@ private struct GeometryEditorToolbarModifier: ViewModifier {
     let isPresented: Binding<Bool>?
     let placement: GeometryEditorToolbar.Placement
     
-    @State private var model = GeometryEditorModel()
+    @State private var isStarted = false
     
     func body(content: Content) -> some View {
         Group {
@@ -49,28 +49,30 @@ private struct GeometryEditorToolbarModifier: ViewModifier {
             case .overlay(let alignment, let orientation):
                 content
                     .overlay(alignment: alignment) {
-                        if isPresented?.wrappedValue ?? model.isStarted {
+                        if isPresented?.wrappedValue ?? isStarted {
                             EmbeddedGeometryEditorToolbar(orientation: orientation)
-                                .environment(model)
                                 .padding()
                         }
                     }
             case .toolbar(let placement):
                 content
                     .toolbar {
-                        if isPresented?.wrappedValue ?? model.isStarted {
+                        if isPresented?.wrappedValue ?? isStarted {
                             ToolbarItemGroup(placement: placement) {
                                 EmbeddedGeometryEditorToolbar(orientation: nil)
-                                    .environment(model)
                             }
                         }
                     }
             }
         }
-        .animation(.default, value: isPresented?.wrappedValue ?? model.isStarted)
+        .environment(\.geometryEditor, geometryEditor)
         .task(id: ObjectIdentifier(geometryEditor)) {
-            model.geometryEditor = geometryEditor
-            await model.monitorStreams()
+            guard isPresented == nil else { return }
+            for await isStarted in geometryEditor.$isStarted {
+                withAnimation {
+                    self.isStarted = isStarted
+                }
+            }
         }
     }
 }
@@ -90,22 +92,25 @@ public struct GeometryEditorToolbar: View {
     
     private var orientation: Orientation? = .vertical
     
-    @State private var model = GeometryEditorModel()
+    @State private var isStarted = false
     
     public var body: some View {
         Group {
-            if isPresented?.wrappedValue ?? model.isStarted {
+            if isPresented?.wrappedValue ?? isStarted {
                 EmbeddedGeometryEditorToolbar(orientation: orientation)
-                    .environment(model)
+                    .environment(\.geometryEditor, geometryEditor)
             } else {
                 Color.clear
                     .frame(width: 0, height: 0)
             }
         }
-        .animation(.default, value: isPresented?.wrappedValue ?? model.isStarted)
         .task(id: ObjectIdentifier(geometryEditor)) {
-            model.geometryEditor = geometryEditor
-            await model.monitorStreams()
+            guard isPresented == nil else { return }
+            for await isStarted in geometryEditor.$isStarted {
+                withAnimation {
+                    self.isStarted = isStarted
+                }
+            }
         }
     }
 }
@@ -192,45 +197,62 @@ private struct EmbeddedGeometryEditorToolbar: View {
 // MARK: - Components
 
 private struct UndoButton: View {
-    @Environment(GeometryEditorModel.self) private var model
+    @Environment(\.geometryEditor) private var geometryEditor
     @Environment(\.labelPadding) private var labelPadding
     
+    @State private var canUndo = false
+    
     var body: some View {
-        Button {
-            model.geometryEditor.undo()
-        } label: {
+        Button(action: geometryEditor.undo) {
             Label("Undo", systemImage: "arrow.uturn.backward")
                 .padding(labelPadding)
         }
-        .disabled(!model.canUndo)
+        .disabled(!canUndo)
+        .task(id: ObjectIdentifier(geometryEditor)) {
+            for await canUndo in self.geometryEditor.$canUndo {
+                self.canUndo = canUndo
+            }
+        }
     }
 }
+
 private struct RedoButton: View {
-    @Environment(GeometryEditorModel.self) private var model
+    @Environment(\.geometryEditor) private var geometryEditor
     @Environment(\.labelPadding) private var labelPadding
     
+    @State private var canRedo = false
+    
     var body: some View {
-        Button {
-            model.geometryEditor.redo()
-        }  label: {
+        Button(action: geometryEditor.redo) {
             Label("Redo", systemImage: "arrow.uturn.forward")
                 .padding(labelPadding)
         }
-        .disabled(!model.canRedo)
+        .disabled(!canRedo)
+        .task(id: ObjectIdentifier(geometryEditor)) {
+            for await canRedo in geometryEditor.$canRedo {
+                self.canRedo = canRedo
+            }
+        }
     }
 }
+
 private struct DeleteButton: View {
-    @Environment(GeometryEditorModel.self) private var model
+    @Environment(\.geometryEditor) private var geometryEditor
     @Environment(\.labelPadding) private var labelPadding
     
+    @State private var canDeleteSelectedElement = false
+    
     var body: some View {
-        Button {
-            model.geometryEditor.deleteSelectedElement()
-        } label: {
+        Button(action: geometryEditor.deleteSelectedElement) {
             Label("Delete Selected Element", systemImage: "circle.badge.minus")
                 .padding(labelPadding)
         }
-        .disabled(!model.canDeleteSelectedElement)
+        .disabled(!canDeleteSelectedElement)
+        .task(id: ObjectIdentifier(geometryEditor)) {
+            for await selectedElement in self.geometryEditor.$selectedElement {
+                canDeleteSelectedElement = selectedElement?.canBeDeleted ?? false
+            }
+        }
     }
 }
 
@@ -239,6 +261,7 @@ private struct DeleteButton: View {
 
 extension EnvironmentValues {
     @Entry var labelPadding = 0.0
+    @Entry var geometryEditor = GeometryEditor()
 }
 
 private extension View {

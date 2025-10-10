@@ -68,7 +68,7 @@ public extension GeometryEditorToolbar {
         var systemImage: String {
             switch self {
             case .freehand: "scribble"
-            case .programmaticReticle: "dot.viewfinder" // TODO: pick other symbol
+            case .programmaticReticle: "dot.viewfinder" // TODO: pick other symbol?
             case .shape(let shape): shape.systemImage
             case .vertex: "point.3.connected.trianglepath.dotted"
             case .vertexReticle: "dot.viewfinder"
@@ -93,15 +93,14 @@ extension GeometryEditorToolbar.Tool: CaseIterable {
 }
 
 struct ToolPicker: View {
-    @Environment(GeometryEditorModel.self) private var model
+    @Environment(\.geometryEditor) private var geometryEditor
     @Environment(\.labelPadding) private var labelPadding
     @Environment(\.tools) private var tools
     @Environment(\.selectedTool) private var externalSelectedTool
     
-    private typealias Tool = GeometryEditorToolbar.Tool
-    
-    @State private var selectedTool: Tool = .vertex
-    @State private var validTools: [Tool] = []
+    @State private var geometry: Geometry?
+    @State private var selectedTool: GeometryEditorToolbar.Tool = .vertex
+    @State private var validTools: [GeometryEditorToolbar.Tool] = []
     
     var body: some View {
         // Prevents the geometry editor tool from being overwritten when tools is empty.
@@ -123,11 +122,6 @@ struct ToolPicker: View {
                 }
             }
             .onAppear(perform: setUp)
-            .onChange(of: model.geometry) {
-                // Updates the validTools when the geometry changes.
-                updateValidTools()
-                updateSelectedTool()
-            }
             .onChange(of: tools) {
                 // Updates validTools when the external tools change.
                 updateValidTools()
@@ -151,14 +145,22 @@ struct ToolPicker: View {
             .onChange(of: selectedTool) {
                 // Sets the external and geometry editor tools when the selectedTool changes.
                 externalSelectedTool?.wrappedValue = selectedTool
-                model.geometryEditor.tool = selectedTool.geometryEditorTool
+                geometryEditor.tool = selectedTool.geometryEditorTool
                 
                 // Needed to since the validTools contains the selectedTool.
                 updateValidTools()
             }
-            .onChange(of: ObjectIdentifier(model.geometryEditor)) {
+            .task(id: ObjectIdentifier(geometryEditor)) {
                 // Overwrites the geometry editor tool when the editor changes.
-                model.geometryEditor.tool = selectedTool.geometryEditorTool
+                geometryEditor.tool = selectedTool.geometryEditorTool
+                
+                for await geometry in geometryEditor.$geometry {
+                    self.geometry = geometry
+                    
+                    // Updates the validTools when the geometry changes.
+                    updateValidTools()
+                    updateSelectedTool()
+                }
             }
         }
     }
@@ -184,12 +186,12 @@ struct ToolPicker: View {
         }
         
         // Overwrites the geometry editor tool.
-        model.geometryEditor.tool = selectedTool.geometryEditorTool
+        geometryEditor.tool = selectedTool.geometryEditorTool
     }
     
     /// Updates the `validTools` based on the current geometry and `selectedTool`.
     private func updateValidTools() {
-        validTools = if let geometry = model.geometry {
+        validTools = if let geometry {
             tools.filter { tool in
                 switch tool {
                 case .freehand:
@@ -214,9 +216,9 @@ struct ToolPicker: View {
     }
     
     /// Logs an error for an invalid `externalSelectedTool` value.
-    private func logExternalSelectionError(tool: Tool) {
+    private func logExternalSelectionError(tool: GeometryEditorToolbar.Tool) {
         let errorMessage = if tools.contains(tool){
-            if let geometry = model.geometry {
+            if let geometry {
                 "Tool '\(tool)' is not valid for geometry type '\(type(of: geometry))'."
             } else {
                 "Tool '\(tool)' is not valid for current geometry type."
