@@ -68,7 +68,8 @@ private struct GeometryEditorToolbarModifier: ViewModifier {
         .environment(\.geometryEditor, geometryEditor)
         .task(id: ObjectIdentifier(geometryEditor)) {
             guard isPresented == nil else { return }
-            for await isStarted in geometryEditor.$isStarted {
+            
+            await geometryEditor.onIsStartedChanged { isStarted in
                 withAnimation {
                     self.isStarted = isStarted
                 }
@@ -106,7 +107,8 @@ public struct GeometryEditorToolbar: View {
         }
         .task(id: ObjectIdentifier(geometryEditor)) {
             guard isPresented == nil else { return }
-            for await isStarted in geometryEditor.$isStarted {
+            
+            await geometryEditor.onIsStartedChanged { isStarted in
                 withAnimation {
                     self.isStarted = isStarted
                 }
@@ -262,6 +264,32 @@ private struct DeleteButton: View {
 extension EnvironmentValues {
     @Entry var labelPadding = 0.0
     @Entry var geometryEditor = GeometryEditor()
+}
+
+private extension GeometryEditor {
+    /// Monitors `$isStarted` and performs an action when a new value is produced.
+    /// - Parameter action: The closure to run when `isStarted` changes.
+    @MainActor
+    func onIsStartedChanged(perform action: @MainActor @escaping @Sendable (Bool) -> Void) async {
+        var debounceTask: Task<Void, Never>?
+        
+        for await isStarted in $isStarted {
+            debounceTask?.cancel()
+            debounceTask = Task {
+                do {
+                    // Debounces when isStarted is going from true -> false. This is needed because
+                    // isStarted will quickly go from true -> false -> true when the editor is
+                    // restarted, which causes flickering and other issues when used to update UI.
+                    if !isStarted {
+                        try await Task.sleep(for: .seconds(0.1))
+                    }
+                    action(isStarted)
+                } catch {
+                    // Skips running the action if the task was cancelled during the debounce.
+                }
+            }
+        }
+    }
 }
 
 private extension View {
