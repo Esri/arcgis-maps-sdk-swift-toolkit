@@ -265,8 +265,8 @@ private struct FeatureEditorView: View {
             let feature = featureForm.feature
             try await feature.load()
             
-            if let geometry = feature.geometry {
-                let buffer = geometry.extent.withBuilder { $0.expand(by: 1.1) }
+            if let buffer = feature.geometry?.extent.withBuilder({ $0.expand(by: 1.1) }),
+               !buffer.isEmpty {
                 viewpoint?.wrappedValue = Viewpoint(boundingGeometry: buffer)
             }
             
