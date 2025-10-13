@@ -181,9 +181,10 @@ public struct WorldScaleSceneView: View {
         .onCameraTrackingStateChanged { trackingState in
             onCameraTrackingStateChangedAction?(trackingState)
         }
-        .onTapGesture { tapPoint in
-            handleSingleTap(tapPoint)
-        }
+        // Workaround for `onTapGesture` Apple bug #FB19405284.
+        .simultaneousGesture(SpatialTapGesture().onEnded({ event in
+            handleSingleTap(event.location)
+        }))
     }
     
     /// A world scale world-tracking scene view.
@@ -201,9 +202,10 @@ public struct WorldScaleSceneView: View {
         .onCameraTrackingStateChanged { trackingState in
             onCameraTrackingStateChangedAction?(trackingState)
         }
-        .onTapGesture { tapPoint in
-            handleSingleTap(tapPoint)
-        }
+        // Workaround for `onTapGesture` Apple bug #FB19405284.
+        .simultaneousGesture(SpatialTapGesture().onEnded({ event in
+            handleSingleTap(event.location)
+        }))
     }
     
     /// Handles a single tap on the view.
