@@ -15,6 +15,8 @@
 import ArcGIS
 import SwiftUI
 
+private import os
+
 extension FeatureFormView {
     /// A view to configure and add a utility network association.
     struct UtilityAssociationCreationView: View {
@@ -82,10 +84,11 @@ extension FeatureFormView {
         func addAssociation() async {
             guard let options else { return }
             do {
+                let result: UtilityAssociationResult
                 if includeContentVisibility {
-                    try await element.addAssociation(feature: candidate.feature, filter: filter, isContainmentVisible: contentIsVisible)
+                    result = try await element.addAssociation(feature: candidate.feature, filter: filter, isContainmentVisible: contentIsVisible)
                 } else {
-                    switch (options.isFractionAlongEdgeValid, terminalForFromSide, terminalForToSide) {
+                    result = switch (options.isFractionAlongEdgeValid, terminalForFromSide, terminalForToSide) {
                     case let (true, .some(terminal), .none):
                         try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge, terminal: terminal)
                     case let (true, .none, .some(terminal)):
@@ -107,6 +110,7 @@ extension FeatureFormView {
                         try await element.addAssociation(feature: candidate.feature, filter: filter)
                     }
                 }
+                Logger.featureFormView.info("Association added to \(result.title)")
                 // After the association is created, remove the creation
                 // workflow views from the navigation path. This includes:
                 //  1. UtilityAssociationCreationView
