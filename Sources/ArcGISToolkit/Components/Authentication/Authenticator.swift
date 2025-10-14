@@ -181,6 +181,12 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
             return .rejectProtectionSpace
         }
         
+        if challenge.kind == .clientCertificate {
+            if (try? await challenge.isOptional) ?? false {
+                return .continueWithoutCredential
+            }
+        }
+        
         let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
         
         // Alleviates an error with "already presenting".
@@ -192,5 +198,56 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
         
         // Wait for it to complete and return the resulting disposition.
         return await challengeContinuation.value
+    }
+}
+
+private extension NetworkAuthenticationChallenge {
+    /// Determines if a network authentication challenge is optional,
+    /// meaning that the request will succeed if you continue without a
+    /// credential.
+    var isOptional: Bool {
+        get async throws {
+            final class Delegate: NSObject, URLSessionDataDelegate {
+                func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+                    print("-- challenge received: \(challenge.protectionSpace)")
+                    if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+                       let serverTrust = challenge.protectionSpace.serverTrust {
+                        completionHandler(
+                            URLSession.AuthChallengeDisposition.useCredential,
+                            URLCredential(trust: serverTrust)
+                        )
+                    } else {
+                        completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
+                    }
+                }
+            }
+            
+            guard let url = failureResponse?.url ?? protectionSpace.url else { return false }
+            let session = URLSession(configuration: .ephemeral)
+            do {
+                var request = URLRequest(url: url)
+                request.httpMethod = "HEAD"
+                let (_, response) = try await session.data(for: request, delegate: Delegate())
+                if let response = response as? HTTPURLResponse, response.statusCode == 200 {
+                    return true
+                }
+                return false
+            } catch {
+                return false
+            }
+        }
+    }
+}
+
+private extension URLProtectionSpace {
+    /// A url for the protection space.
+    var url: URL? {
+//        URL(string: "https://rt-saml2.esri.com/portal")!
+        let protocolString = `protocol` ?? "https"
+        var urlString = "\(protocolString)://\(host)"
+        if port != 0 && port != 80 && port != 443 {
+            urlString += ":\(port)"
+        }
+        return URL(string: urlString)
     }
 }
