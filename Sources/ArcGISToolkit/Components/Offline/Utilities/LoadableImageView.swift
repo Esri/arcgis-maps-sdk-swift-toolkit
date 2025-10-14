@@ -19,7 +19,7 @@ import SwiftUI
 /// While the image is loading a progress view is displayed.
 /// If there is an error loading the image then user defined failure content is shown.
 /// Once the image loads, a user-defined closure is used to display the image.
-struct LoadableImageView<FailureContent: View & Sendable, LoadedContent: View & Sendable>: View {
+struct LoadableImageView<FailureContent: View, LoadedContent: View>: View {
     /// The loadable image to display.
     let loadableImage: LoadableImage
     /// The content to display in the case of load failure.
@@ -57,11 +57,6 @@ struct LoadableImageView<FailureContent: View & Sendable, LoadedContent: View & 
         self.loadedContent = loadedContent
     }
     
-    /// An error to signify that the loadable image had a null image once it loaded.
-    /// This shouldn't ever happen, but in the case that it does, the failure content
-    /// will be displayed.
-    private struct NoImageError: Error {}
-    
     var body: some View {
         Group {
             switch result {
@@ -74,8 +69,9 @@ struct LoadableImageView<FailureContent: View & Sendable, LoadedContent: View & 
             case .success(let image):
                 loadedContent(Image(uiImage: image))
             }
-        }.task {
-            result = await Result {
+        }
+        .task {
+            result = await Result { [loadableImage] in
                 try await loadableImage.load()
                 guard let image = loadableImage.image else { throw NoImageError() }
                 return image
@@ -83,3 +79,8 @@ struct LoadableImageView<FailureContent: View & Sendable, LoadedContent: View & 
         }
     }
 }
+
+/// An error to signify that the loadable image had a null image once it loaded.
+/// This shouldn't ever happen, but in the case that it does, the failure content
+/// will be displayed.
+private struct NoImageError: Error {}
