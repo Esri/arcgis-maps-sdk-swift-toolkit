@@ -15,6 +15,8 @@
 import ArcGIS
 import Observation
 
+private import os
+
 @MainActor @Observable
 class EmbeddedFeatureFormViewModel {
     /// The current focused element, if one exists.
@@ -88,7 +90,13 @@ class EmbeddedFeatureFormViewModel {
     func evaluateExpressions() {
         evaluateTask?.cancel()
         evaluateTask = Task {
-            _ = try? await featureForm.evaluateExpressions()
+            if let errors = try? await featureForm.evaluateExpressions(), !errors.isEmpty {
+                for evaluationError in errors {
+                    Logger.featureFormView.error(
+                        "Error evaluating expression: \(evaluationError.error.localizedDescription)"
+                    )
+                }
+            }
         }
     }
     
