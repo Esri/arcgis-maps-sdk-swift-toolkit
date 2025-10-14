@@ -393,19 +393,26 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 }
 
 @available(visionOS, unavailable)
+@MainActor
 class RotationCoordinator {
-    private let rotationObservation: NSKeyValueObservation
-    
+    private let previewLayer: AVCaptureVideoPreviewLayer
     private let rotationCoordinator: AVCaptureDevice.RotationCoordinator
     
+    private var rotationObservation: NSKeyValueObservation!
+    
     init(videoCaptureDevice: AVCaptureDevice, previewLayer: AVCaptureVideoPreviewLayer) {
+        self.previewLayer = previewLayer
         rotationCoordinator = AVCaptureDevice.RotationCoordinator(device: videoCaptureDevice, previewLayer: previewLayer)
         rotationObservation = rotationCoordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: [.initial, .new]) { _, change in
-            if let angle = change.newValue {
+            if let newAngle = change.newValue {
                 Task { @MainActor in
-                    previewLayer.connection?.videoRotationAngle = angle
+                    self.updateVideoRotationAngle(newAngle)
                 }
             }
         }
+    }
+    
+    private func updateVideoRotationAngle(_ newAngle: Double) {
+        previewLayer.connection?.videoRotationAngle = newAngle
     }
 }
