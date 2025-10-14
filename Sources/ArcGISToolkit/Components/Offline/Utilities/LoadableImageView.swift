@@ -19,7 +19,7 @@ import SwiftUI
 /// While the image is loading a progress view is displayed.
 /// If there is an error loading the image then user defined failure content is shown.
 /// Once the image loads, a user-defined closure is used to display the image.
-struct LoadableImageView<FailureContent: View, LoadedContent: View>: View {
+struct LoadableImageView<FailureContent: View & Sendable, LoadedContent: View & Sendable>: View {
     /// The loadable image to display.
     let loadableImage: LoadableImage
     /// The content to display in the case of load failure.
