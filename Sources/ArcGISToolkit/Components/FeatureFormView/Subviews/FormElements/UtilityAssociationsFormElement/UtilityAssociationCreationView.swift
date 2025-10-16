@@ -250,8 +250,8 @@ extension FeatureFormView {
                     } label: {
                         Text(LocalizedStringResource.fractionAlongEdge)
                     }
-                    Slider(value: $fractionAlongEdge, in: 0...1) { _ in
-                        LocalizedStringResource.fractionAlongEdge
+                    Slider(value: $fractionAlongEdge, in: 0...1) {
+                        Text(LocalizedStringResource.fractionAlongEdge)
                     }
                 }
             }
