@@ -38,8 +38,14 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
             content
             Color.clear
                 .frame(width: 0, height: 0)
-                .modifier(AuthenticatorModifier(authenticator: authenticator, showsNestedChallenges: false))
-                ._oAuthWebViewSheet(contentModifier: AuthenticatorModifier(authenticator: authenticator, showsNestedChallenges: true))
+                .modifier(AuthenticatorModifier(authenticator: authenticator))
+                ._oAuthWebViewSheet(
+                    contentModifier: AuthenticatorModifier(
+                        authenticator: authenticator,
+                        showsNestedChallenges: true,
+                        allowSkippingCertificateChallenges: true
+                    )
+                )
         }
     }
 }
@@ -49,7 +55,10 @@ private struct AuthenticatorModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     /// A Boolean value indicating if challenges that arrive during the handling
     /// of an OAuth challenge are to be shown.
-    let showsNestedChallenges: Bool
+    var showsNestedChallenges: Bool = false
+    
+    /// A Boolean value indicating if certificate challenges can be skipped.
+    var allowSkippingCertificateChallenges: Bool = false
     
     @ViewBuilder func body(content: Content) -> some View {
         if !showsNestedChallenges && authenticator.isHandlingOAuthChallenge {
@@ -63,7 +72,7 @@ private struct AuthenticatorModifier: ViewModifier {
                 case .serverTrust:
                     content.modifier(TrustHostViewModifier(challenge: challenge))
                 case .certificate:
-                    content.modifier(CertificatePickerViewModifier(challenge: challenge))
+                    content.modifier(CertificatePickerViewModifier(challenge: challenge, showsSkipButton: allowSkippingCertificateChallenges))
                 case .login:
                     content.modifier(LoginViewModifier(challenge: challenge))
                 }
