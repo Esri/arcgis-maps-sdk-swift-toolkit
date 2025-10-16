@@ -168,12 +168,16 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
 struct CertificatePickerViewModifier: ViewModifier {
     /// Creates a certificate picker view modifier.
     /// - Parameter challenge: The challenge that requires a certificate.
-    init(challenge: NetworkChallengeContinuation) {
+    init(challenge: NetworkChallengeContinuation, showsSkipButton: Bool) {
         viewModel = CertificatePickerViewModel(challenge: challenge)
+        self.showsSkipButton = showsSkipButton
     }
     
     /// The view model.
     @ObservedObject private var viewModel: CertificatePickerViewModel
+    
+    /// Whether or not the skip button is shown.
+    private let showsSkipButton: Bool
     
     func body(content: Content) -> some View {
         content
@@ -186,6 +190,7 @@ struct CertificatePickerViewModifier: ViewModifier {
             }
             .promptBrowseCertificate(
                 isPresented: $viewModel.showPrompt,
+                showsSkipButton: showsSkipButton,
                 viewModel: viewModel
             )
             .certificateFilePicker(
@@ -237,6 +242,7 @@ private extension View {
     ///   - viewModel: The view model associated with the view.
     @MainActor @ViewBuilder func promptBrowseCertificate(
         isPresented: Binding<Bool>,
+        showsSkipButton: Bool,
         viewModel: CertificatePickerViewModel
     ) -> some View {
         sheet(isPresented: isPresented) {
@@ -256,19 +262,21 @@ private extension View {
                     .padding(.bottom)
                     HStack {
                         Spacer()
-                        Button {
-                            isPresented.wrappedValue = false
-                            viewModel.continueWithoutCredential()
-                        } label: {
-                            Text(
-                                "Skip",
-                                bundle: .toolkitModule,
-                                comment: "A label indicating that a challenge should be skipped."
-                            )
-                            .padding(.horizontal)
+                        if showsSkipButton {
+                            Button {
+                                isPresented.wrappedValue = false
+                                viewModel.continueWithoutCredential()
+                            } label: {
+                                Text(
+                                    "Skip",
+                                    bundle: .toolkitModule,
+                                    comment: "A label indicating that a challenge should be skipped."
+                                )
+                                .padding(.horizontal)
+                            }
+                            .buttonStyle(.bordered)
+                            Spacer()
                         }
-                        .buttonStyle(.bordered)
-                        Spacer()
                         
                         Button {
                             isPresented.wrappedValue = false
