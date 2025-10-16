@@ -124,6 +124,9 @@ extension FeatureFormView {
                 // views to avoid errors here. (FB20395585)
                 // https://developer.apple.com/forums/thread/802221#802221021
                 navigationPath?.wrappedValue.removeLast(4)
+            } catch let error as ArcGIS.InvalidArgumentError {
+                addAssociationError = .other(error.details)
+                alertIsPresented = true
             } catch {
                 addAssociationError = .anyError(error)
                 alertIsPresented = true
