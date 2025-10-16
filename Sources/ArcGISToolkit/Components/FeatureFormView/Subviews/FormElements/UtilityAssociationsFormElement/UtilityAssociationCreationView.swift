@@ -95,7 +95,7 @@ extension FeatureFormView {
                         try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge, terminal: terminal)
                     case (true, .none, .none):
                         try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
-                    case (false, .some, .some):
+                    case (false, _, _):
                         try await element.addAssociation(
                             feature: candidate.feature,
                             featureTerminal: candidateIsToElement
