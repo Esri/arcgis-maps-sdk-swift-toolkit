@@ -32,7 +32,7 @@ extension FeatureFormView {
         /// See also: `includeContentVisibility`.
         @State private var contentIsVisible: Bool = false
         /// How far along an edge the association is located.
-        @State private var fractionAlongEdge: Double = 0.5
+        @State private var fractionAlongEdge: Double = 0
         /// The options for a utility network feature when creating an association.
         @State private var options: UtilityAssociationFeatureOptions? = nil
         /// A Boolean value which indicates when the configured association is being added.

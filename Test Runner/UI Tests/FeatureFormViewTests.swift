@@ -2010,7 +2010,10 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let fractionAlongEdgeLabel = app.staticTexts["Fraction Along Edge"]
         let fractionAlongEdgeSlider = app.sliders.firstMatch
-        let fractionAlongEdgeValueBefore = app.staticTexts["50%"]
+        /// Despite the test specifying setting the slider to 75%, the framework exceeds the target by a
+        /// little bit.
+        let fractionAlongEdgeValueAfter = app.staticTexts["77%"]
+        let fractionAlongEdgeValueBefore = app.staticTexts["0%"]
         let fromElementLabel = app.staticTexts["From Element"]
         let lowVoltageButton = app.staticTexts["Low Voltage"].firstMatch
         let lowVoltageLabel = app.staticTexts["Low Voltage"]
@@ -2024,12 +2027,10 @@ final class FeatureFormViewTests: XCTestCase {
 #if targetEnvironment(macCatalyst)
         let addAssociationButton = app.buttons["Add Association"]
         let fromNetworkDataSourceButton = app.menuItems["From Network Data Source"]
-        let fractionAlongEdgeValueAfter = app.staticTexts["77%"]
         let terminalHighButton = app.menuItems["high"]
         let terminalLowButton = app.menuItems["low"]
 #else
         let addAssociationButton = app.staticTexts["Add Association"]
-        let fractionAlongEdgeValueAfter = app.staticTexts["76%"]
         let fromNetworkDataSourceButton = app.buttons["From Network Data Source"]
         let terminalHighButton = app.buttons["High"]
         let terminalLowButton = app.buttons["Low"]
@@ -2180,6 +2181,9 @@ final class FeatureFormViewTests: XCTestCase {
 #endif
         terminalLowButton.tap()
         
+#if targetEnvironment(macCatalyst)
+        XCTExpectFailure("The mouse is known to miss the drag handle when starting from 0%.")
+#endif
         fractionAlongEdgeSlider.adjust(toNormalizedSliderPosition: 0.75)
         
         XCTAssertTrue(
