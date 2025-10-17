@@ -63,6 +63,7 @@ extension FeatureFormView {
                                 form, element, filter, source, assetType
                             )
                         )
+                        .accessibilityIdentifier("Asset Type \(assetType.name) \(assetType.code)")
                     }
                 } header: {
                     HStack {
