@@ -83,6 +83,10 @@ public final class Authenticator: ObservableObject {
     /// The current challenge.
     /// This property is not set for OAuth challenges.
     @Published var currentChallenge: ChallengeContinuation?
+    
+    /// A Boolean value indicating if an OAuth challenge is currently being
+    /// handled.
+    @Published var isHandlingOAuthChallenge = false
 }
 
 extension Authenticator: ArcGISAuthenticationChallengeHandler {
@@ -120,6 +124,8 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
             }
             
             do {
+                isHandlingOAuthChallenge = true
+                defer { isHandlingOAuthChallenge = false }
                 return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
             } catch is CancellationError {
                 // If user cancels the creation of OAuth user credential then catch the

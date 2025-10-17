@@ -110,6 +110,11 @@ import UniformTypeIdentifiers
         challenge.resume(with: .cancel)
     }
     
+    /// Continue challenge without credential.
+    func continueWithoutCredential() {
+        challenge.resume(with: .continueWithoutCredential)
+    }
+    
     private func showCertificateError(_ error: CertificateError) {
         certificateError = error
         showCertificateError = true
@@ -235,57 +240,73 @@ private extension View {
         viewModel: CertificatePickerViewModel
     ) -> some View {
         sheet(isPresented: isPresented) {
-            VStack(alignment: .center) {
-                Text(
-                    "Certificate Required",
-                    bundle: .toolkitModule,
-                    comment: "A label indicating that a certificate is required to proceed."
-                )
-                .font(.title)
-                .multilineTextAlignment(.center)
-                .padding(.vertical)
-                Text(
-                    "A certificate is required to access content on \(viewModel.challengingHost).",
-                    bundle: .toolkitModule,
-                    comment: """
+            NavigationStack {
+                VStack(alignment: .center) {
+                    Text(
+                        "A certificate is required to access content on \(viewModel.challengingHost).",
+                        bundle: .toolkitModule,
+                        comment: """
                              An alert message indicating that a certificate is required to access
                              content on a remote host. The variable is the host that prompted the challenge.
                              """
-                )
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.bottom)
-                HStack {
-                    Spacer()
-                    Button(role: .cancel) {
-                        isPresented.wrappedValue = false
-                        viewModel.cancel()
-                    } label: {
-                        Text.cancel
+                    )
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom)
+                    HStack {
+                        Spacer()
+                        Button {
+                            isPresented.wrappedValue = false
+                            viewModel.continueWithoutCredential()
+                        } label: {
+                            Text(
+                                "Ignore",
+                                bundle: .toolkitModule,
+                                comment: "A label indicating that a challenge should be ignored."
+                            )
                             .padding(.horizontal)
+                        }
+                        .buttonStyle(.bordered)
+                        Spacer()
+                        
+                        Button {
+                            isPresented.wrappedValue = false
+                            viewModel.proceedToPicker()
+                        } label: {
+                            Text(
+                                "Browse",
+                                bundle: .toolkitModule,
+                                comment: "A label for a button to open the system file browser."
+                            )
+                            .padding(.horizontal)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        Spacer()
                     }
-                    .buttonStyle(.bordered)
-                    Spacer()
-                    Button(role: .cancel) {
-                        isPresented.wrappedValue = false
-                        viewModel.proceedToPicker()
-                    } label: {
-                        Text(
-                            "Browse",
-                            bundle: .toolkitModule,
-                            comment: "A label for a button to open the system file browser."
-                        )
-                        .padding(.horizontal)
-                    }
-                    .buttonStyle(.borderedProminent)
                     Spacer()
                 }
-                Spacer()
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(role: .cancel) {
+                            isPresented.wrappedValue = false
+                            viewModel.cancel()
+                        } label: {
+                            Text.cancel
+                        }
+                    }
+                }
+                .navigationTitle(
+                    String(
+                        localized: "Certificate Required",
+                        bundle: .toolkitModule,
+                        comment: "A label indicating that a certificate is required to proceed."
+                    )
+                )
+                .interactiveDismissDisabled()
+                .presentationDetents([.medium])
+                .padding()
             }
-            .interactiveDismissDisabled()
-            .presentationDetents([.medium])
-            .padding()
         }
     }
 }
