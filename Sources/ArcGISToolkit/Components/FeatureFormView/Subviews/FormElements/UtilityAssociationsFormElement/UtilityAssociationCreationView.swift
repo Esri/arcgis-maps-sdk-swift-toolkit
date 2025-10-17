@@ -15,6 +15,8 @@
 import ArcGIS
 import SwiftUI
 
+private import os
+
 extension FeatureFormView {
     /// A view to configure and add a utility network association.
     struct UtilityAssociationCreationView: View {
@@ -30,7 +32,7 @@ extension FeatureFormView {
         /// See also: `includeContentVisibility`.
         @State private var contentIsVisible: Bool = false
         /// How far along an edge the association is located.
-        @State private var fractionAlongEdge: Double = 0.5
+        @State private var fractionAlongEdge: Double = 0
         /// The options for a utility network feature when creating an association.
         @State private var options: UtilityAssociationFeatureOptions? = nil
         /// A Boolean value which indicates when the configured association is being added.
@@ -82,17 +84,18 @@ extension FeatureFormView {
         func addAssociation() async {
             guard let options else { return }
             do {
+                let result: UtilityAssociationResult
                 if includeContentVisibility {
-                    try await element.addAssociation(feature: candidate.feature, filter: filter, isContainmentVisible: contentIsVisible)
+                    result = try await element.addAssociation(feature: candidate.feature, filter: filter, isContainmentVisible: contentIsVisible)
                 } else {
-                    switch (options.isFractionAlongEdgeValid, terminalForFromSide, terminalForToSide) {
+                    result = switch (options.isFractionAlongEdgeValid, terminalForFromSide, terminalForToSide) {
                     case let (true, .some(terminal), .none):
                         try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge, terminal: terminal)
                     case let (true, .none, .some(terminal)):
                         try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge, terminal: terminal)
                     case (true, .none, .none):
                         try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
-                    case (false, .some, .some):
+                    case (false, _, _):
                         try await element.addAssociation(
                             feature: candidate.feature,
                             featureTerminal: candidateIsToElement
@@ -107,6 +110,7 @@ extension FeatureFormView {
                         try await element.addAssociation(feature: candidate.feature, filter: filter)
                     }
                 }
+                Logger.featureFormView.info("Association added to \(result.title)")
                 // After the association is created, remove the creation
                 // workflow views from the navigation path. This includes:
                 //  1. UtilityAssociationCreationView
@@ -120,6 +124,9 @@ extension FeatureFormView {
                 // views to avoid errors here. (FB20395585)
                 // https://developer.apple.com/forums/thread/802221#802221021
                 navigationPath?.wrappedValue.removeLast(4)
+            } catch let error as ArcGIS.InvalidArgumentError {
+                addAssociationError = .other(error.details)
+                alertIsPresented = true
             } catch {
                 addAssociationError = .anyError(error)
                 alertIsPresented = true
@@ -243,8 +250,8 @@ extension FeatureFormView {
                     } label: {
                         Text(LocalizedStringResource.fractionAlongEdge)
                     }
-                    Slider(value: $fractionAlongEdge, in: 0...1) { _ in
-                        LocalizedStringResource.fractionAlongEdge
+                    Slider(value: $fractionAlongEdge, in: 0...1) {
+                        Text(LocalizedStringResource.fractionAlongEdge)
                     }
                 }
             }
