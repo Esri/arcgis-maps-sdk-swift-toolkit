@@ -20,8 +20,6 @@ extension FeatureFormView {
     struct UtilityAssociationsFilterResultView: View {
         /// The model for the FeatureFormView containing the view.
         @Environment(FeatureFormViewModel.self) var featureFormViewModel
-        /// The navigation path for the navigation stack presenting this view.
-        @Environment(\.navigationPath) var navigationPath
         
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
@@ -63,7 +61,7 @@ extension FeatureFormView {
                 Section {
                     ForEach(groupResults, id: \.name) { groupResult in
                         Button {
-                            navigationPath?.wrappedValue.append(
+                            featureFormViewModel.navigationPath.append(
                                 FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
                                     form,
                                     element,
@@ -99,7 +97,7 @@ extension FeatureFormView {
         var addAssociationMenu: some View {
             Menu {
                 Button {
-                    navigationPath?.wrappedValue.append(
+                    featureFormViewModel.navigationPath.append(
                         FeatureFormView.NavigationPathItem.utilityAssociationFeatureSourcesView(
                             form,
                             element,

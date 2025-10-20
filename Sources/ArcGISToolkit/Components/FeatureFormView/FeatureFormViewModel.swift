@@ -19,6 +19,9 @@ import Observation
     /// <#Description#>
     private var formModels: [ObjectIdentifier: EmbeddedFeatureFormViewModel] = [:]
     
+    /// The navigation path used by the navigation stack in the root feature form view.
+    var navigationPath: [FeatureFormView.NavigationPathItem] = []
+    
     /// <#Description#>
     /// - Parameter form: <#form description#>
     @MainActor func addModel(_ form: FeatureForm) {

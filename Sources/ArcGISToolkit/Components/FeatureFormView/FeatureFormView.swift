@@ -106,9 +106,6 @@ public struct FeatureFormView: View {
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
     
-    /// The navigation path used by the navigation stack in the root feature form view.
-    @State private var navigationPath: [NavigationPathItem] = []
-    
     /// The feature form currently visible in the navigation stack.
     @State private var presentedForm: FeatureForm
     
@@ -128,7 +125,7 @@ public struct FeatureFormView: View {
     
     public var body: some View {
         if let rootFeatureForm {
-            NavigationStack(path: $navigationPath) {
+            NavigationStack(path: $featureFormViewModel.navigationPath) {
                 EmbeddedFeatureFormView(form: rootFeatureForm)
                     // Refresh the navigation stack's root view when the root
                     // feature form changes.
@@ -313,13 +310,12 @@ public struct FeatureFormView: View {
             .environment(\.finishEditingError, $finishEditingError)
             .environment(\.isPresented, isPresented)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
-            .environment(\.navigationPath, $navigationPath)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
             .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
             .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
-            .onChange(of: navigationPath) {
-                if let presentedItem = navigationPath.last {
+            .onChange(of: featureFormViewModel.navigationPath) {
+                if let presentedItem = featureFormViewModel.navigationPath.last {
                     onFormEditingEventAction?(.navigationChanged(presentedItem))
                 }
             }

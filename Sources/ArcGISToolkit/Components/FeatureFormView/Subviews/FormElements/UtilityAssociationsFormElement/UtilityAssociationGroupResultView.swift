@@ -23,8 +23,6 @@ extension FeatureFormView {
         /// A Boolean which declares whether navigation to forms for features associated via utility
         /// association form elements is disabled.
         @Environment(\.navigationIsDisabled) var navigationIsDisabled
-        /// The navigation path for the navigation stack presenting this view.
-        @Environment(\.navigationPath) var navigationPath
         /// The environment value to set the continuation to use when the user responds to the alert.
         @Environment(\.setAlertContinuation) var setAlertContinuation
         
@@ -85,7 +83,7 @@ extension FeatureFormView {
             }
             .onChange(of: associationResults.count) {
                 if associationResults.isEmpty {
-                    navigationPath?.wrappedValue.removeLast()
+                    featureFormViewModel.navigationPath.removeLast()
                 }
             }
             .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
@@ -125,7 +123,7 @@ extension FeatureFormView {
         
         func detailsButton(for result: UtilityAssociationResult) -> some View {
             Button {
-                navigationPath?.wrappedValue.append(
+                featureFormViewModel.navigationPath.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
                         form,
                         element,
@@ -153,7 +151,7 @@ extension FeatureFormView {
                 let navigationAction = {
                     let form = FeatureForm(feature: result.associatedFeature)
                     featureFormViewModel.addModel(form)
-                    navigationPath?.wrappedValue.append(
+                    featureFormViewModel.navigationPath.append(
                         FeatureFormView.NavigationPathItem.form(form)
                     )
                 }

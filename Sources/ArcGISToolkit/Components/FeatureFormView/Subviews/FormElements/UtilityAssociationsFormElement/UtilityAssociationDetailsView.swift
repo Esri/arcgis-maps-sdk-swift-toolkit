@@ -20,8 +20,6 @@ extension FeatureFormView {
     struct UtilityAssociationDetailsView: View {
         /// The model for the FeatureFormView containing the view.
         @Environment(FeatureFormViewModel.self) var featureFormViewModel
-        /// The navigation path for the navigation stack presenting this view.
-        @Environment(\.navigationPath) var navigationPath
         
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
@@ -129,7 +127,7 @@ extension FeatureFormView {
                         embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
                     ) {
                         associationsFilterResultsModel.fetchResults()
-                        navigationPath?.wrappedValue.removeLast()
+                        featureFormViewModel.navigationPath.removeLast()
                     }
                 }
             }

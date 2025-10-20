@@ -27,6 +27,9 @@ struct FeatureFormToolbar: ViewModifier {
     /// The visibility of the "save" and "discard" buttons.
     @Environment(\.editingButtonVisibility) var editingButtonsVisibility
     
+    /// The model for the FeatureFormView containing the view.
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel
+    
     /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Environment(\.finishEditingError) var finishEditingError
     
@@ -35,9 +38,6 @@ struct FeatureFormToolbar: ViewModifier {
     
     /// The environment value which declares whether navigation to forms for features associated via utility association form elements is disabled.
     @Environment(\.navigationIsDisabled) var navigationIsDisabled
-    
-    /// The navigation path for the navigation stack presenting this view.
-    @Environment(\.navigationPath) var navigationPath
     
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
@@ -128,6 +128,6 @@ extension FeatureFormToolbar {
     
     /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
     var isRootView: Bool {
-        navigationPath?.wrappedValue.isEmpty ?? true
+        featureFormViewModel.navigationPath.isEmpty ?? true
     }
 }

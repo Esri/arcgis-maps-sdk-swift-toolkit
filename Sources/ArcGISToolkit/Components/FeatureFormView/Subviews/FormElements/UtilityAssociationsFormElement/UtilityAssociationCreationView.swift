@@ -22,8 +22,6 @@ extension FeatureFormView {
     struct UtilityAssociationCreationView: View {
         /// The model for the FeatureFormView containing the view.
         @Environment(FeatureFormViewModel.self) var featureFormViewModel
-        /// The navigation path for the navigation stack presenting this view.
-        @Environment(\.navigationPath) var navigationPath
         
         /// The error to be presented when adding an association failed.
         @State private var addAssociationError: AddAssociationError?
@@ -125,7 +123,7 @@ extension FeatureFormView {
                 // View.searchable(text:placement:prompt:) in these intermediate
                 // views to avoid errors here. (FB20395585)
                 // https://developer.apple.com/forums/thread/802221#802221021
-                navigationPath?.wrappedValue.removeLast(4)
+                featureFormViewModel.navigationPath.removeLast(4)
             } catch let error as ArcGIS.InvalidArgumentError {
                 addAssociationError = .other(error.details)
                 alertIsPresented = true

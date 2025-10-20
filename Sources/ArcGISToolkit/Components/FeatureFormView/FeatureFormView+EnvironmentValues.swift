@@ -26,9 +26,6 @@ extension EnvironmentValues /* FeatureFormView */ {
     /// elements is disabled.
     @Entry var navigationIsDisabled = false
     
-    /// The navigation path for the navigation stack presenting this view.
-    @Entry var navigationPath: Binding<[FeatureFormView.NavigationPathItem]>?
-    
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Entry var onFormEditingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
     
