@@ -100,7 +100,7 @@ public struct FeatureFormView: View {
     /// Continuation information for the alert.
     @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
-    /// <#Description#>
+    /// The model for the feature form view.
     @State private var featureFormViewModel = FeatureFormViewModel()
     
     /// An error thrown from finish editing.
