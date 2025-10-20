@@ -16,32 +16,32 @@ import ArcGIS
 import Observation
 
 @Observable class FeatureFormViewModel {
-    /// <#Description#>
+    /// The models for each feature form in the navigation path.
     private var formModels: [ObjectIdentifier: EmbeddedFeatureFormViewModel] = [:]
     
     /// The navigation path used by the navigation stack in the root feature form view.
     var navigationPath: [FeatureFormView.NavigationPathItem] = []
     
-    /// <#Description#>
-    /// - Parameter form: <#form description#>
+    /// Creates and adds a model for the provided form.
+    /// - Parameter form: The form to create and add a model for.
     @MainActor func addModel(_ form: FeatureForm) {
         formModels[ObjectIdentifier(form)] = EmbeddedFeatureFormViewModel(featureForm: form)
     }
     
-    /// <#Description#>
+    /// Removes all form models.
     func clearModels() {
         formModels.removeAll()
     }
     
-    /// <#Description#>
-    /// - Parameter form: <#form description#>
-    /// - Returns: <#description#>
+    /// Gets the model for the specified form.
+    /// - Parameter form: The form to get a model for.
+    /// - Returns: The model for the provided form.
     func getModel(_ form: FeatureForm) -> EmbeddedFeatureFormViewModel? {
         formModels[ObjectIdentifier(form)]
     }
     
-    /// <#Description#>
-    /// - Parameter form: <#form description#>
+    /// Removes the model for the provided form.
+    /// - Parameter form: The form to remove the model for.
     func removeModel(_ form: FeatureForm) {
         formModels.removeValue(forKey: ObjectIdentifier(form))
     }
