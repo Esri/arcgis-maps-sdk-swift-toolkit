@@ -49,7 +49,7 @@ struct EmbeddedFeatureFormView: View {
             }
             .padding(.horizontal)
             .preference(
-                key: CurrentEmbeddedFeatureForm.self,
+                key: PresentedFeatureFormPreferenceKey.self,
                 value: .init(object: embeddedFeatureFormViewModel)
             )
 #if os(iOS)

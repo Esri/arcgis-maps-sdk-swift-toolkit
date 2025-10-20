@@ -323,11 +323,11 @@ public struct FeatureFormView: View {
                 featureFormViewModel.clearModels()
                 featureFormViewModel.addModel(rootFeatureForm)
                 presentedForm = rootFeatureForm
+                validationErrorVisibilityInternal = .automatic
             }
-            .onPreferenceChange(CurrentEmbeddedFeatureForm.self) { wrappedEmbeddedFeatureFormViewModel in
-                // TODO: See if the preference approach can be replaced by monitoring the navigation path
-                guard let embeddedModel = wrappedEmbeddedFeatureFormViewModel?.object else { return }
-                formChangedAction(embeddedModel.featureForm)
+            .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
+                guard let embeddedFeatureFormViewModel = $0?.object else { return }
+                formChangedAction(embeddedFeatureFormViewModel.featureForm)
             }
         }
     }
