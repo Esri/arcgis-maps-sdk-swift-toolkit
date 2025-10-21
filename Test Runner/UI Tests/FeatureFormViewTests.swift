@@ -2238,7 +2238,7 @@ final class FeatureFormViewTests: XCTestCase {
         let toElementValueLabel = app.staticTexts["Vault"]
         let toElementLabel = app.staticTexts["To Element"]
         let vaultAssetTypeButton = app.buttons["Vault"]
-        let vaultCandidateButton = app.buttons.matching(identifier: "Vault").element(boundBy: 0)
+        let vaultCandidateButton = app.staticTexts.matching(identifier: "Vault").element(boundBy: 1)
         
 #if targetEnvironment(macCatalyst)
         let addAssociationButton = app.buttons["Add Association"]
