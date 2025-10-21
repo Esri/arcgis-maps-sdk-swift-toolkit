@@ -28,8 +28,7 @@ extension FeatureFormView {
         /// A Boolean value indicating if the alert is presented.
         @State private var alertIsPresented = false
         /// A Boolean value indicating if the content in a containment association is visible.
-        ///
-        /// See also: `includeContentVisibility`.
+        /// - SeeAlso: `includeContentVisibility`.
         @State private var contentIsVisible: Bool = false
         /// How far along an edge the association is located.
         @State private var fractionAlongEdge: Double = 0
