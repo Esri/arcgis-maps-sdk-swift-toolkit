@@ -62,12 +62,14 @@ extension FeatureFormView {
             .alert(isPresented: $alertIsPresented, error: addAssociationError) {}
             .task {
                 options = try? await element.options(forAssociationCandidate: candidate.feature)
-                terminalForFromSide = candidateIsToElement
-                ? options?.formFeatureTerminalConfiguration?.terminals.first
-                : options?.candidateFeatureTerminalConfiguration?.terminals.first
-                terminalForToSide = candidateIsToElement
-                ? options?.candidateFeatureTerminalConfiguration?.terminals.first
-                : options?.formFeatureTerminalConfiguration?.terminals.first
+                if supportsTerminalSelection {
+                    terminalForFromSide = candidateIsToElement
+                    ? options?.formFeatureTerminalConfiguration?.terminals.first
+                    : options?.candidateFeatureTerminalConfiguration?.terminals.first
+                    terminalForToSide = candidateIsToElement
+                    ? options?.candidateFeatureTerminalConfiguration?.terminals.first
+                    : options?.formFeatureTerminalConfiguration?.terminals.first
+                }
             }
             .task(id: isAddingAssociation) {
                 guard isAddingAssociation else { return }
@@ -212,7 +214,8 @@ extension FeatureFormView {
                 } label: {
                     Text.fromElement
                 }
-                if let configuration = candidateIsToElement ? options?.formFeatureTerminalConfiguration : options?.candidateFeatureTerminalConfiguration {
+                if supportsTerminalSelection,
+                   let configuration = candidateIsToElement ? options?.formFeatureTerminalConfiguration : options?.candidateFeatureTerminalConfiguration {
                     Picker(selection: $terminalForFromSide) {
                         ForEach(configuration.terminals) {
                             Text($0.name)
@@ -233,7 +236,8 @@ extension FeatureFormView {
                 } label: {
                     Text.toElement
                 }
-                if let configuration = candidateIsToElement ? options?.candidateFeatureTerminalConfiguration : options?.formFeatureTerminalConfiguration {
+                if supportsTerminalSelection,
+                   let configuration = candidateIsToElement ? options?.candidateFeatureTerminalConfiguration : options?.formFeatureTerminalConfiguration {
                     Picker(selection: $terminalForToSide) {
                         ForEach(configuration.terminals) {
                             Text($0.name)
@@ -260,6 +264,11 @@ extension FeatureFormView {
                     }
                 }
             }
+        }
+        
+        /// A Boolean value indicating whether the association should include terminal selections.
+        var supportsTerminalSelection: Bool {
+            filter.kind == .connectivity
         }
     }
     
