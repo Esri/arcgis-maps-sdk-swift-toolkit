@@ -75,33 +75,25 @@ internal import os
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
+    /// The model for the feature form view.
+    @State private var featureFormViewModel = FeatureFormViewModel()
+    
     /// A binding to a Boolean value that determines whether the view is presented.
     private let isPresented: Binding<Bool>?
-    
     /// The root feature form.
     private let rootFeatureForm: FeatureForm?
     
     /// The visibility of the "save" and "discard" buttons.
     var editingButtonsVisibility: Visibility = .automatic
-    
     /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
     var onFeatureFormChanged: ((FeatureForm) -> Void)?
-    
-    /// A Boolean which declares whether navigation to forms for features associated via utility association form
-    /// elements is disabled.
+    /// A Boolean which declares whether navigation to forms for features associated via utility association
+    /// form elements is disabled.
     var navigationIsDisabled = false
-    
     /// The closure to perform when a ``EditingEvent`` occurs.
     var onFormEditingEventAction: ((EditingEvent) -> Void)?
-    
     /// The developer configurable validation error visibility.
     var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
-    
-    /// The model for the feature form view.
-    @State private var featureFormViewModel = FeatureFormViewModel()
-    
-    /// The feature form currently visible in the navigation stack.
-    @State private var presentedForm: FeatureForm
     
     /// Initializes a form view.
     /// - Parameters:
@@ -110,7 +102,6 @@ public struct FeatureFormView: View {
     /// - Since: 200.8
     public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
         self.isPresented = isPresented
-        self.presentedForm = root
         self.rootFeatureForm = root
     }
     
@@ -198,12 +189,12 @@ public struct FeatureFormView: View {
             }
             // Alert for abandoning unsaved edits
             .alert(
-                presentedForm.validationErrors.isEmpty ? discardEditsQuestion : validationErrors,
+                !featureFormViewModel.presentedFormHasValidationErrors ? discardEditsQuestion : validationErrors,
                 isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
                     if let (willNavigate, continuation) = featureFormViewModel.navigationAlertInfo {
                         Button(role: .destructive) {
-                            presentedForm.discardEdits()
+                            featureFormViewModel.presentedForm?.discardEdits()
                             onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
                             featureFormViewModel.validationErrorVisibilityInternal = .automatic
                             continuation()
@@ -211,15 +202,15 @@ public struct FeatureFormView: View {
                             discardEdits
                         }
                         .onAppear {
-                            if !presentedForm.validationErrors.isEmpty {
+                            if featureFormViewModel.presentedFormHasValidationErrors {
                                 featureFormViewModel.validationErrorVisibilityInternal = .visible
                             }
                         }
-                        if (presentedForm.validationErrors.isEmpty) {
+                        if !featureFormViewModel.presentedFormHasValidationErrors {
                             Button {
                                 Task {
                                     do {
-                                        try await presentedForm.finishEditing()
+                                        try await featureFormViewModel.presentedForm?.finishEditing()
                                         onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                         continuation()
                                     } catch {
@@ -238,9 +229,9 @@ public struct FeatureFormView: View {
                     }
                 },
                 message: {
-                    if !presentedForm.validationErrors.isEmpty {
+                    if featureFormViewModel.presentedFormHasValidationErrors {
                         Text(
-                            "You have ^[\(presentedForm.validationErrors.count) error](inflect: true) that must be fixed before saving.",
+                            "You have ^[\(featureFormViewModel.presentedForm?.validationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
                             bundle: .toolkitModule,
                             comment:
                                 """
@@ -310,7 +301,7 @@ public struct FeatureFormView: View {
             .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
                 featureFormViewModel.clearModels()
                 featureFormViewModel.addModel(rootFeatureForm)
-                presentedForm = rootFeatureForm
+                featureFormViewModel.presentedForm = rootFeatureForm
                 featureFormViewModel.validationErrorVisibilityInternal = .automatic
             }
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
@@ -413,9 +404,9 @@ extension FeatureFormView {
     /// the same ``FeatureForm`` make sure not to over-emit form handling events.
     var formChangedAction: (FeatureForm) -> Void {
         { featureForm in
-            if featureForm.feature.globalID != presentedForm.feature.globalID {
+            if featureForm.feature.globalID != featureFormViewModel.presentedForm?.feature.globalID {
                 featureForm.feature.refresh()
-                presentedForm = featureForm
+                featureFormViewModel.presentedForm = featureForm
                 featureFormViewModel.validationErrorVisibilityInternal = .automatic
                 onFeatureFormChanged?(featureForm)
             }

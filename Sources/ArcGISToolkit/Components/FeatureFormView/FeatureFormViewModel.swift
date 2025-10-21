@@ -28,6 +28,9 @@ import Observation
     /// The navigation path used by the navigation stack in the root feature form view.
     var navigationPath: [FeatureFormView.NavigationPathItem] = []
     
+    /// The feature form presented in the navigation stack.
+    var presentedForm: FeatureForm?
+    
     /// The internally managed validation error visibility.
     var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
     
@@ -53,5 +56,12 @@ import Observation
     /// - Parameter form: The form to remove the model for.
     func removeModel(_ form: FeatureForm) {
         formModels.removeValue(forKey: ObjectIdentifier(form))
+    }
+    
+    // MARK: Computed properties
+    
+    /// A Boolean value indicating if the form presented in the navigation stack has validation errors.
+    var presentedFormHasValidationErrors: Bool {
+        !(presentedForm?.validationErrors.isEmpty ?? true)
     }
 }
