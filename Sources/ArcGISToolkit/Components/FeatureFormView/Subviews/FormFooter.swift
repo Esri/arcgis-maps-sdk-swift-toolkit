@@ -31,9 +31,6 @@ struct FormFooter: View {
     /// The internally managed validation error visibility.
     @Environment(\.validationErrorVisibilityInternal) var validationErrorVisibilityInternal
     
-    /// An error thrown from a call to `FeatureForm.finishEditing()`.
-    @Binding var finishEditingError: (any Error)?
-    
     var body: some View {
         HStack {
             discardButton
@@ -66,7 +63,7 @@ struct FormFooter: View {
                         try await featureForm.finishEditing()
                         formHandlingEventAction?(.savedEdits(willNavigate: false))
                     } catch {
-                        finishEditingError = error
+                        featureFormViewModel.finishEditingError = error
                     }
                 }
             } else {

@@ -19,6 +19,9 @@ import Observation
     /// The models for each feature form in the navigation path.
     private var formModels: [ObjectIdentifier: EmbeddedFeatureFormViewModel] = [:]
     
+    /// An error thrown from finish editing.
+    var finishEditingError: (any Error)?
+    
     /// Continuation information for the alert.
     var navigationAlertInfo: (willNavigate: Bool, action: () -> Void)?
     

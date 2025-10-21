@@ -100,9 +100,6 @@ public struct FeatureFormView: View {
     /// The model for the feature form view.
     @State private var featureFormViewModel = FeatureFormViewModel()
     
-    /// An error thrown from finish editing.
-    @State private var finishEditingError: (any Error)?
-    
     /// The feature form currently visible in the navigation stack.
     @State private var presentedForm: FeatureForm
     
@@ -229,7 +226,7 @@ public struct FeatureFormView: View {
                                         onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                         continuation()
                                     } catch {
-                                        finishEditingError = error
+                                        featureFormViewModel.finishEditingError = error
                                     }
                                 }
                             } label: {
@@ -277,13 +274,13 @@ public struct FeatureFormView: View {
                     comment: "The title shown when the feature form failed to save."
                 ),
                 isPresented: alertForFinishEditingErrorsIsPresented,
-                actions: { },
+                actions: {},
                 message: {
-                    if let finishEditingError {
+                    if let error = featureFormViewModel.finishEditingError {
                         Text(
                             """
                             Finish editing failed.
-                            \(String(describing: finishEditingError))
+                            \(String(describing: error))
                             """,
                             bundle: .toolkitModule,
                             comment:
@@ -304,7 +301,6 @@ public struct FeatureFormView: View {
             .animation(.default, value: ObjectIdentifier(rootFeatureForm))
             .environment(featureFormViewModel)
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
-            .environment(\.finishEditingError, $finishEditingError)
             .environment(\.isPresented, isPresented)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
@@ -392,10 +388,10 @@ extension FeatureFormView {
     /// A Boolean value indicating whether the finish editing error alert is presented.
     var alertForFinishEditingErrorsIsPresented: Binding<Bool> {
         Binding {
-            finishEditingError != nil
+            featureFormViewModel.finishEditingError != nil
         } set: { newIsPresented in
             if !newIsPresented {
-                finishEditingError = nil
+                featureFormViewModel.finishEditingError = nil
             }
         }
     }

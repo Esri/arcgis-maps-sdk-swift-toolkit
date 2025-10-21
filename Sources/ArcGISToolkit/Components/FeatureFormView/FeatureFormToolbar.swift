@@ -30,9 +30,6 @@ struct FeatureFormToolbar: ViewModifier {
     /// The model for the FeatureFormView containing the view.
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
-    /// An error thrown from a call to `FeatureForm.finishEditing()`.
-    @Environment(\.finishEditingError) var finishEditingError
-    
     /// A binding to a Boolean value controlling whether the FeatureFormView is presented.
     @Environment(\.isPresented) var isPresented
     
@@ -108,8 +105,7 @@ struct FeatureFormToolbar: ViewModifier {
                     ToolbarItem(placement: .bottomBar) {
                         FormFooter(
                             featureForm: featureForm,
-                            formHandlingEventAction: onFormEditingEventAction,
-                            finishEditingError: finishEditingError
+                            formHandlingEventAction: onFormEditingEventAction
                         )
                     }
                 }
