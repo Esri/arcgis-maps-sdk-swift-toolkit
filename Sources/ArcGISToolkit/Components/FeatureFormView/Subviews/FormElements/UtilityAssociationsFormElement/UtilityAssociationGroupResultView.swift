@@ -77,6 +77,10 @@ extension FeatureFormView {
             ) {
                 associationsFilterResultsModel?.fetchResults()
             }
+            .navigationTitle(
+                utilityAssociationGroupResult?.name ?? "",
+                subtitle: featureFormViewModel.getModel(form)?.title ?? ""
+            )
             .onChange(of: associationResults.count) {
                 if associationResults.isEmpty {
                     featureFormViewModel.navigationPath.removeLast()

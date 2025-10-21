@@ -59,8 +59,7 @@ extension FeatureFormView {
                                     form,
                                     element,
                                     filter,
-                                    groupResult.featureFormSource,
-                                    groupResult.name
+                                    groupResult.featureFormSource
                                 )
                             )
                         } label: {

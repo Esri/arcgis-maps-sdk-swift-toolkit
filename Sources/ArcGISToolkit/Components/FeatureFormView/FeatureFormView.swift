@@ -173,7 +173,7 @@ public struct FeatureFormView: View {
                             .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(filter.title, subtitle: featureFormViewModel.getModel(form)?.title ?? "")
-                        case let .utilityAssociationGroupResultView(form, element, filter, formSource, groupResultName):
+                        case let .utilityAssociationGroupResultView(form, element, filter, formSource):
                             UtilityAssociationGroupResultView(
                                 element: element,
                                 featureFormSource: formSource,
@@ -182,7 +182,6 @@ public struct FeatureFormView: View {
                             )
                             .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(groupResultName, subtitle: featureFormViewModel.getModel(form)?.title ?? "")
                         }
                     }
             }

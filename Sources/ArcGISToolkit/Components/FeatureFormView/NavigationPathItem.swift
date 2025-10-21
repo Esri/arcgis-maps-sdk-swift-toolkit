@@ -23,7 +23,7 @@ extension FeatureFormView {
         case utilityAssociationFeatureCandidatesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource, UtilityAssetType)
         case utilityAssociationFeatureSourcesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter)
         case utilityAssociationFilterResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter)
-        case utilityAssociationGroupResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, FeatureFormSource, String)
+        case utilityAssociationGroupResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, FeatureFormSource)
         
         public static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
@@ -62,8 +62,8 @@ extension FeatureFormView {
                 formA === formB
                 && elementA === elementB
                 && filterA === filterB
-            case let (.utilityAssociationGroupResultView(formA, elementA, filterA, sourceA, _),
-                      .utilityAssociationGroupResultView(formB, elementB, filterB, sourceB, _)):
+            case let (.utilityAssociationGroupResultView(formA, elementA, filterA, sourceA),
+                      .utilityAssociationGroupResultView(formB, elementB, filterB, sourceB)):
                 formA === formB
                 && elementA === elementB
                 && filterA === filterB
@@ -104,7 +104,7 @@ extension FeatureFormView {
                 hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
-            case let .utilityAssociationGroupResultView(form, element, filter, formSource, _):
+            case let .utilityAssociationGroupResultView(form, element, filter, formSource):
                 hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
