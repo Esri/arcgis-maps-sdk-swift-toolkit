@@ -121,6 +121,6 @@ extension FeatureFormToolbar {
     
     /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
     var isRootView: Bool {
-        featureFormViewModel.navigationPath.isEmpty ?? true
+        featureFormViewModel.navigationPath.isEmpty
     }
 }
