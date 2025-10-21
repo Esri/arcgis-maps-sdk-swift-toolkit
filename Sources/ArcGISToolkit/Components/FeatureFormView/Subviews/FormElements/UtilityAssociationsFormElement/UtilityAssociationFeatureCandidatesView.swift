@@ -120,7 +120,7 @@ extension FeatureFormView {
                                     // onTapGesture is not optimal but is
                                     // the only configuration found to work
                                     // so far that avoids selecting the
-                                    // navigation link
+                                    // navigation link.
                                     onFormEditingEventAction?(.showOnMapRequested(candidate.feature))
                                 }
                         }
