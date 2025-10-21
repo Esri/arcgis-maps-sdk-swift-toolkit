@@ -113,7 +113,6 @@ extension FeatureFormView {
                                 .truncationMode(.middle)
                             Spacer()
                             Image(systemName: "scope")
-                                .padding()
                                 .clipShape(.circle)
                                 .hoverEffect()
                                 .onTapGesture {
