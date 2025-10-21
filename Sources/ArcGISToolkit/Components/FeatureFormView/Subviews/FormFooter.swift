@@ -28,9 +28,6 @@ struct FormFooter: View {
     /// The model for the FeatureFormView containing the view.
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
-    /// The internally managed validation error visibility.
-    @Environment(\.validationErrorVisibilityInternal) var validationErrorVisibilityInternal
-    
     var body: some View {
         HStack {
             discardButton
@@ -45,7 +42,7 @@ struct FormFooter: View {
         Button(role: .destructive) {
             featureForm.discardEdits()
             formHandlingEventAction?(.discardedEdits(willNavigate: false))
-            validationErrorVisibilityInternal.wrappedValue = .automatic
+            featureFormViewModel.validationErrorVisibilityInternal = .automatic
         } label: {
             Text(
                 "Discard",
@@ -67,7 +64,7 @@ struct FormFooter: View {
                     }
                 }
             } else {
-                validationErrorVisibilityInternal.wrappedValue = .visible
+                featureFormViewModel.validationErrorVisibilityInternal = .visible
                 featureFormViewModel.navigationAlertInfo = (false, {})
             }
         } label: {

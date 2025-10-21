@@ -103,9 +103,6 @@ public struct FeatureFormView: View {
     /// The feature form currently visible in the navigation stack.
     @State private var presentedForm: FeatureForm
     
-    /// The internally managed validation error visibility.
-    @State private var validationErrorVisibilityInternal = ValidationErrorVisibility.automatic
-    
     /// Initializes a form view.
     /// - Parameters:
     ///   - root: The feature form defining the editing experience.
@@ -208,14 +205,14 @@ public struct FeatureFormView: View {
                         Button(role: .destructive) {
                             presentedForm.discardEdits()
                             onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
-                            validationErrorVisibilityInternal = .automatic
+                            featureFormViewModel.validationErrorVisibilityInternal = .automatic
                             continuation()
                         } label: {
                             discardEdits
                         }
                         .onAppear {
                             if !presentedForm.validationErrors.isEmpty {
-                                validationErrorVisibilityInternal = .visible
+                                featureFormViewModel.validationErrorVisibilityInternal = .visible
                             }
                         }
                         if (presentedForm.validationErrors.isEmpty) {
@@ -305,7 +302,6 @@ public struct FeatureFormView: View {
             .environment(\.navigationIsDisabled, navigationIsDisabled)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
-            .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
             .onChange(of: featureFormViewModel.navigationPath) {
                 if let presentedItem = featureFormViewModel.navigationPath.last {
                     onFormEditingEventAction?(.navigationChanged(presentedItem))
@@ -315,7 +311,7 @@ public struct FeatureFormView: View {
                 featureFormViewModel.clearModels()
                 featureFormViewModel.addModel(rootFeatureForm)
                 presentedForm = rootFeatureForm
-                validationErrorVisibilityInternal = .automatic
+                featureFormViewModel.validationErrorVisibilityInternal = .automatic
             }
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
                 guard let embeddedFeatureFormViewModel = $0?.object else { return }
@@ -420,7 +416,7 @@ extension FeatureFormView {
             if featureForm.feature.globalID != presentedForm.feature.globalID {
                 featureForm.feature.refresh()
                 presentedForm = featureForm
-                validationErrorVisibilityInternal = .automatic
+                featureFormViewModel.validationErrorVisibilityInternal = .automatic
                 onFeatureFormChanged?(featureForm)
             }
         }

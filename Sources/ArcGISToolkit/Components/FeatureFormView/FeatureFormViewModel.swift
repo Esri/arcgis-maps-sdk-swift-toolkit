@@ -28,6 +28,9 @@ import Observation
     /// The navigation path used by the navigation stack in the root feature form view.
     var navigationPath: [FeatureFormView.NavigationPathItem] = []
     
+    /// The internally managed validation error visibility.
+    var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
+    
     /// Creates and adds a model for the provided form.
     /// - Parameter form: The form to create and add a model for.
     @MainActor func addModel(_ form: FeatureForm) {

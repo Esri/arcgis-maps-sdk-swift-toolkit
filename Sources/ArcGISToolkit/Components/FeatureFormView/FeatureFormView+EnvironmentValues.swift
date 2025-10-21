@@ -28,7 +28,4 @@ extension EnvironmentValues /* FeatureFormView */ {
     
     /// The developer configurable validation error visibility.
     @Entry var validationErrorVisibilityExternal: FeatureFormView.ValidationErrorVisibility = .automatic
-    
-    /// The internally managed validation error visibility.
-    @Entry var validationErrorVisibilityInternal: Binding<FeatureFormView.ValidationErrorVisibility> = .constant(.automatic)
 }
