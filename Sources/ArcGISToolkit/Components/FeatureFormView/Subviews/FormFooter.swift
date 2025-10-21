@@ -25,14 +25,14 @@ struct FormFooter: View {
     /// to the ``FeatureFormView``.
     let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
     
+    /// The model for the FeatureFormView containing the view.
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel
+    
     /// The internally managed validation error visibility.
     @Environment(\.validationErrorVisibilityInternal) var validationErrorVisibilityInternal
     
     /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Binding var finishEditingError: (any Error)?
-    
-    /// The environment value to set the continuation to use when the user responds to the alert.
-    @Environment(\.setAlertContinuation) var setAlertContinuation
     
     var body: some View {
         HStack {
@@ -71,7 +71,7 @@ struct FormFooter: View {
                 }
             } else {
                 validationErrorVisibilityInternal.wrappedValue = .visible
-                setAlertContinuation?(false, {})
+                featureFormViewModel.navigationAlertInfo = (false, {})
             }
         } label: {
             Text(

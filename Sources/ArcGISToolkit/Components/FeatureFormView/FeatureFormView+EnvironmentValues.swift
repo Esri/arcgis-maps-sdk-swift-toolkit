@@ -29,9 +29,6 @@ extension EnvironmentValues /* FeatureFormView */ {
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Entry var onFormEditingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
     
-    /// The environment value to set the continuation to use when the user responds to the alert.
-    @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
-    
     /// The developer configurable validation error visibility.
     @Entry var validationErrorVisibilityExternal: FeatureFormView.ValidationErrorVisibility = .automatic
     

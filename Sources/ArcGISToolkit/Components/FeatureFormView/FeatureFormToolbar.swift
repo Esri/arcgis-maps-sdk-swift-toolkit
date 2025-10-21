@@ -42,9 +42,6 @@ struct FeatureFormToolbar: ViewModifier {
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
     
-    /// The environment value to set the continuation to use when the user responds to the alert.
-    @Environment(\.setAlertContinuation) var setAlertContinuation
-    
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits = false
     
@@ -72,10 +69,10 @@ struct FeatureFormToolbar: ViewModifier {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
                             if alertBeforeDismissing {
-                                setAlertContinuation?(true) {
+                                featureFormViewModel.navigationAlertInfo = (true, {
                                     dismiss()
                                     onBackNavigation?()
-                                }
+                                })
                             } else {
                                 dismiss()
                                 onBackNavigation?()
@@ -98,9 +95,9 @@ struct FeatureFormToolbar: ViewModifier {
                     ToolbarItem(placement: .topBarTrailing) {
                         XButton(.dismiss) {
                             if hasEdits {
-                                setAlertContinuation?(false) {
+                                featureFormViewModel.navigationAlertInfo = (false, {
                                     isPresented.wrappedValue = false
-                                }
+                                })
                             } else {
                                 isPresented.wrappedValue = false
                             }

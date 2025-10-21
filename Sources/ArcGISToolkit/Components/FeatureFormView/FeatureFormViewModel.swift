@@ -19,6 +19,9 @@ import Observation
     /// The models for each feature form in the navigation path.
     private var formModels: [ObjectIdentifier: EmbeddedFeatureFormViewModel] = [:]
     
+    /// Continuation information for the alert.
+    var navigationAlertInfo: (willNavigate: Bool, action: () -> Void)?
+    
     /// The navigation path used by the navigation stack in the root feature form view.
     var navigationPath: [FeatureFormView.NavigationPathItem] = []
     

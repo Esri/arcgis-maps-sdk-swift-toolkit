@@ -23,8 +23,6 @@ extension FeatureFormView {
         /// A Boolean which declares whether navigation to forms for features associated via utility
         /// association form elements is disabled.
         @Environment(\.navigationIsDisabled) var navigationIsDisabled
-        /// The environment value to set the continuation to use when the user responds to the alert.
-        @Environment(\.setAlertContinuation) var setAlertContinuation
         
         /// The association to be potentially removed.
         @State private var associationPendingRemoval: UtilityAssociation?
@@ -156,9 +154,9 @@ extension FeatureFormView {
                     )
                 }
                 if embeddedFeatureFormViewModel.featureForm.hasEdits {
-                    setAlertContinuation?(true) {
+                    featureFormViewModel.navigationAlertInfo = (true, {
                         navigationAction()
-                    }
+                    })
                 } else {
                     navigationAction()
                 }

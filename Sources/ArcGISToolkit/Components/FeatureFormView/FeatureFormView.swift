@@ -97,9 +97,6 @@ public struct FeatureFormView: View {
     /// The developer configurable validation error visibility.
     var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
     
-    /// Continuation information for the alert.
-    @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
-    
     /// The model for the feature form view.
     @State private var featureFormViewModel = FeatureFormViewModel()
     
@@ -210,7 +207,7 @@ public struct FeatureFormView: View {
                 presentedForm.validationErrors.isEmpty ? discardEditsQuestion : validationErrors,
                 isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
-                    if let (willNavigate, continuation) = alertContinuation {
+                    if let (willNavigate, continuation) = featureFormViewModel.navigationAlertInfo {
                         Button(role: .destructive) {
                             presentedForm.discardEdits()
                             onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
@@ -311,7 +308,6 @@ public struct FeatureFormView: View {
             .environment(\.isPresented, isPresented)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
-            .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
             .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
             .onChange(of: featureFormViewModel.navigationPath) {
@@ -407,10 +403,10 @@ extension FeatureFormView {
     /// A Boolean value indicating whether the unsaved edits alert is presented.
     var alertForUnsavedEditsIsPresented: Binding<Bool> {
         Binding {
-            alertContinuation != nil
+            featureFormViewModel.navigationAlertInfo != nil
         } set: { newIsPresented in
             if !newIsPresented {
-                alertContinuation = nil
+                featureFormViewModel.navigationAlertInfo = nil
             }
         }
     }
@@ -431,13 +427,6 @@ extension FeatureFormView {
                 validationErrorVisibilityInternal = .automatic
                 onFeatureFormChanged?(featureForm)
             }
-        }
-    }
-    
-    /// A closure used to set the alert continuation.
-    var setAlertContinuation: (Bool, @escaping () -> Void) -> Void {
-        { willNavigate, continuation in
-            alertContinuation = (willNavigate: willNavigate, action: continuation)
         }
     }
     
