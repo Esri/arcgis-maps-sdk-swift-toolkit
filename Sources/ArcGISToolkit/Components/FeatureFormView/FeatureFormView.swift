@@ -299,10 +299,7 @@ public struct FeatureFormView: View {
                 }
             }
             .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
-                featureFormViewModel.clearModels()
-                featureFormViewModel.addModel(rootFeatureForm)
-                featureFormViewModel.presentedForm = rootFeatureForm
-                featureFormViewModel.validationErrorVisibilityInternal = .automatic
+                featureFormViewModel.setRootForm(rootFeatureForm)
             }
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
                 guard let embeddedFeatureFormViewModel = $0?.object else { return }

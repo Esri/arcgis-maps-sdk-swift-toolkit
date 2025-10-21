@@ -40,11 +40,6 @@ import Observation
         formModels[ObjectIdentifier(form)] = EmbeddedFeatureFormViewModel(featureForm: form)
     }
     
-    /// Removes all form models.
-    func clearModels() {
-        formModels.removeAll()
-    }
-    
     /// Gets the model for the specified form.
     /// - Parameter form: The form to get a model for.
     /// - Returns: The model for the provided form.
@@ -56,6 +51,15 @@ import Observation
     /// - Parameter form: The form to remove the model for.
     func removeModel(_ form: FeatureForm) {
         formModels.removeValue(forKey: ObjectIdentifier(form))
+    }
+    
+    /// Sets the root feature form in the feature form view.
+    /// - Parameter form: <#form description#>
+    @MainActor func setRootForm(_ form: FeatureForm) {
+        formModels.removeAll()
+        addModel(form)
+        presentedForm = form
+        validationErrorVisibilityInternal = .automatic
     }
     
     // MARK: Computed properties
