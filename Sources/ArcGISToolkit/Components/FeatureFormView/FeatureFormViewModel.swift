@@ -29,7 +29,7 @@ import Observation
     var navigationPath: [FeatureFormView.NavigationPathItem] = []
     
     /// The feature form presented in the navigation stack.
-    var presentedForm: FeatureForm?
+    private(set) var presentedForm: FeatureForm?
     
     /// The internally managed validation error visibility.
     var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
@@ -53,8 +53,17 @@ import Observation
         formModels.removeValue(forKey: ObjectIdentifier(form))
     }
     
+    
+    /// Sets the presented form in the feature form view.
+    /// - Parameter form: The new presented form.
+    func setPresentedForm(_ form: FeatureForm) {
+        form.feature.refresh()
+        presentedForm = form
+        validationErrorVisibilityInternal = .automatic
+    }
+    
     /// Sets the root feature form in the feature form view.
-    /// - Parameter form: <#form description#>
+    /// - Parameter form: The new root form.
     @MainActor func setRootForm(_ form: FeatureForm) {
         formModels.removeAll()
         addModel(form)
