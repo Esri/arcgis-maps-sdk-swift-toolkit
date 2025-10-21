@@ -178,8 +178,7 @@ public struct FeatureFormView: View {
                                 element: element,
                                 featureFormSource: formSource,
                                 filter: filter,
-                                form: form,
-                                groupTitle: groupResultName
+                                form: form
                             )
                             .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)

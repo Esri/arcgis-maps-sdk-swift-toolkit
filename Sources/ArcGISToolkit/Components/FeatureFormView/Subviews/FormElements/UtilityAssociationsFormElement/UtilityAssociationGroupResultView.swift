@@ -39,8 +39,6 @@ extension FeatureFormView {
         let filter: UtilityAssociationsFilter
         /// The feature form defining the editing experience.
         let form: FeatureForm
-        /// The title of the selected utility association group result.
-        let groupTitle: String
         
         /// The set of association results within the group result.
         var associationResults: [UtilityAssociationResult] {
