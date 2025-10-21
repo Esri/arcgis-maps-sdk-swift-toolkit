@@ -48,12 +48,13 @@ extension FeatureFormView {
                 formA === formB
                 && elementA === elementB
                 && resultA === resultB
-            case let (.utilityAssociationFeatureCandidatesView(formA, elementA, filterA, sourceA, _),
-                      .utilityAssociationFeatureCandidatesView(formB, elementB, filterB, sourceB, _)):
+            case let (.utilityAssociationFeatureCandidatesView(formA, elementA, filterA, sourceA, assetTypeA),
+                      .utilityAssociationFeatureCandidatesView(formB, elementB, filterB, sourceB, assetTypeB)):
                 formA === formB
                 && elementA === elementB
                 && filterA === filterB
                 && sourceA === sourceB
+                && assetTypeA === assetTypeB
             case let (.utilityAssociationFeatureSourcesView(formA, elementA, filterA),
                       .utilityAssociationFeatureSourcesView(formB, elementB, filterB)):
                 formA === formB
@@ -93,11 +94,12 @@ extension FeatureFormView {
                 hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(result))
-            case let .utilityAssociationFeatureCandidatesView(form, element, filter, source, _):
+            case let .utilityAssociationFeatureCandidatesView(form, element, filter, source, assetType):
                 hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(source))
+                hasher.combine(ObjectIdentifier(assetType))
             case let .utilityAssociationFeatureSourcesView(form, element, filter):
                 hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
