@@ -98,7 +98,7 @@ extension FeatureFormView {
         /// A section with the candidate results.
         var sectionForCandidates: some View {
             Section {
-                ForEach(filteredCandidates, id: \.title) { candidate in
+                ForEach(filteredCandidates, id: \.feature.globalID) { candidate in
                     NavigationLink(
                         value: FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
                             form,
