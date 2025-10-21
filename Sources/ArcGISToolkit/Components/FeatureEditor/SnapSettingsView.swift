@@ -15,125 +15,166 @@
 import ArcGIS
 import SwiftUI
 
-@MainActor
-@Observable
-class SnapSettingsModel {
-    private let snapSettings: SnapSettings
-    fileprivate let sourceSettings: [SnapSourceSettingsModel]
-    
-    init(snapSettings: SnapSettings) {
-        self.snapSettings = snapSettings
-        
-        // Grab the settings from the snapSettings object.
-        isEnabled = snapSettings.isEnabled
-        snapsToFeatures = snapSettings.snapsToFeatures
-        snapsToGeometryGuides = snapSettings.snapsToGeometryGuides
-        hapticFeedbackIsEnabled = snapSettings.hapticFeedbackIsEnabled
-        
-        sourceSettings = snapSettings.sourceSettings
-            .filter { !($0.source is GraphicsOverlay) }
-            .map(SnapSourceSettingsModel.init(sourceSettings:))
-    }
-    
-    var isEnabled: Bool {
-        didSet {
-            snapSettings.isEnabled = isEnabled
-        }
-    }
-    
-    var hapticFeedbackIsEnabled: Bool {
-        didSet {
-            snapSettings.hapticFeedbackIsEnabled = hapticFeedbackIsEnabled
-        }
-    }
-    
-    var snapsToFeatures: Bool {
-        didSet {
-            snapSettings.snapsToFeatures = snapsToFeatures
-        }
-    }
-    
-    var snapsToGeometryGuides: Bool {
-        didSet {
-            snapSettings.snapsToGeometryGuides = snapsToGeometryGuides
-        }
-    }
-}
-
-@MainActor
-@Observable
-private class SnapSourceSettingsModel: Identifiable {
-    private let sourceSettings: SnapSourceSettings
-    
-    init(sourceSettings: SnapSourceSettings) {
-        self.sourceSettings = sourceSettings
-        isEnabled = sourceSettings.isEnabled
-    }
-    
-    var isEnabled: Bool {
-        didSet {
-            sourceSettings.isEnabled = isEnabled
-        }
-    }
-    
-    var name: String {
-        sourceSettings.source.name
-    }
-    
-    nonisolated var id: ObjectIdentifier {
-        ObjectIdentifier(self)
-    }
-}
-
+/// A view contain controls for configuring given `SnapSettings`.
+///
+/// - Note: The snap settings should be synchronized if needed before displaying this view.
 struct SnapSettingsView: View {
-    @State var model: SnapSettingsModel
+    /// The snap settings to configure.
+    let settings: SnapSettings
+    
+    /// A Boolean value indicating whether the feature snapping disclosure group is expanded.
+    @State private var featureSnappingIsExpanded = false
+    /// A Boolean value indicating whether the settings have haptic feedback enabled.
+    @State private var hapticFeedbackIsEnabled = false
+    /// A Boolean value indicating whether the settings are enabled.
+    @State private var isEnabled = false
+    /// A Boolean value indicating whether the settings allow snapping to features.
+    @State private var snapsToFeatures = false
+    /// A Boolean value indicating whether the settings allow snapping to geometry guides.
+    @State private var snapsToGeometryGuides = false
     
     var body: some View {
-        List {
+        Form {
             Section {
-                Toggle("Snapping", isOn: $model.isEnabled)
+                Toggle("Snapping", isOn: $isEnabled)
+                    .onChange(of: isEnabled) {
+                        settings.isEnabled = isEnabled
+                    }
             }
             
             Group {
                 Section {
-                    Toggle("Haptics", isOn: $model.hapticFeedbackIsEnabled)
-                    Toggle("Guide Snapping", isOn: $model.snapsToGeometryGuides)
+                    Toggle("Haptics", isOn: $hapticFeedbackIsEnabled)
+                        .onChange(of: hapticFeedbackIsEnabled) {
+                            settings.hapticFeedbackIsEnabled = hapticFeedbackIsEnabled
+                        }
+                    Toggle("Guide Snapping", isOn: $snapsToGeometryGuides)
+                        .onChange(of: snapsToGeometryGuides) {
+                            settings.snapsToGeometryGuides = snapsToGeometryGuides
+                        }
                 }
                 
                 Section {
-                    Toggle("Feature Snapping", isOn: $model.snapsToFeatures)
-                    
-                    if model.snapsToFeatures {
-                        ForEach(model.sourceSettings) { model in
-                            SnapSourceSettingsView(model: model)
-                                .padding(.leading)
+                    DisclosureGroup(isExpanded: $featureSnappingIsExpanded) {
+                        ForEach(settings.sourceSettings, id: \.objectIdentifier) { sourceSettings in
+                            SnapSourceSettingsView(settings: sourceSettings)
                         }
+                        .disabled(!snapsToFeatures)
+                    } label: {
+                        Toggle("Feature Snapping", isOn: $snapsToFeatures)
+                            .onChange(of: snapsToFeatures) {
+                                settings.snapsToFeatures = snapsToFeatures
+                                
+                                // Expands/collapses the group when the toggle is used.
+                                withAnimation {
+                                    featureSnappingIsExpanded = snapsToFeatures
+                                }
+                            }
                     }
                 }
             }
-            .disabled(!model.isEnabled)
+            .disabled(!isEnabled)
         }
-        .animation(.default, value: model.snapsToFeatures)
+        .onChange(of: ObjectIdentifier(settings), initial: true) {
+            // Sets the state properties to the settings' property values when the object changes.
+            featureSnappingIsExpanded = settings.isEnabled
+            hapticFeedbackIsEnabled = settings.hapticFeedbackIsEnabled
+            isEnabled = settings.isEnabled
+            snapsToFeatures = settings.snapsToFeatures
+            snapsToGeometryGuides = settings.snapsToGeometryGuides
+        }
     }
 }
 
+/// A view for displaying and enabling a `SnapSourceSettings` instance and its children.
 private struct SnapSourceSettingsView: View {
-    @State var model: SnapSourceSettingsModel
+    /// The snap source settings to display
+    let settings: SnapSourceSettings
+    
+    /// A Boolean value indicating whether the child source settings disclosure group is expanded.
+    @State private var childrenGroupIsExpanded = false
+    /// A Boolean value indicating whether the snap source settings is enabled.
+    @State private var isEnabled = false
+    /// The snap source settings' rule behavior.
+    @State private var ruleBehavior: SnapRuleBehavior?
     
     var body: some View {
-        Toggle(model.name, isOn: $model.isEnabled)
+        Group {
+            if settings.childSourceSettings.isEmpty {
+                HStack {
+                    settingsToggle
+                    
+                    // This aligns the trailing edges of the toggles without children
+                    // with those that have a disclosure group chevron.
+                    // It also adapts to dynamic type changes automatically.
+                    Image(systemName: "chevron.right")
+                        .font(.caption2.bold())
+                        .opacity(0)
+                }
+            } else {
+                DisclosureGroup(isExpanded: $childrenGroupIsExpanded) {
+                    ForEach(settings.childSourceSettings, id: \.objectIdentifier) { settings in
+                        SnapSourceSettingsView(settings: settings)
+                    }
+                    .disabled(!isEnabled)
+                } label: {
+                    settingsToggle
+                }
+            }
+        }
+        .onChange(of: ObjectIdentifier(settings), initial: true) {
+            isEnabled = settings.isEnabled
+            ruleBehavior = settings.ruleBehavior
+            
+            guard !settings.childSourceSettings.isEmpty else { return }
+            childrenGroupIsExpanded = isEnabled
+        }
+    }
+    
+    /// A toggle for enabling and disabling a given snap source settings.
+    private var settingsToggle: some View {
+        Toggle(isOn: $isEnabled) {
+            Text(settings.source.label)
+            
+            if let ruleBehavior {
+                Label(
+                    ruleBehavior == .rulesLimitSnapping
+                    ? "Snap rules limit snapping."
+                    : "Snap rules prevent snapping.",
+                    systemImage: "exclamationmark.triangle"
+                )
+                .foregroundStyle(ruleBehavior == .rulesLimitSnapping ? .orange : .red)
+                .font(.caption)
+            }
+        }
+        .disabled(ruleBehavior == .rulesPreventSnapping)
+        .onChange(of: isEnabled) {
+            settings.isEnabled = isEnabled
+            
+            // Expands/collapses the group when the toggle is used.
+            guard !settings.childSourceSettings.isEmpty else { return }
+            withAnimation {
+                childrenGroupIsExpanded = isEnabled
+            }
+        }
     }
 }
 
 private extension SnapSource {
-    var name: String {
+    /// A human-readable label for the snap source.
+    var label: String {
         switch self {
-        case let featureLayer as FeatureLayer:
-            return featureLayer.name
+        case let layer as LayerContent:
+            layer.name
         case let overlay as GraphicsOverlay:
-            return overlay.id
+            overlay.id
         default:
-            return "Unknown"
+            "Unknown"
         }
     }
+}
+
+private extension SnapSourceSettings {
+    /// A unique identifier for the object.
+    var objectIdentifier: ObjectIdentifier { ObjectIdentifier(self) }
 }

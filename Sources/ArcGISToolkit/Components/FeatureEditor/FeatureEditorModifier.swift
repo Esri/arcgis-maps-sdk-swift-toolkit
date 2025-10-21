@@ -219,7 +219,7 @@ private struct FeatureEditorView: View {
     
     @ViewBuilder
     private var toolbarContent: some View {
-        SnapSettingsButton(snapSettings: geometryEditor.snapSettings)
+        SnapSettingsButton(settings: geometryEditor.snapSettings)
             .disabled(!isStarted || presentationDetent == .large || !backgroundIsIntractable)
             .onReceive(
                 NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
@@ -317,30 +317,43 @@ private struct FeatureEditorView: View {
 //    }
 }
 
+/// A button that presents a view for configuring given `SnapSettings`.
 private struct SnapSettingsButton: View {
-    let snapSettings: SnapSettings
+    /// The snap settings to configure.
+    let settings: SnapSettings
     
-    @State private var isPresented = false
+    /// A Boolean value indicating whether the error alert is presented.
+    @State private var errorAlertIsPresented = false
+    /// A Boolean value indicating whether the snap settings view is presented.
+    @State private var snapSettingsArePresented = false
+    /// An error thrown while syncing snap settings.
+    @State private var syncingError: (any Error)?
     
     var body: some View {
-        Button("Snap Settings", systemImage: "gear") {
+        Button("Snapping Settings", systemImage: "gear") {
             do {
-                try snapSettings.syncSourceSettings()
-                isPresented = true
+                try settings.syncSourceSettings()
+                snapSettingsArePresented = true
             } catch {
-                print("FE error syncing snap source settings: \(error)")
+                syncingError = error
+                errorAlertIsPresented = true
             }
         }
-        .sheet(isPresented: $isPresented) {
+        .sheet(isPresented: $snapSettingsArePresented) {
             NavigationStack {
-                SnapSettingsView(model: .init(snapSettings:  snapSettings))
-                    .navigationTitle("Snap Settings")
+                SnapSettingsView(settings: settings)
+                    .navigationTitle("Snapping Settings")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
                             XButton(.dismiss)
                         }
                     }
+            }
+        }
+        .alert("Error Syncing Snap Settings", isPresented: $errorAlertIsPresented, actions: {}) {
+            if let syncingError {
+                Text(syncingError.localizedDescription)
             }
         }
     }
