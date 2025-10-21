@@ -85,12 +85,12 @@ public struct FeatureFormView: View {
     
     /// The visibility of the "save" and "discard" buttons.
     var editingButtonsVisibility: Visibility = .automatic
-    /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
-    var onFeatureFormChanged: ((FeatureForm) -> Void)?
     /// A Boolean which declares whether navigation to forms for features associated via utility association
     /// form elements is disabled.
     var navigationIsDisabled = false
-    /// The closure to perform when a ``EditingEvent`` occurs.
+    /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
+    var onFeatureFormChanged: ((FeatureForm) -> Void)?
+    /// The user-provided closure to perform when a ``EditingEvent`` occurs.
     var onFormEditingEventAction: ((EditingEvent) -> Void)?
     /// The developer configurable validation error visibility.
     var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
