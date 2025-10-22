@@ -90,7 +90,7 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
                         .transition(item is Popup ? .move(edge: .trailing) : .opacity)
                     } else if let popup = item as? Popup {
                         PopupView(root: popup, isPresented: $isShowingInspector)
-                            .environment(\.toolbarContent, popupToolbar)
+                            .environment(\.bottomToolbarContent, popupToolbar)
                     }
                 }
                 .onGeometryChange(for: CGFloat.self, of: \.size.height) { newHeight in
@@ -204,10 +204,10 @@ private struct FeatureEditorView: View {
                     isPresented = false
                 }
             }
-            .environment(\.validationErrorMessage, invalidGeometryMessage)
             .environment(\.beforeSaveAction, save)
-            .environment(\.hasExternalEdits, canUndo)
-            .environment(\.toolbarContent, toolbarContent)
+            .environment(\.bottomToolbarContent, toolbarContent)
+            .environment(\.hasEdits, canUndo)
+            .environment(\.validationErrorMessage, invalidGeometryMessage)
             .task(id: ObjectIdentifier(geometryEditor), monitorGeometryEditorStreams)
             .task(
                 id: Hasher.hash(ObjectIdentifier(geometryEditor), ObjectIdentifier(featureForm)),
@@ -362,12 +362,17 @@ private struct SnapSettingsButton: View {
 // MARK: - Extensions
 
 extension EnvironmentValues {
-    @Entry var hasExternalEdits = false
-    @Entry var toolbarContent: (any View)?
-    @Entry var canSave: Bool?
+    /// An action to run before saving.
+    @Entry var beforeSaveAction: (() -> Void)?
+    
+    /// A view to display in the bottom toolbar.
+    @Entry var bottomToolbarContent: (any View)?
+    
+    /// A Boolean value indicating whether there are edits needing to be handled.
+    @Entry var hasEdits = false
+    
     /// Text describing a validation error.
     @Entry var validationErrorMessage: Text?
-    @Entry var beforeSaveAction: (() -> Void)?
 }
 
 private extension PresentationDetent {

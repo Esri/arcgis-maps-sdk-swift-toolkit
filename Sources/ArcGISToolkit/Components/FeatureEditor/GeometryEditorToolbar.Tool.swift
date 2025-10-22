@@ -93,9 +93,16 @@ extension GeometryEditorToolbar.Tool: CaseIterable {
 }
 
 struct ToolPicker: View {
+    /// The geometry editor from the parent geometry editor toolbar.
     @Environment(\.geometryEditor) private var geometryEditor
+    
+    /// The padding to add to the pickers's label. This is need to increase the hit box size.
     @Environment(\.labelPadding) private var labelPadding
+    
+    /// The tool options to show in the picker.
     @Environment(\.tools) private var tools
+    
+    /// A user provided binding to the tool selected by the picker.
     @Environment(\.selectedTool) private var externalSelectedTool
     
     @State private var geometry: Geometry?
@@ -233,7 +240,10 @@ struct ToolPicker: View {
 // MARK: - Helper
 
 private extension EnvironmentValues {
+    /// The tool options to show in the `ToolPicker`.
     @Entry var tools: [GeometryEditorToolbar.Tool] = [.vertex, .freehand, .vertexReticle]
+    
+    /// A binding to the tool selected by the `ToolPicker`.
     @Entry var selectedTool: Binding<GeometryEditorToolbar.Tool>?
 }
 

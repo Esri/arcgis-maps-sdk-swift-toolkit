@@ -112,9 +112,11 @@ public struct FeatureFormView: View {
     /// The internally managed validation error visibility.
     @State private var validationErrorVisibilityInternal = ValidationErrorVisibility.automatic
     
+    /// An action to run before saving.
+    @Environment(\.beforeSaveAction) private var beforeSaveAction
+    
     /// Text describing an external validation error.
     @Environment(\.validationErrorMessage) private var externalValidationErrorMessage
-    @Environment(\.beforeSaveAction) private var beforeSaveAction
     
     /// A Boolean value indicating whether there are edits needing handled before saving.
     private var hasErrors: Bool {

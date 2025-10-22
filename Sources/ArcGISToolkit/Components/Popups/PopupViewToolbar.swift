@@ -23,9 +23,11 @@ extension View {
 
 /// A view modifier that populates the content's toolbar with items used by the `PopupView`.
 private struct PopupViewToolbar: ViewModifier {
+    /// A view to display in the bottom toolbar.
+    @Environment(\.bottomToolbarContent) private var bottomToolbarContent
+    
     /// A binding to a Boolean value that determines whether a popup view is presented.
     @Environment(\.isPresented) private var isPresented
-    @Environment(\.toolbarContent) private var toolbarContent
     
     func body(content: Content) -> some View {
         content
@@ -38,9 +40,9 @@ private struct PopupViewToolbar: ViewModifier {
                         .font(.headline)
                     }
                 }
-                if let toolbarContent {
+                if let bottomToolbarContent {
                     ToolbarItemGroup(placement: .bottomBar) {
-                        AnyView(toolbarContent)
+                        AnyView(bottomToolbarContent)
                     }
                 }
             }

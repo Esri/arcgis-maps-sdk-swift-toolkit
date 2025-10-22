@@ -22,6 +22,9 @@ extension View {
 }
 
 struct FeatureFormToolbar: ViewModifier {
+    /// A view to display in the bottom toolbar.
+    @Environment(\.bottomToolbarContent) var bottomToolbarContent
+    
     @Environment(\.dismiss) var dismiss
     
     /// The visibility of the "save" and "discard" buttons.
@@ -29,6 +32,9 @@ struct FeatureFormToolbar: ViewModifier {
     
     /// An error thrown from a call to `FeatureForm.finishEditing()`.
     @Environment(\.finishEditingError) var finishEditingError
+    
+    /// A Boolean value indicating whether there are external edits needing to be handled.
+    @Environment(\.hasEdits) var hasExternalEdits
     
     /// A binding to a Boolean value controlling whether the FeatureFormView is presented.
     @Environment(\.isPresented) var isPresented
@@ -56,9 +62,7 @@ struct FeatureFormToolbar: ViewModifier {
     /// `UtilityAssociationGroupResultView`.
     let isAForm: Bool
     
-    @Environment(\.hasExternalEdits) var hasExternalEdits
-    @Environment(\.toolbarContent) var toolbarContent
-    
+    /// A Boolean value indicating whether there are edits to be handled.
     private var hasEdits: Bool {
         hasFormEdits || hasExternalEdits
     }
@@ -72,9 +76,9 @@ struct FeatureFormToolbar: ViewModifier {
                 }
             }
             .toolbar {
-                if let toolbarContent {
+                if let bottomToolbarContent {
                     ToolbarItemGroup(placement: .bottomBar) {
-                        AnyView(toolbarContent)
+                        AnyView(bottomToolbarContent)
                     }
                 }
                 

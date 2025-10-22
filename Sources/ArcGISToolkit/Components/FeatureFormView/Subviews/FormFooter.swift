@@ -34,9 +34,11 @@ struct FormFooter: View {
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Environment(\.setAlertContinuation) var setAlertContinuation
     
+    /// An action to run before saving.
+    @Environment(\.beforeSaveAction) var beforeSaveAction
+    
     /// Text describing an external validation error.
-    @Environment(\.validationErrorMessage) private var validationErrorMessage
-    @Environment(\.beforeSaveAction) private var beforeSaveAction
+    @Environment(\.validationErrorMessage) var validationErrorMessage
     
     var body: some View {
 //        HStack {

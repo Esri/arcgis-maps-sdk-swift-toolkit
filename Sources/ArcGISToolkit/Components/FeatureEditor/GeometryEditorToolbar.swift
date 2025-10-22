@@ -199,7 +199,10 @@ private struct EmbeddedGeometryEditorToolbar: View {
 // MARK: - Components
 
 private struct UndoButton: View {
+    /// The geometry editor from the parent geometry editor toolbar.
     @Environment(\.geometryEditor) private var geometryEditor
+    
+    /// The padding to add to the buttons's label. This is need to increase the hit box size.
     @Environment(\.labelPadding) private var labelPadding
     
     @State private var canUndo = false
@@ -219,7 +222,10 @@ private struct UndoButton: View {
 }
 
 private struct RedoButton: View {
+    /// The geometry editor from the parent geometry editor toolbar.
     @Environment(\.geometryEditor) private var geometryEditor
+    
+    /// The padding to add to the buttons's label. This is need to increase the hit box size.
     @Environment(\.labelPadding) private var labelPadding
     
     @State private var canRedo = false
@@ -239,7 +245,10 @@ private struct RedoButton: View {
 }
 
 private struct DeleteButton: View {
+    /// The geometry editor from the parent geometry editor toolbar.
     @Environment(\.geometryEditor) private var geometryEditor
+    
+    /// The padding to add to the buttons's label. This is need to increase the hit box size.
     @Environment(\.labelPadding) private var labelPadding
     
     @State private var canDeleteSelectedElement = false
@@ -262,8 +271,11 @@ private struct DeleteButton: View {
 // MARK: - Helper
 
 extension EnvironmentValues {
-    @Entry var labelPadding = 0.0
+    /// The geometry editor for the geometry editor toolbar.
     @Entry var geometryEditor = GeometryEditor()
+    
+    /// The amount of padding to add to a control's label. This is need to increase the hit box size.
+    @Entry var labelPadding = 0.0
 }
 
 private extension GeometryEditor {
