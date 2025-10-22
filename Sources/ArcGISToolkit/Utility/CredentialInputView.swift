@@ -26,11 +26,11 @@ extension View {
     ///   - continueAction: The continue action.
     @ViewBuilder func credentialInput(
         isPresented: Binding<Bool>,
-        fields: CredentialInputSheetView.Fields,
+        fields: CredentialInputModifier.Fields,
         message: String,
         title: String,
-        cancelAction: CredentialInputSheetView.Action,
-        continueAction: CredentialInputSheetView.Action
+        cancelAction: CredentialInputModifier.Action,
+        continueAction: CredentialInputModifier.Action
     ) -> some View {
         modifier(
             CredentialInputModifier(
@@ -45,7 +45,7 @@ extension View {
     }
 }
 
-struct CredentialInputSheetView_Previews: PreviewProvider {
+struct CredentialInputView_Previews: PreviewProvider {
     static var previews: some View {
         Color.clear
             .credentialInput(
@@ -74,7 +74,7 @@ struct CredentialInputModifier: ViewModifier {
     var isPresented: Binding<Bool>
     
     /// The fields shown in the view.
-    let fields: CredentialInputSheetView.Fields
+    let fields: CredentialInputModifier.Fields
     
     /// Descriptive text that provides more details about the reason for the alert.
     let message: String
@@ -83,42 +83,10 @@ struct CredentialInputModifier: ViewModifier {
     let title: String
     
     /// The cancel action.
-    let cancelAction: CredentialInputSheetView.Action
+    let cancelAction: CredentialInputModifier.Action
     
     /// The continue action.
-    let continueAction: CredentialInputSheetView.Action
-    
-    @ViewBuilder func body(content: Content) -> some View {
-        content
-            .sheet(isPresented: isPresented) {
-                CredentialInputSheetView(
-                    isPresented: isPresented,
-                    fields: fields,
-                    message: message,
-                    title: title,
-                    cancelAction: cancelAction,
-                    continueAction: continueAction
-                )
-                .interactiveDismissDisabled()
-            }
-    }
-}
-
-struct CredentialInputSheetView: View {
-    /// The fields shown in the alert.
-    private let fields: Fields
-    
-    /// Descriptive text that provides more details about the reason for the alert.
-    private let message: String
-    
-    /// The title of the alert.
-    private let title: String
-    
-    /// The cancel action.
-    private let cancelAction: Action
-    
-    /// The continue action.
-    private let continueAction: Action
+    let continueAction: CredentialInputModifier.Action
     
     /// The value in the username field.
     @State private var username = ""
@@ -126,38 +94,57 @@ struct CredentialInputSheetView: View {
     /// The value in the password field.
     @State private var password = ""
     
-    /// A Boolean value indicating whether or not the view is displayed.
-    private var isPresented: Binding<Bool>
-    
     @FocusState private var usernameFieldIsFocused: Bool
     
     @FocusState private var passwordFieldIsFocused: Bool
     
-    /// Creates the view.
-    /// - Parameters:
-    ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
-    ///   - fields: The fields shown in the alert.
-    ///   - message: Descriptive text that provides more details about the reason for the alert.
-    ///   - title: The title of the alert.
-    ///   - cancelAction: The cancel action.
-    ///   - continueAction: The continue action.
-    init(
-        isPresented: Binding<Bool>,
-        fields: Fields,
-        message: String,
-        title: String,
-        cancelAction: Action,
-        continueAction: Action
-    ) {
-        self.isPresented = isPresented
-        self.cancelAction = cancelAction
-        self.continueAction = continueAction
-        
-        self.fields = fields
-        self.message = message
-        self.title = title
+    @ViewBuilder func body(content: Content) -> some View {
+        content
+            .alert(title, isPresented: isPresented) {
+                switch fields {
+                case .password:
+                    passwordTextField
+                case .usernamePassword:
+                    usernameTextField
+                    passwordTextField
+                }
+                
+                Button(role: .cancel) {
+                    cancelAction.handler("", "")
+                } label: {
+                    Text(cancelAction.title)
+                        .padding(.horizontal)
+                }
+                
+                Button {
+                    isPresented.wrappedValue = false
+                    continueAction.handler(username, password)
+                } label: {
+                    Text(continueAction.title)
+                        .padding(.horizontal)
+                }
+                .disabled(!isContinueEnabled)
+                
+            } message: {
+                Text(message)
+            }
+            .onAppear {
+                // Reset username and password values.
+                username = ""
+                password = ""
+                
+                // Set initial focus of text field.
+                switch fields {
+                case .usernamePassword:
+                    usernameFieldIsFocused = true
+                case .password:
+                    passwordFieldIsFocused = true
+                }
+            }
     }
-    
+}
+
+extension CredentialInputModifier {
     /// A Boolean value indicating whether the alert should allow the continue action to proceed.
     private var isContinueEnabled: Bool {
         switch fields {
@@ -208,78 +195,8 @@ struct CredentialInputSheetView: View {
         }
         .focused($passwordFieldIsFocused)
     }
-    
-    var body: some View {
-        VStack {
-            VStack(alignment: .center) {
-                VStack(spacing: 8) {
-                    Text(title)
-                        .font(.title)
-                        .multilineTextAlignment(.center)
-                    Text(message)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                .padding(.vertical)
-                Form {
-                    Section {
-                        switch fields {
-                        case .password:
-                            passwordTextField
-                        case .usernamePassword:
-                            usernameTextField
-                            passwordTextField
-                        }
-                    } footer: {
-                        // Adding the buttons to the footer or the
-                        // form will push the buttons to the bottom of
-                        // the sheet when we want the buttons
-                        // below the text fields.
-                        HStack {
-                            Spacer()
-                            Button(role: .cancel) {
-                                cancelAction.handler("", "")
-                            } label: {
-                                Text(cancelAction.title)
-                                    .padding(.horizontal)
-                            }
-                            .buttonStyle(.bordered)
-                            Spacer()
-                            Button {
-                                isPresented.wrappedValue = false
-                                continueAction.handler(username, password)
-                            } label: {
-                                Text(continueAction.title)
-                                    .padding(.horizontal)
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .disabled(!isContinueEnabled)
-                            Spacer()
-                        }
-                        .padding(.top)
-                    }
-                }
-                .scrollContentBackground(.hidden)
-            }
-        }
-        .padding()
-        .onAppear {
-            // Reset username and password values.
-            username = ""
-            password = ""
-            
-            // Set initial focus of text field.
-            switch fields {
-            case .usernamePassword:
-                usernameFieldIsFocused = true
-            case .password:
-                passwordFieldIsFocused = true
-            }
-        }
-    }
 }
-extension CredentialInputSheetView {
+extension CredentialInputModifier {
     /// The fields shown in the alert. This determines if the view is intended to require either a username
     /// and password, or a password only.
     enum Fields {
@@ -291,7 +208,7 @@ extension CredentialInputSheetView {
     }
 }
 
-extension CredentialInputSheetView {
+extension CredentialInputModifier {
     /// A configuration for an alert action.
     struct Action {
         /// The title of the action.
