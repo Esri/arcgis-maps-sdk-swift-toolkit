@@ -69,7 +69,6 @@ struct CredentialInputView_Previews: PreviewProvider {
 
 /// A view modifier that prompts for credentials.
 struct CredentialInputModifier: ViewModifier {
-    
     /// A Boolean value indicating whether or not the view is displayed.
     var isPresented: Binding<Bool>
     
