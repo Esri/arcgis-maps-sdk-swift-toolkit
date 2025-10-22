@@ -94,10 +94,6 @@ struct CredentialInputModifier: ViewModifier {
     /// The value in the password field.
     @State private var password = ""
     
-    @FocusState private var usernameFieldIsFocused: Bool
-    
-    @FocusState private var passwordFieldIsFocused: Bool
-    
     @ViewBuilder func body(content: Content) -> some View {
         content
             .alert(title, isPresented: isPresented) {
@@ -128,19 +124,6 @@ struct CredentialInputModifier: ViewModifier {
             } message: {
                 Text(message)
             }
-            .onAppear {
-                // Reset username and password values.
-                username = ""
-                password = ""
-                
-                // Set initial focus of text field.
-                switch fields {
-                case .usernamePassword:
-                    usernameFieldIsFocused = true
-                case .password:
-                    passwordFieldIsFocused = true
-                }
-            }
     }
 }
 
@@ -167,11 +150,7 @@ extension CredentialInputModifier {
         .textInputAutocapitalization(.never)
         .autocorrectionDisabled(true)
         .textContentType(.username)
-        .focused($usernameFieldIsFocused)
         .submitLabel(.next)
-        .onSubmit {
-            passwordFieldIsFocused = true
-        }
     }
     
     var passwordTextField: some View {
@@ -193,7 +172,6 @@ extension CredentialInputModifier {
                 continueAction.handler(username, password)
             }
         }
-        .focused($passwordFieldIsFocused)
     }
 }
 extension CredentialInputModifier {
