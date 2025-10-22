@@ -150,8 +150,8 @@ extension FeatureFormView {
         }
         
         /// The model for the feature form containing the element to add the association to.
-        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.getModel(form)!
+        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+            featureFormViewModel.getModel(form)
         }
         
         /// A Boolean value indicating whether content visibility should be specified for the new association.
@@ -208,10 +208,12 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the from side of the association.
         var sectionForFromElement: some View {
             Section {
-                LabeledContent {
-                    Text(candidateIsToElement ? embeddedFeatureFormViewModel.title : candidate.title)
-                } label: {
-                    Text.fromElement
+                if let embeddedFeatureFormViewModel {
+                    LabeledContent {
+                        Text(candidateIsToElement ? embeddedFeatureFormViewModel.title : candidate.title)
+                    } label: {
+                        Text.fromElement
+                    }
                 }
                 if supportsTerminalSelection,
                    let configuration = candidateIsToElement ? options?.formFeatureTerminalConfiguration : options?.candidateFeatureTerminalConfiguration {
@@ -230,10 +232,12 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the to side of the association.
         var sectionForToElement: some View {
             Section {
-                LabeledContent {
-                    Text(candidateIsToElement ? candidate.title : embeddedFeatureFormViewModel.title)
-                } label: {
-                    Text.toElement
+                if let embeddedFeatureFormViewModel {
+                    LabeledContent {
+                        Text(candidateIsToElement ? candidate.title : embeddedFeatureFormViewModel.title)
+                    } label: {
+                        Text.toElement
+                    }
                 }
                 if supportsTerminalSelection,
                    let configuration = candidateIsToElement ? options?.candidateFeatureTerminalConfiguration : options?.formFeatureTerminalConfiguration {

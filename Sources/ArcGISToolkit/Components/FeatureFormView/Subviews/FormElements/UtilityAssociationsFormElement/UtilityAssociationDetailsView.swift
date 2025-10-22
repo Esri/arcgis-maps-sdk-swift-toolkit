@@ -62,13 +62,13 @@ extension FeatureFormView {
         }
         
         /// The model containing the latest association filter results.
-        var associationsFilterResultsModel: AssociationsFilterResultsModel {
-            embeddedFeatureFormViewModel.associationsFilterResultsModels[element]!
+        var associationsFilterResultsModel: AssociationsFilterResultsModel? {
+            embeddedFeatureFormViewModel?.associationsFilterResultsModels[element]
         }
         
         /// The model for the feature form containing the element with the association.
-        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.getModel(form)!
+        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+            featureFormViewModel.getModel(form)
         }
         
         /// A section which contains the association type label.
@@ -85,10 +85,12 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the from side of the association.
         var sectionForFromElement: some View {
             Section {
-                LabeledContent {
-                    Text(associationResult.associatedFeatureIsToElement ? embeddedFeatureFormViewModel.title : associationResult.title)
-                } label: {
-                    Text.fromElement
+                if let embeddedFeatureFormViewModel {
+                    LabeledContent {
+                        Text(associationResult.associatedFeatureIsToElement ? embeddedFeatureFormViewModel.title : associationResult.title)
+                    } label: {
+                        Text.fromElement
+                    }
                 }
                 if let fromElementTerminal = associationResult.association.fromElement.terminal {
                     row(for: fromElementTerminal)
@@ -99,10 +101,12 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the to side of the association.
         var sectionForToElement: some View {
             Section {
-                LabeledContent {
-                    Text(associationResult.associatedFeatureIsToElement ? associationResult.title : embeddedFeatureFormViewModel.title)
-                } label: {
-                    Text.toElement
+                if let embeddedFeatureFormViewModel {
+                    LabeledContent {
+                        Text(associationResult.associatedFeatureIsToElement ? associationResult.title : embeddedFeatureFormViewModel.title)
+                    } label: {
+                        Text.toElement
+                    }
                 }
                 if let toElementTerminal = associationResult.association.toElement.terminal {
                     row(for: toElementTerminal)
@@ -112,7 +116,9 @@ extension FeatureFormView {
         
         /// A section with a button to remove the association.
         @ViewBuilder var sectionForRemoveButton: some View {
-            if isEditable {
+            if let associationsFilterResultsModel,
+               let embeddedFeatureFormViewModel,
+               isEditable {
                 Section {
                     Button(role: .destructive) {
                         removalConfirmationIsPresented = true

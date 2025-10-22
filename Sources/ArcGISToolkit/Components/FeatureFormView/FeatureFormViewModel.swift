@@ -66,6 +66,7 @@ import Observation
     /// - Parameter form: The new root form.
     @MainActor func setRootForm(_ form: FeatureForm) {
         formModels.removeAll()
+        navigationPath.removeAll()
         addModel(form)
         presentedForm = form
         validationErrorVisibilityInternal = .automatic

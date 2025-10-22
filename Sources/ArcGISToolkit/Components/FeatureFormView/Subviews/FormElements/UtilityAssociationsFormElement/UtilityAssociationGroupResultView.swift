@@ -55,53 +55,55 @@ extension FeatureFormView {
         }
         
         var body: some View {
-            List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-                mainButton(for: utilityAssociationResult)
-                    .disabled(navigationIsDisabled)
+            if let embeddedFeatureFormViewModel {
+                List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
+                    mainButton(for: utilityAssociationResult)
+                        .disabled(navigationIsDisabled)
 #if targetEnvironment(macCatalyst)
-                    .contextMenu {
-                        deleteButton(for: utilityAssociationResult.association)
-                    }
+                        .contextMenu {
+                            deleteButton(for: utilityAssociationResult.association)
+                        }
 #else
-                    .swipeActions {
-                        deleteButton(for: utilityAssociationResult.association)
-                    }
+                        .swipeActions {
+                            deleteButton(for: utilityAssociationResult.association)
+                        }
 #endif
-                    .tint(.primary)
-            }
-            .associationRemovalConfirmation(
-                isPresented: $removalConfirmationIsPresented,
-                association: associationPendingRemoval,
-                element: element,
-                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
-            ) {
-                associationsFilterResultsModel?.fetchResults()
-            }
-            .navigationTitle(
-                utilityAssociationGroupResult?.name ?? "",
-                subtitle: featureFormViewModel.getModel(form)?.title ?? ""
-            )
-            .onChange(of: associationResults.count) {
-                if associationResults.isEmpty {
-                    featureFormViewModel.navigationPath.removeLast()
+                        .tint(.primary)
                 }
-            }
-            .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
-                associationsFilterResultsModel?.fetchResults()
-            }
-            .onIsEditableChange(of: element) { newIsEditable in
-                isEditable = newIsEditable
+                .associationRemovalConfirmation(
+                    isPresented: $removalConfirmationIsPresented,
+                    association: associationPendingRemoval,
+                    element: element,
+                    embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+                ) {
+                    associationsFilterResultsModel?.fetchResults()
+                }
+                .navigationTitle(
+                    utilityAssociationGroupResult?.name ?? "",
+                    subtitle: featureFormViewModel.getModel(form)?.title ?? ""
+                )
+                .onChange(of: associationResults.count) {
+                    if associationResults.isEmpty {
+                        featureFormViewModel.navigationPath.removeLast()
+                    }
+                }
+                .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
+                    associationsFilterResultsModel?.fetchResults()
+                }
+                .onIsEditableChange(of: element) { newIsEditable in
+                    isEditable = newIsEditable
+                }
             }
         }
         
         /// The model containing the latest association filter results.
         var associationsFilterResultsModel: AssociationsFilterResultsModel? {
-            embeddedFeatureFormViewModel.associationsFilterResultsModels[element]
+            embeddedFeatureFormViewModel?.associationsFilterResultsModels[element]
         }
         
         /// The view model for the form.
-        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.getModel(form)!
+        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+            featureFormViewModel.getModel(form)
         }
         
         @ViewBuilder func deleteButton(for association: UtilityAssociation) -> some View {
@@ -155,7 +157,7 @@ extension FeatureFormView {
                         FeatureFormView.NavigationPathItem.form(form)
                     )
                 }
-                if embeddedFeatureFormViewModel.featureForm.hasEdits {
+                if embeddedFeatureFormViewModel?.featureForm.hasEdits ?? false {
                     featureFormViewModel.navigationAlertInfo = (true, {
                         navigationAction()
                     })

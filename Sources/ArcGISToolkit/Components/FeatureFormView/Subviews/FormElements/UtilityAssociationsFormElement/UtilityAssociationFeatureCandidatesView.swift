@@ -81,11 +81,6 @@ extension FeatureFormView {
             )
         }
         
-        /// The model for the feature form containing the element to add the association to.
-        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel {
-            featureFormViewModel.getModel(form)!
-        }
-        
         /// The candidates that can be used to create an association filtered by name.
         var filteredCandidates: [UtilityAssociationFeatureCandidate] {
             if filterPhrase.isEmpty {
