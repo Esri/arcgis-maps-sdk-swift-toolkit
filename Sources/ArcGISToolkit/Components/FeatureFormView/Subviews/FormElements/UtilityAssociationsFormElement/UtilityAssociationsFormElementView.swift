@@ -39,7 +39,7 @@ extension FeatureFormView {
                 case .success(let results):
                     FeatureFormGroupedContentView(content: results.map {
                         Row(
-                            associationsFilterResultsModel: associationsFilterResultsModel!,
+                            associationsFilterResultsModel: associationsFilterResultsModel,
                             element: element,
                             filter: $0.filter,
                             form: embeddedFeatureFormViewModel.featureForm
@@ -74,7 +74,7 @@ extension FeatureFormView {
         @Environment(FeatureFormViewModel.self) var featureFormViewModel
         
         /// The model containing the latest association filter results.
-        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        let associationsFilterResultsModel: AssociationsFilterResultsModel?
         /// The form element containing the filter result.
         let element: UtilityAssociationsFormElement
         /// The referenced utility associations filter.
@@ -84,7 +84,7 @@ extension FeatureFormView {
         
         /// The referenced utility associations filter result.
         var result: UtilityAssociationsFilterResult? {
-            try? associationsFilterResultsModel.result?
+            try? associationsFilterResultsModel?.result?
                 .get()
                 .first(where: { $0.filter === filter } )
         }
