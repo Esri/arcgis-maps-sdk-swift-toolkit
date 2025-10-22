@@ -188,7 +188,7 @@ private struct FeatureEditorView: View {
     private var featureForm: FeatureForm { presentedFeatureForm ?? rootFeatureForm }
     
     var body: some View {
-        FeatureFormView(root: featureForm, isPresented: $isPresented)
+        FeatureFormView(root: rootFeatureForm, isPresented: $isPresented)
             .onFeatureFormChanged { presentedFeatureForm = $0 }
             .onFormEditingEvent { event in
                 // Stops the geometry editor in preparation for startEditing() to run again
@@ -204,8 +204,7 @@ private struct FeatureEditorView: View {
                     isPresented = false
                 }
             }
-            .environment(\.canSave, geometry?.sketchIsValid)
-//            .environment(\.cantSaveMessage, cantSaveMessage)
+            .environment(\.validationErrorMessage, invalidGeometryMessage)
             .environment(\.beforeSaveAction, save)
             .environment(\.hasExternalEdits, canUndo)
             .environment(\.toolbarContent, toolbarContent)
@@ -305,16 +304,17 @@ private struct FeatureEditorView: View {
         featureForm.feature.geometry = geometry
     }
     
-//    @ViewBuilder
-//    private var cantSaveMessage: Text? {
-//        if !model.canSave {
-//            Text(
-//                "The geometry is not valid.",
-//                bundle: .toolkitModule,
-//                comment: ""
-//            )
-//        }
-//    }
+    /// The text for indicating that the geometry editor's geometry is invalid.
+    @ViewBuilder
+    private var invalidGeometryMessage: Text? {
+        if !(geometry?.sketchIsValid ?? true) {
+            Text(
+                "The geometry is invalid. It must be corrected before saving.",
+                bundle: .toolkitModule,
+                comment: ""
+            )
+        }
+    }
 }
 
 /// A button that presents a view for configuring given `SnapSettings`.
@@ -365,7 +365,8 @@ extension EnvironmentValues {
     @Entry var hasExternalEdits = false
     @Entry var toolbarContent: (any View)?
     @Entry var canSave: Bool?
-//    @Entry var cantSaveMessage: Text?
+    /// Text describing a validation error.
+    @Entry var validationErrorMessage: Text?
     @Entry var beforeSaveAction: (() -> Void)?
 }
 

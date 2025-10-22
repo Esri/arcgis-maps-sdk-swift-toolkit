@@ -112,9 +112,14 @@ public struct FeatureFormView: View {
     /// The internally managed validation error visibility.
     @State private var validationErrorVisibilityInternal = ValidationErrorVisibility.automatic
     
-    @Environment(\.canSave) private var canSave
-//    @Environment(\.cantSaveMessage) private var cantSaveMessage
+    /// Text describing an external validation error.
+    @Environment(\.validationErrorMessage) private var externalValidationErrorMessage
     @Environment(\.beforeSaveAction) private var beforeSaveAction
+    
+    /// A Boolean value indicating whether there are edits needing handled before saving.
+    private var hasErrors: Bool {
+        presentedForm.validationErrors.isEmpty && externalValidationErrorMessage == nil
+    }
     
     /// Initializes a form view.
     /// - Parameters:
@@ -163,7 +168,7 @@ public struct FeatureFormView: View {
             }
             // Alert for abandoning unsaved edits
             .alert(
-                presentedForm.validationErrors.isEmpty ? discardEditsQuestion : validationErrors,
+                hasErrors ? discardEditsQuestion : validationErrors,
                 isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
                     if let (willNavigate, continuation) = alertContinuation {
@@ -180,7 +185,7 @@ public struct FeatureFormView: View {
                                 validationErrorVisibilityInternal = .visible
                             }
                         }
-                        if presentedForm.validationErrors.isEmpty && (canSave ?? true) {
+                        if hasErrors {
                             Button {
                                 Task {
                                     if let beforeSaveAction {
@@ -206,22 +211,13 @@ public struct FeatureFormView: View {
                     }
                 },
                 message: {
-//                    if let cantSaveMessage {
-//                        cantSaveMessage
-//                    }
-                    
-                    if !presentedForm.validationErrors.isEmpty {
-                        Text(
-                            "You have ^[\(presentedForm.validationErrors.count) error](inflect: true) that must be fixed before saving.",
-                            bundle: .toolkitModule,
-                            comment:
-                                """
-                                A message explaining that the indicated number
-                                of validation errors must be resolved before
-                                saving the feature form.
-                                """
-                        )
-//                        + (cantSaveMessage ?? Text(""))
+                    if presentedForm.validationErrors.isEmpty, let externalValidationErrorMessage {
+                        // TODO: will this break localization?
+                        validationErrorsMessage + Text("\n") + externalValidationErrorMessage
+                    } else if presentedForm.validationErrors.isEmpty {
+                        validationErrorsMessage
+                    } else if let externalValidationErrorMessage {
+                        externalValidationErrorMessage
                     } else {
                         Text(
                             "Updates to the form will be lost.",
@@ -286,6 +282,20 @@ public struct FeatureFormView: View {
                 formChangedAction(wrappedFeatureForm.object)
             }
         }
+    }
+    
+    /// The text for indicating there are validation errors.
+    private var validationErrorsMessage: Text {
+        Text(
+            "You have validation ^[\(presentedForm.validationErrors.count) error](inflect: true) that must be fixed before saving.",
+            bundle: .toolkitModule,
+            comment:
+                """
+                A message explaining that the indicated number
+                of validation errors must be resolved before
+                saving the feature form.
+                """
+        )
     }
 }
 
