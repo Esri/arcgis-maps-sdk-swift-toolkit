@@ -119,7 +119,6 @@ struct CredentialInputModifier: ViewModifier {
                         .padding(.horizontal)
                 }
                 .disabled(!isContinueEnabled)
-                
             } message: {
                 Text(message)
             }
