@@ -725,6 +725,9 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "Show all";
 
+/* A label for a button to show the indicated feature on the map. */
+"Show On Map" = "Show On Map";
+
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
 

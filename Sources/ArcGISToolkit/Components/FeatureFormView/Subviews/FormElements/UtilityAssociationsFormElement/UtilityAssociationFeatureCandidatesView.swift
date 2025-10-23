@@ -94,32 +94,38 @@ extension FeatureFormView {
         var sectionForCandidates: some View {
             Section {
                 ForEach(filteredCandidates, id: \.feature.globalID) { candidate in
-                    NavigationLink(
-                        value: FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
-                            form,
-                            element,
-                            filter,
-                            candidate
+                    Button {
+                        featureFormViewModel.navigationPath.append(
+                            FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
+                                form,
+                                element,
+                                filter,
+                                candidate
+                            )
                         )
-                    ) {
+                    } label: {
                         HStack {
                             CandidateLabel(candidate: candidate)
                                 .lineLimit(4)
                                 .truncationMode(.middle)
                             Spacer()
-                            Image(systemName: "scope")
-                                .clipShape(.circle)
-                                .hoverEffect()
-                                .onTapGesture {
-                                    // onTapGesture is not optimal but is
-                                    // the only configuration found to work
-                                    // so far that avoids selecting the
-                                    // navigation link.
-                                    onFormEditingEventAction?(.showOnMapRequested(candidate.feature))
+                            Button {
+                                onFormEditingEventAction?(.showOnMapRequested(candidate.feature))
+                            } label: {
+                                Label {
+                                    Text(
+                                        "Show On Map",
+                                        bundle: .toolkitModule,
+                                        comment: "A label for a button to show the indicated feature on the map."
+                                    )
+                                } icon: {
+                                    Image(systemName: "scope")
                                 }
+                                .labelStyle(.iconOnly)
+                            }
                         }
                     }
-                    ._navigationLinkIndicatorVisibility(.hidden)
+                    .tint(.primary)
                 }
             } header: {
                 Text(

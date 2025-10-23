@@ -79,19 +79,6 @@ extension View {
     func inspectorTint<S>(_ tint: S) -> some View where S: ShapeStyle {
         self.tint(tint)
     }
-    
-    /// Configures whether navigation links show a disclosure indicator.
-    ///
-    /// - Bug: The `navigationLinkIndicatorVisibility` symbol will crash apps at launch on
-    /// iOS 18 when built with Xcode 26.0 & 26.0.1. (FB20596543) 
-    @ViewBuilder func _navigationLinkIndicatorVisibility(_ visibility: Visibility) -> some View {
-#if compiler(>=6.2.1) // (Xcode 26.1 Beta 2)
-        self
-            .navigationLinkIndicatorVisibility(visibility)
-#else
-        self
-#endif
-    }
 }
 
 extension View {
