@@ -19,6 +19,7 @@
 		88519D3F2C8A7967007D7015 /* LocationButtonExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88519D3E2C8A7967007D7015 /* LocationButtonExampleView.swift */; };
 		8A9419622E035F1D003C7D10 /* AppSecrets.swift.masque in Sources */ = {isa = PBXBuildFile; fileRef = 8A9419612E035F1D003C7D10 /* AppSecrets.swift.masque */; };
 		8AC666152DA865EE00F33C36 /* Examples+ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */; };
+		D73F3FCF2EAA8C18000E9CAC /* GeometryEditorToolbarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73F3FCE2EAA8C18000E9CAC /* GeometryEditorToolbarExampleView.swift */; };
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; };
 		E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */; };
 		E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */; };
@@ -77,6 +78,7 @@
 		88519D3E2C8A7967007D7015 /* LocationButtonExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationButtonExampleView.swift; sourceTree = "<group>"; };
 		8A9419612E035F1D003C7D10 /* AppSecrets.swift.masque */ = {isa = PBXFileReference; lastKnownFileType = text; name = AppSecrets.swift.masque; path = ../AppSecrets.swift.masque; sourceTree = "<group>"; };
 		8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Examples+ListItem.swift"; sourceTree = "<group>"; };
+		D73F3FCE2EAA8C18000E9CAC /* GeometryEditorToolbarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryEditorToolbarExampleView.swift; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
 		E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterExampleView.swift; sourceTree = "<group>"; };
 		E47ABE402652FE0900FD2FE3 /* Toolkit Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Toolkit Examples.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,6 +117,7 @@
 				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
 				E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */,
 				882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */,
+				D73F3FCE2EAA8C18000E9CAC /* GeometryEditorToolbarExampleView.swift */,
 				88519D3E2C8A7967007D7015 /* LocationButtonExampleView.swift */,
 				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
 				4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */,
@@ -315,6 +318,7 @@
 				8AC666152DA865EE00F33C36 /* Examples+ListItem.swift in Sources */,
 				75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
+				D73F3FCF2EAA8C18000E9CAC /* GeometryEditorToolbarExampleView.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
 				E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */,
 				E4AA9316276BF5ED000E6289 /* FloatingPanelExampleView.swift in Sources */,
