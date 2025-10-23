@@ -145,26 +145,75 @@ public struct FeatureFormView: View {
                         switch itemType {
                         case let .form(form):
                             EmbeddedFeatureFormView(featureForm: form)
-                        case let .utilityAssociationFilterResultView(result, embeddedFeatureFormViewModel):
-                            UtilityAssociationsFilterResultView(
+                        case let .utilityAssociationAssetTypesView(embeddedFeatureFormViewModel, element, filter, source):
+                            UtilityAssociationAssetTypesView(
+                                element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                utilityAssociationsFilterResult: result
+                                filter: filter,
+                                source: source
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(result.filter.title, subtitle: embeddedFeatureFormViewModel.title)
+                            .navigationTitle(source.name)
+                        case let .utilityAssociationCreationView(embeddedFeatureFormViewModel, candidate, element, filter):
+                            UtilityAssociationCreationView(candidate: candidate, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel, filter: filter)
+                                .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                                .navigationBarTitleDisplayMode(.inline)
+                                .navigationTitle(newAssociation)
+                        case let .utilityAssociationDetailsView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, associationResult):
+                            UtilityAssociationDetailsView(
+                                associationResult: associationResult,
+                                associationsFilterResultsModel: associationsFilterResultsModel,
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                        case let .utilityAssociationFeatureCandidatesView(embeddedFeatureFormViewModel, element, filter, source, assetType):
+                            UtilityAssociationFeatureCandidatesView(
+                                assetType: assetType,
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                filter: filter,
+                                source: source
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(assetType.name)
+                        case let .utilityAssociationFeatureSourcesView(embeddedFeatureFormViewModel, element, filter):
+                            UtilityAssociationFeatureSourcesView(
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                filter: filter
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(networkDataSource)
+                        case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filter):
+                            UtilityAssociationsFilterResultView(
+                                associationsFilterResultsModel: associationsFilterResultsModel,
+                                element: element,
+                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                                filter: filter
+                            )
+                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(filter.title, subtitle: embeddedFeatureFormViewModel.title)
                             .preference(
                                 key: PresentedFeatureFormPreferenceKey.self,
                                 value: .init(object: embeddedFeatureFormViewModel.featureForm)
                             )
-                        case let .utilityAssociationGroupResultView(result, embeddedFeatureFormViewModel):
+                        case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filter, formSource, groupResultName):
                             UtilityAssociationGroupResultView(
+                                associationsFilterResultsModel: associationsFilterResultsModel,
+                                element: element,
                                 embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                utilityAssociationGroupResult: result
+                                featureFormSource: formSource,
+                                filter: filter
                             )
                             .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(result.name, subtitle: embeddedFeatureFormViewModel.title)
+                            .navigationTitle(groupResultName, subtitle: embeddedFeatureFormViewModel.title)
                         }
                     }
             }
@@ -428,6 +477,25 @@ extension FeatureFormView {
             "Discard Edits?",
             bundle: .toolkitModule,
             comment: "A question asking if the user would like to discard their unsaved edits."
+        )
+    }
+    
+    var networkDataSource: Text {
+        .init(
+            "Network Data Source",
+            bundle: .toolkitModule,
+            comment: """
+                A navigation title for a page listing
+                data sources in a utility network.
+                """
+        )
+    }
+    
+    var newAssociation: Text {
+        .init(
+            "New Association",
+            bundle: .toolkitModule,
+            comment: "A navigation title for a view to create a new association in."
         )
     }
     

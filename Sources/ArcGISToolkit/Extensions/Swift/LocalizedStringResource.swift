@@ -60,6 +60,17 @@ extension LocalizedStringResource {
         )
     }
     
+    static var fractionAlongEdge: Self {
+        .init(
+            "Fraction Along Edge",
+            bundle: .toolkit,
+            comment: """
+                A label in reference to a fractional distance along an
+                edge style utility network element.
+                """
+        )
+    }
+    
     static var loading: Self {
         .init(
             "Loading",
@@ -90,6 +101,14 @@ extension LocalizedStringResource {
             "OK",
             bundle: .toolkit,
             comment: "A label for button to proceed with an operation."
+        )
+    }
+    
+    static var removeAssociation: Self {
+        .init(
+            "Remove Association",
+            bundle: .toolkit,
+            comment: "A label for a button to remove a utility association."
         )
     }
     
