@@ -18,6 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
+        /// A Boolean value indicating whether there are edits needing to be handled.
+        @Environment(\.hasEdits) var hasExternalEdits
         /// A Boolean which declares whether navigation to forms for features associated via utility
         /// association form elements is disabled.
         @Environment(\.navigationIsDisabled) var navigationIsDisabled
@@ -47,6 +49,11 @@ extension FeatureFormView {
         /// The set of association results within the group result.
         var associationResults: [UtilityAssociationResult] {
             utilityAssociationGroupResult?.associationResults ?? []
+        }
+        
+        /// A Boolean value indicating whether there are edits to be handled.
+        var hasEdits: Bool {
+            hasExternalEdits || embeddedFeatureFormViewModel.featureForm.hasEdits
         }
         
         /// The backing utility association group result.
@@ -146,7 +153,7 @@ extension FeatureFormView {
                         )
                     )
                 }
-                if embeddedFeatureFormViewModel.featureForm.hasEdits {
+                if hasEdits {
                     setAlertContinuation?(true) {
                         navigationAction()
                     }

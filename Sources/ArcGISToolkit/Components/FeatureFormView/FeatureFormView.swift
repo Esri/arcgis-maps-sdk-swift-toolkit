@@ -120,7 +120,7 @@ public struct FeatureFormView: View {
     
     /// A Boolean value indicating whether there are edits needing handled before saving.
     private var hasErrors: Bool {
-        presentedForm.validationErrors.isEmpty && externalValidationErrorMessage == nil
+        !presentedForm.validationErrors.isEmpty || externalValidationErrorMessage != nil
     }
     
     /// Initializes a form view.
@@ -219,7 +219,7 @@ public struct FeatureFormView: View {
             }
             // Alert for abandoning unsaved edits
             .alert(
-                hasErrors ? discardEditsQuestion : validationErrors,
+                !hasErrors ? discardEditsQuestion : validationErrors,
                 isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
                     if let (willNavigate, continuation) = alertContinuation {
@@ -236,7 +236,7 @@ public struct FeatureFormView: View {
                                 validationErrorVisibilityInternal = .visible
                             }
                         }
-                        if hasErrors {
+                        if !hasErrors {
                             Button {
                                 Task {
                                     if let beforeSaveAction {
@@ -262,10 +262,10 @@ public struct FeatureFormView: View {
                     }
                 },
                 message: {
-                    if presentedForm.validationErrors.isEmpty, let externalValidationErrorMessage {
+                    if !presentedForm.validationErrors.isEmpty, let externalValidationErrorMessage {
                         // TODO: will this break localization?
                         validationErrorsMessage + Text("\n") + externalValidationErrorMessage
-                    } else if presentedForm.validationErrors.isEmpty {
+                    } else if !presentedForm.validationErrors.isEmpty {
                         validationErrorsMessage
                     } else if let externalValidationErrorMessage {
                         externalValidationErrorMessage
