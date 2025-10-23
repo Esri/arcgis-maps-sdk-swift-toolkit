@@ -51,34 +51,50 @@ extension FeatureFormView {
         
         var body: some View {
             List {
-                Section {
-                    ForEach(groupResults, id: \.name) { groupResult in
-                        Button {
-                            featureFormViewModel.navigationPath.append(
-                                FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
-                                    form,
-                                    element,
-                                    filter,
-                                    groupResult.featureFormSource
-                                )
+                if groupResults.isEmpty {
+                    ContentUnavailableView(
+                        String(
+                            localized: LocalizedStringResource(
+                                "No Filter Results Found",
+                                bundle: .toolkit,
+                                comment: """
+                                A label indicating no utility association 
+                                filter results were found.
+                                """
                             )
-                        } label: {
-                            HStack {
-                                Text(groupResult.name)
-                                Spacer()
-                                Group {
-                                    Text(groupResult.associationResults.count, format: .number)
-                                    Image(systemName: "chevron.right")
+                        ),
+                        systemImage: "exclamationmark.magnifyingglass"
+                    )
+                } else {
+                    Section {
+                        ForEach(groupResults, id: \.name) { groupResult in
+                            Button {
+                                featureFormViewModel.navigationPath.append(
+                                    FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
+                                        form,
+                                        element,
+                                        filter,
+                                        groupResult.featureFormSource
+                                    )
+                                )
+                            } label: {
+                                HStack {
+                                    Text(groupResult.name)
+                                    Spacer()
+                                    Group {
+                                        Text(groupResult.associationResults.count, format: .number)
+                                        Image(systemName: "chevron.right")
+                                    }
+                                    .foregroundColor(.secondary)
                                 }
-                                .foregroundColor(.secondary)
                             }
+                            .tint(.primary)
                         }
-                        .tint(.primary)
                     }
                 }
-                .onChange(of: embeddedFeatureFormViewModel?.hasEdits) {
-                    associationsFilterResultsModel?.fetchResults()
-                }
+            }
+            .onChange(of: embeddedFeatureFormViewModel?.hasEdits) {
+                associationsFilterResultsModel?.fetchResults()
             }
             .overlay(alignment: .bottomLeading) {
                 addAssociationMenu

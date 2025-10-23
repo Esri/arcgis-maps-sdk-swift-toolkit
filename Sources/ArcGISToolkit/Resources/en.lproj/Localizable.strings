@@ -544,6 +544,14 @@ found. */
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "No configurations available.";
 
+/* A label indicating no utility association 
+feature sources were found. */
+"No Feature Sources Found" = "No Feature Sources Found";
+
+/* A label indicating no utility association 
+filter results were found. */
+"No Filter Results Found" = "No Filter Results Found";
+
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "No Internet Connection";
 

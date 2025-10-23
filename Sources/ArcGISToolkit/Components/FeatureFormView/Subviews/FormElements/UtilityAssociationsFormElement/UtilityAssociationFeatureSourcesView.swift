@@ -57,20 +57,36 @@ extension FeatureFormView {
                         prompt: nil
                     )
                 }
-                Section {
-                    ForEach(filteredSources, id: \.name) { source in
-                        NavigationLink(
-                            source.name,
-                            value: FeatureFormView.NavigationPathItem.utilityAssociationAssetTypesView(
-                                form, element, filter, source
+                if filteredSources.isEmpty {
+                    ContentUnavailableView(
+                        String(
+                            localized: LocalizedStringResource(
+                                "No Feature Sources Found",
+                                bundle: .toolkit,
+                                comment: """
+                                A label indicating no utility association 
+                                feature sources were found.
+                                """
                             )
-                        )
+                        ),
+                        systemImage: "exclamationmark.magnifyingglass"
+                    )
+                } else {
+                    Section {
+                        ForEach(filteredSources, id: \.name) { source in
+                            NavigationLink(
+                                source.name,
+                                value: FeatureFormView.NavigationPathItem.utilityAssociationAssetTypesView(
+                                    form, element, filter, source
+                                )
+                            )
+                        }
+                    } header: {
+                        Text.count(filteredSources.count)
+                            .font(.caption)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .textCase(nil)
                     }
-                } header: {
-                    Text.count(filteredSources.count)
-                        .font(.caption)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .textCase(nil)
                 }
             }
             .task {
