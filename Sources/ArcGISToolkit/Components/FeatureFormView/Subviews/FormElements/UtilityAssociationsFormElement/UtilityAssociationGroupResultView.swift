@@ -167,6 +167,9 @@ extension FeatureFormView {
             } label: {
                 HStack {
                     UtilityAssociationResultLabel(result: result)
+                    ShowOnMapButton(feature: result.associatedFeature)
+                        .labelStyle(.iconOnly)
+                        .tint(.blue)
                     detailsButton(for: result)
                         .buttonStyle(.plain)
                         .hoverEffect()
