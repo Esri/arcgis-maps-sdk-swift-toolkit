@@ -41,9 +41,6 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "All the trace inputs and results will be lost.";
 
-/* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "Allow";
-
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "An error occurred while fetching map areas.";
 
@@ -116,11 +113,11 @@ for the AR experience. */
 /* The status text when a map area download is cancelled. */
 "Cancelled" = "Cancelled";
 
+/* A label indicating that the remote host's certificate is not trusted. */
+"Cannot Verify Server Identity" = "Cannot Verify Server Identity";
+
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificate Required";
-
-/* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "Certificate Trust Warning";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
 "Change auto-pan mode to compass" = "Change auto-pan mode to compass";
@@ -181,7 +178,8 @@ association is visible or not. */
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
 
-/* A label for a button used to continue the authentication operation. */
+/* A button indicating the user accepts a potentially dangerous action.
+A label for a button used to continue the authentication operation. */
 "Continue" = "Continue";
 
 /* A label for a button to continue editing the feature form. */
@@ -207,9 +205,6 @@ association is visible or not. */
 
 /* The status text for an opened map area. */
 "Currently open" = "Currently open";
-
-/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Dangerous: The certificate provided by '%@' is not signed by a trusted authority.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
 "Date exceeds maximum" = "Date exceeds maximum";
@@ -427,6 +422,9 @@ variable is a cardinal or intercardinal direction. */
 
 /* Houses (Level of Detail) */
 "Houses" = "Houses";
+
+/* A label indicating that a challenge should be ignored. */
+"Ignore" = "Ignore";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Junction Edge Object Connectivity From Side";
@@ -803,6 +801,9 @@ match the spatial reference of the map. */
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "The form wasn't submitted";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "The identity of \"%@\" cannot be verified. Would you like to connect anyway?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "The map does not have a spatial reference.";
