@@ -15,8 +15,13 @@
 import ArcGIS
 import Observation
 
+private import os
+
 @MainActor @Observable
 class EmbeddedFeatureFormViewModel {
+    /// The models for fetching association filter results for each utility associations form element in the form.
+    var associationsFilterResultsModels: [UtilityAssociationsFormElement: AssociationsFilterResultsModel] = [:]
+    
     /// The current focused element, if one exists.
     var focusedElement: FormElement? {
         didSet {
@@ -81,6 +86,7 @@ class EmbeddedFeatureFormViewModel {
     
     deinit {
         evaluateTask?.cancel()
+        monitorEditsTask?.cancel()
         visibilityTask?.cancel()
     }
     
@@ -88,7 +94,13 @@ class EmbeddedFeatureFormViewModel {
     func evaluateExpressions() {
         evaluateTask?.cancel()
         evaluateTask = Task {
-            _ = try? await featureForm.evaluateExpressions()
+            if let errors = try? await featureForm.evaluateExpressions(), !errors.isEmpty {
+                for evaluationError in errors {
+                    Logger.featureFormView.error(
+                        "Error evaluating expression: \(evaluationError.error.localizedDescription)"
+                    )
+                }
+            }
         }
     }
     
@@ -96,9 +108,9 @@ class EmbeddedFeatureFormViewModel {
     private func monitorEdits() {
         monitorEditsTask?.cancel()
         monitorEditsTask = Task { [weak self] in
-            guard !Task.isCancelled, let self else { return }
+            guard !Task.isCancelled, let featureForm = self?.featureForm else { return }
             for await hasEdits in featureForm.$hasEdits.dropFirst() {
-                self.hasEdits = hasEdits
+                self?.hasEdits = hasEdits
             }
         }
     }

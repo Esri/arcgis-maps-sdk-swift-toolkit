@@ -19,8 +19,8 @@ import SwiftUI
 struct FeatureFormTestView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
-    /// A message describing an error during test view setup.
-    @State private var alertError: String?
+    /// An error that occurred during testing.
+    @State private var error: TestingError?
     
     /// The form being edited in the form view.
     @State private var featureForm: FeatureForm?
@@ -44,19 +44,102 @@ struct FeatureFormTestView: View {
     @State private var testSetupTask: Task<Void, Never>?
     
     var body: some View {
-        Group {
+        MapViewReader { mapView in
             if let map, let testCase {
-                makeMapView(map, testCase)
-                    .task {
-                        if let credentialInfo = testCase.credentialInfo {
-                            await addCredential(credentialInfo)
+                MapView(map: map)
+                    .onDrawStatusChanged { drawStatus in
+                        if !initialDrawCompleted, drawStatus == .completed {
+                            initialDrawCompleted = true
+                            testSetupTask = Task {
+                                await selectObjectID(testCase.objectID, on: map, for: testCase.layerName)
+                            }
                         }
                     }
-            } else {
-                testCaseList
             }
         }
+        .alert(
+            error?.kind ?? "Error",
+            isPresented: Binding {
+                error != nil
+            } set: { _ in },
+            actions: {},
+            message: {
+                if let error {
+                    Text("""
+                    \(error.note)
+                    \(error.description ?? "")
+                    """)
+                }
+            }
+        )
+        .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(featureForm != nil)
+        .sheet(isPresented: Binding(get: { featureForm != nil }, set: { _ in })) {
+            FeatureFormView(root: featureForm!)
+        }
+        .task {
+            await setup()
+        }
+    }
+    
+    /// Sets up the view for the desired test case.
+    func setup() async {
+        guard let testCaseArg = UserDefaults.standard.testCase else {
+            error = .general(note: "A test case argument (\"-testCase\") was not provided.")
+            return
+        }
+        guard let testCase = cases.first(where: { $0.id == testCaseArg }) else {
+            error = .general(note: "A test case matching \(testCaseArg) not found.")
+            return
+        }
+        
+        if let credentialInfo = testCase.credentialInfo {
+            await addCredential(credentialInfo)
+        }
+        
+        self.testCase = testCase
+        let map = Map(url: testCase.url)
+        
+        do {
+            try await map?.load()
+            self.map = map
+        } catch {
+            self.error = .arcGIS(note: "The map failed to load.", error: error)
+        }
+    }
+}
+
+private enum TestingError: Error {
+    case arcGIS(note: String, error: any Error)
+    case general(note: String)
+    
+    var description: String? {
+        switch self {
+        case let .arcGIS(_, error as ArcGIS.InvalidCallError):
+            return error.details
+        case let .arcGIS(_, error):
+            return error.localizedDescription
+        default:
+            return nil
+        }
+    }
+    
+    var kind: String {
+        switch self {
+        case let .arcGIS(_, error):
+            return String(describing: type(of: error))
+        case .general:
+            return "General Error"
+        }
+    }
+    
+    var note: String {
+        switch self {
+        case let .arcGIS(note, _):
+            return note
+        case let .general(note):
+            return note
+        }
     }
 }
 
@@ -71,44 +154,7 @@ private extension FeatureFormTestView {
             )
             ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
         } catch {
-            alertError = error.localizedDescription
-        }
-    }
-    
-    /// Make the main test UI.
-    /// - Parameters:
-    ///   - map: The map under test.
-    ///   - testCase: The test definition.
-    func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
-        MapViewReader { mapView in
-            MapView(map: map)
-                .onDrawStatusChanged { drawStatus in
-                    if !initialDrawCompleted, drawStatus == .completed {
-                        initialDrawCompleted = true
-                        testSetupTask = Task {
-                            await selectObjectID(testCase.objectID, on: map, for: testCase.layerName)
-                        }
-                    }
-                }
-                .alert(
-                    "Error",
-                    isPresented: Binding {
-                        alertError != nil
-                    } set: { _ in },
-                    actions: { },
-                    message: { Text(alertError ?? "Unknown error") }
-                )
-                .ignoresSafeArea(.keyboard)
-                .task {
-                    do {
-                        try await map.load()
-                    } catch {
-                        alertError = error.localizedDescription
-                    }
-                }
-                .sheet(isPresented: Binding(get: { featureForm != nil }, set: { _ in })) {
-                    FeatureFormView(root: featureForm!)
-                }
+            self.error = .arcGIS(note: "Credentials for the test case couldn't be created.", error: error)
         }
     }
     
@@ -125,40 +171,42 @@ private extension FeatureFormTestView {
             featureLayer = map.operationalLayers.first as? FeatureLayer
         }
         guard let featureLayer else {
-            alertError = "Can't resolve layer"
+            error = .general(note: "The feature layer couldn't be resolved.")
             return
         }
+        
         let parameters = QueryParameters()
         parameters.addObjectID(objectID)
+        
         do {
-            let result = try await featureLayer.featureTable?.queryFeatures(using: parameters)
-            guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else {
-                alertError = "No match for feature \(objectID.formatted()) found."
-                return
-            }
-            try await feature.load()
-            featureLayer.selectFeature(feature)
-            featureForm = FeatureForm(feature: feature)
+            try await featureLayer.featureTable?.load()
         } catch {
-            alertError = error.localizedDescription
+            self.error = .arcGIS(note: "The feature table failed to load.", error: error)
+            return
         }
-    }
-    
-    /// The list of test cases.
-    var testCaseList: some View {
-        List {
-            Section {
-                TextField("Search", text: $searchTerm, prompt: Text("Search"))
-            }
-            let cases = searchTerm.isEmpty ? cases : cases.filter { $0.id.localizedStandardContains(searchTerm) }
-            ForEach(cases) { testCase in
-                Button(testCase.id) {
-                    self.testCase = testCase
-                    map = Map(url: testCase.url)
-                }
-                .buttonStyle(.plain)
-            }
+        
+        let result: FeatureQueryResult?
+        do {
+            result = try await featureLayer.featureTable?.queryFeatures(using: parameters)
+        } catch {
+            self.error = .arcGIS(note: "The feature table query failed.", error: error)
+            return
         }
+        
+        guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else {
+            error = .general(note: "No match for feature \(objectID.formatted()) was found.")
+            return
+        }
+        
+        do {
+            try await feature.load()
+        } catch {
+            self.error = .arcGIS(note: "The feature failed to load.", error: error)
+            return
+        }
+        
+        featureLayer.selectFeature(feature)
+        featureForm = FeatureForm(feature: feature)
     }
     
     /// Test conditions for a Form View.
@@ -244,6 +292,9 @@ private extension FeatureFormTestView {
         .init("testCase_12_4", objectID: 2584, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_12_5", objectID: 3321, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_12_6", objectID: 3321, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_13_1", objectID: 3321, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_13_2", objectID: 5050, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_13_3", objectID: 311, layerName: "Electric Distribution Junction", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
     ]}
 }
 
@@ -295,5 +346,12 @@ private extension FeatureFormTestView.TestCase.CredentialInfo {
 private extension URL {
     static var sampleServer7Portal: Self {
         .init(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!
+    }
+}
+
+private extension UserDefaults {
+    /// The value of the `-testCase` launch argument.
+    var testCase: String? {
+        string(forKey: "testCase")
     }
 }

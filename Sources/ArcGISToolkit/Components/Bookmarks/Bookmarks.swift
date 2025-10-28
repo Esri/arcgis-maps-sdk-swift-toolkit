@@ -56,9 +56,6 @@ public struct Bookmarks: View {
     /// The selected bookmark.
     private var selection: Binding<Bookmark?>
     
-    /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
-    private var viewpoint: Binding<Viewpoint?>?
-    
     public var body: some View {
         VStack {
             BookmarksHeader(isPresented: $isPresented)
@@ -142,8 +139,6 @@ extension Bookmarks {
             Task {
                 await geoViewProxy.setViewpoint(viewpoint, duration: nil)
             }
-        } else if let viewpoint {
-            viewpoint.wrappedValue = bookmark.viewpoint
         }
     }
     

@@ -16,42 +16,49 @@ import ArcGIS
 import SwiftUI
 
 struct EmbeddedFeatureFormView: View {
-    /// The view model for the form.
-    @State private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
+    /// The model for the FeatureFormView containing the view.
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel: FeatureFormViewModel
     
-    /// Initializes a form view.
-    /// - Parameter featureForm: The feature form defining the editing experience.
-    init(featureForm: FeatureForm) {
-        self.embeddedFeatureFormViewModel = EmbeddedFeatureFormViewModel(featureForm: featureForm)
-    }
+    /// The feature form defining the editing experience.
+    let form: FeatureForm
     
     var body: some View {
-        ScrollViewReader { scrollView in
-            List(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
-                makeElement(element)
-            }
-            .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
-                if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
-                    // Navigation bars will unfortunately cover or obscure
-                    // section headers. See FB19740517.
-                    withAnimation { scrollView.scrollTo(focusedElement, anchor: .top) }
+        if let embeddedFeatureFormViewModel {
+            ScrollViewReader { scrollView in
+                List(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
+                    makeElement(element)
+                }
+                .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
+                    if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
+                        // Navigation bars will unfortunately cover or obscure
+                        // section headers. See FB19740517.
+                        withAnimation { scrollView.scrollTo(focusedElement, anchor: .top) }
+                    }
                 }
             }
-            .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
-                embeddedFeatureFormViewModel.title = newTitle
+            .environment(embeddedFeatureFormViewModel)
+            .featureFormToolbar(form, isAForm: true) {
+                featureFormViewModel.removeModel(form)
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(embeddedFeatureFormViewModel.title)
-        }
+            .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
+                embeddedFeatureFormViewModel.title = newTitle
+            }
+            .padding(.horizontal)
+            .preference(
+                key: PresentedFeatureFormPreferenceKey.self,
+                value: .init(object: embeddedFeatureFormViewModel)
+            )
 #if os(iOS)
-        .scrollDismissesKeyboard(.immediately)
+            .scrollDismissesKeyboard(.immediately)
 #endif
-        .environment(embeddedFeatureFormViewModel)
-        .preference(
-            key: PresentedFeatureFormPreferenceKey.self,
-            value: .init(object: embeddedFeatureFormViewModel.featureForm)
-        )
-        .featureFormToolbar(embeddedFeatureFormViewModel.featureForm, isAForm: true)
+        }
+    }
+    
+    /// The view model for the form.
+    var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+        featureFormViewModel.getModel(form)
     }
 }
 
@@ -78,20 +85,22 @@ extension EmbeddedFeatureFormView {
     /// Makes UI for a field form element or a text form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
-        switch element {
-        case let element as AttachmentsFormElement:
-            AttachmentsFeatureElementView(
-                formElement: element,
-                formViewModel: embeddedFeatureFormViewModel
-            )
-        case let element as FieldFormElement:
-            makeFieldElement(element)
-        case let element as TextFormElement:
-            makeTextElement(element)
-        case let element as UtilityAssociationsFormElement:
-            makeUtilityAssociationsFormElement(element)
-        default:
-            EmptyView()
+        if let embeddedFeatureFormViewModel {
+            switch element {
+            case let element as AttachmentsFormElement:
+                AttachmentsFeatureElementView(
+                    formElement: element,
+                    formViewModel: embeddedFeatureFormViewModel
+                )
+            case let element as FieldFormElement:
+                makeFieldElement(element)
+            case let element as TextFormElement:
+                makeTextElement(element)
+            case let element as UtilityAssociationsFormElement:
+                makeUtilityAssociationsFormElement(element)
+            default:
+                EmptyView()
+            }
         }
     }
     

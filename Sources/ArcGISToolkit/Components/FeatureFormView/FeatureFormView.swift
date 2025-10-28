@@ -75,42 +75,25 @@ internal import os
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
+    /// The model for the feature form view.
+    @State private var featureFormViewModel = FeatureFormViewModel()
+    
     /// A binding to a Boolean value that determines whether the view is presented.
     private let isPresented: Binding<Bool>?
-    
     /// The root feature form.
     private let rootFeatureForm: FeatureForm?
     
     /// The visibility of the "save" and "discard" buttons.
     var editingButtonsVisibility: Visibility = .automatic
-    
+    /// A Boolean which declares whether navigation to forms for features associated via utility association
+    /// form elements is disabled.
+    var navigationIsDisabled = false
     /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
     var onFeatureFormChanged: ((FeatureForm) -> Void)?
-    
-    /// A Boolean which declares whether navigation to forms for features associated via utility association form
-    /// elements is disabled.
-    var navigationIsDisabled = false
-    
-    /// The closure to perform when a ``EditingEvent`` occurs.
+    /// The user-provided closure to perform when a ``EditingEvent`` occurs.
     var onFormEditingEventAction: ((EditingEvent) -> Void)?
-    
     /// The developer configurable validation error visibility.
     var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
-    
-    /// Continuation information for the alert.
-    @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
-    
-    /// An error thrown from finish editing.
-    @State private var finishEditingError: (any Error)?
-    
-    /// The navigation path used by the navigation stack in the root feature form view.
-    @State private var navigationPath = NavigationPath()
-    
-    /// The feature form currently visible in the navigation stack.
-    @State private var presentedForm: FeatureForm
-    
-    /// The internally managed validation error visibility.
-    @State private var validationErrorVisibilityInternal = ValidationErrorVisibility.automatic
     
     /// Initializes a form view.
     /// - Parameters:
@@ -119,86 +102,117 @@ public struct FeatureFormView: View {
     /// - Since: 200.8
     public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
         self.isPresented = isPresented
-        self.presentedForm = root
         self.rootFeatureForm = root
     }
     
     public var body: some View {
         if let rootFeatureForm {
-            NavigationStack(path: $navigationPath) {
-                EmbeddedFeatureFormView(featureForm: rootFeatureForm)
+            NavigationStack(path: $featureFormViewModel.navigationPath) {
+                EmbeddedFeatureFormView(form: rootFeatureForm)
                     // Refresh the navigation stack's root view when the root
                     // feature form changes.
                     .id(ObjectIdentifier(rootFeatureForm))
                     .navigationDestination(for: NavigationPathItem.self) { itemType in
                         switch itemType {
                         case let .form(form):
-                            EmbeddedFeatureFormView(featureForm: form)
-                        case let .utilityAssociationDetailsView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, associationResult):
+                            EmbeddedFeatureFormView(form: form)
+                        case let .utilityAssociationAssetTypesView(form, element, filter, source):
+                            UtilityAssociationAssetTypesView(
+                                element: element,
+                                filter: filter,
+                                form: form,
+                                source: source
+                            )
+                            .featureFormToolbar(form)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(source.name)
+                        case let .utilityAssociationCreationView(form, element, filter, candidate):
+                            UtilityAssociationCreationView(
+                                candidate: candidate,
+                                element: element,
+                                filter: filter,
+                                form: form
+                            )
+                            .featureFormToolbar(form)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(newAssociation)
+                        case let .utilityAssociationDetailsView(form, element, associationResult):
                             UtilityAssociationDetailsView(
                                 associationResult: associationResult,
-                                associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+                                form: form
                             )
-                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)
-                        case let .utilityAssociationFilterResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, resultTitle):
+                        case let .utilityAssociationFeatureCandidatesView(form, element, filter, source, assetType):
+                            UtilityAssociationFeatureCandidatesView(
+                                assetType: assetType,
+                                element: element,
+                                filter: filter,
+                                form: form,
+                                source: source
+                            )
+                            .featureFormToolbar(form)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(assetType.name)
+                        case let .utilityAssociationFeatureSourcesView(form, element, filter):
+                            UtilityAssociationFeatureSourcesView(
+                                element: element,
+                                filter: filter,
+                                form: form
+                            )
+                            .featureFormToolbar(form)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(networkDataSource)
+                        case let .utilityAssociationFilterResultView(form, element, filter):
                             UtilityAssociationsFilterResultView(
-                                associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                filterTitle: resultTitle
+                                filter: filter,
+                                form: form
                             )
-                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(resultTitle, subtitle: embeddedFeatureFormViewModel.title)
-                            .preference(
-                                key: PresentedFeatureFormPreferenceKey.self,
-                                value: .init(object: embeddedFeatureFormViewModel.featureForm)
-                            )
-                        case let .utilityAssociationGroupResultView(embeddedFeatureFormViewModel, associationsFilterResultsModel, element, filterTitle, groupTitle):
+                            .navigationTitle(filter.title, subtitle: featureFormViewModel.getModel(form)?.title ?? "")
+                        case let .utilityAssociationGroupResultView(form, element, filter, formSource):
                             UtilityAssociationGroupResultView(
-                                associationsFilterResultsModel: associationsFilterResultsModel,
                                 element: element,
-                                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
-                                filterTitle: filterTitle,
-                                groupTitle: groupTitle
+                                featureFormSource: formSource,
+                                filter: filter,
+                                form: form
                             )
-                            .featureFormToolbar(embeddedFeatureFormViewModel.featureForm)
+                            .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(groupTitle, subtitle: embeddedFeatureFormViewModel.title)
                         }
                     }
             }
             // Alert for abandoning unsaved edits
             .alert(
-                presentedForm.validationErrors.isEmpty ? discardEditsQuestion : validationErrors,
+                !featureFormViewModel.presentedFormHasValidationErrors ? discardEditsQuestion : validationErrors,
                 isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
-                    if let (willNavigate, continuation) = alertContinuation {
+                    if let (willNavigate, continuation) = featureFormViewModel.navigationAlertInfo {
                         Button(role: .destructive) {
-                            presentedForm.discardEdits()
+                            featureFormViewModel.presentedForm?.discardEdits()
                             onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
-                            validationErrorVisibilityInternal = .automatic
+                            featureFormViewModel.validationErrorVisibilityInternal = .automatic
                             continuation()
                         } label: {
                             discardEdits
                         }
                         .onAppear {
-                            if !presentedForm.validationErrors.isEmpty {
-                                validationErrorVisibilityInternal = .visible
+                            if featureFormViewModel.presentedFormHasValidationErrors {
+                                featureFormViewModel.validationErrorVisibilityInternal = .visible
                             }
                         }
-                        if (presentedForm.validationErrors.isEmpty) {
+                        if !featureFormViewModel.presentedFormHasValidationErrors {
                             Button {
                                 Task {
                                     do {
-                                        try await presentedForm.finishEditing()
+                                        try await featureFormViewModel.presentedForm?.finishEditing()
                                         onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                         continuation()
                                     } catch {
-                                        finishEditingError = error
+                                        featureFormViewModel.finishEditingError = error
                                     }
                                 }
                             } label: {
@@ -213,9 +227,9 @@ public struct FeatureFormView: View {
                     }
                 },
                 message: {
-                    if !presentedForm.validationErrors.isEmpty {
+                    if featureFormViewModel.presentedFormHasValidationErrors {
                         Text(
-                            "You have ^[\(presentedForm.validationErrors.count) error](inflect: true) that must be fixed before saving.",
+                            "You have ^[\(featureFormViewModel.presentedForm?.validationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
                             bundle: .toolkitModule,
                             comment:
                                 """
@@ -246,13 +260,13 @@ public struct FeatureFormView: View {
                     comment: "The title shown when the feature form failed to save."
                 ),
                 isPresented: alertForFinishEditingErrorsIsPresented,
-                actions: { },
+                actions: {},
                 message: {
-                    if let finishEditingError {
+                    if let error = featureFormViewModel.finishEditingError {
                         Text(
                             """
                             Finish editing failed.
-                            \(String(describing: finishEditingError))
+                            \(String(describing: error))
                             """,
                             bundle: .toolkitModule,
                             comment:
@@ -271,21 +285,23 @@ public struct FeatureFormView: View {
                 }
             )
             .animation(.default, value: ObjectIdentifier(rootFeatureForm))
+            .environment(featureFormViewModel)
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
-            .environment(\.finishEditingError, $finishEditingError)
             .environment(\.isPresented, isPresented)
             .environment(\.navigationIsDisabled, navigationIsDisabled)
-            .environment(\.navigationPath, $navigationPath)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
-            .environment(\.setAlertContinuation, setAlertContinuation)
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
-            .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
-            .onChange(of: ObjectIdentifier(rootFeatureForm)) {
-                presentedForm = rootFeatureForm
+            .onChange(of: featureFormViewModel.navigationPath) {
+                if let presentedItem = featureFormViewModel.navigationPath.last {
+                    onFormEditingEventAction?(.navigationChanged(presentedItem))
+                }
             }
-            .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) { wrappedFeatureForm in
-                guard let wrappedFeatureForm else { return }
-                formChangedAction(wrappedFeatureForm.object)
+            .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
+                featureFormViewModel.setRootForm(rootFeatureForm)
+            }
+            .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
+                guard let embeddedFeatureFormViewModel = $0?.object else { return }
+                formChangedAction(embeddedFeatureFormViewModel.featureForm)
             }
         }
     }
@@ -299,9 +315,13 @@ public extension FeatureFormView {
         /// Indicates that the user has discarded their edits.
         /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after discarding.
         case discardedEdits(willNavigate: Bool)
+        /// The view presented in the view changed.
+        case navigationChanged(NavigationPathItem)
         /// Indicates that the user has saved their edits.
         /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after saving.
         case savedEdits(willNavigate: Bool)
+        /// Indicates that the user has tapped on an option to visualize a feature on the map.
+        case showOnMapRequested(ArcGISFeature)
     }
     
     /// Sets the visibility of the save and discard buttons on the form.
@@ -350,10 +370,10 @@ extension FeatureFormView {
     /// A Boolean value indicating whether the finish editing error alert is presented.
     var alertForFinishEditingErrorsIsPresented: Binding<Bool> {
         Binding {
-            finishEditingError != nil
+            featureFormViewModel.finishEditingError != nil
         } set: { newIsPresented in
             if !newIsPresented {
-                finishEditingError = nil
+                featureFormViewModel.finishEditingError = nil
             }
         }
     }
@@ -361,10 +381,10 @@ extension FeatureFormView {
     /// A Boolean value indicating whether the unsaved edits alert is presented.
     var alertForUnsavedEditsIsPresented: Binding<Bool> {
         Binding {
-            alertContinuation != nil
+            featureFormViewModel.navigationAlertInfo != nil
         } set: { newIsPresented in
             if !newIsPresented {
-                alertContinuation = nil
+                featureFormViewModel.navigationAlertInfo = nil
             }
         }
     }
@@ -379,19 +399,10 @@ extension FeatureFormView {
     /// the same ``FeatureForm`` make sure not to over-emit form handling events.
     var formChangedAction: (FeatureForm) -> Void {
         { featureForm in
-            if featureForm.feature.globalID != presentedForm.feature.globalID {
-                featureForm.feature.refresh()
-                presentedForm = featureForm
-                validationErrorVisibilityInternal = .automatic
+            if featureForm.feature.globalID != featureFormViewModel.presentedForm?.feature.globalID {
+                featureFormViewModel.setPresentedForm(featureForm)
                 onFeatureFormChanged?(featureForm)
             }
-        }
-    }
-    
-    /// A closure used to set the alert continuation.
-    var setAlertContinuation: (Bool, @escaping () -> Void) -> Void {
-        { willNavigate, continuation in
-            alertContinuation = (willNavigate: willNavigate, action: continuation)
         }
     }
     
@@ -418,6 +429,25 @@ extension FeatureFormView {
             "Discard Edits?",
             bundle: .toolkitModule,
             comment: "A question asking if the user would like to discard their unsaved edits."
+        )
+    }
+    
+    var networkDataSource: Text {
+        .init(
+            "Network Data Source",
+            bundle: .toolkitModule,
+            comment: """
+                A navigation title for a page listing
+                data sources in a utility network.
+                """
+        )
+    }
+    
+    var newAssociation: Text {
+        .init(
+            "New Association",
+            bundle: .toolkitModule,
+            comment: "A navigation title for a view to create a new association in."
         )
     }
     

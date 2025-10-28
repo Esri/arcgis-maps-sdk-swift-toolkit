@@ -15,6 +15,24 @@
 import SwiftUI
 
 extension Text {
+    /// Localized text to display the number of items in a collection.
+    static func count(_ count: Int) -> Self {
+        .init(
+            "Count \(count)",
+            bundle: .toolkitModule,
+            comment: "Localized text to display the number of items in a collection."
+        )
+    }
+    
+    /// Localized text for the phrase "Association Type".
+    static var associationType: Self {
+        .init(
+            "Association Type",
+            bundle: .toolkitModule,
+            comment: "A label in reference to a utility association type."
+        )
+    }
+    
     /// Localized text for the word "Cancel".
     static var cancel: Self {
         .init(LocalizedStringResource.cancel)
@@ -35,6 +53,15 @@ extension Text {
             "Field",
             bundle: .toolkitModule,
             comment: "A field in a dataset."
+        )
+    }
+    
+    /// Localized text for the phrase "From Element".
+    static var fromElement: Self {
+        .init(
+            "From Element",
+            bundle: .toolkitModule,
+            comment: #"A label for the element on the "from" side of a utility association."#
         )
     }
     
@@ -62,6 +89,24 @@ extension Text {
             "Required",
             bundle: .toolkitModule,
             comment: "A label indicating a field is required"
+        )
+    }
+    
+    /// Localized text for the word "Terminal".
+    static var terminal: Self {
+        .init(
+            "Terminal",
+            bundle: .toolkitModule,
+            comment: "A label in reference to a utility terminal."
+        )
+    }
+    
+    /// Localized text for the phrase "To Element".
+    static var toElement: Self {
+        .init(
+            "To Element",
+            bundle: .toolkitModule,
+            comment: #"A label for the element on the "to" side of a utility association."#
         )
     }
     

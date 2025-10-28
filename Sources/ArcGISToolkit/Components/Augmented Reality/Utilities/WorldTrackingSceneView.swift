@@ -141,6 +141,7 @@ struct WorldTrackingSceneView: View {
                         }
                     }
                     .allowsHitTesting(false)
+                    .ignoresSafeArea()
             }
         }
         .observingInterfaceOrientation($interfaceOrientation)

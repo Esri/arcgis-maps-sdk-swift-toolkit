@@ -12,18 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-import SwiftUI
-
-/// A preference key that specifies the feature form currently presented in the `FeatureFormView` navigation stack.
-struct PresentedFeatureFormPreferenceKey: PreferenceKey {
-    static let defaultValue: EquatableObject<EmbeddedFeatureFormViewModel>? = nil
-    
-    static func reduce(
-        value: inout EquatableObject<EmbeddedFeatureFormViewModel>?,
-        nextValue: () -> EquatableObject<EmbeddedFeatureFormViewModel>?
-    ) {
-        guard let nextValue = nextValue() else { return }
-        value = nextValue
+extension Dictionary where Key == String {
+    /// Performs a case-insensitive key lookup on the dictionary.
+    /// - Parameter lookupKey: The key to lookup.
+    /// - Returns: The value for the key, if found.
+    func valueIgnoringCase(for lookupKey: String) -> Value? {
+        first { $0.key.caseInsensitiveCompare(lookupKey) == .orderedSame }?.value
     }
 }

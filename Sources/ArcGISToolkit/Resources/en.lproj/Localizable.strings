@@ -20,7 +20,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "A map area cannot be downloaded at this time.";
 
-/* A label for an option to add a new utility association. */
+/* A label for a button to add a new utility association. */
+"Add" = "Add";
+
+/* A label for a button to add a new utility network association. */
 "Add Association" = "Add Association";
 
 /* A label for a button to add a map area. */
@@ -37,9 +40,6 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "All the trace inputs and results will be lost.";
-
-/* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "Allow";
 
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "An error occurred while fetching map areas.";
@@ -73,6 +73,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Authentication Required";
+
+/* A section header label in reference to the asset
+types available to use when querying for utility
+association feature candidates. */
+"Available Asset Types" = "Available Asset Types";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Back";
@@ -108,11 +113,11 @@ for the AR experience. */
 /* The status text when a map area download is cancelled. */
 "Cancelled" = "Cancelled";
 
+/* A label indicating that the remote host's certificate is not trusted. */
+"Cannot Verify Server Identity" = "Cannot Verify Server Identity";
+
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificate Required";
-
-/* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "Certificate Trust Warning";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
 "Change auto-pan mode to compass" = "Change auto-pan mode to compass";
@@ -134,6 +139,10 @@ for the AR experience. */
 
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Choose From Library";
+
+/* Instructional text for the user to choose a feature
+candidate to add as a utility association. */
+"Choose to add" = "Choose to add";
 
 /* Cities (Level of Detail) */
 "Cities" = "Cities";
@@ -162,10 +171,15 @@ for the AR experience. */
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Containment";
 
+/* A label indicating whether content in the new
+association is visible or not. */
+"Content Visible" = "Content Visible";
+
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
 
-/* A label for a button used to continue the authentication operation. */
+/* A button indicating the user accepts a potentially dangerous action.
+A label for a button used to continue the authentication operation. */
 "Continue" = "Continue";
 
 /* A label for a button to continue editing the feature form. */
@@ -173,6 +187,9 @@ for the AR experience. */
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Could not retrieve map areas for this map.";
+
+/* Localized text to display the number of items in a collection. */
+"Count %lld" = "Count %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Counties";
@@ -188,9 +205,6 @@ for the AR experience. */
 
 /* The status text for an opened map area. */
 "Currently open" = "Currently open";
-
-/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Dangerous: The certificate provided by '%@' is not signed by a trusted authority.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
 "Date exceeds maximum" = "Date exceeds maximum";
@@ -343,9 +357,21 @@ trace operation. */
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "Filter";
 
+/* A label for a search field to filter utility 
+asset types by name. */
+"Filter asset types by name" = "Filter asset types by name";
+
+/* A label for a search field to filter utility 
+association candidate features by name. */
+"Filter candidates by name" = "Filter candidates by name";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "Filter facilities";
+
+/* A label for a search field to filter utility 
+association feature sources by name. */
+"Filter feature sources by name" = "Filter feature sources by name";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -361,11 +387,16 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "Finish editing failed.\n%@";
 
-/* A label in reference to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an
+edge style utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
 
 /* A label for the element on the "from" side of a utility association. */
 "From Element" = "From Element";
+
+/* A label for a button to choose a feature for a new
+utility association from a network data source. */
+"From Network Data Source" = "From Network Data Source";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -391,6 +422,9 @@ variable is a cardinal or intercardinal direction. */
 
 /* Houses (Level of Detail) */
 "Houses" = "Houses";
+
+/* A label indicating that a challenge should be ignored. */
+"Ignore" = "Ignore";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Junction Edge Object Connectivity From Side";
@@ -481,6 +515,13 @@ through auto-pan modes. */
 /* A label in reference to a specific utility network. */
 "Network" = "Network";
 
+/* A navigation title for a page listing
+data sources in a utility network. */
+"Network Data Source" = "Network Data Source";
+
+/* A navigation title for a view to create a new association in. */
+"New Association" = "New Association";
+
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "New name";
 
@@ -493,8 +534,21 @@ through auto-pan modes. */
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "No bookmarks";
 
+/* A label indicating no utility association 
+candidates matching the filter criteria were
+found. */
+"No Candidates Found" = "No Candidates Found";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "No configurations available.";
+
+/* A label indicating no utility association 
+feature sources were found. */
+"No Feature Sources Found" = "No Feature Sources Found";
+
+/* A label indicating no utility association 
+filter results were found. */
+"No Filter Results Found" = "No Filter Results Found";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "No Internet Connection";
@@ -543,6 +597,10 @@ through auto-pan modes. */
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
+
+/* A label indicating features can be selected by
+interactively tapping on the map. */
+"On Map" = "On Map";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Online Map Failed to Load";
@@ -640,6 +698,14 @@ current visible extent of the map or scene. */
 /* A label for a button to save edits. */
 "Save Edits" = "Save Edits";
 
+/* A generic prompt for a search field where a more
+specific prompt has not been provided. */
+"Search" = "Search";
+
+/* A label for a search bar to search through feature 
+candidates to use in a new utility association. */
+"Search Features" = "Search Features";
+
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Search Query";
 
@@ -664,6 +730,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for a button to show all the association results. */
 "Show all" = "Show all";
+
+/* A label for a button to show the indicated feature on the map. */
+"Show On Map" = "Show On Map";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
@@ -748,6 +817,9 @@ match the spatial reference of the map. */
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "The form wasn't submitted";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "The identity of \"%@\" cannot be verified. Would you like to connect anyway?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "The map does not have a spatial reference.";
