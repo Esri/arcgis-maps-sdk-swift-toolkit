@@ -30,12 +30,12 @@ extension FeatureFormView {
         /// A Boolean value indicating if the content in a containment association is visible.
         /// - SeeAlso: `includeContentVisibility`.
         @State private var contentIsVisible: Bool = false
-        /// How far along an edge the association is located.
-        @State private var fractionAlongEdge: Double = 0
-        /// The options for a utility network feature when creating an association.
-        @State private var options: UtilityAssociationFeatureOptions? = nil
         /// A Boolean value which indicates when the configured association is being added.
         @State private var isAddingAssociation = false
+        /// The options for a utility network feature when creating an association.
+        @State private var options: UtilityAssociationFeatureOptions? = nil
+        /// The percent along an edge the association is located.
+        @State private var percentAlong: Double = 0
         /// The terminal selection for the "from" side of the association.
         @State private var terminalForFromSide: UtilityTerminal? = nil
         /// The terminal selection for the "to" side of the association.
@@ -55,7 +55,7 @@ extension FeatureFormView {
                 sectionForAssociation
                 sectionForFromElement
                 sectionForToElement
-                sectionForFractionAlongEdge
+                sectionForPercentAlong
                 sectionForAddButton
             }
             .alert(isPresented: $alertIsPresented, error: addAssociationError) {}
@@ -91,11 +91,11 @@ extension FeatureFormView {
                 } else {
                     result = switch (options.isFractionAlongEdgeValid, terminalForFromSide, terminalForToSide) {
                     case let (true, .some(terminal), .none):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge, terminal: terminal)
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong, terminal: terminal)
                     case let (true, .none, .some(terminal)):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge, terminal: terminal)
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong, terminal: terminal)
                     case (true, .none, .none):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong)
                     case (false, _, _):
                         try await element.addAssociation(
                             feature: candidate.feature,
@@ -253,17 +253,17 @@ extension FeatureFormView {
             }
         }
         
-        /// A section which contains the fraction along edge slider.
-        @ViewBuilder var sectionForFractionAlongEdge: some View {
+        /// A section which contains the percent along slider.
+        @ViewBuilder var sectionForPercentAlong: some View {
             if options?.isFractionAlongEdgeValid ?? false {
                 Section {
                     LabeledContent {
-                        Text(fractionAlongEdge, format: .percent.precision(.fractionLength(0)))
+                        Text(percentAlong, format: .percent.precision(.fractionLength(0)))
                     } label: {
-                        Text(LocalizedStringResource.fractionAlongEdge)
+                        Text(LocalizedStringResource.percentAlong)
                     }
-                    Slider(value: $fractionAlongEdge, in: 0...1) {
-                        Text(LocalizedStringResource.fractionAlongEdge)
+                    Slider(value: $percentAlong, in: 0...1) {
+                        Text(LocalizedStringResource.percentAlong)
                     }
                 }
             }

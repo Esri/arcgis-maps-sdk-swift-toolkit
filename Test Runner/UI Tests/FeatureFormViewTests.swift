@@ -1529,7 +1529,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
     }
     
-    // Test case 12.2: Associations show fraction along edge
+    // Test case 12.2: Associations show percent along
     // It has been determined that with the currently-available public test data
     // this is no longer feasible. So this functionality will be ad-hoc tested only.
     
@@ -2008,12 +2008,12 @@ final class FeatureFormViewTests: XCTestCase {
         let electricDistributionLineDataSourceButton = app.buttons["Electric Distribution Line"]
         let elementTitle = app.staticTexts["Associations"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
-        let fractionAlongEdgeLabel = app.staticTexts["Fraction Along Edge"]
-        let fractionAlongEdgeSlider = app.sliders.firstMatch
+        let percentAlongLabel = app.staticTexts["Percent Along"]
+        let percentAlongSlider = app.sliders.firstMatch
         /// Despite the test specifying setting the slider to 75%, the framework exceeds the target by a
         /// little bit.
-        let fractionAlongEdgeValueAfter = app.staticTexts["77%"]
-        let fractionAlongEdgeValueBefore = app.staticTexts["0%"]
+        let percentAlongValueAfter = app.staticTexts["77%"]
+        let percentAlongBefore = app.staticTexts["0%"]
         let fromElementLabel = app.staticTexts["From Element"]
         let lowVoltageButton = app.staticTexts["Low Voltage"].firstMatch
         let lowVoltageLabel = app.staticTexts["Low Voltage"]
@@ -2142,18 +2142,18 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            fractionAlongEdgeLabel.waitForExistence(timeout: 5),
-            "The fraction along edge label doesn't exist."
+            percentAlongLabel.waitForExistence(timeout: 5),
+            "The percent along label doesn't exist."
         )
         
         XCTAssertTrue(
-            fractionAlongEdgeValueBefore.waitForExistence(timeout: 5),
-            "The fraction along edge label doesn't exist."
+            percentAlongBefore.waitForExistence(timeout: 5),
+            "The percent along label doesn't exist."
         )
         
         XCTAssertTrue(
-            fractionAlongEdgeSlider.waitForExistence(timeout: 5),
-            "The fraction along edge slider doesn't exist."
+            percentAlongSlider.waitForExistence(timeout: 5),
+            "The percent along slider doesn't exist."
         )
         
         XCTAssertTrue(
@@ -2178,11 +2178,11 @@ final class FeatureFormViewTests: XCTestCase {
 #if targetEnvironment(macCatalyst)
         XCTExpectFailure("The mouse is known to miss the drag handle when starting from 0%.")
 #endif
-        fractionAlongEdgeSlider.adjust(toNormalizedSliderPosition: 0.75)
+        percentAlongSlider.adjust(toNormalizedSliderPosition: 0.75)
         
         XCTAssertTrue(
-            fractionAlongEdgeValueAfter.waitForExistence(timeout: 5),
-            "The fraction along edge label doesn't exist."
+            percentAlongValueAfter.waitForExistence(timeout: 5),
+            "The percent along label doesn't exist."
         )
         
         addButton.tap()
