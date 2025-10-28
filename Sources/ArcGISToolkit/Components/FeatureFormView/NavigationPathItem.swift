@@ -15,50 +15,60 @@
 import ArcGIS
 
 extension FeatureFormView {
-    enum NavigationPathItem: Hashable {
+    /// Describes the items in feature form view's navigation stack.
+    /// - Since: 300.0
+    public enum NavigationPathItem: Hashable {
         case form(FeatureForm)
-        case utilityAssociationAssetTypesView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource)
-        case utilityAssociationCreationView(EmbeddedFeatureFormViewModel, UtilityAssociationFeatureCandidate, UtilityAssociationsFormElement, UtilityAssociationsFilter)
-        case utilityAssociationDetailsView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationResult)
-        case utilityAssociationFeatureCandidatesView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource, UtilityAssetType)
-        case utilityAssociationFeatureSourcesView(EmbeddedFeatureFormViewModel, UtilityAssociationsFormElement, UtilityAssociationsFilter)
-        case utilityAssociationFilterResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationsFilter)
-        case utilityAssociationGroupResultView(EmbeddedFeatureFormViewModel, AssociationsFilterResultsModel, UtilityAssociationsFormElement, UtilityAssociationsFilter, FeatureFormSource, String)
+        case utilityAssociationAssetTypesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource)
+        case utilityAssociationCreationView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureCandidate)
+        case utilityAssociationDetailsView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationResult)
+        case utilityAssociationFeatureCandidatesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource, UtilityAssetType)
+        case utilityAssociationFeatureSourcesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter)
+        case utilityAssociationFilterResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter)
+        case utilityAssociationGroupResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, FeatureFormSource)
         
-        static func == (lhs: Self, rhs: Self) -> Bool {
+        public static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case let (.form(a), .form(b)):
                 a === b
-            case let (.utilityAssociationAssetTypesView(_, elementA, filterA, sourceA),
-                      .utilityAssociationAssetTypesView(_, elementB, filterB, sourceB)):
-                elementA === elementB
-                && filterA === filterB
-                && sourceA === sourceB
-            case let (.utilityAssociationCreationView(_, candidateA, elementA, filterA),
-                      .utilityAssociationCreationView(_, candidateB, elementB, filterB)):
-                candidateA === candidateB
+            case let (.utilityAssociationAssetTypesView(formA, elementA, filterA, sourceA),
+                      .utilityAssociationAssetTypesView(formB, elementB, filterB, sourceB)):
+                formA === formB
                 && elementA === elementB
                 && filterA === filterB
-            case let (.utilityAssociationDetailsView(_, _, elementA, resultA),
-                      .utilityAssociationDetailsView(_, _, elementB, resultB)):
-                elementA === elementB
+                && sourceA === sourceB
+            case let (.utilityAssociationCreationView(formA, elementA, filterA, candidateA),
+                      .utilityAssociationCreationView(formB, elementB, filterB, candidateB)):
+                formA === formB
+                && elementA === elementB
+                && filterA === filterB
+                && candidateA === candidateB
+            case let (.utilityAssociationDetailsView(formA, elementA, resultA),
+                      .utilityAssociationDetailsView(formB, elementB, resultB)):
+                formA === formB
+                && elementA === elementB
                 && resultA === resultB
-            case let (.utilityAssociationFeatureCandidatesView(_, elementA, filterA, sourceA, _),
-                      .utilityAssociationFeatureCandidatesView(_, elementB, filterB, sourceB, _)):
-                elementA === elementB
+            case let (.utilityAssociationFeatureCandidatesView(formA, elementA, filterA, sourceA, assetTypeA),
+                      .utilityAssociationFeatureCandidatesView(formB, elementB, filterB, sourceB, assetTypeB)):
+                formA === formB
+                && elementA === elementB
                 && filterA === filterB
                 && sourceA === sourceB
-            case let (.utilityAssociationFeatureSourcesView(_, elementA, filterA),
-                      .utilityAssociationFeatureSourcesView(_, elementB, filterB)):
-                elementA === elementB
+                && assetTypeA === assetTypeB
+            case let (.utilityAssociationFeatureSourcesView(formA, elementA, filterA),
+                      .utilityAssociationFeatureSourcesView(formB, elementB, filterB)):
+                formA === formB
+                && elementA === elementB
                 && filterA === filterB
-            case let (.utilityAssociationFilterResultView(_, _, elementA, filterA),
-                      .utilityAssociationFilterResultView(_, _, elementB, filterB)):
-                elementA === elementB
+            case let (.utilityAssociationFilterResultView(formA, elementA, filterA),
+                      .utilityAssociationFilterResultView(formB, elementB, filterB)):
+                formA === formB
+                && elementA === elementB
                 && filterA === filterB
-            case let (.utilityAssociationGroupResultView(_, _, elementA, filterA, sourceA, _),
-                      .utilityAssociationGroupResultView(_, _, elementB, filterB, sourceB, _)):
-                elementA === elementB
+            case let (.utilityAssociationGroupResultView(formA, elementA, filterA, sourceA),
+                      .utilityAssociationGroupResultView(formB, elementB, filterB, sourceB)):
+                formA === formB
+                && elementA === elementB
                 && filterA === filterB
                 && sourceA === sourceB
             default:
@@ -66,32 +76,40 @@ extension FeatureFormView {
             }
         }
         
-        func hash(into hasher: inout Hasher) {
+        public func hash(into hasher: inout Hasher) {
             switch self {
             case let .form(form):
                 hasher.combine(ObjectIdentifier(form))
-            case let .utilityAssociationAssetTypesView(_, element, filter, source):
+            case let .utilityAssociationAssetTypesView(form, element, filter, source):
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(source))
-            case let .utilityAssociationCreationView(_, candidate, element, filter):
-                hasher.combine(ObjectIdentifier(candidate))
+            case let .utilityAssociationCreationView(form, element, filter, candidate):
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
-            case let .utilityAssociationDetailsView(_, _, element, result):
+                hasher.combine(ObjectIdentifier(candidate))
+            case let .utilityAssociationDetailsView(form, element, result):
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(result))
-            case let .utilityAssociationFeatureCandidatesView(_, element, filter, source, _):
+            case let .utilityAssociationFeatureCandidatesView(form, element, filter, source, assetType):
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(source))
-            case let .utilityAssociationFeatureSourcesView(_, element, filter):
+                hasher.combine(ObjectIdentifier(assetType))
+            case let .utilityAssociationFeatureSourcesView(form, element, filter):
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
-            case let .utilityAssociationFilterResultView(_, _, element, filter):
+            case let .utilityAssociationFilterResultView(form, element, filter):
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
-            case let .utilityAssociationGroupResultView(_, _, element, filter, formSource, _):
+            case let .utilityAssociationGroupResultView(form, element, filter, formSource):
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(formSource))

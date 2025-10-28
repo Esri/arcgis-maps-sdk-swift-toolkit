@@ -2173,12 +2173,6 @@ final class FeatureFormViewTests: XCTestCase {
             "The Low terminal option doesn't exist."
         )
         
-#if swift(<6.2) && !targetEnvironment(macCatalyst)
-        XCTExpectFailure("""
-            The terminal selection options can be found, but tapping on them
-            doesn't work correctly in Xcode 16.4 for iOS.
-        """)
-#endif
         terminalLowButton.tap()
         
 #if targetEnvironment(macCatalyst)
@@ -2238,7 +2232,7 @@ final class FeatureFormViewTests: XCTestCase {
         let toElementValueLabel = app.staticTexts["Vault"]
         let toElementLabel = app.staticTexts["To Element"]
         let vaultAssetTypeButton = app.buttons["Vault"]
-        let vaultCandidateButton = app.buttons.matching(identifier: "Vault").element(boundBy: 0)
+        let vaultCandidateButton = app.staticTexts.matching(identifier: "Vault").element(boundBy: 1)
         
 #if targetEnvironment(macCatalyst)
         let addAssociationButton = app.buttons["Add Association"]

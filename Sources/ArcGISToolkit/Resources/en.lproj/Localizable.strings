@@ -534,8 +534,21 @@ data sources in a utility network. */
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "No bookmarks";
 
+/* A label indicating no utility association 
+candidates matching the filter criteria were
+found. */
+"No Candidates Found" = "No Candidates Found";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "No configurations available.";
+
+/* A label indicating no utility association 
+feature sources were found. */
+"No Feature Sources Found" = "No Feature Sources Found";
+
+/* A label indicating no utility association 
+filter results were found. */
+"No Filter Results Found" = "No Filter Results Found";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "No Internet Connection";
@@ -717,6 +730,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for a button to show all the association results. */
 "Show all" = "Show all";
+
+/* A label for a button to show the indicated feature on the map. */
+"Show On Map" = "Show On Map";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";

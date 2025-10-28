@@ -18,8 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view to inspect and delete a utility network association.
     struct UtilityAssociationDetailsView: View {
-        /// The navigation path for the navigation stack presenting this view.
-        @Environment(\.navigationPath) var navigationPath
+        /// The model for the FeatureFormView containing the view.
+        @Environment(FeatureFormViewModel.self) var featureFormViewModel
         
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
@@ -28,12 +28,10 @@ extension FeatureFormView {
         
         /// The association result.
         let associationResult: UtilityAssociationResult
-        /// The model containing the latest association filter results.
-        let associationsFilterResultsModel: AssociationsFilterResultsModel
         /// The element containing the association.
         let element: UtilityAssociationsFormElement
-        /// The model for the feature form containing the element with the association.
-        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         
         var body: some View {
             List {
@@ -63,6 +61,16 @@ extension FeatureFormView {
             }
         }
         
+        /// The model containing the latest association filter results.
+        var associationsFilterResultsModel: AssociationsFilterResultsModel? {
+            embeddedFeatureFormViewModel?.associationsFilterResultsModels[element]
+        }
+        
+        /// The model for the feature form containing the element with the association.
+        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+            featureFormViewModel.getModel(form)
+        }
+        
         /// A section which contains the association type label.
         var sectionForAssociation: some View {
             Section {
@@ -77,10 +85,12 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the from side of the association.
         var sectionForFromElement: some View {
             Section {
-                LabeledContent {
-                    Text(associationResult.associatedFeatureIsToElement ? embeddedFeatureFormViewModel.title : associationResult.title)
-                } label: {
-                    Text.fromElement
+                if let embeddedFeatureFormViewModel {
+                    LabeledContent {
+                        Text(associationResult.associatedFeatureIsToElement ? embeddedFeatureFormViewModel.title : associationResult.title)
+                    } label: {
+                        Text.fromElement
+                    }
                 }
                 if let fromElementTerminal = associationResult.association.fromElement.terminal {
                     row(for: fromElementTerminal)
@@ -91,10 +101,12 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the to side of the association.
         var sectionForToElement: some View {
             Section {
-                LabeledContent {
-                    Text(associationResult.associatedFeatureIsToElement ? associationResult.title : embeddedFeatureFormViewModel.title)
-                } label: {
-                    Text.toElement
+                if let embeddedFeatureFormViewModel {
+                    LabeledContent {
+                        Text(associationResult.associatedFeatureIsToElement ? associationResult.title : embeddedFeatureFormViewModel.title)
+                    } label: {
+                        Text.toElement
+                    }
                 }
                 if let toElementTerminal = associationResult.association.toElement.terminal {
                     row(for: toElementTerminal)
@@ -104,7 +116,9 @@ extension FeatureFormView {
         
         /// A section with a button to remove the association.
         @ViewBuilder var sectionForRemoveButton: some View {
-            if isEditable {
+            if let associationsFilterResultsModel,
+               let embeddedFeatureFormViewModel,
+               isEditable {
                 Section {
                     Button(role: .destructive) {
                         removalConfirmationIsPresented = true
@@ -119,7 +133,7 @@ extension FeatureFormView {
                         embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
                     ) {
                         associationsFilterResultsModel.fetchResults()
-                        navigationPath?.wrappedValue.removeLast()
+                        featureFormViewModel.navigationPath.removeLast()
                     }
                 }
             }
