@@ -37,11 +37,11 @@ extension FeatureFormView {
             Group {
                 switch associationsFilterResultsModel?.result {
                 case .success(let results):
-                    ForEach(results, id: \.filter.kind) { result in
+                    ForEach(results.indices, id: \.self) { index in
                         Row(
                             associationsFilterResultsModel: associationsFilterResultsModel,
                             element: element,
-                            filter: result.filter,
+                            filter: results[index].filter,
                             form: embeddedFeatureFormViewModel.featureForm
                         )
                         .environment(embeddedFeatureFormViewModel)
