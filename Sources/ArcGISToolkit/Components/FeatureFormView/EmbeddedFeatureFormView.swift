@@ -45,7 +45,6 @@ struct EmbeddedFeatureFormView: View {
             .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
                 embeddedFeatureFormViewModel.title = newTitle
             }
-            .padding(.horizontal)
             .preference(
                 key: PresentedFeatureFormPreferenceKey.self,
                 value: .init(object: embeddedFeatureFormViewModel)
