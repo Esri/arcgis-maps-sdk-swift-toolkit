@@ -218,7 +218,7 @@ struct CertificatePickerViewModifier: ViewModifier {
                     }
                 )
             )
-            .certificateErrorSheet(
+            .certificateErrorAlert(
                 isPresented: $viewModel.showCertificateError,
                 viewModel: viewModel
             )
@@ -229,7 +229,6 @@ private extension UTType {
     /// A `UTType` that represents a pfx file.
     static let pfx = UTType(filenameExtension: "pfx")!
 }
-
 private extension View {
     /// Displays a prompt to the user to let them know that picking a certificate is required.
     /// - Parameters:
@@ -239,75 +238,49 @@ private extension View {
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
-        sheet(isPresented: isPresented) {
-            NavigationStack {
-                VStack(alignment: .center) {
+        alert(
+            Text(
+                "Certificate Required",
+                bundle: .toolkitModule,
+                comment: "A label indicating that a certificate is required to proceed."
+            ),
+            isPresented: isPresented) {
+                Button {
+                    isPresented.wrappedValue = false
+                    viewModel.proceedToPicker()
+                } label: {
                     Text(
-                        "A certificate is required to access content on \(viewModel.challengingHost).",
+                        "Browse",
                         bundle: .toolkitModule,
-                        comment: """
-                             An alert message indicating that a certificate is required to access
-                             content on a remote host. The variable is the host that prompted the challenge.
-                             """
+                        comment: "A label for a button to open the system file browser."
                     )
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom)
-                    HStack {
-                        Spacer()
-                        Button {
-                            isPresented.wrappedValue = false
-                            viewModel.continueWithoutCredential()
-                        } label: {
-                            Text(
-                                "Ignore",
-                                bundle: .toolkitModule,
-                                comment: "A label indicating that a challenge should be ignored."
-                            )
-                            .padding(.horizontal)
-                        }
-                        .buttonStyle(.bordered)
-                        Spacer()
-                        
-                        Button {
-                            isPresented.wrappedValue = false
-                            viewModel.proceedToPicker()
-                        } label: {
-                            Text(
-                                "Browse",
-                                bundle: .toolkitModule,
-                                comment: "A label for a button to open the system file browser."
-                            )
-                            .padding(.horizontal)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        Spacer()
-                    }
-                    Spacer()
                 }
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button(role: .cancel) {
-                            isPresented.wrappedValue = false
-                            viewModel.cancel()
-                        } label: {
-                            Text.cancel
-                        }
-                    }
-                }
-                .navigationTitle(
-                    String(
-                        localized: "Certificate Required",
+                Button {
+                    isPresented.wrappedValue = false
+                    viewModel.continueWithoutCredential()
+                } label: {
+                    Text(
+                        "Ignore",
                         bundle: .toolkitModule,
-                        comment: "A label indicating that a certificate is required to proceed."
+                        comment: "A label indicating that a challenge should be ignored."
                     )
+                }
+                Button(role: .cancel) {
+                    isPresented.wrappedValue = false
+                    viewModel.cancel()
+                } label: {
+                    Text.cancel
+                }
+            } message: {
+                Text(
+                    "A certificate is required to access content on \(viewModel.challengingHost).",
+                    bundle: .toolkitModule,
+                    comment: """
+                         An alert message indicating that a certificate is required to access
+                         content on a remote host. The variable is the host that prompted the challenge.
+                         """
                 )
-                .interactiveDismissDisabled()
-                .presentationDetents([.medium])
-                .padding()
             }
-        }
     }
 }
 
@@ -333,30 +306,38 @@ private extension View {
         }
     }
 }
-
 private extension View {
-    /// Displays a sheet to notify that there was an error importing the certificate.
+    /// Displays an alert to notify that there was an error importing the certificate.
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating if the view is presented.
     ///   - viewModel: The view model associated with the view.
-    @MainActor @ViewBuilder func certificateErrorSheet(
+    @MainActor @ViewBuilder func certificateErrorAlert(
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
-        sheet(isPresented: isPresented) {
-            VStack(alignment: .center) {
-                Text(
-                    "Error importing certificate",
-                    bundle: .toolkitModule,
-                    comment: """
-                             A message indicating that some error occurred while importing a chosen
-                             network certificate.
-                             """
-                )
-                .font(.title)
-                .multilineTextAlignment(.center)
-                .padding(.vertical)
-                
+        alert(
+            Text(
+                "Error importing certificate",
+                bundle: .toolkitModule,
+                comment: """
+                         A message indicating that some error occurred while importing a chosen
+                         network certificate.
+                         """
+            ),
+            isPresented: isPresented) {
+                Button {
+                    isPresented.wrappedValue = false
+                    viewModel.proceedToPicker()
+                } label: {
+                    Text.tryAgain
+                }
+                Button(role: .cancel) {
+                    isPresented.wrappedValue = false
+                    viewModel.cancel()
+                } label: {
+                    Text.cancel
+                }
+            } message: {
                 Text(
                     viewModel.certificateError?.localizedDescription ?? String(
                         localized: "The certificate file or password was invalid.",
@@ -364,36 +345,6 @@ private extension View {
                         comment: "A label indicating the chosen file or given password was invalid."
                     )
                 )
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.bottom)
-                HStack {
-                    Spacer()
-                    Button(role: .cancel) {
-                        isPresented.wrappedValue = false
-                        viewModel.cancel()
-                    } label: {
-                        Text.cancel
-                            .padding(.horizontal)
-                    }
-                    .buttonStyle(.bordered)
-                    Spacer()
-                    Button(role: .cancel) {
-                        isPresented.wrappedValue = false
-                        viewModel.proceedToPicker()
-                    } label: {
-                        Text.tryAgain
-                            .padding(.horizontal)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    Spacer()
-                }
-                Spacer()
             }
-            .interactiveDismissDisabled()
-            .presentationDetents([.medium])
-            .padding()
-        }
     }
 }

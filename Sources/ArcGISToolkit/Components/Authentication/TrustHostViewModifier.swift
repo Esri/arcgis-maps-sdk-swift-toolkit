@@ -30,27 +30,6 @@ struct TrustHostViewModifier: ViewModifier {
     /// A Boolean value indicating whether or not the prompt is displayed.
     @State var isPresented: Bool = false
     
-    var title: some View {
-        Text(
-            "Certificate Trust Warning",
-            bundle: .toolkitModule,
-            comment: "A label indicating that the remote host's certificate is not trusted."
-        )
-        .font(.title)
-        .multilineTextAlignment(.center)
-    }
-    
-    var message: some View {
-        Text(
-            "Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
-            bundle: .toolkitModule,
-            comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
-        )
-        .multilineTextAlignment(.center)
-        .font(.subheadline)
-        .foregroundStyle(.secondary)
-    }
-    
     func body(content: Content) -> some View {
         content
             .delayedOnAppear {
@@ -60,42 +39,38 @@ struct TrustHostViewModifier: ViewModifier {
                 // it doesn't show.
                 isPresented = true
             }
-            .sheet(isPresented: $isPresented) {
-                VStack(alignment: .center) {
-                    title
-                        .padding(.vertical)
-                    message
-                        .padding(.bottom)
-                    HStack {
-                        Spacer()
-                        Button(role: .cancel) {
-                            isPresented = false
-                            challenge.resume(with: .cancel)
-                        } label: {
-                            Text.cancel
-                                .padding(.horizontal)
-                        }
-                        .buttonStyle(.bordered)
-                        Spacer()
-                        Button(role: .destructive) {
-                            isPresented = false
-                            challenge.resume(with: .continueWithCredential(.serverTrust))
-                        } label: {
-                            Text(
-                                "Allow",
-                                bundle: .toolkitModule,
-                                comment: "A button indicating the user accepts a potentially dangerous action."
-                            )
-                            .padding(.horizontal)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        Spacer()
+            .alert(
+                String(
+                    localized: "Cannot Verify Server Identity",
+                    bundle: .toolkitModule,
+                    comment: "A label indicating that the remote host's certificate is not trusted."
+                ),
+                isPresented: $isPresented,
+                actions: {
+                    Button {
+                        isPresented = false
+                        challenge.resume(with: .continueWithCredential(.serverTrust))
+                    } label: {
+                        Text(
+                            "Continue",
+                            bundle: .toolkitModule,
+                            comment: "A button indicating the user accepts a potentially dangerous action."
+                        )
                     }
-                    Spacer()
+                    Button(role: .cancel) {
+                        isPresented = false
+                        challenge.resume(with: .cancel)
+                    } label: {
+                        Text.cancel
+                    }
+                },
+                message: {
+                    Text(
+                        "The identity of \"\(challenge.host)\" cannot be verified. Would you like to connect anyway?",
+                        bundle: .toolkitModule,
+                        comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
+                    )
                 }
-                .padding()
-                .presentationDetents([.medium])
-                .interactiveDismissDisabled()
-            }
+            )
     }
 }
