@@ -16,8 +16,8 @@ import ArcGIS
 import SwiftUI
 
 extension View {
-    func featureFormToolbar(_ featureForm: FeatureForm, isAForm: Bool = false) -> some View {
-        self.modifier(FeatureFormToolbar(featureForm: featureForm, isAForm: isAForm))
+    func featureFormToolbar(_ featureForm: FeatureForm, isAForm: Bool = false, onBackNavigation: (() -> Void)? = nil) -> some View {
+        self.modifier(FeatureFormToolbar(featureForm: featureForm, isAForm: isAForm, onBackNavigation: onBackNavigation))
     }
 }
 
@@ -27,11 +27,8 @@ struct FeatureFormToolbar: ViewModifier {
     /// The visibility of the "save" and "discard" buttons.
     @Environment(\.editingButtonVisibility) var editingButtonsVisibility
     
-    /// An error thrown from a call to `FeatureForm.finishEditing()`.
-    @Environment(\.finishEditingError) var finishEditingError
-    
-    /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
-    @Environment(\.formDeprecatedInitializerWasUsed) var deprecatedInitializerWasUsed
+    /// The model for the FeatureFormView containing the view.
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
     /// A binding to a Boolean value controlling whether the FeatureFormView is presented.
     @Environment(\.isPresented) var isPresented
@@ -39,14 +36,8 @@ struct FeatureFormToolbar: ViewModifier {
     /// The environment value which declares whether navigation to forms for features associated via utility association form elements is disabled.
     @Environment(\.navigationIsDisabled) var navigationIsDisabled
     
-    /// The navigation path for the navigation stack presenting this view.
-    @Environment(\.navigationPath) var navigationPath
-    
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
-    
-    /// The environment value to set the continuation to use when the user responds to the alert.
-    @Environment(\.setAlertContinuation) var setAlertContinuation
     
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits = false
@@ -58,6 +49,9 @@ struct FeatureFormToolbar: ViewModifier {
     /// associated view such as a `UtilityAssociationsFilterResultView` or
     /// `UtilityAssociationGroupResultView`.
     let isAForm: Bool
+    
+    /// A closure to perform when back navigation completes.
+    let onBackNavigation: (() -> Void)?
     
     func body(content: Content) -> some View {
         content
@@ -72,11 +66,13 @@ struct FeatureFormToolbar: ViewModifier {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
                             if alertBeforeDismissing {
-                                setAlertContinuation?(true) {
+                                featureFormViewModel.navigationAlertInfo = (true, {
                                     dismiss()
-                                }
+                                    onBackNavigation?()
+                                })
                             } else {
                                 dismiss()
+                                onBackNavigation?()
                             }
                         } label: {
                             Label {
@@ -96,21 +92,20 @@ struct FeatureFormToolbar: ViewModifier {
                     ToolbarItem(placement: .topBarTrailing) {
                         XButton(.dismiss) {
                             if hasEdits {
-                                setAlertContinuation?(false) {
+                                featureFormViewModel.navigationAlertInfo = (false, {
                                     isPresented.wrappedValue = false
-                                }
+                                })
                             } else {
                                 isPresented.wrappedValue = false
                             }
                         }
                     }
                 }
-                if !deprecatedInitializerWasUsed, hasEdits, editingButtonsVisibility != .hidden {
+                if hasEdits, editingButtonsVisibility != .hidden {
                     ToolbarItem(placement: .bottomBar) {
                         FormFooter(
                             featureForm: featureForm,
-                            formHandlingEventAction: onFormEditingEventAction,
-                            finishEditingError: finishEditingError
+                            formHandlingEventAction: onFormEditingEventAction
                         )
                     }
                 }
@@ -126,6 +121,6 @@ extension FeatureFormToolbar {
     
     /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
     var isRootView: Bool {
-        navigationPath?.wrappedValue.isEmpty ?? true
+        featureFormViewModel.navigationPath.isEmpty
     }
 }

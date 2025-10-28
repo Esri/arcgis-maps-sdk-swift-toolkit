@@ -67,22 +67,6 @@ public final class Authenticator: ObservableObject {
     /// - Parameters:
     ///   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
     ///   encountering an untrusted host.
-    ///   - oAuthUserConfigurations: The OAuth configurations that this authenticator can work with.
-    /// - Attention: Deprecated at 200.8.
-    @_disfavoredOverload
-    @available(*, deprecated, message: "Use 'init(promptForUntrustedHosts:oAuthUserConfigurations:iapConfigurations:)' instead")
-    public init(
-        promptForUntrustedHosts: Bool = false,
-        oAuthUserConfigurations: [OAuthUserConfiguration] = []
-    ) {
-        self.promptForUntrustedHosts = promptForUntrustedHosts
-        self.oAuthUserConfigurations = oAuthUserConfigurations
-    }
-    
-    /// Creates an authenticator.
-    /// - Parameters:
-    ///   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
-    ///   encountering an untrusted host.
     ///   - oAuthUserConfigurations: The OAuth user configurations that this authenticator can work with.
     ///   - iapConfigurations: The IAP configurations that this authenticator can work with.
     /// - Since: 200.8
@@ -99,6 +83,10 @@ public final class Authenticator: ObservableObject {
     /// The current challenge.
     /// This property is not set for OAuth challenges.
     @Published var currentChallenge: ChallengeContinuation?
+    
+    /// A Boolean value indicating if an OAuth challenge is currently being
+    /// handled.
+    @Published var isHandlingOAuthChallenge = false
 }
 
 extension Authenticator: ArcGISAuthenticationChallengeHandler {
@@ -136,6 +124,8 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
             }
             
             do {
+                isHandlingOAuthChallenge = true
+                defer { isHandlingOAuthChallenge = false }
                 return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
             } catch is CancellationError {
                 // If user cancels the creation of OAuth user credential then catch the

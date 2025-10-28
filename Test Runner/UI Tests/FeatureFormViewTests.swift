@@ -30,21 +30,14 @@ final class FeatureFormViewTests: XCTestCase {
     func openTestCase(id: String = #function) {
         let app = XCUIApplication()
         let formViewTestsButton = app.buttons["Feature Form Tests"]
+        
+        // Pass the name of the test function as the testCase, dropping the parentheses.
+        let testCaseArgument = ["-testCase", "\(id.dropLast(2))"]
+        app.launchArguments.append(contentsOf: testCaseArgument)
+        
         // Open tests
         app.launch()
         formViewTestsButton.tap()
-        
-        // Select test case
-        let testCase = String(id.dropLast(2))
-        let textField = app.textFields["Search"]
-        textField.tap()
-        textField.typeText(testCase)
-        let testCaseButton = app.buttons[testCase]
-        XCTAssertTrue(
-            testCaseButton.waitForExistence(timeout: 5),
-            "The button doesn't exist for \(testCase)"
-        )
-        testCaseButton.tap()
     }
     
     func testAttachmentRenaming() {
@@ -54,12 +47,11 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["Esri Location"]
         let nameField = app.textFields["New name"]
         let okButton = app.buttons["OK"]
+        let renamedAttachmentLabel = app.staticTexts["EsriHQ\(#function).jpeg"]
 #if targetEnvironment(macCatalyst)
         let rename = app.menuItems["Rename"]
-        let renamedAttachmentLabel = app.staticTexts["EsriHQ\(#function).jpeg"]
 #else
         let rename = app.buttons["Rename"]
-        let renamedAttachmentLabel = app.staticTexts["\(#function).jpeg"]
 #endif
         
         openTestCase()
@@ -533,8 +525,6 @@ final class FeatureFormViewTests: XCTestCase {
                 timeZone: .gmt, year: 2023, month: 7, day: 15, hour: 3, minute: 53
             )
         )
-        
-        XCTExpectFailure("Time should not be included. Apollo #355")
         
         XCTAssertEqual(
             fieldValue.label,
@@ -1549,7 +1539,7 @@ final class FeatureFormViewTests: XCTestCase {
         let filterResults = app.staticTexts["Content"]
         let formTitle = app.staticTexts["Structure Boundary"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let utilityElementButton = app.buttons["Circuit Breaker, Content"]
+        let utilityElementButton = app.buttons["Circuit Breaker, Visible: false"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -1702,6 +1692,670 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertTrue(
             utilityElementButton.waitForExistence(timeout: 5),
             "The utility element \"Transformer - 2552\" doesn't exist."
+        )
+    }
+    
+    func testCase_12_6() {
+        let app = XCUIApplication()
+        let associationSettingButton = app.buttons["Utility Association Details"]
+        let cancelButton = app.buttons["Cancel"].firstMatch
+        let discardButton = app.buttons["Discard"].firstMatch
+        let elementTitle = app.staticTexts["Associations"]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
+        let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
+        let removeAssociationButton = app.buttons["Remove Association"]
+        let removeButton = app.buttons["Remove"].firstMatch
+        let transformerButton = app.buttons["Transformer, High"]
+        
+#if targetEnvironment(macCatalyst)
+        let inlineRemoveAssociationButton = app.menuItems["remove_association"]
+#else
+        let inlineRemoveAssociationButton = app.buttons["Remove Association"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: electricDistributionDevice)
+        
+        XCTAssertTrue(
+            elementTitle.waitForExistence(timeout: 5),
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            connectedFilterTitle.waitForExistence(timeout: 5),
+            "The filter result \"Connected\" doesn't exist."
+        )
+        
+        connectedFilterTitle.tap()
+        
+        XCTAssertTrue(
+            networkSourceGroupButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        networkSourceGroupButton.tap()
+        
+        XCTAssertTrue(
+            transformerButton.waitForExistence(timeout: 5),
+            "The \"Transformer\" association doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            associationSettingButton.waitForExistence(timeout: 5),
+            "The association settings button doesn't exist."
+        )
+        
+        associationSettingButton.tap()
+        
+        XCTAssertTrue(
+            removeAssociationButton.waitForExistence(timeout: 5),
+            "The remove association button doesn't exist."
+        )
+        
+        removeAssociationButton.tap()
+        
+        XCTAssertTrue(
+            cancelButton.waitForExistence(timeout: 5),
+            "The cancel button doesn't exist."
+        )
+        
+        cancelButton.tap()
+        
+        removeAssociationButton.tap()
+        
+        XCTAssertTrue(
+            removeButton.waitForExistence(timeout: 5),
+            "The remove button doesn't exist."
+        )
+        
+        removeButton.tap()
+        
+        XCTAssertTrue(
+            connectedFilterTitle.waitForExistence(timeout: 5),
+            #"Navigation did not return to the "Connected" filter results page."#
+        )
+        
+        XCTAssertTrue(
+            discardButton.waitForExistence(timeout: 5),
+            "The discard button doesn't exist."
+        )
+        
+        discardButton.tap()
+        
+        XCTAssertTrue(
+            networkSourceGroupButton.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        networkSourceGroupButton.tap()
+        
+        XCTAssertTrue(
+            transformerButton.waitForExistence(timeout: 5),
+            "The \"Transformer\" association doesn't exist."
+        )
+        
+#if targetEnvironment(macCatalyst)
+        transformerButton.rightClick()
+#else
+        transformerButton.swipeLeft()
+#endif
+        
+        XCTAssertTrue(
+            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
+            "The delete button doesn't exist."
+        )
+        
+        inlineRemoveAssociationButton.tap()
+        
+        XCTAssertTrue(
+            cancelButton.waitForExistence(timeout: 5),
+            "The cancel button doesn't exist."
+        )
+        
+        cancelButton.tap()
+        
+#if targetEnvironment(macCatalyst)
+        transformerButton.rightClick()
+#else
+        transformerButton.swipeLeft()
+#endif
+        
+        XCTAssertTrue(
+            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
+            "The delete button doesn't exist."
+        )
+        
+        inlineRemoveAssociationButton.tap()
+        
+        XCTAssertTrue(
+            removeButton.waitForExistence(timeout: 5),
+            "The remove button doesn't exist."
+        )
+        
+        removeButton.tap()
+        
+        XCTAssertTrue(
+            discardButton.waitForExistence(timeout: 5),
+            "The discard button doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            connectedFilterTitle.waitForExistence(timeout: 5),
+            #"Navigation did not return to the "Connected" filter results page."#
+        )
+    }
+    
+    func testCase_13_1() {
+        let app = XCUIApplication()
+        
+        let addButton = app.buttons["Add"]
+        let associationTypeLabel = app.staticTexts["Association Type"]
+        let cabinetFuseButton = app.buttons["Cabinet Fuse"]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let connectivityLabel = app.staticTexts["Connectivity"]
+        let discardButton = app.buttons["Discard"]
+        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
+        let electricDistributionDeviceLabel = app.staticTexts["Electric Distribution Device"]
+        let elementTitle = app.staticTexts["Associations"]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
+        let fromElementLabel = app.staticTexts["From Element"]
+        let fuseButton = app.staticTexts["Fuse"].firstMatch
+        let fuseLabel = app.staticTexts["Fuse"]
+        let networkSourceGroupButtonAfter = app.buttons["Electric Distribution Device, 2"]
+        let newAssociationText = app.staticTexts["New Association"]
+        let saveButton = app.buttons["Save"]
+        let searchField = app.textFields["Search"]
+        let toElementLabel = app.staticTexts["To Element"]
+        
+#if targetEnvironment(macCatalyst)
+        let addAssociationButton = app.buttons["Add Association"]
+        let fromNetworkDataSourceButton = app.menuItems["From Network Data Source"]
+#else
+        let addAssociationButton = app.staticTexts["Add Association"]
+        let fromNetworkDataSourceButton = app.buttons["From Network Data Source"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        XCTAssertTrue(
+            elementTitle.waitForExistence(timeout: 5),
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            connectedFilterTitle.waitForExistence(timeout: 5),
+            "The filter result \"Connected\" doesn't exist."
+        )
+        
+        connectedFilterTitle.tap()
+        
+        XCTAssertTrue(
+            addAssociationButton.waitForExistence(timeout: 5),
+            "The \"Add Association\" button doesn't exist."
+        )
+        
+        addAssociationButton.tap()
+        
+        XCTAssertTrue(
+            fromNetworkDataSourceButton.waitForExistence(timeout: 5),
+            "The \"From Network Data Source\" button doesn't exist."
+        )
+        
+        fromNetworkDataSourceButton.tap()
+        
+        XCTAssertTrue(
+            electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
+            "The \"Electric Distribution Device\" button doesn't exist."
+        )
+        
+        electricDistributionDeviceDataSourceButton.tap()
+        
+        XCTAssertTrue(
+            searchField.waitForExistence(timeout: 5),
+            "The \"Search\" field doesn't exist."
+        )
+        
+        searchField.tap()
+        
+        searchField.typeText("Cabinet Fuse")
+        
+        XCTAssertTrue(
+            cabinetFuseButton.waitForExistence(timeout: 5),
+            "The \"Search\" field doesn't exist."
+        )
+        
+        cabinetFuseButton.tap()
+        
+        XCTAssertTrue(
+            fuseButton.firstMatch.waitForExistence(timeout: 5),
+            "The \"Fuse\" candidate doesn't exist."
+        )
+        
+        fuseButton.tap()
+        
+        XCTAssertTrue(
+            newAssociationText.waitForExistence(timeout: 5),
+            "The New Association header text doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            associationTypeLabel.waitForExistence(timeout: 5),
+            "The association type label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            connectivityLabel.waitForExistence(timeout: 5),
+            "The association type value doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            fromElementLabel.waitForExistence(timeout: 5),
+            "The from element label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            electricDistributionDeviceLabel.waitForExistence(timeout: 5),
+            "The from element value doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            toElementLabel.waitForExistence(timeout: 5),
+            "The to element label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            fuseLabel.waitForExistence(timeout: 5),
+            "The to element value doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            addButton.waitForExistence(timeout: 5),
+            "The add button doesn't exist."
+        )
+        
+        addButton.tap()
+        
+        XCTAssertTrue(
+            networkSourceGroupButtonAfter.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            saveButton.waitForExistence(timeout: 5),
+            "The save button doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            discardButton.waitForExistence(timeout: 5),
+            "The discard button doesn't exist."
+        )
+    }
+    
+    func testCase_13_2() {
+        let app = XCUIApplication()
+        
+        let addButton = app.buttons["Add"]
+        let associationTypeLabel = app.staticTexts["Association Type"]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let connectivityLabel = app.staticTexts["Connectivity"]
+        let discardButton = app.buttons["Discard"]
+        let electricDistributionDevice2 = app.buttons["Electric Distribution Device, 2"]
+        let electricDistributionDeviceLabel = app.staticTexts["Electric Distribution Device"]
+        let electricDistributionJunctionButton5 = app.buttons["Electric Distribution Junction, 5"]
+        let electricDistributionLine1 = app.buttons["Electric Distribution Line, 1"]
+        let electricDistributionLineDataSourceButton = app.buttons["Electric Distribution Line"]
+        let elementTitle = app.staticTexts["Associations"]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
+        let fractionAlongEdgeLabel = app.staticTexts["Fraction Along Edge"]
+        let fractionAlongEdgeSlider = app.sliders.firstMatch
+        /// Despite the test specifying setting the slider to 75%, the framework exceeds the target by a
+        /// little bit.
+        let fractionAlongEdgeValueAfter = app.staticTexts["77%"]
+        let fractionAlongEdgeValueBefore = app.staticTexts["0%"]
+        let fromElementLabel = app.staticTexts["From Element"]
+        let lowVoltageButton = app.staticTexts["Low Voltage"].firstMatch
+        let lowVoltageLabel = app.staticTexts["Low Voltage"]
+        let newAssociationText = app.staticTexts["New Association"]
+        let saveButton = app.buttons["Save"]
+        let terminalLabel = app.staticTexts["Terminal"]
+        let terminalPicker = app.buttons["Terminal, High"]
+        let toElementLabel = app.staticTexts["To Element"]
+        let undergroundThreePhaseButton = app.buttons["Asset Type Underground Three Phase 85"]
+        
+#if targetEnvironment(macCatalyst)
+        let addAssociationButton = app.buttons["Add Association"]
+        let fromNetworkDataSourceButton = app.menuItems["From Network Data Source"]
+        let terminalHighButton = app.menuItems["high"]
+        let terminalLowButton = app.menuItems["low"]
+#else
+        let addAssociationButton = app.staticTexts["Add Association"]
+        let fromNetworkDataSourceButton = app.buttons["From Network Data Source"]
+        let terminalHighButton = app.buttons["High"]
+        let terminalLowButton = app.buttons["Low"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        XCTAssertTrue(
+            elementTitle.waitForExistence(timeout: 5),
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            connectedFilterTitle.waitForExistence(timeout: 5),
+            "The filter result \"Connected\" doesn't exist."
+        )
+        
+        connectedFilterTitle.tap()
+        
+        XCTAssertTrue(
+            electricDistributionJunctionButton5.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Junction\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            electricDistributionDevice2.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            addAssociationButton.waitForExistence(timeout: 5),
+            "The \"Add Association\" button doesn't exist."
+        )
+        
+        addAssociationButton.tap()
+        
+        XCTAssertTrue(
+            fromNetworkDataSourceButton.waitForExistence(timeout: 5),
+            "The \"From Network Data Source\" button doesn't exist."
+        )
+        
+        fromNetworkDataSourceButton.tap()
+        
+        XCTAssertTrue(
+            electricDistributionLineDataSourceButton.waitForExistence(timeout: 5),
+            "The \"Electric Distribution Line\" button doesn't exist."
+        )
+        
+        electricDistributionLineDataSourceButton.tap()
+        
+        XCTAssertTrue(
+            undergroundThreePhaseButton.firstMatch.waitForExistence(timeout: 5),
+            "The Underground Three Phase button doesn't exist."
+        )
+        
+        undergroundThreePhaseButton.firstMatch.tap()
+        
+        XCTAssertTrue(
+            lowVoltageButton.firstMatch.waitForExistence(timeout: 5),
+            "The \"Low Voltage\" candidate doesn't exist."
+        )
+        
+        lowVoltageButton.firstMatch.tap()
+        
+        XCTAssertTrue(
+            newAssociationText.waitForExistence(timeout: 5),
+            "The New Association header text doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            associationTypeLabel.waitForExistence(timeout: 5),
+            "The association type label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            connectivityLabel.waitForExistence(timeout: 5),
+            "The association type value doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            fromElementLabel.waitForExistence(timeout: 5),
+            "The from element label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            electricDistributionDeviceLabel.waitForExistence(timeout: 5),
+            "The from element value doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            terminalLabel.waitForExistence(timeout: 5),
+            "The terminal label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            terminalPicker.waitForExistence(timeout: 5),
+            "The terminal picker doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            toElementLabel.waitForExistence(timeout: 5),
+            "The to element label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            lowVoltageLabel.waitForExistence(timeout: 5),
+            "The to element value doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            fractionAlongEdgeLabel.waitForExistence(timeout: 5),
+            "The fraction along edge label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            fractionAlongEdgeValueBefore.waitForExistence(timeout: 5),
+            "The fraction along edge label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            fractionAlongEdgeSlider.waitForExistence(timeout: 5),
+            "The fraction along edge slider doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            addButton.waitForExistence(timeout: 5),
+            "The add button doesn't exist."
+        )
+        
+        terminalPicker.tap()
+        
+        XCTAssertTrue(
+            terminalHighButton.waitForExistence(timeout: 5),
+            "The High terminal option doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            terminalLowButton.waitForExistence(timeout: 5),
+            "The Low terminal option doesn't exist."
+        )
+        
+        terminalLowButton.tap()
+        
+#if targetEnvironment(macCatalyst)
+        XCTExpectFailure("The mouse is known to miss the drag handle when starting from 0%.")
+#endif
+        fractionAlongEdgeSlider.adjust(toNormalizedSliderPosition: 0.75)
+        
+        XCTAssertTrue(
+            fractionAlongEdgeValueAfter.waitForExistence(timeout: 5),
+            "The fraction along edge label doesn't exist."
+        )
+        
+        addButton.tap()
+        
+        XCTAssertTrue(
+            electricDistributionJunctionButton5.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Junction\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            electricDistributionDevice2.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Device\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            electricDistributionLine1.waitForExistence(timeout: 5),
+            "The network source group \"Electric Distribution Line\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            saveButton.waitForExistence(timeout: 5),
+            "The save button doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            discardButton.waitForExistence(timeout: 5),
+            "The discard button doesn't exist."
+        )
+    }
+    
+    func testCase_13_3() {
+        let app = XCUIApplication()
+        
+        let addButton = app.buttons["Add"]
+        let associationTypeLabel = app.staticTexts["Association Type"]
+        let containerFilterTitle = app.staticTexts["Container"].firstMatch
+        let containmentLabel = app.staticTexts["Containment"]
+        let discardButton = app.buttons["Discard"]
+        let electricDistributionJunctionLabel = app.staticTexts["Electric Distribution Junction"]
+        let elementTitle = app.staticTexts["Associations"]
+        let formTitle = app.staticTexts["Electric Distribution Junction"]
+        let fromElementLabel = app.staticTexts["From Element"]
+        let newAssociationText = app.staticTexts["New Association"]
+        let saveButton = app.buttons["Save"]
+        let structureJunction2 = app.buttons["Structure Junction, 2"]
+        let structureJunctionDataSourceButton = app.buttons["Structure Junction"]
+        let toElementValueLabel = app.staticTexts["Vault"]
+        let toElementLabel = app.staticTexts["To Element"]
+        let vaultAssetTypeButton = app.buttons["Vault"]
+        let vaultCandidateButton = app.staticTexts.matching(identifier: "Vault").element(boundBy: 1)
+        
+#if targetEnvironment(macCatalyst)
+        let addAssociationButton = app.buttons["Add Association"]
+        let contentVisibleSwitch = app.checkBoxes["Content Visible"]
+        let fromNetworkDataSourceButton = app.menuItems["From Network Data Source"]
+#else
+        let addAssociationButton = app.staticTexts["Add Association"]
+        let contentVisibleSwitch = app.switches["Content Visible"].switches.firstMatch
+        let fromNetworkDataSourceButton = app.buttons["From Network Data Source"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        XCTAssertTrue(
+            elementTitle.waitForExistence(timeout: 5),
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            containerFilterTitle.waitForExistence(timeout: 5),
+            "The filter result \"Connected\" doesn't exist."
+        )
+        
+        containerFilterTitle.tap()
+        
+        XCTAssertTrue(
+            addAssociationButton.waitForExistence(timeout: 5),
+            "The \"Add Association\" button doesn't exist."
+        )
+        
+        addAssociationButton.tap()
+        
+        XCTAssertTrue(
+            fromNetworkDataSourceButton.waitForExistence(timeout: 5),
+            "The \"From Network Data Source\" button doesn't exist."
+        )
+        
+        fromNetworkDataSourceButton.tap()
+        
+        XCTAssertTrue(
+            structureJunctionDataSourceButton.waitForExistence(timeout: 5),
+            "The \"Structure Junction\" button doesn't exist."
+        )
+        
+        structureJunctionDataSourceButton.tap()
+        
+        XCTAssertTrue(
+            vaultAssetTypeButton.firstMatch.waitForExistence(timeout: 5),
+            "The Vault button doesn't exist."
+        )
+        
+        vaultAssetTypeButton.tap()
+        
+        XCTAssertTrue(
+            vaultCandidateButton.waitForExistence(timeout: 5),
+            "The \"Vault\" candidate doesn't exist."
+        )
+        
+        vaultCandidateButton.tap()
+        
+        XCTAssertTrue(
+            newAssociationText.waitForExistence(timeout: 5),
+            "The New Association header text doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            associationTypeLabel.waitForExistence(timeout: 5),
+            "The association type label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            containmentLabel.waitForExistence(timeout: 5),
+            "The association type value doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            contentVisibleSwitch.waitForExistence(timeout: 5),
+            "The content visibility switch doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            fromElementLabel.waitForExistence(timeout: 5),
+            "The from element label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            toElementValueLabel.waitForExistence(timeout: 5),
+            "The from element value doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            toElementLabel.waitForExistence(timeout: 5),
+            "The to element label doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            electricDistributionJunctionLabel.waitForExistence(timeout: 5),
+            "The to element value doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            addButton.waitForExistence(timeout: 5),
+            "The add button doesn't exist."
+        )
+        
+        contentVisibleSwitch.tap()
+        
+        addButton.tap()
+        
+        XCTAssertTrue(
+            structureJunction2.waitForExistence(timeout: 5),
+            "The added structure junction doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            saveButton.waitForExistence(timeout: 5),
+            "The save button doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            discardButton.waitForExistence(timeout: 5),
+            "The discard button doesn't exist."
         )
     }
 }

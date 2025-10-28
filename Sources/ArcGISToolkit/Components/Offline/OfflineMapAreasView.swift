@@ -181,7 +181,7 @@ public struct OfflineMapAreasView: View {
             // or else the state is lost when backgrounding and foregrounding the application.
             .sheet(isPresented: $isAddingOnDemandArea) {
                 OnDemandConfigurationView(
-                    map: onlineMap.clone(),
+                    map: Map(item: onlineMap.item!),
                     title: mapViewModel.nextOnDemandAreaTitle(),
                     titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
                 ) {

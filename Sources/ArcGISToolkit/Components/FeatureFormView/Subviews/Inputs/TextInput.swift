@@ -23,13 +23,25 @@ struct TextInput: View {
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
+    /// Performs camera authorization request handling.
+    @State private var cameraRequester = CameraRequester()
+    
     /// A Boolean value indicating whether the full screen text input is presented.
     @State private var fullScreenTextInputIsPresented = false
     
     /// A Boolean value indicating whether the code scanner is presented.
     @State private var scannerIsPresented = false
     
-    /// The current text value.
+    /// The element's current value.
+    ///
+    /// - Note: A string is used, irrespective of the element's field type, in order to take advantage of the
+    /// feature form's validation system. If the user enters an alphanumeric value into a numeric field, it
+    /// triggers a validation error that is shown in the UI. If a type respective of the field type is used
+    /// instead, when the user enters an alphanumeric string into a numeric field, the bound value is not
+    /// updated and the opportunity to present a validation error to the user is lost. Additionally, if the user
+    /// gives focus to another field, the bad value they've entered is lost, creating a potentially frustrating
+    /// user experience. The string approach affords the user the opportunity to return the input and resolve
+    /// the validation error.
     @State private var text = ""
     
     /// A Boolean value indicating whether the device camera is accessible for scanning.
@@ -155,7 +167,11 @@ private extension TextInput {
             if isBarcodeScanner {
                 Button {
                     embeddedFeatureFormViewModel.focusedElement = element
-                    scannerIsPresented = true
+                    if cameraRequester.authorizationStatus == .authorized {
+                        scannerIsPresented = true
+                    } else {
+                        cameraRequester.request()
+                    }
                 } label: {
                     Image(systemName: "barcode.viewfinder")
                         .font(.title2)
@@ -164,6 +180,12 @@ private extension TextInput {
                 .disabled(cameraIsDisabled)
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("\(element.label) Scan Button")
+                .cameraRequester(cameraRequester)
+                .onChange(of: cameraRequester.authorizationStatus) { _, newValue in
+                    if newValue == .authorized {
+                        scannerIsPresented = true
+                    }
+                }
             }
 #endif
         }
@@ -229,7 +251,7 @@ private extension TextInput {
         var body: some View {
             HStack {
                 FormElementHeader(element: element)
-                Button("Done") {
+                Button.done {
                     dismiss()
                 }
 #if !os(visionOS)

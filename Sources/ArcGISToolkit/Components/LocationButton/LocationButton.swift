@@ -116,12 +116,16 @@ public struct LocationButton: View {
             )
         case .started:
             Text(
-                "Auto-pan",
-                bundle: .toolkitModule,
-                comment:
-                    """
-                    The accessibility label of the location button when the location display is showing and the button cycles through auto-pan modes.
-                    """
+                LocalizedStringResource(
+                    "location-button-auto-pan-accessibility-label",
+                    defaultValue: "Auto-pan",
+                    bundle: .toolkit,
+                    comment: """
+                        The accessibility label of the location button when the 
+                        location display is showing and the button cycles 
+                        through auto-pan modes.
+                        """
+                )
             )
         @unknown default:
             fatalError()
@@ -158,15 +162,21 @@ public struct LocationButton: View {
             switch autoPanMode {
             case .off:
                 Text(
-                    "Off",
-                    bundle: .toolkitModule,
-                    comment: "The accessibility value of the location button when the auto-pan mode is off."
+                    LocalizedStringResource(
+                        "location-button-status-label-off",
+                        defaultValue: "Off",
+                        bundle: .toolkit,
+                        comment: "The accessibility value of the location button when the auto-pan mode is off."
+                    )
                 )
             case .recenter:
                 Text(
-                    "Recenter",
-                    bundle: .toolkitModule,
-                    comment: "The accessibility value of the location button when the auto-pan mode is recenter."
+                    LocalizedStringResource(
+                        "location-button-status-label-recenter",
+                        defaultValue: "Recenter",
+                        bundle: .toolkit,
+                        comment: "The accessibility value of the location button when the auto-pan mode is recenter."
+                    )
                 )
             case .compassNavigation:
                 Text(
@@ -176,9 +186,12 @@ public struct LocationButton: View {
                 )
             case .navigation:
                 Text(
-                    "Navigation",
-                    bundle: .toolkitModule,
-                    comment: "The accessibility value of the location button when the auto-pan mode is navigation."
+                    LocalizedStringResource(
+                        "location-button-status-label-navigation",
+                        defaultValue: "Navigation",
+                        bundle: .toolkit,
+                        comment: "The accessibility value of the location button when the auto-pan mode is navigation."
+                    )
                 )
             @unknown default:
                 fatalError("Unknown case")
@@ -252,9 +265,12 @@ public struct LocationButton: View {
     /// The text for the auto-pan section in the context menu.
     private var autoPanSectionHeaderLabelText: Text {
         Text(
-            "Auto-pan",
-            bundle: .toolkitModule,
-            comment: "The header of the auto-pan section in the location button context menu."
+            LocalizedStringResource(
+                "location-button-auto-pan-section-header-title",
+                defaultValue: "Auto-pan",
+                bundle: .toolkit,
+                comment: "The header of the auto-pan section in the location button context menu."
+            )
         )
     }
     
@@ -392,27 +408,39 @@ private extension LocationDisplay.AutoPanMode {
         return switch self {
         case .off:
             Text(
-                "Off",
-                bundle: .toolkitModule,
-                comment: "The label text for turning the auto-pan mode off in the location button context menu."
+                LocalizedStringResource(
+                    "location-button-accessibility-value-off",
+                    defaultValue: "Off",
+                    bundle: .toolkit,
+                    comment: "The label text for turning the auto-pan mode off in the location button context menu."
+                )
             )
         case .recenter:
             Text(
-                "Recenter",
-                bundle: .toolkitModule,
-                comment: "The label text for choosing the 'recenter' auto-pan mode in the location button context menu."
+                LocalizedStringResource(
+                    "location-button-accessibility-value-recenter",
+                    defaultValue: "Recenter",
+                    bundle: .toolkit,
+                    comment: "The label text for choosing the 'recenter' auto-pan mode in the location button context menu."
+                )
             )
         case .compassNavigation:
             Text(
-                "Compass",
-                bundle: .toolkitModule,
-                comment: "The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu."
+                LocalizedStringResource(
+                    "location-button-accessibility-value-compass",
+                    defaultValue: "Compass",
+                    bundle: .toolkit,
+                    comment: "The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu."
+                )
             )
         case .navigation:
             Text(
-                "Navigation",
-                bundle: .toolkitModule,
-                comment: "The label text for choosing the 'navigation' auto-pan mode in the location button context menu."
+                LocalizedStringResource(
+                    "location-button-accessibility-value-navigation",
+                    defaultValue: "Navigation",
+                    bundle: .toolkit,
+                    comment: "The label text for choosing the 'navigation' auto-pan mode in the location button context menu."
+                )
             )
         @unknown default:
             fatalError()

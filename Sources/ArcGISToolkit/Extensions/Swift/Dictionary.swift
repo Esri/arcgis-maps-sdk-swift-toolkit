@@ -1,4 +1,4 @@
-// Copyright 2023 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,16 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-
-/// A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
-struct FormHeader: View /* Deprecated */ {
-    /// The title defined for the form.
-    let title: String
-    
-    var body: some View {
-        Text(title)
-            .font(.title)
-            .fontWeight(.bold)
+extension Dictionary where Key == String {
+    /// Performs a case-insensitive key lookup on the dictionary.
+    /// - Parameter lookupKey: The key to lookup.
+    /// - Returns: The value for the key, if found.
+    func valueIgnoringCase(for lookupKey: String) -> Value? {
+        first { $0.key.caseInsensitiveCompare(lookupKey) == .orderedSame }?.value
     }
 }

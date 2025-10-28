@@ -15,8 +15,13 @@
 import ArcGIS
 import Observation
 
-@Observable
+private import os
+
+@MainActor @Observable
 class EmbeddedFeatureFormViewModel {
+    /// The models for fetching association filter results for each utility associations form element in the form.
+    var associationsFilterResultsModels: [UtilityAssociationsFormElement: AssociationsFilterResultsModel] = [:]
+    
     /// The current focused element, if one exists.
     var focusedElement: FormElement? {
         didSet {
@@ -26,8 +31,14 @@ class EmbeddedFeatureFormViewModel {
         }
     }
     
-    /// The currently presented feature form view.
-    var presentedForm: FeatureFormView?
+    /// A Boolean value indicating whether the associated form has edits.
+    var hasEdits = false {
+        didSet {
+            if !hasEdits {
+                previouslyFocusedElements.removeAll()
+            }
+        }
+    }
     
     /// The set of all elements which previously held focus.
     var previouslyFocusedElements = [FormElement]()
@@ -36,67 +47,88 @@ class EmbeddedFeatureFormViewModel {
     var title = ""
     
     /// The list of visible form elements.
-    var visibleElements = [FormElement]()
+    var visibleElements: [FormElement] {
+        var elements = featureForm
+            .elements
+            .filter { elementVisibility[$0] == true }
+        if let attachmentsElement = featureForm.defaultAttachmentsElement {
+            elements.append(attachmentsElement)
+        }
+        return elements
+    }
+    
+    /// A dictionary of each form element and whether or not it is visible.
+    private var elementVisibility: [FormElement: Bool] = [:]
     
     /// The expression evaluation task.
     @ObservationIgnored
     private var evaluateTask: Task<Void, Never>?
     
     /// The feature form.
-    private(set) var featureForm: FeatureForm
+    let featureForm: FeatureForm
     
     /// The group of visibility tasks.
     @ObservationIgnored
-    private var isVisibleTasks = [Task<Void, Never>]()
+    private var visibilityTask: Task<Void, Never>?
+    
+    /// A task to monitor whether the form has edits.
+    @ObservationIgnored
+    private var monitorEditsTask: Task<Void, Never>?
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
     public init(featureForm: FeatureForm) {
         self.featureForm = featureForm
+        evaluateExpressions()
+        monitorEdits()
+        monitorVisibility()
     }
     
     deinit {
         evaluateTask?.cancel()
-        isVisibleTasks.forEach { task in
-            task.cancel()
-        }
-        isVisibleTasks.removeAll()
-    }
-    
-    /// Kick off tasks to monitor `isVisible` for each element.
-    @MainActor
-    private func initializeIsVisibleTasks() {
-        isVisibleTasks.forEach { $0.cancel() }
-        isVisibleTasks.removeAll()
-        for element in featureForm.elements {
-            let newTask = Task { [weak self] in
-                for await _ in element.$isVisible {
-                    guard !Task.isCancelled else { return }
-                    self?.updateVisibleElements()
-                }
-            }
-            isVisibleTasks.append(newTask)
-        }
-    }
-    
-    /// A detached task observing visibility changes.
-    private func updateVisibleElements() {
-        visibleElements = featureForm.elements.filter { $0.isVisible }
-    }
-    
-    /// Performs an initial evaluation of all form expressions.
-    @MainActor
-    func initialEvaluation() async {
-        _ = try? await featureForm.evaluateExpressions()
-        initializeIsVisibleTasks()
+        monitorEditsTask?.cancel()
+        visibilityTask?.cancel()
     }
     
     /// Performs an evaluation of all form expressions.
-    @MainActor
     func evaluateExpressions() {
         evaluateTask?.cancel()
         evaluateTask = Task {
-            _ = try? await featureForm.evaluateExpressions()
+            if let errors = try? await featureForm.evaluateExpressions(), !errors.isEmpty {
+                for evaluationError in errors {
+                    Logger.featureFormView.error(
+                        "Error evaluating expression: \(evaluationError.error.localizedDescription)"
+                    )
+                }
+            }
+        }
+    }
+    
+    /// Starts a task to monitor whether the associated form has edits.
+    private func monitorEdits() {
+        monitorEditsTask?.cancel()
+        monitorEditsTask = Task { [weak self] in
+            guard !Task.isCancelled, let featureForm = self?.featureForm else { return }
+            for await hasEdits in featureForm.$hasEdits.dropFirst() {
+                self?.hasEdits = hasEdits
+            }
+        }
+    }
+    
+    /// Starts a task group which monitors the visibility of each form element.
+    private func monitorVisibility() {
+        visibilityTask?.cancel()
+        visibilityTask = Task { [weak self] in
+            await withTaskGroup { group in
+                for element in self?.featureForm.elements ?? [] {
+                    group.addTask { @MainActor @Sendable [weak self] in
+                        for await isVisible in element.$isVisible {
+                            guard !Task.isCancelled else { return }
+                            self?.elementVisibility[element] = isVisible
+                        }
+                    }
+                }
+            }
         }
     }
 }

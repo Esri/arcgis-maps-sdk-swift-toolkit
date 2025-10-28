@@ -120,12 +120,6 @@ for the AR experience. */
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Barva";
 
-/* An compass description to be read by a screen reader describing the
-current heading. The first variable being a degree value and the
-second being a corresponding cardinal direction (north, northeast,
-east, etc.). */
-"Compass, heading %lld degrees %@" = "Kompas, usmerjenost %lld stopinj %@";
-
 /* A label indicating a utility association's 
 containment is not visible. */
 "Content" = "Vsebina";

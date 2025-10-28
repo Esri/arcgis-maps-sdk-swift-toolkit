@@ -16,78 +16,51 @@ import ArcGIS
 import SwiftUI
 
 struct EmbeddedFeatureFormView: View {
-    /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
-    @Environment(\.formDeprecatedInitializerWasUsed) var deprecatedInitializerWasUsed
+    /// The model for the FeatureFormView containing the view.
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel: FeatureFormViewModel
     
-    /// The view model for the form.
-    @State private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
-    
-    /// Initializes a form view.
-    /// - Parameter featureForm: The feature form defining the editing experience.
-    init(featureForm: FeatureForm) {
-        self.embeddedFeatureFormViewModel = EmbeddedFeatureFormViewModel(featureForm: featureForm)
-    }
+    /// The feature form defining the editing experience.
+    let form: FeatureForm
     
     var body: some View {
-        ScrollViewReader { scrollViewProxy in
-            ScrollView {
-                VStack(alignment: .leading) {
-                    if deprecatedInitializerWasUsed, !embeddedFeatureFormViewModel.title.isEmpty {
-                        FormHeader(title: embeddedFeatureFormViewModel.title)
-                        Divider()
+        if let embeddedFeatureFormViewModel {
+            ScrollViewReader { scrollViewProxy in
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
+                            makeElement(element)
+                        }
                     }
-                    ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
-                        makeElement(element)
-                    }
-                    if let attachmentsElement = embeddedFeatureFormViewModel.featureForm.defaultAttachmentsElement {
-                        // The Toolkit currently only supports AttachmentsFormElements via the
-                        // default attachments element. Once AttachmentsFormElements can be authored
-                        // this can call makeElement(_:) instead and makeElement(_:) should have a
-                        // case added for AttachmentsFormElement.
-                        AttachmentsFeatureElementView(
-                            formElement: attachmentsElement,
-                            formViewModel: embeddedFeatureFormViewModel
-                        )
+                }
+                .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
+                    if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
+                        withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                     }
                 }
             }
-            .task {
-                for await hasEdits in embeddedFeatureFormViewModel.featureForm.$hasEdits.dropFirst() {
-                    if !hasEdits {
-                        embeddedFeatureFormViewModel.previouslyFocusedElements.removeAll()
-                    }
-                }
+            .environment(embeddedFeatureFormViewModel)
+            .featureFormToolbar(form, isAForm: true) {
+                featureFormViewModel.removeModel(form)
             }
-            .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
-                if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
-                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
-                }
-            }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(embeddedFeatureFormViewModel.title)
             .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
                 embeddedFeatureFormViewModel.title = newTitle
             }
-            .navigationBarTitleDisplayMode(
-                .inline,
-                isApplied: !deprecatedInitializerWasUsed
+            .padding(.horizontal)
+            .preference(
+                key: PresentedFeatureFormPreferenceKey.self,
+                value: .init(object: embeddedFeatureFormViewModel)
             )
-            .navigationTitle(
-                embeddedFeatureFormViewModel.title,
-                isApplied: !deprecatedInitializerWasUsed
-            )
-        }
 #if os(iOS)
-        .scrollDismissesKeyboard(.immediately)
+            .scrollDismissesKeyboard(.immediately)
 #endif
-        .environment(embeddedFeatureFormViewModel)
-        .padding([.horizontal])
-        .preference(
-            key: PresentedFeatureFormPreferenceKey.self,
-            value: .init(object: embeddedFeatureFormViewModel.featureForm)
-        )
-        .task {
-            await embeddedFeatureFormViewModel.initialEvaluation()
         }
-        .featureFormToolbar(embeddedFeatureFormViewModel.featureForm, isAForm: true)
+    }
+    
+    /// The view model for the form.
+    var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+        featureFormViewModel.getModel(form)
     }
 }
 
@@ -106,17 +79,22 @@ extension EmbeddedFeatureFormView {
     /// Makes UI for a field form element or a text form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
-        switch element {
-        case let element as FieldFormElement:
-            makeFieldElement(element)
-        case let element as TextFormElement:
-            makeTextElement(element)
-        case let element as UtilityAssociationsFormElement:
-            if !deprecatedInitializerWasUsed {
+        if let embeddedFeatureFormViewModel {
+            switch element {
+            case let element as AttachmentsFormElement:
+                AttachmentsFeatureElementView(
+                    formElement: element,
+                    formViewModel: embeddedFeatureFormViewModel
+                )
+            case let element as FieldFormElement:
+                makeFieldElement(element)
+            case let element as TextFormElement:
+                makeTextElement(element)
+            case let element as UtilityAssociationsFormElement:
                 makeUtilityAssociationsFormElement(element)
+            default:
+                EmptyView()
             }
-        default:
-            EmptyView()
         }
     }
     

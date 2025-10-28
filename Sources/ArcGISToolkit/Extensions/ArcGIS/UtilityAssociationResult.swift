@@ -12,22 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+import ArcGIS
 
-extension View {
-    /// Conditionally configures the title display mode for this view.
-    /// - Parameters:
-    ///   - displayMode: The style to use for displaying the title.
-    ///   - isApplied: A Boolean value indicating whether the display mode is applied to the view or not.
-    @ViewBuilder
-    func navigationBarTitleDisplayMode(
-        _ displayMode: NavigationBarItem.TitleDisplayMode,
-        isApplied: Bool
-    ) -> some View {
-        if isApplied {
-            self.navigationBarTitleDisplayMode(displayMode)
-        } else {
-            self
-        }
+extension UtilityAssociationResult {
+    /// The utility element which is the associated feature.
+    var associatedElement: UtilityElement {
+        associatedFeatureIsToElement ? association.toElement : association.fromElement
+    }
+    
+    /// A Boolean value indicating whether the `associatedFeature` global ID
+    /// matches the `toElement` global ID.
+    var associatedFeatureIsToElement: Bool {
+        associatedFeature.globalID == association.toElement.globalID
     }
 }
