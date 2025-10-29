@@ -27,6 +27,8 @@ extension FeatureFormView {
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
         /// The phrase used to filter candidates by name.
         @State private var filterPhrase = ""
+        /// The parameters for retrieving the next page of results.
+        @State private var nextQueryParams: QueryParameters?
         /// A Boolean value indicating if a candidate query is running.
         @State private var queryIsRunning = false
         
@@ -51,6 +53,16 @@ extension FeatureFormView {
                         contentUnavailableView
                     } else {
                         sectionForCandidates
+                        if let nextQueryParams {
+                            ProgressView()
+                                .task {
+                                    let result = try? await source.queryFeatures(assetType: assetType, parameters: nextQueryParams)
+                                    if let moreCandidates = result?.candidates {
+                                        candidates.append(contentsOf: moreCandidates)
+                                    }
+                                    self.nextQueryParams = result?.nextQueryParams
+                                }
+                        }
                     }
                 }
             }
@@ -59,7 +71,9 @@ extension FeatureFormView {
                 defer { queryIsRunning = false }
                 let parameters = QueryParameters()
                 parameters.whereClause = "1=1"
-                candidates = (try? await source.queryFeatures(assetType: assetType, parameters: parameters).candidates) ?? []
+                let result = try? await source.queryFeatures(assetType: assetType, parameters: parameters)
+                candidates = result?.candidates ?? []
+                nextQueryParams = result?.nextQueryParams
             }
         }
         
