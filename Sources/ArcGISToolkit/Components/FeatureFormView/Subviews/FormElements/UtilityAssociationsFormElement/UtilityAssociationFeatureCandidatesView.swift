@@ -27,10 +27,10 @@ extension FeatureFormView {
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
         /// The phrase used to filter candidates by name.
         @State private var filterPhrase = ""
+        /// A Boolean value indicating if the initial candidate query is running.
+        @State private var initialQueryIsRunning = false
         /// The parameters for retrieving the next page of results.
         @State private var nextQueryParams: QueryParameters?
-        /// A Boolean value indicating if a candidate query is running.
-        @State private var queryIsRunning = false
         
         /// The asset type to use when querying for feature candidates.
         let assetType: UtilityAssetType
@@ -46,7 +46,7 @@ extension FeatureFormView {
         var body: some View {
             List {
                 sectionForFilter
-                if queryIsRunning {
+                if initialQueryIsRunning {
                     ProgressView()
                 } else {
                     if filteredCandidates.isEmpty {
@@ -67,8 +67,8 @@ extension FeatureFormView {
                 }
             }
             .task {
-                queryIsRunning = true
-                defer { queryIsRunning = false }
+                initialQueryIsRunning = true
+                defer { initialQueryIsRunning = false }
                 let parameters = QueryParameters()
                 parameters.whereClause = "1=1"
                 let result = try? await source.queryFeatures(assetType: assetType, parameters: parameters)
