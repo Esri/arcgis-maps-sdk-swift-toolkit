@@ -65,8 +65,8 @@ extension LocalizedStringResource {
             "Fraction Along Edge",
             bundle: .toolkit,
             comment: """
-                A label in reference to a fractional distance along an
-                edge style utility network element.
+                A label in reference to a fractional distance along an 
+                edge of a utility network element.
                 """
         )
     }
@@ -101,6 +101,17 @@ extension LocalizedStringResource {
             "OK",
             bundle: .toolkit,
             comment: "A label for button to proceed with an operation."
+        )
+    }
+    
+    static var percentAlong: Self {
+        .init(
+            "Percent Along",
+            bundle: .toolkit,
+            comment: """
+                A label in reference to a percent along an 
+                edge of a utility network element.
+                """
         )
     }
     

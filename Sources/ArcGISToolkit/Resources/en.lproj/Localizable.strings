@@ -1,5 +1,5 @@
 /* A label with the name of a terminal on an associated
-utility element (first variable) and a fractional value
+utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
 "%@, %@" = "%@, %@";
@@ -387,8 +387,8 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "Finish editing failed.\n%@";
 
-/* A label in reference to a fractional distance along an
-edge style utility network element. */
+/* A label in reference to a fractional distance along an 
+edge of a utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
 
 /* A label for the element on the "from" side of a utility association. */
@@ -626,6 +626,10 @@ removes only the association.  */
 
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Password Required";
+
+/* A label in reference to a percent along an 
+edge of a utility network element. */
+"Percent Along" = "Percent Along";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Please enable camera access in settings.";
