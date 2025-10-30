@@ -325,6 +325,48 @@ public class JobManager: ObservableObject {
         
         self.backgroundTaskIdentifier = identifier
     }
+    
+    @available(iOS 26.0, *)
+    public func startContinuedProcessingTask<Job: JobProtocol>(for job: Job) {
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.esri.ArcGISToolkit.jobManager.continuedProcessingTask", using: .main) { task in
+            let task = task as! BGContinuedProcessingTask
+            
+            task.expirationHandler = {
+                Task { await job.cancel() }
+            }
+            
+            task.progress.totalUnitCount = 100
+            task.progress.completedUnitCount = job.progress.completedUnitCount
+            
+            Task {
+                var observers = Set<NSKeyValueObservation>()
+                let observer = job.progress.observe(\.completedUnitCount, options: .new) { [progress = task.progress] _, value in
+                    progress.completedUnitCount = value.newValue ?? 0
+                    print("-- progress: \(progress.completedUnitCount)")
+                }
+                observers.insert(observer)
+                
+                let result = await job.result
+                print("-- done")
+                switch result {
+                case .success:
+                    task.setTaskCompleted(success: true)
+                case .failure:
+                    task.setTaskCompleted(success: false)
+                }
+            }
+        }
+        
+        let request = BGContinuedProcessingTaskRequest(
+            identifier: "com.esri.ArcGISToolkit.jobManager.continuedProcessingTask",
+            title: "A succinct title",
+            subtitle: "A useful and informative subtitle"
+        )
+
+        request.strategy = .fail
+
+        try! BGTaskScheduler.shared.submit(request)
+    }
 }
 
 /// An enum that defines a schedule for background status checks.
