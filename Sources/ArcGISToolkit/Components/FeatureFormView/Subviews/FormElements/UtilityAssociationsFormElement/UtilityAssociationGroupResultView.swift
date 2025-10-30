@@ -124,27 +124,34 @@ extension FeatureFormView {
         }
         
         func detailsButton(for result: UtilityAssociationResult) -> some View {
-            Button {
-                featureFormViewModel.navigationPath.append(
-                    FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
-                        form,
-                        element,
-                        result
+            Menu {
+                ShowOnMapButton(feature: result.associatedFeature)
+                Button {
+                    featureFormViewModel.navigationPath.append(
+                        FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
+                            form,
+                            element,
+                            result
+                        )
                     )
-                )
+                } label: {
+                    Text(
+                        "More Information",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to view utility association details."
+                    )
+                }
             } label: {
                 Label {
                     Text(
-                        "Utility Association Details",
+                        "More Options",
                         bundle: .toolkitModule,
-                        comment: "A label for a button to view utility association details."
+                        comment: "A label for a button to see more options for a list row."
                     )
                 } icon: {
                     Image(systemName: "ellipsis.circle")
                 }
-                .contentShape(.circle)
                 .labelStyle(.iconOnly)
-                .tint(.blue)
             }
         }
         
@@ -167,9 +174,6 @@ extension FeatureFormView {
             } label: {
                 HStack {
                     UtilityAssociationResultLabel(result: result)
-                    ShowOnMapButton(feature: result.associatedFeature)
-                        .labelStyle(.iconOnly)
-                        .tint(.blue)
                     detailsButton(for: result)
                         .buttonStyle(.plain)
                         .hoverEffect()
