@@ -1697,12 +1697,12 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_12_6() {
         let app = XCUIApplication()
-        let associationSettingButton = app.buttons["Utility Association Details"]
         let cancelButton = app.buttons["Cancel"].firstMatch
         let discardButton = app.buttons["Discard"].firstMatch
         let elementTitle = app.staticTexts["Associations"]
         let connectedFilterTitle = app.staticTexts["Connected"]
         let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
+        let moreOptionsButton = app.buttons["More Options"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
         let removeAssociationButton = app.buttons["Remove Association"]
         let removeButton = app.buttons["Remove"].firstMatch
@@ -1742,11 +1742,11 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            associationSettingButton.waitForExistence(timeout: 5),
+            moreOptionsButton.waitForExistence(timeout: 5),
             "The association settings button doesn't exist."
         )
         
-        associationSettingButton.tap()
+        moreOptionsButton.tap()
         
         XCTAssertTrue(
             removeAssociationButton.waitForExistence(timeout: 5),
@@ -1761,6 +1761,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         cancelButton.tap()
+        
+        moreOptionsButton.tap()
         
         removeAssociationButton.tap()
         
@@ -1796,7 +1798,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
 #if targetEnvironment(macCatalyst)
-        transformerButton.rightClick()
+        moreOptionsButton.tap()
 #else
         transformerButton.swipeLeft()
 #endif

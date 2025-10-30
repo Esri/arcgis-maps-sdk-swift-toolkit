@@ -59,15 +59,9 @@ extension FeatureFormView {
                 List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
                     mainButton(for: utilityAssociationResult)
                         .disabled(navigationIsDisabled)
-#if targetEnvironment(macCatalyst)
-                        .contextMenu {
-                            deleteButton(for: utilityAssociationResult.association)
-                        }
-#else
                         .swipeActions {
                             deleteButton(for: utilityAssociationResult.association)
                         }
-#endif
                         .tint(.primary)
                 }
                 .associationRemovalConfirmation(
@@ -145,6 +139,7 @@ extension FeatureFormView {
                         Image(systemName: "info.circle")
                     }
                 }
+                deleteButton(for: result.association)
             } label: {
                 Label {
                     Text(
