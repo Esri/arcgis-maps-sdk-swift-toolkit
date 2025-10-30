@@ -135,11 +135,15 @@ extension FeatureFormView {
                         )
                     )
                 } label: {
-                    Text(
-                        "More Information",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to view utility association details."
-                    )
+                    Label {
+                        Text(
+                            "More Information",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to view details for a list row."
+                        )
+                    } icon: {
+                        Image(systemName: "info.circle")
+                    }
                 }
             } label: {
                 Label {
