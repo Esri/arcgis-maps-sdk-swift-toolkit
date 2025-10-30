@@ -328,7 +328,9 @@ public class JobManager: ObservableObject {
     
     @available(iOS 26.0, *)
     public func startContinuedProcessingTask<Job: JobProtocol>(for job: Job) {
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.esri.ArcGISToolkit.jobManager.continuedProcessingTask", using: .main) { task in
+        print("-- func was called")
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.esri.JobManagerExample.cpt", using: .main) { task in
+            print("-- starting bg continued task")
             let task = task as! BGContinuedProcessingTask
             
             task.expirationHandler = {
@@ -336,12 +338,13 @@ public class JobManager: ObservableObject {
             }
             
             task.progress.totalUnitCount = 100
-            task.progress.completedUnitCount = job.progress.completedUnitCount
+            task.progress.completedUnitCount = Int64(job.progress.fractionCompleted * 100)
             
             Task {
                 var observers = Set<NSKeyValueObservation>()
-                let observer = job.progress.observe(\.completedUnitCount, options: .new) { [progress = task.progress] _, value in
-                    progress.completedUnitCount = value.newValue ?? 0
+                let observer = job.progress.observe(\.fractionCompleted, options: .new) { [progress = task.progress] _, value in
+                    guard let fractionCompleted = value.newValue else { return }
+                    progress.completedUnitCount = Int64(fractionCompleted * 100)
                     print("-- progress: \(progress.completedUnitCount)")
                 }
                 observers.insert(observer)
@@ -358,9 +361,9 @@ public class JobManager: ObservableObject {
         }
         
         let request = BGContinuedProcessingTaskRequest(
-            identifier: "com.esri.ArcGISToolkit.jobManager.continuedProcessingTask",
-            title: "A succinct title",
-            subtitle: "A useful and informative subtitle"
+            identifier: "com.esri.JobManagerExample.cpt",
+            title: "Take Map Offline",
+            subtitle: "Taking tree inspection map offline."
         )
 
         request.strategy = .fail
