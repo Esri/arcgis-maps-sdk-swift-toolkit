@@ -176,6 +176,7 @@ extension FeatureFormView {
                     detailsButton(for: result)
                         .buttonStyle(.plain)
                         .hoverEffect()
+                        .tint(.blue)
                 }
             }
         }
