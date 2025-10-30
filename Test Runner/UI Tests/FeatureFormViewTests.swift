@@ -1706,12 +1706,10 @@ final class FeatureFormViewTests: XCTestCase {
         let removeButton = app.buttons["Remove"].firstMatch
         
 #if targetEnvironment(macCatalyst)
-        let inlineRemoveAssociationButton = app.menuItems["remove_association"]
         let moreOptionsButton = app.popUpButtons["More Options"]
         let removeAssociationButton = app.menuItems["Remove Association"]
         let transformerButton = app.popUpButtons["Transformer, High"]
 #else
-        let inlineRemoveAssociationButton = app.buttons["Remove Association"]
         let moreOptionsButton = app.buttons["More Options"]
         let removeAssociationButton = app.buttons["Remove Association"]
         let transformerButton = app.buttons["Transformer, High"]
@@ -1807,11 +1805,11 @@ final class FeatureFormViewTests: XCTestCase {
 #endif
         
         XCTAssertTrue(
-            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
+            removeAssociationButton.waitForExistence(timeout: 5),
             "The delete button doesn't exist."
         )
         
-        inlineRemoveAssociationButton.tap()
+        removeAssociationButton.tap()
         
         XCTAssertTrue(
             cancelButton.waitForExistence(timeout: 5),
@@ -1830,10 +1828,10 @@ final class FeatureFormViewTests: XCTestCase {
 #else
         transformerButton.swipeLeft()
         XCTAssertTrue(
-            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
+            removeAssociationButton.waitForExistence(timeout: 5),
             "The delete button doesn't exist."
         )
-        inlineRemoveAssociationButton.tap()
+        removeAssociationButton.tap()
 #endif
         
         XCTAssertTrue(
