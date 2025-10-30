@@ -1702,16 +1702,19 @@ final class FeatureFormViewTests: XCTestCase {
         let elementTitle = app.staticTexts["Associations"]
         let connectedFilterTitle = app.staticTexts["Connected"]
         let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
-        let moreOptionsButton = app.buttons["More Options"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let removeAssociationButton = app.buttons["Remove Association"]
         let removeButton = app.buttons["Remove"].firstMatch
-        let transformerButton = app.buttons["Transformer, High"]
         
 #if targetEnvironment(macCatalyst)
         let inlineRemoveAssociationButton = app.menuItems["remove_association"]
+        let moreOptionsButton = app.popUpButtons["More Options"]
+        let removeAssociationButton = app.menuItems["Remove Association"]
+        let transformerButton = app.popUpButtons["Transformer, High"]
 #else
         let inlineRemoveAssociationButton = app.buttons["Remove Association"]
+        let moreOptionsButton = app.buttons["More Options"]
+        let removeAssociationButton = app.buttons["Remove Association"]
+        let transformerButton = app.buttons["Transformer, High"]
 #endif
         
         openTestCase()
@@ -1818,17 +1821,20 @@ final class FeatureFormViewTests: XCTestCase {
         cancelButton.tap()
         
 #if targetEnvironment(macCatalyst)
-        transformerButton.rightClick()
+        moreOptionsButton.tap()
+        XCTAssertTrue(
+            removeAssociationButton.waitForExistence(timeout: 5),
+            "The delete button doesn't exist."
+        )
+        removeAssociationButton.tap()
 #else
         transformerButton.swipeLeft()
-#endif
-        
         XCTAssertTrue(
             inlineRemoveAssociationButton.waitForExistence(timeout: 5),
             "The delete button doesn't exist."
         )
-        
         inlineRemoveAssociationButton.tap()
+#endif
         
         XCTAssertTrue(
             removeButton.waitForExistence(timeout: 5),
