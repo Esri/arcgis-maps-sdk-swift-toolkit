@@ -77,7 +77,7 @@ extension FeatureFormView {
                     subtitle: featureFormViewModel.getModel(form)?.title ?? ""
                 )
                 .onChange(of: associationResults.count) {
-                    if associationResults.isEmpty {
+                    if associationResults.isEmpty, !featureFormViewModel.navigationPath.isEmpty {
                         featureFormViewModel.navigationPath.removeLast()
                     }
                 }
