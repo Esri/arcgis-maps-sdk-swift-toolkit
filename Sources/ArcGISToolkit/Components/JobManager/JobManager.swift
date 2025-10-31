@@ -326,10 +326,18 @@ public class JobManager: ObservableObject {
         self.backgroundTaskIdentifier = identifier
     }
     
+    var continuedProcessingTaskIdentifierPrefix: String {
+        (Bundle.main.bundleIdentifier ?? "") + ".cpt.jobs"
+    }
+    
+    func continuedProcessingTaskIdentifier<Job: JobProtocol>(for job: Job) -> String {
+        "\(continuedProcessingTaskIdentifierPrefix).\(ObjectIdentifier(job))"
+    }
+    
     @available(iOS 26.0, *)
     public func startContinuedProcessingTask<Job: JobProtocol>(for job: Job) {
-        print("-- func was called")
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.esri.JobManagerExample.cpt", using: .main) { task in
+        print("-- func was called: \(continuedProcessingTaskIdentifier(for: job))")
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: continuedProcessingTaskIdentifier(for: job), using: .main) { task in
             print("-- starting bg continued task")
             let task = task as! BGContinuedProcessingTask
             
@@ -361,7 +369,7 @@ public class JobManager: ObservableObject {
         }
         
         let request = BGContinuedProcessingTaskRequest(
-            identifier: "com.esri.JobManagerExample.cpt",
+            identifier: continuedProcessingTaskIdentifier(for: job),
             title: "Take Map Offline",
             subtitle: "Taking tree inspection map offline."
         )
