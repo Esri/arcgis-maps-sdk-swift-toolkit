@@ -1697,21 +1697,22 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_12_6() {
         let app = XCUIApplication()
-        let associationSettingButton = app.buttons["Utility Association Details"]
         let cancelButton = app.buttons["Cancel"].firstMatch
         let discardButton = app.buttons["Discard"].firstMatch
         let elementTitle = app.staticTexts["Associations"]
         let connectedFilterTitle = app.staticTexts["Connected"]
         let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let removeAssociationButton = app.buttons["Remove Association"]
         let removeButton = app.buttons["Remove"].firstMatch
-        let transformerButton = app.buttons["Transformer, High"]
         
 #if targetEnvironment(macCatalyst)
-        let inlineRemoveAssociationButton = app.menuItems["remove_association"]
+        let moreOptionsButton = app.popUpButtons["More Options"]
+        let removeAssociationButton = app.menuItems["Remove Association"]
+        let transformerButton = app.popUpButtons["Transformer, High"]
 #else
-        let inlineRemoveAssociationButton = app.buttons["Remove Association"]
+        let moreOptionsButton = app.buttons["More Options"]
+        let removeAssociationButton = app.buttons["Remove Association"]
+        let transformerButton = app.buttons["Transformer, High"]
 #endif
         
         openTestCase()
@@ -1742,11 +1743,11 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            associationSettingButton.waitForExistence(timeout: 5),
+            moreOptionsButton.waitForExistence(timeout: 5),
             "The association settings button doesn't exist."
         )
         
-        associationSettingButton.tap()
+        moreOptionsButton.tap()
         
         XCTAssertTrue(
             removeAssociationButton.waitForExistence(timeout: 5),
@@ -1761,6 +1762,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         cancelButton.tap()
+        
+        moreOptionsButton.tap()
         
         removeAssociationButton.tap()
         
@@ -1796,17 +1799,17 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
 #if targetEnvironment(macCatalyst)
-        transformerButton.rightClick()
+        moreOptionsButton.tap()
 #else
         transformerButton.swipeLeft()
 #endif
         
         XCTAssertTrue(
-            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
+            removeAssociationButton.waitForExistence(timeout: 5),
             "The delete button doesn't exist."
         )
         
-        inlineRemoveAssociationButton.tap()
+        removeAssociationButton.tap()
         
         XCTAssertTrue(
             cancelButton.waitForExistence(timeout: 5),
@@ -1816,17 +1819,20 @@ final class FeatureFormViewTests: XCTestCase {
         cancelButton.tap()
         
 #if targetEnvironment(macCatalyst)
-        transformerButton.rightClick()
-#else
-        transformerButton.swipeLeft()
-#endif
-        
+        moreOptionsButton.tap()
         XCTAssertTrue(
-            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
+            removeAssociationButton.waitForExistence(timeout: 5),
             "The delete button doesn't exist."
         )
-        
-        inlineRemoveAssociationButton.tap()
+        removeAssociationButton.tap()
+#else
+        transformerButton.swipeLeft()
+        XCTAssertTrue(
+            removeAssociationButton.waitForExistence(timeout: 5),
+            "The delete button doesn't exist."
+        )
+        removeAssociationButton.tap()
+#endif
         
         XCTAssertTrue(
             removeButton.waitForExistence(timeout: 5),

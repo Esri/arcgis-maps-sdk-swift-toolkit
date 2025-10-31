@@ -20,8 +20,6 @@ extension FeatureFormView {
     struct UtilityAssociationFeatureCandidatesView: View {
         /// The model for the FeatureFormView containing the view.
         @Environment(FeatureFormViewModel.self) var featureFormViewModel
-        /// The closure to perform when a ``EditingEvent`` occurs.
-        @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
         
         /// The candidates that can be used to create an association.
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
@@ -123,20 +121,8 @@ extension FeatureFormView {
                                 .lineLimit(4)
                                 .truncationMode(.middle)
                             Spacer()
-                            Button {
-                                onFormEditingEventAction?(.showOnMapRequested(candidate.feature))
-                            } label: {
-                                Label {
-                                    Text(
-                                        "Show On Map",
-                                        bundle: .toolkitModule,
-                                        comment: "A label for a button to show the indicated feature on the map."
-                                    )
-                                } icon: {
-                                    Image(systemName: "scope")
-                                }
+                            ShowOnMapButton(feature: candidate.feature)
                                 .labelStyle(.iconOnly)
-                            }
                         }
                     }
                     .tint(.primary)
