@@ -82,9 +82,11 @@ public class OfflineManager: ObservableObject {
     var jobs: [any JobProtocol] { jobManager.jobs }
     
     /// The update mode of any new on-demand map areas taken offline.
+    /// - Since 300.0
     public var onDemandUpdateMode: GenerateOfflineMapParameters.UpdateMode = .noUpdates
     
     /// The update mode of any new preplanned map areas taken offline.
+    /// - Since 300.0
     public var preplannedUpdateMode: DownloadPreplannedOfflineMapParameters.UpdateMode = .noUpdates
     
     /// The portal item information for web maps that have downloaded map areas.
