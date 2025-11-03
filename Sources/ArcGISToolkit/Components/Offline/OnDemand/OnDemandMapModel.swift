@@ -193,8 +193,8 @@ class OnDemandMapModel: ObservableObject, Identifiable {
                 maxScale: configuration.maxScale
             )
             
-            // Set the update mode to no updates as the offline map is display-only.
-            parameters.updateMode = .noUpdates
+            // Set the update mode.
+            parameters.updateMode = OfflineManager.shared.onDemandUpdateMode
             
             // Update item info on parameters
             if let itemInfo = parameters.itemInfo {
