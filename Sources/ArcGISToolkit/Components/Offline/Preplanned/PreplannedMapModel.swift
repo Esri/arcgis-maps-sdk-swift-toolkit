@@ -341,8 +341,8 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
         let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
             preplannedMapArea: self
         )
-        // Set the update mode to no updates as the offline map is display-only.
-        parameters.updateMode = .noUpdates
+        // Set the update mode.
+        parameters.updateMode = await OfflineManager.shared.preplannedUpdateMode
         
         return parameters
     }
