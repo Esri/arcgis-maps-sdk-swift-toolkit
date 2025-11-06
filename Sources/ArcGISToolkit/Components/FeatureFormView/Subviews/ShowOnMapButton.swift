@@ -38,8 +38,6 @@ extension FeatureFormView {
                         Image(systemName: "scope")
                     }
                 }
-            } else {
-                EmptyView()
             }
         }
     }
