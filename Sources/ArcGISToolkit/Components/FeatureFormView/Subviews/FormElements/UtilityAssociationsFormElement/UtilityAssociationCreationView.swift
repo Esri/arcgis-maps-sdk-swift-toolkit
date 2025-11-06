@@ -262,7 +262,7 @@ extension FeatureFormView {
                     } label: {
                         Text(LocalizedStringResource.percentAlong)
                     }
-                    Slider(value: $percentAlong, in: 0...1) {
+                    Slider(value: $percentAlong, in: 0...1, step: 0.01) {
                         Text(LocalizedStringResource.percentAlong)
                     }
                 }
