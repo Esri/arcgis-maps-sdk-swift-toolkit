@@ -23,18 +23,23 @@ extension FeatureFormView {
         let feature: ArcGISFeature
         
         var body: some View {
-            Button {
-                onFormEditingEventAction?(.showOnMapRequested(feature))
-            } label: {
-                Label {
-                    Text(
-                        "Show On Map",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to show the indicated feature on the map."
-                    )
-                } icon: {
-                    Image(systemName: "scope")
+            if let table = feature.table,
+               table.hasGeometry {
+                Button {
+                    onFormEditingEventAction?(.showOnMapRequested(feature))
+                } label: {
+                    Label {
+                        Text(
+                            "Show On Map",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to show the indicated feature on the map."
+                        )
+                    } icon: {
+                        Image(systemName: "scope")
+                    }
                 }
+            } else {
+                EmptyView()
             }
         }
     }
