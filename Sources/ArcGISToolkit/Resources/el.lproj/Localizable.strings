@@ -1,3 +1,9 @@
+/* A label with the name of a terminal on an associated
+utility element (first variable) and a percentage
+(second variable) indicating the relative location along
+an edge where a utility association is (logically) located. */
+"%@, %@" = "Đ_%@, %@_____________ớ";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld επιλεγμένο";
 
@@ -14,7 +20,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "Δεν είναι δυνατή η λήψη περιοχής χάρτη αυτή τη στιγμή.";
 
-/* A label for an option to add a new utility association. */
+/* A label for a button to add a new utility association. */
+"Add" = "Đ_Add_______ớ";
+
+/* A label for a button to add a new utility network association. */
 "Add Association" = "Προσθήκη συσχέτισης";
 
 /* A label for a button to add a map area. */
@@ -32,9 +41,6 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Όλες οι εισαγωγές ιχνών και αποτελεσμάτων θα χαθούν.";
 
-/* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "Να επιτραπεί.";
-
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "Παρουσιάστηκε σφάλμα κατά την ανάκτηση περιοχών χάρτη.";
 
@@ -44,8 +50,17 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "Όνομα περιοχής";
 
+/* A navigation title for the Association Settings page. */
+"Association Settings" = "Đ_Association Settings_____________________ớ";
+
+/* A label in reference to a utility association type. */
+"Association Type" = "Đ_Association Type_________________ớ";
+
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Συσχετίσεις";
+
+/* A label for the "Attachment" utility association kind. */
+"Attachment" = "Đ_Attachment_____________________ớ";
 
 /* A label in reference to attachments. */
 "Attachments" = "Συνημμένα";
@@ -58,6 +73,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Απαιτείται Έλεγχος Ταυτότητας";
+
+/* A section header label in reference to the asset
+types available to use when querying for utility
+association feature candidates. */
+"Available Asset Types" = "Đ_Available Asset Types______________________ớ";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Πίσω";
@@ -93,17 +113,36 @@ for the AR experience. */
 /* The status text when a map area download is cancelled. */
 "Cancelled" = "Ακυρώθηκε";
 
+/* A label indicating that the remote host's certificate is not trusted. */
+"Cannot Verify Server Identity" = "Đ_Cannot Verify Server Identity______________________________ớ";
+
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Απαιτείται Πιστοποιητικό";
 
-/* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "Προειδοποίηση Αξιοπιστίας Πιστοποιητικού";
+/* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to compass" = "Đ_Change auto-pan mode to compass_________________ớ";
+
+/* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to navigation" = "Đ_Change auto-pan mode to navigation__________________ớ";
+
+/* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to recenter" = "Đ_Change auto-pan mode to recenter_________________ớ";
+
+/* The accessibility hint of the location button. */
+"Change location display options" = "Đ_Change location display options_________________ớ";
+
+/* A label of a mark on a chart. */
+"chart-mark-label-value" = "Đ_Value___________ớ";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Επιλογή από Αρχεία";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Επιλογή από Βιβλιοθήκη";
+
+/* Instructional text for the user to choose a feature
+candidate to add as a utility association. */
+"Choose to add" = "Đ_Choose to add______________ớ";
 
 /* Cities (Level of Detail) */
 "Cities" = "Πόλεις";
@@ -120,14 +159,27 @@ for the AR experience. */
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Χρώμα";
 
-/* A label indicating a utility association's 
-containment is not visible. */
-"Content" = "Περιεχόμενο";
+/* The accessibility value of the location button when the auto-pan mode is compass navigation. */
+"Compass navigation" = "Đ_Compass navigation___________________ớ";
+
+/* The accessibility label of the compass button. */
+"compass-button-accessibility-label" = "Đ_Compass_______________ớ";
+
+/* A label for the "Connectivity" utility association kind. */
+"Connectivity" = "Đ_Connectivity_____________ớ";
+
+/* A label for the "Containment" utility association kind. */
+"Containment" = "Đ_Containment____________ớ";
+
+/* A label indicating whether content in the new
+association is visible or not. */
+"Content Visible" = "Đ_Content Visible________________ớ";
 
 /* Continent (Level of Detail) */
 "Continent" = "Ήπειρος";
 
-/* A label for a button used to continue the authentication operation. */
+/* A button indicating the user accepts a potentially dangerous action.
+A label for a button used to continue the authentication operation. */
 "Continue" = "Συνέχεια";
 
 /* A label for a button to continue editing the feature form. */
@@ -135,6 +187,9 @@ containment is not visible. */
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Δεν ήταν δυνατή η ανάκτηση περιοχών χάρτη για αυτόν τον χάρτη.";
+
+/* Localized text to display the number of items in a collection. */
+"Count %lld" = "Đ_Count %lld_____________________ớ";
 
 /* Counties (Level of Detail) */
 "Counties" = "Επαρχίες";
@@ -150,9 +205,6 @@ containment is not visible. */
 
 /* The status text for an opened map area. */
 "Currently open" = "Αυτή τη στιγμή ανοιχτό";
-
-/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Κίνδυνος: Το παρεχόμενο πιστοποιητικό από το '%@' δεν έχει υπογραφεί από αξιόπιστη αρχή.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
 "Date exceeds maximum" = "Η ημερομηνία υπερβαίνει τη μέγιστη";
@@ -214,6 +266,9 @@ containment is not visible. */
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Δεν μπορούν να προστεθούν διπλότυπα σημεία έναρξης.";
+
+/* The cardinal direction East. */
+"East" = "Đ_East_________ớ";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -286,11 +341,14 @@ The variable provides additional data. */
 to be used as a trace starting point. */
 "Failed to set starting point" = "Αδυναμία προσδιορισμού σημείου έναρξης";
 
+/* The accessibility value of the location button when the location display fails to start. */
+"Failed to start" = "Đ_Failed to start________________ớ";
+
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
 "Feature Results" = "Αποτελέσματα Στοιχείου";
 
-/* A field in a set of data contained in a popup. */
+/* A field in a dataset. */
 "Field" = "Πεδίο";
 
 /* A label in reference to fields in a set of data contained in a popup. */
@@ -299,9 +357,21 @@ trace operation. */
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "Φίλτρο";
 
+/* A label for a search field to filter utility 
+asset types by name. */
+"Filter asset types by name" = "Đ_Filter asset types by name___________________________ớ";
+
+/* A label for a search field to filter utility 
+association candidate features by name. */
+"Filter candidates by name" = "Đ_Filter candidates by name__________________________ớ";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "Φιλτράρισμα εγκαταστάσεων";
+
+/* A label for a search field to filter utility 
+association feature sources by name. */
+"Filter feature sources by name" = "Đ_Filter feature sources by name_______________________________ớ";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -317,8 +387,16 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "Η ολοκλήρωση της επεξεργασίας απέτυχε. %@";
 
-/* A label in reference to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an 
+edge of a utility network element. */
 "Fraction Along Edge" = "Κλάσμα κατά μήκος της ακμής";
+
+/* A label for the element on the "from" side of a utility association. */
+"From Element" = "Đ_From Element_____________ớ";
+
+/* A label for a button to choose a feature for a new
+utility association from a network data source. */
+"From Network Data Source" = "Đ_From Network Data Source_________________________ớ";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -328,11 +406,37 @@ trace operation. */
 AR experience. */
 "heading" = "επικεφαλίδα";
 
+/* The accessibility value of a compass. The first
+variable is a heading in degrees and the second
+variable is a cardinal or intercardinal direction. */
+"Heading: %@ %@" = "Đ_Heading: %@ %@_______________ớ";
+
+/* The section header for the auto-pan section in the location button context menu. */
+"Hide Location" = "Đ_Hide Location______________ớ";
+
+/* The accessibility hint of the hide location display context menu option. */
+"Hide location display" = "Đ_Hide location display______________________ớ";
+
 /* House Property (Level of Detail) */
 "House Property" = "Ιδιότητα σπιτιού";
 
 /* Houses (Level of Detail) */
 "Houses" = "Σπίτια";
+
+/* A label indicating that a challenge should be ignored. */
+"Ignore" = "Đ_Ignore_____________ớ";
+
+/* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
+"Junction Edge Object Connectivity From Side" = "Đ_Junction Edge Object Connectivity From Side_______________________ớ";
+
+/* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
+"Junction Edge Object Connectivity Midspan" = "Đ_Junction Edge Object Connectivity Midspan______________________ớ";
+
+/* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
+"Junction Edge Object Connectivity To Side" = "Đ_Junction Edge Object Connectivity To Side______________________ớ";
+
+/* A label for a pie chart legend item label. */
+"Label" = "Đ_Label___________ớ";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Μικρότερο από την ελάχιστη τιμή";
@@ -345,6 +449,38 @@ AR experience. */
 
 /* The status text when a map area failed to load. */
 "Loading failed" = "Αποτυχία φόρτωσης";
+
+/* The accessibility label of the location button when the location display is not showing. */
+"Location display" = "Đ_Location display_________________ớ";
+
+/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-compass" = "Đ_Compass_______________ớ";
+
+/* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-navigation" = "Đ_Navigation_____________________ớ";
+
+/* The label text for turning the auto-pan mode off in the location button context menu. */
+"location-button-accessibility-value-off" = "Đ_Off_______ớ";
+
+/* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-recenter" = "Đ_Recenter_________________ớ";
+
+/* The accessibility label of the location button when the 
+location display is showing and the button cycles 
+through auto-pan modes. */
+"location-button-auto-pan-accessibility-label" = "Đ_Auto-pan_________________ớ";
+
+/* The header of the auto-pan section in the location button context menu. */
+"location-button-auto-pan-section-header-title" = "Đ_Auto-pan_________________ớ";
+
+/* The accessibility value of the location button when the auto-pan mode is navigation. */
+"location-button-status-label-navigation" = "Đ_Navigation_____________________ớ";
+
+/* The accessibility value of the location button when the auto-pan mode is off. */
+"location-button-status-label-off" = "Đ_Off_______ớ";
+
+/* The accessibility value of the location button when the auto-pan mode is recenter. */
+"location-button-status-label-recenter" = "Đ_Recenter_________________ớ";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Περιοχές χάρτη";
@@ -370,6 +506,12 @@ AR experience. */
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Λειτουργία";
 
+/* A label for a button to view details for a list row. */
+"More Information" = "Đ_More Information_________________ớ";
+
+/* A label for a button to see more options for a list row. */
+"More Options" = "Đ_More Options_____________ớ";
+
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Όνομα";
 
@@ -379,20 +521,40 @@ AR experience. */
 /* A label in reference to a specific utility network. */
 "Network" = "Δίκτυο";
 
+/* A navigation title for a page listing
+data sources in a utility network. */
+"Network Data Source" = "Đ_Network Data Source____________________ớ";
+
+/* A navigation title for a view to create a new association in. */
+"New Association" = "Đ_New Association________________ớ";
+
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Νέο όνομα";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "Νέα ιχνηλάτηση";
 
-/* A label indicating that no associations are available for the popup element. */
+/* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "Καμία συσχέτιση";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Δεν υπάρχουν σελιδοδείκτες";
 
+/* A label indicating no utility association 
+candidates matching the filter criteria were
+found. */
+"No Candidates Found" = "Đ_No Candidates Found____________________ớ";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Δεν υπάρχουν διαθέσιμες παραμετροποιήσεις.";
+
+/* A label indicating no utility association 
+feature sources were found. */
+"No Feature Sources Found" = "Đ_No Feature Sources Found_________________________ớ";
+
+/* A label indicating no utility association 
+filter results were found. */
+"No Filter Results Found" = "Đ_No Filter Results Found________________________ớ";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Δεν υπάρχει σύνδεση στο διαδίκτυο";
@@ -418,6 +580,15 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "Καμία τιμή";
 
+/* The cardinal direction North. */
+"North" = "Đ_North___________ớ";
+
+/* The intercardinal direction Northeast. */
+"Northeast" = "Đ_Northeast___________________ớ";
+
+/* The intercardinal direction Northwest. */
+"Northwest" = "Đ_Northwest___________________ớ";
+
 /* A trace function output result was not provided. */
 "Not Available" = "Μη διαθέσιμο";
 
@@ -433,8 +604,16 @@ AR experience. */
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
+/* A label indicating features can be selected by
+interactively tapping on the map. */
+"On Map" = "Đ_On Map_____________ớ";
+
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Αποτυχία φόρτωσης χάρτη με σύνδεση";
+
+/* Helper text indicating that an accompanying button only 
+removes only the association.  */
+"Only removes the association. The feature remains." = "Đ_Only removes the association. The feature remains__________________________ớ.";
 
 /* A label for a button to open a map area. */
 "Open" = "Άνοιγμα";
@@ -453,6 +632,10 @@ AR experience. */
 
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Απαιτείται κωδικός πρόσβασης";
+
+/* A label in reference to a percent along an 
+edge of a utility network element. */
+"Percent Along" = "Đ_Percent Along______________ớ";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Ενεργοποίηση πρόσβασης στην κάμερα στις Ρυθμίσεις.";
@@ -481,6 +664,15 @@ The variable provides additional data. */
 /* A label for a button to refresh map area content. */
 "Refresh" = "Ανανέωση";
 
+/* A label for a button to remove a utility network association. */
+"Remove" = "Đ_Remove_____________ớ";
+
+/* A label for a button to remove a utility association. */
+"Remove Association" = "Đ_Remove Association___________________ớ";
+
+/* A label for a confirmation to remove a utility association. */
+"Remove association?" = "Đ_Remove association____________________ớ?";
+
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Κατάργηση λήψης";
 
@@ -489,6 +681,9 @@ The variable provides additional data. */
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
 "Rename attachment" = "Μετονομασία συνημμένου";
+
+/* The accessibility hint of the compass component. */
+"Reorient map north" = "Đ_Reorient map north___________________ớ";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -512,6 +707,14 @@ current visible extent of the map or scene. */
 
 /* A label for a button to save edits. */
 "Save Edits" = "Αποθήκευση αλλαγών";
+
+/* A generic prompt for a search field where a more
+specific prompt has not been provided. */
+"Search" = "Đ_Search_____________ớ";
+
+/* A label for a search bar to search through feature 
+candidates to use in a new utility association. */
+"Search Features" = "Đ_Search Features________________ớ";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Ερώτημα Αναζήτησης";
@@ -538,6 +741,9 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "Εμφάνιση όλων";
 
+/* A label for a button to show the indicated feature on the map. */
+"Show On Map" = "Đ_Show On Map____________ớ";
+
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Ιστότοποι";
 
@@ -547,9 +753,21 @@ or more levels in a floor-aware map or scene. */
 /* Small Building (Level of Detail) */
 "Small Building" = "Μικρό κτήριο";
 
+/* The cardinal direction South. */
+"South" = "Đ_South___________ớ";
+
+/* The intercardinal direction Southeast. */
+"Southeast" = "Đ_Southeast___________________ớ";
+
+/* The intercardinal direction Southwest. */
+"Southwest" = "Đ_Southwest___________________ớ";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Αναντιστοιχία χωρικής αναφοράς.";
+
+/* The accessibility value of the location button when the location display is starting. */
+"Starting" = "Đ_Starting_________________ớ";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -560,6 +778,12 @@ network trace operation. */
 
 /* States/Provinces (Level of Detail) */
 "States/Provinces" = "Περιφέρειες/Νομοί";
+
+/* The accessibility value of the location button when the location display is not showing. */
+"Stopped" = "Đ_Stopped_______________ớ";
+
+/* The accessibility value of the location button when the location display is stopping. */
+"Stopping" = "Đ_Stopping_________________ớ";
 
 /* Street (Level of Detail) */
 "Street" = "Δρόμος";
@@ -577,6 +801,9 @@ place an ArcGIS Scene. */
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "Πατήστε στην εικόνα για περισσότερες πληροφορίες.";
+
+/* A label in reference to a utility terminal. */
+"Terminal" = "Đ_Terminal_________________ớ";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Παραμετροποίηση Τερματικού";
@@ -600,6 +827,9 @@ match the spatial reference of the map. */
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Η φόρμα δεν υποβλήθηκε";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Đ_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________ớ?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Ο χάρτης δεν έχει χωρική αναφορά.";
@@ -632,6 +862,9 @@ to be imported as an attachment. */
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Τίτλος";
 
+/* A label for the element on the "to" side of a utility association. */
+"To Element" = "Đ_To Element_____________________ớ";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "Σήμερα";
 
@@ -650,8 +883,14 @@ to be imported as an attachment. */
 /* A label in reference to a utility network trace configuration. */
 "Trace Configuration" = "Παραμετροποίηση Ιχνηλάτησης";
 
+/* A label indicating that a utility network trace is running. */
+"Tracingâ€¦" = "Đ_Tracingâ€¦_____________________ớ";
+
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Δοκιμάστε Ξανά";
+
+/* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
+"Turn off auto-pan" = "Đ_Turn off auto-pan__________________ớ";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Άγνωστο";
@@ -673,11 +912,11 @@ without saving. */
 /* A label in reference to a credential username. */
 "Username" = "Όνομα χρήστη";
 
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "Đ_Unknown_______________ớ";
+
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Σφάλματα επικύρωσης";
-
-/* A value in a set of data contained in a popup. */
-"Value" = "Αξία";
 
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
@@ -710,8 +949,15 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "Προβολή";
 
 /* A label indicating a utility association's 
+containment is not visible. */
+"Visible: false" = "Đ_Visible: false_______________ớ";
+
+/* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "Ορατό περιεχόμενο";
+"Visible: true" = "Đ_Visible: true______________ớ";
+
+/* The cardinal direction West. */
+"West" = "Đ_West_________ớ";
 
 /* World (Level of Detail) */
 "World" = "Κόσμος";

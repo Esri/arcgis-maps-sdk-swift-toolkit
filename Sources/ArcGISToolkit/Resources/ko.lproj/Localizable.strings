@@ -1,3 +1,9 @@
+/* A label with the name of a terminal on an associated
+utility element (first variable) and a percentage
+(second variable) indicating the relative location along
+an edge where a utility association is (logically) located. */
+"%@, %@" = "한_%@, %@_____________빠";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld개 선택됨";
 
@@ -14,7 +20,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "현재 맵 영역을 다운로드할 수 없습니다.";
 
-/* A label for an option to add a new utility association. */
+/* A label for a button to add a new utility association. */
+"Add" = "한_Add_______빠";
+
+/* A label for a button to add a new utility network association. */
 "Add Association" = "연관 추가";
 
 /* A label for a button to add a map area. */
@@ -32,9 +41,6 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "모든 추적 입력 및 결과가 손실됩니다.";
 
-/* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "허용";
-
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "맵 영역을 가져오는 동안 오류가 발생했습니다.";
 
@@ -44,8 +50,17 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "영역 이름";
 
+/* A navigation title for the Association Settings page. */
+"Association Settings" = "한_Association Settings_____________________빠";
+
+/* A label in reference to a utility association type. */
+"Association Type" = "한_Association Type_________________빠";
+
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "연관";
+
+/* A label for the "Attachment" utility association kind. */
+"Attachment" = "한_Attachment_____________________빠";
 
 /* A label in reference to attachments. */
 "Attachments" = "첨부 파일";
@@ -58,6 +73,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "인증 필요";
+
+/* A section header label in reference to the asset
+types available to use when querying for utility
+association feature candidates. */
+"Available Asset Types" = "한_Available Asset Types______________________빠";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "뒤로";
@@ -93,17 +113,36 @@ for the AR experience. */
 /* The status text when a map area download is cancelled. */
 "Cancelled" = "취소됨";
 
+/* A label indicating that the remote host's certificate is not trusted. */
+"Cannot Verify Server Identity" = "한_Cannot Verify Server Identity______________________________빠";
+
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "인증서 필요";
 
-/* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "인증서 신뢰 경고";
+/* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to compass" = "한_Change auto-pan mode to compass_________________빠";
+
+/* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to navigation" = "한_Change auto-pan mode to navigation__________________빠";
+
+/* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to recenter" = "한_Change auto-pan mode to recenter_________________빠";
+
+/* The accessibility hint of the location button. */
+"Change location display options" = "한_Change location display options_________________빠";
+
+/* A label of a mark on a chart. */
+"chart-mark-label-value" = "한_Value___________빠";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "파일에서 선택";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "라이브러리에서 선택";
+
+/* Instructional text for the user to choose a feature
+candidate to add as a utility association. */
+"Choose to add" = "한_Choose to add______________빠";
 
 /* Cities (Level of Detail) */
 "Cities" = "도시";
@@ -120,14 +159,27 @@ for the AR experience. */
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "색상";
 
-/* A label indicating a utility association's 
-containment is not visible. */
-"Content" = "콘텐츠";
+/* The accessibility value of the location button when the auto-pan mode is compass navigation. */
+"Compass navigation" = "한_Compass navigation___________________빠";
+
+/* The accessibility label of the compass button. */
+"compass-button-accessibility-label" = "한_Compass_______________빠";
+
+/* A label for the "Connectivity" utility association kind. */
+"Connectivity" = "한_Connectivity_____________빠";
+
+/* A label for the "Containment" utility association kind. */
+"Containment" = "한_Containment____________빠";
+
+/* A label indicating whether content in the new
+association is visible or not. */
+"Content Visible" = "한_Content Visible________________빠";
 
 /* Continent (Level of Detail) */
 "Continent" = "대륙";
 
-/* A label for a button used to continue the authentication operation. */
+/* A button indicating the user accepts a potentially dangerous action.
+A label for a button used to continue the authentication operation. */
 "Continue" = "계속";
 
 /* A label for a button to continue editing the feature form. */
@@ -135,6 +187,9 @@ containment is not visible. */
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "이 맵에 대한 맵 영역을 검색할 수 없습니다.";
+
+/* Localized text to display the number of items in a collection. */
+"Count %lld" = "한_Count %lld_____________________빠";
 
 /* Counties (Level of Detail) */
 "Counties" = "구/군";
@@ -150,9 +205,6 @@ containment is not visible. */
 
 /* The status text for an opened map area. */
 "Currently open" = "현재 열림";
-
-/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "위험: '%@'에서 제공된 인증서가 신뢰할 수 있는 기관에서 서명되지 않았습니다.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
 "Date exceeds maximum" = "날짜가 최대값을 초과함";
@@ -214,6 +266,9 @@ containment is not visible. */
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "중복된 시작점을 추가할 수 없습니다.";
+
+/* The cardinal direction East. */
+"East" = "한_East_________빠";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -286,11 +341,14 @@ The variable provides additional data. */
 to be used as a trace starting point. */
 "Failed to set starting point" = "시작점을 설정하지 못함";
 
+/* The accessibility value of the location button when the location display fails to start. */
+"Failed to start" = "한_Failed to start________________빠";
+
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
 "Feature Results" = "피처 결과";
 
-/* A field in a set of data contained in a popup. */
+/* A field in a dataset. */
 "Field" = "필드";
 
 /* A label in reference to fields in a set of data contained in a popup. */
@@ -299,9 +357,21 @@ trace operation. */
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "필터";
 
+/* A label for a search field to filter utility 
+asset types by name. */
+"Filter asset types by name" = "한_Filter asset types by name___________________________빠";
+
+/* A label for a search field to filter utility 
+association candidate features by name. */
+"Filter candidates by name" = "한_Filter candidates by name__________________________빠";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "시설 필터링";
+
+/* A label for a search field to filter utility 
+association feature sources by name. */
+"Filter feature sources by name" = "한_Filter feature sources by name_______________________________빠";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -317,8 +387,16 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "편집을 완료하지 못했습니다. %@";
 
-/* A label in reference to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an 
+edge of a utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
+
+/* A label for the element on the "from" side of a utility association. */
+"From Element" = "한_From Element_____________빠";
+
+/* A label for a button to choose a feature for a new
+utility association from a network data source. */
+"From Network Data Source" = "한_From Network Data Source_________________________빠";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -328,11 +406,37 @@ trace operation. */
 AR experience. */
 "heading" = "방향";
 
+/* The accessibility value of a compass. The first
+variable is a heading in degrees and the second
+variable is a cardinal or intercardinal direction. */
+"Heading: %@ %@" = "한_Heading: %@ %@_______________빠";
+
+/* The section header for the auto-pan section in the location button context menu. */
+"Hide Location" = "한_Hide Location______________빠";
+
+/* The accessibility hint of the hide location display context menu option. */
+"Hide location display" = "한_Hide location display______________________빠";
+
 /* House Property (Level of Detail) */
 "House Property" = "주택 자산";
 
 /* Houses (Level of Detail) */
 "Houses" = "주택";
+
+/* A label indicating that a challenge should be ignored. */
+"Ignore" = "한_Ignore_____________빠";
+
+/* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
+"Junction Edge Object Connectivity From Side" = "한_Junction Edge Object Connectivity From Side_______________________빠";
+
+/* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
+"Junction Edge Object Connectivity Midspan" = "한_Junction Edge Object Connectivity Midspan______________________빠";
+
+/* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
+"Junction Edge Object Connectivity To Side" = "한_Junction Edge Object Connectivity To Side______________________빠";
+
+/* A label for a pie chart legend item label. */
+"Label" = "한_Label___________빠";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "최소값보다 작음";
@@ -345,6 +449,38 @@ AR experience. */
 
 /* The status text when a map area failed to load. */
 "Loading failed" = "불러오기 실패";
+
+/* The accessibility label of the location button when the location display is not showing. */
+"Location display" = "한_Location display_________________빠";
+
+/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-compass" = "한_Compass_______________빠";
+
+/* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-navigation" = "한_Navigation_____________________빠";
+
+/* The label text for turning the auto-pan mode off in the location button context menu. */
+"location-button-accessibility-value-off" = "한_Off_______빠";
+
+/* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-recenter" = "한_Recenter_________________빠";
+
+/* The accessibility label of the location button when the 
+location display is showing and the button cycles 
+through auto-pan modes. */
+"location-button-auto-pan-accessibility-label" = "한_Auto-pan_________________빠";
+
+/* The header of the auto-pan section in the location button context menu. */
+"location-button-auto-pan-section-header-title" = "한_Auto-pan_________________빠";
+
+/* The accessibility value of the location button when the auto-pan mode is navigation. */
+"location-button-status-label-navigation" = "한_Navigation_____________________빠";
+
+/* The accessibility value of the location button when the auto-pan mode is off. */
+"location-button-status-label-off" = "한_Off_______빠";
+
+/* The accessibility value of the location button when the auto-pan mode is recenter. */
+"location-button-status-label-recenter" = "한_Recenter_________________빠";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "맵 영역";
@@ -370,6 +506,12 @@ AR experience. */
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "모드";
 
+/* A label for a button to view details for a list row. */
+"More Information" = "한_More Information_________________빠";
+
+/* A label for a button to see more options for a list row. */
+"More Options" = "한_More Options_____________빠";
+
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "이름";
 
@@ -379,20 +521,40 @@ AR experience. */
 /* A label in reference to a specific utility network. */
 "Network" = "네트워크";
 
+/* A navigation title for a page listing
+data sources in a utility network. */
+"Network Data Source" = "한_Network Data Source____________________빠";
+
+/* A navigation title for a view to create a new association in. */
+"New Association" = "한_New Association________________빠";
+
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "새 이름";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "새 추적";
 
-/* A label indicating that no associations are available for the popup element. */
+/* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "연관 없음";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "북마크 없음";
 
+/* A label indicating no utility association 
+candidates matching the filter criteria were
+found. */
+"No Candidates Found" = "한_No Candidates Found____________________빠";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "사용 가능한 구성이 없습니다.";
+
+/* A label indicating no utility association 
+feature sources were found. */
+"No Feature Sources Found" = "한_No Feature Sources Found_________________________빠";
+
+/* A label indicating no utility association 
+filter results were found. */
+"No Filter Results Found" = "한_No Filter Results Found________________________빠";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "인터넷 연결 없음";
@@ -418,6 +580,15 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "값 없음";
 
+/* The cardinal direction North. */
+"North" = "한_North___________빠";
+
+/* The intercardinal direction Northeast. */
+"Northeast" = "한_Northeast___________________빠";
+
+/* The intercardinal direction Northwest. */
+"Northwest" = "한_Northwest___________________빠";
+
 /* A trace function output result was not provided. */
 "Not Available" = "사용할 수 없음";
 
@@ -433,8 +604,16 @@ AR experience. */
 /* A label for button to proceed with an operation. */
 "OK" = "확인";
 
+/* A label indicating features can be selected by
+interactively tapping on the map. */
+"On Map" = "한_On Map_____________빠";
+
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "온라인 맵을 불러오지 못함";
+
+/* Helper text indicating that an accompanying button only 
+removes only the association.  */
+"Only removes the association. The feature remains." = "한_Only removes the association. The feature remains__________________________빠.";
 
 /* A label for a button to open a map area. */
 "Open" = "열기";
@@ -453,6 +632,10 @@ AR experience. */
 
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "비밀번호 필요";
+
+/* A label in reference to a percent along an 
+edge of a utility network element. */
+"Percent Along" = "한_Percent Along______________빠";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "설정에서 카메라 접근 권한을 활성화하세요.";
@@ -481,6 +664,15 @@ The variable provides additional data. */
 /* A label for a button to refresh map area content. */
 "Refresh" = "새로 고침";
 
+/* A label for a button to remove a utility network association. */
+"Remove" = "한_Remove_____________빠";
+
+/* A label for a button to remove a utility association. */
+"Remove Association" = "한_Remove Association___________________빠";
+
+/* A label for a confirmation to remove a utility association. */
+"Remove association?" = "한_Remove association____________________빠?";
+
 /* A label for a button to remove a map area download. */
 "Remove Download" = "다운로드 제거";
 
@@ -489,6 +681,9 @@ The variable provides additional data. */
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
 "Rename attachment" = "첨부 파일 이름 바꾸기";
+
+/* The accessibility hint of the compass component. */
+"Reorient map north" = "한_Reorient map north___________________빠";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -512,6 +707,14 @@ current visible extent of the map or scene. */
 
 /* A label for a button to save edits. */
 "Save Edits" = "편집 내용 저장";
+
+/* A generic prompt for a search field where a more
+specific prompt has not been provided. */
+"Search" = "한_Search_____________빠";
+
+/* A label for a search bar to search through feature 
+candidates to use in a new utility association. */
+"Search Features" = "한_Search Features________________빠";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "검색 쿼리";
@@ -538,6 +741,9 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "모두 보기";
 
+/* A label for a button to show the indicated feature on the map. */
+"Show On Map" = "한_Show On Map____________빠";
+
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "사이트";
 
@@ -547,9 +753,21 @@ or more levels in a floor-aware map or scene. */
 /* Small Building (Level of Detail) */
 "Small Building" = "소형 건물";
 
+/* The cardinal direction South. */
+"South" = "한_South___________빠";
+
+/* The intercardinal direction Southeast. */
+"Southeast" = "한_Southeast___________________빠";
+
+/* The intercardinal direction Southwest. */
+"Southwest" = "한_Southwest___________________빠";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "공간 기준 체계가 불일치합니다.";
+
+/* The accessibility value of the location button when the location display is starting. */
+"Starting" = "한_Starting_________________빠";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -560,6 +778,12 @@ network trace operation. */
 
 /* States/Provinces (Level of Detail) */
 "States/Provinces" = "시/도";
+
+/* The accessibility value of the location button when the location display is not showing. */
+"Stopped" = "한_Stopped_______________빠";
+
+/* The accessibility value of the location button when the location display is stopping. */
+"Stopping" = "한_Stopping_________________빠";
 
 /* Street (Level of Detail) */
 "Street" = "도로";
@@ -577,6 +801,9 @@ place an ArcGIS Scene. */
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "자세한 내용을 보려면 이미지를 탭합니다.";
+
+/* A label in reference to a utility terminal. */
+"Terminal" = "한_Terminal_________________빠";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "터미널 구성";
@@ -600,6 +827,9 @@ match the spatial reference of the map. */
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "양식이 제출되지 않았습니다.";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "한_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________빠?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "맵에 공간 기준 체계가 없습니다.";
@@ -632,6 +862,9 @@ to be imported as an attachment. */
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "제목";
 
+/* A label for the element on the "to" side of a utility association. */
+"To Element" = "한_To Element_____________________빠";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "오늘";
 
@@ -650,8 +883,14 @@ to be imported as an attachment. */
 /* A label in reference to a utility network trace configuration. */
 "Trace Configuration" = "추적 구성";
 
+/* A label indicating that a utility network trace is running. */
+"Tracingâ€¦" = "한_Tracingâ€¦_____________________빠";
+
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "다시 시도";
+
+/* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
+"Turn off auto-pan" = "한_Turn off auto-pan__________________빠";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "알 수 없음";
@@ -673,11 +912,11 @@ without saving. */
 /* A label in reference to a credential username. */
 "Username" = "사용자 이름";
 
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "한_Unknown_______________빠";
+
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "유효성 검사 오류";
-
-/* A value in a set of data contained in a popup. */
-"Value" = "값";
 
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
@@ -710,8 +949,15 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "보기";
 
 /* A label indicating a utility association's 
+containment is not visible. */
+"Visible: false" = "한_Visible: false_______________빠";
+
+/* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "표시 콘텐츠";
+"Visible: true" = "한_Visible: true______________빠";
+
+/* The cardinal direction West. */
+"West" = "한_West_________빠";
 
 /* World (Level of Detail) */
 "World" = "전 세계";
