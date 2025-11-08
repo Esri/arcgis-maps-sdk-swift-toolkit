@@ -59,6 +59,7 @@ extension FeatureFormView {
                 }
             }
             .task {
+                guard !initialQueryIsComplete else { return }
                 let parameters = QueryParameters()
                 parameters.whereClause = "1=1"
                 queryFeatures(parameters: parameters)
