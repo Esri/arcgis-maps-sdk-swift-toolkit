@@ -27,10 +27,10 @@ extension FeatureFormView {
         
         /// The element to add the new association to.
         let element: UtilityAssociationsFormElement
-        /// The model for the feature form containing the element to add the association to.
-        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         
         /// The feature sources that can be used to create an association filtered by name.
         private var filteredSources: [UtilityAssociationFeatureSource] {
@@ -57,20 +57,36 @@ extension FeatureFormView {
                         prompt: nil
                     )
                 }
-                Section {
-                    ForEach(filteredSources, id: \.name) { source in
-                        NavigationLink(
-                            source.name,
-                            value: FeatureFormView.NavigationPathItem.utilityAssociationAssetTypesView(
-                                embeddedFeatureFormViewModel, element, filter, source
+                if filteredSources.isEmpty {
+                    ContentUnavailableView(
+                        String(
+                            localized: LocalizedStringResource(
+                                "No Feature Sources Found",
+                                bundle: .toolkit,
+                                comment: """
+                                A label indicating no utility association 
+                                feature sources were found.
+                                """
                             )
-                        )
+                        ),
+                        systemImage: "exclamationmark.magnifyingglass"
+                    )
+                } else {
+                    Section {
+                        ForEach(filteredSources, id: \.name) { source in
+                            NavigationLink(
+                                source.name,
+                                value: FeatureFormView.NavigationPathItem.utilityAssociationAssetTypesView(
+                                    form, element, filter, source
+                                )
+                            )
+                        }
+                    } header: {
+                        Text.count(filteredSources.count)
+                            .font(.caption)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .textCase(nil)
                     }
-                } header: {
-                    Text.count(filteredSources.count)
-                        .font(.caption)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .textCase(nil)
                 }
             }
             .task {
