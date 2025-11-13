@@ -25,10 +25,12 @@ extension FeatureFormView {
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
         /// The phrase used to filter candidates by name.
         @State private var filterPhrase = ""
-        /// A Boolean value indicating if the initial candidate query is complete.
-        @State private var initialQueryIsComplete = false
         /// The parameters for retrieving the next page of results.
         @State private var nextQueryParameters: QueryParameters?
+        /// A Boolean value indicating whether a filter based query is running.
+        @State private var queryForFilterPhraseIsRunning = false
+        /// A Boolean value indicating if the initial candidate query is complete.
+        @State private var queryForFirstPageIsComplete = false
         /// A Boolean value indicating whether a query is running.
         @State private var queryIsRunning = false
         /// The task for the current query.
@@ -48,23 +50,27 @@ extension FeatureFormView {
         var body: some View {
             List {
                 sectionForFilter
-                if !initialQueryIsComplete {
+                if !queryForFirstPageIsComplete {
                     ProgressView()
+                        .task {
+                            let parameters = QueryParameters()
+                            parameters.whereClause = "1=1"
+                            queryFeatures(parameters: parameters)
+                            await queryTask?.value
+                            queryForFirstPageIsComplete = true
+                        }
                 } else {
-                    if filteredCandidates.isEmpty && !queryIsRunning {
-                        contentUnavailableView
+                    if filteredCandidates.isEmpty {
+                        if queryForFilterPhraseIsRunning {
+                            ProgressView()
+                                .id(filterPhrase)
+                        } else if !queryIsRunning {
+                            contentUnavailableView
+                        }
                     } else {
                         sectionForCandidates
                     }
                 }
-            }
-            .task {
-                guard !initialQueryIsComplete else { return }
-                let parameters = QueryParameters()
-                parameters.whereClause = "1=1"
-                queryFeatures(parameters: parameters)
-                await queryTask?.value
-                initialQueryIsComplete = true
             }
         }
         
@@ -128,10 +134,6 @@ extension FeatureFormView {
                             .task {
                                 queryFeatures(parameters: nextQueryParameters)
                             }
-                    } else if queryIsRunning {
-                        // Paging via filter phrase
-                        ProgressView()
-                            .id(nextQueryParameters.resultOffset)
                     }
                 }
             } header: {
@@ -170,23 +172,27 @@ extension FeatureFormView {
                             """
                     )
                 )
+                .disabled(!queryForFirstPageIsComplete)
                 .task(id: filterPhrase) {
-                    while filteredCandidates.isEmpty, let nextQueryParameters {
+                    try? await Task.sleep(for: .milliseconds(500))
+                    queryForFilterPhraseIsRunning = true
+                    while !Task.isCancelled, filteredCandidates.isEmpty, let nextQueryParameters {
                         queryFeatures(parameters: nextQueryParameters)
                         await queryTask?.value
                     }
+                    queryForFilterPhraseIsRunning = false
                 }
             }
         }
         
         func queryFeatures(parameters: QueryParameters) {
             queryTask?.cancel()
+            queryIsRunning = true
             queryTask = Task {
-                queryIsRunning = true
                 let result = try? await source.queryFeatures(assetType: assetType, parameters: parameters)
-                queryIsRunning = false
                 candidates.append(contentsOf: result?.candidates ?? [])
                 nextQueryParameters = result?.nextQueryParams
+                queryIsRunning = false
             }
         }
     }
