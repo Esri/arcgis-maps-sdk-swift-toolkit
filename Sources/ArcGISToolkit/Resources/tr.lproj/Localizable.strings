@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "ı_%@, %@_____________İ";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld seçildi";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Şu anda bir harita alanı indirilemiyor.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "ı_Add_______İ";
+"Add" = "Ekle";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "İlişkilendirme Ekle";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Alan Adı";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "ı_Association Settings_____________________İ";
+"Association Settings" = "İlişkilendirme Ayarları";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "ı_Association Type_________________İ";
+"Association Type" = "İlişkilendirme Türü";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "İlişkilendirmeler";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "ı_Attachment_____________________İ";
+"Attachment" = "Ek";
 
 /* A label in reference to attachments. */
 "Attachments" = "Ekler";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "ı_Available Asset Types______________________İ";
+"Available Asset Types" = "Kullanılabilir Varlık Türleri";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Geri";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "İptal Edildi";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "ı_Cannot Verify Server Identity______________________________İ";
+"Cannot Verify Server Identity" = "Sunucu Kimliğini Doğrulanamadı";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Sertifika Gerekli";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "ı_Change auto-pan mode to compass_________________İ";
+"Change auto-pan mode to compass" = "Otomatik kaydırma modunu pusula olarak değiştir";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "ı_Change auto-pan mode to navigation__________________İ";
+"Change auto-pan mode to navigation" = "Otomatik kaydırma modunu navigasyon olarak değiştir";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "ı_Change auto-pan mode to recenter_________________İ";
+"Change auto-pan mode to recenter" = "Otomatik kaydırma modunu yeniden ortalama olarak değiştir";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "ı_Change location display options_________________İ";
+"Change location display options" = "Konum görüntüleme seçeneklerini değiştir";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "ı_Value___________İ";
+"chart-mark-label-value" = "Değer";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Dosyalardan Seç";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "ı_Choose to add______________İ";
+"Choose to add" = "Eklemeyi seç";
 
 /* Cities (Level of Detail) */
 "Cities" = "Şehirler";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "Renk";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "ı_Compass navigation___________________İ";
+"Compass navigation" = "Pusula navigasyonu";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "ı_Compass_______________İ";
+"compass-button-accessibility-label" = "Pusula";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "ı_Connectivity_____________İ";
+"Connectivity" = "Bağlanırlık";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "ı_Containment____________İ";
+"Containment" = "Kapsama";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "ı_Content Visible________________İ";
+"Content Visible" = "İçerik Görünür";
 
 /* Continent (Level of Detail) */
 "Continent" = "Kıta";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "Bu harita için harita alanları alınamadı.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "ı_Count %lld_____________________İ";
+"Count %lld" = "Sayım %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "İdari Bölgeler";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Yinelenen başlangıç noktaları eklenemez.";
 
 /* The cardinal direction East. */
-"East" = "ı_East_________İ";
+"East" = "Doğu";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "Başlangıç noktası ayarlanamadı";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "ı_Failed to start________________İ";
+"Failed to start" = "Başlatılamadı";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "ı_Filter asset types by name___________________________İ";
+"Filter asset types by name" = "Varlık türlerini ada göre filtrele";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "ı_Filter candidates by name__________________________İ";
+"Filter candidates by name" = "Adayları ada göre filtrele";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "ı_Filter feature sources by name_______________________________İ";
+"Filter feature sources by name" = "Detay kaynaklarını ada göre filtrele";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "Kenar Boyunca Kesir";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "ı_From Element_____________İ";
+"From Element" = "Kaynak Öge";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "ı_From Network Data Source_________________________İ";
+"From Network Data Source" = "Ağ Veri Kaynağından";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "ı_Heading: %@ %@_______________İ";
+"Heading: %@ %@" = "Başlık: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "ı_Hide Location______________İ";
+"Hide Location" = "Konumu Gizle";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "ı_Hide location display______________________İ";
+"Hide location display" = "Konum görüntülemeyi gizli";
 
 /* House Property (Level of Detail) */
 "House Property" = "Ev Mülkiyeti";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "Evler";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "ı_Ignore_____________İ";
+"Ignore" = "Yoksay";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "ı_Junction Edge Object Connectivity From Side_______________________İ";
+"Junction Edge Object Connectivity From Side" = "Kenardan Kavşak Kenar Nesnesi Bağlanırlığı";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "ı_Junction Edge Object Connectivity Midspan______________________İ";
+"Junction Edge Object Connectivity Midspan" = "Kavşak Kenar Nesnesi Bağlanırlığı Aralık Ortası";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "ı_Junction Edge Object Connectivity To Side______________________İ";
+"Junction Edge Object Connectivity To Side" = "Kenara Kavşak Kenar Nesnesi Bağlanırlığı";
 
 /* A label for a pie chart legend item label. */
-"Label" = "ı_Label___________İ";
+"Label" = "Etiket";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Minimum değerden daha küçük";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "Yükleme başarısız oldu";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "ı_Location display_________________İ";
+"Location display" = "Konum görüntüleme";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "ı_Compass_______________İ";
+"location-button-accessibility-value-compass" = "Pusula";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "ı_Navigation_____________________İ";
+"location-button-accessibility-value-navigation" = "Navigasyon";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "ı_Off_______İ";
+"location-button-accessibility-value-off" = "Kapalı";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "ı_Recenter_________________İ";
+"location-button-accessibility-value-recenter" = "Yeniden ortala";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "ı_Auto-pan_________________İ";
+"location-button-auto-pan-accessibility-label" = "Otomatik kaydırma";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "ı_Auto-pan_________________İ";
+"location-button-auto-pan-section-header-title" = "Otomatik kaydırma";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "ı_Navigation_____________________İ";
+"location-button-status-label-navigation" = "Navigasyon";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "ı_Off_______İ";
+"location-button-status-label-off" = "Kapalı";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "ı_Recenter_________________İ";
+"location-button-status-label-recenter" = "Yeniden ortala";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Harita Alanları";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "Mod";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "ı_More Information_________________İ";
+"More Information" = "Daha Fazla Bilgi";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "ı_More Options_____________İ";
+"More Options" = "Daha Fazla Seçenek";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Adı";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "ı_Network Data Source____________________İ";
+"Network Data Source" = "Ağ Veri Kaynağı";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "ı_New Association________________İ";
+"New Association" = "Yeni İlişkilendirme";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Yeni ad";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "ı_No Candidates Found____________________İ";
+"No Candidates Found" = "Aday Bulunamadı";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Kullanılabilir yapılandırma yok.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "ı_No Feature Sources Found_________________________İ";
+"No Feature Sources Found" = "Detay Kaynağı Bulunamadı";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "ı_No Filter Results Found________________________İ";
+"No Filter Results Found" = "Filtre Sonucu Bulunamadı";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "İnternet Bağlantısı Yok";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "Değer Yok";
 
 /* The cardinal direction North. */
-"North" = "ı_North___________İ";
+"North" = "Kuzey";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "ı_Northeast___________________İ";
+"Northeast" = "Kuzeydoğu";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "ı_Northwest___________________İ";
+"Northwest" = "Kuzeybatı";
 
 /* A trace function output result was not provided. */
 "Not Available" = "Kullanılamıyor";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "ı_On Map_____________İ";
+"On Map" = "Harita üzerinde";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Çevrim İçi Harita Yüklenemedi";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "ı_Only removes the association. The feature remains__________________________İ.";
+"Only removes the association. The feature remains." = "Yalnızca ilişkilendirmeyi kaldırır. Detay kalır.";
 
 /* A label for a button to open a map area. */
 "Open" = "Açık";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "ı_Percent Along______________İ";
+"Percent Along" = "Boyunca Yüzde";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Lütfen ayarlarda kamera erişimini etkinleştirin.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "Yenile";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "ı_Remove_____________İ";
+"Remove" = "Kaldır";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "ı_Remove Association___________________İ";
+"Remove Association" = "İlişkilendirmeyi Kaldır";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "ı_Remove association____________________İ?";
+"Remove association?" = "İlişkilendirme kaldırılsın mı?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "İndirmeyi Kaldır";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "Eki yeniden adlandır";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "ı_Reorient map north___________________İ";
+"Reorient map north" = "Haritayı tekrar kuzeye yönlendir";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "ı_Search_____________İ";
+"Search" = "Ara";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "ı_Search Features________________İ";
+"Search Features" = "Detay Ara";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Arama Sorgusu";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Tümünü göster";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "ı_Show On Map____________İ";
+"Show On Map" = "Harita Üzerinde Göster";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Siteler";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "Küçük Bina";
 
 /* The cardinal direction South. */
-"South" = "ı_South___________İ";
+"South" = "Güney";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "ı_Southeast___________________İ";
+"Southeast" = "Güneydoğu";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "ı_Southwest___________________İ";
+"Southwest" = "Güneybatı";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Mekansal referans eşleşmiyor.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "ı_Starting_________________İ";
+"Starting" = "Başlatılıyor";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "Eyaletler/İller";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "ı_Stopped_______________İ";
+"Stopped" = "Durduruldu";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "ı_Stopping_________________İ";
+"Stopping" = "Durduruluyor";
 
 /* Street (Level of Detail) */
 "Street" = "Sokak";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "Daha fazla bilgi için görüntüye dokunun.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "ı_Terminal_________________İ";
+"Terminal" = "Terminal";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminal Yapılandırması";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "Form gönderilmedi";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "ı_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________İ?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "\"%@\" kimliği doğrulanamadı. Yine de bağlamak istiyor musunuz?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Haritada bir mekansal referans yok.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "Başlık";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "ı_To Element_____________________İ";
+"To Element" = "Hedef Öge";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Bugün";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "İz Yapılandırması";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "ı_Tracingâ€¦_____________________İ";
+"Tracingâ€¦" = "Tracingâ€¦";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Yeniden Dene";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "ı_Turn off auto-pan__________________İ";
+"Turn off auto-pan" = "Otomatik kaydırmayı kapat";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Bilinmeyen";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "Kullanıcı adı";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "ı_Unknown_______________İ";
+"utility-association-unknown-label" = "Bilinmeyen";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Doğrulama Hataları";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "ı_Visible: false_______________İ";
+"Visible: false" = "Görünür: yanlış";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "ı_Visible: true______________İ";
+"Visible: true" = "Görünür: doğru";
 
 /* The cardinal direction West. */
-"West" = "ı_West_________İ";
+"West" = "Batı";
 
 /* World (Level of Detail) */
 "World" = "Dünya";

@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "Į_%@, %@_____________š";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld pasirinkta";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Šiuo metu žemėlapio teritorijos negalima atsisiųsti.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "Į_Add_______š";
+"Add" = "Pridėti";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Pridėti susiejimą";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Teritorijos pavadinimas";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "Į_Association Settings_____________________š";
+"Association Settings" = "Susiejimo nustatymai";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "Į_Association Type_________________š";
+"Association Type" = "Susiejimo tipas";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Susiejimai";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "Į_Attachment_____________________š";
+"Attachment" = "Priedas";
 
 /* A label in reference to attachments. */
 "Attachments" = "Priedai";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "Į_Available Asset Types______________________š";
+"Available Asset Types" = "Prieinamų išteklių tipai";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Atgal";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "Atšaukta";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "Į_Cannot Verify Server Identity______________________________š";
+"Cannot Verify Server Identity" = "Nepavyksta patikrinti serverio tapatumo";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Reikalingas sertifikatas";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "Į_Change auto-pan mode to compass_________________š";
+"Change auto-pan mode to compass" = "Pakeisti automatinio stūmimo režimą į kompasą";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "Į_Change auto-pan mode to navigation__________________š";
+"Change auto-pan mode to navigation" = "Pakeisti automatinio stūmimo režimą į navigaciją";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "Į_Change auto-pan mode to recenter_________________š";
+"Change auto-pan mode to recenter" = "Pakeisti automatinio stūmimo režimą į centravimą iš naujo";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "Į_Change location display options_________________š";
+"Change location display options" = "Pakeisti vietos atvaizdavimo parinktis";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "Į_Value___________š";
+"chart-mark-label-value" = "Vertė";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Pasirinkti iš failų";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "Į_Choose to add______________š";
+"Choose to add" = "Pasirinkti norint pridėti";
 
 /* Cities (Level of Detail) */
 "Cities" = "Miestai";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "Spalva";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "Į_Compass navigation___________________š";
+"Compass navigation" = "Navigacija pagal kompasą";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "Į_Compass_______________š";
+"compass-button-accessibility-label" = "Kompasas";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "Į_Connectivity_____________š";
+"Connectivity" = "Jungimas";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "Į_Containment____________š";
+"Containment" = "Apribojimas";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "Į_Content Visible________________š";
+"Content Visible" = "Turinys matomas";
 
 /* Continent (Level of Detail) */
 "Continent" = "Žemynas";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "Nepavyko gauti šio žemėalapio teritorijų.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "Į_Count %lld_____________________š";
+"Count %lld" = "Skaičius: %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Apygardos";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Negalima įtraukti pasikartojančių pradžios taškų.";
 
 /* The cardinal direction East. */
-"East" = "Į_East_________š";
+"East" = "Rytai";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "Nepavyko nustatyti pradžios taško";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "Į_Failed to start________________š";
+"Failed to start" = "Nepavyko paleisti";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "Į_Filter asset types by name___________________________š";
+"Filter asset types by name" = "Filtruoti išteklių tipus pagal pavadinimą";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "Į_Filter candidates by name__________________________š";
+"Filter candidates by name" = "Filtruoti kandidatus pagal pavadinimą";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "Į_Filter feature sources by name_______________________________š";
+"Filter feature sources by name" = "Filtruoti elementų šaltinius pagal pavadinimą";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "Trumpena išilgai krašto";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "Į_From Element_____________š";
+"From Element" = "Iš elemento";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "Į_From Network Data Source_________________________š";
+"From Network Data Source" = "Iš tinklo duomenų šaltinio";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "Į_Heading: %@ %@_______________š";
+"Heading: %@ %@" = "Antraštė: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "Į_Hide Location______________š";
+"Hide Location" = "Slėpti vietą";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "Į_Hide location display______________________š";
+"Hide location display" = "Slėpti padėties atvaizdavimą";
 
 /* House Property (Level of Detail) */
 "House Property" = "Namų nuosavybė";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "Namai";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "Į_Ignore_____________š";
+"Ignore" = "Nepaisyti";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "Į_Junction Edge Object Connectivity From Side_______________________š";
+"Junction Edge Object Connectivity From Side" = "Sandūros-briaunos objekto jungimas iš šono";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "Į_Junction Edge Object Connectivity Midspan______________________š";
+"Junction Edge Object Connectivity Midspan" = "Sandūros-briaunos objekto jungimas viduryje";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "Į_Junction Edge Object Connectivity To Side______________________š";
+"Junction Edge Object Connectivity To Side" = "Sandūros-briaunos objekto jungimas į šoną";
 
 /* A label for a pie chart legend item label. */
-"Label" = "Į_Label___________š";
+"Label" = "Žymė";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Mažiau negu minimali reikšmė";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "Įkelti nepavyko";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "Į_Location display_________________š";
+"Location display" = "Padėties atvaizdavimas";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "Į_Compass_______________š";
+"location-button-accessibility-value-compass" = "Kompasas";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "Į_Navigation_____________________š";
+"location-button-accessibility-value-navigation" = "Navigacinis";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "Į_Off_______š";
+"location-button-accessibility-value-off" = "Išjungta";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "Į_Recenter_________________š";
+"location-button-accessibility-value-recenter" = "Centruoti iš naujo";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "Į_Auto-pan_________________š";
+"location-button-auto-pan-accessibility-label" = "Automatinis stūmimas";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "Į_Auto-pan_________________š";
+"location-button-auto-pan-section-header-title" = "Automatinis stūmimas";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "Į_Navigation_____________________š";
+"location-button-status-label-navigation" = "Navigacinis";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "Į_Off_______š";
+"location-button-status-label-off" = "Išjungta";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "Į_Recenter_________________š";
+"location-button-status-label-recenter" = "Centruoti iš naujo";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Žemėlapio teritorijos";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "Režimas";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "Į_More Information_________________š";
+"More Information" = "Daugiau informacijos";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "Į_More Options_____________š";
+"More Options" = "Daugiau parinkčių";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Pavadinimas";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "Į_Network Data Source____________________š";
+"Network Data Source" = "Tinklo duomenų šaltinis";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "Į_New Association________________š";
+"New Association" = "Naujas susiejimas";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Naujas pavadinimas";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "Į_No Candidates Found____________________š";
+"No Candidates Found" = "Kandidatų nerasta";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Galimų konfigūracijų nėra.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "Į_No Feature Sources Found_________________________š";
+"No Feature Sources Found" = "Elementų šaltinių nerasta";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "Į_No Filter Results Found________________________š";
+"No Filter Results Found" = "Filtrų rezultatų nerasta";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Nėra interneto ryšio";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "Reikšmių nėra";
 
 /* The cardinal direction North. */
-"North" = "Į_North___________š";
+"North" = "Šiaurė";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "Į_Northeast___________________š";
+"Northeast" = "Šiaurės rytai";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "Į_Northwest___________________š";
+"Northwest" = "Šiaurės vakarai";
 
 /* A trace function output result was not provided. */
 "Not Available" = "Nepasiekiama";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "Į_On Map_____________š";
+"On Map" = "Žemėlapyje";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Nepavyko įkelti internetinio žemėlapio";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "Į_Only removes the association. The feature remains__________________________š.";
+"Only removes the association. The feature remains." = "Pašalina tik susiejimą. Elementas išlieka.";
 
 /* A label for a button to open a map area. */
 "Open" = "Atverti";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "Į_Percent Along______________š";
+"Percent Along" = "Proc. palei";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Nustatymuose įjunkite prieigą prie kameros.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "Atnaujinti";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "Į_Remove_____________š";
+"Remove" = "Pašalinti";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "Į_Remove Association___________________š";
+"Remove Association" = "Pašalinti susiejimą";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "Į_Remove association____________________š?";
+"Remove association?" = "Pašalinti susiejimą?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Šalinti atsisiuntimą";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "Pervardinti priedą";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "Į_Reorient map north___________________š";
+"Reorient map north" = "Perorientuoti žemėlapį į šiaurę";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "Į_Search_____________š";
+"Search" = "Ieškoti";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "Į_Search Features________________š";
+"Search Features" = "Ieškoti elementų";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Paieškos užklausa";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Rodyti visus";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "Į_Show On Map____________š";
+"Show On Map" = "Rodyti žemėlapyje";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Svetainės";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "Mažas pastatas";
 
 /* The cardinal direction South. */
-"South" = "Į_South___________š";
+"South" = "Pietūs";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "Į_Southeast___________________š";
+"Southeast" = "Pietryčiai";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "Į_Southwest___________________š";
+"Southwest" = "Pietvakariai";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Koordinačių sistemos neatitikimas.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "Į_Starting_________________š";
+"Starting" = "Paleidžiama";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "Valstijos / provincijos";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "Į_Stopped_______________š";
+"Stopped" = "Sustabdyta";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "Į_Stopping_________________š";
+"Stopping" = "Stabdoma";
 
 /* Street (Level of Detail) */
 "Street" = "Gatvė";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "Norėdami gauti daugiau informacijos, bakstelėkite atvaizdą.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "Į_Terminal_________________š";
+"Terminal" = "Terminalas";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminalo konfigūracija";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "Forma nepateikta";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Į_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________š?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Nepavyko patikrinti „%@“ tapatumo. Ar vis tiek norite prisijungti?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Pagrindo žemėlapis neturi koordinačių sistemos.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "Pavadinimas";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "Į_To Element_____________________š";
+"To Element" = "Į elementą";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Šiandien";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "Ženklo konfigūracija";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "Į_Tracingâ€¦_____________________š";
+"Tracingâ€¦" = "Trasuojama";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Bandykite dar kartą";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "Į_Turn off auto-pan__________________š";
+"Turn off auto-pan" = "Išjungti automatinį stūmimą";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Nežinomas";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "Naudotojo vardas";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "Į_Unknown_______________š";
+"utility-association-unknown-label" = "Nežinomas";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Tikrinimo klaidos";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "Į_Visible: false_______________š";
+"Visible: false" = "Matoma: ne";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "Į_Visible: true______________š";
+"Visible: true" = "Matoma: taip";
 
 /* The cardinal direction West. */
-"West" = "Į_West_________š";
+"West" = "Vakarai";
 
 /* World (Level of Detail) */
 "World" = "Pasaulis";

@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "Ř_%@, %@_____________ů";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld vybráno";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Oblast mapy v tuto chvíli nelze stáhnout.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "Ř_Add_______ů";
+"Add" = "Přidat";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Přidat přiřazení";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Název oblasti";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "Ř_Association Settings_____________________ů";
+"Association Settings" = "Nastavení vazby";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "Ř_Association Type_________________ů";
+"Association Type" = "Typ vazby";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Přiřazení";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "Ř_Attachment_____________________ů";
+"Attachment" = "Příloha";
 
 /* A label in reference to attachments. */
 "Attachments" = "Přílohy";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "Ř_Available Asset Types______________________ů";
+"Available Asset Types" = "Dostupné typy prvků";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Zpět";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "Zrušeno";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "Ř_Cannot Verify Server Identity______________________________ů";
+"Cannot Verify Server Identity" = "Ověření identity serveru se nezdařilo";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Vyžadován certifikát";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "Ř_Change auto-pan mode to compass_________________ů";
+"Change auto-pan mode to compass" = "Změnit režim automatického posunu na kompas";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "Ř_Change auto-pan mode to navigation__________________ů";
+"Change auto-pan mode to navigation" = "Změnit režim automatického posunu na navigaci";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "Ř_Change auto-pan mode to recenter_________________ů";
+"Change auto-pan mode to recenter" = "Změnit režim automatického posunu na opětovné vycentrování";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "Ř_Change location display options_________________ů";
+"Change location display options" = "Změnit možnosti zobrazení polohy";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "Ř_Value___________ů";
+"chart-mark-label-value" = "Hodnota";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Vybrat ze souborů";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "Ř_Choose to add______________ů";
+"Choose to add" = "Vyberte, co chcete přidat";
 
 /* Cities (Level of Detail) */
 "Cities" = "Města";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "Barva";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "Ř_Compass navigation___________________ů";
+"Compass navigation" = "Navigace kompasu";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "Ř_Compass_______________ů";
+"compass-button-accessibility-label" = "Kompas";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "Ř_Connectivity_____________ů";
+"Connectivity" = "Konektivita";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "Ř_Containment____________ů";
+"Containment" = "Obsah";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "Ř_Content Visible________________ů";
+"Content Visible" = "Viditelný obsah";
 
 /* Continent (Level of Detail) */
 "Continent" = "Kontinent";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "Načtení oblastí mapy pro tuto mapu se nezdařilo.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "Ř_Count %lld_____________________ů";
+"Count %lld" = "Počet %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Kraje";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Duplicitní výchozí body nelze přidat.";
 
 /* The cardinal direction East. */
-"East" = "Ř_East_________ů";
+"East" = "Východ";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "Nepodařilo se nastavit výchozí bod";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "Ř_Failed to start________________ů";
+"Failed to start" = "Spuštění se nezdařilo";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "Ř_Filter asset types by name___________________________ů";
+"Filter asset types by name" = "Filtrovat typy prvků podle názvu";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "Ř_Filter candidates by name__________________________ů";
+"Filter candidates by name" = "Filtrovat kandidáty podle názvu";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "Ř_Filter feature sources by name_______________________________ů";
+"Filter feature sources by name" = "Filtrovat zdroje prvků podle názvu";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "Zlomek podél hrany";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "Ř_From Element_____________ů";
+"From Element" = "Od prvku";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "Ř_From Network Data Source_________________________ů";
+"From Network Data Source" = "Ze síťového zdroje dat";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "Ř_Heading: %@ %@_______________ů";
+"Heading: %@ %@" = "Směr: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "Ř_Hide Location______________ů";
+"Hide Location" = "Skrýt polohu";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "Ř_Hide location display______________________ů";
+"Hide location display" = "Skrýt zobrazení polohy";
 
 /* House Property (Level of Detail) */
 "House Property" = "Nemovitost – dům";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "Domy";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "Ř_Ignore_____________ů";
+"Ignore" = "Ignorovat";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "Ř_Junction Edge Object Connectivity From Side_______________________ů";
+"Junction Edge Object Connectivity From Side" = "Konektivita uzel-hrana-objekt – ze strany";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "Ř_Junction Edge Object Connectivity Midspan______________________ů";
+"Junction Edge Object Connectivity Midspan" = "Konektivita uzel-hrana-objekt – v mezilehlém bodě";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "Ř_Junction Edge Object Connectivity To Side______________________ů";
+"Junction Edge Object Connectivity To Side" = "Konektivita uzel-hrana-objekt – ke straně";
 
 /* A label for a pie chart legend item label. */
-"Label" = "Ř_Label___________ů";
+"Label" = "Popisek";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Nižší než minimální hodnota";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "Načítání se nezdařilo";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "Ř_Location display_________________ů";
+"Location display" = "Zobrazení polohy";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "Ř_Compass_______________ů";
+"location-button-accessibility-value-compass" = "Kompas";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "Ř_Navigation_____________________ů";
+"location-button-accessibility-value-navigation" = "Navigace";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "Ř_Off_______ů";
+"location-button-accessibility-value-off" = "Vypnuto";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "Ř_Recenter_________________ů";
+"location-button-accessibility-value-recenter" = "Znovu vycentrovat";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "Ř_Auto-pan_________________ů";
+"location-button-auto-pan-accessibility-label" = "Automatický posun";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "Ř_Auto-pan_________________ů";
+"location-button-auto-pan-section-header-title" = "Automatický posun";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "Ř_Navigation_____________________ů";
+"location-button-status-label-navigation" = "Navigace";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "Ř_Off_______ů";
+"location-button-status-label-off" = "Vypnuto";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "Ř_Recenter_________________ů";
+"location-button-status-label-recenter" = "Znovu vycentrovat";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Oblasti mapy";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "Režim";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "Ř_More Information_________________ů";
+"More Information" = "Více informací";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "Ř_More Options_____________ů";
+"More Options" = "Více možností";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Název";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "Ř_Network Data Source____________________ů";
+"Network Data Source" = "Síťový zdroj dat";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "Ř_New Association________________ů";
+"New Association" = "Nová vazba";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Nový název";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "Ř_No Candidates Found____________________ů";
+"No Candidates Found" = "Nebyli nalezeni žádní kandidáti";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Žádné konfigurace k dispozici.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "Ř_No Feature Sources Found_________________________ů";
+"No Feature Sources Found" = "Nebyly nalezeny žádné zdroje prvků";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "Ř_No Filter Results Found________________________ů";
+"No Filter Results Found" = "Nebyly nalezeny žádné filtrované výsledky";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Žádné připojení k internetu";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "Žádná hodnota";
 
 /* The cardinal direction North. */
-"North" = "Ř_North___________ů";
+"North" = "Sever";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "Ř_Northeast___________________ů";
+"Northeast" = "Severovýchod";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "Ř_Northwest___________________ů";
+"Northwest" = "Severozápad";
 
 /* A trace function output result was not provided. */
 "Not Available" = "Není k dispozici";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "Ř_On Map_____________ů";
+"On Map" = "Na mapě";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Offline mapu se nepodařilo načíst";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "Ř_Only removes the association. The feature remains__________________________ů.";
+"Only removes the association. The feature remains." = "Odebere pouze vazbu. Prvek zůstává.";
 
 /* A label for a button to open a map area. */
 "Open" = "Otevřít";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "Ř_Percent Along______________ů";
+"Percent Along" = "Procento podél";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Povolte přístup k fotoaparátu v části Nastavení.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "Obnovit";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "Ř_Remove_____________ů";
+"Remove" = "Odebrat";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "Ř_Remove Association___________________ů";
+"Remove Association" = "Odebrat vazbu";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "Ř_Remove association____________________ů?";
+"Remove association?" = "Odebrat vazbu?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Odstranit stahování";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "Přejmenovat přílohu";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "Ř_Reorient map north___________________ů";
+"Reorient map north" = "Znovu orientovat mapu na sever";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "Ř_Search_____________ů";
+"Search" = "Hledat";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "Ř_Search Features________________ů";
+"Search Features" = "Vyhledat prvky";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Vyhledávací dotaz";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Zobrazit vše";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "Ř_Show On Map____________ů";
+"Show On Map" = "Zobrazit na mapě";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Místa";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "Malá budova";
 
 /* The cardinal direction South. */
-"South" = "Ř_South___________ů";
+"South" = "Jih";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "Ř_Southeast___________________ů";
+"Southeast" = "Jihovýchod";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "Ř_Southwest___________________ů";
+"Southwest" = "Jihozápad";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Nesprávný souřadnicový systém.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "Ř_Starting_________________ů";
+"Starting" = "Spouštění";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "Státy/provincie";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "Ř_Stopped_______________ů";
+"Stopped" = "Zastaveno";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "Ř_Stopping_________________ů";
+"Stopping" = "Zastavování";
 
 /* Street (Level of Detail) */
 "Street" = "Ulice";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "Klepnutím na obrázek získáte další informace.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "Ř_Terminal_________________ů";
+"Terminal" = "Vývod";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Konfigurace terminálu";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "Formulář nebyl odeslán";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Ř_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________ů?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Identitu serveru %@ se nepodařilo ověřit. Chcete se přesto připojit?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Mapa nemá zadán souřadnicový systém.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "Nadpis";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "Ř_To Element_____________________ů";
+"To Element" = "K prvku";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Dnes";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "Konfigurace trasování";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "Ř_Tracingâ€¦_____________________ů";
+"Tracingâ€¦" = "Sledování";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Zkusit znovu";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "Ř_Turn off auto-pan__________________ů";
+"Turn off auto-pan" = "Vypnout automatický posun";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Neznámé";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "Uživatelské jméno";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "Ř_Unknown_______________ů";
+"utility-association-unknown-label" = "Neznámé";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Chyby ověření";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "Ř_Visible: false_______________ů";
+"Visible: false" = "Viditelné: nepravda";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "Ř_Visible: true______________ů";
+"Visible: true" = "Viditelné: pravda";
 
 /* The cardinal direction West. */
-"West" = "Ř_West_________ů";
+"West" = "Západ";
 
 /* World (Level of Detail) */
 "World" = "Svět";

@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "Š_%@, %@_____________ä";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld on valitud";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Kaardiala ei saa praegu alla laadida.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "Š_Add_______ä";
+"Add" = "Lisa";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Lisa seos";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Ala nimi";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "Š_Association Settings_____________________ä";
+"Association Settings" = "Seose seaded";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "Š_Association Type_________________ä";
+"Association Type" = "Seose tüüp";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Seosed";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "Š_Attachment_____________________ä";
+"Attachment" = "Manus";
 
 /* A label in reference to attachments. */
 "Attachments" = "Manused";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "Š_Available Asset Types______________________ä";
+"Available Asset Types" = "Saadaolevad varatüübid";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Tagasi";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "Tühistatud";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "Š_Cannot Verify Server Identity______________________________ä";
+"Cannot Verify Server Identity" = "Serveri identiteeti ei saa kinnitada";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Sert on nõutav";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "Š_Change auto-pan mode to compass_________________ä";
+"Change auto-pan mode to compass" = "Automaatse panoraamimise režiimi muutmine kompassiks";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "Š_Change auto-pan mode to navigation__________________ä";
+"Change auto-pan mode to navigation" = "Automaatse panoraamimise režiimi muutmine navigeerimiseks";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "Š_Change auto-pan mode to recenter_________________ä";
+"Change auto-pan mode to recenter" = "Automaatse panoraamimise režiimi muutmine retsentreerimiseks";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "Š_Change location display options_________________ä";
+"Change location display options" = "Asukoha kuvamisvalikute muutmine";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "Š_Value___________ä";
+"chart-mark-label-value" = "Väärtus";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Valige failidest";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "Š_Choose to add______________ä";
+"Choose to add" = "Vali, et lisada";
 
 /* Cities (Level of Detail) */
 "Cities" = "Linnad";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "Värv";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "Š_Compass navigation___________________ä";
+"Compass navigation" = "Kompassi nagiveerimine";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "Š_Compass_______________ä";
+"compass-button-accessibility-label" = "Kompass";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "Š_Connectivity_____________ä";
+"Connectivity" = "Ühenduvus";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "Š_Containment____________ä";
+"Containment" = "Sisaldavus";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "Š_Content Visible________________ä";
+"Content Visible" = "Sisu on nähtav";
 
 /* Continent (Level of Detail) */
 "Continent" = "Maailmajagu";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "Selle kaardi kaardialasid ei saanud välja võtta.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "Š_Count %lld_____________________ä";
+"Count %lld" = "Arv %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Maakonnad";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Korduvaid alguspunkte ei saa lisada.";
 
 /* The cardinal direction East. */
-"East" = "Š_East_________ä";
+"East" = "Ida";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "Alguspunkti määramine nurjus";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "Š_Failed to start________________ä";
+"Failed to start" = "Ei õnnestunud käivitada";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "Š_Filter asset types by name___________________________ä";
+"Filter asset types by name" = "Filtrivarade tüübid nime alusel";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "Š_Filter candidates by name__________________________ä";
+"Filter candidates by name" = "Filtrikandidaadid nime alusel";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "Š_Filter feature sources by name_______________________________ä";
+"Filter feature sources by name" = "Filtriobjektide allikad nime alusel";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "Murdosa mööda serva";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "Š_From Element_____________ä";
+"From Element" = "Elemendist";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "Š_From Network Data Source_________________________ä";
+"From Network Data Source" = "Võrgu andmeallikast";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "Š_Heading: %@ %@_______________ä";
+"Heading: %@ %@" = "Pealkiri: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "Š_Hide Location______________ä";
+"Hide Location" = "Peida asukoht";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "Š_Hide location display______________________ä";
+"Hide location display" = "Peida asukohakuva";
 
 /* House Property (Level of Detail) */
 "House Property" = "Maja atribuut";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "Majad";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "Š_Ignore_____________ä";
+"Ignore" = "Eira";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "Š_Junction Edge Object Connectivity From Side_______________________ä";
+"Junction Edge Object Connectivity From Side" = "Ühenduskoha serva objekti ühenduvus küljelt";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "Š_Junction Edge Object Connectivity Midspan______________________ä";
+"Junction Edge Object Connectivity Midspan" = "Ühenduskoha serva objekti keskmine ulatus";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "Š_Junction Edge Object Connectivity To Side______________________ä";
+"Junction Edge Object Connectivity To Side" = "Ühenduskoha serva objekti ühenduvus küljele";
 
 /* A label for a pie chart legend item label. */
-"Label" = "Š_Label___________ä";
+"Label" = "Märgis";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Miinimumväärtusest väiksem";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "Laadimine ebaõnnestus";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "Š_Location display_________________ä";
+"Location display" = "Asukohakuva";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "Š_Compass_______________ä";
+"location-button-accessibility-value-compass" = "Kompass";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "Š_Navigation_____________________ä";
+"location-button-accessibility-value-navigation" = "Navigeerimine";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "Š_Off_______ä";
+"location-button-accessibility-value-off" = "Väljas";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "Š_Recenter_________________ä";
+"location-button-accessibility-value-recenter" = "Retsentreeri";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "Š_Auto-pan_________________ä";
+"location-button-auto-pan-accessibility-label" = "Automaatne panoraamimine";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "Š_Auto-pan_________________ä";
+"location-button-auto-pan-section-header-title" = "Automaatne panoraamimine";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "Š_Navigation_____________________ä";
+"location-button-status-label-navigation" = "Navigeerimine";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "Š_Off_______ä";
+"location-button-status-label-off" = "Väljas";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "Š_Recenter_________________ä";
+"location-button-status-label-recenter" = "Retsentreeri";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Kaardialad";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "Režiim";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "Š_More Information_________________ä";
+"More Information" = "Lisateave";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "Š_More Options_____________ä";
+"More Options" = "Rohkem valikuid";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Nimi";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "Š_Network Data Source____________________ä";
+"Network Data Source" = "Võrgu andmeallikas";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "Š_New Association________________ä";
+"New Association" = "Uue seos";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Uus nimi";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "Š_No Candidates Found____________________ä";
+"No Candidates Found" = "Kandidaate ei leitud";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Konfiguratsioone pole saadaval.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "Š_No Feature Sources Found_________________________ä";
+"No Feature Sources Found" = "Objektiallikaid ei leitud";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "Š_No Filter Results Found________________________ä";
+"No Filter Results Found" = "Filtritulemusi ei leitud";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Internetiühendus puudub";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "Väärtus puudub";
 
 /* The cardinal direction North. */
-"North" = "Š_North___________ä";
+"North" = "Põhi";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "Š_Northeast___________________ä";
+"Northeast" = "Kirre";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "Š_Northwest___________________ä";
+"Northwest" = "Loe";
 
 /* A trace function output result was not provided. */
 "Not Available" = "Pole saadaval";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "Š_On Map_____________ä";
+"On Map" = "Kaardil";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Võrgukaarti ei õnnestunud laadida";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "Š_Only removes the association. The feature remains__________________________ä.";
+"Only removes the association. The feature remains." = "Eemaldab ainult seose. Objekt jääb.";
 
 /* A label for a button to open a map area. */
 "Open" = "Ava";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "Š_Percent Along______________ä";
+"Percent Along" = "Protsent (joonest või marsruudist)";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Lubage seadetes juurdepääs kaamerale.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "Värskenda";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "Š_Remove_____________ä";
+"Remove" = "Eemalda";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "Š_Remove Association___________________ä";
+"Remove Association" = "Eemalda seos";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "Š_Remove association____________________ä?";
+"Remove association?" = "Kas eemaldada seos?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Eemalda allalaadimine";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "Nimeta manuse ümber";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "Š_Reorient map north___________________ä";
+"Reorient map north" = "Suuna kaart ümber põhja";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "Š_Search_____________ä";
+"Search" = "Otsing";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "Š_Search Features________________ä";
+"Search Features" = "Otsi objektidest";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Otsingupäring";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Kuva kõik";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "Š_Show On Map____________ä";
+"Show On Map" = "Kuva kaardil";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Saidid";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "Väike ehitis";
 
 /* The cardinal direction South. */
-"South" = "Š_South___________ä";
+"South" = "Lõuna";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "Š_Southeast___________________ä";
+"Southeast" = "Kagu";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "Š_Southwest___________________ä";
+"Southwest" = "Edel";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Koordinaatsüsteemi mittevastavus.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "Š_Starting_________________ä";
+"Starting" = "Käivitamine";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "Osariigid/provintsid";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "Š_Stopped_______________ä";
+"Stopped" = "Peatatud";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "Š_Stopping_________________ä";
+"Stopping" = "Peatamine";
 
 /* Street (Level of Detail) */
 "Street" = "Tänav";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "Lisateabe saamiseks puudutage pilti.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "Š_Terminal_________________ä";
+"Terminal" = "Terminal";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminali konfiguratsioon";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "Vormi ei esitatud";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Š_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________ä?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "%@ identiteeti ei saa kinnitada. Kas soovite sellegipoolest ühenduse luua?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Kaardil pole ruumilist referentsi.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "Pealkiri";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "Š_To Element_____________________ä";
+"To Element" = "Elemendini";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Täna";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "Jälgimise konfiguratsioon";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "Š_Tracingâ€¦_____________________ä";
+"Tracingâ€¦" = "Tracingâ€¦";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Proovige uuesti";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "Š_Turn off auto-pan__________________ä";
+"Turn off auto-pan" = "Lülita automaatne panoraamimine välja";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Tundmatu";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "Kasutajanimi";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "Š_Unknown_______________ä";
+"utility-association-unknown-label" = "Tundmatu";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Valideerimise vead";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "Š_Visible: false_______________ä";
+"Visible: false" = "Nähtav: vale";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "Š_Visible: true______________ä";
+"Visible: true" = "Nähtav: õige";
 
 /* The cardinal direction West. */
-"West" = "Š_West_________ä";
+"West" = "Lääs";
 
 /* World (Level of Detail) */
 "World" = "Maailm";

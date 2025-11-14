@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "بيت_%@, %@_____________لاحقة";
+"%@, %@" = "%@، %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "تم تحديد %lld";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "يتعذر تنزيل منطقة الخريطة في هذا الوقت.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "بيت_Add_______لاحقة";
+"Add" = "إضافة";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "إضافة اقتران";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "اسم المنطقة";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "بيت_Association Settings_____________________لاحقة";
+"Association Settings" = "إعدادات الاقتران";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "بيت_Association Type_________________لاحقة";
+"Association Type" = "نوع الاقتران";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "اقترانات";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "بيت_Attachment_____________________لاحقة";
+"Attachment" = "مرفق";
 
 /* A label in reference to attachments. */
 "Attachments" = "المرفقات";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "بيت_Available Asset Types______________________لاحقة";
+"Available Asset Types" = "أنواع الأصول المتاحة";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "السابق";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "تم الإلغاء";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "بيت_Cannot Verify Server Identity______________________________لاحقة";
+"Cannot Verify Server Identity" = "يتعذر التحقق من صحة هوية الخادم";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "الشهادة مطلوبة";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "بيت_Change auto-pan mode to compass_________________لاحقة";
+"Change auto-pan mode to compass" = "تغيير وضع التحريك التلقائي إلى البوصلة";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "بيت_Change auto-pan mode to navigation__________________لاحقة";
+"Change auto-pan mode to navigation" = "تغيير وضع التحريك التلقائي إلى التنقل";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "بيت_Change auto-pan mode to recenter_________________لاحقة";
+"Change auto-pan mode to recenter" = "تغيير وضع التحريك التلقائي إلى إعادة التمركز";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "بيت_Change location display options_________________لاحقة";
+"Change location display options" = "تغيير خيارات عرض الموقع";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "بيت_Value___________لاحقة";
+"chart-mark-label-value" = "القيمة";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "اختيار من الملفات";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "بيت_Choose to add______________لاحقة";
+"Choose to add" = "اختر للإضافة";
 
 /* Cities (Level of Detail) */
 "Cities" = "مدن";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "لون";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "بيت_Compass navigation___________________لاحقة";
+"Compass navigation" = "التنقل باستخدام البوصلة";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "بيت_Compass_______________لاحقة";
+"compass-button-accessibility-label" = "البوصلة";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "بيت_Connectivity_____________لاحقة";
+"Connectivity" = "الاتصال";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "بيت_Containment____________لاحقة";
+"Containment" = "الاحتواء";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "بيت_Content Visible________________لاحقة";
+"Content Visible" = "المحتوى مرئي";
 
 /* Continent (Level of Detail) */
 "Continent" = "قارة";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "يتعذر استرداد مناطق الخريطة لهذه الخريطة.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "بيت_Count %lld_____________________لاحقة";
+"Count %lld" = "العدد %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "مقاطعات";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "تتعذر إضافة نقاط بداية مكررة.";
 
 /* The cardinal direction East. */
-"East" = "بيت_East_________لاحقة";
+"East" = "شرق";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "فشل في تعيين نقطة البداية";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "بيت_Failed to start________________لاحقة";
+"Failed to start" = "فشل البدء";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "بيت_Filter asset types by name___________________________لاحقة";
+"Filter asset types by name" = "تصفية أنواع الأصول حسب الاسم";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "بيت_Filter candidates by name__________________________لاحقة";
+"Filter candidates by name" = "تصفية المرشحين حسب الاسم";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "بيت_Filter feature sources by name_______________________________لاحقة";
+"Filter feature sources by name" = "تصفية مصادر المعالم حسب الاسم";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "كسر بامتداد Edge";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "بيت_From Element_____________لاحقة";
+"From Element" = "من العنصر";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "بيت_From Network Data Source_________________________لاحقة";
+"From Network Data Source" = "من مصدر بيانات الشبكة";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "بيت_Heading: %@ %@_______________لاحقة";
+"Heading: %@ %@" = "العنوان: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "بيت_Hide Location______________لاحقة";
+"Hide Location" = "إخفاء الموقع";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "بيت_Hide location display______________________لاحقة";
+"Hide location display" = "إخفاء عرض الموقع";
 
 /* House Property (Level of Detail) */
 "House Property" = "ملكية المنزل";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "المنازل";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "بيت_Ignore_____________لاحقة";
+"Ignore" = "تجاهل";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "بيت_Junction Edge Object Connectivity From Side_______________________لاحقة";
+"Junction Edge Object Connectivity From Side" = "اتصال كائن حافة الوصلة من الجانب";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "بيت_Junction Edge Object Connectivity Midspan______________________لاحقة";
+"Junction Edge Object Connectivity Midspan" = "اتصال كائن حافة الوصلة من المنتصف";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "بيت_Junction Edge Object Connectivity To Side______________________لاحقة";
+"Junction Edge Object Connectivity To Side" = "اتصال كائن حافة الوصلة إلى الجانب";
 
 /* A label for a pie chart legend item label. */
-"Label" = "بيت_Label___________لاحقة";
+"Label" = "التسمية";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "أقل من أدنى قيمة";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "فشل التحميل";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "بيت_Location display_________________لاحقة";
+"Location display" = "عرض الموقع";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "بيت_Compass_______________لاحقة";
+"location-button-accessibility-value-compass" = "البوصلة";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "بيت_Navigation_____________________لاحقة";
+"location-button-accessibility-value-navigation" = "تنقل";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "بيت_Off_______لاحقة";
+"location-button-accessibility-value-off" = "إيقاف تشغيل";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "بيت_Recenter_________________لاحقة";
+"location-button-accessibility-value-recenter" = "إعادة التمركز";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "بيت_Auto-pan_________________لاحقة";
+"location-button-auto-pan-accessibility-label" = "تحريك تلقائي";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "بيت_Auto-pan_________________لاحقة";
+"location-button-auto-pan-section-header-title" = "تحريك تلقائي";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "بيت_Navigation_____________________لاحقة";
+"location-button-status-label-navigation" = "تنقل";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "بيت_Off_______لاحقة";
+"location-button-status-label-off" = "إيقاف تشغيل";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "بيت_Recenter_________________لاحقة";
+"location-button-status-label-recenter" = "إعادة التمركز";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "مناطق الخريطة";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "الوضع";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "بيت_More Information_________________لاحقة";
+"More Information" = "المزيد من المعلومات";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "بيت_More Options_____________لاحقة";
+"More Options" = "مزيد من الخيارات";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "الاسم";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "بيت_Network Data Source____________________لاحقة";
+"Network Data Source" = "مصدر بيانات الشبكة";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "بيت_New Association________________لاحقة";
+"New Association" = "اقتران جديد";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "الاسم الجديد";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "بيت_No Candidates Found____________________لاحقة";
+"No Candidates Found" = "لم يتم العثور على مرشحين";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "لا توجد تكوينات متاحة.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "بيت_No Feature Sources Found_________________________لاحقة";
+"No Feature Sources Found" = "لم يتم العثور على مصادر معالم";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "بيت_No Filter Results Found________________________لاحقة";
+"No Filter Results Found" = "لم يتم العثور على نتائج تصفية";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "لا يوجد اتصال بالإنترنت";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "بدون قيمة";
 
 /* The cardinal direction North. */
-"North" = "بيت_North___________لاحقة";
+"North" = "شمال";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "بيت_Northeast___________________لاحقة";
+"Northeast" = "شمال شرقي";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "بيت_Northwest___________________لاحقة";
+"Northwest" = "شمال غربي";
 
 /* A trace function output result was not provided. */
 "Not Available" = "غير متاح";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "بيت_On Map_____________لاحقة";
+"On Map" = "على الخريطة";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "فشل تحميل الخريطة المتصلة";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "بيت_Only removes the association. The feature remains__________________________لاحقة.";
+"Only removes the association. The feature remains." = "يزيل الاقتران فقط. يبقى المعلم.";
 
 /* A label for a button to open a map area. */
 "Open" = "فتح";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "بيت_Percent Along______________لاحقة";
+"Percent Along" = "النسبة المئوية على طول";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "يرجى تمكين الوصول إلى الكاميرا في الإعدادات.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "تحديث";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "بيت_Remove_____________لاحقة";
+"Remove" = "إزالة";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "بيت_Remove Association___________________لاحقة";
+"Remove Association" = "إزالة الاقتران";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "بيت_Remove association____________________لاحقة?";
+"Remove association?" = "هل ترغب في إزالة الاقتران؟";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "إزالة التنزيل";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "إعادة تسمية المرفق";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "بيت_Reorient map north___________________لاحقة";
+"Reorient map north" = "إعادة توجيه الخريطة إلى الشمال";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "بيت_Search_____________لاحقة";
+"Search" = "بحث";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "بيت_Search Features________________لاحقة";
+"Search Features" = "البحث عن المعالم";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "استعلام البحث";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "إظهار الكل";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "بيت_Show On Map____________لاحقة";
+"Show On Map" = "إظهار على الخريطة";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "المواقع";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "مبنى صغير";
 
 /* The cardinal direction South. */
-"South" = "بيت_South___________لاحقة";
+"South" = "جنوب";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "بيت_Southeast___________________لاحقة";
+"Southeast" = "جنوب شرقي";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "بيت_Southwest___________________لاحقة";
+"Southwest" = "جنوب غربي";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "عدم تطابق الإسناد المكاني.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "بيت_Starting_________________لاحقة";
+"Starting" = "البدء";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "الولايات/المقاطعات";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "بيت_Stopped_______________لاحقة";
+"Stopped" = "تم الإيقاف";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "بيت_Stopping_________________لاحقة";
+"Stopping" = "الإيقاف";
 
 /* Street (Level of Detail) */
 "Street" = "شارع";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "اضغط على الصورة لمزيد من المعلومات.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "بيت_Terminal_________________لاحقة";
+"Terminal" = "محطة طرفية";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "تكوين طرفي";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "لم يتم تقديم النموذج";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "بيت_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________لاحقة?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "يتعذر التحقق من صحة هوية \"%@\". هل ترغب في الاتصال على أي حال؟";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "لا تحتوي الخريطة على إسناد مكاني.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "العنوان";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "بيت_To Element_____________________لاحقة";
+"To Element" = "إلى العنصر";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "اليوم";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "تكوين التتبع";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "بيت_Tracingâ€¦_____________________لاحقة";
+"Tracingâ€¦" = "التتبع";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "المحاولة مرة أخرى";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "بيت_Turn off auto-pan__________________لاحقة";
+"Turn off auto-pan" = "إيقاف تشغيل التحريك التلقائي";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "غير معروف";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "اسم المستخدم";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "بيت_Unknown_______________لاحقة";
+"utility-association-unknown-label" = "غير معروف";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "أخطاء التحقق من الصحة";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "بيت_Visible: false_______________لاحقة";
+"Visible: false" = "مرئي: خطأ";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "بيت_Visible: true______________لاحقة";
+"Visible: true" = "مرئي: صواب";
 
 /* The cardinal direction West. */
-"West" = "بيت_West_________لاحقة";
+"West" = "غرب";
 
 /* World (Level of Detail) */
 "World" = "العالم";
