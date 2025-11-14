@@ -59,15 +59,9 @@ extension FeatureFormView {
                 List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
                     mainButton(for: utilityAssociationResult)
                         .disabled(navigationIsDisabled)
-#if targetEnvironment(macCatalyst)
-                        .contextMenu {
-                            deleteButton(for: utilityAssociationResult.association)
-                        }
-#else
                         .swipeActions {
                             deleteButton(for: utilityAssociationResult.association)
                         }
-#endif
                         .tint(.primary)
                 }
                 .associationRemovalConfirmation(
@@ -83,7 +77,7 @@ extension FeatureFormView {
                     subtitle: featureFormViewModel.getModel(form)?.title ?? ""
                 )
                 .onChange(of: associationResults.count) {
-                    if associationResults.isEmpty {
+                    if associationResults.isEmpty, !featureFormViewModel.navigationPath.isEmpty {
                         featureFormViewModel.navigationPath.removeLast()
                     }
                 }
@@ -124,27 +118,39 @@ extension FeatureFormView {
         }
         
         func detailsButton(for result: UtilityAssociationResult) -> some View {
-            Button {
-                featureFormViewModel.navigationPath.append(
-                    FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
-                        form,
-                        element,
-                        result
+            Menu {
+                ShowOnMapButton(feature: result.associatedFeature)
+                Button {
+                    featureFormViewModel.navigationPath.append(
+                        FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
+                            form,
+                            element,
+                            result
+                        )
                     )
-                )
+                } label: {
+                    Label {
+                        Text(
+                            "More Information",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to view details for a list row."
+                        )
+                    } icon: {
+                        Image(systemName: "info.circle")
+                    }
+                }
+                deleteButton(for: result.association)
             } label: {
                 Label {
                     Text(
-                        "Utility Association Details",
+                        "More Options",
                         bundle: .toolkitModule,
-                        comment: "A label for a button to view utility association details."
+                        comment: "A label for a button to see more options for a list row."
                     )
                 } icon: {
                     Image(systemName: "ellipsis.circle")
                 }
-                .contentShape(.circle)
                 .labelStyle(.iconOnly)
-                .tint(.blue)
             }
         }
         
@@ -170,6 +176,7 @@ extension FeatureFormView {
                     detailsButton(for: result)
                         .buttonStyle(.plain)
                         .hoverEffect()
+                        .tint(.blue)
                 }
             }
         }

@@ -38,6 +38,7 @@ extension FeatureFormView {
                 sectionForAssociation
                 sectionForFromElement
                 sectionForToElement
+                sectionForPercentAlong
                 sectionForRemoveButton
             }
             .navigationTitle(
@@ -94,6 +95,19 @@ extension FeatureFormView {
                 }
                 if let fromElementTerminal = associationResult.association.fromElement.terminal {
                     row(for: fromElementTerminal)
+                }
+            }
+        }
+        
+        /// A section which contains the percent along.
+        @ViewBuilder var sectionForPercentAlong: some View {
+            if associationResult.association.kind == .junctionEdgeObjectConnectivityMidspan {
+                Section {
+                    LabeledContent {
+                        Text(associationResult.association.fractionAlongEdge, format: .percent.precision(.fractionLength(0)))
+                    } label: {
+                        Text(LocalizedStringResource.percentAlong)
+                    }
                 }
             }
         }

@@ -1,5 +1,5 @@
 /* A label with the name of a terminal on an associated
-utility element (first variable) and a fractional value
+utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
 "%@, %@" = "%@, %@";
@@ -387,8 +387,8 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "Finish editing failed.\n%@";
 
-/* A label in reference to a fractional distance along an
-edge style utility network element. */
+/* A label in reference to a fractional distance along an 
+edge of a utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
 
 /* A label for the element on the "from" side of a utility association. */
@@ -505,6 +505,12 @@ through auto-pan modes. */
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Mode";
+
+/* A label for a button to view details for a list row. */
+"More Information" = "More Information";
+
+/* A label for a button to see more options for a list row. */
+"More Options" = "More Options";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Name";
@@ -626,6 +632,10 @@ removes only the association.  */
 
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Password Required";
+
+/* A label in reference to a percent along an 
+edge of a utility network element. */
+"Percent Along" = "Percent Along";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Please enable camera access in settings.";
@@ -901,9 +911,6 @@ without saving. */
 
 /* A label in reference to a credential username. */
 "Username" = "Username";
-
-/* A label for a button to view utility association details. */
-"Utility Association Details" = "Utility Association Details";
 
 /* A label for an unknown utility association kind. */
 "utility-association-unknown-label" = "Unknown";

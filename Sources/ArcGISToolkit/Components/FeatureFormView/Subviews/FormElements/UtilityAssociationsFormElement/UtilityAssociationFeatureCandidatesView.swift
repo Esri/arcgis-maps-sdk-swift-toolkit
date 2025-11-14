@@ -20,15 +20,19 @@ extension FeatureFormView {
     struct UtilityAssociationFeatureCandidatesView: View {
         /// The model for the FeatureFormView containing the view.
         @Environment(FeatureFormViewModel.self) var featureFormViewModel
-        /// The closure to perform when a ``EditingEvent`` occurs.
-        @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
         
         /// The candidates that can be used to create an association.
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
         /// The phrase used to filter candidates by name.
         @State private var filterPhrase = ""
-        /// A Boolean value indicating if a candidate query is running.
+        /// A Boolean value indicating if the initial candidate query is complete.
+        @State private var initialQueryIsComplete = false
+        /// The parameters for retrieving the next page of results.
+        @State private var nextQueryParameters: QueryParameters?
+        /// A Boolean value indicating whether a query is running.
         @State private var queryIsRunning = false
+        /// The task for the current query.
+        @State private var queryTask: Task<Void, Never>?
         
         /// The asset type to use when querying for feature candidates.
         let assetType: UtilityAssetType
@@ -44,10 +48,10 @@ extension FeatureFormView {
         var body: some View {
             List {
                 sectionForFilter
-                if queryIsRunning {
+                if !initialQueryIsComplete {
                     ProgressView()
                 } else {
-                    if filteredCandidates.isEmpty {
+                    if filteredCandidates.isEmpty && !queryIsRunning {
                         contentUnavailableView
                     } else {
                         sectionForCandidates
@@ -55,11 +59,11 @@ extension FeatureFormView {
                 }
             }
             .task {
-                queryIsRunning = true
-                defer { queryIsRunning = false }
                 let parameters = QueryParameters()
                 parameters.whereClause = "1=1"
-                candidates = (try? await source.queryFeatures(assetType: assetType, parameters: parameters).candidates) ?? []
+                queryFeatures(parameters: parameters)
+                await queryTask?.value
+                initialQueryIsComplete = true
             }
         }
         
@@ -109,23 +113,25 @@ extension FeatureFormView {
                                 .lineLimit(4)
                                 .truncationMode(.middle)
                             Spacer()
-                            Button {
-                                onFormEditingEventAction?(.showOnMapRequested(candidate.feature))
-                            } label: {
-                                Label {
-                                    Text(
-                                        "Show On Map",
-                                        bundle: .toolkitModule,
-                                        comment: "A label for a button to show the indicated feature on the map."
-                                    )
-                                } icon: {
-                                    Image(systemName: "scope")
-                                }
+                            ShowOnMapButton(feature: candidate.feature)
                                 .labelStyle(.iconOnly)
-                            }
                         }
                     }
                     .tint(.primary)
+                }
+                if let nextQueryParameters {
+                    if filterPhrase.isEmpty {
+                        // Paging via scrolling
+                        ProgressView()
+                            .id(nextQueryParameters.resultOffset)
+                            .task {
+                                queryFeatures(parameters: nextQueryParameters)
+                            }
+                    } else if queryIsRunning {
+                        // Paging via filter phrase
+                        ProgressView()
+                            .id(nextQueryParameters.resultOffset)
+                    }
                 }
             } header: {
                 Text(
@@ -163,6 +169,23 @@ extension FeatureFormView {
                             """
                     )
                 )
+                .task(id: filterPhrase) {
+                    while filteredCandidates.isEmpty, let nextQueryParameters {
+                        queryFeatures(parameters: nextQueryParameters)
+                        await queryTask?.value
+                    }
+                }
+            }
+        }
+        
+        func queryFeatures(parameters: QueryParameters) {
+            queryTask?.cancel()
+            queryTask = Task {
+                queryIsRunning = true
+                let result = try? await source.queryFeatures(assetType: assetType, parameters: parameters)
+                queryIsRunning = false
+                candidates.append(contentsOf: result?.candidates ?? [])
+                nextQueryParameters = result?.nextQueryParams
             }
         }
     }
