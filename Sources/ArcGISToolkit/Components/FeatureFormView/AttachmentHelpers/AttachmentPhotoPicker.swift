@@ -53,5 +53,3 @@ struct AttachmentPhotoPicker: ViewModifier {
             }
     }
 }
-
-extension PhotosPickerItem: @unchecked Swift.Sendable {}

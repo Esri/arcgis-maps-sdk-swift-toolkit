@@ -13,17 +13,16 @@
 // limitations under the License.
 
 import ArcGIS
-import SwiftUI
 
-/// A preference key that specifies the feature form currently presented in the `FeatureFormView` navigation stack.
-struct PresentedFeatureFormPreferenceKey: PreferenceKey {
-    static let defaultValue: EquatableObject<EmbeddedFeatureFormViewModel>? = nil
+extension UtilityAssociationResult {
+    /// The utility element which is the associated feature.
+    var associatedElement: UtilityElement {
+        associatedFeatureIsToElement ? association.toElement : association.fromElement
+    }
     
-    static func reduce(
-        value: inout EquatableObject<EmbeddedFeatureFormViewModel>?,
-        nextValue: () -> EquatableObject<EmbeddedFeatureFormViewModel>?
-    ) {
-        guard let nextValue = nextValue() else { return }
-        value = nextValue
+    /// A Boolean value indicating whether the `associatedFeature` global ID
+    /// matches the `toElement` global ID.
+    var associatedFeatureIsToElement: Bool {
+        associatedFeature.globalID == association.toElement.globalID
     }
 }

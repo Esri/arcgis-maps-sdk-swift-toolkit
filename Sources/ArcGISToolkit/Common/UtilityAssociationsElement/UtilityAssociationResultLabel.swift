@@ -44,41 +44,30 @@ struct UtilityAssociationResultLabel: View {
 }
 
 private extension UtilityAssociationResult {
-    /// The utility element which is the associated feature.
-    private var associatedElement: UtilityElement {
-        associatedFeatureIsToElement ?  association.toElement : association.fromElement
-    }
-    
-    /// A Boolean value indicating whether the `associatedFeature` global ID
-    /// matches the `toElement` global ID.
-    private var associatedFeatureIsToElement: Bool {
-        associatedFeature.globalID == association.toElement.globalID
-    }
-    
     /// The details describing the result's association.
     var details: Text? {
         switch association.kind {
         case .connectivity, .junctionEdgeObjectConnectivityFromSide, .junctionEdgeObjectConnectivityMidspan, .junctionEdgeObjectConnectivityToSide:
             var terminalName: String? = nil
-            var fractionAlongEdge: Double? = nil
+            var percentAlong: Double? = nil
             if let terminal = associatedElement.terminal, !terminal.name.isEmpty {
                 terminalName = terminal.name
             }
             if association.kind == .junctionEdgeObjectConnectivityMidspan {
-                fractionAlongEdge = association.fractionAlongEdge
+                percentAlong = association.fractionAlongEdge
             }
-            switch (terminalName, fractionAlongEdge) {
+            switch (terminalName, percentAlong) {
             case let (.some(name), .none):
                 return Text(name)
-            case let (.none, .some(fraction)):
-                return Text(fraction, format: .percent)
+            case let (.none, .some(percent)):
+                return Text(percent, format: .percent)
             case let (.some(name), .some(fraction)):
                 return Text(
                     "\(name), \(fraction, format: .percent)",
                     bundle: .toolkitModule,
                     comment: """
                         A label with the name of a terminal on an associated
-                        utility element (first variable) and a fractional value
+                        utility element (first variable) and a percentage
                         (second variable) indicating the relative location along
                         an edge where a utility association is (logically) located.
                         """

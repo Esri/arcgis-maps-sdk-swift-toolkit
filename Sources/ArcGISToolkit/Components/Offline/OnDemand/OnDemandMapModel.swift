@@ -48,7 +48,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     @Published private(set) var mobileMapPackage: MobileMapPackage?
     
     /// The file size of the on-demand map area.
-    @Published private(set) var directorySize = 0
+    @Published private(set) var sizeInBytes = 0
     
     /// The currently running offline map job.
     @Published private(set) var job: GenerateOfflineMapJob?
@@ -162,7 +162,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
                 status = .downloaded
             }
             mobileMapPackage = mmpk
-            directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+            sizeInBytes = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
             if thumbnail == nil, let loadable = mmpk.item?.thumbnail {
                 try? await loadable.load()
@@ -171,7 +171,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         } catch {
             status = .mmpkLoadFailure(error)
             mobileMapPackage = nil
-            directorySize = 0
+            sizeInBytes = 0
             map = nil
         }
     }
@@ -193,8 +193,8 @@ class OnDemandMapModel: ObservableObject, Identifiable {
                 maxScale: configuration.maxScale
             )
             
-            // Set the update mode to no updates as the offline map is display-only.
-            parameters.updateMode = .noUpdates
+            // Set the update mode.
+            parameters.updateMode = OfflineManager.shared.onDemandUpdateMode
             
             // Update item info on parameters
             if let itemInfo = parameters.itemInfo {

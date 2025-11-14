@@ -16,8 +16,13 @@ import ArcGIS
 import Foundation
 import Observation
 
+private import os
+
 @MainActor @Observable
 class EmbeddedFeatureFormViewModel {
+    /// The models for fetching association filter results for each utility associations form element in the form.
+    var associationsFilterResultsModels: [UtilityAssociationsFormElement: AssociationsFilterResultsModel] = [:]
+    
     /// The current focused element, if one exists.
     var focusedElement: FormElement? {
         didSet {
@@ -27,8 +32,14 @@ class EmbeddedFeatureFormViewModel {
         }
     }
     
-    /// The currently presented feature form view.
-    var presentedForm: FeatureFormView?
+    /// A Boolean value indicating whether the associated form has edits.
+    var hasEdits = false {
+        didSet {
+            if !hasEdits {
+                previouslyFocusedElements.removeAll()
+            }
+        }
+    }
     
     /// The set of all elements which previously held focus.
     var previouslyFocusedElements = [FormElement]()
@@ -60,22 +71,28 @@ class EmbeddedFeatureFormViewModel {
     private var evaluateTask: Task<Void, Never>?
     
     /// The feature form.
-    private(set) var featureForm: FeatureForm
+    let featureForm: FeatureForm
     
     /// The group of visibility tasks.
     @ObservationIgnored
     private var visibilityTask: Task<Void, Never>?
+    
+    /// A task to monitor whether the form has edits.
+    @ObservationIgnored
+    private var monitorEditsTask: Task<Void, Never>?
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
     public init(featureForm: FeatureForm) {
         self.featureForm = featureForm
         evaluateExpressions()
+        monitorEdits()
         monitorVisibility()
     }
     
     deinit {
         evaluateTask?.cancel()
+        monitorEditsTask?.cancel()
         visibilityTask?.cancel()
     }
     
@@ -83,7 +100,24 @@ class EmbeddedFeatureFormViewModel {
     func evaluateExpressions() {
         evaluateTask?.cancel()
         evaluateTask = Task {
-            _ = try? await featureForm.evaluateExpressions()
+            if let errors = try? await featureForm.evaluateExpressions(), !errors.isEmpty {
+                for evaluationError in errors {
+                    Logger.featureFormView.error(
+                        "Error evaluating expression: \(evaluationError.error.localizedDescription)"
+                    )
+                }
+            }
+        }
+    }
+    
+    /// Starts a task to monitor whether the associated form has edits.
+    private func monitorEdits() {
+        monitorEditsTask?.cancel()
+        monitorEditsTask = Task { [weak self] in
+            guard !Task.isCancelled, let featureForm = self?.featureForm else { return }
+            for await hasEdits in featureForm.$hasEdits.dropFirst() {
+                self?.hasEdits = hasEdits
+            }
         }
     }
     
