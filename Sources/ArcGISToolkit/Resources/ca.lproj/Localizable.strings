@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "ó_%@, %@_____________à";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld seleccionats";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "No es pot baixar cap àrea del mapa en aquests moments.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "ó_Add_______à";
+"Add" = "Afegeix";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Afegeix una associació";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Nom de l'àrea";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "ó_Association Settings_____________________à";
+"Association Settings" = "Configuració de l'associació";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "ó_Association Type_________________à";
+"Association Type" = "Tipus d'associació";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Associacions";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "ó_Attachment_____________________à";
+"Attachment" = "Fitxer adjunt";
 
 /* A label in reference to attachments. */
 "Attachments" = "Fitxers adjunts";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "ó_Available Asset Types______________________à";
+"Available Asset Types" = "Tipus d'actius disponibles";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Enrere";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "Cancel·lat";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "ó_Cannot Verify Server Identity______________________________à";
+"Cannot Verify Server Identity" = "No es pot verificar la identitat del servidor";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificat obligatori";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "ó_Change auto-pan mode to compass_________________à";
+"Change auto-pan mode to compass" = "Canvia el mode de desplaçament automàtic a Brúixola";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "ó_Change auto-pan mode to navigation__________________à";
+"Change auto-pan mode to navigation" = "Canvia el mode de desplaçament automàtic a Navegació";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "ó_Change auto-pan mode to recenter_________________à";
+"Change auto-pan mode to recenter" = "Canvia el mode de desplaçament automàtic a Torna a centrar";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "ó_Change location display options_________________à";
+"Change location display options" = "Canvia les opcions de visualització de la ubicació";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "ó_Value___________à";
+"chart-mark-label-value" = "Valor";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Trieu d'entre els fitxers";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "ó_Choose to add______________à";
+"Choose to add" = "Trieu per afegir";
 
 /* Cities (Level of Detail) */
 "Cities" = "Ciutats";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "Color";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "ó_Compass navigation___________________à";
+"Compass navigation" = "Navegació amb brúixola";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "ó_Compass_______________à";
+"compass-button-accessibility-label" = "Brúixola";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "ó_Connectivity_____________à";
+"Connectivity" = "Connectivitat";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "ó_Containment____________à";
+"Containment" = "Contenció";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "ó_Content Visible________________à";
+"Content Visible" = "Contingut visible";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "No s'han pogut recuperar les àrees d'aquest mapa.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "ó_Count %lld_____________________à";
+"Count %lld" = "Recompte: %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Comtats";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "No es poden afegir punts d'inici duplicats.";
 
 /* The cardinal direction East. */
-"East" = "ó_East_________à";
+"East" = "Est";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "No s'ha pogut definir el punt d'inici";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "ó_Failed to start________________à";
+"Failed to start" = "No s'ha pogut iniciar";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "ó_Filter asset types by name___________________________à";
+"Filter asset types by name" = "Filtra els tipus d'actius per nom";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "ó_Filter candidates by name__________________________à";
+"Filter candidates by name" = "Filtra els candidats per nom";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "ó_Filter feature sources by name_______________________________à";
+"Filter feature sources by name" = "Filtra les fonts d'entitats per nom";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "Fracció al llarg de la vora";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "ó_From Element_____________à";
+"From Element" = "Element d'origen";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "ó_From Network Data Source_________________________à";
+"From Network Data Source" = "Font de dades de la xarxa d'origen";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "ó_Heading: %@ %@_______________à";
+"Heading: %@ %@" = "Rumb: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "ó_Hide Location______________à";
+"Hide Location" = "Amaga la ubicació";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "ó_Hide location display______________________à";
+"Hide location display" = "Amaga la visualització de la ubicació";
 
 /* House Property (Level of Detail) */
 "House Property" = "Propietat de la casa";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "Cases";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "ó_Ignore_____________à";
+"Ignore" = "Ignora";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "ó_Junction Edge Object Connectivity From Side_______________________à";
+"Junction Edge Object Connectivity From Side" = "Connectivitat de l'objecte node-aresta des del lateral";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "ó_Junction Edge Object Connectivity Midspan______________________à";
+"Junction Edge Object Connectivity Midspan" = "Connectivitat de l'objecte node-aresta al punt intermig";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "ó_Junction Edge Object Connectivity To Side______________________à";
+"Junction Edge Object Connectivity To Side" = "Connectivitat de l'objecte node-aresta al lateral";
 
 /* A label for a pie chart legend item label. */
-"Label" = "ó_Label___________à";
+"Label" = "Etiqueta";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Menys que el valor mínim";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "No s'ha pogut carregar";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "ó_Location display_________________à";
+"Location display" = "Visualització de la ubicació";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "ó_Compass_______________à";
+"location-button-accessibility-value-compass" = "Brúixola";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "ó_Navigation_____________________à";
+"location-button-accessibility-value-navigation" = "Navegació";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "ó_Off_______à";
+"location-button-accessibility-value-off" = "Desactivat";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "ó_Recenter_________________à";
+"location-button-accessibility-value-recenter" = "Torna a centrar";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "ó_Auto-pan_________________à";
+"location-button-auto-pan-accessibility-label" = "Desplaçament automàtic";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "ó_Auto-pan_________________à";
+"location-button-auto-pan-section-header-title" = "Desplaçament automàtic";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "ó_Navigation_____________________à";
+"location-button-status-label-navigation" = "Navegació";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "ó_Off_______à";
+"location-button-status-label-off" = "Desactivat";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "ó_Recenter_________________à";
+"location-button-status-label-recenter" = "Torna a centrar";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Àrees del mapa";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "Mode";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "ó_More Information_________________à";
+"More Information" = "Més informació";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "ó_More Options_____________à";
+"More Options" = "Més opcions";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Nom";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "ó_Network Data Source____________________à";
+"Network Data Source" = "Font de dades de la xarxa";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "ó_New Association________________à";
+"New Association" = "Associació nova";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Nom nou";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "ó_No Candidates Found____________________à";
+"No Candidates Found" = "No s'ha trobat cap candidat";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "No hi ha cap configuració disponible.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "ó_No Feature Sources Found_________________________à";
+"No Feature Sources Found" = "No s'ha trobat cap font d'entitats";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "ó_No Filter Results Found________________________à";
+"No Filter Results Found" = "No s'ha trobat cap resultat del filtre";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "No hi ha connexió a internet";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "No hi ha cap valor";
 
 /* The cardinal direction North. */
-"North" = "ó_North___________à";
+"North" = "Nord";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "ó_Northeast___________________à";
+"Northeast" = "Nord-est";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "ó_Northwest___________________à";
+"Northwest" = "Nord-oest";
 
 /* A trace function output result was not provided. */
 "Not Available" = "No disponible";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "ó_On Map_____________à";
+"On Map" = "Al mapa";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "No s'ha pogut carregar el mapa en línia";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "ó_Only removes the association. The feature remains__________________________à.";
+"Only removes the association. The feature remains." = "Només s'elimina l'associació. L'entitat es conserva.";
 
 /* A label for a button to open a map area. */
 "Open" = "Obert";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "ó_Percent Along______________à";
+"Percent Along" = "Percentatge al llarg de la vora";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Habiliteu l'accés a la càmera a la configuració.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "Actualitza";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "ó_Remove_____________à";
+"Remove" = "Elimina";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "ó_Remove Association___________________à";
+"Remove Association" = "Elimina l'associació";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "ó_Remove association____________________à?";
+"Remove association?" = "Voleu eliminar l'associació?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Elimina la baixada";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "Canvia el nom del fitxer adjunt";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "ó_Reorient map north___________________à";
+"Reorient map north" = "Reorienta el mapa cap al nord";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "ó_Search_____________à";
+"Search" = "Cerca";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "ó_Search Features________________à";
+"Search Features" = "Cerca entitats";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Consulta de cerca";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Mostra-ho tot";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "ó_Show On Map____________à";
+"Show On Map" = "Mostra-ho al mapa";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Llocs";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "Edifici petit";
 
 /* The cardinal direction South. */
-"South" = "ó_South___________à";
+"South" = "Sud";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "ó_Southeast___________________à";
+"Southeast" = "Sud-est";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "ó_Southwest___________________à";
+"Southwest" = "Sud-oest";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Discrepància de la referència espacial.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "ó_Starting_________________à";
+"Starting" = "S'està iniciant";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "Estats o províncies";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "ó_Stopped_______________à";
+"Stopped" = "S'ha aturat";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "ó_Stopping_________________à";
+"Stopping" = "S'està aturant";
 
 /* Street (Level of Detail) */
 "Street" = "Carrer";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "Toqueu la imatge per obtenir més informació.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "ó_Terminal_________________à";
+"Terminal" = "Terminal";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Configuració del terminal";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "No s'ha enviat el formulari";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "ó_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________à?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "No es pot verificar la identitat del servei \"%@\". Us hi voleu connectar igualment?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "El mapa no té una referència espacial.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "Títol";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "ó_To Element_____________________à";
+"To Element" = "Element de destinació";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Avui";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "Configuració del traçat";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "ó_Tracingâ€¦_____________________à";
+"Tracingâ€¦" = "S'està traçant...";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Torna-ho a provar";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "ó_Turn off auto-pan__________________à";
+"Turn off auto-pan" = "Desactiva el desplaçament automàtic";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Desconegut";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "Nom d'usuari";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "ó_Unknown_______________à";
+"utility-association-unknown-label" = "Desconegut";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Errors de validació";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "ó_Visible: false_______________à";
+"Visible: false" = "Visible: fals";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "ó_Visible: true______________à";
+"Visible: true" = "Visible: cert";
 
 /* The cardinal direction West. */
-"West" = "ó_West_________à";
+"West" = "Oest";
 
 /* World (Level of Detail) */
 "World" = "Món";

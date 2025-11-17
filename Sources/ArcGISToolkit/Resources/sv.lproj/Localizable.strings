@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "Å_%@, %@_____________ö";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld har valts";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Ett kartområde kan inte hämtas just nu.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "Å_Add_______ö";
+"Add" = "Lägg till";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Lägg till association";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Områdesnamn";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "Å_Association Settings_____________________ö";
+"Association Settings" = "Associationsinställningar";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "Å_Association Type_________________ö";
+"Association Type" = "Associationstyp";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Associationer";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "Å_Attachment_____________________ö";
+"Attachment" = "Bilaga";
 
 /* A label in reference to attachments. */
 "Attachments" = "Bilagor";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "Å_Available Asset Types______________________ö";
+"Available Asset Types" = "Tillgängliga resurstyper";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Tillbaka";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "Avbruten";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "Å_Cannot Verify Server Identity______________________________ö";
+"Cannot Verify Server Identity" = "Det går inte att verifiera serveridentitet";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certifikat krävs";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "Å_Change auto-pan mode to compass_________________ö";
+"Change auto-pan mode to compass" = "Ändra autopanoreringsläge till kompass";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "Å_Change auto-pan mode to navigation__________________ö";
+"Change auto-pan mode to navigation" = "Ändra autopanoreringsläge till navigering";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "Å_Change auto-pan mode to recenter_________________ö";
+"Change auto-pan mode to recenter" = "Ändra autopanoreringsläge till omcentrera";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "Å_Change location display options_________________ö";
+"Change location display options" = "Ändra visningsalternativ för plats";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "Å_Value___________ö";
+"chart-mark-label-value" = "Värde";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Välj från filer";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "Å_Choose to add______________ö";
+"Choose to add" = "Välj att lägga till";
 
 /* Cities (Level of Detail) */
 "Cities" = "Orter";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "Färg";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "Å_Compass navigation___________________ö";
+"Compass navigation" = "Kompassnavigering";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "Å_Compass_______________ö";
+"compass-button-accessibility-label" = "Kompass";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "Å_Connectivity_____________ö";
+"Connectivity" = "Anslutning";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "Å_Containment____________ö";
+"Containment" = "Inneslutning";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "Å_Content Visible________________ö";
+"Content Visible" = "Innehåll synligt";
 
 /* Continent (Level of Detail) */
 "Continent" = "Kontinent";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "Det gick inte att hämta kartområden för den här kartan.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "Å_Count %lld_____________________ö";
+"Count %lld" = "Antal %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Län";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Duplicerade startpunkter kan inte läggas till.";
 
 /* The cardinal direction East. */
-"East" = "Å_East_________ö";
+"East" = "Öst";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "Det gick inte att ange startpunkt";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "Å_Failed to start________________ö";
+"Failed to start" = "Det gick inte att starta";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "Å_Filter asset types by name___________________________ö";
+"Filter asset types by name" = "Filtrera resurstyper efter namn";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "Å_Filter candidates by name__________________________ö";
+"Filter candidates by name" = "Filtrera kandidater efter namn";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "Å_Filter feature sources by name_______________________________ö";
+"Filter feature sources by name" = "Filtrera geoobjektkällor efter namn";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "Bråkdel längs kant";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "Å_From Element_____________ö";
+"From Element" = "Från element";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "Å_From Network Data Source_________________________ö";
+"From Network Data Source" = "Från nätverksdatakälla";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "Å_Heading: %@ %@_______________ö";
+"Heading: %@ %@" = "Rubrik: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "Å_Hide Location______________ö";
+"Hide Location" = "Dölj plats";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "Å_Hide location display______________________ö";
+"Hide location display" = "Dölj platsvisning";
 
 /* House Property (Level of Detail) */
 "House Property" = "Hustomt";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "Hus";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "Å_Ignore_____________ö";
+"Ignore" = "Ignorera";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "Å_Junction Edge Object Connectivity From Side_______________________ö";
+"Junction Edge Object Connectivity From Side" = "Nod-kant objektanslutning från sida";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "Å_Junction Edge Object Connectivity Midspan______________________ö";
+"Junction Edge Object Connectivity Midspan" = "Nod-kant objektanslutning mittspann";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "Å_Junction Edge Object Connectivity To Side______________________ö";
+"Junction Edge Object Connectivity To Side" = "Nod-kant objektanslutning till sida";
 
 /* A label for a pie chart legend item label. */
-"Label" = "Å_Label___________ö";
+"Label" = "Etikett";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Mindre än minimivärdet";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "Inläsning misslyckades";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "Å_Location display_________________ö";
+"Location display" = "Platsvisning";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "Å_Compass_______________ö";
+"location-button-accessibility-value-compass" = "Kompass";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "Å_Navigation_____________________ö";
+"location-button-accessibility-value-navigation" = "Navigering";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "Å_Off_______ö";
+"location-button-accessibility-value-off" = "Av";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "Å_Recenter_________________ö";
+"location-button-accessibility-value-recenter" = "Omcentrera";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "Å_Auto-pan_________________ö";
+"location-button-auto-pan-accessibility-label" = "Autopanorering";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "Å_Auto-pan_________________ö";
+"location-button-auto-pan-section-header-title" = "Autopanorering";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "Å_Navigation_____________________ö";
+"location-button-status-label-navigation" = "Navigering";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "Å_Off_______ö";
+"location-button-status-label-off" = "Av";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "Å_Recenter_________________ö";
+"location-button-status-label-recenter" = "Omcentrera";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Kartområden";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "Läge";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "Å_More Information_________________ö";
+"More Information" = "Mer information";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "Å_More Options_____________ö";
+"More Options" = "Fler alternativ";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Namn";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "Å_Network Data Source____________________ö";
+"Network Data Source" = "Nätverksdatakälla";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "Å_New Association________________ö";
+"New Association" = "Ny association";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Nytt namn";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "Å_No Candidates Found____________________ö";
+"No Candidates Found" = "Inga kandidater hittades";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Inga konfigurationer tillgängliga.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "Å_No Feature Sources Found_________________________ö";
+"No Feature Sources Found" = "Inga geoobjektkällor hittades";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "Å_No Filter Results Found________________________ö";
+"No Filter Results Found" = "Inga filterresultat hittades";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Ingen internetanslutning";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "Inget värde";
 
 /* The cardinal direction North. */
-"North" = "Å_North___________ö";
+"North" = "Nord";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "Å_Northeast___________________ö";
+"Northeast" = "Nordost";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "Å_Northwest___________________ö";
+"Northwest" = "Nordväst";
 
 /* A trace function output result was not provided. */
 "Not Available" = "Inte tillgänglig";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "Å_On Map_____________ö";
+"On Map" = "På karta";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Det gick inte att läsa in onlinekartan";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "Å_Only removes the association. The feature remains__________________________ö.";
+"Only removes the association. The feature remains." = "Tar endast bort association. Geoobjektet återstår.";
 
 /* A label for a button to open a map area. */
 "Open" = "Öppna";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "Å_Percent Along______________ö";
+"Percent Along" = "Procent längs";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Aktivera kameraåtkomst i inställningar.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "Uppdatera";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "Å_Remove_____________ö";
+"Remove" = "Ta bort";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "Å_Remove Association___________________ö";
+"Remove Association" = "Ta bort association";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "Å_Remove association____________________ö?";
+"Remove association?" = "Ta bort association?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Ta bort hämtning";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "Byt namn på bilaga";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "Å_Reorient map north___________________ö";
+"Reorient map north" = "Omorientera kartan norrut";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "Å_Search_____________ö";
+"Search" = "Sök";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "Å_Search Features________________ö";
+"Search Features" = "Sök geoobjekt";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Sökfråga";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Visa alla";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "Å_Show On Map____________ö";
+"Show On Map" = "Visa på karta";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Webbplatser";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "Liten byggnad";
 
 /* The cardinal direction South. */
-"South" = "Å_South___________ö";
+"South" = "Syd";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "Å_Southeast___________________ö";
+"Southeast" = "Sydost";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "Å_Southwest___________________ö";
+"Southwest" = "Sydväst";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Spatial referens matchar inte.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "Å_Starting_________________ö";
+"Starting" = "Startar";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "Delstater/provinser";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "Å_Stopped_______________ö";
+"Stopped" = "Stoppad";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "Å_Stopping_________________ö";
+"Stopping" = "Stoppar";
 
 /* Street (Level of Detail) */
 "Street" = "Gata";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "Tryck på bilden för mer information.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "Å_Terminal_________________ö";
+"Terminal" = "Terminal";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminalkonfiguration";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "Formuläret skickades inte";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Å_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________ö?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Identiteten för \"%@\" kan inte verifieras. Vill du ansluta ändå?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Kartan saknar spatial referens.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "Titel";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "Å_To Element_____________________ö";
+"To Element" = "Till element";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Idag";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "Spårningskonfiguration";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "Å_Tracingâ€¦_____________________ö";
+"Tracingâ€¦" = "Spårningâ€¦";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Försök igen";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "Å_Turn off auto-pan__________________ö";
+"Turn off auto-pan" = "Inaktivera autopanorering";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Okänt";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "Användarnamn";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "Å_Unknown_______________ö";
+"utility-association-unknown-label" = "Okänt";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Valideringsfel";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "Å_Visible: false_______________ö";
+"Visible: false" = "Synlig: falskt";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "Å_Visible: true______________ö";
+"Visible: true" = "Synlig: sant";
 
 /* The cardinal direction West. */
-"West" = "Å_West_________ö";
+"West" = "Väst";
 
 /* World (Level of Detail) */
 "World" = "Världen";

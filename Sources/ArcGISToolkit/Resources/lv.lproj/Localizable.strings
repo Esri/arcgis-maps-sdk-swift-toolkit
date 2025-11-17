@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "ķ_%@, %@_____________ū";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld ir atlasīts";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Šoreiz kartes teritoriju nevar ielādēt.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "ķ_Add_______ū";
+"Add" = "Pievienot";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Pievienot saistību";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Teritorijas nosaukums";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "ķ_Association Settings_____________________ū";
+"Association Settings" = "Saistības uzstādījumi";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "ķ_Association Type_________________ū";
+"Association Type" = "Saistības veids";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Saistības";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "ķ_Attachment_____________________ū";
+"Attachment" = "Pielikums";
 
 /* A label in reference to attachments. */
 "Attachments" = "Pielikumi";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "ķ_Available Asset Types______________________ū";
+"Available Asset Types" = "Pieejamie līdzekļu veidi";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Atpakaļ";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "Atcelts";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "ķ_Cannot Verify Server Identity______________________________ū";
+"Cannot Verify Server Identity" = "Nevar verificēt servera identitāti";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Ir nepieciešams sertifikāts";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "ķ_Change auto-pan mode to compass_________________ū";
+"Change auto-pan mode to compass" = "Pāriet no automātiskās panoramēšanas režīma uz kompasu";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "ķ_Change auto-pan mode to navigation__________________ū";
+"Change auto-pan mode to navigation" = "Pāriet no automātiskās panoramēšanas režīma uz navigāciju";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "ķ_Change auto-pan mode to recenter_________________ū";
+"Change auto-pan mode to recenter" = "Pāriet no automātiskās panoramēšanas režīma uz atkārtotu centrēšanu";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "ķ_Change location display options_________________ū";
+"Change location display options" = "Mainīt atrašanās vietas attēlošanas opcijas";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "ķ_Value___________ū";
+"chart-mark-label-value" = "Vērtība";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Izvēlēties no failiem";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "ķ_Choose to add______________ū";
+"Choose to add" = "Izvēlēties, lai pievienotu";
 
 /* Cities (Level of Detail) */
 "Cities" = "Pilsētas";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "Krāsa";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "ķ_Compass navigation___________________ū";
+"Compass navigation" = "Kompasa navigācija";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "ķ_Compass_______________ū";
+"compass-button-accessibility-label" = "Kompass";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "ķ_Connectivity_____________ū";
+"Connectivity" = "Savienojamība";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "ķ_Containment____________ū";
+"Containment" = "Ietvērums";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "ķ_Content Visible________________ū";
+"Content Visible" = "Saturs redzams";
 
 /* Continent (Level of Detail) */
 "Continent" = "Kontinents";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "Nevar izgūt kartes teritorijas šai kartei.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "ķ_Count %lld_____________________ū";
+"Count %lld" = "Skaitīt %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Novadi";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Dublētos sākumpunktus nevar pievienot.";
 
 /* The cardinal direction East. */
-"East" = "ķ_East_________ū";
+"East" = "Austrumi";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "Neizdevās iestatīt sākumpunktu";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "ķ_Failed to start________________ū";
+"Failed to start" = "Nevarēja palaist";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "ķ_Filter asset types by name___________________________ū";
+"Filter asset types by name" = "Filtrēt līdzekļu veidus pēc nosaukuma";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "ķ_Filter candidates by name__________________________ū";
+"Filter candidates by name" = "Filtrēt kandidātus pēc nosaukuma";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "ķ_Filter feature sources by name_______________________________ū";
+"Filter feature sources by name" = "Filtrēt elementa avotus pēc nosaukuma";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "Frakcija gar malu";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "ķ_From Element_____________ū";
+"From Element" = "No elementa";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "ķ_From Network Data Source_________________________ū";
+"From Network Data Source" = "No tīkla datu avota";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "ķ_Heading: %@ %@_______________ū";
+"Heading: %@ %@" = "Kurss: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "ķ_Hide Location______________ū";
+"Hide Location" = "Paslēpt novietojumu";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "ķ_Hide location display______________________ū";
+"Hide location display" = "Paslēpt novietojuma attēlojumu";
 
 /* House Property (Level of Detail) */
 "House Property" = "Ēkas īpašums";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "Ēkas";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "ķ_Ignore_____________ū";
+"Ignore" = "Ignorēt";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "ķ_Junction Edge Object Connectivity From Side_______________________ū";
+"Junction Edge Object Connectivity From Side" = "Savienojuma malas objekta savienojamība no sāniem";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "ķ_Junction Edge Object Connectivity Midspan______________________ū";
+"Junction Edge Object Connectivity Midspan" = "Savienojuma malas objekta savienojamība vidusposmā";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "ķ_Junction Edge Object Connectivity To Side______________________ū";
+"Junction Edge Object Connectivity To Side" = "Savienojuma malas objekta savienojamība uz sāniem";
 
 /* A label for a pie chart legend item label. */
-"Label" = "ķ_Label___________ū";
+"Label" = "Apzīmējums";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Mazāk par minimālo vērtību";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "Ielāde neizdevās";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "ķ_Location display_________________ū";
+"Location display" = "Novietojuma attēlojums";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "ķ_Compass_______________ū";
+"location-button-accessibility-value-compass" = "Kompass";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "ķ_Navigation_____________________ū";
+"location-button-accessibility-value-navigation" = "Navigācija";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "ķ_Off_______ū";
+"location-button-accessibility-value-off" = "Izslēgts";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "ķ_Recenter_________________ū";
+"location-button-accessibility-value-recenter" = "Iecentrēt atkārtoti";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "ķ_Auto-pan_________________ū";
+"location-button-auto-pan-accessibility-label" = "Automātiskā panoramēšana";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "ķ_Auto-pan_________________ū";
+"location-button-auto-pan-section-header-title" = "Automātiskā panoramēšana";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "ķ_Navigation_____________________ū";
+"location-button-status-label-navigation" = "Navigācija";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "ķ_Off_______ū";
+"location-button-status-label-off" = "Izslēgts";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "ķ_Recenter_________________ū";
+"location-button-status-label-recenter" = "Iecentrēt atkārtoti";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Kartes teritorijas";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "Režīms";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "ķ_More Information_________________ū";
+"More Information" = "Papildinformācija";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "ķ_More Options_____________ū";
+"More Options" = "Vairāk opciju";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Nosaukums";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "ķ_Network Data Source____________________ū";
+"Network Data Source" = "Tīmekļa datu avots";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "ķ_New Association________________ū";
+"New Association" = "Jaunā saistība";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Jauns nosaukums";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "ķ_No Candidates Found____________________ū";
+"No Candidates Found" = "Kandidāti nav atrasti";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Konfigurācijas nav pieejamas.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "ķ_No Feature Sources Found_________________________ū";
+"No Feature Sources Found" = "Elementa avoti nav atrasti";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "ķ_No Filter Results Found________________________ū";
+"No Filter Results Found" = "Nav atrasti filtra rezultāti";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Nav interneta savienojuma";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "Nav vērtības";
 
 /* The cardinal direction North. */
-"North" = "ķ_North___________ū";
+"North" = "Ziemeļi";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "ķ_Northeast___________________ū";
+"Northeast" = "Ziemeļaustrumu";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "ķ_Northwest___________________ū";
+"Northwest" = "Ziemeļrietumu";
 
 /* A trace function output result was not provided. */
 "Not Available" = "Nav pieejams";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "ķ_On Map_____________ū";
+"On Map" = "Uz kartes";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Nevarēja ielādēt tiešsaistes karti";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "ķ_Only removes the association. The feature remains__________________________ū.";
+"Only removes the association. The feature remains." = "Noņem tikai saistību. Elements saglabājas.";
 
 /* A label for a button to open a map area. */
 "Open" = "Atvērt";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "ķ_Percent Along______________ū";
+"Percent Along" = "Procentuālā pozīcija";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Lūdzu, iestatījumos iespējojiet piekļuvi kamerai.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "Atjaunot";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "ķ_Remove_____________ū";
+"Remove" = "Noņemt";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "ķ_Remove Association___________________ū";
+"Remove Association" = "Noņemt saistību";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "ķ_Remove association____________________ū?";
+"Remove association?" = "Noņemt saistību?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Noņemt lejupielādi";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "Pārdēvēt pielikumu";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "ķ_Reorient map north___________________ū";
+"Reorient map north" = "Pārorientēt karti uz ziemeļiem";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "ķ_Search_____________ū";
+"Search" = "Meklēt";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "ķ_Search Features________________ū";
+"Search Features" = "Meklēt elementus";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Meklēšanas vaicājums";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Rādīt visu";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "ķ_Show On Map____________ū";
+"Show On Map" = "Rādīt kartē";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Vietnes";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "Neliela ēka";
 
 /* The cardinal direction South. */
-"South" = "ķ_South___________ū";
+"South" = "Dienvidi";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "ķ_Southeast___________________ū";
+"Southeast" = "Dienvidaustrumi";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "ķ_Southwest___________________ū";
+"Southwest" = "Dienvidrietumi";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Telpiskās atskaites nesaderība.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "ķ_Starting_________________ū";
+"Starting" = "Palaišana";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "Štati/provinces";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "ķ_Stopped_______________ū";
+"Stopped" = "Apturēts";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "ķ_Stopping_________________ū";
+"Stopping" = "Apturēšana";
 
 /* Street (Level of Detail) */
 "Street" = "Iela";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "Lai skatītu vairāk informācijas, pieskarieties attēlam.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "ķ_Terminal_________________ū";
+"Terminal" = "Terminālis";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Beigu konfigurācija";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "Forma netika iesniegta";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "ķ_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________ū?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "\"%@\" identitāti nevar verificēt. Vai tik un tā vēlaties savienot?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Kartei nav telpiskās atskaites.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "Virsraksts";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "ķ_To Element_____________________ū";
+"To Element" = "Uz elementu";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Šodien";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "Izsekošanas konfigurācija";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "ķ_Tracingâ€¦_____________________ū";
+"Tracingâ€¦" = "Izseko€¦";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Mēģināt vēlreiz";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "ķ_Turn off auto-pan__________________ū";
+"Turn off auto-pan" = "Izslēgt automātisko panoramēšanu";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Nezināms";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "Lietotājvārds";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "ķ_Unknown_______________ū";
+"utility-association-unknown-label" = "Nezināms";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validācijas kļūdas";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "ķ_Visible: false_______________ū";
+"Visible: false" = "Redzams: nē";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "ķ_Visible: true______________ū";
+"Visible: true" = "Redzams: jā";
 
 /* The cardinal direction West. */
-"West" = "ķ_West_________ū";
+"West" = "Rietumi";
 
 /* World (Level of Detail) */
 "World" = "Pasaule";

@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "כן_%@, %@_____________ש";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld נבחר";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "לא ניתן להוריד מפה כרגע.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "כן_Add_______ש";
+"Add" = "הוסף";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "הוסף אסוסיאציה";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "שם אזור";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "כן_Association Settings_____________________ש";
+"Association Settings" = "הגדרות אסוסיאציה";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "כן_Association Type_________________ש";
+"Association Type" = "סוג אסוציאציה";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "אסוסיאציות";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "כן_Attachment_____________________ש";
+"Attachment" = "קובץ מצורף";
 
 /* A label in reference to attachments. */
 "Attachments" = "קבצים מצורפים";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "כן_Available Asset Types______________________ש";
+"Available Asset Types" = "סוגי נכסים זמינים";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "חזור";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "בוטל";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "כן_Cannot Verify Server Identity______________________________ש";
+"Cannot Verify Server Identity" = "לא ניתן לאמת את זהות השרת";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "נדרש אישור";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "כן_Change auto-pan mode to compass_________________ש";
+"Change auto-pan mode to compass" = "שנה את מצב ההזזה האוטומטית למצפן";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "כן_Change auto-pan mode to navigation__________________ש";
+"Change auto-pan mode to navigation" = "שנה את מצב ההזזה האוטומטית לניווט";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "כן_Change auto-pan mode to recenter_________________ש";
+"Change auto-pan mode to recenter" = "שנה את מצב ההזזה האוטומטית למרכוז מחדש";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "כן_Change location display options_________________ש";
+"Change location display options" = "שנה את אפשרויות תצוגת המיקום";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "כן_Value___________ש";
+"chart-mark-label-value" = "ערך";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "בחר מקבצים";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "כן_Choose to add______________ש";
+"Choose to add" = "בחר להוסיף";
 
 /* Cities (Level of Detail) */
 "Cities" = "ערים";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "צבע";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "כן_Compass navigation___________________ש";
+"Compass navigation" = "ניווט מצפן";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "כן_Compass_______________ש";
+"compass-button-accessibility-label" = "מצפן";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "כן_Connectivity_____________ש";
+"Connectivity" = "קישוריות";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "כן_Containment____________ש";
+"Containment" = "הכלה";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "כן_Content Visible________________ש";
+"Content Visible" = "תוכן גלוי";
 
 /* Continent (Level of Detail) */
 "Continent" = "יבשת";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "לא ניתן לאחזר אזורי מפה עבור מפה זו.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "כן_Count %lld_____________________ש";
+"Count %lld" = "ספירה %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "מחוזות";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "לא ניתן להוסיף נקודות התחלה כפולות.";
 
 /* The cardinal direction East. */
-"East" = "כן_East_________ש";
+"East" = "מזרח";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "קביעת נקודת התחלה נכשלה";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "כן_Failed to start________________ש";
+"Failed to start" = "ההפעלה נכשלה";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "כן_Filter asset types by name___________________________ש";
+"Filter asset types by name" = "סנן סוגי נכסים לפי שם";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "כן_Filter candidates by name__________________________ש";
+"Filter candidates by name" = "סנן מועמדים לפי שם";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "כן_Filter feature sources by name_______________________________ש";
+"Filter feature sources by name" = "סנן מקורות ישות לפי שם";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "חתוך לאורך הקצה";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "כן_From Element_____________ש";
+"From Element" = "אלמנט מ-";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "כן_From Network Data Source_________________________ש";
+"From Network Data Source" = "ממקור נתוני רשת";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "כן_Heading: %@ %@_______________ש";
+"Heading: %@ %@" = "כיוון: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "כן_Hide Location______________ש";
+"Hide Location" = "הסתר מיקום";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "כן_Hide location display______________________ש";
+"Hide location display" = "הסתר תצוגת מיקום";
 
 /* House Property (Level of Detail) */
 "House Property" = "מאפיין בית";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "בתים";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "כן_Ignore_____________ש";
+"Ignore" = "התעלם";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "כן_Junction Edge Object Connectivity From Side_______________________ש";
+"Junction Edge Object Connectivity From Side" = "קישוריות אוביקט קצה צומת מהצד";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "כן_Junction Edge Object Connectivity Midspan______________________ש";
+"Junction Edge Object Connectivity Midspan" = "קישוריות אוביקט קצה צומת טווח בינוני";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "כן_Junction Edge Object Connectivity To Side______________________ש";
+"Junction Edge Object Connectivity To Side" = "קישוריות אוביקט קצה צומת לצד";
 
 /* A label for a pie chart legend item label. */
-"Label" = "כן_Label___________ש";
+"Label" = "תווית";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "פחות מהערך המינימלי";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "הטעינה נכשלה";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "כן_Location display_________________ש";
+"Location display" = "תצוגת מיקום";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "כן_Compass_______________ש";
+"location-button-accessibility-value-compass" = "מצפן";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "כן_Navigation_____________________ש";
+"location-button-accessibility-value-navigation" = "ניווט";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "כן_Off_______ש";
+"location-button-accessibility-value-off" = "כבוי";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "כן_Recenter_________________ש";
+"location-button-accessibility-value-recenter" = "מרכוז מחדש";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "כן_Auto-pan_________________ש";
+"location-button-auto-pan-accessibility-label" = "הזזה אוטומטית";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "כן_Auto-pan_________________ש";
+"location-button-auto-pan-section-header-title" = "הזזה אוטומטית";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "כן_Navigation_____________________ש";
+"location-button-status-label-navigation" = "ניווט";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "כן_Off_______ש";
+"location-button-status-label-off" = "כבוי";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "כן_Recenter_________________ש";
+"location-button-status-label-recenter" = "מרכוז מחדש";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "אזורי מפה";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "אופן";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "כן_More Information_________________ש";
+"More Information" = "מידע נוסף";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "כן_More Options_____________ש";
+"More Options" = "אפשרויות נוספות";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "שם";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "כן_Network Data Source____________________ש";
+"Network Data Source" = "מקור נתוני רשת";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "כן_New Association________________ש";
+"New Association" = "שיוך חדש";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "שם חדש";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "כן_No Candidates Found____________________ש";
+"No Candidates Found" = "לא נמצאו מועמדים";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "אין תצורות זמינות.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "כן_No Feature Sources Found_________________________ש";
+"No Feature Sources Found" = "לא נמצאו מקורות ישויות";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "כן_No Filter Results Found________________________ש";
+"No Filter Results Found" = "לא נמצאו תוצאות סינון";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "אין חיבור לאינטרנט";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "אין ערך";
 
 /* The cardinal direction North. */
-"North" = "כן_North___________ש";
+"North" = "צפון";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "כן_Northeast___________________ש";
+"Northeast" = "צפון-מזרח";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "כן_Northwest___________________ש";
+"Northwest" = "צפון-מערב";
 
 /* A trace function output result was not provided. */
 "Not Available" = "לא זמין";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "כן_On Map_____________ש";
+"On Map" = "במפה";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "טעינת מפה מקוונת נכשלה";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "כן_Only removes the association. The feature remains__________________________ש.";
+"Only removes the association. The feature remains." = "אסר את האסוסיציה בלבד היישות נותרת.";
 
 /* A label for a button to open a map area. */
 "Open" = "פתוח";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "כן_Percent Along______________ש";
+"Percent Along" = "אחוז לאורך";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "הפעל גישה למצלמה בהגדרות.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "רענן";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "כן_Remove_____________ש";
+"Remove" = "הסר";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "כן_Remove Association___________________ש";
+"Remove Association" = "הסר אסוסיאציה";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "כן_Remove association____________________ש?";
+"Remove association?" = "להסיר שיוך?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "הסר הורדה";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "שנה שם קובץ מצורף";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "כן_Reorient map north___________________ש";
+"Reorient map north" = "כוון מחדש את המפה צפונה";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "כן_Search_____________ש";
+"Search" = "חיפוש";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "כן_Search Features________________ש";
+"Search Features" = "חפש ישויות";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "שאילתת חיפוש";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "הצג הכל";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "כן_Show On Map____________ש";
+"Show On Map" = "הצג במפה";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "אתרים";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "בניין קטן";
 
 /* The cardinal direction South. */
-"South" = "כן_South___________ש";
+"South" = "דרום";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "כן_Southeast___________________ש";
+"Southeast" = "דרום-מזרח";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "כן_Southwest___________________ש";
+"Southwest" = "דרום-מערב";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "חוסר התאמה של ייחוס מרחבי";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "כן_Starting_________________ש";
+"Starting" = "מתחיל";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "מדינות/מחוזות";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "כן_Stopped_______________ש";
+"Stopped" = "נעצר";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "כן_Stopping_________________ש";
+"Stopping" = "עוצר";
 
 /* Street (Level of Detail) */
 "Street" = "רחוב";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "הקש על תמונה לקבלת מידע נוסף";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "כן_Terminal_________________ש";
+"Terminal" = "מסוף";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "תצורת מסוף";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "הטופס לא נשלח";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "כן_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________ש?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "לא ניתן לאמת את הזהות של \"%@\". האם ברצונך להתחבר בכל זאת?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "למפה אין ייחוס מרחבי.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "כותרת";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "כן_To Element_____________________ש";
+"To Element" = "אלמנט ל-";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "היום";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "תצורת עקיבה";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "כן_Tracingâ€¦_____________________ש";
+"Tracingâ€¦" = "איתורâ€¦";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "נסה שוב";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "כן_Turn off auto-pan__________________ש";
+"Turn off auto-pan" = "כבה הזזה אוטומטית";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "לא ידוע";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "שם משתמש";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "כן_Unknown_______________ש";
+"utility-association-unknown-label" = "לא ידוע";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "שגיאות אימות";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "כן_Visible: false_______________ש";
+"Visible: false" = "גלוי: false";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "כן_Visible: true______________ש";
+"Visible: true" = "גלוי: true";
 
 /* The cardinal direction West. */
-"West" = "כן_West_________ש";
+"West" = "מערב";
 
 /* World (Level of Detail) */
 "World" = "עולם";

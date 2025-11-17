@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "Đ_%@, %@_____________ớ";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld đã chọn";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Không thể tải xuống khu vực bản đồ vào lúc này.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "Đ_Add_______ớ";
+"Add" = "Thêm";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Thêm Liên kết";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Tên Khu vực";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "Đ_Association Settings_____________________ớ";
+"Association Settings" = "Thiết lập Liên kết";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "Đ_Association Type_________________ớ";
+"Association Type" = "Loại Liên kết";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Liên kết";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "Đ_Attachment_____________________ớ";
+"Attachment" = "Phần đính kèm";
 
 /* A label in reference to attachments. */
 "Attachments" = "Các tệp đính kèm";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "Đ_Available Asset Types______________________ớ";
+"Available Asset Types" = "Loại Tài sản Có sẵn";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Quay lại";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "Đã hủy bỏ";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "Đ_Cannot Verify Server Identity______________________________ớ";
+"Cannot Verify Server Identity" = "Không thể Xác minh Danh tính Máy chủ";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Yêu cầu Chứng chỉ";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "Đ_Change auto-pan mode to compass_________________ớ";
+"Change auto-pan mode to compass" = "Chuyển chế độ tự động di chuyển sang la bàn";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "Đ_Change auto-pan mode to navigation__________________ớ";
+"Change auto-pan mode to navigation" = "Chuyển chế độ tự động di chuyển sang điều hướng";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "Đ_Change auto-pan mode to recenter_________________ớ";
+"Change auto-pan mode to recenter" = "Chuyển chế độ tự động di chuyển sang về giữa";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "Đ_Change location display options_________________ớ";
+"Change location display options" = "Thay đổi tùy chọn hiển thị vị trí";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "Đ_Value___________ớ";
+"chart-mark-label-value" = "Giá trị";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Chọn Từ Tệp";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "Đ_Choose to add______________ớ";
+"Choose to add" = "Chọn để thêm";
 
 /* Cities (Level of Detail) */
 "Cities" = "Thành phố";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "Màu sắc";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "Đ_Compass navigation___________________ớ";
+"Compass navigation" = "Điều hướng bằng la bàn";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "Đ_Compass_______________ớ";
+"compass-button-accessibility-label" = "La bàn";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "Đ_Connectivity_____________ớ";
+"Connectivity" = "Kết nối";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "Đ_Containment____________ớ";
+"Containment" = "Bộ chứa";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "Đ_Content Visible________________ớ";
+"Content Visible" = "Hiển thị nội dung";
 
 /* Continent (Level of Detail) */
 "Continent" = "Lục địa";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "Không thể truy xuất khu vực bản đồ cho bản đồ này.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "Đ_Count %lld_____________________ớ";
+"Count %lld" = "Số lượng %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Hạt";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Không thể thêm điểm bắt đầu trùng lặp.";
 
 /* The cardinal direction East. */
-"East" = "Đ_East_________ớ";
+"East" = "Đông";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "Không thể thiết lập điểm bắt đầu";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "Đ_Failed to start________________ớ";
+"Failed to start" = "Không thể bắt đầu";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "Đ_Filter asset types by name___________________________ớ";
+"Filter asset types by name" = "Lọc loại tài sản theo tên";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "Đ_Filter candidates by name__________________________ớ";
+"Filter candidates by name" = "Lọc ứng viên theo tên‎";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "Đ_Filter feature sources by name_______________________________ớ";
+"Filter feature sources by name" = "Lọc nguồn đối tượng theo tên";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "Phân số Dọc theo Cạnh";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "Đ_From Element_____________ớ";
+"From Element" = "Từ Phần tử";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "Đ_From Network Data Source_________________________ớ";
+"From Network Data Source" = "‎Từ Nguồn Dữ liệu Mạng";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "Đ_Heading: %@ %@_______________ớ";
+"Heading: %@ %@" = "Đầu mục: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "Đ_Hide Location______________ớ";
+"Hide Location" = "Ẩn Vị trí";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "Đ_Hide location display______________________ớ";
+"Hide location display" = "Ẩn thông tin hiển thị vị trí";
 
 /* House Property (Level of Detail) */
 "House Property" = "Thuộc tính Nhà ở";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "Nhà ở";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "Đ_Ignore_____________ớ";
+"Ignore" = "Bỏ qua";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "Đ_Junction Edge Object Connectivity From Side_______________________ớ";
+"Junction Edge Object Connectivity From Side" = "Kết nối đối tượng Junction và Edge Từ Phía";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "Đ_Junction Edge Object Connectivity Midspan______________________ớ";
+"Junction Edge Object Connectivity Midspan" = "Kết nối đối tượng Junction và Edge Từ Giữa";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "Đ_Junction Edge Object Connectivity To Side______________________ớ";
+"Junction Edge Object Connectivity To Side" = "Kết nối đối tượng Junction và Edge Đến Phía";
 
 /* A label for a pie chart legend item label. */
-"Label" = "Đ_Label___________ớ";
+"Label" = "Nhãn";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Dưới giá trị tối thiểu";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "Tải không thành công";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "Đ_Location display_________________ớ";
+"Location display" = "Hiển thị vị trí";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "Đ_Compass_______________ớ";
+"location-button-accessibility-value-compass" = "La bàn";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "Đ_Navigation_____________________ớ";
+"location-button-accessibility-value-navigation" = "Điều hướng";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "Đ_Off_______ớ";
+"location-button-accessibility-value-off" = "Tắt";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "Đ_Recenter_________________ớ";
+"location-button-accessibility-value-recenter" = "Về giữa";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "Đ_Auto-pan_________________ớ";
+"location-button-auto-pan-accessibility-label" = "Tự động di chuyển";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "Đ_Auto-pan_________________ớ";
+"location-button-auto-pan-section-header-title" = "Tự động di chuyển";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "Đ_Navigation_____________________ớ";
+"location-button-status-label-navigation" = "Điều hướng";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "Đ_Off_______ớ";
+"location-button-status-label-off" = "Tắt";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "Đ_Recenter_________________ớ";
+"location-button-status-label-recenter" = "Về giữa";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Khu vực Bản đồ";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "Chế độ";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "Đ_More Information_________________ớ";
+"More Information" = "Thông tin khác";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "Đ_More Options_____________ớ";
+"More Options" = "Tùy chọn khác";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Tên";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "Đ_Network Data Source____________________ớ";
+"Network Data Source" = "‎Nguồn Dữ liệu Mạng";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "Đ_New Association________________ớ";
+"New Association" = "Liên kết Mới";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Tên mới";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "Đ_No Candidates Found____________________ớ";
+"No Candidates Found" = "Không Tìm thấy Ứng viên";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Không có cấu hình nào khả dụng.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "Đ_No Feature Sources Found_________________________ớ";
+"No Feature Sources Found" = "Không Tìm thấy Nguồn Đối tượng";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "Đ_No Filter Results Found________________________ớ";
+"No Filter Results Found" = "Không Tìm thấy Kết quả Lọc";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Không có Kết nối Internet";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "Không có Giá trị";
 
 /* The cardinal direction North. */
-"North" = "Đ_North___________ớ";
+"North" = "Bắc";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "Đ_Northeast___________________ớ";
+"Northeast" = "Đông bắc";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "Đ_Northwest___________________ớ";
+"Northwest" = "Tây bắc";
 
 /* A trace function output result was not provided. */
 "Not Available" = "Không khả dụng";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "Đ_On Map_____________ớ";
+"On Map" = "Trên Bản đồ";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Tải Bản đồ Trực tuyến Không thành công";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "Đ_Only removes the association. The feature remains__________________________ớ.";
+"Only removes the association. The feature remains." = "Chỉ gỡ bỏ liên kết. Vẫn giữ lại đối tượng.";
 
 /* A label for a button to open a map area. */
 "Open" = "Mở";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "Đ_Percent Along______________ớ";
+"Percent Along" = "Phần trăm Dọc";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Vui lòng bật quyền truy cập camera trong thiết lập.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "Làm mới";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "Đ_Remove_____________ớ";
+"Remove" = "Gỡ bỏ";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "Đ_Remove Association___________________ớ";
+"Remove Association" = "Gỡ bỏ Liên kết";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "Đ_Remove association____________________ớ?";
+"Remove association?" = "Gỡ bỏ liên kết?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Xóa Tải xuống";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "Đổi tên tệp đính kèm";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "Đ_Reorient map north___________________ớ";
+"Reorient map north" = "Đổi hướng bản đồ về phía bắc";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "Đ_Search_____________ớ";
+"Search" = "Tìm kiếm";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "Đ_Search Features________________ớ";
+"Search Features" = "Tìm kiếm Đối tượng";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Truy vấn Tìm kiếm";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Hiện tất cả";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "Đ_Show On Map____________ớ";
+"Show On Map" = "Hiển thị Trên Bản đồ";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "Tòa nhà Nhỏ";
 
 /* The cardinal direction South. */
-"South" = "Đ_South___________ớ";
+"South" = "Nam";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "Đ_Southeast___________________ớ";
+"Southeast" = "Đông nam";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "Đ_Southwest___________________ớ";
+"Southwest" = "Tây nam";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Tham chiếu không gian không trùng khớp.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "Đ_Starting_________________ớ";
+"Starting" = "Đang bắt đầu";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "Các Tiểu bang/Tỉnh";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "Đ_Stopped_______________ớ";
+"Stopped" = "Đã dừng";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "Đ_Stopping_________________ớ";
+"Stopping" = "Đang dừng";
 
 /* Street (Level of Detail) */
 "Street" = "Đường phố";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "Chạm vào hình ảnh để biết thêm thông tin.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "Đ_Terminal_________________ớ";
+"Terminal" = "Thiết bị đầu cuối";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Cấu hình Thiết bị đầu cuối";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "Biểu mẫu chưa được gửi";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Đ_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________ớ?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Không thể xác minh danh tính của \"%@\". Bạn vẫn muốn tiếp tục kết nối?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Bản đồ không có mục tham chiếu không gian.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "Tiêu đề";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "Đ_To Element_____________________ớ";
+"To Element" = "Đến Phần tử";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Hôm nay";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "Cấu hình truy dấu";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "Đ_Tracingâ€¦_____________________ớ";
+"Tracingâ€¦" = "Truy vếtâ€¦";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Thử lại";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "Đ_Turn off auto-pan__________________ớ";
+"Turn off auto-pan" = "Tắt tự động di chuyển";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Không xác định";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "Tên người dùng";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "Đ_Unknown_______________ớ";
+"utility-association-unknown-label" = "Không xác định";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Lỗi Xác minh";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "Đ_Visible: false_______________ớ";
+"Visible: false" = "Hiển thị: false";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "Đ_Visible: true______________ớ";
+"Visible: true" = "Hiển thị: true";
 
 /* The cardinal direction West. */
-"West" = "Đ_West_________ớ";
+"West" = "Tây";
 
 /* World (Level of Detail) */
 "World" = "Thế giới";

@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "ng_%@, %@_____________ny";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld dipilih";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Area peta tidak dapat diunduh pada saat ini.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "ng_Add_______ny";
+"Add" = "Tambahkan";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Tambahkan Asosiasi";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Nama Area";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "ng_Association Settings_____________________ny";
+"Association Settings" = "Pengaturan Asosiasi";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "ng_Association Type_________________ny";
+"Association Type" = "Jenis Asosiasi";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Asosiasi";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "ng_Attachment_____________________ny";
+"Attachment" = "Lampiran";
 
 /* A label in reference to attachments. */
 "Attachments" = "Lampiran";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "ng_Available Asset Types______________________ny";
+"Available Asset Types" = "Jenis Aset yang Tersedia";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Kembali";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "Dibatalkan";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "ng_Cannot Verify Server Identity______________________________ny";
+"Cannot Verify Server Identity" = "Tidak Dapat Memverifikasi Identitas Server";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Diperlukan Sertifikat";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "ng_Change auto-pan mode to compass_________________ny";
+"Change auto-pan mode to compass" = "Ubah mode geser otomatis ke kompas";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "ng_Change auto-pan mode to navigation__________________ny";
+"Change auto-pan mode to navigation" = "Ubah mode geser otomatis ke navigasi";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "ng_Change auto-pan mode to recenter_________________ny";
+"Change auto-pan mode to recenter" = "Ubah mode geser otomatis ke pemusatan kembali";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "ng_Change location display options_________________ny";
+"Change location display options" = "Ubah opsi tampilan lokasi";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "ng_Value___________ny";
+"chart-mark-label-value" = "Nilai";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Pilih Dari File";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "ng_Choose to add______________ny";
+"Choose to add" = "Pilih untuk ditambahkan";
 
 /* Cities (Level of Detail) */
 "Cities" = "Kota";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "Warna";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "ng_Compass navigation___________________ny";
+"Compass navigation" = "Navigasi kompas";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "ng_Compass_______________ny";
+"compass-button-accessibility-label" = "Kompas";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "ng_Connectivity_____________ny";
+"Connectivity" = "Konektivitas";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "ng_Containment____________ny";
+"Containment" = "Penahanan";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "ng_Content Visible________________ny";
+"Content Visible" = "Konten Dapat Dilihat";
 
 /* Continent (Level of Detail) */
 "Continent" = "Benua";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "Tidak dapat mengambil area peta untuk peta ini.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "ng_Count %lld_____________________ny";
+"Count %lld" = "Jumlah %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Daerah";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Titik awal duplikat tidak dapat ditambahkan.";
 
 /* The cardinal direction East. */
-"East" = "ng_East_________ny";
+"East" = "Timur";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "Gagal menetapkan titik awal";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "ng_Failed to start________________ny";
+"Failed to start" = "Gagal dimulai";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "ng_Filter asset types by name___________________________ny";
+"Filter asset types by name" = "Filter jenis aset berdasarkan nama";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "ng_Filter candidates by name__________________________ny";
+"Filter candidates by name" = "Filter kandidat berdasarkan nama";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "ng_Filter feature sources by name_______________________________ny";
+"Filter feature sources by name" = "Filter sumber fitur berdasarkan nama";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "Fraksi Sepanjang Tepi";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "ng_From Element_____________ny";
+"From Element" = "Dari Elemen";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "ng_From Network Data Source_________________________ny";
+"From Network Data Source" = "Dari Sumber Data Jaringan";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "ng_Heading: %@ %@_______________ny";
+"Heading: %@ %@" = "Heading: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "ng_Hide Location______________ny";
+"Hide Location" = "Sembunyikan Lokasi";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "ng_Hide location display______________________ny";
+"Hide location display" = "Sembunyikan tampilan lokasi";
 
 /* House Property (Level of Detail) */
 "House Property" = "Properti Rumah";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "Rumah";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "ng_Ignore_____________ny";
+"Ignore" = "Abaikan";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "ng_Junction Edge Object Connectivity From Side_______________________ny";
+"Junction Edge Object Connectivity From Side" = "Konektivitas Objek Tepi Persimpangan Dari Samping";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "ng_Junction Edge Object Connectivity Midspan______________________ny";
+"Junction Edge Object Connectivity Midspan" = "Rentang Tengah Konektivitas Objek Tepi Persimpangan";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "ng_Junction Edge Object Connectivity To Side______________________ny";
+"Junction Edge Object Connectivity To Side" = "Konektivitas Objek Tepi Persimpangan Ke Samping";
 
 /* A label for a pie chart legend item label. */
-"Label" = "ng_Label___________ny";
+"Label" = "Label";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Kurang dari nilai minimal";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "Gagal memuat";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "ng_Location display_________________ny";
+"Location display" = "Tampilan lokasi";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "ng_Compass_______________ny";
+"location-button-accessibility-value-compass" = "Kompas";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "ng_Navigation_____________________ny";
+"location-button-accessibility-value-navigation" = "Navigasi";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "ng_Off_______ny";
+"location-button-accessibility-value-off" = "Mati";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "ng_Recenter_________________ny";
+"location-button-accessibility-value-recenter" = "Pusatkan kembali";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "ng_Auto-pan_________________ny";
+"location-button-auto-pan-accessibility-label" = "Geser otomatis";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "ng_Auto-pan_________________ny";
+"location-button-auto-pan-section-header-title" = "Geser otomatis";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "ng_Navigation_____________________ny";
+"location-button-status-label-navigation" = "Navigasi";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "ng_Off_______ny";
+"location-button-status-label-off" = "Mati";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "ng_Recenter_________________ny";
+"location-button-status-label-recenter" = "Pusatkan kembali";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Area Peta";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "Mode";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "ng_More Information_________________ny";
+"More Information" = "Informasi Selengkapnya";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "ng_More Options_____________ny";
+"More Options" = "Opsi Lainnya";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Nama";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "ng_Network Data Source____________________ny";
+"Network Data Source" = "Sumber Data Jaringan";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "ng_New Association________________ny";
+"New Association" = "Asosiasi Baru";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Nama baru";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "ng_No Candidates Found____________________ny";
+"No Candidates Found" = "Tidak Ditemukan Kandidat";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Tidak ada konfigurasi yang tersedia.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "ng_No Feature Sources Found_________________________ny";
+"No Feature Sources Found" = "Tidak Ditemukan Sumber Fitur";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "ng_No Filter Results Found________________________ny";
+"No Filter Results Found" = "Tidak Ditemukan Hasil Filter";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Tidak Ada Koneksi Internet";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "Tidak Ada Nilai";
 
 /* The cardinal direction North. */
-"North" = "ng_North___________ny";
+"North" = "Utara";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "ng_Northeast___________________ny";
+"Northeast" = "Timur laut";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "ng_Northwest___________________ny";
+"Northwest" = "Barat laut";
 
 /* A trace function output result was not provided. */
 "Not Available" = "Tidak Tersedia";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "ng_On Map_____________ny";
+"On Map" = "Di Peta";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Peta Online Gagal Dimuat";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "ng_Only removes the association. The feature remains__________________________ny.";
+"Only removes the association. The feature remains." = "Hanya hapus asosiasi Fitur tetap ada.";
 
 /* A label for a button to open a map area. */
 "Open" = "Buka";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "ng_Percent Along______________ny";
+"Percent Along" = "Persen Sepanjang";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Aktifkan akses kamera di pengaturan.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "Muat Ulang";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "ng_Remove_____________ny";
+"Remove" = "Hapus";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "ng_Remove Association___________________ny";
+"Remove Association" = "Hapus Asosiasi";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "ng_Remove association____________________ny?";
+"Remove association?" = "Hapus asosiasi?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Hapus Unduhan";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "Ganti nama lampiran";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "ng_Reorient map north___________________ny";
+"Reorient map north" = "Ubah arah peta ke utara";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "ng_Search_____________ny";
+"Search" = "Cari";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "ng_Search Features________________ny";
+"Search Features" = "Cari Fitur";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Cari Kueri";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Tampilkan semua";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "ng_Show On Map____________ny";
+"Show On Map" = "Tampilkan pada Peta";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Situs";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "Bangunan Kecil";
 
 /* The cardinal direction South. */
-"South" = "ng_South___________ny";
+"South" = "Selatan";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "ng_Southeast___________________ny";
+"Southeast" = "Tenggara";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "ng_Southwest___________________ny";
+"Southwest" = "Barat daya";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Ketidaksesuaian referensi spasial.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "ng_Starting_________________ny";
+"Starting" = "Memulai";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "Negara Bagian/Provinsi";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "ng_Stopped_______________ny";
+"Stopped" = "Berhenti";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "ng_Stopping_________________ny";
+"Stopping" = "Menghentikan";
 
 /* Street (Level of Detail) */
 "Street" = "Jalan";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "Ketuk gambar untuk informasi selengkapnya.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "ng_Terminal_________________ny";
+"Terminal" = "Terminal";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Konfigurasi Terminal";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "Formulir tidak dikirim";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "ng_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________ny?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Identitas \"%@\" tidak dapat diverifikasi. Anda ingin tetap menghubungkannya?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Peta tersebut tidak memiliki referensi spasial.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "Gelar";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "ng_To Element_____________________ny";
+"To Element" = "Ke Elemen";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Hari ini";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "Konfigurasi Pelacakan";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "ng_Tracingâ€¦_____________________ny";
+"Tracingâ€¦" = "Pelacakan";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Coba lagi";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "ng_Turn off auto-pan__________________ny";
+"Turn off auto-pan" = "Nonaktifkan geser otomatis";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Tidak Diketahui";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "Nama Pengguna";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "ng_Unknown_______________ny";
+"utility-association-unknown-label" = "Tidak Diketahui";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Kesalahan Validasi";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "ng_Visible: false_______________ny";
+"Visible: false" = "Terlihat: false";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "ng_Visible: true______________ny";
+"Visible: true" = "Terlihat: true";
 
 /* The cardinal direction West. */
-"West" = "ng_West_________ny";
+"West" = "Barat";
 
 /* World (Level of Detail) */
 "World" = "Dunia";

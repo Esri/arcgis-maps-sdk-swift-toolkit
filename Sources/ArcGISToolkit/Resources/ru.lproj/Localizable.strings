@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "Ж_%@, %@_____________Я";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld выбрано";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "В данное время область карты невозможно загрузить.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "Ж_Add_______Я";
+"Add" = "Добавить";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Добавить связь";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Имя области";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "Ж_Association Settings_____________________Я";
+"Association Settings" = "Настройки связи";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "Ж_Association Type_________________Я";
+"Association Type" = "Тип связи";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Связи";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "Ж_Attachment_____________________Я";
+"Attachment" = "Вложение";
 
 /* A label in reference to attachments. */
 "Attachments" = "Вложения";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "Ж_Available Asset Types______________________Я";
+"Available Asset Types" = "Доступные типы оборудования";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Назад";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "Отменено";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "Ж_Cannot Verify Server Identity______________________________Я";
+"Cannot Verify Server Identity" = "Невозможно проверить идентификацию сервера";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Требуется сертификат";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "Ж_Change auto-pan mode to compass_________________Я";
+"Change auto-pan mode to compass" = "Изменить режим автоперемещения на компас";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "Ж_Change auto-pan mode to navigation__________________Я";
+"Change auto-pan mode to navigation" = "Изменить режим автоперемещения на навигацию";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "Ж_Change auto-pan mode to recenter_________________Я";
+"Change auto-pan mode to recenter" = "Изменить режим автоперемещения на центрирование";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "Ж_Change location display options_________________Я";
+"Change location display options" = "Изменить опции отображения местоположения";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "Ж_Value___________Я";
+"chart-mark-label-value" = "Значение";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Выбрать из файлов";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "Ж_Choose to add______________Я";
+"Choose to add" = "Выбрать для добавления";
 
 /* Cities (Level of Detail) */
 "Cities" = "Города";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "Цвет";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "Ж_Compass navigation___________________Я";
+"Compass navigation" = "Навигация по компасу";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "Ж_Compass_______________Я";
+"compass-button-accessibility-label" = "Компас";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "Ж_Connectivity_____________Я";
+"Connectivity" = "Связность";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "Ж_Containment____________Я";
+"Containment" = "Содержание";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "Ж_Content Visible________________Я";
+"Content Visible" = "Видимое содержание";
 
 /* Continent (Level of Detail) */
 "Continent" = "Континент";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "Невозможно получить области карты для этой карты.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "Ж_Count %lld_____________________Я";
+"Count %lld" = "Количество %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Округа";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Дублирующиеся начальные точки не могут быть добавлены.";
 
 /* The cardinal direction East. */
-"East" = "Ж_East_________Я";
+"East" = "Восток";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "Не удалось установить начальную точку";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "Ж_Failed to start________________Я";
+"Failed to start" = "Не удалось начать";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "Ж_Filter asset types by name___________________________Я";
+"Filter asset types by name" = "Фильтр типов оборудования по имени";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "Ж_Filter candidates by name__________________________Я";
+"Filter candidates by name" = "Фильтр кандидатов по имени";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "Ж_Filter feature sources by name_______________________________Я";
+"Filter feature sources by name" = "Фильтр источников объектов по имени";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "Дробление вдоль ребра";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "Ж_From Element_____________Я";
+"From Element" = "Элемент От";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "Ж_From Network Data Source_________________________Я";
+"From Network Data Source" = "Из источника сетевых данных";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "Ж_Heading: %@ %@_______________Я";
+"Heading: %@ %@" = "Заголовок: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "Ж_Hide Location______________Я";
+"Hide Location" = "Скрыть местоположение";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "Ж_Hide location display______________________Я";
+"Hide location display" = "Скрыть отображение местоположения";
 
 /* House Property (Level of Detail) */
 "House Property" = "Домовладение";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "Дома";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "Ж_Ignore_____________Я";
+"Ignore" = "Игнорировать";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "Ж_Junction Edge Object Connectivity From Side_______________________Я";
+"Junction Edge Object Connectivity From Side" = "Связность соединение объект-ребро со стороны";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "Ж_Junction Edge Object Connectivity Midspan______________________Я";
+"Junction Edge Object Connectivity Midspan" = "Связность соединение объект-ребро в середине";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "Ж_Junction Edge Object Connectivity To Side______________________Я";
+"Junction Edge Object Connectivity To Side" = "Связность соединение объект-ребро в сторону";
 
 /* A label for a pie chart legend item label. */
-"Label" = "Ж_Label___________Я";
+"Label" = "Подпись";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Меньше минимального значения";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "Сбой загрузки";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "Ж_Location display_________________Я";
+"Location display" = "Отображение местоположения";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "Ж_Compass_______________Я";
+"location-button-accessibility-value-compass" = "Компас";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "Ж_Navigation_____________________Я";
+"location-button-accessibility-value-navigation" = "Навигация";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "Ж_Off_______Я";
+"location-button-accessibility-value-off" = "Выкл.";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "Ж_Recenter_________________Я";
+"location-button-accessibility-value-recenter" = "Центрирование";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "Ж_Auto-pan_________________Я";
+"location-button-auto-pan-accessibility-label" = "Автоперемещение";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "Ж_Auto-pan_________________Я";
+"location-button-auto-pan-section-header-title" = "Автоперемещение";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "Ж_Navigation_____________________Я";
+"location-button-status-label-navigation" = "Навигация";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "Ж_Off_______Я";
+"location-button-status-label-off" = "Выкл.";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "Ж_Recenter_________________Я";
+"location-button-status-label-recenter" = "Центрирование";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Области карты";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "Режим";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "Ж_More Information_________________Я";
+"More Information" = "Дополнительные сведения";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "Ж_More Options_____________Я";
+"More Options" = "Дополнительные опции";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Имя";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "Ж_Network Data Source____________________Я";
+"Network Data Source" = "Источник сетевых данных";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "Ж_New Association________________Я";
+"New Association" = "Новая связь";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Новое имя";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "Ж_No Candidates Found____________________Я";
+"No Candidates Found" = "Кандидаты не найдены";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Нет доступных конфигураций.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "Ж_No Feature Sources Found_________________________Я";
+"No Feature Sources Found" = "Источники объектов не найдены";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "Ж_No Filter Results Found________________________Я";
+"No Filter Results Found" = "Результаты фильтра не найдены";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Нет подключения к Интернету";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "Нет значения";
 
 /* The cardinal direction North. */
-"North" = "Ж_North___________Я";
+"North" = "Север";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "Ж_Northeast___________________Я";
+"Northeast" = "Северо-восток";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "Ж_Northwest___________________Я";
+"Northwest" = "Северо-запад";
 
 /* A trace function output result was not provided. */
 "Not Available" = "Недоступно";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "Ж_On Map_____________Я";
+"On Map" = "На карте";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Не удалось загрузить онлайн-карту";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "Ж_Only removes the association. The feature remains__________________________Я.";
+"Only removes the association. The feature remains." = "Удаляет только связь. Объект остается.";
 
 /* A label for a button to open a map area. */
 "Open" = "Открыть";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "Ж_Percent Along______________Я";
+"Percent Along" = "Процент вдоль";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Включите доступ к камере в Настройках.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "Обновить";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "Ж_Remove_____________Я";
+"Remove" = "Удалить";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "Ж_Remove Association___________________Я";
+"Remove Association" = "Удалить связь";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "Ж_Remove association____________________Я?";
+"Remove association?" = "Удалить связь?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Удалить загрузку";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "Переименовать вложение";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "Ж_Reorient map north___________________Я";
+"Reorient map north" = "Переориентировать карту на север";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "Ж_Search_____________Я";
+"Search" = "Поиск";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "Ж_Search Features________________Я";
+"Search Features" = "Поиск объектов";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Запрос поиска";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Показать все";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "Ж_Show On Map____________Я";
+"Show On Map" = "Показать на карте";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Сайты";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "Небольшое здание";
 
 /* The cardinal direction South. */
-"South" = "Ж_South___________Я";
+"South" = "Юг";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "Ж_Southeast___________________Я";
+"Southeast" = "Юго-восток";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "Ж_Southwest___________________Я";
+"Southwest" = "Юго-запад";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Не совпадает пространственная привязка.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "Ж_Starting_________________Я";
+"Starting" = "Запуск";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "Штаты/Провинции";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "Ж_Stopped_______________Я";
+"Stopped" = "Остановлен";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "Ж_Stopping_________________Я";
+"Stopping" = "Остановка";
 
 /* Street (Level of Detail) */
 "Street" = "Улица";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "Нажмите на изображении для получения дополнительной информации.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "Ж_Terminal_________________Я";
+"Terminal" = "Терминал";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Настройка терминала";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "Форма не была отправлена";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Ж_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________Я?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Идентификация \"%@\" не может быть проверена. Хотите подключить в любом случае?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Карта не имеет пространственной привязки.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "Заголовок";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "Ж_To Element_____________________Я";
+"To Element" = "Элемент До";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Сегодня";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "Конфигурация трассировки";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "Ж_Tracingâ€¦_____________________Я";
+"Tracingâ€¦" = "Трассировка";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Попробуйте еще раз";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "Ж_Turn off auto-pan__________________Я";
+"Turn off auto-pan" = "Выключить автоперемещение";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Неизвестный";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "Имя пользователя";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "Ж_Unknown_______________Я";
+"utility-association-unknown-label" = "Неизвестный";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Ошибки проверки";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "Ж_Visible: false_______________Я";
+"Visible: false" = "Видимость: ложь";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "Ж_Visible: true______________Я";
+"Visible: true" = "Видимость: истина";
 
 /* The cardinal direction West. */
-"West" = "Ж_West_________Я";
+"West" = "Запад";
 
 /* World (Level of Detail) */
 "World" = "Весь мир";

@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "试_%@, %@_____________验";
+"%@, %@" = "%@、%@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld 已选";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "目前无法下载地图区域。";
 
 /* A label for a button to add a new utility association. */
-"Add" = "试_Add_______验";
+"Add" = "添加";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "添加关联";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "区域名称";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "试_Association Settings_____________________验";
+"Association Settings" = "关联设置";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "试_Association Type_________________验";
+"Association Type" = "关联类型";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "关联";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "试_Attachment_____________________验";
+"Attachment" = "附件";
 
 /* A label in reference to attachments. */
 "Attachments" = "附件";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "试_Available Asset Types______________________验";
+"Available Asset Types" = "可用资产类型";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "返回";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "已取消";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "试_Cannot Verify Server Identity______________________________验";
+"Cannot Verify Server Identity" = "无法验证服务器身份";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "需要证书";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "试_Change auto-pan mode to compass_________________验";
+"Change auto-pan mode to compass" = "将自动平移模式更改为罗盘";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "试_Change auto-pan mode to navigation__________________验";
+"Change auto-pan mode to navigation" = "将自动平移模式更改为导航";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "试_Change auto-pan mode to recenter_________________验";
+"Change auto-pan mode to recenter" = "将自动平移模式更改为重新居中";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "试_Change location display options_________________验";
+"Change location display options" = "更改位置显示选项";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "试_Value___________验";
+"chart-mark-label-value" = "值";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "从文件中选择";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "试_Choose to add______________验";
+"Choose to add" = "选择以添加";
 
 /* Cities (Level of Detail) */
 "Cities" = "城市群";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "颜色";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "试_Compass navigation___________________验";
+"Compass navigation" = "罗盘导航";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "试_Compass_______________验";
+"compass-button-accessibility-label" = "罗盘";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "试_Connectivity_____________验";
+"Connectivity" = "连通性";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "试_Containment____________验";
+"Containment" = "包含";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "试_Content Visible________________验";
+"Content Visible" = "内容可见";
 
 /* Continent (Level of Detail) */
 "Continent" = "大洲";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "无法检索此地图的地图区域。";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "试_Count %lld_____________________验";
+"Count %lld" = "计数 %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "多个区县";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "无法添加重复的起点。";
 
 /* The cardinal direction East. */
-"East" = "试_East_________验";
+"East" = "东";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "设置起始点失败";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "试_Failed to start________________验";
+"Failed to start" = "无法启动";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "试_Filter asset types by name___________________________验";
+"Filter asset types by name" = "按名称过滤资产类型";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "试_Filter candidates by name__________________________验";
+"Filter candidates by name" = "按名称过滤候选项";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "试_Filter feature sources by name_______________________________验";
+"Filter feature sources by name" = "按名称过滤要素源";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "沿边缘的分数";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "试_From Element_____________验";
+"From Element" = "自元素";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "试_From Network Data Source_________________________验";
+"From Network Data Source" = "从网络数据源";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "试_Heading: %@ %@_______________验";
+"Heading: %@ %@" = "标头：%@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "试_Hide Location______________验";
+"Hide Location" = "隐藏位置";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "试_Hide location display______________________验";
+"Hide location display" = "隐藏位置显示";
 
 /* House Property (Level of Detail) */
 "House Property" = "房产";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "房屋";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "试_Ignore_____________验";
+"Ignore" = "忽略";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "试_Junction Edge Object Connectivity From Side_______________________验";
+"Junction Edge Object Connectivity From Side" = "交汇点-边对象连通性“自”侧";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "试_Junction Edge Object Connectivity Midspan______________________验";
+"Junction Edge Object Connectivity Midspan" = "交汇点-边对象连通性中跨";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "试_Junction Edge Object Connectivity To Side______________________验";
+"Junction Edge Object Connectivity To Side" = "交汇点-边对象连通性“至”侧";
 
 /* A label for a pie chart legend item label. */
-"Label" = "试_Label___________验";
+"Label" = "标注";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "低于最小值";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "加载失败";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "试_Location display_________________验";
+"Location display" = "位置显示";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "试_Compass_______________验";
+"location-button-accessibility-value-compass" = "罗盘";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "试_Navigation_____________________验";
+"location-button-accessibility-value-navigation" = "导航";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "试_Off_______验";
+"location-button-accessibility-value-off" = "关";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "试_Recenter_________________验";
+"location-button-accessibility-value-recenter" = "重新居中";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "试_Auto-pan_________________验";
+"location-button-auto-pan-accessibility-label" = "自动平移";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "试_Auto-pan_________________验";
+"location-button-auto-pan-section-header-title" = "自动平移";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "试_Navigation_____________________验";
+"location-button-status-label-navigation" = "导航";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "试_Off_______验";
+"location-button-status-label-off" = "关";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "试_Recenter_________________验";
+"location-button-status-label-recenter" = "重新居中";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "地图区域";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "模式";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "试_More Information_________________验";
+"More Information" = "更多信息";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "试_More Options_____________验";
+"More Options" = "更多选项";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "名称";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "试_Network Data Source____________________验";
+"Network Data Source" = "网络数据源";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "试_New Association________________验";
+"New Association" = "新建关联";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "新名称";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "试_No Candidates Found____________________验";
+"No Candidates Found" = "未找到候选项";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "无可用配置。";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "试_No Feature Sources Found_________________________验";
+"No Feature Sources Found" = "未找到要素源";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "试_No Filter Results Found________________________验";
+"No Filter Results Found" = "未找到过滤结果";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "无 Internet 连接";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "无值";
 
 /* The cardinal direction North. */
-"North" = "试_North___________验";
+"North" = "北";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "试_Northeast___________________验";
+"Northeast" = "东北";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "试_Northwest___________________验";
+"Northwest" = "西北";
 
 /* A trace function output result was not provided. */
 "Not Available" = "不可用";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "试_On Map_____________验";
+"On Map" = "在地图上";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "在线地图加载失败";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "试_Only removes the association. The feature remains__________________________验.";
+"Only removes the association. The feature remains." = "仅移除关联。 保留要素。";
 
 /* A label for a button to open a map area. */
 "Open" = "打开";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "试_Percent Along______________验";
+"Percent Along" = "延伸百分比";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "请在设置中启用照相机访问。";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "刷新";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "试_Remove_____________验";
+"Remove" = "移除";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "试_Remove Association___________________验";
+"Remove Association" = "移除关联";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "试_Remove association____________________验?";
+"Remove association?" = "移除关联?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "移除下载";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "重命名附件";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "试_Reorient map north___________________验";
+"Reorient map north" = "将地图重定向为北";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "试_Search_____________验";
+"Search" = "搜索";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "试_Search Features________________验";
+"Search Features" = "搜索要素";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "搜索查询";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "显示全部";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "试_Show On Map____________验";
+"Show On Map" = "在地图上显示";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "站点";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "小型建筑物";
 
 /* The cardinal direction South. */
-"South" = "试_South___________验";
+"South" = "南";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "试_Southeast___________________验";
+"Southeast" = "东南";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "试_Southwest___________________验";
+"Southwest" = "西南";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "空间参考不匹配。";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "试_Starting_________________验";
+"Starting" = "正在启动";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "多个州/省";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "试_Stopped_______________验";
+"Stopped" = "已停止";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "试_Stopping_________________验";
+"Stopping" = "正在停止";
 
 /* Street (Level of Detail) */
 "Street" = "街区";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "点击图像获取详细信息。";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "试_Terminal_________________验";
+"Terminal" = "终端";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "终端配置";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "该表单未提交";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "试_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________验?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "无法验证 \"%@\" 的身份。 是否仍要连接?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "地图无空间参考。";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "标题";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "试_To Element_____________________验";
+"To Element" = "至元素";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "今天";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "追踪配置";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "试_Tracingâ€¦_____________________验";
+"Tracingâ€¦" = "正在追踪";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "重试";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "试_Turn off auto-pan__________________验";
+"Turn off auto-pan" = "关闭自动平移";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "未知";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "用户名";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "试_Unknown_______________验";
+"utility-association-unknown-label" = "未知";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "验证错误";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "试_Visible: false_______________验";
+"Visible: false" = "可见：false";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "试_Visible: true______________验";
+"Visible: true" = "可见：true";
 
 /* The cardinal direction West. */
-"West" = "试_West_________验";
+"West" = "西";
 
 /* World (Level of Detail) */
 "World" = "世界";

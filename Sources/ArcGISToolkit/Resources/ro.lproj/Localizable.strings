@@ -2,7 +2,7 @@
 utility element (first variable) and a percentage
 (second variable) indicating the relative location along
 an edge where a utility association is (logically) located. */
-"%@, %@" = "Ă_%@, %@_____________ș";
+"%@, %@" = "%@, %@";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld selectat";
@@ -21,7 +21,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "A map area cannot be downloaded at this time." = "Nu poate fi descărcată o zonă de hartă în acest moment.";
 
 /* A label for a button to add a new utility association. */
-"Add" = "Ă_Add_______ș";
+"Add" = "Adăugare";
 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Adăugați o asociere";
@@ -51,16 +51,16 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Area Name" = "Nume zonă";
 
 /* A navigation title for the Association Settings page. */
-"Association Settings" = "Ă_Association Settings_____________________ș";
+"Association Settings" = "Setări asociere";
 
 /* A label in reference to a utility association type. */
-"Association Type" = "Ă_Association Type_________________ș";
+"Association Type" = "Tip asociere";
 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Asocieri";
 
 /* A label for the "Attachment" utility association kind. */
-"Attachment" = "Ă_Attachment_____________________ș";
+"Attachment" = "Fișier atașat";
 
 /* A label in reference to attachments. */
 "Attachments" = "Fișiere atașate";
@@ -77,7 +77,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header label in reference to the asset
 types available to use when querying for utility
 association feature candidates. */
-"Available Asset Types" = "Ă_Available Asset Types______________________ș";
+"Available Asset Types" = "Tipuri de active disponibile";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Înapoi";
@@ -114,25 +114,25 @@ for the AR experience. */
 "Cancelled" = "Anulat";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Cannot Verify Server Identity" = "Ă_Cannot Verify Server Identity______________________________ș";
+"Cannot Verify Server Identity" = "Nu se poate verifica identitatea serverului";
 
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificat necesar";
 
 /* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to compass" = "Ă_Change auto-pan mode to compass_________________ș";
+"Change auto-pan mode to compass" = "Schimbare mod de panoramare automată la busolă";
 
 /* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to navigation" = "Ă_Change auto-pan mode to navigation__________________ș";
+"Change auto-pan mode to navigation" = "Schimbare mod de panoramare automată la navigare";
 
 /* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"Change auto-pan mode to recenter" = "Ă_Change auto-pan mode to recenter_________________ș";
+"Change auto-pan mode to recenter" = "Schimbare mod de panoramare automată la recentrare";
 
 /* The accessibility hint of the location button. */
-"Change location display options" = "Ă_Change location display options_________________ș";
+"Change location display options" = "Modificare opțiuni de afișare a locației";
 
 /* A label of a mark on a chart. */
-"chart-mark-label-value" = "Ă_Value___________ș";
+"chart-mark-label-value" = "Valoare";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Alegeți din Fișiere";
@@ -142,7 +142,7 @@ for the AR experience. */
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
-"Choose to add" = "Ă_Choose to add______________ș";
+"Choose to add" = "Alegeți pentru a adăuga";
 
 /* Cities (Level of Detail) */
 "Cities" = "Orașe";
@@ -160,20 +160,20 @@ candidate to add as a utility association. */
 "Color" = "Culoare";
 
 /* The accessibility value of the location button when the auto-pan mode is compass navigation. */
-"Compass navigation" = "Ă_Compass navigation___________________ș";
+"Compass navigation" = "Navigare cu busolă";
 
 /* The accessibility label of the compass button. */
-"compass-button-accessibility-label" = "Ă_Compass_______________ș";
+"compass-button-accessibility-label" = "Busolă";
 
 /* A label for the "Connectivity" utility association kind. */
-"Connectivity" = "Ă_Connectivity_____________ș";
+"Connectivity" = "Conectivitate";
 
 /* A label for the "Containment" utility association kind. */
-"Containment" = "Ă_Containment____________ș";
+"Containment" = "Izolare";
 
 /* A label indicating whether content in the new
 association is visible or not. */
-"Content Visible" = "Ă_Content Visible________________ș";
+"Content Visible" = "Conținut vizibil";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
@@ -189,7 +189,7 @@ A label for a button used to continue the authentication operation. */
 "Could not retrieve map areas for this map." = "Nu s-au putut recupera zonele de hartă pentru această hartă.";
 
 /* Localized text to display the number of items in a collection. */
-"Count %lld" = "Ă_Count %lld_____________________ș";
+"Count %lld" = "Număr %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Ținuturi";
@@ -268,7 +268,7 @@ network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Punctele de pornire duplicat nu pot fi adăugate.";
 
 /* The cardinal direction East. */
-"East" = "Ă_East_________ș";
+"East" = "Est";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -342,7 +342,7 @@ to be used as a trace starting point. */
 "Failed to set starting point" = "Nu s-a reușit setarea punctului de pornire";
 
 /* The accessibility value of the location button when the location display fails to start. */
-"Failed to start" = "Ă_Failed to start________________ș";
+"Failed to start" = "Pornirea a eşuat";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
@@ -359,11 +359,11 @@ trace operation. */
 
 /* A label for a search field to filter utility 
 asset types by name. */
-"Filter asset types by name" = "Ă_Filter asset types by name___________________________ș";
+"Filter asset types by name" = "Filtrare tipuri de active după nume";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
-"Filter candidates by name" = "Ă_Filter candidates by name__________________________ș";
+"Filter candidates by name" = "Filtrare candidați după nume";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -371,7 +371,7 @@ facility contains one or more levels in a floor-aware map or scene. */
 
 /* A label for a search field to filter utility 
 association feature sources by name. */
-"Filter feature sources by name" = "Ă_Filter feature sources by name_______________________________ș";
+"Filter feature sources by name" = "Filtrare sursă de obiecte spațiale după nume";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -392,11 +392,11 @@ edge of a utility network element. */
 "Fraction Along Edge" = "Fracție de-a lungul marginii";
 
 /* A label for the element on the "from" side of a utility association. */
-"From Element" = "Ă_From Element_____________ș";
+"From Element" = "Din element";
 
 /* A label for a button to choose a feature for a new
 utility association from a network data source. */
-"From Network Data Source" = "Ă_From Network Data Source_________________________ș";
+"From Network Data Source" = "Din sursa de date de rețea";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -409,13 +409,13 @@ AR experience. */
 /* The accessibility value of a compass. The first
 variable is a heading in degrees and the second
 variable is a cardinal or intercardinal direction. */
-"Heading: %@ %@" = "Ă_Heading: %@ %@_______________ș";
+"Heading: %@ %@" = "Direcție: %@ %@";
 
 /* The section header for the auto-pan section in the location button context menu. */
-"Hide Location" = "Ă_Hide Location______________ș";
+"Hide Location" = "Ascundere locație";
 
 /* The accessibility hint of the hide location display context menu option. */
-"Hide location display" = "Ă_Hide location display______________________ș";
+"Hide location display" = "Ascundere afișare locație";
 
 /* House Property (Level of Detail) */
 "House Property" = "Proprietate casă";
@@ -424,19 +424,19 @@ variable is a cardinal or intercardinal direction. */
 "Houses" = "Case";
 
 /* A label indicating that a challenge should be ignored. */
-"Ignore" = "Ă_Ignore_____________ș";
+"Ignore" = "Ignorare";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
-"Junction Edge Object Connectivity From Side" = "Ă_Junction Edge Object Connectivity From Side_______________________ș";
+"Junction Edge Object Connectivity From Side" = "Conectivitate obiect joncțiune margine de la laterală";
 
 /* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
-"Junction Edge Object Connectivity Midspan" = "Ă_Junction Edge Object Connectivity Midspan______________________ș";
+"Junction Edge Object Connectivity Midspan" = "Conectivitate obiect joncțiune margine semirotire";
 
 /* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
-"Junction Edge Object Connectivity To Side" = "Ă_Junction Edge Object Connectivity To Side______________________ș";
+"Junction Edge Object Connectivity To Side" = "Conectivitate obiect joncțiune margine la laterală";
 
 /* A label for a pie chart legend item label. */
-"Label" = "Ă_Label___________ș";
+"Label" = "Etichetă";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Mai puțin decât valoarea minimă";
@@ -451,36 +451,36 @@ variable is a cardinal or intercardinal direction. */
 "Loading failed" = "Încărcare eșuată";
 
 /* The accessibility label of the location button when the location display is not showing. */
-"Location display" = "Ă_Location display_________________ș";
+"Location display" = "Afișare locație";
 
 /* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-compass" = "Ă_Compass_______________ș";
+"location-button-accessibility-value-compass" = "Busolă";
 
 /* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-navigation" = "Ă_Navigation_____________________ș";
+"location-button-accessibility-value-navigation" = "Navigare";
 
 /* The label text for turning the auto-pan mode off in the location button context menu. */
-"location-button-accessibility-value-off" = "Ă_Off_______ș";
+"location-button-accessibility-value-off" = "Inactiv";
 
 /* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
-"location-button-accessibility-value-recenter" = "Ă_Recenter_________________ș";
+"location-button-accessibility-value-recenter" = "Recentrare";
 
 /* The accessibility label of the location button when the 
 location display is showing and the button cycles 
 through auto-pan modes. */
-"location-button-auto-pan-accessibility-label" = "Ă_Auto-pan_________________ș";
+"location-button-auto-pan-accessibility-label" = "Panoramare automată";
 
 /* The header of the auto-pan section in the location button context menu. */
-"location-button-auto-pan-section-header-title" = "Ă_Auto-pan_________________ș";
+"location-button-auto-pan-section-header-title" = "Panoramare automată";
 
 /* The accessibility value of the location button when the auto-pan mode is navigation. */
-"location-button-status-label-navigation" = "Ă_Navigation_____________________ș";
+"location-button-status-label-navigation" = "Navigare";
 
 /* The accessibility value of the location button when the auto-pan mode is off. */
-"location-button-status-label-off" = "Ă_Off_______ș";
+"location-button-status-label-off" = "Inactiv";
 
 /* The accessibility value of the location button when the auto-pan mode is recenter. */
-"location-button-status-label-recenter" = "Ă_Recenter_________________ș";
+"location-button-status-label-recenter" = "Recentrare";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Zone hartă";
@@ -507,10 +507,10 @@ through auto-pan modes. */
 "Mode" = "Mod";
 
 /* A label for a button to view details for a list row. */
-"More Information" = "Ă_More Information_________________ș";
+"More Information" = "Informații suplimentare";
 
 /* A label for a button to see more options for a list row. */
-"More Options" = "Ă_More Options_____________ș";
+"More Options" = "Mai multe opțiuni";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Nume";
@@ -523,10 +523,10 @@ through auto-pan modes. */
 
 /* A navigation title for a page listing
 data sources in a utility network. */
-"Network Data Source" = "Ă_Network Data Source____________________ș";
+"Network Data Source" = "Sursă de date de rețea";
 
 /* A navigation title for a view to create a new association in. */
-"New Association" = "Ă_New Association________________ș";
+"New Association" = "Asociere nouă";
 
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Nume nou";
@@ -543,18 +543,18 @@ data sources in a utility network. */
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
-"No Candidates Found" = "Ă_No Candidates Found____________________ș";
+"No Candidates Found" = "Nu s-au găsit candidați";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Nu există configurări disponibile.";
 
 /* A label indicating no utility association 
 feature sources were found. */
-"No Feature Sources Found" = "Ă_No Feature Sources Found_________________________ș";
+"No Feature Sources Found" = "Nu s-au găsit surse de obiecte spațiale";
 
 /* A label indicating no utility association 
 filter results were found. */
-"No Filter Results Found" = "Ă_No Filter Results Found________________________ș";
+"No Filter Results Found" = "Nu s-au găsit rezultate ale filtrelor";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Nu există conexiune la internet";
@@ -581,13 +581,13 @@ filter results were found. */
 "No Value" = "Nicio valoare";
 
 /* The cardinal direction North. */
-"North" = "Ă_North___________ș";
+"North" = "Nord";
 
 /* The intercardinal direction Northeast. */
-"Northeast" = "Ă_Northeast___________________ș";
+"Northeast" = "Nord-Est";
 
 /* The intercardinal direction Northwest. */
-"Northwest" = "Ă_Northwest___________________ș";
+"Northwest" = "Nord-Vest";
 
 /* A trace function output result was not provided. */
 "Not Available" = "Indisponibil";
@@ -606,14 +606,14 @@ filter results were found. */
 
 /* A label indicating features can be selected by
 interactively tapping on the map. */
-"On Map" = "Ă_On Map_____________ș";
+"On Map" = "Pe hartă";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Harta online nu s-a putut încărca";
 
 /* Helper text indicating that an accompanying button only 
 removes only the association.  */
-"Only removes the association. The feature remains." = "Ă_Only removes the association. The feature remains__________________________ș.";
+"Only removes the association. The feature remains." = "Elimină doar asocierea. Obiectul spațial rămâne.";
 
 /* A label for a button to open a map area. */
 "Open" = "Deschidere";
@@ -635,7 +635,7 @@ removes only the association.  */
 
 /* A label in reference to a percent along an 
 edge of a utility network element. */
-"Percent Along" = "Ă_Percent Along______________ș";
+"Percent Along" = "Procent de-a lungul";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Vă rugăm să activați accesul la cameră din setări.";
@@ -665,13 +665,13 @@ The variable provides additional data. */
 "Refresh" = "Reîmprospătare";
 
 /* A label for a button to remove a utility network association. */
-"Remove" = "Ă_Remove_____________ș";
+"Remove" = "Eliminare";
 
 /* A label for a button to remove a utility association. */
-"Remove Association" = "Ă_Remove Association___________________ș";
+"Remove Association" = "Eliminare asociere";
 
 /* A label for a confirmation to remove a utility association. */
-"Remove association?" = "Ă_Remove association____________________ș?";
+"Remove association?" = "Eliminați asocierea?";
 
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Eliminare descărcare";
@@ -683,7 +683,7 @@ The variable provides additional data. */
 "Rename attachment" = "Redenumire atașament";
 
 /* The accessibility hint of the compass component. */
-"Reorient map north" = "Ă_Reorient map north___________________ș";
+"Reorient map north" = "Reorientare hartă spre nord";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -710,11 +710,11 @@ current visible extent of the map or scene. */
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
-"Search" = "Ă_Search_____________ș";
+"Search" = "Căutare";
 
 /* A label for a search bar to search through feature 
 candidates to use in a new utility association. */
-"Search Features" = "Ă_Search Features________________ș";
+"Search Features" = "Căutare obiecte spațiale";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Interogare căutare";
@@ -742,7 +742,7 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Afișare toate";
 
 /* A label for a button to show the indicated feature on the map. */
-"Show On Map" = "Ă_Show On Map____________ș";
+"Show On Map" = "Arătați pe hartă";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Site-uri";
@@ -754,20 +754,20 @@ or more levels in a floor-aware map or scene. */
 "Small Building" = "Clădire mică";
 
 /* The cardinal direction South. */
-"South" = "Ă_South___________ș";
+"South" = "Sud";
 
 /* The intercardinal direction Southeast. */
-"Southeast" = "Ă_Southeast___________________ș";
+"Southeast" = "Sud-Est";
 
 /* The intercardinal direction Southwest. */
-"Southwest" = "Ă_Southwest___________________ș";
+"Southwest" = "Sud-Vest";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Neconcordanță referință spațială.";
 
 /* The accessibility value of the location button when the location display is starting. */
-"Starting" = "Ă_Starting_________________ș";
+"Starting" = "Pornire";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -780,10 +780,10 @@ network trace operation. */
 "States/Provinces" = "State/provincii";
 
 /* The accessibility value of the location button when the location display is not showing. */
-"Stopped" = "Ă_Stopped_______________ș";
+"Stopped" = "Oprit";
 
 /* The accessibility value of the location button when the location display is stopping. */
-"Stopping" = "Ă_Stopping_________________ș";
+"Stopping" = "Oprire";
 
 /* Street (Level of Detail) */
 "Street" = "Stradă";
@@ -803,7 +803,7 @@ additional information. */
 "Tap on the image for more information." = "Atingeți pe imagine pentru mai multe informații.";
 
 /* A label in reference to a utility terminal. */
-"Terminal" = "Ă_Terminal_________________ș";
+"Terminal" = "Terminal";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Configurație terminal";
@@ -829,7 +829,7 @@ match the spatial reference of the map. */
 "The form wasn't submitted" = "Formularul nu a fost trimis";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Ă_The identity of \"%@\" cannot be verified. Would you like to connect anyway______________________________________ș?";
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Identitatea „%@” nu poate fi verificată. Doriți să vă conectați oricum?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Harta nu are o referință spațială.";
@@ -863,7 +863,7 @@ to be imported as an attachment. */
 "Title" = "Titlu";
 
 /* A label for the element on the "to" side of a utility association. */
-"To Element" = "Ă_To Element_____________________ș";
+"To Element" = "La element";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Astăzi";
@@ -884,13 +884,13 @@ to be imported as an attachment. */
 "Trace Configuration" = "Configurare urmărire";
 
 /* A label indicating that a utility network trace is running. */
-"Tracingâ€¦" = "Ă_Tracingâ€¦_____________________ș";
+"Tracingâ€¦" = "Urmărire";
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Încercați din nou";
 
 /* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
-"Turn off auto-pan" = "Ă_Turn off auto-pan__________________ș";
+"Turn off auto-pan" = "Dezactivare panoramare automată";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Necunoscut";
@@ -913,7 +913,7 @@ without saving. */
 "Username" = "Nume de utilizator";
 
 /* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "Ă_Unknown_______________ș";
+"utility-association-unknown-label" = "Necunoscut";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Erori de validare";
@@ -950,14 +950,14 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label indicating a utility association's 
 containment is not visible. */
-"Visible: false" = "Ă_Visible: false_______________ș";
+"Visible: false" = "Vizibil: fals";
 
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible: true" = "Ă_Visible: true______________ș";
+"Visible: true" = "Vizibil: adevărat";
 
 /* The cardinal direction West. */
-"West" = "Ă_West_________ș";
+"West" = "Vest";
 
 /* World (Level of Detail) */
 "World" = "Glob";
