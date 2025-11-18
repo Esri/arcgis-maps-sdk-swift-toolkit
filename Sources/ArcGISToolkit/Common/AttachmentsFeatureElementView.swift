@@ -267,10 +267,3 @@ extension View {
         }
     }
 }
-
-extension Logger {
-    /// A logger for the attachments feature element view.
-    static var attachmentsFeatureElementView: Logger {
-        Logger(subsystem: "com.esri.ArcGISToolkit", category: "AttachmentsFeatureElementView")
-    }
-}
