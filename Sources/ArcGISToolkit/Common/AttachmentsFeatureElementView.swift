@@ -84,7 +84,7 @@ struct AttachmentsFeatureElementView: View {
                         do {
                             attachments = try await featureElement.featureAttachments
                         } catch {
-                            Logger.attachmentsFeatureElementView.error("\(error.localizedDescription)")
+                            Logger.attachmentsFeatureElementView.error("Attachments failed load. \(error.localizedDescription)")
                             return
                         }
                         let attachmentModels = attachments
