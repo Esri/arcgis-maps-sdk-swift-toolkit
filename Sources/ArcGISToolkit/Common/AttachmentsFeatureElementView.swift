@@ -50,6 +50,8 @@ struct AttachmentsFeatureElementView: View {
         case initializing
         /// Attachments have been fetched and wrapped with models.
         case initialized([AttachmentModel])
+        /// Attachments failed to load.
+        case loadFailed
     }
     
     /// The current state of the attachment models.
@@ -85,6 +87,7 @@ struct AttachmentsFeatureElementView: View {
                             attachments = try await featureElement.featureAttachments
                         } catch {
                             Logger.attachmentsFeatureElementView.error("Attachments failed load. \(error.localizedDescription)")
+                            attachmentModelsState = .loadFailed
                             return
                         }
                         let attachmentModels = attachments
@@ -114,6 +117,12 @@ struct AttachmentsFeatureElementView: View {
                     }
                     .disclosureGroupPadding()
                 }
+            case .loadFailed:
+                Text(
+                    "Attachments failed to load.",
+                    bundle: .toolkitModule,
+                    comment: "The status text when attachments failed to load."
+                )
             }
         }
         .onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
