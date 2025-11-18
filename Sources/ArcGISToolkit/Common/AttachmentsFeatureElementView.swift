@@ -16,6 +16,8 @@ import ArcGIS
 import QuickLook
 import SwiftUI
 
+internal import os
+
 /// A view displaying an `AttachmentsFeatureElement`.
 struct AttachmentsFeatureElementView: View {
     /// The `AttachmentsFeatureElement` to display.
@@ -44,8 +46,6 @@ struct AttachmentsFeatureElementView: View {
     
     /// The state of the attachment models.
     private enum AttachmentModelsState {
-        /// Attachment models have not been initialized.
-        case notInitialized
         /// Attachments are being fetched and wrapped with models.
         case initializing
         /// Attachments have been fetched and wrapped with models.
@@ -53,7 +53,7 @@ struct AttachmentsFeatureElementView: View {
     }
     
     /// The current state of the attachment models.
-    @State private var attachmentModelsState: AttachmentModelsState = .notInitialized
+    @State private var attachmentModelsState: AttachmentModelsState = .initializing
     
     /// Creates a new `AttachmentsFeatureElementView` for a Feature Form.
     /// - Parameter formElement: The `AttachmentsFeatureElement`.
@@ -76,12 +76,17 @@ struct AttachmentsFeatureElementView: View {
     var body: some View {
         Group {
             switch attachmentModelsState {
-            case .notInitialized, .initializing:
+            case .initializing:
                 ProgressView()
                     .padding()
                     .task {
-                        attachmentModelsState = .initializing
-                        let attachments = (try? await featureElement.featureAttachments) ?? []
+                        let attachments: [any FeatureAttachment]
+                        do {
+                            attachments = try await featureElement.featureAttachments
+                        } catch {
+                            Logger.attachmentsFeatureElementView.error("\(error.localizedDescription)")
+                            return
+                        }
                         let attachmentModels = attachments
                             .reversed()
                             .map {
@@ -260,5 +265,12 @@ extension View {
         } else {
             self
         }
+    }
+}
+
+extension Logger {
+    /// A logger for the attachments feature element view.
+    static var attachmentsFeatureElementView: Logger {
+        Logger(subsystem: "com.esri.ArcGISToolkit", category: "AttachmentsFeatureElementView")
     }
 }
