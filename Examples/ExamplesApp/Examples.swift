@@ -80,6 +80,7 @@ struct Examples: View {
             .example("Basemap Gallery", content: BasemapGalleryExampleView()),
             .example("Bookmarks", content: BookmarksExampleView()),
             .example("Compass", content: CompassExampleView()),
+            .example("Data View", content: DataViewExampleView()),
             .example("Feature Form", content: FeatureFormExampleView()),
             .example("Floating Panel", content: FloatingPanelExampleView()),
             .example("Floor Filter", content: FloorFilterExampleView()),
