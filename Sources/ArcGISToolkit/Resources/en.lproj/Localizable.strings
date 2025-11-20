@@ -65,6 +65,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label in reference to attachments. */
 "Attachments" = "Attachments";
 
+/* The status text when attachments failed to load. */
+"Attachments failed to load." = "Attachments failed to load.";
+
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "Attachments larger than %@ cannot be downloaded.";
 
