@@ -39,7 +39,11 @@ struct DataViewExampleView: View {
                 .buttonStyle(.bordered)
             }
             .sheet(isPresented: $dataViewIsPresented) {
-                DataView(map: map)
+                DataView(geoModel: map)
+            }
+            .task {
+                try? await map.load()
+                dataViewIsPresented = true
             }
     }
 }
