@@ -149,21 +149,17 @@ public struct OfflineMapAreasView: View {
     public var body: some View {
         NavigationStack {
             VStack {
-                if mapViewModel.isLoadingModels {
+                switch mapViewModel.mode {
+                case .notLoaded:
                     ProgressView()
-                } else {
-                    if mapViewModel.mapIsOfflineDisabled {
-                        offlineDisabledView
-                    } else {
-                        switch mapViewModel.mode {
-                        case .preplanned:
-                            preplannedMapAreasView
-                        case .onDemand, .ambiguous:
-                            onDemandMapAreasView
-                        case .noInternetAvailable:
-                            noInternetNoAreasView
-                        }
-                    }
+                case .preplanned:
+                    preplannedMapAreasView
+                case .onDemand, .ambiguous:
+                    onDemandMapAreasView
+                case .noInternetAvailable:
+                    noInternetNoAreasView
+                case .offlineDisabled:
+                    offlineDisabledView
                 }
             }
             #if !os(visionOS)
@@ -230,7 +226,7 @@ public struct OfflineMapAreasView: View {
                     }
                 }
                 .refreshable {
-                    Task { await mapViewModel.loadModels() }
+                    await mapViewModel.loadModels()
                 }
             } else if mapViewModel.isShowingOnlyOfflineModels {
                 // If we have no models and no internet, show a content unavailable view.
