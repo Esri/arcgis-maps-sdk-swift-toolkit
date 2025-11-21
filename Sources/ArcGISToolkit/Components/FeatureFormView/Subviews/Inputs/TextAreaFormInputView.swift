@@ -17,8 +17,16 @@ import SwiftUI
 
 /// A view for multi-line text input.
 struct TextAreaFormInputView: View {
+    /// A Boolean value indicating whether or not the expanded field is focused.
+    @FocusState private var expandedEditorIsFocused: Bool
+    /// A Boolean value indicating whether or not the inline field is focused.
+    @FocusState private var inlineEditorIsFocused: Bool
+    
     @ScaledMetric private var idealHeight = 100
     
+    /// A Boolean value indicating whether the full screen text input is presented.
+    @State private var fullScreenTextInputIsPresented = false
+    /// The element's current value.
     @State private var value: String = ""
     
     let element: FieldFormElement
@@ -33,11 +41,30 @@ struct TextAreaFormInputView: View {
     
     var body: some View {
         TextEditor(text: $value)
+            .focused($inlineEditorIsFocused)
+            .formInputStyle(isTappable: true)
             // Ideally we'd specify a line limit but the line limit modifier
             // does not currently work with the text editor (FB19423738) so we
             // use a scaled ideal height instead.
             .frame(idealHeight: idealHeight)
-            .formInputStyle(isTappable: true)
             .scrollContentBackground(.hidden)
+            .sheet(isPresented: $fullScreenTextInputIsPresented) {
+                TextEditor(text: $value)
+                    .focused($expandedEditorIsFocused)
+                    .padding()
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    if inlineEditorIsFocused {
+                        Button {
+                            fullScreenTextInputIsPresented = true
+                            inlineEditorIsFocused = false
+                        } label: {
+                            Label("", systemImage: "rectangle.expand.diagonal")
+                        }
+                        Spacer()
+                    }
+                }
+            }
     }
 }
