@@ -20,15 +20,21 @@ extension FeatureFormView {
     struct UtilityAssociationFeatureCandidatesView: View {
         /// The model for the FeatureFormView containing the view.
         @Environment(FeatureFormViewModel.self) var featureFormViewModel
-        /// The closure to perform when a ``EditingEvent`` occurs.
-        @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
         
         /// The candidates that can be used to create an association.
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
         /// The phrase used to filter candidates by name.
         @State private var filterPhrase = ""
-        /// A Boolean value indicating if a candidate query is running.
+        /// The parameters for retrieving the next page of results.
+        @State private var nextQueryParameters: QueryParameters?
+        /// A Boolean value indicating whether a filter based query is running.
+        @State private var queryForFilterPhraseIsRunning = false
+        /// A Boolean value indicating if the initial candidate query is complete.
+        @State private var queryForFirstPageIsComplete = false
+        /// A Boolean value indicating whether a query is running.
         @State private var queryIsRunning = false
+        /// The task for the current query.
+        @State private var queryTask: Task<Void, Never>?
         
         /// The asset type to use when querying for feature candidates.
         let assetType: UtilityAssetType
@@ -44,22 +50,27 @@ extension FeatureFormView {
         var body: some View {
             List {
                 sectionForFilter
-                if queryIsRunning {
+                if !queryForFirstPageIsComplete {
                     ProgressView()
+                        .task {
+                            let parameters = QueryParameters()
+                            parameters.whereClause = "1=1"
+                            queryFeatures(parameters: parameters)
+                            await queryTask?.value
+                            queryForFirstPageIsComplete = true
+                        }
                 } else {
                     if filteredCandidates.isEmpty {
-                        contentUnavailableView
+                        if queryForFilterPhraseIsRunning {
+                            ProgressView()
+                                .id(filterPhrase)
+                        } else if !queryIsRunning {
+                            contentUnavailableView
+                        }
                     } else {
                         sectionForCandidates
                     }
                 }
-            }
-            .task {
-                queryIsRunning = true
-                defer { queryIsRunning = false }
-                let parameters = QueryParameters()
-                parameters.whereClause = "1=1"
-                candidates = (try? await source.queryFeatures(assetType: assetType, parameters: parameters).candidates) ?? []
             }
         }
         
@@ -109,23 +120,21 @@ extension FeatureFormView {
                                 .lineLimit(4)
                                 .truncationMode(.middle)
                             Spacer()
-                            Button {
-                                onFormEditingEventAction?(.showOnMapRequested(candidate.feature))
-                            } label: {
-                                Label {
-                                    Text(
-                                        "Show On Map",
-                                        bundle: .toolkitModule,
-                                        comment: "A label for a button to show the indicated feature on the map."
-                                    )
-                                } icon: {
-                                    Image(systemName: "scope")
-                                }
+                            ShowOnMapButton(feature: candidate.feature)
                                 .labelStyle(.iconOnly)
-                            }
                         }
                     }
                     .tint(.primary)
+                }
+                if let nextQueryParameters {
+                    if filterPhrase.isEmpty {
+                        // Paging via scrolling
+                        ProgressView()
+                            .id(nextQueryParameters.resultOffset)
+                            .task {
+                                queryFeatures(parameters: nextQueryParameters)
+                            }
+                    }
                 }
             } header: {
                 Text(
@@ -163,6 +172,27 @@ extension FeatureFormView {
                             """
                     )
                 )
+                .disabled(!queryForFirstPageIsComplete)
+                .task(id: filterPhrase) {
+                    try? await Task.sleep(for: .milliseconds(500))
+                    queryForFilterPhraseIsRunning = true
+                    while !Task.isCancelled, filteredCandidates.isEmpty, let nextQueryParameters {
+                        queryFeatures(parameters: nextQueryParameters)
+                        await queryTask?.value
+                    }
+                    queryForFilterPhraseIsRunning = false
+                }
+            }
+        }
+        
+        func queryFeatures(parameters: QueryParameters) {
+            queryTask?.cancel()
+            queryIsRunning = true
+            queryTask = Task {
+                let result = try? await source.queryFeatures(assetType: assetType, parameters: parameters)
+                candidates.append(contentsOf: result?.candidates ?? [])
+                nextQueryParameters = result?.nextQueryParams
+                queryIsRunning = false
             }
         }
     }

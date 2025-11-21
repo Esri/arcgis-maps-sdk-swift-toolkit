@@ -1529,7 +1529,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
     }
     
-    // Test case 12.2: Associations show fraction along edge
+    // Test case 12.2: Associations show percent along
     // It has been determined that with the currently-available public test data
     // this is no longer feasible. So this functionality will be ad-hoc tested only.
     
@@ -1697,21 +1697,22 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_12_6() {
         let app = XCUIApplication()
-        let associationSettingButton = app.buttons["Utility Association Details"]
         let cancelButton = app.buttons["Cancel"].firstMatch
         let discardButton = app.buttons["Discard"].firstMatch
         let elementTitle = app.staticTexts["Associations"]
         let connectedFilterTitle = app.staticTexts["Connected"]
         let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let removeAssociationButton = app.buttons["Remove Association"]
         let removeButton = app.buttons["Remove"].firstMatch
-        let transformerButton = app.buttons["Transformer, High"]
         
 #if targetEnvironment(macCatalyst)
-        let inlineRemoveAssociationButton = app.menuItems["remove_association"]
+        let moreOptionsButton = app.popUpButtons["More Options"]
+        let removeAssociationButton = app.menuItems["Remove Association"]
+        let transformerButton = app.popUpButtons["Transformer, High"]
 #else
-        let inlineRemoveAssociationButton = app.buttons["Remove Association"]
+        let moreOptionsButton = app.buttons["More Options"]
+        let removeAssociationButton = app.buttons["Remove Association"]
+        let transformerButton = app.buttons["Transformer, High"]
 #endif
         
         openTestCase()
@@ -1742,11 +1743,11 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            associationSettingButton.waitForExistence(timeout: 5),
+            moreOptionsButton.waitForExistence(timeout: 5),
             "The association settings button doesn't exist."
         )
         
-        associationSettingButton.tap()
+        moreOptionsButton.tap()
         
         XCTAssertTrue(
             removeAssociationButton.waitForExistence(timeout: 5),
@@ -1761,6 +1762,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         cancelButton.tap()
+        
+        moreOptionsButton.tap()
         
         removeAssociationButton.tap()
         
@@ -1796,17 +1799,17 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
 #if targetEnvironment(macCatalyst)
-        transformerButton.rightClick()
+        moreOptionsButton.tap()
 #else
         transformerButton.swipeLeft()
 #endif
         
         XCTAssertTrue(
-            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
+            removeAssociationButton.waitForExistence(timeout: 5),
             "The delete button doesn't exist."
         )
         
-        inlineRemoveAssociationButton.tap()
+        removeAssociationButton.tap()
         
         XCTAssertTrue(
             cancelButton.waitForExistence(timeout: 5),
@@ -1816,17 +1819,20 @@ final class FeatureFormViewTests: XCTestCase {
         cancelButton.tap()
         
 #if targetEnvironment(macCatalyst)
-        transformerButton.rightClick()
-#else
-        transformerButton.swipeLeft()
-#endif
-        
+        moreOptionsButton.tap()
         XCTAssertTrue(
-            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
+            removeAssociationButton.waitForExistence(timeout: 5),
             "The delete button doesn't exist."
         )
-        
-        inlineRemoveAssociationButton.tap()
+        removeAssociationButton.tap()
+#else
+        transformerButton.swipeLeft()
+        XCTAssertTrue(
+            removeAssociationButton.waitForExistence(timeout: 5),
+            "The delete button doesn't exist."
+        )
+        removeAssociationButton.tap()
+#endif
         
         XCTAssertTrue(
             removeButton.waitForExistence(timeout: 5),
@@ -1856,6 +1862,7 @@ final class FeatureFormViewTests: XCTestCase {
         let connectivityLabel = app.staticTexts["Connectivity"]
         let discardButton = app.buttons["Discard"]
         let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
+        let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
         let electricDistributionDeviceLabel = app.staticTexts["Electric Distribution Device"]
         let elementTitle = app.staticTexts["Associations"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
@@ -1908,6 +1915,11 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertTrue(
             electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
             "The \"Electric Distribution Device\" button doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            electricDistributionJunctionDataSourceButton.waitForExistence(timeout: 5),
+            "The \"Electric Distribution Junction\" button doesn't exist."
         )
         
         electricDistributionDeviceDataSourceButton.tap()
@@ -2002,27 +2014,23 @@ final class FeatureFormViewTests: XCTestCase {
         let connectivityLabel = app.staticTexts["Connectivity"]
         let discardButton = app.buttons["Discard"]
         let electricDistributionDevice2 = app.buttons["Electric Distribution Device, 2"]
+        let electricDistributionDevice3 = app.buttons["Electric Distribution Device, 3"]
+        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
         let electricDistributionDeviceLabel = app.staticTexts["Electric Distribution Device"]
         let electricDistributionJunctionButton5 = app.buttons["Electric Distribution Junction, 5"]
+        let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
         let electricDistributionLine1 = app.buttons["Electric Distribution Line, 1"]
-        let electricDistributionLineDataSourceButton = app.buttons["Electric Distribution Line"]
         let elementTitle = app.staticTexts["Associations"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
-        let fractionAlongEdgeLabel = app.staticTexts["Fraction Along Edge"]
-        let fractionAlongEdgeSlider = app.sliders.firstMatch
-        /// Despite the test specifying setting the slider to 75%, the framework exceeds the target by a
-        /// little bit.
-        let fractionAlongEdgeValueAfter = app.staticTexts["77%"]
-        let fractionAlongEdgeValueBefore = app.staticTexts["0%"]
         let fromElementLabel = app.staticTexts["From Element"]
-        let lowVoltageButton = app.staticTexts["Low Voltage"].firstMatch
-        let lowVoltageLabel = app.staticTexts["Low Voltage"]
+        let switchButton = app.staticTexts["Switch"].firstMatch
+        let switchLabel = app.staticTexts["Switch"]
         let newAssociationText = app.staticTexts["New Association"]
         let saveButton = app.buttons["Save"]
         let terminalLabel = app.staticTexts["Terminal"]
         let terminalPicker = app.buttons["Terminal, High"]
         let toElementLabel = app.staticTexts["To Element"]
-        let undergroundThreePhaseButton = app.buttons["Asset Type Underground Three Phase 85"]
+        let undergroundMediumVoltageThreePhaseDisconnectButton = app.buttons["Asset Type Underground Medium Voltage Three Phase Disconnect 493"]
         
 #if targetEnvironment(macCatalyst)
         let addAssociationButton = app.buttons["Add Association"]
@@ -2076,25 +2084,30 @@ final class FeatureFormViewTests: XCTestCase {
         fromNetworkDataSourceButton.tap()
         
         XCTAssertTrue(
-            electricDistributionLineDataSourceButton.waitForExistence(timeout: 5),
-            "The \"Electric Distribution Line\" button doesn't exist."
+            electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
+            "The \"Electric Distribution Device\" button doesn't exist."
         )
-        
-        electricDistributionLineDataSourceButton.tap()
         
         XCTAssertTrue(
-            undergroundThreePhaseButton.firstMatch.waitForExistence(timeout: 5),
-            "The Underground Three Phase button doesn't exist."
+            electricDistributionJunctionDataSourceButton.waitForExistence(timeout: 5),
+            "The \"Electric Distribution Junction\" button doesn't exist."
         )
         
-        undergroundThreePhaseButton.firstMatch.tap()
+        electricDistributionDeviceDataSourceButton.tap()
         
         XCTAssertTrue(
-            lowVoltageButton.firstMatch.waitForExistence(timeout: 5),
-            "The \"Low Voltage\" candidate doesn't exist."
+            undergroundMediumVoltageThreePhaseDisconnectButton.firstMatch.waitForExistence(timeout: 5),
+            "The Underground Medium Voltage Three Phase Disconnect button doesn't exist."
         )
         
-        lowVoltageButton.firstMatch.tap()
+        undergroundMediumVoltageThreePhaseDisconnectButton.firstMatch.tap()
+        
+        XCTAssertTrue(
+            switchButton.firstMatch.waitForExistence(timeout: 5),
+            "The \"Switch\" candidate doesn't exist."
+        )
+        
+        switchButton.firstMatch.tap()
         
         XCTAssertTrue(
             newAssociationText.waitForExistence(timeout: 5),
@@ -2137,23 +2150,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            lowVoltageLabel.waitForExistence(timeout: 5),
+            switchLabel.waitForExistence(timeout: 5),
             "The to element value doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            fractionAlongEdgeLabel.waitForExistence(timeout: 5),
-            "The fraction along edge label doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            fractionAlongEdgeValueBefore.waitForExistence(timeout: 5),
-            "The fraction along edge label doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            fractionAlongEdgeSlider.waitForExistence(timeout: 5),
-            "The fraction along edge slider doesn't exist."
         )
         
         XCTAssertTrue(
@@ -2173,17 +2171,7 @@ final class FeatureFormViewTests: XCTestCase {
             "The Low terminal option doesn't exist."
         )
         
-        terminalLowButton.tap()
-        
-#if targetEnvironment(macCatalyst)
-        XCTExpectFailure("The mouse is known to miss the drag handle when starting from 0%.")
-#endif
-        fractionAlongEdgeSlider.adjust(toNormalizedSliderPosition: 0.75)
-        
-        XCTAssertTrue(
-            fractionAlongEdgeValueAfter.waitForExistence(timeout: 5),
-            "The fraction along edge label doesn't exist."
-        )
+        terminalHighButton.tap()
         
         addButton.tap()
         
@@ -2193,13 +2181,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            electricDistributionDevice2.waitForExistence(timeout: 5),
+            electricDistributionDevice3.waitForExistence(timeout: 5),
             "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            electricDistributionLine1.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Line\" doesn't exist."
         )
         
         XCTAssertTrue(
