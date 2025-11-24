@@ -87,12 +87,6 @@ private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
         HStack(alignment: .firstTextBaseline) {
-            Text(text)
-                .accessibilityIdentifier("\(element.label) Text Input Preview")
-                .fixedSize(horizontal: false, vertical: true)
-                .lineLimit(5)
-                .truncationMode(.tail)
-                .frame(minHeight: 100, alignment: .top)
             TextField(
                 element.label,
                 text: $text,
