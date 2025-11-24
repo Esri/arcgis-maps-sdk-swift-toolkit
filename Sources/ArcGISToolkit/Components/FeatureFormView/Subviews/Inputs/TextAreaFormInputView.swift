@@ -27,7 +27,7 @@ struct TextAreaFormInputView: View {
     /// A Boolean value indicating whether the full screen text input is presented.
     @State private var fullScreenTextInputIsPresented = false
     /// The element's current value.
-    @State private var value: String = ""
+    @State private var text: String = ""
     
     let element: FieldFormElement
     
@@ -40,16 +40,20 @@ struct TextAreaFormInputView: View {
     }
     
     var body: some View {
-        TextEditor(text: $value)
+        TextEditor(text: $text)
             .focused($inlineEditorIsFocused)
             .formInputStyle(isTappable: true)
             // Ideally we'd specify a line limit but the line limit modifier
             // does not currently work with the text editor (FB19423738) so we
             // use a scaled ideal height instead.
             .frame(idealHeight: idealHeight)
+            .onValueChange(of: element) { _, newFormattedValue in
+                guard text != newFormattedValue else { return }
+                text = newFormattedValue
+            }
             .scrollContentBackground(.hidden)
             .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                TextEditor(text: $value)
+                TextEditor(text: $text)
                     .focused($expandedEditorIsFocused)
                     .padding()
             }
