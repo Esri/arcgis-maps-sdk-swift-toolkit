@@ -81,6 +81,7 @@ struct TextAreaFormInputView: View {
                         FormElementFooter(element: element)
                     }
                 }
+                .padding()
             }
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
