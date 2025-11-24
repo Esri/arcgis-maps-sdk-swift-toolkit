@@ -72,14 +72,15 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
+            .onValueChange(of: element) { _, newFormattedValue in
+                guard text != newFormattedValue else { return }
+                text = newFormattedValue
+            }
 #if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
             }
 #endif
-            .onValueChange(of: element) { _, newFormattedValue in
-                text = newFormattedValue
-            }
     }
 }
 
