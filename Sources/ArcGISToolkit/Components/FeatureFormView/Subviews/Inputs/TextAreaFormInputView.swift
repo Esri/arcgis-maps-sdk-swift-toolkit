@@ -17,6 +17,9 @@ import SwiftUI
 
 /// A view for multi-line text input.
 struct TextAreaFormInputView: View {
+    /// The view model for the form.
+    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+    
     /// A Boolean value indicating whether or not the expanded field is focused.
     @FocusState private var expandedEditorIsFocused: Bool
     /// A Boolean value indicating whether or not the inline field is focused.
@@ -27,7 +30,7 @@ struct TextAreaFormInputView: View {
     /// A Boolean value indicating whether the full screen text input is presented.
     @State private var fullScreenTextInputIsPresented = false
     /// The element's current value.
-    @State private var text: String = ""
+    @State private var text = ""
     
     let element: FieldFormElement
     
@@ -47,6 +50,11 @@ struct TextAreaFormInputView: View {
             // does not currently work with the text editor (FB19423738) so we
             // use a scaled ideal height instead.
             .frame(idealHeight: idealHeight)
+            .onChange(of: text) {
+                guard text != element.formattedValue else { return }
+                element.convertAndUpdateValue(text)
+                embeddedFeatureFormViewModel.evaluateExpressions()
+            }
             .onValueChange(of: element) { _, newFormattedValue in
                 guard text != newFormattedValue else { return }
                 text = newFormattedValue
