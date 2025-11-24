@@ -50,6 +50,9 @@ struct TextAreaFormInputView: View {
             // does not currently work with the text editor (FB19423738) so we
             // use a scaled ideal height instead.
             .frame(idealHeight: idealHeight)
+            .onChange(of: inlineEditorIsFocused) {
+                embeddedFeatureFormViewModel.focusedElement = inlineEditorIsFocused ? element : nil
+            }
             .onChange(of: text) {
                 guard text != element.formattedValue else { return }
                 element.convertAndUpdateValue(text)
@@ -61,9 +64,23 @@ struct TextAreaFormInputView: View {
             }
             .scrollContentBackground(.hidden)
             .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                TextEditor(text: $text)
-                    .focused($expandedEditorIsFocused)
-                    .padding()
+                NavigationStack {
+                    Section {
+                        TextEditor(text: $text)
+                            .focused($expandedEditorIsFocused)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(element.label)
+                            .toolbar {
+                                ToolbarItem(placement: .topBarTrailing) {
+                                    Button.done {
+                                        fullScreenTextInputIsPresented = false
+                                    }
+                                }
+                            }
+                    } footer: {
+                        FormElementFooter(element: element)
+                    }
+                }
             }
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
