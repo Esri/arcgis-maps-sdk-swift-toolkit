@@ -26,9 +26,6 @@ struct TextInput: View {
     /// Performs camera authorization request handling.
     @State private var cameraRequester = CameraRequester()
     
-    /// A Boolean value indicating whether the full screen text input is presented.
-    @State private var fullScreenTextInputIsPresented = false
-    
     /// A Boolean value indicating whether the code scanner is presented.
     @State private var scannerIsPresented = false
     
@@ -75,17 +72,12 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
-            .onTapGesture {
-                if element.isMultiline {
-                    fullScreenTextInputIsPresented = true
-                }
-            }
 #if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
             }
 #endif
-            .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+            .onValueChange(of: element) { _, newFormattedValue in
                 text = newFormattedValue
             }
     }
@@ -95,45 +87,33 @@ private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
         HStack(alignment: .firstTextBaseline) {
-            Group {
-                if element.isMultiline {
-                    Text(text)
-                        .accessibilityIdentifier("\(element.label) Text Input Preview")
-                        .fixedSize(horizontal: false, vertical: true)
-                        .lineLimit(5)
-                        .truncationMode(.tail)
-                        .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(text: $text, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel)
-                                .padding()
-#if targetEnvironment(macCatalyst)
-                                .environment(embeddedFeatureFormViewModel)
-#endif
-                        }
-                        .frame(minHeight: 100, alignment: .top)
-                } else {
-                    TextField(
-                        element.label,
-                        text: $text,
-                        prompt: Text(element.input is BarcodeScannerFormInput ? String.noValue : element.hint).foregroundColor(.secondary),
-                        axis: .horizontal
-                    )
-                    .accessibilityIdentifier("\(element.label) Text Input")
-                    .focused($isFocused)
-                    .keyboardType(keyboardType)
+            Text(text)
+                .accessibilityIdentifier("\(element.label) Text Input Preview")
+                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(5)
+                .truncationMode(.tail)
+                .frame(minHeight: 100, alignment: .top)
+            TextField(
+                element.label,
+                text: $text,
+                prompt: Text(element.input is BarcodeScannerFormInput ? String.noValue : element.hint).foregroundColor(.secondary),
+                axis: .horizontal
+            )
+            .accessibilityIdentifier("\(element.label) Text Input")
+            .focused($isFocused)
+            .keyboardType(keyboardType)
 #if os(visionOS)
-                    // No need for hover effect since it will be applied
-                    // properly at 'formInputStyle'.
-                    .hoverEffectDisabled()
+            // No need for hover effect since it will be applied
+            // properly at 'formInputStyle'.
+            .hoverEffectDisabled()
 #endif
-                    .onChange(of: isFocused) {
-                        embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
-                    }
-                    .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
-                        // Another form input took focus.
-                        if embeddedFeatureFormViewModel.focusedElement != element {
-                            isFocused  = false
-                        }
-                    }
+            .onChange(of: isFocused) {
+                embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+            }
+            .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
+                // Another form input took focus.
+                if embeddedFeatureFormViewModel.focusedElement != element {
+                    isFocused  = false
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -150,8 +130,7 @@ private extension TextInput {
 #endif
             .scrollContentBackground(.hidden)
             if !text.isEmpty,
-               !isBarcodeScanner,
-               !element.isMultiline {
+               !isBarcodeScanner {
                 XButton(.clear) {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
@@ -228,95 +207,7 @@ private extension TextInput {
 }
 
 private extension TextInput {
-    /// A view for displaying a multiline text input outside the body of the feature form view.
-    ///
-    /// By moving outside of the feature form view's scroll view we let the text field naturally manage
-    /// keeping the input caret visible.
-    struct FullScreenTextInput: View {
-        /// The current text value.
-        @Binding var text: String
-        
-        /// An action that dismisses the current presentation.
-        @Environment(\.dismiss) private var dismiss
-        
-        /// A Boolean value indicating whether the text field is focused.
-        @FocusState private var isFocused: Bool
-        
-        /// The element the input belongs to.
-        let element: FieldFormElement
-        
-        /// The view model for the form.
-        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
-        
-        var body: some View {
-            HStack {
-                FormElementHeader(element: element)
-                Button.done {
-                    dismiss()
-                }
-#if !os(visionOS)
-                .buttonStyle(.plain)
-                .foregroundStyle(Color.accentColor)
-#endif
-            }
-            RepresentedUITextView(initialText: text) { text in
-                guard text != element.formattedValue else { return }
-                element.convertAndUpdateValue(text)
-                embeddedFeatureFormViewModel.evaluateExpressions()
-            } onTextViewDidEndEditing: { text in
-                self.text = text
-            }
-            .focused($isFocused)
-            .onAppear {
-                isFocused = true
-            }
-            .onChange(of: isFocused) {
-                embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
-            }
-            Spacer()
-            FormElementFooter(element: element)
-        }
-    }
-}
-
-private extension TextInput {
     private var isBarcodeScanner: Bool {
         element.input is BarcodeScannerFormInput
-    }
-}
-
-private extension View {
-    /// Wraps `onValueChange(of:action:)` with an additional boolean property that when false will
-    /// not monitor value changes.
-    /// - Parameters:
-    ///   - element: The form element to watch for changes on.
-    ///   - when: The boolean value which disables monitoring. When `true` changes will be monitored.
-    ///   - action: The action which watches for changes.
-    /// - Returns: The modified view.
-    func onValueChange(of element: FieldFormElement, when: Bool, action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void) -> some View {
-        modifier(
-            ConditionalChangeOfModifier(element: element, condition: when) { newValue, newFormattedValue in
-                action(newValue, newFormattedValue)
-            }
-        )
-    }
-}
-
-private struct ConditionalChangeOfModifier: ViewModifier {
-    let element: FieldFormElement
-    
-    let condition: Bool
-    
-    let action: (_ newValue: Any?, _ newFormattedValue: String) -> Void
-    
-    func body(content: Content) -> some View {
-        if condition {
-            content
-                .onValueChange(of: element) { newValue, newFormattedValue in
-                    action(newValue, newFormattedValue)
-                }
-        } else {
-            content
-        }
     }
 }
