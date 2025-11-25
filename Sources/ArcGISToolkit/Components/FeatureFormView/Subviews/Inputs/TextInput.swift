@@ -17,8 +17,10 @@ import SwiftUI
 
 /// A view for text input.
 struct TextInput: View {
-    /// The view model for the form.
+    /// The view model for the embedded feature form.
     @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+    /// The view model for the feature form.
+    @Environment(FeatureFormViewModel.self) private var featureFormViewModel
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -81,15 +83,15 @@ struct TextInput: View {
                     fullScreenTextInputIsPresented = true
                 }
             }
-            .onValueChange(of: element) { _, newFormattedValue in
-                guard text != newFormattedValue else { return }
-                text = newFormattedValue
-            }
 #if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
             }
 #endif
+            .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+                guard text != newFormattedValue else { return }
+                text = newFormattedValue
+            }
     }
 }
 
@@ -105,23 +107,12 @@ private extension TextInput {
                         .lineLimit(5)
                         .truncationMode(.tail)
                         .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            NavigationStack {
-                                Section {
-                                    TextEditor(text: $text)
-                                        .navigationBarTitleDisplayMode(.inline)
-                                        .navigationTitle(element.label)
-                                        .toolbar {
-                                            ToolbarItem(placement: .topBarTrailing) {
-                                                Button.done {
-                                                    fullScreenTextInputIsPresented = false
-                                                }
-                                            }
-                                        }
-                                } footer: {
-                                    FormElementFooter(element: element)
-                                }
-                            }
-                            .padding()
+                            FullScreenTextInput(text: $text, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel)
+                                .padding()
+#if targetEnvironment(macCatalyst)
+                                .environment(embeddedFeatureFormViewModel)
+                                .environment(featureFormViewModel)
+#endif
                         }
                         .frame(minHeight: 100, alignment: .top)
                 } else {
@@ -242,7 +233,89 @@ private extension TextInput {
 }
 
 private extension TextInput {
+    /// A view for displaying a multiline text input outside the body of the feature form view.
+    ///
+    /// By moving outside of the feature form view's scroll view we let the text field naturally manage
+    /// keeping the input caret visible.
+    struct FullScreenTextInput: View {
+        /// The current text value.
+        @Binding var text: String
+        
+        /// An action that dismisses the current presentation.
+        @Environment(\.dismiss) private var dismiss
+        
+        /// A Boolean value indicating whether the text field is focused.
+        @FocusState private var isFocused: Bool
+        
+        /// The element the input belongs to.
+        let element: FieldFormElement
+        
+        /// The view model for the form.
+        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
+        
+        var body: some View {
+            HStack {
+                FormElementHeader(element: element)
+                Button.done {
+                    dismiss()
+                }
+#if !os(visionOS)
+                .buttonStyle(.plain)
+                .foregroundStyle(Color.accentColor)
+#endif
+            }
+            TextEditor(text: $text)
+                .focused($isFocused)
+                .onAppear {
+                    isFocused = true
+                }
+                .onChange(of: isFocused) {
+                    embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                }
+            Spacer()
+            FormElementFooter(element: element)
+        }
+    }
+}
+
+private extension TextInput {
     private var isBarcodeScanner: Bool {
         element.input is BarcodeScannerFormInput
+    }
+}
+
+private extension View {
+    /// Wraps `onValueChange(of:action:)` with an additional boolean property that when false will
+    /// not monitor value changes.
+    /// - Parameters:
+    ///   - element: The form element to watch for changes on.
+    ///   - when: The boolean value which disables monitoring. When `true` changes will be monitored.
+    ///   - action: The action which watches for changes.
+    /// - Returns: The modified view.
+    func onValueChange(of element: FieldFormElement, when: Bool, action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void) -> some View {
+        modifier(
+            ConditionalChangeOfModifier(element: element, condition: when) { newValue, newFormattedValue in
+                action(newValue, newFormattedValue)
+            }
+        )
+    }
+}
+
+private struct ConditionalChangeOfModifier: ViewModifier {
+    let element: FieldFormElement
+    
+    let condition: Bool
+    
+    let action: (_ newValue: Any?, _ newFormattedValue: String) -> Void
+    
+    func body(content: Content) -> some View {
+        if condition {
+            content
+                .onValueChange(of: element) { newValue, newFormattedValue in
+                    action(newValue, newFormattedValue)
+                }
+        } else {
+            content
+        }
     }
 }
