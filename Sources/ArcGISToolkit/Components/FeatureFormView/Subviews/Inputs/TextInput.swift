@@ -26,6 +26,9 @@ struct TextInput: View {
     /// Performs camera authorization request handling.
     @State private var cameraRequester = CameraRequester()
     
+    /// A Boolean value indicating whether the full screen text input is presented.
+    @State private var fullScreenTextInputIsPresented = false
+    
     /// A Boolean value indicating whether the code scanner is presented.
     @State private var scannerIsPresented = false
     
@@ -58,9 +61,10 @@ struct TextInput: View {
     ///   - element: The input's parent element.
     init(element: FieldFormElement) {
         precondition(
-            element.input is TextBoxFormInput
+            element.input is TextAreaFormInput
+            || element.input is TextBoxFormInput
             || element.input is BarcodeScannerFormInput,
-            "\(Self.self).\(#function) element's input must be \(TextBoxFormInput.self) or \(BarcodeScannerFormInput.self)."
+            "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self), \(TextBoxFormInput.self) or \(BarcodeScannerFormInput.self)."
         )
         self.element = element
     }
@@ -71,6 +75,11 @@ struct TextInput: View {
                 guard text != element.formattedValue else { return }
                 element.convertAndUpdateValue(text)
                 embeddedFeatureFormViewModel.evaluateExpressions()
+            }
+            .onTapGesture {
+                if element.isMultiline {
+                    fullScreenTextInputIsPresented = true
+                }
             }
             .onValueChange(of: element) { _, newFormattedValue in
                 guard text != newFormattedValue else { return }
@@ -88,27 +97,57 @@ private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
         HStack(alignment: .firstTextBaseline) {
-            TextField(
-                element.label,
-                text: $text,
-                prompt: Text(element.input is BarcodeScannerFormInput ? String.noValue : element.hint).foregroundColor(.secondary),
-                axis: .horizontal
-            )
-            .accessibilityIdentifier("\(element.label) Text Input")
-            .focused($isFocused)
-            .keyboardType(keyboardType)
+            Group {
+                if element.isMultiline {
+                    Text(text)
+                        .accessibilityIdentifier("\(element.label) Text Input Preview")
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(5)
+                        .truncationMode(.tail)
+                        .sheet(isPresented: $fullScreenTextInputIsPresented) {
+                            NavigationStack {
+                                Section {
+                                    TextEditor(text: $text)
+                                        .navigationBarTitleDisplayMode(.inline)
+                                        .navigationTitle(element.label)
+                                        .toolbar {
+                                            ToolbarItem(placement: .topBarTrailing) {
+                                                Button.done {
+                                                    fullScreenTextInputIsPresented = false
+                                                }
+                                            }
+                                        }
+                                } footer: {
+                                    FormElementFooter(element: element)
+                                }
+                            }
+                            .padding()
+                        }
+                        .frame(minHeight: 100, alignment: .top)
+                } else {
+                    TextField(
+                        element.label,
+                        text: $text,
+                        prompt: Text(element.input is BarcodeScannerFormInput ? String.noValue : element.hint).foregroundColor(.secondary),
+                        axis: .horizontal
+                    )
+                    .accessibilityIdentifier("\(element.label) Text Input")
+                    .focused($isFocused)
+                    .keyboardType(keyboardType)
 #if os(visionOS)
-            // No need for hover effect since it will be applied
-            // properly at 'formInputStyle'.
-            .hoverEffectDisabled()
+                    // No need for hover effect since it will be applied
+                    // properly at 'formInputStyle'.
+                    .hoverEffectDisabled()
 #endif
-            .onChange(of: isFocused) {
-                embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
-            }
-            .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
-                // Another form input took focus.
-                if embeddedFeatureFormViewModel.focusedElement != element {
-                    isFocused  = false
+                    .onChange(of: isFocused) {
+                        embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                    }
+                    .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
+                        // Another form input took focus.
+                        if embeddedFeatureFormViewModel.focusedElement != element {
+                            isFocused  = false
+                        }
+                    }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -125,7 +164,8 @@ private extension TextInput {
 #endif
             .scrollContentBackground(.hidden)
             if !text.isEmpty,
-               !isBarcodeScanner {
+               !isBarcodeScanner,
+               !element.isMultiline {
                 XButton(.clear) {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
