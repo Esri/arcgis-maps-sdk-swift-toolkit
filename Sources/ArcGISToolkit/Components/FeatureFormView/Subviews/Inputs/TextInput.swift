@@ -272,6 +272,7 @@ private extension TextInput {
                 .onChange(of: isFocused) {
                     embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
                 }
+                .scrollContentBackground(.hidden)
             Spacer()
             FormElementFooter(element: element)
         }
