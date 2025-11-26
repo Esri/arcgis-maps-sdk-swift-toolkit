@@ -1048,7 +1048,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Unsupported Value"]
         let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
+        let noValueButton = app.buttons["No value Combo Box Option"]
         let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
         let unsupportedValue = app.buttons["0"]
         
@@ -1724,7 +1724,7 @@ final class FeatureFormViewTests: XCTestCase {
         let elementTitle = app.staticTexts["Associations"]
         let fieldValue = app.staticTexts["Asset type Combo Box Value"]
         let filterResults = app.staticTexts["Connected"]
-        let firstOptionButton = app.buttons["Unknown"]
+        let firstOptionButton = app.buttons["Unknown Combo Box Option"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let formTitle2 = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
