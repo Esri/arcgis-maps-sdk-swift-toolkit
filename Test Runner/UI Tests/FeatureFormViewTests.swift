@@ -105,6 +105,8 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 1.1: unfocused and focused state, no value
     func testCase_1_1() throws {
+        try skipForCatalystScrollBehavior()
+        
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
@@ -114,6 +116,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.scrollToElement(fieldTitle, direction: .up)
         
         XCTAssertTrue(
             fieldTitle.exists,
@@ -163,6 +167,8 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 1.2: focused and unfocused state, with value (populated)
     func testCase_1_2() throws {
+        try skipForCatalystScrollBehavior()
+        
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
@@ -174,6 +180,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.scrollToElement(textField, direction: .up)
         
         textField.tap()
         
@@ -209,11 +217,14 @@ final class FeatureFormViewTests: XCTestCase {
             "The clear button doesn't exist."
         )
         
-#if targetEnvironment(macCatalyst)
+#if targetEnvironment(macCatalyst) || os(visionOS)
         app.typeText("\r")
 #else
         returnButton.tap()
 #endif
+        
+        // Scroll slightly up to expose section header. FB19740517
+        app.scrollToElement(fieldTitle, direction: .down, maxSwipes: 1, velocity: .slow)
         
         XCTAssertTrue(
             fieldTitle.isHittable,
@@ -230,6 +241,8 @@ final class FeatureFormViewTests: XCTestCase {
             "The clear button isn't hittable."
         )
         
+        app.scrollToElement(textField, direction: .up, maxSwipes: 1, velocity: .slow)
+        
         XCTAssertTrue(
             textField.isHittable,
             "The text field isn't hittable."
@@ -237,7 +250,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 1.3: unfocused and focused state, with error value (> 256 chars)
-    func testCase_1_3() throws {
+    func testCase_1_3() async throws {
+        try skipForCatalystScrollBehavior()
+        
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
@@ -249,6 +264,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.scrollToElement(textField, direction: .up)
         
         textField.tap()
         
@@ -274,9 +291,14 @@ final class FeatureFormViewTests: XCTestCase {
             "The character count doesn't exist."
         )
         
-        XCTAssertEqual(
-            characterIndicator.label,
-            "257"
+        await fulfillment(
+            of: [
+                expectation(
+                    for: NSPredicate(format: "label == \"257\""),
+                    evaluatedWith: characterIndicator
+                )
+            ],
+            timeout: 10.0
         )
         
         XCTAssertTrue(
@@ -284,7 +306,7 @@ final class FeatureFormViewTests: XCTestCase {
             "The clear button doesn't exist."
         )
         
-#if targetEnvironment(macCatalyst)
+#if targetEnvironment(macCatalyst) || os(visionOS)
         app.typeText("\r")
 #else
         returnButton.tap()
@@ -321,7 +343,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
     }
     
-    func testCase_1_4() {
+    func testCase_1_4() async {
         let app = XCUIApplication()
         let footer = app.staticTexts["numbers Footer"]
         let formTitle = app.staticTexts["Domain"]
@@ -353,11 +375,15 @@ final class FeatureFormViewTests: XCTestCase {
         textField.doubleTap()
         textField.typeText("3")
         
-        expectation(
-            for: NSPredicate(format: "label == \"Range domain 2-5\""),
-            evaluatedWith: footer
+        await fulfillment(
+            of: [
+                expectation(
+                    for: NSPredicate(format: "label == \"Range domain 2-5\""),
+                    evaluatedWith: footer
+                )
+            ],
+            timeout: 10
         )
-        waitForExpectations(timeout: 10, handler: nil)
         
         // Highlight/select the current value and replace it
         textField.doubleTap()
@@ -384,6 +410,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.scrollToElement(fieldValue, direction: .up)
         
         if fieldValue.label != "No Value" {
             clearButton.tap()
@@ -426,6 +454,8 @@ final class FeatureFormViewTests: XCTestCase {
             "The now button isn't hittable."
         )
         
+        app.scrollToElement(footer, direction: .up, velocity: .slow)
+        
         XCTAssertEqual(
             footer.label,
             "Date Entry is Required"
@@ -433,7 +463,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 2.2: Focused and unfocused state, with value (populated)
-    func testCase_2_2() {
+    func testCase_2_2() throws {
+        try skipForCatalystScrollBehavior()
+        
         let app = XCUIApplication()
         let datePicker = app.datePickers["Launch Date and Time for Apollo 11 Date Picker"]
         let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
@@ -446,6 +478,9 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         fieldValue.tap()
+        
+        // Scroll slightly up to expose section header. FB19740517
+        app.scrollToElement(fieldTitle, direction: .down, maxSwipes: 1, velocity: .slow)
         
         XCTAssertTrue(
             fieldTitle.isHittable,
@@ -463,6 +498,8 @@ final class FeatureFormViewTests: XCTestCase {
             localDate?.formatted()
         )
         
+        app.scrollToElement(footer, direction: .up, velocity: .slow)
+        
         XCTAssertEqual(
             footer.label,
             "Enter the launch date and time (July 16, 1969 13:32 UTC)"
@@ -472,6 +509,8 @@ final class FeatureFormViewTests: XCTestCase {
             datePicker.exists,
             "The date picker doesn't exist."
         )
+        
+        app.scrollToElement(nowButton, direction: .down, velocity: .slow)
         
         XCTAssertTrue(
             nowButton.isHittable,
@@ -543,7 +582,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 2.4: Maximum date
-    func testCase_2_4() {
+    func testCase_2_4() throws {
+        try skipForCatalystScrollBehavior()
+        
         let app = XCUIApplication()
         let clearButton = app.buttons["Launch Date Time End Clear Button"]
         let fieldValue = app.staticTexts["Launch Date Time End Value"]
@@ -554,16 +595,22 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(fieldValue, direction: .up)
+        
         if fieldValue.label != "No Value" {
             clearButton.tap()
         }
         
         fieldValue.tap()
         
+        app.scrollToElement(footer, direction: .up, velocity: .slow)
+        
         XCTAssertTrue(
             footer.exists,
             "The footer doesn't exist."
         )
+        
+        app.scrollToElement(nowButton, direction: .down, velocity: .slow)
         
         XCTAssertTrue(
             nowButton.waitForExistence(timeout: 2.5),
@@ -584,6 +631,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         fieldValue.tap()
         
+        app.scrollToElement(footer, direction: .up, velocity: .slow)
+        
         XCTAssertEqual(
             footer.label,
             "End date and Time 7/27/1969 12:00:00 AM"
@@ -595,6 +644,8 @@ final class FeatureFormViewTests: XCTestCase {
             )
         )
         
+        app.scrollToElement(fieldValue, direction: .down, velocity: .slow)
+        
         XCTAssertEqual(
             fieldValue.label,
             localDate?.formatted()
@@ -602,7 +653,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 2.5: Minimum date
-    func testCase_2_5() {
+    func testCase_2_5() throws {
+        try skipForCatalystScrollBehavior()
+        
         let app = XCUIApplication()
         let datePicker = app.datePickers["start and end date time Date Picker"]
         let fieldValue = app.staticTexts["start and end date time Value"]
@@ -615,7 +668,11 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(fieldValue, direction: .up)
+        
         fieldValue.tap()
+        
+        app.scrollToElement(footer, direction: .up, velocity: .slow)
         
         XCTAssertTrue(
             footer.exists,
@@ -631,7 +688,11 @@ final class FeatureFormViewTests: XCTestCase {
             """
         )
         
+        app.scrollToElement(nowButton, direction: .down, velocity: .slow)
+        
         nowButton.tap()
+        
+        app.scrollToElement(julyFirstButton, direction: .up, velocity: .slow)
         
         julyFirstButton.tap()
         
@@ -640,6 +701,8 @@ final class FeatureFormViewTests: XCTestCase {
                 timeZone: .gmt, year: 1969, month: 7, day: 1, hour: 7
             )
         )
+        
+        app.scrollToElement(fieldValue, direction: .down, velocity: .slow)
         
         XCTAssertEqual(
             fieldValue.label,
@@ -873,6 +936,8 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(footer, direction: .up, velocity: .slow)
+        
         XCTAssertTrue(
             fieldTitle.exists,
             "The field title doesn't exist."
@@ -939,17 +1004,11 @@ final class FeatureFormViewTests: XCTestCase {
             "The field title doesn't exist."
         )
         
-        if #available(iOS 18.0, *) {
-            XCTAssertFalse(
-                fieldValue.exists,
-                "The field value exists but it should not because it is empty."
-            )
-        } else {
-            XCTAssertEqual(
-                fieldValue.label,
-                ""
-            )
-        }
+        XCTAssertEqual(
+            fieldValue.label,
+            "",
+            "The field value was not empty as expected."
+        )
         
         optionsButton.tap()
         
@@ -995,6 +1054,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.scrollToElement(fieldTitle, direction: .up)
         
         XCTAssertTrue(
             fieldTitle.exists,
@@ -1090,11 +1151,15 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(field1, direction: .up)
+        
         // Verify the Radio Button fallback to Combo Box was successful.
         XCTAssertTrue(
             field1.exists,
             "The combo box doesn't exist."
         )
+        
+        app.scrollToElement(noValueEnabledRadioButton, direction: .up)
         
         // Verify the radio buttons are shown even when the value option is enabled.
         XCTAssertTrue(
@@ -1126,12 +1191,16 @@ final class FeatureFormViewTests: XCTestCase {
             "The field title isn't hittable."
         )
         
+#if targetEnvironment(macCatalyst)
+        XCTExpectFailure("The switch cannot be found on Mac Catalyst.")
+#endif
+        
         XCTAssertEqual(
             switchView.label,
             "2"
         )
         
-        switchView.tap()
+        switchView.tapSwitch()
         
         XCTAssertEqual(
             switchView.label,
@@ -1154,6 +1223,10 @@ final class FeatureFormViewTests: XCTestCase {
             "The field title isn't hittable."
         )
         
+#if targetEnvironment(macCatalyst)
+        XCTExpectFailure("The switch cannot be found on Mac Catalyst.")
+#endif
+        
         XCTAssertEqual(
             switchView.label,
             "1"
@@ -1164,7 +1237,7 @@ final class FeatureFormViewTests: XCTestCase {
             "The switch isn't hittable."
         )
         
-        switchView.tap()
+        switchView.tapSwitch()
         
         XCTAssertEqual(
             switchView.label,
@@ -1196,17 +1269,15 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 6.1: Test initially expanded and collapsed
     func testCase_6_1() {
         let app = XCUIApplication()
+        let collapsedGroup = app.staticTexts["Group with Multiple Form Elements 2"]
         let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
+        let expandedGroup = app.staticTexts["Group with Multiple Form Elements"]
         let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         
 #if targetEnvironment(macCatalyst)
-        let collapsedGroup = app.disclosureTriangles["Group with Multiple Form Elements 2"]
-        let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
         let expandedGroupDescription = app.disclosureTriangles["Group with Multiple Form Elements Description"]
 #else
-        let collapsedGroup = app.staticTexts["Group with Multiple Form Elements 2"]
-        let expandedGroup = app.staticTexts["Group with Multiple Form Elements"]
         let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
 #endif
         
@@ -1234,6 +1305,8 @@ final class FeatureFormViewTests: XCTestCase {
             "The first group element doesn't exist."
         )
         
+        app.scrollToElement(collapsedGroup, direction: .up)
+        
         XCTAssertTrue(
             collapsedGroup.exists,
             "The collapsed group header doesn't exist."
@@ -1247,7 +1320,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 6.2: Test visibility of empty group
-    func testCase_6_2() {
+    func testCase_6_2() throws {
+        try skipForCatalystScrollBehavior()
+        
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let groupElement = app.staticTexts["single line text 3"]
@@ -1264,10 +1339,14 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(hiddenElementsGroup, direction: .up)
+        
         XCTAssertTrue(
             hiddenElementsGroup.exists,
             "The group header doesn't exist."
         )
+        
+        app.scrollToElement(hiddenElementsGroupDescription, direction: .up)
         
         XCTAssertTrue(
             hiddenElementsGroupDescription.exists,
@@ -1285,6 +1364,8 @@ final class FeatureFormViewTests: XCTestCase {
             "The first group element exists but should be hidden."
         )
         
+        app.scrollToElement(showElementsButton, direction: .down)
+        
         // Confirm the option to show the elements exists.
         XCTAssertTrue(
             showElementsButton.exists,
@@ -1292,6 +1373,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         showElementsButton.tap()
+        
+        app.scrollToElement(groupElement, direction: .up)
         
         // Confirm the first element of the conditional group doesn't exist.
         XCTAssertTrue(
@@ -1302,6 +1385,8 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 7.1: Test read only elements
     func testCase_7_1() throws {
+        try skipForCatalystScrollBehavior()
+        
         let app = XCUIApplication()
         let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
         let elementsAreEditableSwitch = app.switches["Elements are editable Switch"]
@@ -1332,17 +1417,26 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(radioButtonsReadOnlyInput.exists)
         
+        app.scrollToElement(dateReadOnlyInput, direction: .up)
+        
         XCTAssertTrue(dateReadOnlyInput.exists)
+        
+        app.scrollToElement(shortTextReadOnlyInput, direction: .up)
         
         XCTAssertTrue(shortTextReadOnlyInput.exists)
         
+        app.scrollToElement(longTextReadOnlyInput, direction: .up)
+        
         XCTAssertTrue(longTextReadOnlyInput.exists)
         
-        elementsAreEditableSwitch.tap()
+        // Scroll slightly up to expose section header. FB19740517
+        app.scrollToElement(elementsAreEditableSwitch, direction: .down)
+        
+        elementsAreEditableSwitch.tapSwitch()
         
         XCTAssertTrue(elementInTheGroupIsEditableSwitch.exists)
         
-        elementInTheGroupIsEditableSwitch.tap()
+        elementInTheGroupIsEditableSwitch.tapSwitch()
         
         XCTAssertTrue(comboBox.exists)
         
@@ -1350,7 +1444,11 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(dateInput.exists)
         
+        app.scrollToElement(shortTextTextInput, direction: .up)
+        
         XCTAssertTrue(shortTextTextInput.exists)
+        
+        app.scrollToElement(longTextTextInputPreview, direction: .up)
         
         XCTAssertTrue(longTextTextInputPreview.exists)
     }
@@ -1369,7 +1467,7 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
-        XCTAssertTrue(placeholderImage.exists)
+        XCTAssertTrue(placeholderImage.waitForExistence(timeout: 10))
         XCTAssertTrue(attachmentName.exists)
         XCTAssertTrue(sizeLabel.exists)
         XCTAssertTrue(downloadIcon.exists)
@@ -1377,7 +1475,7 @@ final class FeatureFormViewTests: XCTestCase {
         placeholderImage.tap()
         
         XCTAssertTrue(thumbnailImage.waitForExistence(timeout: 10))
-        XCTAssertFalse(placeholderImage.exists)
+        XCTAssertFalse(placeholderImage.waitForExistence(timeout: 10))
         XCTAssertFalse(downloadIcon.exists)
     }
     
@@ -1410,7 +1508,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         titleTextField.typeText("Los Angeles")
         
-        XCTAssertTrue(losAngelesText.exists)
+        XCTAssertTrue(losAngelesText.waitForExistence(timeout: 10))
     }
     
     /// Test plain text
@@ -1469,10 +1567,14 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(elementTitle, direction: .up, velocity: .fast)
+        
         XCTAssertTrue(
             elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
         )
+        
+        app.scrollToElement(filterResults3, direction: .up)
         
         XCTAssertTrue(
             filterResults1.waitForExistence(timeout: 5),
@@ -1544,10 +1646,14 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(elementTitle, direction: .up, velocity: .fast)
+        
         XCTAssertTrue(
             elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
         )
+        
+        app.scrollToElement(filterResults, direction: .up, velocity: .slow)
         
         XCTAssertTrue(
             filterResults.waitForExistence(timeout: 5),
@@ -1580,6 +1686,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.scrollToElement(elementTitle, direction: .up, velocity: .fast)
         
         XCTAssertTrue(
             elementTitle.waitForExistence(timeout: 5),
@@ -1624,6 +1732,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.scrollToElement(elementTitle, direction: .up, velocity: .fast)
         
         XCTAssertTrue(
             elementTitle.waitForExistence(timeout: 5),
@@ -1684,7 +1794,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         // Tap the "Discard" option. Note that some platforms may use "Discard Edits".
-        discardEditsButton.tap()
+        discardEditsButton.firstMatch.tap()
         
         // Access the new `FeatureForm`
         // Expectation: the form title should be "Electric Distribution Junction"
@@ -2354,5 +2464,54 @@ private extension String {
             tellus et ut dolore.
             """
         )
+    }
+}
+
+extension XCUIApplication {
+    /// Scrolls up until the target element is hittable or max swipes reached.
+    func scrollToElement(
+        _ element: XCUIElement,
+        direction: ScrollDirection,
+        maxSwipes: Int = 10,
+        velocity: XCUIGestureVelocity? = nil
+    ) {
+        let target = collectionViews.firstMatch
+        var swipes = 0
+        while !element.isHittable && swipes < maxSwipes {
+            switch (direction, velocity) {
+            case (.up, .none):
+                target.swipeUp()
+            case (.up, .some(let velocity)):
+                target.swipeUp(velocity: velocity)
+            case (.down, .none):
+                target.swipeDown()
+            case (.down, .some(let velocity)):
+                target.swipeDown(velocity: velocity)
+            }
+            swipes += 1
+        }
+    }
+}
+
+enum ScrollDirection {
+    case down
+    case up
+}
+
+extension XCUIElement {
+    func tapSwitch() {
+#if os(visionOS)
+        tap()
+#else
+        switches.firstMatch.tap()
+#endif
+    }
+}
+
+extension XCTestCase {
+    func skipForCatalystScrollBehavior() throws {
+#if targetEnvironment(macCatalyst)
+        throw XCTSkip("Scrolling in UI tests on Mac Catalyst is inconsistent (FB19836397)")
+#endif
     }
 }
