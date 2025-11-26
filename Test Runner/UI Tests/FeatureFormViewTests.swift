@@ -1006,8 +1006,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertEqual(
             fieldValue.label,
-            "",
-            "The field value was not empty as expected."
+            ""
         )
         
         optionsButton.tap()
