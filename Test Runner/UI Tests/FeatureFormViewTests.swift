@@ -835,7 +835,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Combo String"]
         let fieldValue = app.staticTexts["Combo String Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
+        let noValueButton = app.buttons["No value Combo Box Option"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -881,7 +881,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Required Combo Box Combo Box Value"]
         let footer = app.staticTexts["Required Combo Box Footer"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
+        let noValueButton = app.buttons["No value Combo Box Option"]
         let oakButton = app.buttons["Oak"]
         
         openTestCase()
