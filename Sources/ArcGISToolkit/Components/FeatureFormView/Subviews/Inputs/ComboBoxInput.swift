@@ -79,32 +79,32 @@ struct ComboBoxInput: View {
     }
     
     var body: some View {
-        HStack {
-            Text(displayedValue)
-                .accessibilityIdentifier("\(element.label) Combo Box Value")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
-                .contentShape(.rect)
-                .onTapGesture {
-                    embeddedFeatureFormViewModel.focusedElement = element
-                    isPresented = true
+        Button {
+            embeddedFeatureFormViewModel.focusedElement = element
+            isPresented = true
+        } label: {
+            HStack {
+                Text(displayedValue)
+                    .accessibilityIdentifier("\(element.label) Combo Box Value")
+                Spacer()
+                if let _ = selectedValue.codedValue, !isRequired {
+                    // Only show clear button if we have a value
+                    // and we're not required. (i.e., Don't show clear if
+                    // the field is required.)
+                    XButton(.clear) {
+                        embeddedFeatureFormViewModel.focusedElement = element
+                        defer { embeddedFeatureFormViewModel.focusedElement = nil }
+                        updateValueAndEvaluateExpressions(nil)
+                    }
+                    .accessibilityIdentifier("\(element.label) Clear Button")
+                } else {
+                    // Otherwise, always show chevron.
+                    Image(systemName: "chevron.right")
+                        .accessibilityIdentifier("\(element.label) Options Button")
                 }
-            if let _ = selectedValue.codedValue, !isRequired {
-                // Only show clear button if we have a value
-                // and we're not required. (i.e., Don't show clear if
-                // the field is required.)
-                XButton(.clear) {
-                    embeddedFeatureFormViewModel.focusedElement = element
-                    defer { embeddedFeatureFormViewModel.focusedElement = nil }
-                    updateValueAndEvaluateExpressions(nil)
-                }
-                .accessibilityIdentifier("\(element.label) Clear Button")
-            } else {
-                // Otherwise, always show chevron.
-                Image(systemName: "chevron.right")
-                    .accessibilityIdentifier("\(element.label) Options Button")
-                    .foregroundStyle(.secondary)
             }
+            .foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
+            .tint(.primary)
         }
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
@@ -221,16 +221,19 @@ extension ComboBoxInput {
     }
     
     private func makePickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
-        HStack {
-            Button(label) { action() }
-            Spacer()
-            if selected {
-                Image(systemName: "checkmark")
-#if !os(visionOS)
-                    .foregroundStyle(Color.accentColor)
-#endif
+        Button {
+            action()
+        } label: {
+            HStack {
+                Text(label)
+                Spacer()
+                if selected {
+                    Image(systemName: "checkmark")
+                        .foregroundStyle(Color.accentColor)
+                }
             }
         }
+        .accessibilityIdentifier("\(label) Combo Box Option")
     }
     
     private func updateValueAndEvaluateExpressions(_ value: CodedValue?) {
