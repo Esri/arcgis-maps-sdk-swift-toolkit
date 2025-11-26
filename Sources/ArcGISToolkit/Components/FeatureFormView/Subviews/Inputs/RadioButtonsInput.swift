@@ -58,7 +58,7 @@ struct RadioButtonsInput: View {
                 noValueOption: input.noValueOption
             )
         } else {
-            VStack(alignment: .leading, spacing: .zero) {
+            VStack(alignment: .leading) {
                 if input.noValueOption == .show {
                     makeRadioButtonRow(
                         placeholderValue,
@@ -148,7 +148,6 @@ extension RadioButtonsInput {
 #endif
                 }
             }
-            .padding(10)
             .contentShape(.rect(cornerRadius: 10))
             .hoverEffect()
         }
