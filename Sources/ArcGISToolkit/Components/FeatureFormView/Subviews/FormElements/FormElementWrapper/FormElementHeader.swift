@@ -23,12 +23,9 @@ struct FormElementHeader: View {
     let element: FormElement
     
     var body: some View {
-        HStack {
-            titleTextForElement
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-        }
-        .padding(.top, formElementPadding)
+        titleTextForElement
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
     }
     
     @ViewBuilder
@@ -53,16 +50,18 @@ extension FormElementHeader {
         @State private var isRequired = false
         
         var body: some View {
-            Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
-                .onIsEditableChange(of: element) { newIsEditable in
-                    isEditable = newIsEditable
+            HStack {
+                Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
+                    .onIsEditableChange(of: element) { newIsEditable in
+                        isEditable = newIsEditable
+                    }
+                    .onIsRequiredChange(of: element) { newIsRequired in
+                        isRequired = newIsRequired
+                    }
+                if !isEditable {
+                    Spacer()
+                    Image(systemName: "pencil.slash")
                 }
-                .onIsRequiredChange(of: element) { newIsRequired in
-                    isRequired = newIsRequired
-                }
-            Spacer()
-            if !isEditable {
-                Image(systemName: "pencil.slash")
             }
         }
     }
