@@ -1,4 +1,4 @@
-# Contribution guidelines
+# Contribution Guidelines
 
 Esri welcomes contributions to our open source projects on Github. Please see our [guidelines for contributing](https://github.com/esri/contributing).
 

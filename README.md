@@ -86,7 +86,7 @@ Please see [Configure App Secrets](Documentation/ConfigureAppSecrets.md) for add
 
 ## Issues
 
-Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/new). 
+Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/new).
 
 ## Contributing
 
