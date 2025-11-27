@@ -43,6 +43,6 @@ Expect a good amount of feedback as part of any pull request.
 
 ### License
 
-By contributing your code, you agree to license your contribution under the terms of the [Apache License 2.0](license.txt) license.
+By contributing your code, you agree to license your contribution under the terms of the [Apache License 2.0](LICENSE.txt) license.
 
 Your contributions should be an original work of authorship by you, including any modifications or additions to an existing work, that is intentionally submitted for inclusion in this repo. Contributions that require an additional third-party license or have other restrictions (including, but not limited to, related patents and trademarks) will be rejected.
