@@ -82,45 +82,43 @@ struct DateTimeInput: View {
     /// Elements for display the date selection.
     /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
-        HStack {
-            formattedDate
-                .accessibilityIdentifier("\(element.label) Value")
-                .foregroundStyle(displayColor)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(.rect)
-                .onTapGesture {
-                    withAnimation {
-                        if date == nil {
-                            if dateRange.contains(.now) {
-                                date = .now
-                            } else if let min = input.min {
-                                date = min
-                            } else if let max = input.max {
-                                date = max
-                            }
-                        }
-                        isEditing.toggle()
-                        embeddedFeatureFormViewModel.focusedElement = isEditing ? element : nil
+        Button {
+            withAnimation {
+                if date == nil {
+                    if dateRange.contains(.now) {
+                        date = .now
+                    } else if let min = input.min {
+                        date = min
+                    } else if let max = input.max {
+                        date = max
                     }
                 }
-            
-            Spacer()
-            
-            if isEditing {
-                todayOrNowButton
-            } else {
-                if date == nil {
-                    Image(systemName: "calendar")
-                        .font(.title2)
-                        .accessibilityIdentifier("\(element.label) Calendar Image")
-                        .foregroundStyle(.secondary)
-                } else if !isRequired {
-                    XButton(.clear) {
-                        embeddedFeatureFormViewModel.focusedElement = element
-                        defer { embeddedFeatureFormViewModel.focusedElement = nil }
-                        date = nil
+                isEditing.toggle()
+                embeddedFeatureFormViewModel.focusedElement = isEditing ? element : nil
+            }
+        } label: {
+            HStack {
+                formattedDate
+                    .accessibilityIdentifier("\(element.label) Value")
+                    .foregroundStyle(displayColor)
+                Spacer()
+                if isEditing {
+                    todayOrNowButton
+                } else {
+                    if date == nil {
+                        Image(systemName: "calendar")
+                            .font(.title2)
+                            .accessibilityIdentifier("\(element.label) Calendar Image")
+                            .foregroundStyle(.secondary)
+                    } else if !isRequired {
+                        XButton(.clear) {
+                            embeddedFeatureFormViewModel.focusedElement = element
+                            defer { embeddedFeatureFormViewModel.focusedElement = nil }
+                            date = nil
+                        }
+                        .accessibilityIdentifier("\(element.label) Clear Button")
+                        .tint(.secondary)
                     }
-                    .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
         }
