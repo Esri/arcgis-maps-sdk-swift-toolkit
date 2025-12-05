@@ -617,6 +617,9 @@ final class FeatureFormViewTests: XCTestCase {
         
         fieldValue.tap()
         
+        // Swipe up to reveal the entire date picker.
+        app.scrollViews.firstMatch.swipeUp()
+        
         XCTAssertTrue(
             footer.exists,
             "The footer doesn't exist."
@@ -632,6 +635,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         nowButton.tap()
+        
+        XCTAssertTrue(julyFirstButton.waitForExistence(timeout: 5))
         
         julyFirstButton.tap()
         
