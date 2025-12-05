@@ -2027,10 +2027,11 @@ final class FeatureFormViewTests: XCTestCase {
         let elementTitle = app.staticTexts["Associations"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let fromElementLabel = app.staticTexts["From Element"]
-        let switchButton = app.staticTexts["Switch"].firstMatch
-        let switchLabel = app.staticTexts["Switch"]
         let newAssociationText = app.staticTexts["New Association"]
         let saveButton = app.buttons["Save"]
+        let searchField = app.textFields["Search"].firstMatch
+        let switchButton = app.staticTexts["Switch"].firstMatch
+        let switchLabel = app.staticTexts["Switch"]
         let terminalLabel = app.staticTexts["Terminal"]
         let terminalPicker = app.buttons["Terminal, High"]
         let toElementLabel = app.staticTexts["To Element"]
@@ -2098,6 +2099,10 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         electricDistributionDeviceDataSourceButton.tap()
+        
+        searchField.tap()
+        
+        searchField.typeText("disconnect")
         
         XCTAssertTrue(
             undergroundMediumVoltageThreePhaseDisconnectButton.firstMatch.waitForExistence(timeout: 5),
