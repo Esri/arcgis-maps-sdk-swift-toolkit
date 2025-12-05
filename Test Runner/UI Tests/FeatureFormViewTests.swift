@@ -2102,7 +2102,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         searchField.tap()
         
-        searchField.typeText("disconnect")
+        searchField.typeText("Disconnect")
         
         XCTAssertTrue(
             undergroundMediumVoltageThreePhaseDisconnectButton.firstMatch.waitForExistence(timeout: 5),
