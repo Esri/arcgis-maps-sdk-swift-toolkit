@@ -2024,7 +2024,6 @@ final class FeatureFormViewTests: XCTestCase {
         let electricDistributionDeviceLabel = app.staticTexts["Electric Distribution Device"]
         let electricDistributionJunctionButton5 = app.buttons["Electric Distribution Junction, 5"]
         let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
-        let electricDistributionLine1 = app.buttons["Electric Distribution Line, 1"]
         let elementTitle = app.staticTexts["Associations"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let fromElementLabel = app.staticTexts["From Element"]
