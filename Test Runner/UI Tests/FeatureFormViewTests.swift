@@ -349,8 +349,8 @@ final class FeatureFormViewTests: XCTestCase {
             "Enter value from 2.0 to 5.0"
         )
         
-        // Highlight/select the current value and replace it
-        textField.doubleTap()
+        // Replace the current value with 3
+        textField.typeText(XCUIKeyboardKey.delete.rawValue)
         textField.typeText("3")
         
         expectation(
@@ -359,8 +359,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         waitForExpectations(timeout: 10, handler: nil)
         
-        // Highlight/select the current value and replace it
-        textField.doubleTap()
+        // Replace the current value with 6
+        textField.typeText(XCUIKeyboardKey.delete.rawValue)
         textField.typeText("6")
         
         XCTAssertEqual(
