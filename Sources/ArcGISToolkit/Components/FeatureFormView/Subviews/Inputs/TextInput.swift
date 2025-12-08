@@ -124,8 +124,6 @@ private extension TextInput {
                     .focused($isFocused)
                     .keyboardType(keyboardType)
 #if os(visionOS)
-                    // No need for hover effect since it will be applied
-                    // properly at 'formInputStyle'.
                     .hoverEffectDisabled()
 #endif
                     .onChange(of: isFocused) {
