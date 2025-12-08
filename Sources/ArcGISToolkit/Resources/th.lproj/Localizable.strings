@@ -1,3 +1,9 @@
+/* A label with the name of a terminal on an associated
+utility element (first variable) and a percentage
+(second variable) indicating the relative location along
+an edge where a utility association is (logically) located. */
+"%@, %@" = "%@, %@";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld ที่เลือก";
 
@@ -14,7 +20,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "ไม่สามารถดาวน์โหลดพื้นที่แผนที่ได้ในครั้งนี้";
 
-/* A label for an option to add a new utility association. */
+/* A label for a button to add a new utility association. */
+"Add" = "เพิ่ม";
+
+/* A label for a button to add a new utility network association. */
 "Add Association" = "เพิ่มความสัมพันธ์";
 
 /* A label for a button to add a map area. */
@@ -32,9 +41,6 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "อินพุทและผลลัพธ์การติดตามทั้งหมดจะสูญหาย";
 
-/* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "อนุญาต";
-
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "เกิดข้อผิดพลาดขึ้นขณะดึงข้อมูลพื้นที่แผนที่";
 
@@ -44,8 +50,17 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "ชื่อพื้นที่";
 
+/* A navigation title for the Association Settings page. */
+"Association Settings" = "การตั้งค่าความสัมพันธ์";
+
+/* A label in reference to a utility association type. */
+"Association Type" = "ประเภทความสัมพันธ์";
+
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "ความสัมพันธ์";
+
+/* A label for the "Attachment" utility association kind. */
+"Attachment" = "ไฟล์แนบ";
 
 /* A label in reference to attachments. */
 "Attachments" = "เอกสารแนบ";
@@ -58,6 +73,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "จำเป็นต้องรับรองความถูกต้อง";
+
+/* A section header label in reference to the asset
+types available to use when querying for utility
+association feature candidates. */
+"Available Asset Types" = "ประเภทแอสเซ็ทที่พร้อมใช้งาน";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "กลับ";
@@ -93,17 +113,36 @@ for the AR experience. */
 /* The status text when a map area download is cancelled. */
 "Cancelled" = "ยกเลิกแล้ว";
 
+/* A label indicating that the remote host's certificate is not trusted. */
+"Cannot Verify Server Identity" = "ไม่สามารถยืนยันตัวตนของเซิร์ฟเวอร์ได้";
+
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "จำเป็นต้องใช้ใบรับรอง";
 
-/* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "คำเตือนการเชื่อถือใบรับรอง";
+/* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to compass" = "เปลี่ยนโหมดการเลื่อนอัตโนมัติเป็นเข็มทิศ";
+
+/* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to navigation" = "เปลี่ยนโหมดการเลื่อนอัตโนมัติเป็นการนำทาง";
+
+/* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to recenter" = "เปลี่ยนโหมดการเลื่อนอัตโนมัติเป็นการปรับจุดศูนย์กลาง";
+
+/* The accessibility hint of the location button. */
+"Change location display options" = "เปลี่ยนตัวเลือกการแสดงผลตำแหน่ง";
+
+/* A label of a mark on a chart. */
+"chart-mark-label-value" = "ค่า";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "เลือกจากไฟล์";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "เลือกจากห้องสมุด";
+
+/* Instructional text for the user to choose a feature
+candidate to add as a utility association. */
+"Choose to add" = "เลือกเพื่อเพิ่ม";
 
 /* Cities (Level of Detail) */
 "Cities" = "เมือง";
@@ -120,14 +159,27 @@ for the AR experience. */
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "สี";
 
-/* A label indicating a utility association's 
-containment is not visible. */
-"Content" = "เนื้อหา";
+/* The accessibility value of the location button when the auto-pan mode is compass navigation. */
+"Compass navigation" = "การนำทางด้วยเข็มทิศ";
+
+/* The accessibility label of the compass button. */
+"compass-button-accessibility-label" = "เข็มทิศ";
+
+/* A label for the "Connectivity" utility association kind. */
+"Connectivity" = "การเชื่อมต่อ";
+
+/* A label for the "Containment" utility association kind. */
+"Containment" = "การกักกัน";
+
+/* A label indicating whether content in the new
+association is visible or not. */
+"Content Visible" = "การมองเห็นเนื้อหา";
 
 /* Continent (Level of Detail) */
 "Continent" = "ทวีป";
 
-/* A label for a button used to continue the authentication operation. */
+/* A button indicating the user accepts a potentially dangerous action.
+A label for a button used to continue the authentication operation. */
 "Continue" = "ดำเนินการต่อ";
 
 /* A label for a button to continue editing the feature form. */
@@ -135,6 +187,9 @@ containment is not visible. */
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "ไม่สามารถดึงข้อมูลพื้นที่แผนที่สำหรับแผนที่นี้ได้";
+
+/* Localized text to display the number of items in a collection. */
+"Count %lld" = "จำนวน %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "เขต";
@@ -150,9 +205,6 @@ containment is not visible. */
 
 /* The status text for an opened map area. */
 "Currently open" = "เปิดอยู่ในปัจจุบัน";
-
-/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "อันตราย: ใบรับรองที่ระบุโดย '%@' ไม่มีลายเซ็นของหน่วยงานที่เชื่อถือได้";
 
 /* Text indicating a field's value must not exceed a maximum date. */
 "Date exceeds maximum" = "วันที่เกินค่าสูงสุด";
@@ -214,6 +266,9 @@ containment is not visible. */
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "ไม่สามารถเพิ่มจุดเริ่มต้นซ้ำได้";
+
+/* The cardinal direction East. */
+"East" = "ตะวันออก";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -286,11 +341,14 @@ The variable provides additional data. */
 to be used as a trace starting point. */
 "Failed to set starting point" = "ตั้งค่าจุดเริ่มต้นไม่สำเร็จ";
 
+/* The accessibility value of the location button when the location display fails to start. */
+"Failed to start" = "เริ่มไม่สำเร็จ";
+
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
 "Feature Results" = "ผลลัพธ์ฟีเจอร์";
 
-/* A field in a set of data contained in a popup. */
+/* A field in a dataset. */
 "Field" = "ฟิลด์";
 
 /* A label in reference to fields in a set of data contained in a popup. */
@@ -299,9 +357,21 @@ trace operation. */
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "ตัวกรอง";
 
+/* A label for a search field to filter utility 
+asset types by name. */
+"Filter asset types by name" = "กรองประเภทแอสเซ็ตตามชื่อ";
+
+/* A label for a search field to filter utility 
+association candidate features by name. */
+"Filter candidates by name" = "กรองแคนดิเดทตามชื่อ";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "กรองสิ่งอำนวยความสะดวก";
+
+/* A label for a search field to filter utility 
+association feature sources by name. */
+"Filter feature sources by name" = "กรองแหล่งที่มาฟีเจอร์ตามชื่อ";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -317,8 +387,16 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "เสร็จสิ้นการแก้ไขไม่สำเร็จ %@";
 
-/* A label in reference to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an 
+edge of a utility network element. */
 "Fraction Along Edge" = "เศษส่วนตามแนวขอบ";
+
+/* A label for the element on the "from" side of a utility association. */
+"From Element" = "องค์ประกอบจาก";
+
+/* A label for a button to choose a feature for a new
+utility association from a network data source. */
+"From Network Data Source" = "จากแหล่งข้อมูลเครือข่าย";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -328,11 +406,37 @@ trace operation. */
 AR experience. */
 "heading" = "มุ่งหน้าสู่";
 
+/* The accessibility value of a compass. The first
+variable is a heading in degrees and the second
+variable is a cardinal or intercardinal direction. */
+"Heading: %@ %@" = "ทิศทาง: %@ %@";
+
+/* The section header for the auto-pan section in the location button context menu. */
+"Hide Location" = "ซ่อนตำแหน่ง";
+
+/* The accessibility hint of the hide location display context menu option. */
+"Hide location display" = "ซ่อนการแสดงตำแหน่ง";
+
 /* House Property (Level of Detail) */
 "House Property" = "ทรัพย์สินบ้าน";
 
 /* Houses (Level of Detail) */
 "Houses" = "บ้าน";
+
+/* A label indicating that a challenge should be ignored. */
+"Ignore" = "ไม่สนใจ";
+
+/* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
+"Junction Edge Object Connectivity From Side" = "การเชื่อมต่อวัตถุระหว่างจุดเชื่อมและขอบจากด้านข้าง";
+
+/* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
+"Junction Edge Object Connectivity Midspan" = "การเชื่อมต่อวัตถุระหว่างจุดเชื่อมและขอบช่วงกลาง";
+
+/* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
+"Junction Edge Object Connectivity To Side" = "การเชื่อมต่อวัตถุระหว่างจุดเชื่อมและขอบไปยังด้านข้าง";
+
+/* A label for a pie chart legend item label. */
+"Label" = "ป้ายชื่อ";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "น้อยกว่าค่าขั้นต่ำ";
@@ -345,6 +449,38 @@ AR experience. */
 
 /* The status text when a map area failed to load. */
 "Loading failed" = "โหลดไม่สำเร็จ";
+
+/* The accessibility label of the location button when the location display is not showing. */
+"Location display" = "การแสดงผลตำแหน่ง";
+
+/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-compass" = "เข็มทิศ";
+
+/* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-navigation" = "การนำทาง";
+
+/* The label text for turning the auto-pan mode off in the location button context menu. */
+"location-button-accessibility-value-off" = "ปิด";
+
+/* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-recenter" = "ปรับจุดศูนย์กลาง";
+
+/* The accessibility label of the location button when the 
+location display is showing and the button cycles 
+through auto-pan modes. */
+"location-button-auto-pan-accessibility-label" = "เลื่อนอัตโนมัติ";
+
+/* The header of the auto-pan section in the location button context menu. */
+"location-button-auto-pan-section-header-title" = "เลื่อนอัตโนมัติ";
+
+/* The accessibility value of the location button when the auto-pan mode is navigation. */
+"location-button-status-label-navigation" = "การนำทาง";
+
+/* The accessibility value of the location button when the auto-pan mode is off. */
+"location-button-status-label-off" = "ปิด";
+
+/* The accessibility value of the location button when the auto-pan mode is recenter. */
+"location-button-status-label-recenter" = "ปรับจุดศูนย์กลาง";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "พื้นที่แผนที่";
@@ -370,6 +506,12 @@ AR experience. */
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "โหมด";
 
+/* A label for a button to view details for a list row. */
+"More Information" = "ข้อมูลเพิ่มเติม";
+
+/* A label for a button to see more options for a list row. */
+"More Options" = "ตัวเลือกเพิ่มเติม";
+
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "ชื่อ";
 
@@ -379,20 +521,40 @@ AR experience. */
 /* A label in reference to a specific utility network. */
 "Network" = "เครือข่าย";
 
+/* A navigation title for a page listing
+data sources in a utility network. */
+"Network Data Source" = "แหล่งข้อมูลเครือข่าย";
+
+/* A navigation title for a view to create a new association in. */
+"New Association" = "ความสัมพันธ์ใหม่";
+
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "ชื่อใหม่";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "การติดตามใหม่";
 
-/* A label indicating that no associations are available for the popup element. */
+/* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "ไม่มีความสัมพันธ์";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "ไม่มีบุ๊กมาร์ก";
 
+/* A label indicating no utility association 
+candidates matching the filter criteria were
+found. */
+"No Candidates Found" = "ไม่พบแคนดิเดท";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "ไม่มีการกำหนดค่าที่พร้อมใช้งาน";
+
+/* A label indicating no utility association 
+feature sources were found. */
+"No Feature Sources Found" = "ไม่พบแหล่งข้อมูลฟีเจอร์";
+
+/* A label indicating no utility association 
+filter results were found. */
+"No Filter Results Found" = "ไม่พบผลการกรอง";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "ไม่มีการเชื่อมต่ออินเทอร์เน็ต";
@@ -418,6 +580,15 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "ไม่มีค่า";
 
+/* The cardinal direction North. */
+"North" = "เหนือ";
+
+/* The intercardinal direction Northeast. */
+"Northeast" = "ตะวันออกเฉียงเหนือ";
+
+/* The intercardinal direction Northwest. */
+"Northwest" = "ตะวันตกเฉียงเหนือ";
+
 /* A trace function output result was not provided. */
 "Not Available" = "ไม่พร้อมใช้งาน";
 
@@ -433,8 +604,16 @@ AR experience. */
 /* A label for button to proceed with an operation. */
 "OK" = "ตกลง";
 
+/* A label indicating features can be selected by
+interactively tapping on the map. */
+"On Map" = "บนแผนที่";
+
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "โหลดแผนที่ออนไลน์ไม่สำเร็จ";
+
+/* Helper text indicating that an accompanying button only 
+removes only the association.  */
+"Only removes the association. The feature remains." = "ลบเฉพาะความสัมพันธ์เท่านั้น เหลือฟีเจอร์ไว้";
 
 /* A label for a button to open a map area. */
 "Open" = "เปิด";
@@ -453,6 +632,10 @@ AR experience. */
 
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "จำเป็นต้องใช้รหัสผ่าน";
+
+/* A label in reference to a percent along an 
+edge of a utility network element. */
+"Percent Along" = "เปอร์เซ็นต์ตามแนว";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "กรุณาเปิดใช้งานการเข้าถึงกล้องในการตั้งค่า";
@@ -481,6 +664,15 @@ The variable provides additional data. */
 /* A label for a button to refresh map area content. */
 "Refresh" = "รีเฟรช";
 
+/* A label for a button to remove a utility network association. */
+"Remove" = "ลบทิ้ง";
+
+/* A label for a button to remove a utility association. */
+"Remove Association" = "ลบความสัมพันธ์";
+
+/* A label for a confirmation to remove a utility association. */
+"Remove association?" = "ลบความสัมพันธ์หรือไม่";
+
 /* A label for a button to remove a map area download. */
 "Remove Download" = "ลบที่ดาวน์โหลดไว้";
 
@@ -489,6 +681,9 @@ The variable provides additional data. */
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
 "Rename attachment" = "เปลี่ยนชื่อไฟล์แนบ";
+
+/* The accessibility hint of the compass component. */
+"Reorient map north" = "หมุนแผนที่ไปยังทิศเหนือ";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -512,6 +707,14 @@ current visible extent of the map or scene. */
 
 /* A label for a button to save edits. */
 "Save Edits" = "บันทึกการแก้ไข";
+
+/* A generic prompt for a search field where a more
+specific prompt has not been provided. */
+"Search" = "ค้นหา";
+
+/* A label for a search bar to search through feature 
+candidates to use in a new utility association. */
+"Search Features" = "ค้นหาฟีเจอร์";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "คิวรีการค้นหา";
@@ -538,6 +741,9 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "แสดงทั้งหมด";
 
+/* A label for a button to show the indicated feature on the map. */
+"Show On Map" = "แสดงบนแผนที่";
+
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "เว็บไซต์";
 
@@ -547,9 +753,21 @@ or more levels in a floor-aware map or scene. */
 /* Small Building (Level of Detail) */
 "Small Building" = "อาคารขนาดเล็ก";
 
+/* The cardinal direction South. */
+"South" = "ใต้";
+
+/* The intercardinal direction Southeast. */
+"Southeast" = "ตะวันออกเฉียงใต้";
+
+/* The intercardinal direction Southwest. */
+"Southwest" = "ตะวันตกเฉียงใต้";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "การอ้างอิงเชิงพื้นที่ไม่ตรงกัน";
+
+/* The accessibility value of the location button when the location display is starting. */
+"Starting" = "กำลังเริ่ม";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -560,6 +778,12 @@ network trace operation. */
 
 /* States/Provinces (Level of Detail) */
 "States/Provinces" = "รัฐ/จังหวัด";
+
+/* The accessibility value of the location button when the location display is not showing. */
+"Stopped" = "หยุดแล้ว";
+
+/* The accessibility value of the location button when the location display is stopping. */
+"Stopping" = "กำลังหยุด";
 
 /* Street (Level of Detail) */
 "Street" = "ถนน";
@@ -577,6 +801,9 @@ place an ArcGIS Scene. */
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "แตะบนภาพเพื่อดูข้อมูลเพิ่มเติม";
+
+/* A label in reference to a utility terminal. */
+"Terminal" = "เทอร์มินัล";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "การกำหนดค่าเทอร์มินัล";
@@ -600,6 +827,9 @@ match the spatial reference of the map. */
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "ไม่ได้ส่งฟอร์ม";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "ไม่สามารถยืนยันข้อมูลประจำตัวของ \"%@\" ได้ คุณต้องการยืนยันการเชื่อมต่อหรือไม่";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "แผนที่ไม่มีการอ้างอิงเชิงพื้นที่";
@@ -632,6 +862,9 @@ to be imported as an attachment. */
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "คำนำหน้า";
 
+/* A label for the element on the "to" side of a utility association. */
+"To Element" = "องค์ประกอบถึง";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "วันนี้";
 
@@ -650,8 +883,14 @@ to be imported as an attachment. */
 /* A label in reference to a utility network trace configuration. */
 "Trace Configuration" = "การกำหนดค่าการติดตาม";
 
+/* A label indicating that a utility network trace is running. */
+"Tracingâ€¦" = "กำลังตามรอยâ€¦";
+
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "ลองอีกครั้ง";
+
+/* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
+"Turn off auto-pan" = "ปิดการเลื่อนอัตโนมัติ";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "ไม่ทราบ";
@@ -673,11 +912,11 @@ without saving. */
 /* A label in reference to a credential username. */
 "Username" = "ชื่อผู้ใช้";
 
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "ไม่ทราบ";
+
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "ข้อผิดพลาดการตรวจสอบ";
-
-/* A value in a set of data contained in a popup. */
-"Value" = "ค่า";
 
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
@@ -710,8 +949,15 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "ดู";
 
 /* A label indicating a utility association's 
+containment is not visible. */
+"Visible: false" = "การมองเห็น: เท็จ";
+
+/* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "เนื้อหาที่มองเห็น";
+"Visible: true" = "การมองเห็น: จริง";
+
+/* The cardinal direction West. */
+"West" = "ตะวันตก";
 
 /* World (Level of Detail) */
 "World" = "โลก";

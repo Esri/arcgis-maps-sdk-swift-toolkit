@@ -371,8 +371,8 @@ final class FeatureFormViewTests: XCTestCase {
             "Enter value from 2.0 to 5.0"
         )
         
-        // Highlight/select the current value and replace it
-        textField.doubleTap()
+        // Replace the current value with 3
+        textField.typeText(XCUIKeyboardKey.delete.rawValue)
         textField.typeText("3")
         
         await fulfillment(
@@ -385,8 +385,8 @@ final class FeatureFormViewTests: XCTestCase {
             timeout: 10
         )
         
-        // Highlight/select the current value and replace it
-        textField.doubleTap()
+        // Replace the current value with 6
+        textField.typeText(XCUIKeyboardKey.delete.rawValue)
         textField.typeText("6")
         
         XCTAssertEqual(
@@ -2128,14 +2128,14 @@ final class FeatureFormViewTests: XCTestCase {
         let electricDistributionDeviceLabel = app.staticTexts["Electric Distribution Device"]
         let electricDistributionJunctionButton5 = app.buttons["Electric Distribution Junction, 5"]
         let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
-        let electricDistributionLine1 = app.buttons["Electric Distribution Line, 1"]
         let elementTitle = app.staticTexts["Associations"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let fromElementLabel = app.staticTexts["From Element"]
-        let switchButton = app.staticTexts["Switch"].firstMatch
-        let switchLabel = app.staticTexts["Switch"]
         let newAssociationText = app.staticTexts["New Association"]
         let saveButton = app.buttons["Save"]
+        let searchField = app.textFields["Search"].firstMatch
+        let switchButton = app.staticTexts["Switch"].firstMatch
+        let switchLabel = app.staticTexts["Switch"]
         let terminalLabel = app.staticTexts["Terminal"]
         let terminalPicker = app.buttons["Terminal, High"]
         let toElementLabel = app.staticTexts["To Element"]
@@ -2203,6 +2203,10 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         electricDistributionDeviceDataSourceButton.tap()
+        
+        searchField.tap()
+        
+        searchField.typeText("Disconnect")
         
         XCTAssertTrue(
             undergroundMediumVoltageThreePhaseDisconnectButton.firstMatch.waitForExistence(timeout: 5),
