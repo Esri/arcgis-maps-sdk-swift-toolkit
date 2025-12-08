@@ -68,9 +68,9 @@ extension EmbeddedFeatureFormView {
         Section {
             switch element {
             case let element as GroupFormElement:
-                GroupFormElementView(element: element) { internalMakeElement($0) }
+                GroupFormElementView(element: element) { makeElementBody($0) }
             default:
-                internalMakeElement(element)
+                makeElementBody(element)
             }
         } header: {
             FormElementHeader(element: element)
@@ -81,9 +81,9 @@ extension EmbeddedFeatureFormView {
         }
     }
     
-    /// Makes UI for a field form element or a text form element.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
+    /// Makes UI for a form element's body.
+    /// - Parameter element: The element to generate the body for.
+    @ViewBuilder func makeElementBody(_ element: FormElement) -> some View {
         if let embeddedFeatureFormViewModel {
             switch element {
             case let element as AttachmentsFormElement:
@@ -92,34 +92,16 @@ extension EmbeddedFeatureFormView {
                     formViewModel: embeddedFeatureFormViewModel
                 )
             case let element as FieldFormElement:
-                makeFieldElement(element)
+                if !(element.input is UnsupportedFormInput) {
+                    FieldFormElementView(element: element)
+                }
             case let element as TextFormElement:
-                makeTextElement(element)
+                TextFormElementView(element: element)
             case let element as UtilityAssociationsFormElement:
-                makeUtilityAssociationsFormElement(element)
+                FeatureFormView.UtilityAssociationsFormElementView(element: element)
             default:
                 EmptyView()
             }
         }
-    }
-    
-    /// Makes UI for a field form element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-        if !(element.input is UnsupportedFormInput) {
-            FieldFormElementView(element: element)
-        }
-    }
-    
-    /// Makes UI for a text form element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
-        TextFormElementView(element: element)
-    }
-    
-    /// Makes UI for a utility associations element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
-        FeatureFormView.UtilityAssociationsFormElementView(element: element)
     }
 }
