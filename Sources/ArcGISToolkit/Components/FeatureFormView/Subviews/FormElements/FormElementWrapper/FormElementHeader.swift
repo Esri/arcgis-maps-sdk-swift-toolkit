@@ -45,24 +45,17 @@ extension FormElementHeader {
         
         /// A Boolean value indicating whether the input is editable.
         @State private var isEditable = false
-        
         /// A Boolean value indicating whether a value for the input is required.
         @State private var isRequired = false
         
         var body: some View {
-            HStack {
-                Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
-                    .onIsEditableChange(of: element) { newIsEditable in
-                        isEditable = newIsEditable
-                    }
-                    .onIsRequiredChange(of: element) { newIsRequired in
-                        isRequired = newIsRequired
-                    }
-                if !isEditable {
-                    Spacer()
-                    Image(systemName: "pencil.slash")
+            Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
+                .onIsEditableChange(of: element) { newIsEditable in
+                    isEditable = newIsEditable
                 }
-            }
+                .onIsRequiredChange(of: element) { newIsRequired in
+                    isRequired = newIsRequired
+                }
         }
     }
 }
