@@ -1399,7 +1399,7 @@ final class FeatureFormViewTests: XCTestCase {
         let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]
         
         let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
-        let dateInput = app.staticTexts["Date Value"]
+        let dateInput = app.buttons["Date Value"]
         
         let shortTextReadOnlyInput = app.staticTexts["Short text Read Only Input"]
         let shortTextTextInput = app.textFields["Short text Text Input"]
