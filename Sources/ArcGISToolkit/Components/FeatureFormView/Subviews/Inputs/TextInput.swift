@@ -17,8 +17,10 @@ import SwiftUI
 
 /// A view for text input.
 struct TextInput: View {
-    /// The view model for the form.
+    /// The view model for the embedded feature form.
     @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+    /// The view model for the feature form.
+    @Environment(FeatureFormViewModel.self) private var featureFormViewModel
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -87,6 +89,7 @@ struct TextInput: View {
             }
 #endif
             .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+                guard text != newFormattedValue else { return }
                 text = newFormattedValue
             }
     }
@@ -108,6 +111,7 @@ private extension TextInput {
                                 .padding()
 #if targetEnvironment(macCatalyst)
                                 .environment(embeddedFeatureFormViewModel)
+                                .environment(featureFormViewModel)
 #endif
                         }
                         .frame(minHeight: 100, alignment: .top)
@@ -260,20 +264,15 @@ private extension TextInput {
                 .foregroundStyle(Color.accentColor)
 #endif
             }
-            RepresentedUITextView(initialText: text) { text in
-                guard text != element.formattedValue else { return }
-                element.convertAndUpdateValue(text)
-                embeddedFeatureFormViewModel.evaluateExpressions()
-            } onTextViewDidEndEditing: { text in
-                self.text = text
-            }
-            .focused($isFocused)
-            .onAppear {
-                isFocused = true
-            }
-            .onChange(of: isFocused) {
-                embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
-            }
+            TextEditor(text: $text)
+                .focused($isFocused)
+                .onAppear {
+                    isFocused = true
+                }
+                .onChange(of: isFocused) {
+                    embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                }
+                .scrollContentBackground(.hidden)
             Spacer()
             FormElementFooter(element: element)
         }
