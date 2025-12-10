@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import BackgroundTasks
 import Combine
 import OSLog
 import SwiftUI
@@ -118,13 +119,17 @@ public class OfflineManager: ObservableObject {
     /// - Parameters:
     ///   - job: The job to start.
     ///   - portalItem: The portal item whose map is being taken offline.
-    func start(job: some JobProtocol, portalItem: PortalItem) {
+    ///   - title: The title of the map area being taken offline.
+    func start(job: some JobProtocol, portalItem: PortalItem, title: String) {
         Logger.offlineManager.debug("Starting Job from offline manager")
         jobManager.jobs.append(job)
         observeJob(job)
         job.start()
         Task.detached {
             await self.savePendingMapInfo(for: portalItem)
+        }
+        if #available(iOS 26.0, *) {
+            startContinuedProcessingTask(for: job, title: title)
         }
     }
     
@@ -358,5 +363,28 @@ private extension Dictionary {
                 return value
             }()
         }
+    }
+}
+
+extension OfflineManager {
+    @available(iOS 26.0, *)
+    func startContinuedProcessingTask(for job: some JobProtocol, title: String) {
+        let cptIdentifier = (Bundle.main.bundleIdentifier ?? "") + ".cpt.jobs" + ".\(UUID().uuidString)"
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: cptIdentifier, using: .main) { task in
+            let task = task as! BGContinuedProcessingTask
+            task.bind(to: job)
+        }
+        
+        let request = BGContinuedProcessingTaskRequest(
+            identifier: cptIdentifier,
+            title: String(
+                localized: "Offline Map",
+                bundle: .toolkitModule,
+                comment: "The default title of the live activity for taking a map offline."
+            ),
+            subtitle: title
+        )
+        request.strategy = .fail
+        try? BGTaskScheduler.shared.submit(request)
     }
 }

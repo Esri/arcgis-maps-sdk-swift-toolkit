@@ -5,6 +5,7 @@
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck</string>
+		<string>com.esri.OfflineMapAreasExample.cpt.jobs.*</string>
 	</array>
 	<key>CFBundleLocalizations</key>
 	<array>
