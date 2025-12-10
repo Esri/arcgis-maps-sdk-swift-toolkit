@@ -367,6 +367,11 @@ private extension Dictionary {
 }
 
 extension OfflineManager {
+    /// Starts a background continued processing task for a given job that is
+    /// taking a map offline.
+    /// - Parameters:
+    ///   - job: The job that should be monitored by the started task.
+    ///   - title: The title of the area being taken offline.
     @available(iOS 26.0, *)
     func startContinuedProcessingTask(for job: some JobProtocol, title: String) {
         let cptIdentifier = (Bundle.main.bundleIdentifier ?? "") + ".cpt.jobs" + ".\(UUID().uuidString)"
