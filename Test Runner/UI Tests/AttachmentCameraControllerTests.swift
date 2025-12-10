@@ -44,17 +44,19 @@ final class AttachmentCameraControllerTests: XCTestCase {
         )
         attachmentCameraControllerTestsButton.tap()
         
-        // Wait for camera access alert's allow button.
-        XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
-        allowButton.tap()
+        if allowButton.waitForExistence(timeout: 1) {
+            // Provide camera permission if prompted.
+            allowButton.tap()
+        }
         
         XCTAssertTrue(videoButton.waitForExistence(timeout: 5))
         
         app.buttons["VIDEO"].tap()
         
-        // Wait for microphone access alert's allow button.
-        XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
-        allowButton.tap()
+        if allowButton.waitForExistence(timeout: 1) {
+            // Provide microphone permission if prompted.
+            allowButton.tap()
+        }
         
         XCTAssertEqual(cameraModeLabel.label, "Video")
         
