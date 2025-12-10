@@ -491,8 +491,6 @@ final class FeatureFormViewTests: XCTestCase {
             localDate?.formatted()
         )
         
-        app.scrollToElement(footer, direction: .up, velocity: .slow)
-        
         XCTAssertEqual(
             footer.label,
             "Enter the launch date and time (July 16, 1969 13:32 UTC)"
