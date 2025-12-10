@@ -5,7 +5,6 @@
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.esri.ArcGISToolkit.jobManager.statusCheck</string>
-		<string>com.esri.JobManagerExample.cpt.jobs.*</string>
 	</array>
 	<key>CFBundleLocalizations</key>
 	<array>

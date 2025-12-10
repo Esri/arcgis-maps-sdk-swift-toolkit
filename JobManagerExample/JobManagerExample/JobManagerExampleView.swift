@@ -87,9 +87,6 @@ struct JobManagerExampleView: View {
                     do {
                         let job = try await makeWildfiresGeodatabaseJob()
                         jobManager.jobs.append(job)
-                        if #available(iOS 26.0, *) {
-                            jobManager.startContinuedProcessingTask(for: job)
-                        }
                     } catch {
                         Logger.jobManagerExample.error("Error creating generate geodatabase job: \(error, privacy: .public)")
                     }
@@ -107,9 +104,6 @@ struct JobManagerExampleView: View {
                     do {
                         let job = try await makeNapervilleOfflineMapJob()
                         jobManager.jobs.append(job)
-                        if #available(iOS 26.0, *) {
-                            jobManager.startContinuedProcessingTask(for: job)
-                        }
                     } catch {
                         Logger.jobManagerExample.error("Error creating offline map job: \(error, privacy: .public)")
                     }
