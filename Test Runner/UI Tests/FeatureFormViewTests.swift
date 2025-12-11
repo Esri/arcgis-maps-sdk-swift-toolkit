@@ -919,7 +919,7 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        app.scrollToElement(footer, direction: .up, velocity: .slow)
+        app.swipeUp()
         
         XCTAssertTrue(
             fieldTitle.exists,
