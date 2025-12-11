@@ -1982,6 +1982,8 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(elementTitle, direction: .up, velocity: .fast)
+        
         XCTAssertTrue(
             elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
@@ -2142,6 +2144,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.scrollToElement(elementTitle, direction: .up, velocity: .fast)
         
         XCTAssertTrue(
             elementTitle.waitForExistence(timeout: 5),
@@ -2330,10 +2334,14 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.scrollToElement(elementTitle, direction: .up, velocity: .fast)
+        
         XCTAssertTrue(
             elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
         )
+        
+        app.scrollToElement(containerFilterTitle, direction: .up)
         
         XCTAssertTrue(
             containerFilterTitle.waitForExistence(timeout: 5),
