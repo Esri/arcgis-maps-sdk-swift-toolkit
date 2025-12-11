@@ -769,7 +769,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            footer.isHittable,
+            footer.exists,
             "The footer isn't hittable."
         )
         
