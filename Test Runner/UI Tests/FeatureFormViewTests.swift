@@ -1812,6 +1812,8 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: electricDistributionDevice)
         
+        app.scrollToElement(elementTitle, direction: .up, velocity: .fast)
+        
         XCTAssertTrue(
             elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
