@@ -22,13 +22,13 @@ final class AttachmentCameraControllerTests: XCTestCase {
     
     /// Test `AttachmentCameraController.onCameraCaptureModeChanged(perform:)`
     func testOnCameraCaptureModeChanged() throws {
-        let isUnsupportedEnvironment: Bool
 #if targetEnvironment(simulator) || targetEnvironment(macCatalyst)
-        isUnsupportedEnvironment = true
-#else
-        isUnsupportedEnvironment = false
+        throw XCTSkip("This test intended for iOS devices only.")
 #endif
-        try XCTSkipIf(isUnsupportedEnvironment, "This test intended for iOS devices only.")
+        
+        guard #available(iOS 26.0, *) else {
+            throw XCTSkip("Unsupported iOS version")
+        }
         
         let app = XCUIApplication()
         let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
@@ -44,17 +44,19 @@ final class AttachmentCameraControllerTests: XCTestCase {
         )
         attachmentCameraControllerTestsButton.tap()
         
-        // Wait for camera access alert's allow button.
-        XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
-        allowButton.tap()
+        if allowButton.waitForExistence(timeout: 1) {
+            // Provide camera permission if prompted.
+            allowButton.tap()
+        }
         
         XCTAssertTrue(videoButton.waitForExistence(timeout: 5))
         
         app.buttons["VIDEO"].tap()
         
-        // Wait for microphone access alert's allow button.
-        XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
-        allowButton.tap()
+        if allowButton.waitForExistence(timeout: 1) {
+            // Provide microphone permission if prompted.
+            allowButton.tap()
+        }
         
         XCTAssertEqual(cameraModeLabel.label, "Video")
         
