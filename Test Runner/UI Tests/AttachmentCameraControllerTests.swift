@@ -30,6 +30,10 @@ final class AttachmentCameraControllerTests: XCTestCase {
 #endif
         try XCTSkipIf(isUnsupportedEnvironment, "This test intended for iOS devices only.")
         
+        guard #available(iOS 26.0, *) else {
+            throw XCTSkip("Unsupported iOS version")
+        }
+        
         let app = XCUIApplication()
         let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
         let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
