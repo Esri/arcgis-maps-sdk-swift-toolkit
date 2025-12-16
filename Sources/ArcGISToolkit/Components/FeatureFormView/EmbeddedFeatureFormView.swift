@@ -31,14 +31,12 @@ struct EmbeddedFeatureFormView: View {
                         // to make all form elements reachable.
                         ScrollView {
                             VStack {
-                                ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
-                                    makeElement(element)
-                                }
+                                makeVisibleElements()
                             }
                         }
                     } else {
-                        List(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
-                            makeElement(element)
+                        Form {
+                            makeVisibleElements()
                         }
                     }
                 }
@@ -116,6 +114,13 @@ extension EmbeddedFeatureFormView {
             default:
                 EmptyView()
             }
+        }
+    }
+    
+    /// Makes UI for all visible form elements.
+    func makeVisibleElements() -> some View {
+        ForEach(embeddedFeatureFormViewModel?.visibleElements ?? [], id: \.self) { element in
+            makeElement(element)
         }
     }
 }
