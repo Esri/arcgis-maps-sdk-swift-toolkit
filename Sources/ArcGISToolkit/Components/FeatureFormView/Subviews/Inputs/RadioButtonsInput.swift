@@ -25,16 +25,13 @@ struct RadioButtonsInput: View {
     /// A Boolean value indicating whether a ``ComboBoxInput`` should be used instead.
     /// This will be `true` if the current value doesn't exist as an option in the domain
     @State private var fallbackToComboBox = false
-    
     /// The selected option.
     @State private var selectedValue: CodedValue?
-    
     /// The element's current value.
     @State private var value: Any?
     
     /// The element the input belongs to.
     private let element: FieldFormElement
-    
     /// The input configuration of the field.
     private let input: RadioButtonsFormInput
     
