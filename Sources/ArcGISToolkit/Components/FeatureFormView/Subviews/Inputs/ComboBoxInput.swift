@@ -159,14 +159,8 @@ extension ComboBoxInput {
     /// Adds navigation context to support toolbar items and other visual elements in the picker.
     private func makePicker() -> some View {
         NavigationStack {
-            VStack {
-                Text(element.description)
-                    .foregroundStyle(.secondary)
-                    .font(.subheadline)
-                    .padding(.horizontal)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Divider()
-                List {
+            List {
+                Section {
                     if !element.isRequired {
                         if noValueOption == .show {
                             makePickerRow(
@@ -184,37 +178,36 @@ extension ComboBoxInput {
                             updateValueAndEvaluateExpressions(codedValue)
                         }
                     }
-                    if let unsupportedValue = selectedValue.unsupportedValue {
-                        Section {
-                            makePickerRow(label: unsupportedValue, selected: true) { }
-                                .italic()
-                        } header: {
-                            Text.unsupportedValue
-                        }
-                        .accessibilityIdentifier("\(element.label) Unsupported Value Section")
-                    }
+                } header: {
+                    Text(element.description)
                 }
+                if let unsupportedValue = selectedValue.unsupportedValue {
+                    Section {
+                        makePickerRow(label: unsupportedValue, selected: true) { }
+                            .italic()
+                    } header: {
+                        Text.unsupportedValue
+                    }
+                    .accessibilityIdentifier("\(element.label) Unsupported Value Section")
+                }
+            }
+            .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
+            .navigationTitle(element.label)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isPresented = false
+                    } label: {
+                        Text.done
+                            .fontWeight(.semibold)
 #if !os(visionOS)
-                .listStyle(.plain)
-#endif
-                .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
-                .navigationTitle(element.label)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            isPresented = false
-                        } label: {
-                            Text.done
-                                .fontWeight(.semibold)
-#if !os(visionOS)
-                                .foregroundStyle(Color.accentColor)
-#endif
-                        }
-#if !os(visionOS)
-                        .buttonStyle(.plain)
+                            .foregroundStyle(Color.accentColor)
 #endif
                     }
+#if !os(visionOS)
+                    .buttonStyle(.plain)
+#endif
                 }
             }
         }
