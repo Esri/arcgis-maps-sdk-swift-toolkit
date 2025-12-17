@@ -24,22 +24,17 @@ struct ComboBoxInput: View {
     
     /// The phrase to use when filtering by coded value name.
     @State private var filterPhrase = ""
-    
     /// A Boolean value indicating if the combo box picker is presented.
     @State private var isPresented = false
-    
     /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
-    
     /// The selected option.
     @State private var selectedValue: ComboBoxValue = .noValue
     
     /// The element the input belongs to.
     private let element: FieldFormElement
-    
     /// The text used to represent a `nil` value.
     private let noValueLabel: String
-    
     /// The display state value for `nil` value options.
     private let noValueOption: FormInputNoValueOption
     
