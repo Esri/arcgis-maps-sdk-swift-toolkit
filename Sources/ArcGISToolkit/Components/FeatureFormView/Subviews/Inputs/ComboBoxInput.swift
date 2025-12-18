@@ -92,6 +92,7 @@ struct ComboBoxInput: View {
                         updateValueAndEvaluateExpressions(nil)
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")
+                    .buttonStyle(.plain)
                 } else {
                     // Otherwise, always show chevron.
                     Image(systemName: "chevron.right")

@@ -117,6 +117,7 @@ struct DateTimeInput: View {
                             date = nil
                         }
                         .accessibilityIdentifier("\(element.label) Clear Button")
+                        .buttonStyle(.plain)
                         .tint(.secondary)
                     }
                 }
