@@ -222,6 +222,7 @@ extension ComboBoxInput {
             }
         }
         .accessibilityIdentifier("\(label) Combo Box Option")
+        .foregroundStyle(.primary)
     }
     
     private func updateValueAndEvaluateExpressions(_ value: CodedValue?) {
