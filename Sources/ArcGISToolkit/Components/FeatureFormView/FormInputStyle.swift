@@ -25,7 +25,7 @@ struct FormInputStyle: ViewModifier {
             .frame(minHeight: 30)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
-            .background(Color(uiColor: .tertiarySystemFill))
+            .background(.quinary)
             .cornerRadius(cornerRadius)
         if isTappable {
             content
