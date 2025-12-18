@@ -217,7 +217,6 @@ extension ComboBoxInput {
                 Spacer()
                 if selected {
                     Image(systemName: "checkmark")
-                        .foregroundStyle(Color.accentColor)
                 }
             }
         }
