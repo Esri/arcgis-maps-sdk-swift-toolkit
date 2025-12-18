@@ -93,7 +93,7 @@ struct TextInput: View {
 private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
-        HStack(alignment: .firstTextBaseline) {
+        HStack {
             Group {
                 if element.isMultiline {
                     Text(text)
