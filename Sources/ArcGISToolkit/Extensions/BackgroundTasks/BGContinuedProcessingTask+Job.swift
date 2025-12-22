@@ -15,6 +15,7 @@
 import ArcGIS
 import BackgroundTasks
 
+#if targetEnvironment(iOS)
 @available(iOS 26.0, *)
 public extension BGContinuedProcessingTask {
     /// Binds a job to this continued processing task such that the job progress
@@ -52,3 +53,4 @@ public extension BGContinuedProcessingTask {
         }
     }
 }
+#endif

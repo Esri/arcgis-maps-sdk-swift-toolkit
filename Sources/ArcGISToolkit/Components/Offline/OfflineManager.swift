@@ -128,9 +128,11 @@ public class OfflineManager: ObservableObject {
         Task.detached {
             await self.savePendingMapInfo(for: portalItem)
         }
+#if targetEnvironment(iOS)
         if #available(iOS 26.0, *) {
             startContinuedProcessingTask(for: job, title: title)
         }
+#endif
     }
     
     /// Observes a job for completion.
@@ -366,6 +368,7 @@ private extension Dictionary {
     }
 }
 
+#if targetEnvironment(iOS)
 extension OfflineManager {
     /// Starts a background continued processing task for a given job that is
     /// taking a map offline.
@@ -393,3 +396,4 @@ extension OfflineManager {
         try? BGTaskScheduler.shared.submit(request)
     }
 }
+#endif
