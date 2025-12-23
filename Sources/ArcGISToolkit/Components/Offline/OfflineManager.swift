@@ -76,11 +76,25 @@ public class OfflineManager: ObservableObject {
     /// The action to perform when a job completes.
     var jobCompletionAction: ((any JobProtocol) -> Void)?
     
+    /// Backing variable for the `jobManager` property.
+    private var _jobManager: JobManager = JobManager(uniqueID: "offlineManager")
+    
     /// The job manager used by the offline manager.
-    let jobManager = JobManager(uniqueID: "offlineManager")
+    var jobManager: JobManager? {
+        if #available(iOS 26.0, *) {
+            useBGContinuedProcessingTasks ? nil : _jobManager
+        } else {
+            _jobManager
+        }
+    }
+    
+    /// Storage for jobs when we are not making use of the job manager.
+    var _jobs: [any JobProtocol] = []
     
     /// The jobs managed by this instance.
-    var jobs: [any JobProtocol] { jobManager.jobs }
+    var jobs: [any JobProtocol] {
+        jobManager?.jobs ?? _jobs
+    }
     
     /// The update mode of any new on-demand map areas taken offline.
     /// - Since 300.0
@@ -89,6 +103,29 @@ public class OfflineManager: ObservableObject {
     /// The update mode of any new preplanned map areas taken offline.
     /// - Since 300.0
     public var preplannedUpdateMode: DownloadPreplannedOfflineMapParameters.UpdateMode = .noUpdates
+    
+    /// Backing variable for `useBGContinuedProcessingTasks`.
+    private var _useBGContinuedProcessingTasks = true
+    
+    /// A Boolean value indicating whether the `OfflineManager` makes use of
+    /// `BGContinuedProcessingTask` in-lieu of the `JobManager`.
+    /// Setting this has no effect on platforms other than iOS.
+    /// - Since 300.0
+    @available(iOS 26.0, *)
+    public var useBGContinuedProcessingTasks: Bool {
+        get {
+#if !targetEnvironment(visionOS) && !targetEnvironment(macCatalyst)
+            _useBGContinuedProcessingTasks
+#else
+            false
+#endif
+        }
+        set {
+#if !targetEnvironment(visionOS) && !targetEnvironment(macCatalyst)
+            _useBGContinuedProcessingTasks = newValue
+#endif
+        }
+    }
     
     /// The portal item information for web maps that have downloaded map areas.
     @Published
@@ -103,16 +140,18 @@ public class OfflineManager: ObservableObject {
         // Retrieve the offline map infos.
         loadOfflineMapInfos()
         
-        // Observe each job's status.
-        for job in jobManager.jobs {
-            observeJob(job)
+        if let jobManager {
+            // Observe each job's status.
+            for job in jobManager.jobs {
+                observeJob(job)
+            }
+            
+            // Resume all paused jobs.
+            let count = jobManager.jobs.filter { $0.status == .paused }
+                .count
+            Logger.offlineManager.debug("Resuming all paused jobs (\(count)).")
+            jobManager.resumeAllPausedJobs()
         }
-        
-        // Resume all paused jobs.
-        let count = jobManager.jobs.filter { $0.status == .paused }
-            .count
-        Logger.offlineManager.debug("Resuming all paused jobs (\(count)).")
-        jobManager.resumeAllPausedJobs()
     }
     
     /// Starts a job that will be managed by this instance.
@@ -122,7 +161,11 @@ public class OfflineManager: ObservableObject {
     ///   - title: The title of the map area being taken offline.
     func start(job: some JobProtocol, portalItem: PortalItem, title: String) {
         Logger.offlineManager.debug("Starting Job from offline manager")
-        jobManager.jobs.append(job)
+        if let jobManager {
+            jobManager.jobs.append(job)
+        } else {
+            _jobs.append(job)
+        }
         observeJob(job)
         job.start()
         Task.detached {
@@ -130,7 +173,9 @@ public class OfflineManager: ObservableObject {
         }
 #if !targetEnvironment(visionOS) && !targetEnvironment(macCatalyst)
         if #available(iOS 26.0, *) {
-            startContinuedProcessingTask(for: job, title: title)
+            if useBGContinuedProcessingTasks {
+                startContinuedProcessingTask(for: job, title: title)
+            }
         }
 #endif
     }
@@ -143,13 +188,19 @@ public class OfflineManager: ObservableObject {
             // Wait for job to finish.
             let result = await job.result
             
-            // Remove completed job from JobManager.
-            Logger.offlineManager.debug("Removing completed job from job manager")
-            jobManager.jobs.removeAll { $0 === job }
-            
-            // This isn't strictly required, but it helps to get the state saved as soon
-            // as possible after removing a job instead of waiting for the app to be backgrounded.
-            jobManager.saveState()
+            if let jobManager {
+                // Remove completed job from JobManager.
+                Logger.offlineManager.debug("Removing completed job from job manager")
+                jobManager.jobs.removeAll { $0 === job }
+                
+                // This isn't strictly required, but it helps to get the state saved as soon
+                // as possible after removing a job instead of waiting for the app to be backgrounded.
+                jobManager.saveState()
+            } else {
+                // Remove completed job from JobManager.
+                Logger.offlineManager.debug("Removing completed job from storage.")
+                _jobs.removeAll { $0 === job }
+            }
             
             // Call job completion action.
             jobCompletionAction?(job)
@@ -323,22 +374,31 @@ public extension SwiftUI.Scene {
     ) -> some SwiftUI.Scene {
         Logger.offlineManager.debug("Executing OfflineManager SwiftUI.Scene modifier")
         
-        // Set the background status check schedule.
-        OfflineManager.shared.jobManager.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
-        
         // Set callback for job completion.
         OfflineManager.shared.jobCompletionAction = jobCompletionAction
         
-        // Support app-relaunch after background downloads.
-        return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
-            Logger.offlineManager.debug("Executing OfflineManager backgroundTask")
+        if let jobManager = OfflineManager.shared.jobManager {
+            // Set the background status check schedule.
+            jobManager.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
             
-            // Allow the `ArcGISURLSession` to handle its background task events.
-            await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
-            
-            // When the app is re-launched from a background url session, resume any paused jobs,
-            // and check the job status.
-            await OfflineManager.shared.jobManager.resumeAllPausedJobs()
+            // Support app-relaunch after background downloads.
+            return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
+                Logger.offlineManager.debug("Executing OfflineManager backgroundTask")
+                
+                // Allow the `ArcGISURLSession` to handle its background task events.
+                await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
+                
+                // When the app is re-launched from a background url session, resume any paused jobs,
+                // and check the job status.
+                await jobManager.resumeAllPausedJobs()
+            }
+        } else {
+            return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
+                Logger.offlineManager.debug("Executing OfflineManager backgroundTask")
+                
+                // Allow the `ArcGISURLSession` to handle its background task events.
+                await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
+            }
         }
     }
 }
