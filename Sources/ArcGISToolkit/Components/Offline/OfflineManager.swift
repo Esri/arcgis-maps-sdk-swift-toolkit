@@ -128,7 +128,7 @@ public class OfflineManager: ObservableObject {
         Task.detached {
             await self.savePendingMapInfo(for: portalItem)
         }
-#if targetEnvironment(iOS)
+#if !targetEnvironment(visionOS) && !targetEnvironment(macCatalyst)
         if #available(iOS 26.0, *) {
             startContinuedProcessingTask(for: job, title: title)
         }
@@ -368,7 +368,7 @@ private extension Dictionary {
     }
 }
 
-#if targetEnvironment(iOS)
+#if !targetEnvironment(visionOS) && !targetEnvironment(macCatalyst)
 extension OfflineManager {
     /// Starts a background continued processing task for a given job that is
     /// taking a map offline.
