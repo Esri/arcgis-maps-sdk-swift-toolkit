@@ -77,7 +77,7 @@ public class OfflineManager: ObservableObject {
     var jobCompletionAction: ((any JobProtocol) -> Void)?
     
     /// Backing variable for the `jobManager` property.
-    private var _jobManager: JobManager = JobManager(uniqueID: "offlineManager")
+    fileprivate var _jobManager: JobManager = JobManager(uniqueID: "offlineManager")
     
     /// The job manager used by the offline manager.
     var jobManager: JobManager? {
@@ -377,28 +377,20 @@ public extension SwiftUI.Scene {
         // Set callback for job completion.
         OfflineManager.shared.jobCompletionAction = jobCompletionAction
         
-        if let jobManager = OfflineManager.shared.jobManager {
-            // Set the background status check schedule.
-            jobManager.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
+        // Set the background status check schedule.
+        // This must be set on the backing variable.
+        OfflineManager.shared._jobManager.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
+        
+        // Support app-relaunch after background downloads.
+        return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
+            Logger.offlineManager.debug("Executing OfflineManager backgroundTask")
             
-            // Support app-relaunch after background downloads.
-            return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
-                Logger.offlineManager.debug("Executing OfflineManager backgroundTask")
-                
-                // Allow the `ArcGISURLSession` to handle its background task events.
-                await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
-                
-                // When the app is re-launched from a background url session, resume any paused jobs,
-                // and check the job status.
-                await jobManager.resumeAllPausedJobs()
-            }
-        } else {
-            return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
-                Logger.offlineManager.debug("Executing OfflineManager backgroundTask")
-                
-                // Allow the `ArcGISURLSession` to handle its background task events.
-                await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
-            }
+            // Allow the `ArcGISURLSession` to handle its background task events.
+            await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
+            
+            // When the app is re-launched from a background url session, resume any paused jobs,
+            // and check the job status.
+            await OfflineManager.shared.jobManager?.resumeAllPausedJobs()
         }
     }
 }
