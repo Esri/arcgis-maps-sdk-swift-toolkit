@@ -88,6 +88,15 @@ public class OfflineManager: ObservableObject {
         }
     }
     
+    /// The preferred schedule for performing status checks while the application is in the
+    /// background.
+    /// - SeeAlso ``JobManager/preferredBackgroundStatusCheckSchedule``
+    /// - Since 300.0
+    public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule {
+        get { _jobManager.preferredBackgroundStatusCheckSchedule }
+        set { _jobManager.preferredBackgroundStatusCheckSchedule = newValue }
+    }
+    
     /// Storage for jobs when we are not making use of the job manager.
     var _jobs: [any JobProtocol] = []
     
@@ -365,7 +374,8 @@ public class OfflineManager: ObservableObject {
 public extension SwiftUI.Scene {
     /// Sets up the offline manager for offline toolkit components.
     /// - Parameters:
-    ///   - preferredBackgroundStatusCheckSchedule: The preferred background status check schedule. See ``JobManager/preferredBackgroundStatusCheckSchedule`` for more details.
+    ///   - preferredBackgroundStatusCheckSchedule: The preferred background status check schedule.
+    ///   See ``JobManager/preferredBackgroundStatusCheckSchedule`` for more details.
     ///   - jobCompletionAction: An action to perform when a job completes.
     @MainActor
     func offlineManager(
@@ -378,8 +388,7 @@ public extension SwiftUI.Scene {
         OfflineManager.shared.jobCompletionAction = jobCompletionAction
         
         // Set the background status check schedule.
-        // This must be set on the backing variable.
-        OfflineManager.shared._jobManager.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
+        OfflineManager.shared.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
         
         // Support app-relaunch after background downloads.
         return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
