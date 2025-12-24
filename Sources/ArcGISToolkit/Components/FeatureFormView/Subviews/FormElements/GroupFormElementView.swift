@@ -40,8 +40,6 @@ struct GroupFormElementView<Content>: View where Content: View {
             }
         } label: {
             Label(element: element)
-                .multilineTextAlignment(.leading)
-                .tint(.primary)
         }
         .onAppear {
             isExpanded = element.initialState == .expanded
@@ -76,11 +74,16 @@ extension GroupFormElementView {
         let element: GroupFormElement
         
         var body: some View {
-            if !element.description.isEmpty {
-                Text(element.description)
-                    .accessibilityIdentifier("\(element.label) Description")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+            VStack(alignment: .leading) {
+                Text(element.label)
+                if !element.description.isEmpty {
+                    Text(element.description)
+                        .accessibilityIdentifier("\(element.label) Description")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .tint(.primary)
+                }
             }
         }
     }

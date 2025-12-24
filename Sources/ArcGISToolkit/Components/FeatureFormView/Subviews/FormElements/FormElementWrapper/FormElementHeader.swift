@@ -31,7 +31,7 @@ struct FormElementHeader: View {
     @ViewBuilder
     var titleTextForElement: some View {
         switch element {
-        case _ as AttachmentsFormElement:
+        case _ as AttachmentsFormElement, _ as GroupFormElement:
             EmptyView()
         case let element as FieldFormElement:
             FieldFormElementTitle(element: element)
