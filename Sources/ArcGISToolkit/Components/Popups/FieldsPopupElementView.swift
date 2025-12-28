@@ -72,19 +72,22 @@ struct FieldsPopupElementView: View {
         let formattedValue: String
         
         var body: some View {
-            if formattedValue.lowercased().starts(with: "http"),
-               let url = URL(string: formattedValue) {
+            if let url = formattedValue.detectedUrl {
                 Link(destination: url) {
-                    Text(
-                        "View",
-                        bundle: .toolkitModule,
-                        comment: "E.g. Open a hyperlink."
-                    )
+                    if url.scheme == "tel" {
+                        Text(formattedValue)
+                    } else {
+                        Text(
+                            "View",
+                            bundle: .toolkitModule,
+                            comment: "E.g. Open a hyperlink."
+                        )
+                    }
                 }
 #if os(visionOS)
-                    .buttonStyle(.bordered)
+                .buttonStyle(.bordered)
 #else
-                    .buttonStyle(.borderless)
+                .buttonStyle(.borderless)
 #endif
             } else {
                 Text(formattedValue)
@@ -109,4 +112,33 @@ private extension FieldsPopupElement {
             comment: "A label in reference to fields in a set of data contained in a popup."
         ) : title
     }
+}
+
+private extension String {
+    /// Returns the first detected link or phone number as a URL, if found.
+    var detectedUrl: URL? {
+        let types: NSTextCheckingResult.CheckingType = [.link, .phoneNumber]
+        let detector = try? NSDataDetector(types: types.rawValue)
+        
+        let range = NSRange(self.startIndex..., in: self)
+        guard let match = detector?.firstMatch(in: self, options: [], range: range) else {
+            return nil
+        }
+        
+        /// URL detected
+        if let url = match.url {
+            return url
+        }
+        
+        /// Phone number detected
+        if let phoneNumber = match.phoneNumber {
+            let cleaned = phoneNumber
+                .components(separatedBy: CharacterSet.decimalDigits.inverted)
+                .joined()
+            return URL(string: "tel:\(cleaned)")
+        }
+        
+        return nil
+    }
+    
 }
