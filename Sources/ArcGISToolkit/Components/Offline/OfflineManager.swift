@@ -98,14 +98,14 @@ public class OfflineManager: ObservableObject {
     }
     
     /// Storage for jobs when we are not making use of the job manager.
-    var _jobs: [any JobProtocol] = []
+    private var selfManagedJobs: [any JobProtocol] = []
     
     /// The jobs managed by this instance.
     var jobs: [any JobProtocol] {
         return if isUsingJobManager {
             jobManager.jobs
         } else {
-            _jobs
+            selfManagedJobs
         }
     }
     
@@ -178,7 +178,7 @@ public class OfflineManager: ObservableObject {
         if isUsingJobManager {
             jobManager.jobs.append(job)
         } else {
-            _jobs.append(job)
+            selfManagedJobs.append(job)
         }
         observeJob(job)
         job.start()
@@ -211,9 +211,9 @@ public class OfflineManager: ObservableObject {
                 // as possible after removing a job instead of waiting for the app to be backgrounded.
                 jobManager.saveState()
             } else {
-                // Remove completed job from JobManager.
+                // Remove completed job from self managed jobs.
                 Logger.offlineManager.debug("Removing completed job from storage.")
-                _jobs.removeAll { $0 === job }
+                selfManagedJobs.removeAll { $0 === job }
             }
             
             // Call job completion action.
