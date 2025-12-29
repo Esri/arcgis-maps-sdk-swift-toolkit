@@ -66,32 +66,43 @@ struct FieldsPopupElementView: View {
         }
     }
     
-    /// A view for displaying a formatted value.
     private struct FormattedValueText: View {
-        /// The String to display.
+        
         let formattedValue: String
         
         var body: some View {
-            if let url = formattedValue.detectedUrl {
+            switch formattedValue.detectedValue {
+                
+            case .phone(let url, let range):
+                Text(phoneAttributedText(url: url, range: range))
+                
+            case .url(let url):
                 Link(destination: url) {
-                    if url.scheme == "tel" {
-                        Text(formattedValue)
-                    } else {
-                        Text(
-                            "View",
-                            bundle: .toolkitModule,
-                            comment: "E.g. Open a hyperlink."
-                        )
-                    }
+                    Text(
+                        "View",
+                        bundle: .toolkitModule,
+                        comment: "E.g. Open a hyperlink."
+                    )
                 }
 #if os(visionOS)
                 .buttonStyle(.bordered)
 #else
                 .buttonStyle(.borderless)
 #endif
-            } else {
+                
+            case .none:
                 Text(formattedValue)
             }
+        }
+        
+        private func phoneAttributedText(url: URL, range: NSRange) -> AttributedString {
+            var attributed = AttributedString(formattedValue)
+            if let range = Range(range, in: attributed) {
+                attributed[range].link = url
+                attributed[range].foregroundColor = .blue
+                attributed[range].underlineStyle = .single
+            }
+            return attributed
         }
     }
 }
@@ -115,27 +126,38 @@ private extension FieldsPopupElement {
 }
 
 private extension String {
-    /// Returns the first detected link or phone number as a URL, if found.
-    var detectedUrl: URL? {
-        let types: NSTextCheckingResult.CheckingType = [.link, .phoneNumber]
-        let detector = try? NSDataDetector(types: types.rawValue)
-        
-        let range = NSRange(self.startIndex..., in: self)
-        guard let match = detector?.firstMatch(in: self, options: [], range: range) else {
+    
+    enum DetectedValue {
+        case phone(url: URL, range: NSRange)
+        case url(URL)
+    }
+    
+    var detectedValue: DetectedValue? {
+        let types: NSTextCheckingResult.CheckingType = [.phoneNumber, .link]
+        guard let detector = try? NSDataDetector(types: types.rawValue) else {
             return nil
         }
         
-        /// URL detected
-        if let url = match.url {
-            return url
+        let fullRange = NSRange(startIndex..., in: self)
+        
+        guard let match = detector.firstMatch(in: self, options: [], range: fullRange) else {
+            return nil
         }
         
-        /// Phone number detected
-        if let phoneNumber = match.phoneNumber {
-            let cleaned = phoneNumber
+        /// Phone number
+        if let phone = match.phoneNumber {
+            let cleaned = phone
                 .components(separatedBy: CharacterSet.decimalDigits.inverted)
                 .joined()
-            return URL(string: "tel:\(cleaned)")
+            
+            if let url = URL(string: "tel:\(cleaned)") {
+                return .phone(url: url, range: match.range)
+            }
+        }
+        
+        /// URL
+        if let url = match.url {
+            return .url(url)
         }
         
         return nil
