@@ -77,14 +77,14 @@ public class OfflineManager: ObservableObject {
     var jobCompletionAction: ((any JobProtocol) -> Void)?
     
     /// Backing variable for the `jobManager` property.
-    fileprivate var _jobManager: JobManager = JobManager(uniqueID: "offlineManager")
+    let jobManager: JobManager = JobManager(uniqueID: "offlineManager")
     
-    /// The job manager used by the offline manager.
-    var jobManager: JobManager? {
-        if #available(iOS 26.0, *) {
-            useBGContinuedProcessingTasks ? nil : _jobManager
+    /// A Boolean value indicating if the `JobManager` is managing the jobs.
+    var isUsingJobManager: Bool {
+        return if #available(iOS 26.0, *) {
+            !useBGContinuedProcessingTasks
         } else {
-            _jobManager
+            true
         }
     }
     
@@ -93,8 +93,8 @@ public class OfflineManager: ObservableObject {
     /// - SeeAlso ``JobManager/preferredBackgroundStatusCheckSchedule``
     /// - Since 300.0
     public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule {
-        get { _jobManager.preferredBackgroundStatusCheckSchedule }
-        set { _jobManager.preferredBackgroundStatusCheckSchedule = newValue }
+        get { jobManager.preferredBackgroundStatusCheckSchedule }
+        set { jobManager.preferredBackgroundStatusCheckSchedule = newValue }
     }
     
     /// Storage for jobs when we are not making use of the job manager.
@@ -102,7 +102,11 @@ public class OfflineManager: ObservableObject {
     
     /// The jobs managed by this instance.
     var jobs: [any JobProtocol] {
-        jobManager?.jobs ?? _jobs
+        return if isUsingJobManager {
+            jobManager.jobs
+        } else {
+            _jobs
+        }
     }
     
     /// The update mode of any new on-demand map areas taken offline.
@@ -149,7 +153,8 @@ public class OfflineManager: ObservableObject {
         // Retrieve the offline map infos.
         loadOfflineMapInfos()
         
-        if let jobManager {
+        // If using the job manager, then perform required setup.
+        if isUsingJobManager {
             // Observe each job's status.
             for job in jobManager.jobs {
                 observeJob(job)
@@ -170,7 +175,7 @@ public class OfflineManager: ObservableObject {
     ///   - title: The title of the map area being taken offline.
     func start(job: some JobProtocol, portalItem: PortalItem, title: String) {
         Logger.offlineManager.debug("Starting Job from offline manager")
-        if let jobManager {
+        if isUsingJobManager {
             jobManager.jobs.append(job)
         } else {
             _jobs.append(job)
@@ -197,7 +202,7 @@ public class OfflineManager: ObservableObject {
             // Wait for job to finish.
             let result = await job.result
             
-            if let jobManager {
+            if isUsingJobManager {
                 // Remove completed job from JobManager.
                 Logger.offlineManager.debug("Removing completed job from job manager")
                 jobManager.jobs.removeAll { $0 === job }
@@ -397,9 +402,11 @@ public extension SwiftUI.Scene {
             // Allow the `ArcGISURLSession` to handle its background task events.
             await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
             
-            // When the app is re-launched from a background url session, resume any paused jobs,
-            // and check the job status.
-            await OfflineManager.shared.jobManager?.resumeAllPausedJobs()
+            if await OfflineManager.shared.isUsingJobManager {
+                // When the app is re-launched from a background url session, resume any paused jobs,
+                // and check the job status.
+                await OfflineManager.shared.jobManager.resumeAllPausedJobs()
+            }
         }
     }
 }
