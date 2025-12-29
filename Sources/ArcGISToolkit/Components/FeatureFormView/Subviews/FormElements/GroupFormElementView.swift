@@ -30,10 +30,11 @@ struct GroupFormElementView<Content>: View where Content: View {
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
             ForEach(visibleElements, id: \.self) { element in
-                VStack(alignment: .leading) {
-                    FormElementHeader(element: element)
+                Section {
                     viewCreator(element)
-                        .formInputStyle(isTappable: true)
+                } header: {
+                    FormElementHeader(element: element)
+                } footer: {
                     FormElementFooter(element: element)
                 }
                 .leadingListRowInsetRemoved()
@@ -94,9 +95,10 @@ private extension View {
     func leadingListRowInsetRemoved() -> some View {
         if #available(iOS 26.0, *) {
             return self
-                .listRowInsets([.leading], 0)
+                .listRowInsets(.leading, 0)
         } else {
             return self
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
     }
 }
