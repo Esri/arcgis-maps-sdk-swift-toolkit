@@ -122,6 +122,9 @@ public class OfflineManager: ObservableObject {
     
     /// A Boolean value indicating whether the `OfflineManager` makes use of
     /// `BGContinuedProcessingTask` in-lieu of the `JobManager`.
+    /// This property must be set before taking maps offline and should be set
+    /// to the same value the next time the app is run. Changing the value
+    /// of this property between app runs is not supported.
     /// Setting this has no effect on platforms other than iOS.
     /// - Since 300.0
     @available(iOS 26.0, *)
