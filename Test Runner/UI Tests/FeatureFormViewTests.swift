@@ -826,7 +826,6 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Combo String"]
         let fieldValue = app.staticTexts["Combo String Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value Combo Box Option"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -844,11 +843,11 @@ final class FeatureFormViewTests: XCTestCase {
         fieldValue.tap()
         
         XCTAssertTrue(
-            noValueButton.waitForExistence(timeout: 1),
+            app.noValueComboBoxOption.waitForExistence(timeout: 1),
             "The no value button doesn't exist."
         )
         
-        noValueButton.tap()
+        app.noValueComboBoxOption.tap()
         
         XCTAssertTrue(
             doneButton.exists,
@@ -872,7 +871,6 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Required Combo Box Combo Box Value"]
         let footer = app.staticTexts["Required Combo Box Footer"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value Combo Box Option"]
         let oakButton = app.buttons["Oak"]
         
         openTestCase()
@@ -901,7 +899,7 @@ final class FeatureFormViewTests: XCTestCase {
         fieldValue.tap()
         
         XCTAssertFalse(
-            noValueButton.exists,
+            app.noValueComboBoxOption.exists,
             "The no value button exists but it should not."
         )
         
@@ -987,7 +985,6 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Unsupported Value"]
         let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value Combo Box Option"]
         let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
         let unsupportedValue = app.buttons["0"]
         
@@ -1017,11 +1014,11 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            noValueButton.exists,
+            app.noValueComboBoxOption.exists,
             "No Value doesn't exist."
         )
         
-        noValueButton.tap()
+        app.noValueComboBoxOption.tap()
         
         XCTAssertFalse(
             unsupportedValueSectionHeader.exists,
@@ -2356,5 +2353,12 @@ private extension String {
             tellus et ut dolore.
             """
         )
+    }
+}
+
+private extension XCUIApplication {
+    /// The "No value" combo box option.
+    var noValueComboBoxOption: XCUIElement {
+        buttons["No value Combo Box Option"]
     }
 }
