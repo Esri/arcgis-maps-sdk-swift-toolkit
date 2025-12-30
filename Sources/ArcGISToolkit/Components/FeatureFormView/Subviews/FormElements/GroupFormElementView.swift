@@ -39,7 +39,7 @@ struct GroupFormElementView<Content>: View where Content: View {
                 }
             }
         } label: {
-            Label(element: element)
+            label
         }
         .onAppear {
             isExpanded = element.initialState == .expanded
@@ -60,31 +60,25 @@ struct GroupFormElementView<Content>: View where Content: View {
         .inspectorTint(.blue)
     }
     
+    /// The label for the group element.
+    private var label: some View {
+        VStack(alignment: .leading) {
+            Text(element.label)
+            if !element.description.isEmpty {
+                Text(element.description)
+                    .accessibilityIdentifier("\(element.label) Description")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.leading)
+                    .tint(.primary)
+            }
+        }
+    }
+    
     /// The list of visible group elements.
     private var visibleElements: [FormElement] {
         element
             .elements
             .filter { elementVisibility[$0] == true }
-    }
-}
-
-extension GroupFormElementView {
-    /// A view displaying a label and description of a `GroupFormElement`.
-    struct Label: View {
-        let element: GroupFormElement
-        
-        var body: some View {
-            VStack(alignment: .leading) {
-                Text(element.label)
-                if !element.description.isEmpty {
-                    Text(element.description)
-                        .accessibilityIdentifier("\(element.label) Description")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.leading)
-                        .tint(.primary)
-                }
-            }
-        }
     }
 }
