@@ -23,13 +23,13 @@ struct FormElementHeader: View {
     let element: FormElement
     
     var body: some View {
-        titleTextForElement
+        title
             .font(.subheadline)
             .foregroundStyle(.secondary)
     }
     
     @ViewBuilder
-    var titleTextForElement: some View {
+    var title: some View {
         switch element {
         case is GroupFormElement:
             EmptyView()
