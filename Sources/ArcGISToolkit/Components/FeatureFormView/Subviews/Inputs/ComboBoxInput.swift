@@ -28,8 +28,8 @@ struct ComboBoxInput: View {
     @State private var isPresented = false
     /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
-    /// The selected option.
-    @State private var selectedValue: ComboBoxValue = .none
+    /// The selected value.
+    @State private var selectedValue: ComboBoxValue? = nil
     
     /// The element the input belongs to.
     private let element: FieldFormElement
@@ -82,7 +82,7 @@ struct ComboBoxInput: View {
                 Text(displayedValue)
                     .accessibilityIdentifier("\(element.label) Combo Box Value")
                 Spacer()
-                if selectedValue.codedValue != nil, !isRequired {
+                if selectedValue?.codedValue != nil, !isRequired {
                     // Only show clear button if we have a value
                     // and we're not required. (i.e., Don't show clear if
                     // the field is required.)
@@ -170,14 +170,14 @@ extension ComboBoxInput {
                         }
                     }
                     ForEach(matchingValues, id: \.self) { codedValue in
-                        makePickerRow(label: codedValue.name, selected: selectedValue.codedValue == codedValue) {
+                        makePickerRow(label: codedValue.name, selected: selectedValue?.codedValue == codedValue) {
                             updateValueAndEvaluateExpressions(codedValue)
                         }
                     }
                 } header: {
                     Text(element.description)
                 }
-                if let unsupportedValue = selectedValue.unsupportedValue {
+                if let unsupportedValue = selectedValue?.unsupportedValue {
                     Section {
                         makePickerRow(label: unsupportedValue, selected: true) { }
                             .italic()
@@ -276,7 +276,6 @@ extension ArcGIS.CodedValue: Swift.Hashable {
 
 private enum ComboBoxValue: Equatable {
     case coded(CodedValue)
-    case none
     /// The element's current (but unsupported) value.
     ///
     /// If the element has a value not in its domain, it has an unsupported value. This unsupported value is
