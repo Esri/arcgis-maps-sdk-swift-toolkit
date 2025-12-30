@@ -29,7 +29,7 @@ struct ComboBoxInput: View {
     /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
     /// The selected option.
-    @State private var selectedValue: ComboBoxValue = .noValue
+    @State private var selectedValue: ComboBoxValue = .none
     
     /// The element the input belongs to.
     private let element: FieldFormElement
@@ -99,7 +99,7 @@ struct ComboBoxInput: View {
                         .accessibilityIdentifier("\(element.label) Options Button")
                 }
             }
-            .foregroundStyle(selectedValue != .noValue ? .primary : .secondary)
+            .foregroundStyle(selectedValue != .none ? .primary : .secondary)
             .tint(.primary)
         }
         .onIsRequiredChange(of: element) { newIsRequired in
@@ -109,11 +109,11 @@ struct ComboBoxInput: View {
             if let currentValue = element.codedValues.first(where: {
                 $0.name == newFormattedValue
             }) {
-                selectedValue = .codedValue(currentValue)
+                selectedValue = .coded(currentValue)
             } else if newValue != nil {
-                selectedValue = .unsupportedValue(newFormattedValue)
+                selectedValue = .unsupported(newFormattedValue)
             } else {
-                selectedValue = .noValue
+                selectedValue = .none
             }
         }
         .sheet(isPresented: $isPresented) {
@@ -125,11 +125,11 @@ struct ComboBoxInput: View {
 extension ComboBoxInput {
     var displayedValue: String {
         switch selectedValue {
-        case .codedValue(let codedValue):
+        case .coded(let codedValue):
             codedValue.name
-        case .unsupportedValue(let string):
+        case .unsupported(let string):
             string
-        case .noValue:
+        case .none:
             placeholderValue
         }
     }
@@ -161,7 +161,7 @@ extension ComboBoxInput {
                         if noValueOption == .show {
                             makePickerRow(
                                 label: noValueLabel.isEmpty ? String.noValue : noValueLabel,
-                                selected: selectedValue == .noValue
+                                selected: selectedValue == .none
                             ) {
                                 updateValueAndEvaluateExpressions(nil)
                             }
@@ -275,17 +275,17 @@ extension ArcGIS.CodedValue: Swift.Hashable {
 }
 
 private enum ComboBoxValue: Equatable {
-    case codedValue(CodedValue)
-    case noValue
+    case coded(CodedValue)
+    case none
     /// The element's current (but unsupported) value.
     ///
     /// If the element has a value not in its domain, it has an unsupported value. This unsupported value is
     /// present until the user selects a value within the element's domain.
-    case unsupportedValue(String)
+    case unsupported(String)
     
     var codedValue: CodedValue? {
         switch self {
-        case .codedValue(let codedValue):
+        case .coded(let codedValue):
             codedValue
         default:
             nil
@@ -294,7 +294,7 @@ private enum ComboBoxValue: Equatable {
     
     var unsupportedValue: String? {
         switch self {
-        case .unsupportedValue(let string):
+        case .unsupported(let string):
             string
         default:
             nil
