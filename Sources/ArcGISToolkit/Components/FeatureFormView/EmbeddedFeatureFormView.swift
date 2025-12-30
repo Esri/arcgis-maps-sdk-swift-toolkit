@@ -27,7 +27,7 @@ struct EmbeddedFeatureFormView: View {
             ScrollViewReader { scrollView in
                 Group {
                     let form = Form {
-                        makeVisibleElements()
+                        sections
                     }
 #if RELEASE
                     form
@@ -37,7 +37,7 @@ struct EmbeddedFeatureFormView: View {
                         // to make all form elements accessible.
                         ScrollView {
                             VStack {
-                                makeVisibleElements()
+                                sections
                             }
                         }
                     } else {
@@ -120,8 +120,8 @@ extension EmbeddedFeatureFormView {
         }
     }
     
-    /// Makes UI for all visible form elements.
-    func makeVisibleElements() -> some View {
+    /// Makes sections for all visible form elements.
+    var sections: some View {
         ForEach(embeddedFeatureFormViewModel?.visibleElements ?? [], id: \.self) { element in
             section(for: element)
         }
