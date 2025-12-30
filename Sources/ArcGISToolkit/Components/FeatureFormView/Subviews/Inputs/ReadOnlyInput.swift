@@ -34,6 +34,7 @@ struct ReadOnlyInput: View {
                 }
             }
         }
+        // Remove the background to visually indicate the element is read-only.
         .listRowBackground(EmptyView())
     }
     
