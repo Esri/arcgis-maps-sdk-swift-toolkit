@@ -29,8 +29,7 @@ struct OfflineMapAreasExampleApp: App {
         // when the app is backgrounded. It also gives you a chance to configure
         // properties of the offline manager.
         .offlineManager { offlineManager in
-            // Set the `preferredBackgroundStatusCheckSchedule` to `.regularInterval(interval: 30)` to check the status
-            // of the download job in the background every 30 seconds.
+            // Prefer to check the status of jobs in the background every 30 seconds.
             offlineManager.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
             
             // Use the `onJobCompletion` closure to send a notification once a download job completes.
@@ -41,7 +40,7 @@ struct OfflineMapAreasExampleApp: App {
             // If iOS 26 is available then setup the offline manager to utilize
             // `BGContinuedProcessingTask`.
             if #available(iOS 26.0, *) {
-                offlineManager.useBGContinuedProcessingTasks = false
+                offlineManager.useBGContinuedProcessingTasks = true
             }
         }
     }

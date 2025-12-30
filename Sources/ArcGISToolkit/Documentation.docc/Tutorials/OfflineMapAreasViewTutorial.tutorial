@@ -42,12 +42,22 @@
             }
             
             @Step {
-                Map area download jobs are handled in the component using the `JobManager`. The job
-                manager allows download jobs to continue to run if the app is backgrounded or even 
-                terminated. The `OfflineMapAreasView` requires additional setup to use the job manager.
+                Map area download jobs are handled in the component using the `JobManager` or
+                `BGContinuedProcessingTask`. This allows download jobs to continue to run if
+                the app is backgrounded or, in some situations, even terminated.
+                The `OfflineMapAreasView` requires additional setup to use the job manager.
                 
-                Apply the view modifier `.offlineManager(preferredBackgroundStatusCheckSchedule:)` at the entry point of the application. Set the `preferredBackgroundStatusCheckSchedule` to `.regularInterval(interval: 30)` to check the status of the download job in the background
-                every 30 seconds.
+                Apply the view modifier `.offlineManager(configure:)` at the entry point of
+                the application.
+                
+                Set the `preferredBackgroundStatusCheckSchedule` to `.regularInterval(interval: 30)`
+                to check the status of the download job in the background every 30 seconds. Note that
+                whether the system actually allows the job to be checked at the preferred interval
+                is at the discretion of the operating system.
+                
+                Set the `useBGContinuedProcessingTasks` to `true` so that `BGContinuedProcessingTask`
+                is used when available.
+                
                 @Code(name: "OfflineMapAreasTutorialApp.swift", file: OfflineMapAreasAppStep1.swift)
             }
             
@@ -61,7 +71,7 @@
             }
             
             @Step {
-                Use the `jobCompletionAction` closure in `.offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)` to send a notification once a download job completes.
+                Use the `onJobCompletion` closure to send a notification once a download job completes.
                 
                 Add a method to construct and send a notification.
                 @Code(name: "OfflineMapAreasTutorialApp.swift", file: OfflineMapAreasAppStep2.swift, previousFile: OfflineMapAreasAppStep1.swift)
