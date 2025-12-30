@@ -32,7 +32,7 @@ struct EmbeddedFeatureFormView: View {
 #if RELEASE
                     form
 #else
-                    if UserDefaults.standard.testCase != nil {
+                    if CommandLine.arguments.contains("-testCase") {
                         // Use a ScrollView and VStack during UI testing
                         // to make all form elements accessible.
                         ScrollView {
