@@ -69,12 +69,10 @@ struct FieldsPopupElementView: View {
     private struct FormattedValueText: View {
         
         let formattedValue: String
+        private let detector = PopupValueDetector()
         
         var body: some View {
-            switch formattedValue.detectedValue {
-                
-            case .phone(let url, let range):
-                Text(phoneAttributedText(url: url, range: range))
+            switch detector.detect(in: formattedValue) {
                 
             case .url(let url):
                 Link(destination: url) {
@@ -90,18 +88,28 @@ struct FieldsPopupElementView: View {
                 .buttonStyle(.borderless)
 #endif
                 
+            case .phones(let phones):
+                Text(phoneAttributedText(phones: phones))
+                
             case .none:
                 Text(formattedValue)
             }
         }
         
-        private func phoneAttributedText(url: URL, range: NSRange) -> AttributedString {
+        private func phoneAttributedText(
+            phones: [(url: URL, range: NSRange)]
+        ) -> AttributedString {
+            
             var attributed = AttributedString(formattedValue)
-            if let range = Range(range, in: attributed) {
-                attributed[range].link = url
-                attributed[range].foregroundColor = .blue
-                attributed[range].underlineStyle = .single
+            
+            for phone in phones {
+                if let range = Range(phone.range, in: attributed) {
+                    attributed[range].link = phone.url
+                    attributed[range].foregroundColor = .blue
+                    attributed[range].underlineStyle = .single
+                }
             }
+            
             return attributed
         }
     }
@@ -125,42 +133,41 @@ private extension FieldsPopupElement {
     }
 }
 
-private extension String {
+private struct PopupValueDetector {
     
     enum DetectedValue {
-        case phone(url: URL, range: NSRange)
+        case phones([(url: URL, range: NSRange)])
         case url(URL)
     }
     
-    var detectedValue: DetectedValue? {
-        let types: NSTextCheckingResult.CheckingType = [.phoneNumber, .link]
+    func detect(in text: String) -> DetectedValue? {
+        /// URL detection
+        if text.lowercased().starts(with: "http"),
+           let url = URL(string: text) {
+            return .url(url)
+        }
+        
+        /// Phone number detection
+        let types: NSTextCheckingResult.CheckingType = [.phoneNumber]
         guard let detector = try? NSDataDetector(types: types.rawValue) else {
             return nil
         }
         
-        let fullRange = NSRange(startIndex..., in: self)
+        let fullRange = NSRange(text.startIndex..., in: text)
+        let matches = detector.matches(in: text, options: [], range: fullRange)
         
-        guard let match = detector.firstMatch(in: self, options: [], range: fullRange) else {
-            return nil
-        }
-        
-        /// Phone number
-        if let phone = match.phoneNumber {
+        let phones: [(URL, NSRange)] = matches.compactMap { match in
+            guard let phone = match.phoneNumber else { return nil }
+            
             let cleaned = phone
                 .components(separatedBy: CharacterSet.decimalDigits.inverted)
                 .joined()
             
-            if let url = URL(string: "tel:\(cleaned)") {
-                return .phone(url: url, range: match.range)
-            }
+            guard let url = URL(string: "tel:\(cleaned)") else { return nil }
+            return (url, match.range)
         }
         
-        /// URL
-        if let url = match.url {
-            return .url(url)
-        }
-        
-        return nil
+        return phones.isEmpty ? nil : .phones(phones)
     }
     
 }
