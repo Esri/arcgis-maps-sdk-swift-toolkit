@@ -401,42 +401,8 @@ public extension SwiftUI.Scene {
         }
     }
     
-    
-    /// Sets up the offline manager for offline toolkit components.
-    /// - Parameters:
-    ///   - preferredBackgroundStatusCheckSchedule: The preferred background status check schedule
-    ///   when the `JobManager` is used.
-    ///   - onDemandUpdateMode: The update mode of any new on-demand map areas taken offline.
-    ///   - preplannedUpdateMode: The update mode of any new preplanned map areas taken offline.
-    ///   - useBGContinuedProcessingTasks: Indicates whether the `OfflineManager` makes use of
-    /// `BGContinuedProcessingTask` in-lieu of the `JobManager`.
-    ///   - jobCompletionAction: An action to perform when a job completes.
-    /// - SeeAlso ``OfflineManager/preferredBackgroundStatusCheckSchedule``
-    /// - SeeAlso ``OfflineManager/onDemandUpdateMode``
-    /// - SeeAlso ``OfflineManager/preplannedUpdateMode``
-    /// - SeeAlso ``OfflineManager/useBGContinuedProcessingTasks``
-    /// - SeeAlso ``OfflineManager/jobCompletionAction``
-    /// - Since 300.0
-    @available(iOS 26.0, *)
-    @MainActor
-    func offlineManager(
-        preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,
-        onDemandUpdateMode: GenerateOfflineMapParameters.UpdateMode = .noUpdates,
-        preplannedUpdateMode: DownloadPreplannedOfflineMapParameters.UpdateMode = .noUpdates,
-        useBGContinuedProcessingTasks: Bool = true,
-        jobCompletion jobCompletionAction: ((any JobProtocol) -> Void)? = nil
-    ) -> some SwiftUI.Scene {
-        offlineManager {
-            $0.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
-            $0.onDemandUpdateMode = onDemandUpdateMode
-            $0.preplannedUpdateMode = preplannedUpdateMode
-            $0.useBGContinuedProcessingTasks = useBGContinuedProcessingTasks
-            $0.onJobCompletion = jobCompletionAction
-        }
-    }
-    
-    /// Setup background download support for the offline component and configure
-    /// the offline manager.
+    /// Setup the background download support for the offline toolkit components
+    /// and configure the offline manager.
     /// - Parameters:
     ///   - configure: A closure that allows you to configure the offline manager.
     /// - SeeAlso ``OfflineManager``
