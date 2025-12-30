@@ -208,9 +208,7 @@ extension ComboBoxInput {
     }
     
     private func makePickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
-        Button {
-            action()
-        } label: {
+        Button(action: action) {
             HStack {
                 Text(label)
                 Spacer()
