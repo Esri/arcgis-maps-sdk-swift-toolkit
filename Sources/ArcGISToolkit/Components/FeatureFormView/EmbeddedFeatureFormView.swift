@@ -121,9 +121,23 @@ extension EmbeddedFeatureFormView {
     }
     
     /// Makes sections for all visible form elements.
-    var sections: some View {
-        ForEach(embeddedFeatureFormViewModel?.visibleElements ?? [], id: \.self) { element in
-            section(for: element)
+    @ViewBuilder var sections: some View {
+        if let visibleElements = embeddedFeatureFormViewModel?.visibleElements {
+            ForEach(visibleElements, id: \.self) { element in
+                section(for: element)
+            }
+        } else {
+            ContentUnavailableView {
+                Label {
+                    Text(
+                        "This form is empty.",
+                        bundle: .toolkitModule,
+                        comment: "A notice communicating that a feature form has no elements."
+                    )
+                } icon: {
+                    Image(systemName: "text.page.slash.fill")
+                }
+            }
         }
     }
 }
