@@ -159,7 +159,7 @@ extension ComboBoxInput {
                 Section(element.description) {
                     if !element.isRequired {
                         if noValueOption == .show {
-                            makePickerRow(
+                            pickerRow(
                                 label: noValueLabel.isEmpty ? String.noValue : noValueLabel,
                                 selected: selectedValue == .none
                             ) {
@@ -170,14 +170,14 @@ extension ComboBoxInput {
                         }
                     }
                     ForEach(matchingValues, id: \.self) { codedValue in
-                        makePickerRow(label: codedValue.name, selected: selectedValue?.codedValue == codedValue) {
+                        pickerRow(label: codedValue.name, selected: selectedValue?.codedValue == codedValue) {
                             updateValueAndEvaluateExpressions(codedValue)
                         }
                     }
                 }
                 if let unsupportedValue = selectedValue?.unsupportedValue {
                     Section {
-                        makePickerRow(label: unsupportedValue, selected: true) { }
+                        pickerRow(label: unsupportedValue, selected: true) { }
                             .italic()
                     } header: {
                         Text.unsupportedValue
@@ -207,12 +207,12 @@ extension ComboBoxInput {
         }
     }
     
-    private func makePickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
+    private func pickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack {
                 Text(label)
-                Spacer()
                 if selected {
+                    Spacer()
                     Image(systemName: "checkmark")
                 }
             }
