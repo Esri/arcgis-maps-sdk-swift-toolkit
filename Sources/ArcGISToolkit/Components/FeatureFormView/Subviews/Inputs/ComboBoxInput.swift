@@ -99,7 +99,7 @@ struct ComboBoxInput: View {
                         .accessibilityIdentifier("\(element.label) Options Button")
                 }
             }
-            .foregroundStyle(!selectedValue.isNoValue ? .primary : .secondary)
+            .foregroundStyle(selectedValue != .noValue ? .primary : .secondary)
             .tint(.primary)
         }
         .onIsRequiredChange(of: element) { newIsRequired in
@@ -161,7 +161,7 @@ extension ComboBoxInput {
                         if noValueOption == .show {
                             makePickerRow(
                                 label: noValueLabel.isEmpty ? String.noValue : noValueLabel,
-                                selected: selectedValue.isNoValue
+                                selected: selectedValue == .noValue
                             ) {
                                 updateValueAndEvaluateExpressions(nil)
                             }
@@ -298,15 +298,6 @@ private enum ComboBoxValue: Equatable {
             string
         default:
             nil
-        }
-    }
-    
-    var isNoValue: Bool {
-        switch self {
-        case .noValue:
-            true
-        default:
-            false
         }
     }
 }
