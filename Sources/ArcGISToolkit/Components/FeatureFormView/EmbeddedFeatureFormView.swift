@@ -108,10 +108,8 @@ extension EmbeddedFeatureFormView {
                     formElement: element,
                     formViewModel: embeddedFeatureFormViewModel
                 )
-            case let element as FieldFormElement:
-                if !(element.input is UnsupportedFormInput) {
-                    FieldFormElementView(element: element)
-                }
+            case let element as FieldFormElement where !(element.input is UnsupportedFormInput):
+                FieldFormElementView(element: element)
             case let element as TextFormElement:
                 TextFormElementView(element: element)
             case let element as UtilityAssociationsFormElement:
