@@ -45,11 +45,11 @@ struct EmbeddedFeatureFormView: View {
                     }
 #endif
                 }
-                .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
-                    if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
-                        // Navigation bars will unfortunately cover or obscure
-                        // section headers. See FB19740517.
-                        withAnimation { scrollView.scrollTo(focusedElement, anchor: .top) }
+                .onChange(of: embeddedFeatureFormViewModel.focusedElement) { _, newFocusedElement in
+                    guard let newFocusedElement else { return }
+                    // The navigation bar may obscure section headers (FB19740517).
+                    withAnimation {
+                        scrollView.scrollTo(newFocusedElement, anchor: .top)
                     }
                 }
             }
