@@ -24,7 +24,8 @@ import SwiftUI
 /// This component provides high-level APIs to manage offline map areas and
 /// access their data.
 /// This component manages offline jobs and it utilizes the ``JobManager``
-/// in order to facilitate jobs continuing to run while the app is backgrounded.
+/// and `BGContinuedProcessingTask` in order to facilitate jobs continuing to
+/// run while the app is backgrounded.
 ///
 /// **Features**
 ///
@@ -35,7 +36,7 @@ import SwiftUI
 /// - Access map info for web maps that have saved map areas via `OfflineManager.shared.offlineMapInfos`.
 /// - Remove offline map areas from the device.
 /// - Run download jobs while the app is in the background.
-/// - Get notified when the jobs complete via the `jobCompletionAction` closure in `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletionAction:)`.
+/// - Get notified when the jobs complete via the ``OfflineManager/onJobCompletion`` property.
 ///
 /// The component is useful both for building custom UI with the provided APIs,
 /// and for supporting workflows that require retrieving offline map areas
@@ -46,9 +47,10 @@ import SwiftUI
 /// **Behavior**
 ///
 /// The offline manager is not instantiable, you must use the ``shared`` instance.
-/// Set the `offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletion:)`
-/// modifier at the entry point of your application to add additional setup
-/// required for the component to use the job manager. For example:
+/// Setup and configure the offline manager with the `offlineManager(configure:)`
+/// modifier at the entry point of your application. This is required to support
+/// the use of the ``JobManager`` and it also serves as a convenient location
+/// to configure the properties of the offline manager.
 ///
 /// ```swift
 /// @main
@@ -58,8 +60,10 @@ import SwiftUI
 ///             ContentView()
 ///         }
 ///         // Setup the offline toolkit components for the app.
-///         .offlineManager(preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)) { job in
-///             // Do something after the job completes…
+///         .offlineManager { offlineManager in
+///             // Configure the offline manager
+///             offlineManager.preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
+///             // ...
 ///         }
 ///     }
 /// }
