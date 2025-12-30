@@ -37,7 +37,6 @@ struct GroupFormElementView<Content>: View where Content: View {
                 } footer: {
                     FormElementFooter(element: element)
                 }
-                .leadingListRowInsetRemoved()
             }
         } label: {
             Label(element: element)
@@ -86,19 +85,6 @@ extension GroupFormElementView {
                         .tint(.primary)
                 }
             }
-        }
-    }
-}
-
-private extension View {
-    /// Removes the leading list row inset.
-    func leadingListRowInsetRemoved() -> some View {
-        if #available(iOS 26.0, *) {
-            return self
-                .listRowInsets(.leading, 0)
-        } else {
-            return self
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
     }
 }
