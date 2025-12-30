@@ -66,14 +66,15 @@ struct FieldsPopupElementView: View {
         }
     }
     
-    /// A view for displaying a formatted value.
     private struct FormattedValueText: View {
-        /// The String to display.
+        
         let formattedValue: String
+        private let detector = PopupValueDetector()
         
         var body: some View {
-            if formattedValue.lowercased().starts(with: "http"),
-               let url = URL(string: formattedValue) {
+            switch detector.detect(in: formattedValue) {
+                
+            case .url(let url):
                 Link(destination: url) {
                     Text(
                         "View",
@@ -82,13 +83,34 @@ struct FieldsPopupElementView: View {
                     )
                 }
 #if os(visionOS)
-                    .buttonStyle(.bordered)
+                .buttonStyle(.bordered)
 #else
-                    .buttonStyle(.borderless)
+                .buttonStyle(.borderless)
 #endif
-            } else {
+                
+            case .phones(let phones):
+                Text(phoneAttributedText(phones: phones))
+                
+            case .none:
                 Text(formattedValue)
             }
+        }
+        
+        private func phoneAttributedText(
+            phones: [(url: URL, range: NSRange)]
+        ) -> AttributedString {
+            
+            var attributed = AttributedString(formattedValue)
+            
+            for phone in phones {
+                if let range = Range(phone.range, in: attributed) {
+                    attributed[range].link = phone.url
+                    attributed[range].foregroundColor = .blue
+                    attributed[range].underlineStyle = .single
+                }
+            }
+            
+            return attributed
         }
     }
 }
@@ -109,4 +131,43 @@ private extension FieldsPopupElement {
             comment: "A label in reference to fields in a set of data contained in a popup."
         ) : title
     }
+}
+
+private struct PopupValueDetector {
+    
+    enum DetectedValue {
+        case phones([(url: URL, range: NSRange)])
+        case url(URL)
+    }
+    
+    func detect(in text: String) -> DetectedValue? {
+        /// URL detection
+        if text.lowercased().starts(with: "http"),
+           let url = URL(string: text) {
+            return .url(url)
+        }
+        
+        /// Phone number detection
+        let types: NSTextCheckingResult.CheckingType = [.phoneNumber]
+        guard let detector = try? NSDataDetector(types: types.rawValue) else {
+            return nil
+        }
+        
+        let fullRange = NSRange(text.startIndex..., in: text)
+        let matches = detector.matches(in: text, options: [], range: fullRange)
+        
+        let phones: [(URL, NSRange)] = matches.compactMap { match in
+            guard let phone = match.phoneNumber else { return nil }
+            
+            let cleaned = phone
+                .components(separatedBy: CharacterSet.decimalDigits.inverted)
+                .joined()
+            
+            guard let url = URL(string: "tel:\(cleaned)") else { return nil }
+            return (url, match.range)
+        }
+        
+        return phones.isEmpty ? nil : .phones(phones)
+    }
+    
 }
