@@ -79,15 +79,15 @@ struct EmbeddedFeatureFormView: View {
 }
 
 extension EmbeddedFeatureFormView {
-    /// Makes UI for a form element.
+    /// Makes a section for a form element.
     /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeElement(_ element: FormElement) -> some View {
+    @ViewBuilder func section(for element: FormElement) -> some View {
         switch element {
         case let element as GroupFormElement:
-            GroupFormElementView(element: element) { makeElementBody($0) }
+            GroupFormElementView(element: element) { content(for: $0) }
         default:
             Section {
-                makeElementBody(element)
+                content(for: element)
             } header: {
                 FormElementHeader(element: element)
                     .textCase(.none)
@@ -98,9 +98,9 @@ extension EmbeddedFeatureFormView {
         }
     }
     
-    /// Makes UI for a form element's body.
+    /// Makes content for a form element's section.
     /// - Parameter element: The element to generate the body for.
-    @ViewBuilder func makeElementBody(_ element: FormElement) -> some View {
+    @ViewBuilder func content(for element: FormElement) -> some View {
         if let embeddedFeatureFormViewModel {
             switch element {
             case let element as AttachmentsFormElement:
@@ -125,7 +125,7 @@ extension EmbeddedFeatureFormView {
     /// Makes UI for all visible form elements.
     func makeVisibleElements() -> some View {
         ForEach(embeddedFeatureFormViewModel?.visibleElements ?? [], id: \.self) { element in
-            makeElement(element)
+            section(for: element)
         }
     }
 }
