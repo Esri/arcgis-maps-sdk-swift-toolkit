@@ -156,7 +156,7 @@ extension ComboBoxInput {
     private func makePicker() -> some View {
         NavigationStack {
             List {
-                Section {
+                Section(element.description) {
                     if !element.isRequired {
                         if noValueOption == .show {
                             makePickerRow(
@@ -174,8 +174,6 @@ extension ComboBoxInput {
                             updateValueAndEvaluateExpressions(codedValue)
                         }
                     }
-                } header: {
-                    Text(element.description)
                 }
                 if let unsupportedValue = selectedValue?.unsupportedValue {
                     Section {
