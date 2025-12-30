@@ -26,19 +26,24 @@ struct EmbeddedFeatureFormView: View {
         if let embeddedFeatureFormViewModel {
             ScrollViewReader { scrollView in
                 Group {
+                    let form = Form {
+                        makeVisibleElements()
+                    }
+#if RELEASE
+                    form
+#else
                     if UserDefaults.standard.testCase != nil {
-                        // Use ScrollView + VStack + ForEach during UI testing
-                        // to make all form elements reachable.
+                        // Use a ScrollView and VStack during UI testing
+                        // to make all form elements accessible.
                         ScrollView {
                             VStack {
                                 makeVisibleElements()
                             }
                         }
                     } else {
-                        Form {
-                            makeVisibleElements()
-                        }
+                        form
                     }
+#endif
                 }
                 .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
                     if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
