@@ -74,7 +74,8 @@ public class OfflineManager: ObservableObject {
     public static let shared = OfflineManager()
     
     /// The action to perform when a job completes.
-    var jobCompletionAction: ((any JobProtocol) -> Void)?
+    /// - Since 300.0 
+    public var onJobCompletion: ((any JobProtocol) -> Void)?
     
     /// Backing variable for the `jobManager` property.
     let jobManager: JobManager = JobManager(uniqueID: "offlineManager")
@@ -126,6 +127,7 @@ public class OfflineManager: ObservableObject {
     /// to the same value the next time the app is run. Changing the value
     /// of this property between app runs is not supported.
     /// Setting this has no effect on platforms other than iOS.
+    /// The default value of this property is `true` on iOS.
     /// - Since 300.0
     @available(iOS 26.0, *)
     public var useBGContinuedProcessingTasks: Bool {
@@ -220,7 +222,7 @@ public class OfflineManager: ObservableObject {
             }
             
             // Call job completion action.
-            jobCompletionAction?(job)
+            onJobCompletion?(job)
             
             // Check pending map infos.
             if let portalItem = onlineMapPortalItem(for: job), let id = portalItem.id {
@@ -390,13 +392,63 @@ public extension SwiftUI.Scene {
         preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,
         jobCompletion jobCompletionAction: ((any JobProtocol) -> Void)? = nil
     ) -> some SwiftUI.Scene {
+        offlineManager {
+            // Set callback for job completion.
+            $0.onJobCompletion = jobCompletionAction
+            
+            // Set the background status check schedule.
+            $0.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
+        }
+    }
+    
+    
+    /// Sets up the offline manager for offline toolkit components.
+    /// - Parameters:
+    ///   - preferredBackgroundStatusCheckSchedule: The preferred background status check schedule
+    ///   when the `JobManager` is used.
+    ///   - onDemandUpdateMode: The update mode of any new on-demand map areas taken offline.
+    ///   - preplannedUpdateMode: The update mode of any new preplanned map areas taken offline.
+    ///   - useBGContinuedProcessingTasks: Indicates whether the `OfflineManager` makes use of
+    /// `BGContinuedProcessingTask` in-lieu of the `JobManager`.
+    ///   - jobCompletionAction: An action to perform when a job completes.
+    /// - SeeAlso ``OfflineManager/preferredBackgroundStatusCheckSchedule``
+    /// - SeeAlso ``OfflineManager/onDemandUpdateMode``
+    /// - SeeAlso ``OfflineManager/preplannedUpdateMode``
+    /// - SeeAlso ``OfflineManager/useBGContinuedProcessingTasks``
+    /// - SeeAlso ``OfflineManager/jobCompletionAction``
+    /// - Since 300.0
+    @available(iOS 26.0, *)
+    @MainActor
+    func offlineManager(
+        preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,
+        onDemandUpdateMode: GenerateOfflineMapParameters.UpdateMode = .noUpdates,
+        preplannedUpdateMode: DownloadPreplannedOfflineMapParameters.UpdateMode = .noUpdates,
+        useBGContinuedProcessingTasks: Bool = true,
+        jobCompletion jobCompletionAction: ((any JobProtocol) -> Void)? = nil
+    ) -> some SwiftUI.Scene {
+        offlineManager {
+            $0.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
+            $0.onDemandUpdateMode = onDemandUpdateMode
+            $0.preplannedUpdateMode = preplannedUpdateMode
+            $0.useBGContinuedProcessingTasks = useBGContinuedProcessingTasks
+            $0.onJobCompletion = jobCompletionAction
+        }
+    }
+    
+    /// Setup background download support for the offline component and configure
+    /// the offline manager.
+    /// - Parameters:
+    ///   - configure: A closure that allows you to configure the offline manager.
+    /// - SeeAlso ``OfflineManager``
+    /// - Since 300.0
+    @MainActor
+    func offlineManager(
+        configure: (OfflineManager) -> Void
+    ) -> some SwiftUI.Scene {
         Logger.offlineManager.debug("Executing OfflineManager SwiftUI.Scene modifier")
         
-        // Set callback for job completion.
-        OfflineManager.shared.jobCompletionAction = jobCompletionAction
-        
-        // Set the background status check schedule.
-        OfflineManager.shared.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
+        // Call the configuration closure.
+        configure(OfflineManager.shared)
         
         // Support app-relaunch after background downloads.
         return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
