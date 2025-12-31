@@ -85,8 +85,8 @@ public class OfflineManager: ObservableObject {
     let jobManager = JobManager(uniqueID: "offlineManager")
     
     /// A Boolean value indicating if the `JobManager` is managing the jobs.
-    var isUsingJobManager: Bool {
-        return if #available(iOS 26.0, *) {
+    fileprivate var isUsingJobManager: Bool {
+        if #available(iOS 26.0, *) {
             !useBGContinuedProcessingTasks
         } else {
             true
@@ -107,7 +107,7 @@ public class OfflineManager: ObservableObject {
     
     /// The jobs managed by this instance.
     var jobs: [any JobProtocol] {
-        return if isUsingJobManager {
+        if isUsingJobManager {
             jobManager.jobs
         } else {
             selfManagedJobs
@@ -170,9 +170,8 @@ public class OfflineManager: ObservableObject {
             }
             
             // Resume all paused jobs.
-            let count = jobManager.jobs.filter { $0.status == .paused }
-                .count
-            Logger.offlineManager.debug("Resuming all paused jobs (\(count)).")
+            let count = jobManager.jobs.count(where: { $0.status == .paused })
+            Logger.offlineManager.debug("Resuming \(count) paused job(s)")
             jobManager.resumeAllPausedJobs()
         }
     }
@@ -222,7 +221,7 @@ public class OfflineManager: ObservableObject {
             } else {
                 // Remove completed job from self managed jobs.
                 Logger.offlineManager.debug("Removing completed job from storage.")
-                selfManagedJobs.removeAll { $0 === job }
+                selfManagedJobs.removeAll(where: { $0 === job })
             }
             
             // Call job completion action.
