@@ -213,7 +213,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
                 downloadDirectory: mmpkDirectoryURL
             )
             
-            OfflineManager.shared.start(job: job, portalItem: offlineMapTask.portalItem!, title: title)
+            OfflineManager.shared.startJob(job, portalItem: offlineMapTask.portalItem!, title: title)
             observeJob(job)
         } catch {
             status = .downloadFailure(error)

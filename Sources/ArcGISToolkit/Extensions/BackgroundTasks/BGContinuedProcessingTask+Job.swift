@@ -37,9 +37,8 @@ public extension BGContinuedProcessingTask {
         // Observe progress on the job and update the task.
         Task {
             var observers = Set<NSKeyValueObservation>()
-            let observer = job.progress.observe(\.fractionCompleted, options: [.initial, .new]) { progress, _ in
+            let observer = job.progress.observe(\.fractionCompleted, options: [.initial]) { progress, _ in
                 taskProgress.completedUnitCount = Int64(progress.fractionCompleted * 100)
-                taskProgress.completedUnitCount = Int64(fractionCompleted * 100)
             }
             observers.insert(observer)
             

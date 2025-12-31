@@ -181,7 +181,7 @@ public class OfflineManager: ObservableObject {
     ///   - job: The job to start.
     ///   - portalItem: The portal item whose map is being taken offline.
     ///   - title: The title of the map area being taken offline.
-    func start(job: some JobProtocol, portalItem: PortalItem, title: String) {
+    func startJob(_ job: some JobProtocol, portalItem: PortalItem, title: String) {
         Logger.offlineManager.debug("Starting Job from offline manager")
         if isUsingJobManager {
             jobManager.jobs.append(job)
@@ -213,7 +213,7 @@ public class OfflineManager: ObservableObject {
             if isUsingJobManager {
                 // Remove completed job from JobManager.
                 Logger.offlineManager.debug("Removing completed job from job manager")
-                jobManager.jobs.removeAll { $0 === job }
+                jobManager.jobs.removeAll(where: { $0 === job })
                 
                 // This isn't strictly required, but it helps to get the state saved as soon
                 // as possible after removing a job instead of waiting for the app to be backgrounded.
