@@ -32,17 +32,15 @@ public extension BGContinuedProcessingTask {
         // Set initial progress on the task.
         let taskProgress = progress
         taskProgress.totalUnitCount = 100
-        taskProgress.completedUnitCount = Int64(job.progress.fractionCompleted * 100)
         
         // Observe progress on the job and update the task.
         Task {
-            var observers = Set<NSKeyValueObservation>()
             let observer = job.progress.observe(\.fractionCompleted, options: [.initial]) { progress, _ in
                 taskProgress.completedUnitCount = Int64(progress.fractionCompleted * 100)
             }
-            observers.insert(observer)
             
             let result = await job.result
+            observer.invalidate()
             let success = switch result {
             case .success: true
             case .failure: false
