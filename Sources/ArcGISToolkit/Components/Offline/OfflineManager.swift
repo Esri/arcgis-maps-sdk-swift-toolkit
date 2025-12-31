@@ -47,7 +47,7 @@ import SwiftUI
 /// **Behavior**
 ///
 /// The offline manager is not instantiable, you must use the ``shared`` instance.
-/// Setup and configure the offline manager with the `offlineManager(configure:)`
+/// Set up and configure the offline manager with the `offlineManager(configure:)`
 /// modifier at the entry point of your application. This is required to support
 /// the use of the ``JobManager`` and it also serves as a convenient location
 /// to configure the properties of the offline manager.
@@ -82,7 +82,7 @@ public class OfflineManager: ObservableObject {
     public var onJobCompletion: ((any JobProtocol) -> Void)?
     
     /// Backing variable for the `jobManager` property.
-    let jobManager: JobManager = JobManager(uniqueID: "offlineManager")
+    let jobManager = JobManager(uniqueID: "offlineManager")
     
     /// A Boolean value indicating if the `JobManager` is managing the jobs.
     var isUsingJobManager: Bool {

@@ -22,7 +22,7 @@ struct OfflineMapAreasExampleApp: App {
         WindowGroup {
             OfflineMapAreasExampleView()
         }
-        // Apply the `.offlineManager(configure:)` scene modifier
+        // Apply the `offlineManager(configure:)` scene modifier
         // at the entry point of the application to setup background download
         // support for the offline component. Use of this scene modifier is
         // required for the offline component to complete map area download jobs
