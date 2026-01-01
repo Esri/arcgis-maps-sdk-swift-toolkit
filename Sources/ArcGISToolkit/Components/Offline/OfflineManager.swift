@@ -78,8 +78,21 @@ public class OfflineManager: ObservableObject {
     public static let shared = OfflineManager()
     
     /// The action to perform when a job completes.
-    /// - Since 300.0 
+    /// - Since 300.0
     public var onJobCompletion: ((any JobProtocol) -> Void)?
+    
+    // Backing variable for `completedJobs`.
+    private let _completedJobs: AsyncStream<any JobProtocol>
+    
+    // Continuation for `completedJobs` async sequence.
+    private let completedJobsContinuation: AsyncStream<any JobProtocol>.Continuation
+    
+    /// Jobs that were completed under this offline manager.
+    /// - Since 300.0
+    @available(iOS 18.0, *)
+    public var completedJobs: some AsyncSequence<any JobProtocol, Never> {
+        _completedJobs
+    }
     
     /// Backing variable for the `jobManager` property.
     let jobManager = JobManager(uniqueID: "offlineManager")
@@ -159,6 +172,11 @@ public class OfflineManager: ObservableObject {
     private init() {
         Logger.offlineManager.debug("Initializing OfflineManager")
         
+        (_completedJobs, completedJobsContinuation) = AsyncStream.makeStream(
+            of: (any JobProtocol).self,
+            bufferingPolicy: .unbounded
+        )
+        
         // Retrieve the offline map infos.
         loadOfflineMapInfos()
         
@@ -224,8 +242,9 @@ public class OfflineManager: ObservableObject {
                 selfManagedJobs.removeAll(where: { $0 === job })
             }
             
-            // Call job completion action.
+            // Call job completion action, yield value to stream.
             onJobCompletion?(job)
+            completedJobsContinuation.yield(job)
             
             // Check pending map infos.
             if let portalItem = onlineMapPortalItem(for: job), let id = portalItem.id {
