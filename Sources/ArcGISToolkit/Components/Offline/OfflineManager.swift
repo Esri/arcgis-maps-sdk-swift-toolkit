@@ -79,7 +79,7 @@ public class OfflineManager: ObservableObject {
     
     /// The action to perform when a job completes.
     /// - Since 300.0
-    public var onJobCompletion: ((any JobProtocol) -> Void)?
+    fileprivate var _onJobCompletion: ((any JobProtocol) -> Void)?
     
     // Backing variable for `completedJobs`.
     private let _completedJobs: AsyncStream<any JobProtocol>
@@ -243,7 +243,7 @@ public class OfflineManager: ObservableObject {
             }
             
             // Call job completion action, yield value to stream.
-            onJobCompletion?(job)
+            _onJobCompletion?(job)
             completedJobsContinuation.yield(job)
             
             // Check pending map infos.
@@ -416,7 +416,7 @@ public extension SwiftUI.Scene {
     ) -> some SwiftUI.Scene {
         offlineManager {
             // Set callback for job completion.
-            $0.onJobCompletion = jobCompletionAction
+            $0._onJobCompletion = jobCompletionAction
             
             // Set the background status check schedule.
             $0.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule

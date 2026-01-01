@@ -19,9 +19,13 @@ struct OfflineMapAreasExampleApp: App {
                 offlineManager.useBGContinuedProcessingTasks = true
             }
             
-            // Use the `onJobCompletion` closure to send a notification once a download job completes.
-            offlineManager.onJobCompletion = {
-                Self.notifyJobCompleted(job: $0)
+            // Send a notification once a job completes.
+            if #available(iOS 18.0, *) {
+                Task {
+                    for await job in offlineManager.completedJobs {
+                        Self.notifyJobCompleted(job: job)
+                    }
+                }
             }
         }
     }

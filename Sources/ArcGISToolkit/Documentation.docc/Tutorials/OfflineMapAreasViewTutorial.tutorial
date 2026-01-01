@@ -71,7 +71,7 @@
             }
             
             @Step {
-                Use the `onJobCompletion` closure to send a notification once a download job completes.
+                Use the `completedJobs` async sequence to send a notification once an offline map job completes.
                 
                 Add a method to construct and send a notification.
                 @Code(name: "OfflineMapAreasTutorialApp.swift", file: OfflineMapAreasAppStep2.swift, previousFile: OfflineMapAreasAppStep1.swift)
