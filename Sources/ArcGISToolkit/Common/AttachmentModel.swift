@@ -15,6 +15,9 @@
 import ArcGIS
 @preconcurrency import QuickLook
 import SwiftUI
+import Vision
+import CoreImage
+import CoreImage.CIFilterBuiltins
 
 internal import os
 
@@ -90,6 +93,31 @@ internal import os
         initialLoad?.cancel()
     }
     
+    /// Removes Personally Identifying Information from the image by blurring the offending content
+    func blur() -> URL? {
+        print("absoluteString: \(attachment.fileURL?.path())")
+        
+        guard let url = attachment.fileURL,
+              let image = UIImage(contentsOfFile: url.path())
+        else { print("failed image creation"); return nil }
+        var blurredImage = blurLicensePlates(in: image)
+        
+        blurredImage = blurFaces(in: blurredImage)
+        var blurUrl: URL?
+        if let data = blurredImage.pngData() {
+            let filename = getDocumentsDirectory().appendingPathComponent("copy.png")
+            try? data.write(to: filename)
+            print("fileName = \(filename)")
+            blurUrl = filename
+        }
+        
+        func getDocumentsDirectory() -> URL {
+            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+            return paths[0]
+        }
+        return blurUrl
+    }
+    
     /// Loads the attachment and generates a thumbnail image.
     func load() async {
         loadStatus = .loading
@@ -130,3 +158,182 @@ internal import os
 }
 
 extension AttachmentModel: Identifiable {}
+
+extension AttachmentModel {
+    
+    func blurLicensePlates(in image: UIImage, blurRadius: Float = 15.0) -> UIImage {
+        guard let cgImage = image.cgImage else { return image }
+        
+        // Create text recognition request
+        let request = VNRecognizeTextRequest { request, error in
+            if let error = error {
+                print("Text recognition error: \(error)")
+            }
+        }
+        request.recognitionLevel = .accurate
+        request.usesLanguageCorrection = false
+        
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        do {
+            try handler.perform([request])
+        } catch {
+            print("Text detection failed: \(error)")
+            return image
+        }
+        
+        guard let results = request.results as? [VNRecognizedTextObservation], !results.isEmpty else {
+            print("No text detected.")
+            return image
+        }
+        
+        // Convert UIImage to CIImage for processing
+        guard let ciImage = CIImage(image: image) else { return image }
+        let context = CIContext()
+        var finalImage = ciImage
+        let imageSize = image.size
+        
+        // Regex pattern for license plates (adjust for your region)
+        let platePattern = "^[A-Z0-9*]{5,8}$"
+        
+        for observation in results {
+            if let candidate = observation.topCandidates(1).first {
+                let text = candidate.string
+                
+                // Check if text matches license plate format
+                if text.range(of: platePattern, options: .regularExpression) != nil {
+                    
+                    // Convert Vision bounding box to image coordinates
+                    let boundingBox = observation.boundingBox
+                    let plateRect = CGRect(
+                        x: boundingBox.origin.x * imageSize.width,
+                        y: boundingBox.origin.y * imageSize.height,
+//                        y: (1 - boundingBox.origin.y - boundingBox.height) * imageSize.height,
+                        width: boundingBox.width * imageSize.width,
+                        height: boundingBox.height * imageSize.height
+                    )
+                    
+                    // Crop the plate region
+                    let plateCrop = ciImage.cropped(to: plateRect)
+                    
+                    // Apply Gaussian blur
+                    let blurFilter = CIFilter.gaussianBlur()
+                    blurFilter.inputImage = plateCrop
+                    blurFilter.radius = blurRadius
+                    guard let blurredPlate = blurFilter.outputImage else { continue }
+
+                    // Composite blurred plate back onto original image
+                    let compositor = CIFilter.sourceOverCompositing()
+                    compositor.inputImage = blurredPlate
+                    compositor.backgroundImage = finalImage
+                    guard let composited = compositor.outputImage else { continue }
+                    finalImage = composited
+                }
+            }
+        }
+        
+        // Render final blurred image
+        if let cgFinal = context.createCGImage(finalImage, from: finalImage.extent) {
+            return UIImage(cgImage: cgFinal, scale: image.scale, orientation: image.imageOrientation)
+        }
+        return image
+    }
+
+    func blurFaces(in image: UIImage, blurRadius: Float = 15.0) -> UIImage {
+        guard let cgImage = image.cgImage else { return image }
+        
+        // Create a face detection request
+        let request = VNDetectFaceRectanglesRequest()
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        
+        do {
+            try handler.perform([request])
+        } catch {
+            print("Face detection failed: \(error)")
+            return image
+        }
+        
+        guard let results = request.results as? [VNFaceObservation], !results.isEmpty else {
+            print("No faces detected.")
+            return image
+        }
+        
+        // Convert UIImage to CIImage for processing
+        guard let ciImage = CIImage(image: image) else { return image }
+        let context = CIContext()
+        var finalImage = ciImage
+        
+        let imageSize = image.size
+        
+        for face in results {
+            // Convert Vision bounding box to image coordinates
+            let boundingBox = face.boundingBox
+            let faceRect = CGRect(
+                x: boundingBox.origin.x * imageSize.width,
+                y: boundingBox.origin.y * imageSize.height,
+//                y: (1 - boundingBox.origin.y - boundingBox.height) * imageSize.height,
+                width: boundingBox.width * imageSize.width,
+                height: boundingBox.height * imageSize.height
+            )
+            print(
+                "face: \(face.boundingBox); faceRect: \(faceRect); imageHeight: \(imageSize.height), imageWidth: \(imageSize.width)"
+            )
+
+            // Crop the face region
+            let faceCrop = ciImage.cropped(to: faceRect)
+            
+            // Apply Gaussian blur to the cropped face
+            let blurFilter = CIFilter.gaussianBlur()
+            blurFilter.inputImage = faceCrop
+            blurFilter.radius = blurRadius
+            guard let blurredFace = blurFilter.outputImage else { continue }
+            
+            // Composite blurred face back onto original image
+            let compositor = CIFilter.sourceOverCompositing()
+            compositor.inputImage = blurredFace
+            compositor.backgroundImage = finalImage
+            guard let composited = compositor.outputImage else { continue }
+            
+            finalImage = composited
+        }
+        
+        // Render final blurred image
+        if let cgFinal = context.createCGImage(finalImage, from: finalImage.extent) {
+            return UIImage(cgImage: cgFinal, scale: image.scale, orientation: image.imageOrientation)
+        }
+        
+        return image
+    }
+    
+    func applyBlur(to image: UIImage, radius: CGFloat) -> UIImage? {
+        // Convert UIImage to CIImage
+        guard let ciImage = CIImage(image: image) else { return nil }
+        
+        // Create a Gaussian Blur filter
+        let blurFilter = CIFilter(name: "CIGaussianBlur")
+        blurFilter?.setValue(ciImage, forKey: kCIInputImageKey)
+        blurFilter?.setValue(radius, forKey: kCIInputRadiusKey)
+        
+        // Get the output image
+        guard let outputImage = blurFilter?.outputImage else { return nil }
+        
+        // Create a context and render the output image
+        let context = CIContext()
+        if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
+            return UIImage(cgImage: cgImage)
+        }
+        
+        return nil
+    }
+
+    func applyEnhancedBlur(to image: UIImage, radius: CGFloat, times: Int) -> UIImage? {
+        var blurredImage = image
+        
+        for _ in 0..<times {
+            if let newBlurredImage = applyBlur(to: blurredImage, radius: radius) {
+                blurredImage = newBlurredImage
+            }
+        }
+        
+        return blurredImage
+    }
+}

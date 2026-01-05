@@ -56,6 +56,9 @@ struct AttachmentPreview: View {
     /// The proposed size of each attachment preview cell.
     private let proposedCellSize: CGSize
     
+    /// The url of the the attachment, used to display the attachment via `QuickLook`.
+    @State private var blurUrl: URL?
+    
     init(
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
@@ -108,6 +111,11 @@ struct AttachmentPreview: View {
                                 }
                             }
                         }
+                        Button {
+                            blurUrl = attachmentModel.blur()
+                        } label: {
+                            Label("Blur personal information", systemImage: "hand.raised.circle")
+                        }
                         Button(role: .destructive) {
                             deletedAttachmentModel = attachmentModel
                         } label: {
@@ -141,6 +149,7 @@ struct AttachmentPreview: View {
                 }
             }
         }
+        .quickLookPreview($blurUrl)
         .task(id: deletedAttachmentModel?.id) {
             guard let deletedAttachmentModel else { return }
             onDelete?(deletedAttachmentModel)
