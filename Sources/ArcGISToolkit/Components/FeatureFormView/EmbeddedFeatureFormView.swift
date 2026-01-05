@@ -80,6 +80,8 @@ struct EmbeddedFeatureFormView: View {
 
 extension EmbeddedFeatureFormView {
     /// Makes a section for a form element.
+    ///
+    /// Padding is added to each footer to provide visual seperation between elements.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func section(for element: FormElement) -> some View {
         switch element {
@@ -93,6 +95,7 @@ extension EmbeddedFeatureFormView {
                     .textCase(.none)
             } footer: {
                 FormElementFooter(element: element)
+                    .padding(.bottom)
                     .textCase(.none)
             }
         }
