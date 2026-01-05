@@ -122,7 +122,7 @@ struct AttachmentImportMenu: View {
                 bundle: .toolkitModule,
                 comment: "A label for a button to add a new file attachment."
             )
-            .frame(maxWidth: .infinity, alignment: .center)
+            .frame(maxWidth: .infinity)
             .contentShape(.rect)
         }
         .disabled(importState.importInProgress)
