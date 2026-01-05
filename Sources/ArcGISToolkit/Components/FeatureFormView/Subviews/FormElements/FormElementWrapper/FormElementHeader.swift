@@ -24,7 +24,6 @@ struct FormElementHeader: View {
     
     var body: some View {
         title
-            .font(.subheadline)
             .foregroundStyle(.secondary)
     }
     
