@@ -104,22 +104,20 @@ struct DateTimeInput: View {
                 Spacer()
                 if isEditing {
                     todayOrNowButton
-                } else {
-                    if date == nil {
-                        Image(systemName: "calendar")
-                            .font(.title2)
-                            .accessibilityIdentifier("\(element.label) Calendar Image")
-                            .foregroundStyle(.secondary)
-                    } else if !isRequired {
-                        XButton(.clear) {
-                            embeddedFeatureFormViewModel.focusedElement = element
-                            defer { embeddedFeatureFormViewModel.focusedElement = nil }
-                            date = nil
-                        }
-                        .accessibilityIdentifier("\(element.label) Clear Button")
-                        .buttonStyle(.plain)
-                        .tint(.secondary)
+                } else if date == nil {
+                    Image(systemName: "calendar")
+                        .font(.title2)
+                        .accessibilityIdentifier("\(element.label) Calendar Image")
+                        .foregroundStyle(.secondary)
+                } else if !isRequired {
+                    XButton(.clear) {
+                        embeddedFeatureFormViewModel.focusedElement = element
+                        defer { embeddedFeatureFormViewModel.focusedElement = nil }
+                        date = nil
                     }
+                    .accessibilityIdentifier("\(element.label) Clear Button")
+                    .buttonStyle(.plain)
+                    .tint(.secondary)
                 }
             }
         }
