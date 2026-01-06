@@ -18,7 +18,7 @@ import SwiftUI
 
 @main
 struct OfflineMapAreasExampleApp: App {
-    let offlineManagerConfiguration: OfflineManager.Configuration = {
+    let offlineManagerConfiguration: OfflineManagerConfiguration = {
         return if #available(iOS 26.0, *) {
             // If iOS 26 is available then setup the offline manager to utilize
             // `BGContinuedProcessingTask`.
