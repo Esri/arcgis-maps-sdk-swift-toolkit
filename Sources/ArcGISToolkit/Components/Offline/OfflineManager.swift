@@ -110,7 +110,7 @@ public class OfflineManager: ObservableObject {
     /// background.
     /// - SeeAlso ``JobManager/preferredBackgroundStatusCheckSchedule``
     /// - Since 300.0
-    public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule {
+    public private(set) var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule {
         get { jobManager.preferredBackgroundStatusCheckSchedule }
         set { jobManager.preferredBackgroundStatusCheckSchedule = newValue }
     }
@@ -129,11 +129,11 @@ public class OfflineManager: ObservableObject {
     
     /// The update mode of any new on-demand map areas taken offline.
     /// - Since 300.0
-    public var onDemandUpdateMode: GenerateOfflineMapParameters.UpdateMode = .noUpdates
+    public private(set) var onDemandUpdateMode: GenerateOfflineMapParameters.UpdateMode = .noUpdates
     
     /// The update mode of any new preplanned map areas taken offline.
     /// - Since 300.0
-    public var preplannedUpdateMode: DownloadPreplannedOfflineMapParameters.UpdateMode = .noUpdates
+    public private(set) var preplannedUpdateMode: DownloadPreplannedOfflineMapParameters.UpdateMode = .noUpdates
     
     /// Backing variable for `useBGContinuedProcessingTasks`.
     private var _useBGContinuedProcessingTasks = true
@@ -147,7 +147,7 @@ public class OfflineManager: ObservableObject {
     /// The default value of this property is `true` on iOS.
     /// - Since 300.0
     @available(iOS 26.0, *)
-    public var useBGContinuedProcessingTasks: Bool {
+    public private(set) var useBGContinuedProcessingTasks: Bool {
         get {
 #if !targetEnvironment(visionOS) && !targetEnvironment(macCatalyst)
             _useBGContinuedProcessingTasks
@@ -401,6 +401,15 @@ public class OfflineManager: ObservableObject {
         // Remove offline map info for this map.
         offlineMapInfos.removeAll { $0.id == offlineMapInfo.id }
     }
+    
+    fileprivate func apply(configuration: Configuration) {
+        preferredBackgroundStatusCheckSchedule = configuration.preferredBackgroundStatusCheckSchedule
+        onDemandUpdateMode = configuration.onDemandUpdateMode
+        preplannedUpdateMode = configuration.preplannedUpdateMode
+        if #available(iOS 26.0, *) {
+            useBGContinuedProcessingTasks = configuration.useBGContinuedProcessingTasks
+        }
+    }
 }
 
 public extension SwiftUI.Scene {
@@ -414,29 +423,31 @@ public extension SwiftUI.Scene {
         preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,
         jobCompletion jobCompletionAction: ((any JobProtocol) -> Void)? = nil
     ) -> some SwiftUI.Scene {
-        offlineManager {
-            // Set callback for job completion.
-            $0._onJobCompletion = jobCompletionAction
-            
-            // Set the background status check schedule.
-            $0.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
-        }
+        offlineManager(
+            configuration: .init(
+                preferredBackgroundStatusCheckSchedule: preferredBackgroundStatusCheckSchedule
+            ),
+            onJobCompletion: jobCompletionAction
+        )
     }
     
     /// Setup the background download support for the offline toolkit components
     /// and configure the offline manager.
     /// - Parameters:
     ///   - configure: A closure that allows you to configure the offline manager.
+    ///   - jobCompletionAction: An action to perform when a job completes.
     /// - SeeAlso ``OfflineManager``
+    /// - SeeAlso ``OfflineManager.Configuration``
     /// - Since 300.0
     @MainActor
     func offlineManager(
-        configure: (OfflineManager) -> Void
+        configuration: OfflineManager.Configuration,
+        onJobCompletion jobCompletionAction: ((any JobProtocol) -> Void)? = nil
     ) -> some SwiftUI.Scene {
         Logger.offlineManager.debug("Executing OfflineManager SwiftUI.Scene modifier")
         
-        // Call the configuration closure.
-        configure(OfflineManager.shared)
+        OfflineManager.shared.apply(configuration: configuration)
+        OfflineManager.shared._onJobCompletion = jobCompletionAction
         
         // Support app-relaunch after background downloads.
         return self.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
@@ -450,6 +461,68 @@ public extension SwiftUI.Scene {
                 // and check the job status.
                 await OfflineManager.shared.jobManager.resumeAllPausedJobs()
             }
+        }
+    }
+}
+
+extension OfflineManager {
+    /// The configuration properties for the ``OfflineManager``.
+    /// - Since 300.0
+    public struct Configuration {
+        /// The preferred schedule for performing status checks while the application is in the
+        /// background.
+        /// - SeeAlso ``JobManager/preferredBackgroundStatusCheckSchedule``
+        /// - Since 300.0
+        public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule
+        
+        /// The update mode of any new on-demand map areas taken offline.
+        /// - Since 300.0
+        public var onDemandUpdateMode: GenerateOfflineMapParameters.UpdateMode = .noUpdates
+        
+        /// The update mode of any new preplanned map areas taken offline.
+        /// - Since 300.0
+        public var preplannedUpdateMode: DownloadPreplannedOfflineMapParameters.UpdateMode = .noUpdates
+        
+        /// Backing variable for `useBGContinuedProcessingTasks`.
+        private var _useBGContinuedProcessingTasks = true
+        
+        /// A Boolean value indicating whether the `OfflineManager` makes use of
+        /// `BGContinuedProcessingTask` in-lieu of the `JobManager`.
+        /// Changing the value of this property between app runs is not supported.
+        /// Setting this has no effect on platforms other than iOS.
+        /// The default value of this property is `true` on iOS.
+        /// - Since 300.0
+        @available(iOS 26.0, *)
+        public var useBGContinuedProcessingTasks: Bool {
+            get {
+                _useBGContinuedProcessingTasks
+            }
+            set {
+                _useBGContinuedProcessingTasks = newValue
+            }
+        }
+        
+        public init(
+            preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled,
+            onDemandUpdateMode: GenerateOfflineMapParameters.UpdateMode = .noUpdates,
+            preplannedUpdateMode: DownloadPreplannedOfflineMapParameters.UpdateMode = .noUpdates
+        ) {
+            self.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
+            self.onDemandUpdateMode = onDemandUpdateMode
+            self.preplannedUpdateMode = preplannedUpdateMode
+        }
+        
+        @available(iOS 26.0, *)
+        public init(
+            useBGContinuedProcessingTasks: Bool,
+            preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled,
+            onDemandUpdateMode: GenerateOfflineMapParameters.UpdateMode = .noUpdates,
+            preplannedUpdateMode: DownloadPreplannedOfflineMapParameters.UpdateMode = .noUpdates
+        ) {
+            self.preferredBackgroundStatusCheckSchedule = preferredBackgroundStatusCheckSchedule
+            self.onDemandUpdateMode = onDemandUpdateMode
+            self.preplannedUpdateMode = preplannedUpdateMode
+            self.useBGContinuedProcessingTasks = useBGContinuedProcessingTasks
         }
     }
 }
