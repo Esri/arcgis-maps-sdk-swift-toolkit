@@ -165,7 +165,6 @@ extension ComboBoxInput {
                             ) {
                                 updateValueAndEvaluateExpressions(nil)
                             }
-                            .italic()
                             .foregroundStyle(.secondary)
                         }
                     }

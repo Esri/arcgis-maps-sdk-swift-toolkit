@@ -131,7 +131,6 @@ extension RadioButtonsInput {
             HStack {
                 if useNoValueStyle {
                     Text(label)
-                        .italic()
                         .foregroundStyle(.secondary)
                 } else {
                     Text(label)
