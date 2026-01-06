@@ -210,7 +210,7 @@ public class OfflineManager: ObservableObject {
 #if !targetEnvironment(visionOS) && !targetEnvironment(macCatalyst)
         if #available(iOS 26.0, *) {
             if useBGContinuedProcessingTasks {
-                startContinuedProcessingTask(for: job, title: title)
+                try? startContinuedProcessingTask(for: job, title: title)
             }
         }
 #endif
@@ -564,7 +564,7 @@ extension OfflineManager {
     ///   - job: The job that should be monitored by the started task.
     ///   - title: The title of the area being taken offline.
     @available(iOS 26.0, *)
-    func startContinuedProcessingTask(for job: some JobProtocol, title: String) {
+    func startContinuedProcessingTask(for job: some JobProtocol, title: String) throws {
         let cptIdentifier = (Bundle.main.bundleIdentifier ?? "") + ".cpt.jobs" + ".\(UUID().uuidString)"
         BGTaskScheduler.shared.register(forTaskWithIdentifier: cptIdentifier, using: .main) { task in
             let task = task as! BGContinuedProcessingTask
@@ -581,7 +581,7 @@ extension OfflineManager {
             subtitle: title
         )
         request.strategy = .fail
-        try? BGTaskScheduler.shared.submit(request)
+        try BGTaskScheduler.shared.submit(request)
     }
 }
 #endif
