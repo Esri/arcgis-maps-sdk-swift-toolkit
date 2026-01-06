@@ -18,21 +18,6 @@ import SwiftUI
 
 @main
 struct OfflineMapAreasExampleApp: App {
-    let offlineManagerConfiguration: OfflineManagerConfiguration = {
-        return if #available(iOS 26.0, *) {
-            // If iOS 26 is available then setup the offline manager to utilize
-            // `BGContinuedProcessingTask`.
-            .init(
-                useBGContinuedProcessingTasks: true,
-                preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
-            )
-        } else {
-            .init(
-                preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
-            )
-        }
-    }()
-    
     var body: some SwiftUI.Scene {
         WindowGroup {
             OfflineMapAreasExampleView()
@@ -43,7 +28,9 @@ struct OfflineMapAreasExampleApp: App {
         // required for the offline component to complete map area download jobs
         // when the app is backgrounded. It also gives you a chance to configure
         // properties of the offline manager.
-        .offlineManager(configuration: offlineManagerConfiguration) { job in
+        .offlineManager(configuration: .init(
+            preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
+        )) { job in
             // Send a notification once a job completes.
             Self.notifyJobCompleted(job: job)
         }

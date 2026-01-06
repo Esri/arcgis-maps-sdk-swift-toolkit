@@ -60,11 +60,12 @@ import SwiftUI
 ///             ContentView()
 ///         }
 ///         // Setup the offline toolkit components for the app.
-///         .offlineManager { offlineManager in
-///             // Configure the offline manager
-///             offlineManager.preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
-///             // ...
-///         }
+///        .offlineManager(configuration: .init(
+///            preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
+///        )) { job in
+///            // Perform some action when the job completes.
+///            // ...
+///        }
 ///     }
 /// }
 /// ```
