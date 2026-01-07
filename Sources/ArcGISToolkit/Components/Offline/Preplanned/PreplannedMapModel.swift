@@ -342,7 +342,7 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
             preplannedMapArea: self
         )
         // Set the update mode.
-        parameters.updateMode = await OfflineManager.shared.preplannedUpdateMode
+        parameters.updateMode = await OfflineManager.shared.configuration.preplannedUpdateMode
         
         return parameters
     }
