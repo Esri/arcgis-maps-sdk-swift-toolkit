@@ -171,7 +171,7 @@ extension ComboBoxInput {
                     .labelsHidden()
                     .pickerStyle(.inline)
                 }
-                .textCase(.none)
+                .textCase(nil)
                 if let unsupportedValue = selectedValue?.unsupportedValue {
                     Section {
                         Picker(selection: $selectedValue) {
@@ -185,6 +185,7 @@ extension ComboBoxInput {
                         .pickerStyle(.inline)
                     } header: {
                         Text.unsupportedValue
+                            .textCase(nil)
                     }
                     .accessibilityIdentifier("\(element.label) Unsupported Value Section")
                     .textCase(.none)

@@ -34,8 +34,10 @@ struct GroupFormElementView<Content>: View where Content: View {
                     viewCreator(element)
                 } header: {
                     FormElementHeader(element: element)
+                        .textCase(nil)
                 } footer: {
                     FormElementFooter(element: element)
+                        .textCase(nil)
                 }
             }
         } label: {
