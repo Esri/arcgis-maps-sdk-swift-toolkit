@@ -214,12 +214,17 @@ extension AttachmentModel {
                     
                     // Crop the plate region
                     let plateCrop = ciImage.cropped(to: plateRect)
+                    guard let blurredPlate = applyEnhancedBlur(
+                        to: plateCrop,
+                        radius: CGFloat(blurRadius),
+                        times: 1
+                    ) else { return image}
                     
-                    // Apply Gaussian blur
-                    let blurFilter = CIFilter.gaussianBlur()
-                    blurFilter.inputImage = plateCrop
-                    blurFilter.radius = blurRadius
-                    guard let blurredPlate = blurFilter.outputImage else { continue }
+//                    // Apply Gaussian blur
+//                    let blurFilter = CIFilter.gaussianBlur()
+//                    blurFilter.inputImage = plateCrop
+//                    blurFilter.radius = blurRadius
+//                    guard let blurredPlate = blurFilter.outputImage else { continue }
 
                     // Composite blurred plate back onto original image
                     let compositor = CIFilter.sourceOverCompositing()
@@ -280,12 +285,18 @@ extension AttachmentModel {
 
             // Crop the face region
             let faceCrop = ciImage.cropped(to: faceRect)
+  
+            guard let blurredFace = applyEnhancedBlur(
+                to: faceCrop,
+                radius: CGFloat(blurRadius),
+                times: 1
+            ) else { return image}
             
-            // Apply Gaussian blur to the cropped face
-            let blurFilter = CIFilter.gaussianBlur()
-            blurFilter.inputImage = faceCrop
-            blurFilter.radius = blurRadius
-            guard let blurredFace = blurFilter.outputImage else { continue }
+//            // Apply Gaussian blur to the cropped face
+//            let blurFilter = CIFilter.gaussianBlur()
+//            blurFilter.inputImage = faceCrop
+//            blurFilter.radius = blurRadius
+//            guard let blurredFace = blurFilter.outputImage else { continue }
             
             // Composite blurred face back onto original image
             let compositor = CIFilter.sourceOverCompositing()
@@ -304,10 +315,7 @@ extension AttachmentModel {
         return image
     }
     
-    func applyBlur(to image: UIImage, radius: CGFloat) -> UIImage? {
-        // Convert UIImage to CIImage
-        guard let ciImage = CIImage(image: image) else { return nil }
-        
+    func applyBlur(to ciImage: CIImage, radius: CGFloat) -> CIImage? {
         // Create a Gaussian Blur filter
         let blurFilter = CIFilter(name: "CIGaussianBlur")
         blurFilter?.setValue(ciImage, forKey: kCIInputImageKey)
@@ -315,18 +323,18 @@ extension AttachmentModel {
         
         // Get the output image
         guard let outputImage = blurFilter?.outputImage else { return nil }
-        
-        // Create a context and render the output image
-        let context = CIContext()
-        if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
-            return UIImage(cgImage: cgImage)
-        }
-        
-        return nil
+        return outputImage
+//        // Create a context and render the output image
+//        let context = CIContext()
+//        if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
+//            return UIImage(cgImage: cgImage)
+//        }
+//        
+//        return nil
     }
 
-    func applyEnhancedBlur(to image: UIImage, radius: CGFloat, times: Int) -> UIImage? {
-        var blurredImage = image
+    func applyEnhancedBlur(to ciImage: CIImage, radius: CGFloat, times: Int) -> CIImage? {
+        var blurredImage = ciImage
         
         for _ in 0..<times {
             if let newBlurredImage = applyBlur(to: blurredImage, radius: radius) {
