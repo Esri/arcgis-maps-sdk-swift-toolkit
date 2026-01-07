@@ -157,36 +157,46 @@ extension ComboBoxInput {
         NavigationStack {
             List {
                 Section(element.description) {
-                    if !element.isRequired {
-                        if noValueOption == .show {
-                            pickerRow(
-                                label: noValueLabel.isEmpty ? String.noValue : noValueLabel,
-                                selected: selectedValue == .none
-                            ) {
-                                updateValueAndEvaluateExpressions(nil)
-                            }
-                            .foregroundStyle(.secondary)
+                    Picker(element.description, selection: $selectedValue) {
+                        if !element.isRequired, noValueOption == .show {
+                            Text(noValueLabel.isEmpty ? String.noValue : noValueLabel)
+                                .foregroundStyle(.secondary)
+                                .tag(nil as ComboBoxValue?)
+                        }
+                        ForEach(matchingValues, id: \.self) { codedValue in
+                            Text(codedValue.name)
+                                .tag(ComboBoxValue.coded(codedValue))
                         }
                     }
-                    ForEach(matchingValues, id: \.self) { codedValue in
-                        pickerRow(label: codedValue.name, selected: selectedValue?.codedValue == codedValue) {
-                            updateValueAndEvaluateExpressions(codedValue)
-                        }
-                    }
+                    .labelsHidden()
+                    .pickerStyle(.inline)
                 }
+                .textCase(.none)
                 if let unsupportedValue = selectedValue?.unsupportedValue {
                     Section {
-                        pickerRow(label: unsupportedValue, selected: true) { }
-                            .italic()
+                        Picker(selection: $selectedValue) {
+                            Text(unsupportedValue)
+                                .italic()
+                                .tag(ComboBoxValue.unsupported(unsupportedValue))
+                        } label: {
+                            Text.unsupportedValue
+                        }
+                        .labelsHidden()
+                        .pickerStyle(.inline)
                     } header: {
                         Text.unsupportedValue
                     }
                     .accessibilityIdentifier("\(element.label) Unsupported Value Section")
+                    .textCase(.none)
                 }
             }
             .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
             .navigationTitle(element.label)
             .navigationBarTitleDisplayMode(.inline)
+            .onChange(of: selectedValue) {
+                guard case let .coded(value) = selectedValue else { return }
+                updateValueAndEvaluateExpressions(value)
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -204,20 +214,6 @@ extension ComboBoxInput {
                 }
             }
         }
-    }
-    
-    private func pickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack {
-                Text(label)
-                if selected {
-                    Spacer()
-                    Image(systemName: "checkmark")
-                }
-            }
-        }
-        .accessibilityIdentifier("\(label) Combo Box Option")
-        .foregroundStyle(.primary)
     }
     
     private func updateValueAndEvaluateExpressions(_ value: CodedValue?) {
@@ -295,3 +291,5 @@ private enum ComboBoxValue: Equatable {
         }
     }
 }
+
+extension ComboBoxValue: Hashable {}
