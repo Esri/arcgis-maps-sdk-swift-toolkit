@@ -60,9 +60,11 @@ import SwiftUI
 ///             ContentView()
 ///         }
 ///         // Setup the offline toolkit components for the app.
-///        .offlineManager(configuration: .init(
-///            preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
-///        )) { job in
+///        .offlineManager(
+///            configuration: .init(
+///                preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
+///            )
+///        ) { job in
 ///            // Perform some action when the job completes.
 ///            // ...
 ///        }
@@ -169,8 +171,7 @@ public class OfflineManager: ObservableObject {
         Logger.offlineManager.debug("Initializing OfflineManager")
         
         (_completedJobs, completedJobsContinuation) = AsyncStream.makeStream(
-            of: (any JobProtocol).self,
-            bufferingPolicy: .unbounded
+            of: (any JobProtocol).self
         )
         
         // Retrieve the offline map infos.
@@ -452,10 +453,12 @@ public extension SwiftUI.Scene {
             // Allow the `ArcGISURLSession` to handle its background task events.
             await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
             
-            if await OfflineManager.shared.isUsingJobManager {
-                // When the app is re-launched from a background url session, resume any paused jobs,
-                // and check the job status.
-                await OfflineManager.shared.jobManager.resumeAllPausedJobs()
+            await MainActor.run {
+                if OfflineManager.shared.isUsingJobManager {
+                    // When the app is re-launched from a background url session, resume any paused jobs,
+                    // and check the job status.
+                    OfflineManager.shared.jobManager.resumeAllPausedJobs()
+                }
             }
         }
     }
