@@ -92,11 +92,11 @@ extension EmbeddedFeatureFormView {
                 content(for: element)
             } header: {
                 FormElementHeader(element: element)
-                    .textCase(.none)
+                    .textCase(nil)
             } footer: {
                 FormElementFooter(element: element)
                     .padding(.bottom)
-                    .textCase(.none)
+                    .textCase(nil)
             }
         }
     }

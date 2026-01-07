@@ -174,12 +174,14 @@ extension ComboBoxInput {
                         }
                     }
                 }
+                .textCase(nil)
                 if let unsupportedValue = selectedValue?.unsupportedValue {
                     Section {
                         pickerRow(label: unsupportedValue, selected: true) { }
                             .italic()
                     } header: {
                         Text.unsupportedValue
+                            .textCase(nil)
                     }
                     .accessibilityIdentifier("\(element.label) Unsupported Value Section")
                 }
