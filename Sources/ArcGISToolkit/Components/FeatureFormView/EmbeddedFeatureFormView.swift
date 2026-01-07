@@ -102,7 +102,7 @@ extension EmbeddedFeatureFormView {
         }
     }
     
-    /// Makes content for a form element's section.
+    /// Returns content for the section of the given form element.
     /// - Parameter element: The element to generate the body for.
     @ViewBuilder func content(for element: FormElement) -> some View {
         if let embeddedFeatureFormViewModel {
