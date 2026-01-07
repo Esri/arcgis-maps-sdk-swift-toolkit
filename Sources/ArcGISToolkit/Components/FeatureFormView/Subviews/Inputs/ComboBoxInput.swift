@@ -29,7 +29,7 @@ struct ComboBoxInput: View {
     /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
     /// The selected value.
-    @State private var selectedValue: ComboBoxValue? = nil
+    @State private var selectedValue: ComboBoxValue?
     
     /// The element the input belongs to.
     private let element: FieldFormElement
@@ -92,28 +92,30 @@ struct ComboBoxInput: View {
                         updateValueAndEvaluateExpressions(nil)
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")
+#if os(visionOS)
                     .buttonStyle(.plain)
+#endif
                 } else {
                     // Otherwise, always show chevron.
                     Image(systemName: "chevron.right")
                         .accessibilityIdentifier("\(element.label) Options Button")
                 }
             }
-            .foregroundStyle(selectedValue != .none ? .primary : .secondary)
+            .foregroundStyle(selectedValue != nil ? .primary : .secondary)
             .tint(.primary)
         }
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }
         .onValueChange(of: element) { newValue, newFormattedValue in
-            if let currentValue = element.codedValues.first(where: {
-                $0.name == newFormattedValue
-            }) {
-                selectedValue = .coded(currentValue)
+            selectedValue = if let currentValue = element.codedValues.first(
+                where: { $0.name == newFormattedValue }
+            ) {
+                .coded(currentValue)
             } else if newValue != nil {
-                selectedValue = .unsupported(newFormattedValue)
+                .unsupported(newFormattedValue)
             } else {
-                selectedValue = .none
+                nil
             }
         }
         .sheet(isPresented: $isPresented) {
@@ -161,7 +163,7 @@ extension ComboBoxInput {
                         if noValueOption == .show {
                             pickerRow(
                                 label: noValueLabel.isEmpty ? String.noValue : noValueLabel,
-                                selected: selectedValue == .none
+                                isSelected: selectedValue == nil
                             ) {
                                 updateValueAndEvaluateExpressions(nil)
                             }
@@ -169,7 +171,7 @@ extension ComboBoxInput {
                         }
                     }
                     ForEach(matchingValues, id: \.self) { codedValue in
-                        pickerRow(label: codedValue.name, selected: selectedValue?.codedValue == codedValue) {
+                        pickerRow(label: codedValue.name, isSelected: selectedValue?.codedValue == codedValue) {
                             updateValueAndEvaluateExpressions(codedValue)
                         }
                     }
@@ -177,7 +179,7 @@ extension ComboBoxInput {
                 .textCase(nil)
                 if let unsupportedValue = selectedValue?.unsupportedValue {
                     Section {
-                        pickerRow(label: unsupportedValue, selected: true) { }
+                        pickerRow(label: unsupportedValue, isSelected: true) { }
                             .italic()
                     } header: {
                         Text.unsupportedValue
@@ -208,11 +210,11 @@ extension ComboBoxInput {
         }
     }
     
-    private func pickerRow(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
+    private func pickerRow(label: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack {
                 Text(label)
-                if selected {
+                if isSelected {
                     Spacer()
                     Image(systemName: "checkmark")
                 }

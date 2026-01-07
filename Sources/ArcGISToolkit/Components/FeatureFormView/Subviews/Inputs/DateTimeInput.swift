@@ -101,15 +101,17 @@ struct DateTimeInput: View {
                 formattedDate
                     .accessibilityIdentifier("\(element.label) Value")
                     .foregroundStyle(displayColor)
-                Spacer()
                 if isEditing {
+                    Spacer()
                     todayOrNowButton
                 } else if date == nil {
+                    Spacer()
                     Image(systemName: "calendar")
                         .font(.title2)
                         .accessibilityIdentifier("\(element.label) Calendar Image")
                         .foregroundStyle(.secondary)
                 } else if !isRequired {
+                    Spacer()
                     XButton(.clear) {
                         embeddedFeatureFormViewModel.focusedElement = element
                         defer { embeddedFeatureFormViewModel.focusedElement = nil }
