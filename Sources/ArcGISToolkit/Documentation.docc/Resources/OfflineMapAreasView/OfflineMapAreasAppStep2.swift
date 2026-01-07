@@ -12,10 +12,9 @@ struct OfflineMapAreasExampleApp: App {
         // The configuration will specify to prefer to check the status of jobs
         // in the background every 30 seconds.
         .offlineManager(
-            configuration:
-                OfflineManagerConfiguration(
-                    preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
-                )
+            configuration: OfflineManagerConfiguration(
+                preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
+            )
         ) { job in
             // Send a notification once a job completes.
             Self.notifyJobCompleted(job: job)
