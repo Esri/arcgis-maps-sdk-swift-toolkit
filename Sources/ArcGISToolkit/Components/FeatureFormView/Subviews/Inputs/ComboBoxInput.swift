@@ -29,7 +29,7 @@ struct ComboBoxInput: View {
     /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
     /// The selected value.
-    @State private var selectedValue: ComboBoxValue? = nil
+    @State private var selectedValue: ComboBoxValue?
     
     /// The element the input belongs to.
     private let element: FieldFormElement
@@ -92,28 +92,30 @@ struct ComboBoxInput: View {
                         updateValueAndEvaluateExpressions(nil)
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")
+#if os(visionOS)
                     .buttonStyle(.plain)
+#endif
                 } else {
                     // Otherwise, always show chevron.
                     Image(systemName: "chevron.right")
                         .accessibilityIdentifier("\(element.label) Options Button")
                 }
             }
-            .foregroundStyle(selectedValue != .none ? .primary : .secondary)
+            .foregroundStyle(selectedValue != nil ? .primary : .secondary)
             .tint(.primary)
         }
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }
         .onValueChange(of: element) { newValue, newFormattedValue in
-            if let currentValue = element.codedValues.first(where: {
-                $0.name == newFormattedValue
-            }) {
-                selectedValue = .coded(currentValue)
+            selectedValue = if let currentValue = element.codedValues.first(
+                where: { $0.name == newFormattedValue }
+            ) {
+                .coded(currentValue)
             } else if newValue != nil {
-                selectedValue = .unsupported(newFormattedValue)
+                .unsupported(newFormattedValue)
             } else {
-                selectedValue = .none
+                nil
             }
         }
         .sheet(isPresented: $isPresented) {

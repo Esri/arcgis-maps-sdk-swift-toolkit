@@ -79,29 +79,29 @@ struct EmbeddedFeatureFormView: View {
 }
 
 extension EmbeddedFeatureFormView {
-    /// Makes a section for a form element.
+    /// Returns the section for the given form element.
     ///
-    /// Padding is added to each footer to provide visual seperation between elements.
+    /// Padding is added to each footer to provide visual separation between
+    /// elements.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func section(for element: FormElement) -> some View {
         switch element {
         case let element as GroupFormElement:
-            GroupFormElementView(element: element) { content(for: $0) }
+            GroupFormElementView(element: element, viewCreator: content(for:))
         default:
             Section {
                 content(for: element)
             } header: {
                 FormElementHeader(element: element)
-                    .textCase(nil)
             } footer: {
                 FormElementFooter(element: element)
                     .padding(.bottom)
-                    .textCase(nil)
             }
+            .textCase(nil)
         }
     }
     
-    /// Makes content for a form element's section.
+    /// Returns content for the section of the given form element.
     /// - Parameter element: The element to generate the body for.
     @ViewBuilder func content(for element: FormElement) -> some View {
         if let embeddedFeatureFormViewModel {
@@ -123,12 +123,10 @@ extension EmbeddedFeatureFormView {
         }
     }
     
-    /// Makes sections for all visible form elements.
+    /// The sections for all visible form elements.
     @ViewBuilder var sections: some View {
         if let visibleElements = embeddedFeatureFormViewModel?.visibleElements {
-            ForEach(visibleElements, id: \.self) { element in
-                section(for: element)
-            }
+            ForEach(visibleElements, id: \.self, content: section(for:))
         } else {
             ContentUnavailableView {
                 Label {
