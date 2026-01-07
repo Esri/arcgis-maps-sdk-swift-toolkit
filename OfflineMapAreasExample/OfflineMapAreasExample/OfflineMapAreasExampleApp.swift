@@ -29,10 +29,9 @@ struct OfflineMapAreasExampleApp: App {
         // when the app is backgrounded. It also gives you a chance to configure
         // properties of the offline manager.
         .offlineManager(
-            configuration:
-                OfflineManagerConfiguration(
-                    preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
-                )
+            configuration: OfflineManagerConfiguration(
+                preferredBackgroundStatusCheckSchedule: .regularInterval(interval: 30)
+            )
         ) { job in
             // Send a notification once a job completes.
             Self.notifyJobCompleted(job: job)
