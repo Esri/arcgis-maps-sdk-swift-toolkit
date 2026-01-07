@@ -127,9 +127,7 @@ extension EmbeddedFeatureFormView {
     /// The sections for all visible form elements.
     @ViewBuilder var sections: some View {
         if let visibleElements = embeddedFeatureFormViewModel?.visibleElements {
-            ForEach(visibleElements, id: \.self) { element in
-                section(for: element)
-            }
+            ForEach(visibleElements, id: \.self, content: section(for:))
         } else {
             ContentUnavailableView {
                 Label {
