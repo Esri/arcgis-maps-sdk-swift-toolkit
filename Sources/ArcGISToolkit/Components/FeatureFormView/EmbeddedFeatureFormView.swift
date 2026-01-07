@@ -87,7 +87,7 @@ extension EmbeddedFeatureFormView {
     @ViewBuilder func section(for element: FormElement) -> some View {
         switch element {
         case let element as GroupFormElement:
-            GroupFormElementView(element: element) { content(for: $0) }
+            GroupFormElementView(element: element, viewCreator: content(for:))
         default:
             Section {
                 content(for: element)
