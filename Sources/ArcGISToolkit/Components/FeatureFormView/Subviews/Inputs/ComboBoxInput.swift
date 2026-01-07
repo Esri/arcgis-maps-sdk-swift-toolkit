@@ -161,7 +161,7 @@ extension ComboBoxInput {
                         if noValueOption == .show {
                             pickerRow(
                                 label: noValueLabel.isEmpty ? String.noValue : noValueLabel,
-                                selected: selectedValue == .none
+                                selected: selectedValue == nil
                             ) {
                                 updateValueAndEvaluateExpressions(nil)
                             }
