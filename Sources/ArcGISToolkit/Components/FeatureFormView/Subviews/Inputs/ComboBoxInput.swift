@@ -106,14 +106,14 @@ struct ComboBoxInput: View {
             isRequired = newIsRequired
         }
         .onValueChange(of: element) { newValue, newFormattedValue in
-            if let currentValue = element.codedValues.first(where: {
-                $0.name == newFormattedValue
-            }) {
-                selectedValue = .coded(currentValue)
+            selectedValue = if let currentValue = element.codedValues.first(
+                where: { $0.name == newFormattedValue }
+            ) {
+                .coded(currentValue)
             } else if newValue != nil {
-                selectedValue = .unsupported(newFormattedValue)
+                .unsupported(newFormattedValue)
             } else {
-                selectedValue = .none
+                nil
             }
         }
         .sheet(isPresented: $isPresented) {
