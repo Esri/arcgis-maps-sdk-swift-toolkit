@@ -29,7 +29,7 @@ struct ComboBoxInput: View {
     /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
     /// The selected value.
-    @State private var selectedValue: ComboBoxValue? = nil
+    @State private var selectedValue: ComboBoxValue?
     
     /// The element the input belongs to.
     private let element: FieldFormElement
