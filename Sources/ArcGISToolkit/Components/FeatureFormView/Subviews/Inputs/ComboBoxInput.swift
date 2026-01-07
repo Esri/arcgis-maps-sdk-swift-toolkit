@@ -99,7 +99,7 @@ struct ComboBoxInput: View {
                         .accessibilityIdentifier("\(element.label) Options Button")
                 }
             }
-            .foregroundStyle(selectedValue != .none ? .primary : .secondary)
+            .foregroundStyle(selectedValue != nil ? .primary : .secondary)
             .tint(.primary)
         }
         .onIsRequiredChange(of: element) { newIsRequired in
