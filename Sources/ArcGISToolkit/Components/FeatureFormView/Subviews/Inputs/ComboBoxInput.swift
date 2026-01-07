@@ -92,7 +92,9 @@ struct ComboBoxInput: View {
                         updateValueAndEvaluateExpressions(nil)
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")
+#if os(visionOS)
                     .buttonStyle(.plain)
+#endif
                 } else {
                     // Otherwise, always show chevron.
                     Image(systemName: "chevron.right")
