@@ -399,7 +399,7 @@ public class OfflineManager: ObservableObject {
         offlineMapInfos.removeAll { $0.id == offlineMapInfo.id }
     }
     
-    fileprivate func apply(configuration: OfflineManagerConfiguration) {
+    fileprivate func apply(_ configuration: OfflineManagerConfiguration) {
         preferredBackgroundStatusCheckSchedule = configuration.preferredBackgroundStatusCheckSchedule
         onDemandUpdateMode = configuration.onDemandUpdateMode
         preplannedUpdateMode = configuration.preplannedUpdateMode
@@ -443,7 +443,7 @@ public extension SwiftUI.Scene {
     ) -> some SwiftUI.Scene {
         Logger.offlineManager.debug("Executing OfflineManager SwiftUI.Scene modifier")
         
-        OfflineManager.shared.apply(configuration: configuration)
+        OfflineManager.shared.apply(configuration)
         OfflineManager.shared.onJobCompletion = jobCompletionAction
         
         // Support app-relaunch after background downloads.
