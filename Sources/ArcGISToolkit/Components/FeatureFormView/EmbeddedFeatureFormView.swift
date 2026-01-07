@@ -79,9 +79,10 @@ struct EmbeddedFeatureFormView: View {
 }
 
 extension EmbeddedFeatureFormView {
-    /// Makes a section for a form element.
+    /// Returns the section for the given form element.
     ///
-    /// Padding is added to each footer to provide visual seperation between elements.
+    /// Padding is added to each footer to provide visual separation between
+    /// elements.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func section(for element: FormElement) -> some View {
         switch element {
