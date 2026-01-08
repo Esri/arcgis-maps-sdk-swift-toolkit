@@ -33,6 +33,33 @@ extension String {
         )
     }
     
+    /// A localized string for the word "Cancel".
+    static var cancel: Self {
+        .init(
+            localized: "Cancel",
+            bundle: .toolkitModule,
+            comment: "Cancel your current action to close/hide a sheet or pop-up."
+        )
+    }
+    
+    /// A localized string for the word "Close".
+    static var close: Self {
+        .init(
+            localized: "Close",
+            bundle: .toolkitModule,
+            comment: "Close/hide a sheet or pop-up."
+        )
+    }
+    
+    /// A localized string for the word "Confirm".
+    static var confirm: Self {
+        .init(
+            localized: "Confirm",
+            bundle: .toolkitModule,
+            comment: "Confirm the current action and close a sheet or pop-up."
+        )
+    }
+    
     /// An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
     static var emptyAttachmentDownloadErrorMessage: Self {
         .init(
