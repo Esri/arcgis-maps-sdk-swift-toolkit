@@ -87,11 +87,15 @@ public class OfflineManager: ObservableObject {
     
     /// A Boolean value indicating if the `JobManager` is managing the jobs.
     fileprivate var isUsingJobManager: Bool {
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
         if #available(iOS 26.0, *) {
             !configuration.useBGContinuedProcessingTasks
         } else {
             true
         }
+#else
+        true
+#endif
     }
     
     /// The configuration settings for the offline manager.
@@ -154,7 +158,7 @@ public class OfflineManager: ObservableObject {
         Task.detached {
             await self.savePendingMapInfo(for: portalItem)
         }
-#if !targetEnvironment(visionOS) && !targetEnvironment(macCatalyst)
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
         if #available(iOS 26.0, *) {
             if configuration.useBGContinuedProcessingTasks {
                 try? startContinuedProcessingTask(for: job, title: title)
@@ -414,14 +418,14 @@ public struct OfflineManagerConfiguration: Sendable {
     /// The update mode of any new preplanned map areas taken offline.
     public var preplannedUpdateMode: DownloadPreplannedOfflineMapParameters.UpdateMode
     
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
     /// Backing variable for `useBGContinuedProcessingTasks`.
     private var _useBGContinuedProcessingTasks = true
     
     /// A Boolean value indicating whether the `OfflineManager` makes use of
     /// `BGContinuedProcessingTask` in-lieu of the `JobManager`.
     /// Changing the value of this property between app runs is not supported.
-    /// Setting this has no effect on platforms other than iOS.
-    /// The default value of this property is `true` on iOS.
+    /// The default value of this property is `true`.
     @available(iOS 26.0, *)
     public var useBGContinuedProcessingTasks: Bool {
         get {
@@ -431,6 +435,7 @@ public struct OfflineManagerConfiguration: Sendable {
             _useBGContinuedProcessingTasks = newValue
         }
     }
+#endif
     
     /// Creates a configuration for the offline manager.
     /// - Parameters:
@@ -448,6 +453,7 @@ public struct OfflineManagerConfiguration: Sendable {
         self.preplannedUpdateMode = preplannedUpdateMode
     }
     
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
     /// Creates a configuration for the offline manager.
     /// - Parameters:
     ///   - useBGContinuedProcessingTasks: Whether the `OfflineManager` makes use of
@@ -468,6 +474,7 @@ public struct OfflineManagerConfiguration: Sendable {
         self.preplannedUpdateMode = preplannedUpdateMode
         _useBGContinuedProcessingTasks = useBGContinuedProcessingTasks
     }
+#endif
 }
 
 extension Logger {
@@ -495,7 +502,7 @@ private extension Dictionary {
     }
 }
 
-#if !targetEnvironment(visionOS) && !targetEnvironment(macCatalyst)
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
 extension OfflineManager {
     /// Starts a background continued processing task for a given job that is
     /// taking a map offline.

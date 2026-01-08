@@ -15,7 +15,7 @@
 import ArcGIS
 import BackgroundTasks
 
-#if !targetEnvironment(visionOS) && !targetEnvironment(macCatalyst)
+#if !os(visionOS) && !targetEnvironment(macCatalyst)
 @available(iOS 26.0, *)
 public extension BGContinuedProcessingTask {
     /// Binds a job to this continued processing task such that the job progress
