@@ -27,7 +27,7 @@ struct DismissButton: View {
             }
         }
         
-        var titleKey: String {
+        var label: String {
             switch self {
             case .cancel: String.cancel
             case .close: String.close
@@ -51,56 +51,33 @@ struct DismissButton: View {
         
         if #available(iOS 26.0, *) {
             Button(role: kind.role, action: callDismiss)
+                .accessibilityLabel(Text(kind.label))
         } else {
-            switch kind {
-            case .close, .cancel:
-//                Button(
-//                    kind.titleKey,
-//                    systemImage: "xmark",
-//                    action: callDismiss
-//                )
-//                //.frame(width: 28, height: 28)
-//                .labelStyle(.iconOnly)
-//                .symbolRenderingMode(.hierarchical)
-//#if !os(visionOS)
-//                .buttonStyle(.plain)
-//                .foregroundStyle(.secondary)
-//                .symbolVariant(.circle.fill)
-//#endif
-                //                Button(action: callDismiss) {
-                //                    Image(systemName: "xmark.circle.fill")
-                //                        .resizable()
-                //                        .symbolRenderingMode(.hierarchical)
-                //                        .foregroundStyle(.secondary)
-                //                        .frame(width: 28, height: 28)
-                //                }
-                //                .buttonStyle(.plain)
-                Button(action: callDismiss) {
-                    Label {
-                        Text(kind.titleKey)
-                    } icon: {
-                        Image(systemName: "xmark")
-                    }
-
-                    Label(kind.titleKey, systemImage: "xmark")
-                        
-                        .labelStyle(.iconOnly)
-                        .symbolRenderingMode(.hierarchical)
+            Group {
+                switch kind {
+                case .close, .cancel:
+                    Button(
+                        kind.label,
+                        systemImage: "xmark",
+                        action: callDismiss
+                    )
+                    .font(.system(size: 22))
+                    .symbolRenderingMode(.hierarchical)
 #if !os(visionOS)
-                        .foregroundStyle(.secondary)
-                        .symbolVariant(.circle.fill)
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.secondary)
+                    .symbolVariant(.circle.fill)
 #endif
+                case .confirm:
+                    Button(
+                        kind.label,
+                        systemImage: "checkmark",
+                        action: callDismiss
+                    )
                 }
-                .buttonStyle(.plain)
-
-            case .confirm:
-                Button(
-                    kind.titleKey,
-                    systemImage: "checkmark",
-                    action: callDismiss
-                )
-                .labelStyle(.iconOnly)
             }
+            .accessibilityLabel(Text(kind.label))
+            .labelStyle(.iconOnly)
         }
     }
 }

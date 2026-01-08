@@ -40,6 +40,7 @@ struct XButton: View {
         Button(title, systemImage: "xmark") {
             action?() ?? dismiss()
         }
+        .accessibilityLabel(Text(title))
         .labelStyle(.iconOnly)
         .symbolRenderingMode(.hierarchical)
 #if !os(visionOS)
