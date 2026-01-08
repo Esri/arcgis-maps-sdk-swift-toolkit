@@ -369,8 +369,8 @@ public extension SwiftUI.Scene {
     /// - Parameters:
     ///   - configure: A closure that allows you to configure the offline manager.
     ///   - jobCompletionAction: An action to perform when a job completes.
-    /// - SeeAlso ``OfflineManager``
-    /// - SeeAlso ``OfflineManagerConfiguration``
+    /// - SeeAlso: ``OfflineManager``
+    /// - SeeAlso: ``OfflineManagerConfiguration``
     /// - Since 300.0
     @MainActor
     func offlineManager(
@@ -405,7 +405,7 @@ public extension SwiftUI.Scene {
 public struct OfflineManagerConfiguration: Sendable {
     /// The preferred schedule for performing status checks while the application is in the
     /// background.
-    /// - SeeAlso ``JobManager/preferredBackgroundStatusCheckSchedule``
+    /// - SeeAlso: ``JobManager/preferredBackgroundStatusCheckSchedule``
     public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule
     
     /// The update mode of any new on-demand map areas taken offline.
@@ -415,7 +415,7 @@ public struct OfflineManagerConfiguration: Sendable {
     public var preplannedUpdateMode: DownloadPreplannedOfflineMapParameters.UpdateMode
     
     /// Backing variable for `useBGContinuedProcessingTasks`.
-    private var _useBGContinuedProcessingTasks: Bool = true
+    private var _useBGContinuedProcessingTasks = true
     
     /// A Boolean value indicating whether the `OfflineManager` makes use of
     /// `BGContinuedProcessingTask` in-lieu of the `JobManager`.
@@ -451,7 +451,7 @@ public struct OfflineManagerConfiguration: Sendable {
     /// Creates a configuration for the offline manager.
     /// - Parameters:
     ///   - useBGContinuedProcessingTasks: Whether the `OfflineManager` makes use of
-    /// `BGContinuedProcessingTask` in-lieu of the `JobManager`.
+    ///   `BGContinuedProcessingTask` in-lieu of the `JobManager`.
     ///   - preferredBackgroundStatusCheckSchedule: The preferred schedule for
     ///   performing status checks while the application is in the background.
     ///   - onDemandUpdateMode: The update mode of any new on-demand map areas taken offline.
