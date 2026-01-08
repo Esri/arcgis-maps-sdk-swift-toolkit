@@ -176,7 +176,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
                 downloadDirectory: mmpkDirectoryURL
             )
             
-            OfflineManager.shared.start(job: job, portalItem: offlineMapTask.portalItem!)
+            OfflineManager.shared.startJob(job, portalItem: offlineMapTask.portalItem!, title: title)
             observeJob(job)
         } catch {
             status = .downloadFailure(error)
@@ -342,7 +342,7 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
             preplannedMapArea: self
         )
         // Set the update mode.
-        parameters.updateMode = await OfflineManager.shared.preplannedUpdateMode
+        parameters.updateMode = await OfflineManager.shared.configuration.preplannedUpdateMode
         
         return parameters
     }
