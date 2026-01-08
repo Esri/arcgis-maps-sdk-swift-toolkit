@@ -49,11 +49,10 @@ struct DismissButton: View {
             }
         }
         
-        if #available(iOS 26.0, *) {
-            Button(role: kind.role, action: callDismiss)
-                .accessibilityLabel(Text(kind.label))
-        } else {
-            Group {
+        Group {
+            if #available(iOS 26.0, *) {
+                Button(role: kind.role, action: callDismiss)
+            } else {
                 switch kind {
                 case .close, .cancel:
                     Button(
@@ -76,9 +75,9 @@ struct DismissButton: View {
                     )
                 }
             }
-            .accessibilityLabel(Text(kind.label))
-            .labelStyle(.iconOnly)
         }
+        .accessibilityLabel(Text(kind.label))
+        .labelStyle(.iconOnly)
     }
 }
 
