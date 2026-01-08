@@ -24,17 +24,32 @@ struct EmbeddedFeatureFormView: View {
     
     var body: some View {
         if let embeddedFeatureFormViewModel {
-            ScrollViewReader { scrollViewProxy in
-                ScrollView {
-                    VStack(alignment: .leading) {
-                        ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
-                            makeElement(element)
-                        }
+            ScrollViewReader { scrollView in
+                Group {
+                    let form = Form {
+                        sections
                     }
+#if RELEASE
+                    form
+#else
+                    if CommandLine.arguments.contains("-testCase") {
+                        // Use a ScrollView and VStack during UI testing
+                        // to make all form elements accessible.
+                        ScrollView {
+                            VStack {
+                                sections
+                            }
+                        }
+                    } else {
+                        form
+                    }
+#endif
                 }
-                .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
-                    if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
-                        withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
+                .onChange(of: embeddedFeatureFormViewModel.focusedElement) { _, newFocusedElement in
+                    guard let newFocusedElement else { return }
+                    // The navigation bar may obscure section headers (FB19740517).
+                    withAnimation {
+                        scrollView.scrollTo(newFocusedElement, anchor: .top)
                     }
                 }
             }
@@ -47,7 +62,6 @@ struct EmbeddedFeatureFormView: View {
             .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
                 embeddedFeatureFormViewModel.title = newTitle
             }
-            .padding(.horizontal)
             .preference(
                 key: PresentedFeatureFormPreferenceKey.self,
                 value: .init(object: embeddedFeatureFormViewModel)
@@ -65,20 +79,31 @@ struct EmbeddedFeatureFormView: View {
 }
 
 extension EmbeddedFeatureFormView {
-    /// Makes UI for a form element.
+    /// Returns the section for the given form element.
+    ///
+    /// Padding is added to each footer to provide visual separation between
+    /// elements.
     /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeElement(_ element: FormElement) -> some View {
+    @ViewBuilder func section(for element: FormElement) -> some View {
         switch element {
         case let element as GroupFormElement:
-            GroupFormElementView(element: element) { internalMakeElement($0) }
+            GroupFormElementView(element: element, viewCreator: content(for:))
         default:
-            internalMakeElement(element)
+            Section {
+                content(for: element)
+            } header: {
+                FormElementHeader(element: element)
+            } footer: {
+                FormElementFooter(element: element)
+                    .padding(.bottom)
+            }
+            .textCase(nil)
         }
     }
     
-    /// Makes UI for a field form element or a text form element.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
+    /// Returns content for the section of the given form element.
+    /// - Parameter element: The element to generate the body for.
+    @ViewBuilder func content(for element: FormElement) -> some View {
         if let embeddedFeatureFormViewModel {
             switch element {
             case let element as AttachmentsFormElement:
@@ -86,38 +111,34 @@ extension EmbeddedFeatureFormView {
                     formElement: element,
                     formViewModel: embeddedFeatureFormViewModel
                 )
-            case let element as FieldFormElement:
-                makeFieldElement(element)
+            case let element as FieldFormElement where !(element.input is UnsupportedFormInput):
+                FieldFormElementView(element: element)
             case let element as TextFormElement:
-                makeTextElement(element)
+                TextFormElementView(element: element)
             case let element as UtilityAssociationsFormElement:
-                makeUtilityAssociationsFormElement(element)
+                FeatureFormView.UtilityAssociationsFormElementView(element: element)
             default:
                 EmptyView()
             }
         }
     }
     
-    /// Makes UI for a field form element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-        if !(element.input is UnsupportedFormInput) {
-            FormElementWrapper(element: element)
-            Divider()
+    /// The sections for all visible form elements.
+    @ViewBuilder var sections: some View {
+        if let visibleElements = embeddedFeatureFormViewModel?.visibleElements {
+            ForEach(visibleElements, id: \.self, content: section(for:))
+        } else {
+            ContentUnavailableView {
+                Label {
+                    Text(
+                        "This form is empty.",
+                        bundle: .toolkitModule,
+                        comment: "A notice communicating that a feature form has no elements."
+                    )
+                } icon: {
+                    Image(systemName: "text.page.slash.fill")
+                }
+            }
         }
-    }
-    
-    /// Makes UI for a text form element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
-        TextFormElementView(element: element)
-        Divider()
-    }
-    
-    /// Makes UI for a utility associations element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
-        FormElementWrapper(element: element)
-        Divider()
     }
 }

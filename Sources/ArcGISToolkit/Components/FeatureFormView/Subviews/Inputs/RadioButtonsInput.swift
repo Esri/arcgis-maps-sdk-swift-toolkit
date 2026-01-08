@@ -25,16 +25,13 @@ struct RadioButtonsInput: View {
     /// A Boolean value indicating whether a ``ComboBoxInput`` should be used instead.
     /// This will be `true` if the current value doesn't exist as an option in the domain
     @State private var fallbackToComboBox = false
-    
     /// The selected option.
     @State private var selectedValue: CodedValue?
-    
     /// The element's current value.
     @State private var value: Any?
     
     /// The element the input belongs to.
     private let element: FieldFormElement
-    
     /// The input configuration of the field.
     private let input: RadioButtonsFormInput
     
@@ -58,7 +55,7 @@ struct RadioButtonsInput: View {
                 noValueOption: input.noValueOption
             )
         } else {
-            VStack(alignment: .leading, spacing: .zero) {
+            VStack(alignment: .leading) {
                 if input.noValueOption == .show {
                     makeRadioButtonRow(
                         placeholderValue,
@@ -79,11 +76,6 @@ struct RadioButtonsInput: View {
                     }
                 }
             }
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(uiColor: .tertiarySystemFill))
-            )
-            .frame(maxWidth: .infinity, alignment: .leading)
             .onAppear {
                 if let selectedValue = element.codedValues.first(where: {
                     $0.name == element.formattedValue
@@ -139,7 +131,6 @@ extension RadioButtonsInput {
             HStack {
                 if useNoValueStyle {
                     Text(label)
-                        .italic()
                         .foregroundStyle(.secondary)
                 } else {
                     Text(label)
@@ -153,7 +144,6 @@ extension RadioButtonsInput {
 #endif
                 }
             }
-            .padding(10)
             .contentShape(.rect(cornerRadius: 10))
             .hoverEffect()
         }

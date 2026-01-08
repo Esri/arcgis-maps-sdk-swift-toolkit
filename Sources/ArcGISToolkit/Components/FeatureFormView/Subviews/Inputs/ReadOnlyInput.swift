@@ -24,14 +24,18 @@ struct ReadOnlyInput: View {
     let element: FieldFormElement
     
     var body: some View {
-        if element.isMultiline {
-            modifiedValue
-                .frame(maxWidth: .infinity, alignment: .leading)
-        } else {
-            ScrollView(.horizontal) {
+        Group {
+            if element.isMultiline {
                 modifiedValue
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                ScrollView(.horizontal) {
+                    modifiedValue
+                }
             }
         }
+        // Remove the background to visually indicate the element is read-only.
+        .listRowBackground(EmptyView())
     }
     
     /// The text to display for the element's current value with read-only modifiers.
@@ -41,8 +45,6 @@ struct ReadOnlyInput: View {
             .fixedSize(horizontal: false, vertical: true)
             .id(id)
             .lineLimit(element.isMultiline ? nil : 1)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
             .textSelection(.enabled)
             .onValueChange(of: element) { _, _ in
                 id = UUID()

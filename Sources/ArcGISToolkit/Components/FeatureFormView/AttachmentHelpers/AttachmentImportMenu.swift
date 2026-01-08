@@ -117,9 +117,13 @@ struct AttachmentImportMenu: View {
             // Always show file picker, no matter the input type.
             chooseFromFilesButton()
         } label: {
-            Image(systemName: "plus")
-                .font(.title2)
-                .padding(5)
+            Text(
+                "Add Attachment",
+                bundle: .toolkitModule,
+                comment: "A label for a button to add a new file attachment."
+            )
+            .frame(maxWidth: .infinity)
+            .contentShape(.rect)
         }
         .disabled(importState.importInProgress)
         .cameraRequester(cameraRequester)

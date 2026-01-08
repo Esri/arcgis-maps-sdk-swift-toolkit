@@ -78,6 +78,7 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
+            .contentShape(.rect)
             .onTapGesture {
                 if element.isMultiline {
                     fullScreenTextInputIsPresented = true
@@ -88,7 +89,7 @@ struct TextInput: View {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
             }
 #endif
-            .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+            .onValueChange(of: element) { _, newFormattedValue in
                 guard text != newFormattedValue else { return }
                 text = newFormattedValue
             }
@@ -98,7 +99,7 @@ struct TextInput: View {
 private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
-        HStack(alignment: .firstTextBaseline) {
+        HStack {
             Group {
                 if element.isMultiline {
                     Text(text)
@@ -126,8 +127,6 @@ private extension TextInput {
                     .focused($isFocused)
                     .keyboardType(keyboardType)
 #if os(visionOS)
-                    // No need for hover effect since it will be applied
-                    // properly at 'formInputStyle'.
                     .hoverEffectDisabled()
 #endif
                     .onChange(of: isFocused) {
@@ -194,7 +193,6 @@ private extension TextInput {
             }
 #endif
         }
-        .formInputStyle(isTappable: true)
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
@@ -282,41 +280,5 @@ private extension TextInput {
 private extension TextInput {
     private var isBarcodeScanner: Bool {
         element.input is BarcodeScannerFormInput
-    }
-}
-
-private extension View {
-    /// Wraps `onValueChange(of:action:)` with an additional boolean property that when false will
-    /// not monitor value changes.
-    /// - Parameters:
-    ///   - element: The form element to watch for changes on.
-    ///   - when: The boolean value which disables monitoring. When `true` changes will be monitored.
-    ///   - action: The action which watches for changes.
-    /// - Returns: The modified view.
-    func onValueChange(of element: FieldFormElement, when: Bool, action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void) -> some View {
-        modifier(
-            ConditionalChangeOfModifier(element: element, condition: when) { newValue, newFormattedValue in
-                action(newValue, newFormattedValue)
-            }
-        )
-    }
-}
-
-private struct ConditionalChangeOfModifier: ViewModifier {
-    let element: FieldFormElement
-    
-    let condition: Bool
-    
-    let action: (_ newValue: Any?, _ newFormattedValue: String) -> Void
-    
-    func body(content: Content) -> some View {
-        if condition {
-            content
-                .onValueChange(of: element) { newValue, newFormattedValue in
-                    action(newValue, newFormattedValue)
-                }
-        } else {
-            content
-        }
     }
 }
