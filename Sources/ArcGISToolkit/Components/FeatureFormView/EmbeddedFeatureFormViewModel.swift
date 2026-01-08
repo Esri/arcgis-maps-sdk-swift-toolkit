@@ -47,11 +47,17 @@ class EmbeddedFeatureFormViewModel {
     var title = ""
     
     /// The list of visible form elements.
+    ///
+    /// - Note: The attachments element is appended, if configured, once the default visibility of all other
+    /// form elements has been evaluated. This prevents the attachments element from being initialized and
+    /// quickly removed when it is optimized out for being off-screen, therefore preventing a cancellation
+    /// error in `AttachmentsFeatureElementView`.
     var visibleElements: [FormElement] {
         var elements = featureForm
             .elements
-            .filter { elementVisibility[$0] == true }
-        if let attachmentsElement = featureForm.defaultAttachmentsElement {
+            .filter { elementVisibility[$0, default: false] }
+        if let attachmentsElement = featureForm.defaultAttachmentsElement,
+           elementVisibility.count == featureForm.elements.count {
             elements.append(attachmentsElement)
         }
         return elements

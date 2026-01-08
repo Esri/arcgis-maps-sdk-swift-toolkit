@@ -26,6 +26,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Add Association";
 
+/* A label for a button to add a new file attachment. */
+"Add Attachment" = "Add Attachment";
+
 /* A label for a button to add a map area. */
 "Add Map Area" = "Add Map Area";
 
@@ -861,6 +864,9 @@ to be imported as an attachment. */
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "There are no map areas for this map. Tap the button below to get started.";
+
+/* A notice communicating that a feature form has no elements. */
+"This form is empty." = "This form is empty.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Title";
