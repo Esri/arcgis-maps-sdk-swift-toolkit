@@ -189,11 +189,6 @@ private struct FacilityList: View {
             placement: .navigationBarDrawer,
             prompt: String.filterFacilities
         )
-        .modify {
-            if #available(iOS 26.0, *) {
-                $0.searchToolbarBehavior(.minimize)
-            }
-        }
         .navigationTitle(String.selectAFacility)
         .navigationBarTitleDisplayMode(.inline)
     }
