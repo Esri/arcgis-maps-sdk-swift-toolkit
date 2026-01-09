@@ -18,23 +18,34 @@ import SwiftUI
 struct SiteAndFacilitySelector: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isPresented: Bool
-
+    
     /// The view model used by the `SiteAndFacilitySelector`.
     @EnvironmentObject private var model: FloorFilterViewModel
-        
+    
     @State private var navigationPath = NavigationPath()
+    
+    /// A Boolean value indicating if there are multiple sites. If there not
+    /// multiple sites, then we go straight to the facilities list.
+    private var hasMultipleSites: Bool { model.sites.count > 1 }
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            SiteList(isPresented: $isPresented)
-                .navigationDestination(for: FloorFacility.self) { facility in
-                    FacilityList(isPresented: $isPresented, site: facility.site)
+            VStack {
+                if model.sites.count > 1 {
+                    SiteList(isPresented: $isPresented)
+                } else {
+                    FacilityList(isPresented: $isPresented, site: nil)
                 }
+            }
+            .navigationDestination(for: FloorFacility.self) { facility in
+                FacilityList(isPresented: $isPresented, site: facility.site)
+            }
         }
         .onAppear {
-            if let facility = model.selection?.facility {
-                navigationPath.append(facility)
+            guard hasMultipleSites, let facility = model.selection?.facility else {
+                return
             }
+            navigationPath.append(facility)
         }
         .frame(minWidth: 360, minHeight: 500)
     }
@@ -190,27 +201,27 @@ extension Color {
 //struct SiteAndFacilitySelector1: View {
 //    /// Allows the user to toggle the visibility of the site and facility selector.
 //    @Binding var isPresented: Bool
-//    
+//
 //    @Environment(\.horizontalSizeClass)
 //    private var horizontalSizeClass: UserInterfaceSizeClass?
-//    
+//
 //    /// The view model used by the `SiteAndFacilitySelector`.
 //    @EnvironmentObject var viewModel: FloorFilterViewModel
-//    
+//
 //    /// A Boolean value indicating whether the user is typing into the text field.
 //    @FocusState var textFieldIsFocused: Bool
-//    
+//
 //    /// A Boolean value indicating whether the user tapped the "All Sites" button.
 //    @State private var allSitesIsSelected = false
-//    
+//
 //    /// The site or facility filter phrase.
 //    @State private var query = ""
-//    
+//
 //    /// A Boolean value indicating whether the user pressed the back button in the header.
 //    ///
 //    /// This allows for browsing the site list while keeping the current selection unmodified.
 //    @State private var userDidBackOutToSiteList = false
-//    
+//
 //    var body: some View {
 //        VStack {
 //            header
@@ -231,7 +242,7 @@ extension Color {
 //        .animation(.default, value: textFieldIsFocused)
 //        .clipped()
 //    }
-//    
+//
 //    /// Displays a list of facilities matching the filter criteria as determined by
 //    /// `matchingFacilities`.
 //    ///
@@ -276,7 +287,7 @@ extension Color {
 //            }
 //        }
 //    }
-//    
+//
 //    /// The header at the top of the selector containing the navigation controls and text field.
 //    var header: some View {
 //        VStack {
@@ -287,7 +298,7 @@ extension Color {
 //            headerLowerHalf
 //        }
 //    }
-//    
+//
 //    /// The portion of the header containing the text field.
 //    var headerLowerHalf: some View {
 //        HStack {
@@ -320,7 +331,7 @@ extension Color {
 //            }
 //        }
 //    }
-//    
+//
 //    /// The portion of the header containing the navigation controls.
 //    var headerUpperHalf: some View {
 //        HStack {
@@ -350,7 +361,7 @@ extension Color {
 //        }
 //        .font(.title3)
 //    }
-//    
+//
 //    /// A view containing a list of the site names.
 //    ///
 //    /// If `AutomaticSelectionMode` mode is in use, items will automatically be
@@ -387,7 +398,7 @@ extension Color {
 //        facilityListIsVisible
 //        && multipleSitesAreAvailable
 //    }
-//    
+//
 //    /// A Boolean value indicating whether the facility list is visible.
 //    var facilityListIsVisible: Bool {
 //        (allSitesIsSelected
@@ -395,7 +406,7 @@ extension Color {
 //         || !multipleSitesAreAvailable)
 //        && !userDidBackOutToSiteList
 //    }
-//    
+//
 //    /// A subset of `facilities` with names containing `query` or all `facilities` if
 //    /// `query` is empty.
 //    var matchingFacilities: [FloorFacility] {
@@ -408,7 +419,7 @@ extension Color {
 //            .filter { $0.name.localizedStandardContains(query) }
 //            .sorted { $0.name < $1.name  }
 //    }
-//    
+//
 //    /// A subset of `sites` with names containing `query` or all `sites` if `query` is empty.
 //    var matchingSites: [FloorSite] {
 //        guard !query.isEmpty else {
@@ -418,7 +429,7 @@ extension Color {
 //            $0.name.localizedStandardContains(query)
 //        }
 //    }
-//    
+//
 //    /// A Boolean value indicating whether the floor aware data contains more than one site.
 //    var multipleSitesAreAvailable: Bool {
 //        viewModel.sites.count > 1
