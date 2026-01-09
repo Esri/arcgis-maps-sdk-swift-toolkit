@@ -1985,7 +1985,7 @@ final class FeatureFormViewTests: XCTestCase {
         addButton.tap()
         
         XCTAssertTrue(
-            networkSourceGroupButtonAfter.waitForExistence(timeout: 15),
+            networkSourceGroupButtonAfter.waitForExistence(timeout: 5),
             "The network source group \"Electric Distribution Device\" doesn't exist."
         )
         
