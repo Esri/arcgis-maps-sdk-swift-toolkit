@@ -110,12 +110,32 @@ struct FacilityList: View {
     
     var body: some View {
         List(facilities, id:\.id) { facility in
-            Button(facility.name) {
+            Button {
                 model.setFacility(facility, zoomTo: true)
                 isPresented = false
+            } label: {
+                Label {
+                    Text(facility.name)
+                } icon: {
+                    Image(systemName: "checkmark")
+                        .foregroundStyle(.primary)
+                        .opacity(facility.id == model.selection?.facility?.id ? 1 : 0)
+                }
+//                if facility.id == model.selection?.facility?.id {
+//                    Label(facility.name, systemImage: "checkmark")
+//                        .labelStyle(.titleAndIcon)
+//                } else {
+//                    Label(facility.name, systemImage: "")
+//                        .labelStyle(.titleAndIcon)
+//                }
             }
+            .buttonStyle(.plain)
             .contentShape(.rect)
-            .listRowBackground(facility.id == model.selection?.facility?.id ? Color.secondary.opacity(0.5) : nil)
+//            .listRowBackground(
+//                facility.id == model.selection?.facility?.id
+//                ? Color.foo
+//                : nil
+//            )
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -131,6 +151,10 @@ struct FacilityList: View {
     }
 }
 
+extension Color {
+    static let secondarySystemBackground = Color(uiColor: .secondarySystemBackground)
+    static let foo = Color(uiColor: .systemGroupedBackground)
+}
 
 ///// A view which allows selection of sites and facilities represented in a `FloorManager`.
 /////
