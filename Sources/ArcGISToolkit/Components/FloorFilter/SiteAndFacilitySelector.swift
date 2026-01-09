@@ -54,15 +54,21 @@ struct SiteList: View {
     }
     
     var body: some View {
-        List(sites, id:\.id) { site in
-            NavigationLink {
-                FacilityList(isPresented: $isPresented, site: site)
-            } label: {
-                Text(site.name)
+        VStack {
+            if sites.isEmpty {
+                ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
+            } else {
+                List(sites, id:\.id) { site in
+                    NavigationLink {
+                        FacilityList(isPresented: $isPresented, site: site)
+                    } label: {
+                        Text(site.name)
+                    }
+                }
+                .listStyle(.plain)
             }
         }
         .searchable(text: $searchText, prompt: String.filterSites)
-        .listStyle(.plain)
         .navigationTitle(String.sites)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -109,29 +115,36 @@ struct FacilityList: View {
     }
     
     var body: some View {
-        ScrollViewReader { scrollView in
-            List(facilities, id:\.id) { facility in
-                Button {
-                    model.setFacility(facility, zoomTo: true)
-                    isPresented = false
-                } label: {
-                    HStack {
-                        Text(facility.name)
-                        Spacer()
-                        if facility.id == model.selection?.facility?.id {
-                            Image(systemName: "checkmark")
-                                .foregroundStyle(.primary)
+        VStack {
+            if facilities.isEmpty {
+                ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
+            } else {
+                ScrollViewReader { scrollView in
+                    List(facilities, id:\.id) { facility in
+                        Button {
+                            model.setFacility(facility, zoomTo: true)
+                            isPresented = false
+                        } label: {
+                            HStack {
+                                Text(facility.name)
+                                Spacer()
+                                if facility.id == model.selection?.facility?.id {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(.primary)
+                                }
+                            }
+                            .contentShape(.rect)
                         }
+                        .buttonStyle(.plain)
                     }
-                    .contentShape(.rect)
+                    .listStyle(.plain)
+                    .onChange(of: model.selection) {
+                        guard let floorFacility = model.selection?.facility else {
+                            return
+                        }
+                        withAnimation { scrollView.scrollTo(floorFacility.id) }
+                    }
                 }
-                .buttonStyle(.plain)
-            }
-            .onChange(of: model.selection) {
-                guard let floorFacility = model.selection?.facility else {
-                    return
-                }
-                withAnimation { scrollView.scrollTo(floorFacility.id) }
             }
         }
         .toolbar {
@@ -142,7 +155,6 @@ struct FacilityList: View {
             }
         }
         .searchable(text: $searchText, prompt: String.filterFacilities)
-        .listStyle(.plain)
         .navigationTitle(String.selectAFacility)
         .navigationBarTitleDisplayMode(.inline)
     }
