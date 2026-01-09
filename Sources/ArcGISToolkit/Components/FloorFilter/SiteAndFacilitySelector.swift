@@ -86,6 +86,7 @@ private struct SiteList: View {
                             }
                     } label: {
                         Text(site.name)
+                            .lineLimit(1)
                     }
                 }
                 .listStyle(.plain)
@@ -156,7 +157,14 @@ private struct FacilityList: View {
                             isPresented = false
                         } label: {
                             HStack {
-                                Text(facility.name)
+                                VStack(alignment: .leading) {
+                                    Text(facility.name)
+                                    if model.showingFaciltiesFromAllSites {
+                                        Text(facility.site?.name ?? "")
+                                            .font(.footnote)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
                                 Spacer()
                                 if facility.id == model.selection?.facility?.id {
                                     Image(systemName: "checkmark")
@@ -164,6 +172,7 @@ private struct FacilityList: View {
                                 }
                             }
                             .contentShape(.rect)
+                            .lineLimit(1)
                         }
                         .buttonStyle(.plain)
                     }

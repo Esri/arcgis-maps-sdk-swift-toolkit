@@ -191,25 +191,6 @@ public struct FloorFilter: View {
         )
     }
     
-//    /// A configured `SiteAndFacilitySelector`.
-//    @ViewBuilder private var siteAndFacilitySelector: some View {
-//        if horizontalSizeClass == .compact {
-//            Color.clear
-//                .sheet(isPresented: $siteAndFacilitySelectorIsPresented) {
-//                    SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
-//                }
-//        } else {
-//            ZStack {
-//                Color.clear
-//                    .esriBorder()
-//                SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
-//                    .padding([.top, .leading, .trailing], 2.5)
-//                    .padding(.bottom)
-//            }
-//            .opacity(siteAndFacilitySelectorIsPresented ? 1 : .zero)
-//        }
-//    }
-    
     public var body: some View {
         HStack(alignment: .bottom) {
             levelSelectorContainer
