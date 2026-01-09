@@ -51,12 +51,12 @@ struct SiteAndFacilitySelector: View {
     }
 }
 
-struct SiteList: View {
-    /// The view model used by the `SiteAndFacilitySelector`.
-    @EnvironmentObject var model: FloorFilterViewModel
-    
+private struct SiteList: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isPresented: Bool
+
+    /// The view model backing this view.
+    @EnvironmentObject private var model: FloorFilterViewModel
     
     @State private var searchText = ""
     
@@ -113,12 +113,12 @@ struct SiteList: View {
     }
 }
 
-struct FacilityList: View {
-    /// The view model used by the `SiteAndFacilitySelector`.
-    @EnvironmentObject var model: FloorFilterViewModel
-    
+private struct FacilityList: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isPresented: Bool
+
+    /// The view model backing this view.
+    @EnvironmentObject private var model: FloorFilterViewModel
     
     let site: FloorSite?
     @State private var searchText = ""
