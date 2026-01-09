@@ -190,8 +190,8 @@ public struct OfflineMapAreasView: View {
             }
             .toolbar {
                 if shouldDismiss {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button.done {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        DismissButton(kind: .close) {
                             dismiss()
                         }
                     }
