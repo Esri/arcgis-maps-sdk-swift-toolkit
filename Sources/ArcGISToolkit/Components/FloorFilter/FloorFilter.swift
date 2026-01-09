@@ -140,6 +140,9 @@ public struct FloorFilter: View {
 #if !os(visionOS)
             .foregroundStyle(.tint)
 #endif
+            .popover(isPresented: $siteAndFacilitySelectorIsPresented) {
+                SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
+            }
         } else {
             Image(systemName: "exclamationmark.circle")
                 .padding(.toolkitDefault)
@@ -188,34 +191,35 @@ public struct FloorFilter: View {
         )
     }
     
-    /// A configured `SiteAndFacilitySelector`.
-    @ViewBuilder private var siteAndFacilitySelector: some View {
-        if horizontalSizeClass == .compact {
-            Color.clear
-                .sheet(isPresented: $siteAndFacilitySelectorIsPresented) {
-                    SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
-                }
-        } else {
-            ZStack {
-                Color.clear
-                    .esriBorder()
-                SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
-                    .padding([.top, .leading, .trailing], 2.5)
-                    .padding(.bottom)
-            }
-            .opacity(siteAndFacilitySelectorIsPresented ? 1 : .zero)
-        }
-    }
+//    /// A configured `SiteAndFacilitySelector`.
+//    @ViewBuilder private var siteAndFacilitySelector: some View {
+//        if horizontalSizeClass == .compact {
+//            Color.clear
+//                .sheet(isPresented: $siteAndFacilitySelectorIsPresented) {
+//                    SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
+//                }
+//        } else {
+//            ZStack {
+//                Color.clear
+//                    .esriBorder()
+//                SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
+//                    .padding([.top, .leading, .trailing], 2.5)
+//                    .padding(.bottom)
+//            }
+//            .opacity(siteAndFacilitySelectorIsPresented ? 1 : .zero)
+//        }
+//    }
     
     public var body: some View {
         HStack(alignment: .bottom) {
-            if alignment.horizontal == .trailing {
-                siteAndFacilitySelector
-                levelSelectorContainer
-            } else {
-                levelSelectorContainer
-                siteAndFacilitySelector
-            }
+            levelSelectorContainer
+//            if alignment.horizontal == .trailing {
+//                siteAndFacilitySelector
+//                levelSelectorContainer
+//            } else {
+//                levelSelectorContainer
+//                siteAndFacilitySelector
+//            }
         }
         // Ensure space for filter text field on small screens in landscape
         .frame(minHeight: 100)
