@@ -108,3 +108,16 @@ extension View {
         }
     }
 }
+
+extension View {
+    /// Modify a view in a closure. This is useful for using an `if` statement
+    /// to determine what modifier, if any, should be applied.
+    @ViewBuilder
+    func modify(@ViewBuilder _ transform: (Self) -> (some View)?) -> some View {
+        if let view = transform(self), !(view is EmptyView) {
+            view
+        } else {
+            self
+        }
+    }
+}

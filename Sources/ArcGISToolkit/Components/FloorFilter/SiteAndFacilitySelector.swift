@@ -16,18 +16,24 @@ import ArcGIS
 import SwiftUI
 
 struct SiteAndFacilitySelector: View {
-    /// The view model used by the `SiteAndFacilitySelector`.
-    @EnvironmentObject var model: FloorFilterViewModel
-    
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isPresented: Bool
+
+    /// The view model used by the `SiteAndFacilitySelector`.
+    @EnvironmentObject private var model: FloorFilterViewModel
+        
+    @State private var navigationPath = NavigationPath()
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
+            SiteList(isPresented: $isPresented)
+                .navigationDestination(for: FloorFacility.self) { facility in
+                    FacilityList(isPresented: $isPresented, site: facility.site)
+                }
+        }
+        .onAppear {
             if let facility = model.selection?.facility {
-                FacilityList(isPresented: $isPresented, site: facility.site)
-            } else {
-                SiteList(isPresented: $isPresented)
+                navigationPath.append(facility)
             }
         }
         .frame(minWidth: 360, minHeight: 500)
@@ -68,7 +74,11 @@ struct SiteList: View {
                 .listStyle(.plain)
             }
         }
-        .searchable(text: $searchText, prompt: String.filterSites)
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer,
+            prompt: String.filterSites
+        )
         .navigationTitle(String.sites)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -154,7 +164,16 @@ struct FacilityList: View {
                 }
             }
         }
-        .searchable(text: $searchText, prompt: String.filterFacilities)
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer,
+            prompt: String.filterFacilities
+        )
+        .modify {
+            if #available(iOS 26.0, *) {
+                $0.searchToolbarBehavior(.minimize)
+            }
+        }
         .navigationTitle(String.selectAFacility)
         .navigationBarTitleDisplayMode(.inline)
     }
