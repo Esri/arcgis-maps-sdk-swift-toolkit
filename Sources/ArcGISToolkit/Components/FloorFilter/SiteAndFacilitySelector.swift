@@ -114,13 +114,22 @@ struct FacilityList: View {
                 model.setFacility(facility, zoomTo: true)
                 isPresented = false
             } label: {
-                Label {
+                HStack {
                     Text(facility.name)
-                } icon: {
-                    Image(systemName: "checkmark")
-                        .foregroundStyle(.primary)
-                        .opacity(facility.id == model.selection?.facility?.id ? 1 : 0)
+                    Spacer()
+                    if facility.id == model.selection?.facility?.id {
+                        Image(systemName: "checkmark")
+                            .foregroundStyle(.primary)
+                    }
                 }
+                
+//                Label {
+//                    Text(facility.name)
+//                } icon: {
+//                    Image(systemName: "checkmark")
+//                        .foregroundStyle(.primary)
+//                        .opacity(facility.id == model.selection?.facility?.id ? 1 : 0)
+//                }
 //                if facility.id == model.selection?.facility?.id {
 //                    Label(facility.name, systemImage: "checkmark")
 //                        .labelStyle(.titleAndIcon)
