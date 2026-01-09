@@ -38,7 +38,10 @@ struct SiteAndFacilitySelector: View {
                 }
             }
             .navigationDestination(for: FloorFacility.self) { facility in
-                FacilityList(isPresented: $isPresented, site: facility.site)
+                FacilityList(
+                    isPresented: $isPresented,
+                    site: model.showingFaciltiesFromAllSites ? nil : facility.site
+                )
             }
         }
         .onAppear {
@@ -78,6 +81,9 @@ private struct SiteList: View {
                 List(sites, id:\.id) { site in
                     NavigationLink {
                         FacilityList(isPresented: $isPresented, site: site)
+                            .onAppear {
+                                model.showingFaciltiesFromAllSites = false
+                            }
                     } label: {
                         Text(site.name)
                     }
@@ -107,6 +113,9 @@ private struct SiteList: View {
     @ViewBuilder var allSitesButton: some View {
         NavigationLink {
             FacilityList(isPresented: $isPresented, site: nil)
+                .onAppear {
+                    model.showingFaciltiesFromAllSites = true
+                }
         } label: {
             Text(String.allSites)
         }
