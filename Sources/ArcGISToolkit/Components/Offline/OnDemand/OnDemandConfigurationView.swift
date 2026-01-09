@@ -73,7 +73,7 @@ struct OnDemandConfigurationView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button.cancel {
+                    DismissButton(kind: .cancel) {
                         dismiss()
                     }
                 }
