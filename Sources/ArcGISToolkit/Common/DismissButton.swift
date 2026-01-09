@@ -46,49 +46,58 @@ struct DismissButton: View {
             }
         }
     }
-    let kind: Kind
     
-    @Environment(\.dismiss) private var dismiss
+    let kind: Kind
     var dismissAction: (@MainActor () -> Void)?
     
-    var body: some View {
-        let callDismiss = {
-            if let dismissAction {
-                dismissAction()
-            } else {
-                dismiss()
-            }
+    @Environment(\.dismiss) private var dismiss
+    
+    func callDismiss() {
+        if let dismissAction {
+            dismissAction()
+        } else {
+            dismiss()
         }
-        
+    }
+    
+    var body: some View {
+#if !os(visionOS)
         if #available(iOS 26.0, *) {
             Button(role: kind.role, action: callDismiss)
         } else {
-            Group {
-                switch kind {
-                case .close, .cancel:
-                    Button(
-                        kind.label,
-                        systemImage: "xmark",
-                        action: callDismiss
-                    )
-                    .font(.system(size: 22))
-                    .symbolRenderingMode(.hierarchical)
-#if !os(visionOS)
-                    .buttonStyle(.plain)
-                    .foregroundStyle(.secondary)
-                    .symbolVariant(.circle.fill)
-#endif
-                case .confirm:
-                    Button(
-                        kind.label,
-                        systemImage: "checkmark",
-                        action: callDismiss
-                    )
-                }
-            }
-            .accessibilityLabel(Text(kind.label))
-            .labelStyle(.iconOnly)
+            legacyButton
         }
+#else
+        legacyButton
+#endif
+    }
+    
+    @ViewBuilder var legacyButton: some View {
+        Group {
+            switch kind {
+            case .close, .cancel:
+                Button(
+                    kind.label,
+                    systemImage: "xmark",
+                    action: callDismiss
+                )
+                .font(.system(size: 22))
+                .symbolRenderingMode(.hierarchical)
+#if !os(visionOS)
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
+                .symbolVariant(.circle.fill)
+#endif
+            case .confirm:
+                Button(
+                    kind.label,
+                    systemImage: "checkmark",
+                    action: callDismiss
+                )
+            }
+        }
+        .accessibilityLabel(Text(kind.label))
+        .labelStyle(.iconOnly)
     }
 }
 
