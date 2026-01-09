@@ -109,42 +109,30 @@ struct FacilityList: View {
     }
     
     var body: some View {
-        List(facilities, id:\.id) { facility in
-            Button {
-                model.setFacility(facility, zoomTo: true)
-                isPresented = false
-            } label: {
-                HStack {
-                    Text(facility.name)
-                    Spacer()
-                    if facility.id == model.selection?.facility?.id {
-                        Image(systemName: "checkmark")
-                            .foregroundStyle(.primary)
+        ScrollViewReader { scrollView in
+            List(facilities, id:\.id) { facility in
+                Button {
+                    model.setFacility(facility, zoomTo: true)
+                    isPresented = false
+                } label: {
+                    HStack {
+                        Text(facility.name)
+                        Spacer()
+                        if facility.id == model.selection?.facility?.id {
+                            Image(systemName: "checkmark")
+                                .foregroundStyle(.primary)
+                        }
                     }
+                    .contentShape(.rect)
                 }
-                
-//                Label {
-//                    Text(facility.name)
-//                } icon: {
-//                    Image(systemName: "checkmark")
-//                        .foregroundStyle(.primary)
-//                        .opacity(facility.id == model.selection?.facility?.id ? 1 : 0)
-//                }
-//                if facility.id == model.selection?.facility?.id {
-//                    Label(facility.name, systemImage: "checkmark")
-//                        .labelStyle(.titleAndIcon)
-//                } else {
-//                    Label(facility.name, systemImage: "")
-//                        .labelStyle(.titleAndIcon)
-//                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
-            .contentShape(.rect)
-//            .listRowBackground(
-//                facility.id == model.selection?.facility?.id
-//                ? Color.foo
-//                : nil
-//            )
+            .onChange(of: model.selection) {
+                guard let floorFacility = model.selection?.facility else {
+                    return
+                }
+                withAnimation { scrollView.scrollTo(floorFacility.id) }
+            }
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
