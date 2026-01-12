@@ -15,30 +15,21 @@
 import Foundation
 
 extension String {
-    /// A localized string for the word "Clear".
-    static var clear: Self {
-        .init(
-            localized: "Clear",
-            bundle: .toolkitModule,
-            comment: "E.g. Remove text from a text field."
-        )
-    }
-    
-    /// A localized string for the word "Dismiss".
-    static var dismiss: Self {
-        .init(
-            localized: "Dismiss",
-            bundle: .toolkitModule,
-            comment: "E.g. Close/hide a sheet or pop-up."
-        )
-    }
-    
     /// A localized string for the word "Cancel".
     static var cancel: Self {
         .init(
             localized: "Cancel",
             bundle: .toolkitModule,
             comment: "Cancel your current action to close/hide a sheet or pop-up."
+        )
+    }
+    
+    /// A localized string for the word "Clear".
+    static var clear: Self {
+        .init(
+            localized: "Clear",
+            bundle: .toolkitModule,
+            comment: "E.g. Remove text from a text field."
         )
     }
     
@@ -57,6 +48,15 @@ extension String {
             localized: "Confirm",
             bundle: .toolkitModule,
             comment: "Confirm the current action and close a sheet or pop-up."
+        )
+    }
+    
+    /// A localized string for the word "Dismiss".
+    static var dismiss: Self {
+        .init(
+            localized: "Dismiss",
+            bundle: .toolkitModule,
+            comment: "E.g. Close/hide a sheet or pop-up."
         )
     }
     
