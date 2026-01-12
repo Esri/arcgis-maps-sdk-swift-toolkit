@@ -73,9 +73,7 @@ struct OnDemandConfigurationView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    DismissButton(kind: .cancel) {
-                        dismiss()
-                    }
+                    DismissButton(kind: .cancel)
                 }
             }
             .task { await loadMap() }
