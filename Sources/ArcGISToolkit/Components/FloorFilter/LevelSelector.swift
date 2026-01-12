@@ -104,9 +104,15 @@ extension LevelSelector {
                 .foregroundStyle(textColor(for: level))
                 .frame(maxWidth: .infinity)
                 .padding([.vertical], 4)
-                .background {
-                    roundedRectangle
-                        .fill(buttonColor(for: level))
+                .modify {
+                    if #available(iOS 26.0, *) {
+                        $0.glassEffect()
+                    } else {
+                        $0.background {
+                            roundedRectangle
+                                .fill(buttonColor(for: level))
+                        }
+                    }
                 }
                 .contentShape(.hoverEffect, roundedRectangle)
                 .hoverEffect()
@@ -138,6 +144,11 @@ extension LevelSelector {
             .frame(maxHeight: contentHeight)
             .onAppear { scrollToSelectedLevel(with: proxy) }
             .onChange(of: isCollapsed) { scrollToSelectedLevel(with: proxy) }
+            .modify {
+                if #available(iOS 26.0, *) {
+                    $0.glassEffect()
+                }
+            }
         }
         if #available (iOS 18.0, *) {
             scrollView

@@ -167,7 +167,13 @@ public struct FloorFilter: View {
             }
         }
         .frame(width: levelSelectorWidth)
-        .esriBorder()
+        .modify {
+            if #available(iOS 26.0, *) {
+                $0.glassEffect()
+            } else {
+                $0.esriBorder()
+            }
+        }
         .frame(
             maxWidth: horizontalSizeClass == .compact ? .infinity : nil,
             maxHeight: .infinity,
@@ -194,13 +200,6 @@ public struct FloorFilter: View {
     public var body: some View {
         HStack(alignment: .bottom) {
             levelSelectorContainer
-//            if alignment.horizontal == .trailing {
-//                siteAndFacilitySelector
-//                levelSelectorContainer
-//            } else {
-//                levelSelectorContainer
-//                siteAndFacilitySelector
-//            }
         }
         // Ensure space for filter text field on small screens in landscape
         .frame(minHeight: 100)
