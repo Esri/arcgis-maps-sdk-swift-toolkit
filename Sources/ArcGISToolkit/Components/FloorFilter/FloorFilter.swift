@@ -138,7 +138,11 @@ public struct FloorFilter: View {
             .accessibilityIdentifier("Floor Filter button")
             .buttonStyle(.plain)
 #if !os(visionOS)
-            .foregroundStyle(.tint)
+            .modify {
+                if #unavailable(iOS 26.0) {
+                    $0.foregroundStyle(.tint)
+                }
+            }
 #endif
             .popover(isPresented: $siteAndFacilitySelectorIsPresented) {
                 SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
