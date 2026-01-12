@@ -79,9 +79,7 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                DismissButton(kind: .close) {
-                    dismiss()
-                }
+                DismissButton(kind: .close)
             }
         }
     }
