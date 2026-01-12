@@ -19,12 +19,12 @@ import SwiftUI
 struct DismissButton: View {
     /// The kind of button, which defines it's purpose.
     enum Kind {
-        /// Close the current view. Usually applies to a read-only view
-        /// and is usually meant to be shown in the top bar trailing position.
-        case close
         /// Cancel the current operation or edits in the view.
         /// This is usually meant to be shown in the top bar leading position.
         case cancel
+        /// Close the current view. Usually applies to a read-only view
+        /// and is usually meant to be shown in the top bar trailing position.
+        case close
         /// Confirms the current operation or edits in the view.
         /// This is usually meant to be shown in the top bar trailing position.
         case confirm
