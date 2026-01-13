@@ -35,14 +35,14 @@ struct LevelSelector: View {
     let levels: [FloorLevel]
     
     public var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             if !isTopAligned {
                 makeCollapseButton()
-                Divider()
+                //Divider()
             }
             makeLevelButtons()
             if isTopAligned {
-                Divider()
+                //Divider()
                 makeCollapseButton()
             }
         }
@@ -94,12 +94,12 @@ extension LevelSelector {
     @ViewBuilder func makeLevelButtons() -> some View {
         let scrollView = ScrollViewReader { proxy in
             ScrollView {
-                let list = VStack(spacing: 4) {
+                let list = VStack(spacing: 0) {
                     ForEach(filteredLevels, id: \.id) { level in
                         makeLevelButton(level)
-//                        if level != filteredLevels.last {
-//                            Divider().frame(width: 25)
-//                        }
+                        if level != filteredLevels.last, level != viewModel.selection?.level {
+                            Divider().padding(.horizontal, 6)
+                        }
                     }
                 }
                 if #available (iOS 18.0, *) {
@@ -113,13 +113,15 @@ extension LevelSelector {
                         }
                 }
             }
-            .background {
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(Color(uiColor: .secondarySystemBackground))
-            }
+            .background(Color(uiColor: .secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 6))
             .frame(maxHeight: contentHeight)
             .onAppear { scrollToSelectedLevel(with: proxy) }
-            .onChange(of: isCollapsed) { scrollToSelectedLevel(with: proxy) }
+            .onChange(of: isCollapsed) {
+                guard !isCollapsed else { return }
+                scrollToSelectedLevel(with: proxy)
+            }
+            .animation(.default, value: isCollapsed)
         }
         if #available (iOS 18.0, *) {
             scrollView
@@ -145,12 +147,15 @@ extension LevelSelector {
         } label: {
             Text(level.shortName)
                 .foregroundStyle(.primary)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 4)
+                //.frame(maxWidth: .infinity)
+                //.padding(.vertical, 4)
+                .padding()
                 .modify {
                     if viewModel.selection?.level == level {
-                        RoundedRectangle(cornerRadius: 6)
-                            .fill(Color(uiColor: .systemBackground))
+                        $0.background {
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(Color(uiColor: .systemBackground))
+                        }
                     } else if level == filteredLevels.first || level == filteredLevels.last {
                         $0.background {
                             RoundedRectangle(cornerRadius: 6)

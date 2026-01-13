@@ -155,17 +155,17 @@ public struct FloorFilter: View {
     
     /// A view that displays the level selector and the sites and facilities button.
     private var levelSelectorContainer: some View {
-        VStack {
+        VStack(spacing: 0) {
             if isTopAligned {
                 sitesAndFacilitiesButton
                 if viewModel.hasLevelsToDisplay {
-                    Divider()
+                    //Divider()
                     levelSelector
                 }
             } else {
                 if viewModel.hasLevelsToDisplay {
                     levelSelector
-                    Divider()
+                    //Divider()
                 }
                 sitesAndFacilitiesButton
             }
