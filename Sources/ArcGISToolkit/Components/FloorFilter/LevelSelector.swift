@@ -89,37 +89,6 @@ extension LevelSelector {
         .disabled(levels.count == 1)
     }
     
-    /// A button for a level in the floor level list.
-    /// - Parameter level: The level represented by the button.
-    /// - Returns: The button representing the provided level.
-    @ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
-        Button {
-            viewModel.setLevel(level)
-            if isCollapsed && levels.count > 1 {
-                isCollapsed = false
-            }
-        } label: {
-            let roundedRectangle = RoundedRectangle(cornerRadius: 5)
-            Text(level.shortName)
-                .foregroundStyle(textColor(for: level))
-                .frame(maxWidth: .infinity)
-                .padding([.vertical], 4)
-                .modify {
-                    if #available(iOS 26.0, *) {
-                        $0.glassEffect()
-                    } else {
-                        $0.background {
-                            roundedRectangle
-                                .fill(buttonColor(for: level))
-                        }
-                    }
-                }
-                .contentShape(.hoverEffect, roundedRectangle)
-                .hoverEffect()
-        }
-        .buttonStyle(.plain)
-    }
-    
     /// A scrollable list of buttons; one for each level to be displayed.
     /// - Returns: The scrollable list of level buttons.
     @ViewBuilder func makeLevelButtons() -> some View {
@@ -128,6 +97,9 @@ extension LevelSelector {
                 let list = VStack(spacing: 4) {
                     ForEach(filteredLevels, id: \.id) { level in
                         makeLevelButton(level)
+//                        if level != filteredLevels.last {
+//                            Divider().frame(width: 25)
+//                        }
                     }
                 }
                 if #available (iOS 18.0, *) {
@@ -141,14 +113,13 @@ extension LevelSelector {
                         }
                 }
             }
+            .background {
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(Color(uiColor: .secondarySystemBackground))
+            }
             .frame(maxHeight: contentHeight)
             .onAppear { scrollToSelectedLevel(with: proxy) }
             .onChange(of: isCollapsed) { scrollToSelectedLevel(with: proxy) }
-            .modify {
-                if #available(iOS 26.0, *) {
-                    $0.glassEffect()
-                }
-            }
         }
         if #available (iOS 18.0, *) {
             scrollView
@@ -162,19 +133,92 @@ extension LevelSelector {
         }
     }
     
+    /// A button for a level in the floor level list.
+    /// - Parameter level: The level represented by the button.
+    /// - Returns: The button representing the provided level.
+    @ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
+        Button {
+            viewModel.setLevel(level)
+            if isCollapsed && levels.count > 1 {
+                isCollapsed = false
+            }
+        } label: {
+            Text(level.shortName)
+                .foregroundStyle(.primary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 4)
+                .modify {
+                    if viewModel.selection?.level == level {
+                        RoundedRectangle(cornerRadius: 6)
+                            .fill(Color(uiColor: .systemBackground))
+                    } else if level == filteredLevels.first || level == filteredLevels.last {
+                        $0.background {
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(Color(uiColor: .secondarySystemBackground))
+                        }
+                    } else {
+                        $0.background(Color(uiColor: .secondarySystemBackground))
+                    }
+                }
+        }
+        .buttonBorderShape(.roundedRectangle)
+        .buttonStyle(.plain)
+        .hoverEffect()
+    }
+    
+    /// A button for a level in the floor level list.
+    /// - Parameter level: The level represented by the button.
+    /// - Returns: The button representing the provided level.
+    @ViewBuilder func makeLevelButton1(_ level: FloorLevel) -> some View {
+        Button {
+            viewModel.setLevel(level)
+            if isCollapsed && levels.count > 1 {
+                isCollapsed = false
+            }
+        } label: {
+            let roundedRectangle = RoundedRectangle(cornerRadius: 5)
+            Text(level.shortName)
+                .foregroundStyle(textColor(for: level))
+                .frame(maxWidth: .infinity)
+                .padding([.vertical], 4)
+                .modify {
+//                    if #available(iOS 26.0, *) {
+//                        $0
+//                        //$0.glassEffect()
+//                    } else {
+                        $0.background {
+                            roundedRectangle
+                                .fill(buttonColor(for: level))
+                        }
+//                    }
+                }
+                .contentShape(.hoverEffect, roundedRectangle)
+                .hoverEffect()
+        }
+        .buttonStyle(.plain)
+    }
+    
     /// Determines a appropriate color for a button in the floor level list.
     /// - Parameter level: The level represented by the button.
     /// - Returns: The color for the button representing the provided level.
     func buttonColor(for level: FloorLevel) -> Color {
-        return if viewModel.selection?.level == level {
-#if os(visionOS)
-            .white
-#else
-            .accentColor
-#endif
-        } else {
-            .secondary.opacity(0.1)
-        }
+        return viewModel.selection?.level == level ? Color.clear : .secondary.opacity(0.1)
+        
+//#if os(visionOS)
+//            return .white
+//#else
+//        return .secondary.opacity(0.1)
+//#endif
+        
+//        return if viewModel.selection?.level == level {
+//#if os(visionOS)
+//            return .white
+//#else
+//            .accentColor
+//#endif
+//        } else {
+//            .secondary.opacity(0.1)
+//        }
     }
     
     /// Determines a appropriate text color for a button in the floor level list.
@@ -189,7 +233,11 @@ extension LevelSelector {
             return .black
         }
 #endif
-        return .primary
+        if viewModel.selection?.level == level {
+            return .primary
+        } else {
+            return .secondary
+        }
     }
     
     /// Scrolls the list within the provided proxy to the button representing the selected level.

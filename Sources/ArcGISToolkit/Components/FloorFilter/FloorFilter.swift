@@ -173,7 +173,7 @@ public struct FloorFilter: View {
         .frame(width: levelSelectorWidth)
         .modify {
             if #available(iOS 26.0, *) {
-                $0.glassEffect()
+                $0.glassEffect(.regular.interactive())
             } else {
                 $0.esriBorder()
             }
@@ -202,45 +202,41 @@ public struct FloorFilter: View {
     }
     
     public var body: some View {
-        HStack(alignment: .bottom) {
-            levelSelectorContainer
-        }
-        // Ensure space for filter text field on small screens in landscape
-        .frame(minHeight: 100)
-        .environmentObject(viewModel)
-        .disabled(viewModel.loadStatus != .loaded)
-        .onChange(of: selection?.wrappedValue) {
-            let newValue = selection?.wrappedValue
-            // Prevent a double-set if the view model triggered the original change.
-            guard newValue != viewModel.selection else { return }
-            switch newValue {
-            case .site(let site): viewModel.setSite(site)
-            case .facility(let facility): viewModel.setFacility(facility)
-            case .level(let level): viewModel.setLevel(level)
-            case .none: viewModel.clearSelection()
+        levelSelectorContainer
+            .environmentObject(viewModel)
+            .disabled(viewModel.loadStatus != .loaded)
+            .onChange(of: selection?.wrappedValue) {
+                let newValue = selection?.wrappedValue
+                // Prevent a double-set if the view model triggered the original change.
+                guard newValue != viewModel.selection else { return }
+                switch newValue {
+                case .site(let site): viewModel.setSite(site)
+                case .facility(let facility): viewModel.setFacility(facility)
+                case .level(let level): viewModel.setLevel(level)
+                case .none: viewModel.clearSelection()
+                }
             }
-        }
-        .onChange(of: viewModel.loadStatus) {
-            if viewModel.loadStatus == .loaded,
-               !automaticSingleSiteSelectionDisabled,
-               viewModel.sites.count == 1,
-               let firstSite = viewModel.sites.first {
-                // If we have only one site, select it.
-                viewModel.setSite(firstSite, zoomTo: true)
+            .onChange(of: viewModel.loadStatus) {
+                if viewModel.loadStatus == .loaded,
+                   !automaticSingleSiteSelectionDisabled,
+                   viewModel.sites.count == 1,
+                   let firstSite = viewModel.sites.first {
+                    // If we have only one site, select it.
+                    viewModel.setSite(firstSite, zoomTo: true)
+                }
             }
-        }
-        .onChange(of: viewModel.selection) {
-            let newValue = viewModel.selection
-            // Prevent a double-set if the user triggered the original change.
-            guard selection?.wrappedValue != newValue else { return }
-            selection?.wrappedValue = newValue
-        }
-        .onChange(of: viewpoint.wrappedValue) {
-            guard isNavigating.wrappedValue else { return }
-            if let newViewpoint = viewpoint.wrappedValue {
-                viewModel.onViewpointChanged(newViewpoint)
+            .onChange(of: viewModel.selection) {
+                let newValue = viewModel.selection
+                // Prevent a double-set if the user triggered the original change.
+                guard selection?.wrappedValue != newValue else { return }
+                selection?.wrappedValue = newValue
             }
-        }
+            .onChange(of: viewpoint.wrappedValue) {
+                guard isNavigating.wrappedValue else { return }
+                if let newViewpoint = viewpoint.wrappedValue {
+                    viewModel.onViewpointChanged(newViewpoint)
+                }
+            }
     }
 }
 
