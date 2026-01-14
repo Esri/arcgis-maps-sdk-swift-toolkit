@@ -194,7 +194,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
             )
             
             // Set the update mode.
-            parameters.updateMode = OfflineManager.shared.onDemandUpdateMode
+            parameters.updateMode = OfflineManager.shared.configuration.onDemandUpdateMode
             
             // Update item info on parameters
             if let itemInfo = parameters.itemInfo {
@@ -213,7 +213,7 @@ class OnDemandMapModel: ObservableObject, Identifiable {
                 downloadDirectory: mmpkDirectoryURL
             )
             
-            OfflineManager.shared.start(job: job, portalItem: offlineMapTask.portalItem!)
+            OfflineManager.shared.startJob(job, portalItem: offlineMapTask.portalItem!, title: title)
             observeJob(job)
         } catch {
             status = .downloadFailure(error)
