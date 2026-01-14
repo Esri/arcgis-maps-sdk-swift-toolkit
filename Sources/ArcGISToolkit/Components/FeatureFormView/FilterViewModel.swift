@@ -17,8 +17,8 @@ import Observation
 
 @MainActor @Observable
 class FilterViewModel {
-    var featureTable: ArcGISFeatureTable
-    var fieldFilters = [FieldFilter]()
+    var featureTable: ArcGISFeatureTable?
+    var fieldFilters: [FieldFilter]
     
     var fields = [Field]()
     
@@ -32,12 +32,15 @@ class FilterViewModel {
     
     /// Initializes a filter view model.
     /// - Parameter featureTable: The feature table for the filter.
-    init(featureTable: ArcGISFeatureTable) {
+    init(featureTable: ArcGISFeatureTable? = nil, fieldFilters: [FieldFilter] = [FieldFilter]()) {
         self.featureTable = featureTable
-        Task {
-            try? await featureTable.load()
-            fields = featureTable.fields
-            print("field: \(fields)")
+        self.fieldFilters = fieldFilters
+        if let featureTable {
+            Task {
+                try? await featureTable.load()
+                fields = featureTable.fields
+                print("field: \(fields)")
+            }
         }
     }
 }
@@ -46,6 +49,10 @@ struct FieldFilter {
     var field: Field?
     var operation = UtilityNetworkAttributeComparison.Operator.equal
     var value: Any = ""
+    var formattedValue: String = {
+        // Get string value from `value`
+        return "formattedValue"
+    }()
 }
 
 extension FieldFilter: Equatable {
@@ -65,3 +72,12 @@ extension FieldFilter: Hashable {
 //        hasher.combine(value.hashValue)
     }
 }
+
+
+//private fun List<Field>.getSupportedFields(): List<Field> {
+//    return filter { field ->
+//        field.fieldType.isNumeric ||
+//            field.fieldType == FieldType.Text ||
+//            field.fieldType == FieldType.Oid
+//    }
+//}
