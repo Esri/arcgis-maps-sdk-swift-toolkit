@@ -78,10 +78,8 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
         .task { thumbnailImage = await model.thumbnailImage }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button.done {
-                    dismiss()
-                }
+            ToolbarItem(placement: .topBarTrailing) {
+                DismissButton(kind: .close)
             }
         }
     }

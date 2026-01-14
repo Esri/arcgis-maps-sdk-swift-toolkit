@@ -124,7 +124,9 @@ extension FeatureFormView {
                 // View.searchable(text:placement:prompt:) in these intermediate
                 // views to avoid errors here. (FB20395585)
                 // https://developer.apple.com/forums/thread/802221#802221021
-                featureFormViewModel.navigationPath.removeLast(4)
+                await MainActor.run {
+                    featureFormViewModel.navigationPath.removeLast(4)
+                }
             } catch let error as ArcGIS.InvalidArgumentError {
                 addAssociationError = .other(error.details)
                 alertIsPresented = true

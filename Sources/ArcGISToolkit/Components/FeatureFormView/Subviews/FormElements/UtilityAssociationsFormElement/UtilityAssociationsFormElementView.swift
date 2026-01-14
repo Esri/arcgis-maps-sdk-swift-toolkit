@@ -37,21 +37,19 @@ extension FeatureFormView {
             Group {
                 switch associationsFilterResultsModel?.result {
                 case .success(let results):
-                    FeatureFormGroupedContentView(content: results.map {
+                    ForEach(results, id: \.filter.kind) { result in
                         Row(
                             associationsFilterResultsModel: associationsFilterResultsModel,
                             element: element,
-                            filter: $0.filter,
+                            filter: result.filter,
                             form: embeddedFeatureFormViewModel.featureForm
                         )
                         .environment(embeddedFeatureFormViewModel)
-                    })
+                    }
                 case .failure(let error):
-                    FeatureFormGroupedContentView(content: [
-                        Text.errorFetchingFilterResults(error)
-                    ])
+                    Text.errorFetchingFilterResults(error)
                 case .none:
-                    FeatureFormGroupedContentView(content: [ProgressView()])
+                    ProgressView()
                 }
             }
             .onChange(of: embeddedFeatureFormViewModel.hasEdits) {

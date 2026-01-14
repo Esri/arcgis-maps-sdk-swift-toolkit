@@ -67,7 +67,6 @@ struct SwitchInput: View {
                 Text(isOn ? input.onValue.name : input.offValue.name)
             }
             .accessibilityIdentifier("\(element.label) Switch")
-            .formInputStyle(isTappable: false)
             .onAppear {
                 if element.formattedValue.isEmpty {
                     fallbackToComboBox = true

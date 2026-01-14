@@ -26,6 +26,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Add Association";
 
+/* A label for a button to add a new file attachment. */
+"Add Attachment" = "Add Attachment";
+
 /* A label for a button to add a map area. */
 "Add Map Area" = "Add Map Area";
 
@@ -107,7 +110,8 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Camera access is disabled";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Cancel your current action to close/hide a sheet or pop-up. */
 "Cancel" = "Cancel";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -159,6 +163,9 @@ candidate to add as a utility association. */
 /* A directive to clear all of the completed utility network traces. */
 "Clear All Results" = "Clear All Results";
 
+/* Close/hide a sheet or pop-up. */
+"Close" = "Close";
+
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Color";
 
@@ -167,6 +174,9 @@ candidate to add as a utility association. */
 
 /* The accessibility label of the compass button. */
 "compass-button-accessibility-label" = "Compass";
+
+/* Confirm the current action and close a sheet or pop-up. */
+"Confirm" = "Confirm";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Connectivity";
@@ -604,6 +614,9 @@ filter results were found. */
 /* A label indicating that the map is offline disabled. */
 "Offline Disabled" = "Offline Disabled";
 
+/* The default title of the live activity for taking a map offline. */
+"Offline Map" = "Offline Map";
+
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
@@ -861,6 +874,9 @@ to be imported as an attachment. */
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "There are no map areas for this map. Tap the button below to get started.";
+
+/* A notice communicating that a feature form has no elements. */
+"This form is empty." = "This form is empty.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Title";

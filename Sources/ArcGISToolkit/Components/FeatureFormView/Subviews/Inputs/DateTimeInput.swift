@@ -82,34 +82,7 @@ struct DateTimeInput: View {
     /// Elements for display the date selection.
     /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
-        HStack {
-            formattedDate
-                .accessibilityIdentifier("\(element.label) Value")
-                .foregroundStyle(displayColor)
-            
-            Spacer()
-            
-            if isEditing {
-                todayOrNowButton
-            } else {
-                if date == nil {
-                    Image(systemName: "calendar")
-                        .font(.title2)
-                        .accessibilityIdentifier("\(element.label) Calendar Image")
-                        .foregroundStyle(.secondary)
-                } else if !isRequired {
-                    XButton(.clear) {
-                        embeddedFeatureFormViewModel.focusedElement = element
-                        defer { embeddedFeatureFormViewModel.focusedElement = nil }
-                        date = nil
-                    }
-                    .accessibilityIdentifier("\(element.label) Clear Button")
-                }
-            }
-        }
-        .formInputStyle(isTappable: true)
-        .frame(maxWidth: .infinity)
-        .onTapGesture {
+        Button {
             withAnimation {
                 if date == nil {
                     if dateRange.contains(.now) {
@@ -122,6 +95,32 @@ struct DateTimeInput: View {
                 }
                 isEditing.toggle()
                 embeddedFeatureFormViewModel.focusedElement = isEditing ? element : nil
+            }
+        } label: {
+            HStack {
+                formattedDate
+                    .accessibilityIdentifier("\(element.label) Value")
+                    .foregroundStyle(displayColor)
+                if isEditing {
+                    Spacer()
+                    todayOrNowButton
+                } else if date == nil {
+                    Spacer()
+                    Image(systemName: "calendar")
+                        .font(.title2)
+                        .accessibilityIdentifier("\(element.label) Calendar Image")
+                        .foregroundStyle(.secondary)
+                } else if !isRequired {
+                    Spacer()
+                    XButton(.clear) {
+                        embeddedFeatureFormViewModel.focusedElement = element
+                        defer { embeddedFeatureFormViewModel.focusedElement = nil }
+                        date = nil
+                    }
+                    .accessibilityIdentifier("\(element.label) Clear Button")
+                    .buttonStyle(.plain)
+                    .tint(.secondary)
+                }
             }
         }
     }

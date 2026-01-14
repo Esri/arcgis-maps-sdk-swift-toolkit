@@ -103,17 +103,22 @@ struct AttachmentsFeatureElementView: View {
                     }
             case .initialized(let attachmentModels):
                 if isShowingAttachmentsFormElement {
-                    // If showing a form element, don't show attachments in
-                    // a disclosure group, but also ALWAYS show
-                    // the list of attachments, even if there are none.
-                    attachmentHeader
-                    attachmentBody(attachmentModels: attachmentModels)
+                    if !attachmentModels.isEmpty {
+                        attachmentBody(attachmentModels: attachmentModels)
+                    }
+                    if isEditable,
+                       let element = featureElement as? AttachmentsFormElement {
+                        AttachmentImportMenu(element: element, onAdd: onAdd)
+                    }
                 } else if !attachmentModels.isEmpty {
                     DisclosureGroup(isExpanded: $isExpanded) {
                         attachmentBody(attachmentModels: attachmentModels)
                     } label: {
-                        attachmentHeader
-                            .catalystPadding(4)
+                        PopupElementHeader(
+                            title: featureElement.displayTitle,
+                            description: featureElement.description
+                        )
+                        .catalystPadding(4)
                     }
                     .disclosureGroupPadding()
                 }
@@ -157,20 +162,6 @@ struct AttachmentsFeatureElementView: View {
                 } else {
                     AttachmentList(attachmentModels: attachmentModels)
                 }
-            }
-        }
-    }
-    
-    private var attachmentHeader: some View {
-        HStack {
-            PopupElementHeader(
-                title: featureElement.displayTitle,
-                description: featureElement.description
-            )
-            Spacer()
-            if isEditable,
-               let element = featureElement as? AttachmentsFormElement {
-                AttachmentImportMenu(element: element, onAdd: onAdd)
             }
         }
     }

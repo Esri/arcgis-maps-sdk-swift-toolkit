@@ -826,7 +826,6 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Combo String"]
         let fieldValue = app.staticTexts["Combo String Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -844,11 +843,11 @@ final class FeatureFormViewTests: XCTestCase {
         fieldValue.tap()
         
         XCTAssertTrue(
-            noValueButton.waitForExistence(timeout: 1),
+            app.noValueComboBoxOption.waitForExistence(timeout: 1),
             "The no value button doesn't exist."
         )
         
-        noValueButton.tap()
+        app.noValueComboBoxOption.tap()
         
         XCTAssertTrue(
             doneButton.exists,
@@ -872,7 +871,6 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Required Combo Box Combo Box Value"]
         let footer = app.staticTexts["Required Combo Box Footer"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
         let oakButton = app.buttons["Oak"]
         
         openTestCase()
@@ -901,7 +899,7 @@ final class FeatureFormViewTests: XCTestCase {
         fieldValue.tap()
         
         XCTAssertFalse(
-            noValueButton.exists,
+            app.noValueComboBoxOption.exists,
             "The no value button exists but it should not."
         )
         
@@ -944,17 +942,10 @@ final class FeatureFormViewTests: XCTestCase {
             "The field title doesn't exist."
         )
         
-        if #available(iOS 18.0, *) {
-            XCTAssertFalse(
-                fieldValue.exists,
-                "The field value exists but it should not because it is empty."
-            )
-        } else {
-            XCTAssertEqual(
-                fieldValue.label,
-                ""
-            )
-        }
+        XCTAssertEqual(
+            fieldValue.label,
+            ""
+        )
         
         optionsButton.tap()
         
@@ -994,7 +985,6 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Unsupported Value"]
         let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
         let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
         let unsupportedValue = app.buttons["0"]
         
@@ -1024,11 +1014,11 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            noValueButton.exists,
+            app.noValueComboBoxOption.exists,
             "No Value doesn't exist."
         )
         
-        noValueButton.tap()
+        app.noValueComboBoxOption.tap()
         
         XCTAssertFalse(
             unsupportedValueSectionHeader.exists,
@@ -1320,7 +1310,7 @@ final class FeatureFormViewTests: XCTestCase {
         let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]
         
         let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
-        let dateInput = app.staticTexts["Date Value"]
+        let dateInput = app.buttons["Date Value"]
         
         let shortTextReadOnlyInput = app.staticTexts["Short text Read Only Input"]
         let shortTextTextInput = app.textFields["Short text Text Input"]
@@ -1621,7 +1611,7 @@ final class FeatureFormViewTests: XCTestCase {
         let elementTitle = app.staticTexts["Associations"]
         let fieldValue = app.staticTexts["Asset type Combo Box Value"]
         let filterResults = app.staticTexts["Connected"]
-        let firstOptionButton = app.buttons["Unknown"]
+        let firstOptionButton = app.buttons["Unknown Combo Box Option"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let formTitle2 = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
@@ -2363,5 +2353,12 @@ private extension String {
             tellus et ut dolore.
             """
         )
+    }
+}
+
+private extension XCUIApplication {
+    /// The "No value" combo box option.
+    var noValueComboBoxOption: XCUIElement {
+        buttons["No value Combo Box Option"]
     }
 }

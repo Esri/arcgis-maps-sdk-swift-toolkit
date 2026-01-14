@@ -30,13 +30,17 @@ struct GroupFormElementView<Content>: View where Content: View {
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
             ForEach(visibleElements, id: \.self) { element in
-                viewCreator(element)
-                    .padding(.leading, 16)
+                Section {
+                    viewCreator(element)
+                } header: {
+                    FormElementHeader(element: element)
+                } footer: {
+                    FormElementFooter(element: element)
+                }
+                .textCase(nil)
             }
         } label: {
-            Header(element: element)
-                .multilineTextAlignment(.leading)
-                .tint(.primary)
+            label
         }
         .onAppear {
             isExpanded = element.initialState == .expanded
@@ -57,32 +61,25 @@ struct GroupFormElementView<Content>: View where Content: View {
         .inspectorTint(.blue)
     }
     
+    /// The label for the group element.
+    private var label: some View {
+        VStack(alignment: .leading) {
+            Text(element.label)
+            if !element.description.isEmpty {
+                Text(element.description)
+                    .accessibilityIdentifier("\(element.label) Description")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.leading)
+                    .tint(.primary)
+            }
+        }
+    }
+    
     /// The list of visible group elements.
     private var visibleElements: [FormElement] {
         element
             .elements
             .filter { elementVisibility[$0] == true }
-    }
-}
-
-extension GroupFormElementView {
-    /// A view displaying a label and description of a `GroupFormElement`.
-    struct Header: View {
-        let element: GroupFormElement
-        
-        var body: some View {
-            VStack(alignment: .leading) {
-                if !element.label.isEmpty {
-                    Text(element.label)
-                        .accessibilityIdentifier("\(element.label)")
-                }
-                if !element.description.isEmpty {
-                    Text(element.description)
-                        .accessibilityIdentifier("\(element.label) Description")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
-            }
-        }
     }
 }
