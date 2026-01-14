@@ -14,12 +14,15 @@
 
 import ArcGIS
 import Observation
+import SwiftUI
 
 @MainActor @Observable
 class FilterViewModel {
     var featureTable: ArcGISFeatureTable?
     var fieldFilters: [FieldFilter]
-    
+    private var originalFieldFilters: [FieldFilter]
+    var isFilterViewPresented = false
+
     var fields = [Field]()
     
     func whereClause() -> String {
@@ -35,6 +38,7 @@ class FilterViewModel {
     init(featureTable: ArcGISFeatureTable? = nil, fieldFilters: [FieldFilter] = [FieldFilter]()) {
         self.featureTable = featureTable
         self.fieldFilters = fieldFilters
+        self.originalFieldFilters = fieldFilters
         if let featureTable {
             Task {
                 try? await featureTable.load()
@@ -43,9 +47,22 @@ class FilterViewModel {
             }
         }
     }
+    
+    func apply() {
+        print("FilterViewModel.apply")
+        isFilterViewPresented.toggle()
+    }
+    
+    func cancel() {
+        print("FilterViewModel.cancel")
+        fieldFilters = originalFieldFilters
+        isFilterViewPresented.toggle()
+    }
+
 }
 
 struct FieldFilter {
+    let id = UUID()
     var field: Field?
     var operation = UtilityNetworkAttributeComparison.Operator.equal
     var value: Any = ""

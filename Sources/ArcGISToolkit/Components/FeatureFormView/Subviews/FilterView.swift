@@ -13,70 +13,76 @@ struct FilterView: View {
     var body: some View {
         NavigationStack {
             ScrollViewReader { proxy in
-                ScrollView {
+                List {
                     ForEach(model.fieldFilters, id: \.self) { filter in
-                        FieldView(fieldFilter: filter)
-                            .frame(minHeight: 200)
-                            .padding()
+                        Section {
+                            FieldView(fieldFilter: filter)
+                        }
                     }
-                    Button {
-                        let newFilter = FieldFilter()
-                        model.fieldFilters.append(newFilter)
-                        
-                    } label: {
-                        Image(systemName: "plus")
-                            .bold()
-                            .imageScale(.large)
-                            .padding(8)
+                    HStack {
+                        Spacer()
+                        Button {
+                            withAnimation {
+                                let newFilter = FieldFilter()
+                                model.fieldFilters.append(newFilter)
+                            }
+                        } label: {
+                            Image(systemName: "plus")
+                                .bold()
+                                .imageScale(.large)
+                                .padding(8)
+                        }
+                        .id("plusButton")
+                        .buttonBorderShape(.circle)
+                        .buttonStyle(.borderedProminent)
+                        .shadow(radius: 8)
+                        Spacer()
                     }
-                    .id("plusButton")
-                    .buttonBorderShape(.circle)
-                    .buttonStyle(.borderedProminent)
-                    .shadow(radius: 8)
                 }
                 .onChange(of: model.fieldFilters) {
                     // Scroll to the last message when messages change
                     if let lastFilter = model.fieldFilters.last {
                         print("onChangeOf model.fieldFilters")
                         // Why doesn't this work??
-                        proxy.scrollTo(lastFilter, anchor: .bottom)
+                        withAnimation {
+                            proxy.scrollTo("plusButton", anchor: .bottom)
+                        }
                     }
                 }
             }
             Spacer()
                 .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
+                    ToolbarItem(/*placement: .topBarLeading*/) {
                         cancelButton
                     }
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(/*placement: .topBarTrailing*/) {
                         applyButton
                     }
                 }
         }
+        .navigationTitle(Text("filter"))
     }
-    
+}
+
+extension FilterView {
     var cancelButton: some View {
         Button {
-            //            signOut()
+            model.cancel()
         } label: {
-            Text("Cancel")
-                .frame(maxWidth: .infinity)
+            Image(systemName: "xmark")  //Cancel icon
         }
-        .buttonStyle(.bordered)
-        .controlSize(.large)
-        //        .disabled(isSigningOut)
+        .buttonBorderShape(.circle)
+        .buttonStyle(.borderedProminent)
     }
     
     var applyButton: some View {
         Button {
-            //            dismiss()
+            model.apply()
         } label: {
-            Text("Apply")
-                .frame(maxWidth: .infinity)
+            Image(systemName: "checkmark") // Checkmark icon
         }
-        .buttonStyle(.bordered)
-        .controlSize(.large)
-        //        .disabled(isSigningOut)
+        .buttonBorderShape(.circle)
+        .buttonStyle(.borderedProminent)
     }
 }
 
@@ -125,55 +131,51 @@ private struct FieldView: View {
     }
     
     var body: some View {
-        List {
-            // Field
-            if model.fields.isEmpty {
-                HStack {
-                    Text("Field")
-                    Spacer()
-                    Text(selectedField?.title() ?? "None")
-                }
-            } else {
-                HStack {
-                    Picker("Fields", selection: $selectedField) {
-                        Text("a field")
-                        ForEach(model.fields, id: \.self) { field in
-                            Text(field.title()).tag(field.title() as String?)
-                        }
-                    }
-                    .pickerStyle(MenuPickerStyle())
-                }
-            }
-            
-            // Condition
+        // Field
+        if model.fields.isEmpty {
             HStack {
-                Picker("Condition", selection: $selectedCondition) {
-                    ForEach(conditions, id: \.self) { condition in
-                        condition.icon()
-                            .tag(condition.title())
+                Text("Field")
+                Spacer()
+                Text(selectedField?.title() ?? "None")
+            }
+        } else {
+            HStack {
+                Picker("Fields", selection: $selectedField) {
+                    Text("a field")
+                    ForEach(model.fields, id: \.self) { field in
+                        Text(field.title()).tag(field.title() as String?)
                     }
                 }
                 .pickerStyle(MenuPickerStyle())
             }
-            
-            
-            // Value
-            HStack {
-                Text("Value")
-                Spacer()
-                TextField(
-                    text: $fieldFilter.formattedValue,
-                    prompt: Text("Enter a value"),
-                    label: {
-                        Label("Value", systemImage: "swift")
-                    }
-                )
-                .multilineTextAlignment(.trailing)
-                .frame(alignment: .trailing)
-            }
         }
-        .listStyle(.insetGrouped)
-        .scrollDisabled(true)
+        
+        // Condition
+        HStack {
+            Picker("Condition", selection: $selectedCondition) {
+                ForEach(conditions, id: \.self) { condition in
+                    condition.icon()
+                        .tag(condition.title())
+                }
+            }
+            .pickerStyle(MenuPickerStyle())
+        }
+        
+        
+        // Value
+        HStack {
+            Text("Value")
+            Spacer()
+            TextField(
+                text: $fieldFilter.formattedValue,
+                prompt: Text("Enter a value"),
+                label: {
+                    Label("Value", systemImage: "swift")
+                }
+            )
+            .multilineTextAlignment(.trailing)
+            .frame(alignment: .trailing)
+        }
     }
 }
 
