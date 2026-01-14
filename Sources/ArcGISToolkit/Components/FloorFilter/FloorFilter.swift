@@ -324,6 +324,9 @@ struct LevelSelector26_2: View {
     
     @State private var isCollapsed = false
     
+    /// The height of the scroll view's content.
+    @State private var contentHeight: CGFloat = .zero
+    
     static var buttonShape: some Shape {
         RoundedRectangle(cornerRadius: 18, style: .continuous)
     }
@@ -346,34 +349,40 @@ struct LevelSelector26_2: View {
             
             levelButtons
         }
-        .glassEffect(.regular, in: LevelSelector26_2.buttonShape)
+        .glassEffect(.regular.interactive(), in: LevelSelector26_2.buttonShape)
         .clipShape(LevelSelector26_2.buttonShape)
         .animation(.default, value: isCollapsed)
     }
     
     @ViewBuilder private var levelButtons: some View {
-            ScrollViewReader { scrollView in
-                VStack(spacing: 0) {
-                    if isCollapsed {
-                        if let level = model.selection?.level {
-                            LevelButton_2(level: level, isSelected: true, isCollapsed: true)
-                        }
-                    } else {
-                        ScrollView {
-                            VStack(spacing: 0) {
-                                ForEach(model.sortedLevels, id:\.id) { level in
-                                    LevelButton_2(level: level, isSelected: level == model.selection?.level)
-                                }
+        ScrollViewReader { scrollView in
+            VStack(spacing: 0) {
+                if isCollapsed {
+                    if let level = model.selection?.level {
+                        LevelButton_2(level: level, isSelected: true, isCollapsed: true)
+                    }
+                } else {
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            ForEach(model.sortedLevels, id:\.id) { level in
+                                LevelButton_2(level: level, isSelected: level == model.selection?.level)
                             }
                         }
-                        .clipShape(LevelSelector26_2.buttonShape)
                     }
-                }
-                .onChange(of: isCollapsed) {
-                    guard !isCollapsed else { return }
-                    scrollToSelectedLevel(with: scrollView)
+                    //.clipShape(LevelSelector26_2.buttonShape)
+                    .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                        geometry.contentSize.height
+                    } action: { _, newValue in
+                        contentHeight = newValue
+                    }
+                    .frame(maxHeight: contentHeight)
                 }
             }
+            .onChange(of: isCollapsed) {
+                guard !isCollapsed else { return }
+                scrollToSelectedLevel(with: scrollView)
+            }
+        }
     }
     
     /// Scrolls the list within the provided proxy to the button representing the selected level.
@@ -409,7 +418,8 @@ private struct LevelButton_2: View {
                 .foregroundStyle(isSelected ? .primary : .secondary)
                 .modify {
                     if isSelected {
-                        $0.glassEffect(.clear, in: LevelSelector26_2.buttonShape)
+                        $0.background(Color(uiColor: .systemBackground).opacity(0.75))
+//                        $0.glassEffect(.clear, in: LevelSelector26_2.buttonShape)
 //                        $0.background(Color(uiColor: .secondarySystemBackground))
 //                            .clipShape(LevelSelector26_2.buttonShape)
                     }
