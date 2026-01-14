@@ -277,24 +277,15 @@ struct FloorFilter26: View {
     @Namespace private var namespace
     @State private var isSiteSelectorPresented = false
     
-    static var buttonShape: some Shape {
-        //RoundedRectangle(cornerRadius: 4)
+    var buttonShape: some Shape {
         Capsule()
     }
     
     static let buttonSize: CGFloat = 56
     
     var body: some View {
-//        GlassEffectContainer(spacing: 10) {
-//            VStack {
-//                LevelSelector26()
-//                    .padding(.bottom)
-//                siteSelectorButton
-//            }
-//        }
-        VStack {
-            LevelSelector26_2()
-                .padding(.bottom)
+        VStack(spacing: 12) {
+            LevelSelector26()
             siteSelectorButton
         }
     }
@@ -306,11 +297,11 @@ struct FloorFilter26: View {
             Image(systemName: "building.2")
                 .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
                 .font(.system(size: 22))
-                .glassEffect(.regular.interactive(), in: FloorFilter26.buttonShape)
+                .glassEffect(.regular.interactive(), in: buttonShape)
                 .glassEffectUnion(id: "siteSelector", namespace: namespace)
         }
         .buttonStyle(.plain)
-        .contentShape(FloorFilter26.buttonShape)
+        .contentShape(buttonShape)
         .popover(isPresented: $isSiteSelectorPresented) {
             SiteAndFacilitySelector(isPresented: $isSiteSelectorPresented)
         }
@@ -318,16 +309,14 @@ struct FloorFilter26: View {
 }
 
 @available(iOS 26.0, *)
-struct LevelSelector26_2: View {
+struct LevelSelector26: View {
     @Namespace private var namespace
-    @EnvironmentObject var model: FloorFilterViewModel
+    @EnvironmentObject private var model: FloorFilterViewModel
     
     @State private var isCollapsed = false
-    
-    /// The height of the scroll view's content.
     @State private var contentHeight: CGFloat = .zero
     
-    static var buttonShape: some Shape {
+    var buttonShape: some Shape {
         RoundedRectangle(cornerRadius: 18, style: .continuous)
     }
     
@@ -344,13 +333,13 @@ struct LevelSelector26_2: View {
                         .foregroundStyle(.secondary)
                 }
                 .buttonStyle(.plain)
-                .contentShape(FloorFilter26.buttonShape)
+                .contentShape(buttonShape)
             }
             
             levelButtons
         }
-        .glassEffect(.regular.interactive(), in: LevelSelector26_2.buttonShape)
-        .clipShape(LevelSelector26_2.buttonShape)
+        .glassEffect(.regular.interactive(), in: buttonShape)
+        .clipShape(buttonShape)
         .animation(.default, value: isCollapsed)
     }
     
@@ -359,17 +348,17 @@ struct LevelSelector26_2: View {
             VStack(spacing: 0) {
                 if isCollapsed {
                     if let level = model.selection?.level {
-                        LevelButton_2(level: level, isSelected: true, isCollapsed: true)
+                        LevelButton26(level: level, isSelected: true, isCollapsed: true)
                     }
                 } else {
                     ScrollView {
                         VStack(spacing: 0) {
                             ForEach(model.sortedLevels, id:\.id) { level in
-                                LevelButton_2(level: level, isSelected: level == model.selection?.level)
+                                LevelButton26(level: level, isSelected: level == model.selection?.level)
+                                    .id(level.id)
                             }
                         }
                     }
-                    //.clipShape(LevelSelector26_2.buttonShape)
                     .onScrollGeometryChange(for: CGFloat.self) { geometry in
                         geometry.contentSize.height
                     } action: { _, newValue in
@@ -386,18 +375,18 @@ struct LevelSelector26_2: View {
     }
     
     /// Scrolls the list within the provided proxy to the button representing the selected level.
-    /// - Parameter proxy: The proxy containing the scroll view.
-    func scrollToSelectedLevel(with proxy: ScrollViewProxy) {
+    /// - Parameter scrollView: The scroll view proxy containing the scroll view.
+    func scrollToSelectedLevel(with scrollView: ScrollViewProxy) {
         if let level = model.selection?.level {
             withAnimation {
-                proxy.scrollTo(level.id)
+                scrollView.scrollTo(level.id)
             }
         }
     }
 }
 
 @available(iOS 26.0, *)
-private struct LevelButton_2: View {
+private struct LevelButton26: View {
     @Namespace private var namespace
     @EnvironmentObject var model: FloorFilterViewModel
     
@@ -405,7 +394,11 @@ private struct LevelButton_2: View {
     let isSelected: Bool
     var isCollapsed: Bool = false
     
-    static let textSize: CGFloat = 56
+    let textSize: CGFloat = 56
+    
+    var buttonShape: some Shape {
+        RoundedRectangle(cornerRadius: 18, style: .continuous)
+    }
     
     var body: some View {
         Button {
@@ -413,102 +406,18 @@ private struct LevelButton_2: View {
         }
         label: {
             Text(level.shortName)
-                .frame(width: LevelButton.textSize, height: LevelButton.textSize)
+                .frame(width: textSize, height: textSize)
                 .font(.system(size: 20))
                 .foregroundStyle(isSelected ? .primary : .secondary)
                 .modify {
                     if isSelected {
                         $0.background(Color(uiColor: .systemBackground).opacity(0.75))
-//                        $0.glassEffect(.clear, in: LevelSelector26_2.buttonShape)
-//                        $0.background(Color(uiColor: .secondarySystemBackground))
-//                            .clipShape(LevelSelector26_2.buttonShape)
+                            .fontWeight(.semibold)
+                            .clipShape(buttonShape)
                     }
                 }
         }
         .buttonStyle(.plain)
-        .contentShape(LevelSelector26_2.buttonShape)
-    }
-}
-
-@available(iOS 26.0, *)
-struct LevelSelector26: View {
-    @Namespace private var namespace
-    @EnvironmentObject var model: FloorFilterViewModel
-    
-    @State private var isCollapsed = false
-    
-    static var buttonShape: some Shape {
-        RoundedRectangle(cornerRadius: 18, style: .continuous)
-    }
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            if model.sortedLevels.count > 1 {
-                Button {
-                    isCollapsed.toggle()
-                } label: {
-                    Image(systemName: "chevron.up")
-                        .rotationEffect(isCollapsed ? .degrees(0) : .degrees(180))
-                        .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
-                        .font(.system(size: 20))
-                        .glassEffect(.regular.interactive(), in: LevelSelector26.buttonShape)
-                        .glassEffectUnion(id: "collapseToggle", namespace: namespace)
-                }
-                .buttonStyle(.plain)
-                .contentShape(FloorFilter26.buttonShape)
-            }
-            
-            levelButtons
-        }
-        .animation(.default, value: isCollapsed)
-    }
-    
-    @ViewBuilder private var levelButtons: some View {
-        if isCollapsed {
-            if let level = model.selection?.level {
-                LevelButton(level: level, isSelected: true, isCollapsed: true)
-            }
-        } else {
-            VStack(spacing: 0) {
-                ForEach(model.sortedLevels, id:\.id) { level in
-                    LevelButton(level: level, isSelected: level == model.selection?.level)
-                }
-            }
-        }
-    }
-}
-
-@available(iOS 26.0, *)
-private struct LevelButton: View {
-    @Namespace private var namespace
-    
-    let level: FloorLevel
-    let isSelected: Bool
-    var isCollapsed: Bool = false
-    
-    static let textSize: CGFloat = 56
-    
-    var body: some View {
-        Button { }
-        label: {
-            Text(level.shortName)
-                .frame(width: LevelButton.textSize, height: LevelButton.textSize)
-                .font(.system(size: 20))
-                .glassEffect(.regular.interactive(), in: LevelSelector26.buttonShape)
-                .glassEffectUnion(id: level, namespace: namespace)
-        }
-        .buttonStyle(.plain)
-        .contentShape(FloorFilter26.buttonShape)
-    }
-}
-
-#Preview {
-    if #available(iOS 26.0, *) {
-        ZStack {
-            Image(systemName: "globe")
-                .resizable()
-                .foregroundStyle(Color.green)
-            FloorFilter26()
-        }
+        .contentShape(buttonShape)
     }
 }
