@@ -193,18 +193,9 @@ extension ComboBoxInput {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
+                    DismissButton(kind: .confirm) {
                         isPresented = false
-                    } label: {
-                        Text.done
-                            .fontWeight(.semibold)
-#if !os(visionOS)
-                            .foregroundStyle(Color.accentColor)
-#endif
                     }
-#if !os(visionOS)
-                    .buttonStyle(.plain)
-#endif
                 }
             }
         }
