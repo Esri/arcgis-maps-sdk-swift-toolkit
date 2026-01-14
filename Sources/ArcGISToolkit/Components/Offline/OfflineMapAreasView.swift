@@ -84,8 +84,6 @@ import ArcGIS
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: OfflineMapViewModel
-    /// The action to dismiss the view.
-    @Environment(\.dismiss) private var dismiss
     /// The web map to be taken offline.
     private let onlineMap: Map
     /// The currently selected map.
@@ -190,10 +188,8 @@ public struct OfflineMapAreasView: View {
             }
             .toolbar {
                 if shouldDismiss {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button.done {
-                            dismiss()
-                        }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        DismissButton(kind: .close)
                     }
                 }
             }

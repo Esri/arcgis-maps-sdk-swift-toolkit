@@ -69,8 +69,8 @@ struct MediaDetailView : View {
             .navigationTitle(popupMedia.title, subtitle: popupMedia.caption)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button.done {
+                ToolbarItem(placement: .topBarTrailing) {
+                    DismissButton(kind: .close) {
                         isShowingDetailView.wrappedValue = false
                     }
                 }
