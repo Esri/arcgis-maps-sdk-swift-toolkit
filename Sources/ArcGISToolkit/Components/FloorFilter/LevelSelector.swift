@@ -46,6 +46,7 @@ struct LevelSelector: View {
                 makeCollapseButton()
             }
         }
+        .animation(.default, value: isCollapsed)
     }
 }
 
@@ -121,7 +122,6 @@ extension LevelSelector {
                 guard !isCollapsed else { return }
                 scrollToSelectedLevel(with: proxy)
             }
-            .animation(.default, value: isCollapsed)
         }
         if #available (iOS 18.0, *) {
             scrollView

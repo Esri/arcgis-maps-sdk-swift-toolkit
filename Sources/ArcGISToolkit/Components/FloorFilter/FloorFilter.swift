@@ -202,41 +202,46 @@ public struct FloorFilter: View {
     }
     
     public var body: some View {
-        levelSelectorContainer
-            .environmentObject(viewModel)
-            .disabled(viewModel.loadStatus != .loaded)
-            .onChange(of: selection?.wrappedValue) {
-                let newValue = selection?.wrappedValue
-                // Prevent a double-set if the view model triggered the original change.
-                guard newValue != viewModel.selection else { return }
-                switch newValue {
-                case .site(let site): viewModel.setSite(site)
-                case .facility(let facility): viewModel.setFacility(facility)
-                case .level(let level): viewModel.setLevel(level)
-                case .none: viewModel.clearSelection()
+        if #available(iOS 26.0, *) {
+            FloorFilter26()
+                .environmentObject(viewModel)
+        } else {
+            levelSelectorContainer
+                .environmentObject(viewModel)
+                .disabled(viewModel.loadStatus != .loaded)
+                .onChange(of: selection?.wrappedValue) {
+                    let newValue = selection?.wrappedValue
+                    // Prevent a double-set if the view model triggered the original change.
+                    guard newValue != viewModel.selection else { return }
+                    switch newValue {
+                    case .site(let site): viewModel.setSite(site)
+                    case .facility(let facility): viewModel.setFacility(facility)
+                    case .level(let level): viewModel.setLevel(level)
+                    case .none: viewModel.clearSelection()
+                    }
                 }
-            }
-            .onChange(of: viewModel.loadStatus) {
-                if viewModel.loadStatus == .loaded,
-                   !automaticSingleSiteSelectionDisabled,
-                   viewModel.sites.count == 1,
-                   let firstSite = viewModel.sites.first {
-                    // If we have only one site, select it.
-                    viewModel.setSite(firstSite, zoomTo: true)
+                .onChange(of: viewModel.loadStatus) {
+                    if viewModel.loadStatus == .loaded,
+                       !automaticSingleSiteSelectionDisabled,
+                       viewModel.sites.count == 1,
+                       let firstSite = viewModel.sites.first {
+                        // If we have only one site, select it.
+                        viewModel.setSite(firstSite, zoomTo: true)
+                    }
                 }
-            }
-            .onChange(of: viewModel.selection) {
-                let newValue = viewModel.selection
-                // Prevent a double-set if the user triggered the original change.
-                guard selection?.wrappedValue != newValue else { return }
-                selection?.wrappedValue = newValue
-            }
-            .onChange(of: viewpoint.wrappedValue) {
-                guard isNavigating.wrappedValue else { return }
-                if let newViewpoint = viewpoint.wrappedValue {
-                    viewModel.onViewpointChanged(newViewpoint)
+                .onChange(of: viewModel.selection) {
+                    let newValue = viewModel.selection
+                    // Prevent a double-set if the user triggered the original change.
+                    guard selection?.wrappedValue != newValue else { return }
+                    selection?.wrappedValue = newValue
                 }
-            }
+                .onChange(of: viewpoint.wrappedValue) {
+                    guard isNavigating.wrappedValue else { return }
+                    if let newViewpoint = viewpoint.wrappedValue {
+                        viewModel.onViewpointChanged(newViewpoint)
+                    }
+                }
+        }
     }
 }
 
@@ -264,5 +269,212 @@ public extension FloorFilter {
         var copy = self
         copy.levelSelectorWidth = width
         return copy
+    }
+}
+
+@available(iOS 26.0, *)
+struct FloorFilter26: View {
+    @Namespace private var namespace
+    @State private var isSiteSelectorPresented = false
+    
+    static var buttonShape: some Shape {
+        //RoundedRectangle(cornerRadius: 4)
+        Capsule()
+    }
+    
+    static let buttonSize: CGFloat = 56
+    
+    var body: some View {
+//        GlassEffectContainer(spacing: 10) {
+//            VStack {
+//                LevelSelector26()
+//                    .padding(.bottom)
+//                siteSelectorButton
+//            }
+//        }
+        VStack {
+            LevelSelector26_2()
+                .padding(.bottom)
+            siteSelectorButton
+        }
+    }
+    
+    @ViewBuilder private var siteSelectorButton: some View {
+        Button {
+            isSiteSelectorPresented.toggle()
+        } label: {
+            Image(systemName: "building.2")
+                .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
+                .font(.system(size: 22))
+                .glassEffect(.regular.interactive(), in: FloorFilter26.buttonShape)
+                .glassEffectUnion(id: "siteSelector", namespace: namespace)
+        }
+        .buttonStyle(.plain)
+        .contentShape(FloorFilter26.buttonShape)
+        .popover(isPresented: $isSiteSelectorPresented) {
+            SiteAndFacilitySelector(isPresented: $isSiteSelectorPresented)
+        }
+    }
+}
+
+@available(iOS 26.0, *)
+struct LevelSelector26_2: View {
+    @Namespace private var namespace
+    @EnvironmentObject var model: FloorFilterViewModel
+    
+    @State private var isCollapsed = false
+    
+    static var buttonShape: some Shape {
+        RoundedRectangle(cornerRadius: 18, style: .continuous)
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            if model.sortedLevels.count > 1 {
+                Button {
+                    isCollapsed.toggle()
+                } label: {
+                    Image(systemName: "chevron.up")
+                        .rotationEffect(isCollapsed ? .degrees(0) : .degrees(180))
+                        .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
+                        .font(.system(size: 20))
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .contentShape(FloorFilter26.buttonShape)
+            }
+            
+            levelButtons
+        }
+        .glassEffect(.regular, in: LevelSelector26_2.buttonShape)
+        .clipShape(LevelSelector26_2.buttonShape)
+        .animation(.default, value: isCollapsed)
+    }
+    
+    @ViewBuilder private var levelButtons: some View {
+        if isCollapsed {
+            if let level = model.selection?.level {
+                LevelButton_2(level: level, isSelected: true, isCollapsed: true)
+            }
+        } else {
+            VStack(spacing: 0) {
+                ForEach(model.sortedLevels, id:\.id) { level in
+                    LevelButton_2(level: level, isSelected: level == model.selection?.level)
+                }
+            }
+        }
+    }
+}
+
+@available(iOS 26.0, *)
+private struct LevelButton_2: View {
+    @Namespace private var namespace
+    
+    let level: FloorLevel
+    let isSelected: Bool
+    var isCollapsed: Bool = false
+    
+    static let textSize: CGFloat = 56
+    
+    var body: some View {
+        Button { }
+        label: {
+            Text(level.shortName)
+                .frame(width: LevelButton.textSize, height: LevelButton.textSize)
+                .font(.system(size: 20))
+                .foregroundStyle(isSelected ? .primary : .secondary)
+                .modify {
+                    if isSelected {
+                        $0.glassEffect(.clear, in: LevelSelector26_2.buttonShape)
+//                        $0.background(Color(uiColor: .secondarySystemBackground))
+//                            .clipShape(LevelSelector26_2.buttonShape)
+                    }
+                }
+        }
+        .buttonStyle(.plain)
+        .contentShape(LevelSelector26_2.buttonShape)
+    }
+}
+
+@available(iOS 26.0, *)
+struct LevelSelector26: View {
+    @Namespace private var namespace
+    @EnvironmentObject var model: FloorFilterViewModel
+    
+    @State private var isCollapsed = false
+    
+    static var buttonShape: some Shape {
+        RoundedRectangle(cornerRadius: 18, style: .continuous)
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            if model.sortedLevels.count > 1 {
+                Button {
+                    isCollapsed.toggle()
+                } label: {
+                    Image(systemName: "chevron.up")
+                        .rotationEffect(isCollapsed ? .degrees(0) : .degrees(180))
+                        .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
+                        .font(.system(size: 20))
+                        .glassEffect(.regular.interactive(), in: LevelSelector26.buttonShape)
+                        .glassEffectUnion(id: "collapseToggle", namespace: namespace)
+                }
+                .buttonStyle(.plain)
+                .contentShape(FloorFilter26.buttonShape)
+            }
+            
+            levelButtons
+        }
+        .animation(.default, value: isCollapsed)
+    }
+    
+    @ViewBuilder private var levelButtons: some View {
+        if isCollapsed {
+            if let level = model.selection?.level {
+                LevelButton(level: level, isSelected: true, isCollapsed: true)
+            }
+        } else {
+            VStack(spacing: 0) {
+                ForEach(model.sortedLevels, id:\.id) { level in
+                    LevelButton(level: level, isSelected: level == model.selection?.level)
+                }
+            }
+        }
+    }
+}
+
+@available(iOS 26.0, *)
+private struct LevelButton: View {
+    @Namespace private var namespace
+    
+    let level: FloorLevel
+    let isSelected: Bool
+    var isCollapsed: Bool = false
+    
+    static let textSize: CGFloat = 56
+    
+    var body: some View {
+        Button { }
+        label: {
+            Text(level.shortName)
+                .frame(width: LevelButton.textSize, height: LevelButton.textSize)
+                .font(.system(size: 20))
+                .glassEffect(.regular.interactive(), in: LevelSelector26.buttonShape)
+                .glassEffectUnion(id: level, namespace: namespace)
+        }
+        .buttonStyle(.plain)
+        .contentShape(FloorFilter26.buttonShape)
+    }
+}
+
+#Preview {
+    if #available(iOS 26.0, *) {
+        ZStack {
+            Image(systemName: "globe")
+                .resizable()
+                .foregroundStyle(Color.green)
+            FloorFilter26()
+        }
     }
 }
