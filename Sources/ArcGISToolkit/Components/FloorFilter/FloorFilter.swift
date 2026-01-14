@@ -352,15 +352,36 @@ struct LevelSelector26_2: View {
     }
     
     @ViewBuilder private var levelButtons: some View {
-        if isCollapsed {
-            if let level = model.selection?.level {
-                LevelButton_2(level: level, isSelected: true, isCollapsed: true)
-            }
-        } else {
-            VStack(spacing: 0) {
-                ForEach(model.sortedLevels, id:\.id) { level in
-                    LevelButton_2(level: level, isSelected: level == model.selection?.level)
+            ScrollViewReader { scrollView in
+                VStack(spacing: 0) {
+                    if isCollapsed {
+                        if let level = model.selection?.level {
+                            LevelButton_2(level: level, isSelected: true, isCollapsed: true)
+                        }
+                    } else {
+                        ScrollView {
+                            VStack(spacing: 0) {
+                                ForEach(model.sortedLevels, id:\.id) { level in
+                                    LevelButton_2(level: level, isSelected: level == model.selection?.level)
+                                }
+                            }
+                        }
+                        .clipShape(LevelSelector26_2.buttonShape)
+                    }
                 }
+                .onChange(of: isCollapsed) {
+                    guard !isCollapsed else { return }
+                    scrollToSelectedLevel(with: scrollView)
+                }
+            }
+    }
+    
+    /// Scrolls the list within the provided proxy to the button representing the selected level.
+    /// - Parameter proxy: The proxy containing the scroll view.
+    func scrollToSelectedLevel(with proxy: ScrollViewProxy) {
+        if let level = model.selection?.level {
+            withAnimation {
+                proxy.scrollTo(level.id)
             }
         }
     }
@@ -369,6 +390,7 @@ struct LevelSelector26_2: View {
 @available(iOS 26.0, *)
 private struct LevelButton_2: View {
     @Namespace private var namespace
+    @EnvironmentObject var model: FloorFilterViewModel
     
     let level: FloorLevel
     let isSelected: Bool
@@ -377,7 +399,9 @@ private struct LevelButton_2: View {
     static let textSize: CGFloat = 56
     
     var body: some View {
-        Button { }
+        Button {
+            model.setLevel(level)
+        }
         label: {
             Text(level.shortName)
                 .frame(width: LevelButton.textSize, height: LevelButton.textSize)
