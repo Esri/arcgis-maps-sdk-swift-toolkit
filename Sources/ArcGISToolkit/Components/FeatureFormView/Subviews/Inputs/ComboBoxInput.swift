@@ -271,7 +271,7 @@ extension ArcGIS.CodedValue: Swift.Hashable {
     }
 }
 
-private enum ComboBoxValue: Equatable {
+private enum ComboBoxValue: Hashable {
     case coded(CodedValue)
     /// The element's current (but unsupported) value.
     ///
@@ -297,5 +297,3 @@ private enum ComboBoxValue: Equatable {
         }
     }
 }
-
-extension ComboBoxValue: Hashable {}
