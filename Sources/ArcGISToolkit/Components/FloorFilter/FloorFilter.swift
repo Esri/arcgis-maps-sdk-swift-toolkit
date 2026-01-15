@@ -280,16 +280,20 @@ struct FloorFilter26: View {
     @State private var isSiteSelectorPresented = false
     
     var buttonShape: some Shape {
-        Capsule()
+        RoundedRectangle(cornerRadius: 18, style: .continuous)
     }
     
     static let buttonSize: CGFloat = 56
+    static let padding: CGFloat = 6
     
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 0) {
             LevelSelector26()
             siteSelectorButton
         }
+        .glassEffect(.regular.interactive(), in: buttonShape)
+        .clipShape(buttonShape)
+        .frame(maxWidth: FloorFilter26.buttonSize + FloorFilter26.padding)
     }
     
     @ViewBuilder private var siteSelectorButton: some View {
@@ -299,8 +303,6 @@ struct FloorFilter26: View {
             Image(systemName: "building.2")
                 .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
                 .font(.system(size: 22))
-                .glassEffect(.regular.interactive(), in: buttonShape)
-                .glassEffectUnion(id: "siteSelector", namespace: namespace)
         }
         .buttonStyle(.plain)
         .contentShape(buttonShape)
@@ -338,10 +340,13 @@ struct LevelSelector26: View {
                 .contentShape(buttonShape)
             }
             
-            levelButtons
+            if !model.sortedLevels.isEmpty {
+                levelButtons
+                
+//                Divider()
+//                    .padding(.vertical, 6)
+            }
         }
-        .glassEffect(.regular.interactive(), in: buttonShape)
-        .clipShape(buttonShape)
         .animation(.default, value: isCollapsed)
     }
     
@@ -350,14 +355,23 @@ struct LevelSelector26: View {
             VStack(spacing: 0) {
                 if isCollapsed {
                     if let level = model.selection?.level {
-                        LevelButton26(level: level, isSelected: true, isCollapsed: true)
+                        LevelButton26(
+                            level: level,
+                            isSelected: true,
+                            isCollapsed: $isCollapsed
+                        )
+                        .transition(.move(edge: .top).combined(with: .opacity))
                     }
                 } else {
                     ScrollView {
                         VStack(spacing: 0) {
                             ForEach(model.sortedLevels, id:\.id) { level in
-                                LevelButton26(level: level, isSelected: level == model.selection?.level)
-                                    .id(level.id)
+                                LevelButton26(
+                                    level: level,
+                                    isSelected: level == model.selection?.level,
+                                    isCollapsed: $isCollapsed
+                                )
+                                .id(level.id)
                             }
                         }
                     }
@@ -366,7 +380,9 @@ struct LevelSelector26: View {
                     } action: { _, newValue in
                         contentHeight = newValue
                     }
+                    .clipShape(buttonShape)
                     .frame(maxHeight: contentHeight)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
             .onChange(of: isCollapsed) {
@@ -394,7 +410,7 @@ private struct LevelButton26: View {
     
     let level: FloorLevel
     let isSelected: Bool
-    var isCollapsed: Bool = false
+    @Binding var isCollapsed: Bool
     
     let textSize: CGFloat = 56
     
@@ -404,17 +420,21 @@ private struct LevelButton26: View {
     
     var body: some View {
         Button {
-            model.setLevel(level)
+            if isCollapsed && model.sortedLevels.count > 1 {
+                isCollapsed = false
+            } else {
+                model.setLevel(level)
+            }
         }
         label: {
             Text(level.shortName)
                 .frame(width: textSize, height: textSize)
                 .font(.system(size: 20))
                 .foregroundStyle(isSelected ? .primary : .secondary)
+                .fontWeight(isSelected ? .semibold : .regular)
                 .modify {
-                    if isSelected {
+                    if isSelected && !isCollapsed && model.sortedLevels.count > 1 {
                         $0.background(Color(uiColor: .systemBackground).opacity(0.75))
-                            .fontWeight(.semibold)
                             .clipShape(buttonShape)
                     }
                 }
