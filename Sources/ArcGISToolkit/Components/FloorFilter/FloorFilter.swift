@@ -277,6 +277,7 @@ public extension FloorFilter {
 @available(iOS 26.0, *)
 struct FloorFilter26: View {
     @Namespace private var namespace
+    @EnvironmentObject private var model: FloorFilterViewModel
     @State private var isSiteSelectorPresented = false
     
     var buttonShape: some Shape {
@@ -289,11 +290,18 @@ struct FloorFilter26: View {
     var body: some View {
         VStack(spacing: 0) {
             LevelSelector26()
+                .padding(.horizontal, FloorFilter26.padding)
+            
+            if !model.sortedLevels.isEmpty {
+                Divider()
+            }
+            
             siteSelectorButton
+                .padding(.horizontal, FloorFilter26.padding)
         }
+        .frame(maxWidth: FloorFilter26.buttonSize + FloorFilter26.padding)
         .glassEffect(.regular.interactive(), in: buttonShape)
         .clipShape(buttonShape)
-        .frame(maxWidth: FloorFilter26.buttonSize + FloorFilter26.padding)
     }
     
     @ViewBuilder private var siteSelectorButton: some View {
@@ -342,9 +350,6 @@ struct LevelSelector26: View {
             
             if !model.sortedLevels.isEmpty {
                 levelButtons
-                
-//                Divider()
-//                    .padding(.vertical, 6)
             }
         }
         .animation(.default, value: isCollapsed)
@@ -353,7 +358,7 @@ struct LevelSelector26: View {
     @ViewBuilder private var levelButtons: some View {
         ScrollViewReader { scrollView in
             VStack(spacing: 0) {
-                if isCollapsed {
+                if isCollapsed || model.sortedLevels.count == 1 {
                     if let level = model.selection?.level {
                         LevelButton26(
                             level: level,
@@ -382,6 +387,7 @@ struct LevelSelector26: View {
                     }
                     .clipShape(buttonShape)
                     .frame(maxHeight: contentHeight)
+                    .padding(.bottom, FloorFilter26.padding)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
