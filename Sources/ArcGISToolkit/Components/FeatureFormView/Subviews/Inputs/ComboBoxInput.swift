@@ -193,7 +193,7 @@ extension ComboBoxInput {
                             .textCase(nil)
                     }
                     .accessibilityIdentifier("\(element.label) Unsupported Value Section")
-                    .textCase(.none)
+                    .textCase(nil)
                 }
             }
             .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
