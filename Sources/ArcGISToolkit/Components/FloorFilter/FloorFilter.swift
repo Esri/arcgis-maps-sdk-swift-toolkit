@@ -300,7 +300,7 @@ struct FloorFilter26: View {
                 .padding(.horizontal, FloorFilter26.padding)
         }
         .frame(maxWidth: FloorFilter26.buttonSize + FloorFilter26.padding)
-        .glassEffect(.regular.interactive(), in: buttonShape)
+        .glassEffect(.regular, in: buttonShape)
         .clipShape(buttonShape)
     }
     
@@ -316,6 +316,9 @@ struct FloorFilter26: View {
         .contentShape(buttonShape)
         .popover(isPresented: $isSiteSelectorPresented) {
             SiteAndFacilitySelector(isPresented: $isSiteSelectorPresented)
+            // To work-around an iOS 26 bug on dark mode where the
+            // sheet appears half in dark mode and half in light mode.
+                .background(Color(uiColor: .systemBackground))
         }
     }
 }
