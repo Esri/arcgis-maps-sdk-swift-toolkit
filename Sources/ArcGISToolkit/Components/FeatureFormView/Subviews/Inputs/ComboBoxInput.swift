@@ -161,12 +161,15 @@ extension ComboBoxInput {
                 Section(element.description) {
                     Picker(element.description, selection: $selectedValue) {
                         if !element.isRequired, noValueOption == .show {
-                            Text(noValueLabel.isEmpty ? String.noValue : noValueLabel)
+                            let noValueOptionLabel = noValueLabel.isEmpty ? String.noValue : noValueLabel
+                            Text(noValueOptionLabel)
+                                .accessibilityIdentifier("\(noValueOptionLabel) Combo Box Option")
                                 .foregroundStyle(.secondary)
                                 .tag(nil as ComboBoxValue?)
                         }
                         ForEach(matchingValues, id: \.self) { codedValue in
                             Text(codedValue.name)
+                                .accessibilityIdentifier("\(codedValue.name) Combo Box Option")
                                 .tag(ComboBoxValue.coded(codedValue))
                         }
                     }
