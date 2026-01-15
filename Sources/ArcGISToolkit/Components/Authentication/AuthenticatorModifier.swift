@@ -33,18 +33,41 @@ public extension View {
 private struct AuthenticatorOverlayModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
+    @State private var oAuthWebViewContext: _OAuthWebViewPresentationContext?
+    
     @ViewBuilder func body(content: Content) -> some View {
         ZStack {
             content
             Color.clear
                 .frame(width: 0, height: 0)
                 .modifier(AuthenticatorModifier(authenticator: authenticator))
-                ._oAuthWebViewSheet(
-                    contentModifier: AuthenticatorModifier(
-                        authenticator: authenticator,
-                        showsNestedChallenges: true
-                    )
-                )
+//                ._oAuthWebViewSheet(
+//                    contentModifier: AuthenticatorModifier(
+//                        authenticator: authenticator,
+//                        showsNestedChallenges: true
+//                    )
+//                )
+                ._oAuthWebViewContentBinding(context: $oAuthWebViewContext)
+                .sheet(item: $oAuthWebViewContext, onDismiss: {
+                    print("-- dismissing")
+                }, content: { context in
+                    context.content
+                        .modifier(
+                            AuthenticatorModifier(
+                                authenticator: authenticator,
+                                showsNestedChallenges: true
+                            )
+                        )
+                })
+//                .sheet(isPresented: $isOAuthWebViewPresented) {
+//                    oAuthWebViewContent?
+//                        .modifier(
+//                            AuthenticatorModifier(
+//                                authenticator: authenticator,
+//                                showsNestedChallenges: true
+//                            )
+//                        )
+//                }
         }
     }
 }
