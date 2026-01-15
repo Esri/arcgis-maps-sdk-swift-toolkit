@@ -2367,6 +2367,6 @@ private extension XCUIApplication {
 private extension XCUIElement {
     /// The element's value as a string.
     var stringValue: String? {
-        self.value as? String
+        value as? String
     }
 }
