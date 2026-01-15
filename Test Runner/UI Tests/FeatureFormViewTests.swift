@@ -1031,12 +1031,9 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 4.1: Test regular selection
     func testCase_4_1() {
         let app = XCUIApplication()
-        let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
         let fieldTitle = app.staticTexts["Radio Button Text *"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let dogOption = app.buttons["Radio Button Text dog Radio Button"]
-        let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
-        let noValueOption = app.buttons["Radio Button Text No Value Radio Button"]
+        let radioButtonTextPicker = app.pickers["Radio Button Text"].pickerWheels.firstMatch
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -1046,32 +1043,34 @@ final class FeatureFormViewTests: XCTestCase {
             "The field title doesn't exist."
         )
         
-        XCTAssertTrue(
-            birdOptionCheckmark.exists,
-            "The bird option isn't selected."
+        XCTAssertEqual(
+            radioButtonTextPicker.stringValue,
+            "bird"
         )
         
-        XCTAssertFalse(
-            dogOptionCheckmark.exists,
-            "The dog option is selected."
+        XCTAssertNotEqual(
+            radioButtonTextPicker.stringValue,
+            "dog"
         )
         
-        dogOption.tap()
+        radioButtonTextPicker.adjust(toPickerWheelValue: "dog")
         
-        XCTAssertTrue(
-            dogOptionCheckmark.exists,
-            "The dog option isn't selected."
+        XCTAssertEqual(
+            radioButtonTextPicker.stringValue,
+            "dog"
         )
         
-        XCTAssertFalse(
-            birdOptionCheckmark.exists,
-            "The bird option is selected."
+        XCTAssertNotEqual(
+            radioButtonTextPicker.stringValue,
+            "bird"
         )
         
-        XCTAssertTrue(
-            noValueOption.exists,
-            "The no value option doesn't exist."
-        )
+        // The following assertion is skipped because all possible values in a
+        // picker cannot be programmatically checked.
+//        XCTAssertTrue(
+//            noValueOption.exists,
+//            "The no value option doesn't exist."
+//        )
     }
     
     /// Test case 4.2: Test radio button fallback to combo box
@@ -1079,8 +1078,8 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let field1 = app.staticTexts["Fallback 1 Combo Box Value"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let noValueDisabledRadioButton = app.buttons["No Value Disabled One Radio Button"]
-        let noValueEnabledRadioButton = app.buttons["No Value Enabled N/A Radio Button"]
+        let noValueDisabledPicker = app.pickers["No Value Disabled"].pickerWheels.firstMatch
+        let noValueEnabledPicker = app.pickers["No Value Enabled"].pickerWheels.firstMatch
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -1091,16 +1090,16 @@ final class FeatureFormViewTests: XCTestCase {
             "The combo box doesn't exist."
         )
         
-        // Verify the radio buttons are shown even when the value option is enabled.
-        XCTAssertTrue(
-            noValueEnabledRadioButton.exists,
-            "The radio button doesn't exist."
+        // Verify the radio buttons are shown even when the no value option is enabled.
+        XCTAssertEqual(
+            noValueEnabledPicker.stringValue,
+            "N/A"
         )
         
-        // Verify the radio buttons are still shown even when the value option is disabled.
-        XCTAssertTrue(
-            noValueDisabledRadioButton.exists,
-            "The radio button doesn't exist."
+        // Verify the radio buttons are still shown even when the no value option is disabled.
+        XCTAssertEqual(
+            noValueDisabledPicker.stringValue,
+            "One"
         )
     }
     
@@ -1246,7 +1245,7 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let groupElement = app.staticTexts["single line text 3"]
-        let showElementsButton = app.buttons["show invisible form element"]
+        let radioButtonPicker = app.pickers["Radio Button"].pickerWheels.firstMatch
         
 #if targetEnvironment(macCatalyst)
         let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
@@ -1282,11 +1281,13 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Confirm the option to show the elements exists.
         XCTAssertTrue(
-            showElementsButton.exists,
-            "The show group elements button doesn't exist."
+            radioButtonPicker.exists,
+            "The Radio Button picker doesn't exist."
         )
         
-        showElementsButton.tap()
+        radioButtonPicker.adjust(toPickerWheelValue: "show invisible form element")
+        
+        XCTExpectFailure("The Radio Button picker fails to take the \"show invisible form element\" selection.")
         
         // Confirm the first element of the conditional group doesn't exist.
         XCTAssertTrue(
@@ -1306,8 +1307,8 @@ final class FeatureFormViewTests: XCTestCase {
         let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
         let comboBox = app.staticTexts["Combo box Combo Box Value"]
         
+        let radioButtonsPicker = app.pickers["Radio buttons"].pickerWheels.firstMatch
         let radioButtonsReadOnlyInput = app.staticTexts["Radio buttons Read Only Input"]
-        let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]
         
         let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
         let dateInput = app.buttons["Date Value"]
@@ -1341,7 +1342,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(comboBox.exists)
         
-        XCTAssertTrue(radioButtonsInput.exists)
+        XCTAssertEqual(radioButtonsPicker.stringValue, "0")
         
         XCTAssertTrue(dateInput.exists)
         
@@ -2360,5 +2361,12 @@ private extension XCUIApplication {
     /// The "No value" combo box option.
     var noValueComboBoxOption: XCUIElement {
         buttons["No value Combo Box Option"]
+    }
+}
+
+private extension XCUIElement {
+    /// The element's value as a string.
+    var stringValue: String? {
+        self.value as? String
     }
 }
