@@ -18,7 +18,17 @@ import SwiftUI
 
 @MainActor @Observable
 class FilterViewModel {
-    var featureTable: ArcGISFeatureTable?
+    public var featureTable: ArcGISFeatureTable? {
+        didSet {
+            if let featureTable {
+                Task {
+                    try? await featureTable.load()
+                    fields = supportedFields(featureTable.fields)
+                    print("field: \(fields)")
+                }
+            }
+        }
+    }
     var fieldFilters: [FieldFilter]
     private var originalFieldFilters: [FieldFilter]
     var isFilterViewPresented = false
@@ -39,62 +49,79 @@ class FilterViewModel {
         self.featureTable = featureTable
         self.fieldFilters = fieldFilters
         self.originalFieldFilters = fieldFilters
-        if let featureTable {
-            Task {
-                try? await featureTable.load()
-                fields = featureTable.fields
-                print("field: \(fields)")
-            }
-        }
     }
     
     func apply() {
-        print("FilterViewModel.apply")
         isFilterViewPresented.toggle()
+        self.originalFieldFilters = fieldFilters
     }
     
     func cancel() {
-        print("FilterViewModel.cancel")
         fieldFilters = originalFieldFilters
         isFilterViewPresented.toggle()
     }
-
 }
 
-struct FieldFilter {
+class FieldFilter {
     let id = UUID()
-    var field: Field?
-    var operation = UtilityNetworkAttributeComparison.Operator.equal
+    var field: Field
+    var name = "Condition"
+    var condition = UtilityNetworkAttributeComparison.Operator.equal
     var value: Any = ""
-    var formattedValue: String = {
-        // Get string value from `value`
-        return "formattedValue"
-    }()
+    var formattedValue = "dummy value"
+//    var formattedValue: String = {
+//        // Get string value from `value`
+//        return "dummy value"
+//    }()
+    
+    init(
+        field: Field,
+        name: String = "Condition",
+        condition: UtilityNetworkAttributeComparison.Operator = .equal,
+        value: Any = "",
+        formattedValue: String = "dummy value"
+    ) {
+        self.field = field
+        self.name = name
+        self.condition = condition
+        self.value = value
+        self.formattedValue = formattedValue
+    }
+}
+
+extension FieldFilter {
+    func copy() -> FieldFilter {
+        print("original: \(self)")
+        let newFilter = FieldFilter(
+            field: self.field,
+            name: self.name,
+            condition: self.condition,
+            value: self.value,
+            formattedValue: self.formattedValue
+        )
+        print("newFilter: \(newFilter)")
+        return newFilter
+    }
 }
 
 extension FieldFilter: Equatable {
     static func == (lhs: FieldFilter, rhs: FieldFilter) -> Bool {
-        lhs.field == rhs.field &&
-        lhs.operation == rhs.operation// &&
-//        rhs.value == lhs.value
+        lhs.id == rhs.id
     }
-    
-    
 }
 
 extension FieldFilter: Hashable {
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(field?.hashValue)
-        hasher.combine(operation.hashValue)
-//        hasher.combine(value.hashValue)
+        hasher.combine(id.hashValue)
     }
 }
 
-
-//private fun List<Field>.getSupportedFields(): List<Field> {
-//    return filter { field ->
-//        field.fieldType.isNumeric ||
-//            field.fieldType == FieldType.Text ||
-//            field.fieldType == FieldType.Oid
-//    }
-//}
+extension FilterViewModel {
+    private func supportedFields(_ allFields: [Field]) -> [Field] {
+        allFields.filter { field in
+            (field.type?.isNumeric ?? false) ||
+            field.type == .text ||
+            field.type == FieldType.oid
+        }
+    }
+}

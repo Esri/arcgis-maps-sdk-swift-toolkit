@@ -1,9 +1,21 @@
+// Copyright 2026 Esri
 //
-//  SwiftUIView.swift
-//  arcgis-maps-sdk-swift-toolkit
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-//  Created by mark1113 on 1/8/26.
+//   https://www.apache.org/licenses/LICENSE-2.0
 //
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+//TODO:
+// - look at design and make sure FilterView matches that
+// - what about ... button for delete? (Match design)
+
 
 import ArcGIS
 import SwiftUI
@@ -13,76 +25,111 @@ struct FilterView: View {
     var body: some View {
         NavigationStack {
             ScrollViewReader { proxy in
-                List {
-                    ForEach(model.fieldFilters, id: \.self) { filter in
-                        Section {
-                            FieldView(fieldFilter: filter)
-                        }
-                    }
+                if model.fieldFilters.isEmpty {
+                    Image(systemName: "line.3.horizontal.decrease.circle")
+                        .font(.largeTitle)
+                        .foregroundStyle(.gray)
+                        .padding()
+                    Text("No conditions added")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    Text("Show features that meet all the conditions")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .padding(.bottom)
                     HStack {
                         Spacer()
-                        Button {
-                            withAnimation {
-                                let newFilter = FieldFilter()
-                                model.fieldFilters.append(newFilter)
-                            }
-                        } label: {
-                            Image(systemName: "plus")
-                                .bold()
-                                .imageScale(.large)
-                                .padding(8)
-                        }
-                        .id("plusButton")
-                        .buttonBorderShape(.circle)
-                        .buttonStyle(.borderedProminent)
-                        .shadow(radius: 8)
+                        AddButtonBordered()
                         Spacer()
                     }
-                }
-                .onChange(of: model.fieldFilters) {
-                    // Scroll to the last message when messages change
-                    if let lastFilter = model.fieldFilters.last {
-                        print("onChangeOf model.fieldFilters")
-                        // Why doesn't this work??
-                        withAnimation {
-                            proxy.scrollTo("plusButton", anchor: .bottom)
+                } else {
+                    List {
+                        ForEach(model.fieldFilters, id: \.self) { filter in
+                            Section {
+                                FieldView(fieldFilter: filter)
+                            } header: {
+                                HStack {
+                                    Text(filter.name)
+                                    Spacer()
+                                    Menu {
+                                        // Duplicate the current filter
+                                        duplicateButton(filter)
+                                        // Delete the current filter.
+                                        deleteButton(filter)
+                                    } label: {
+                                        Image(systemName: "ellipsis.circle")
+                                            .imageScale(.large)
+                                    }
+                                }
+                            }
                         }
+                        .onDelete(perform: { offsets in
+                            withAnimation {
+                                model.fieldFilters.remove(atOffsets: offsets)
+                            }
+                        })
+                    }
+                    .onChange(of: model.fieldFilters) {
+                        // Scroll to the last message when messages change
+                        if let lastFilter = model.fieldFilters.last {
+                            print("onChangeOf model.fieldFilters")
+                            // Why doesn't this work??
+                            withAnimation {
+                                proxy.scrollTo("plusButton", anchor: .bottom)
+                            }
+                        }
+                    }
+                    Spacer()
+                    HStack {
+                        AddButtonNoBorder()
+                            .buttonStyle(.borderless)
+                            .padding()
+                        Spacer()
                     }
                 }
             }
             Spacer()
                 .toolbar {
-                    ToolbarItem(/*placement: .topBarLeading*/) {
-                        cancelButton
+                    ToolbarItem(placement: .topBarLeading) {
+                        DismissButton(kind: .cancel){
+                            model.cancel()
+                        }
                     }
-                    ToolbarItem(/*placement: .topBarTrailing*/) {
-                        applyButton
+                    ToolbarItem(placement: .topBarTrailing) {
+                        DismissButton(kind: .confirm){
+                            model.apply()
+                        }
                     }
                 }
         }
-        .navigationTitle(Text("filter"))
-    }
-}
-
-extension FilterView {
-    var cancelButton: some View {
-        Button {
-            model.cancel()
-        } label: {
-            Image(systemName: "xmark")  //Cancel icon
-        }
-        .buttonBorderShape(.circle)
-        .buttonStyle(.borderedProminent)
     }
     
-    var applyButton: some View {
+    private func deleteButton(_ filter: FieldFilter) -> Button<some View> {
         Button {
-            model.apply()
+            if let index = model.fieldFilters.firstIndex(of: filter) {
+                withAnimation {
+                    model.fieldFilters.remove(at: index)
+                }
+            }
         } label: {
-            Image(systemName: "checkmark") // Checkmark icon
+            Text("Delete")
+            Image(systemName: "trash")
         }
-        .buttonBorderShape(.circle)
-        .buttonStyle(.borderedProminent)
+    }
+
+    private func duplicateButton(_ filter: FieldFilter) -> Button<some View> {
+        Button {
+//            if let index = model.fieldFilters.firstIndex(where: { $0.id == filter.id }) {
+            if let index = model.fieldFilters.firstIndex(of: filter) {
+                let newFilter = filter.copy()
+                withAnimation {
+                    model.fieldFilters.insert(newFilter, at: index + 1)
+                }
+            }
+        } label: {
+            Text("Duplicate")
+            Image(systemName: "document.on.document")
+        }
     }
 }
 
@@ -95,7 +142,7 @@ extension FilterView {
                     name: ".int32",
                     alias: "Int32"
                 ),
-                operation: UtilityNetworkAttributeComparison.Operator.equal,
+                condition: UtilityNetworkAttributeComparison.Operator.equal,
                 value: 1
             ),
             FieldFilter(
@@ -104,19 +151,74 @@ extension FilterView {
                     name: ".text",
                     alias: "Text"
                 ),
-                operation: UtilityNetworkAttributeComparison.Operator.notEqual,
+                condition: UtilityNetworkAttributeComparison.Operator.notEqual,
                 value: "Bob"
             )
         ]
     }()
-    let model = FilterViewModel(fieldFilters: filters)
+//    let model = FilterViewModel(fieldFilters: filters)
+    let model = FilterViewModel(fieldFilters: [])
     FilterView()
         .environment(model)
 }
 
+private struct AddButtonBordered: View {
+    @Environment(FilterViewModel.self) private var model
+    var body: some View {
+        HStack {
+            Button {
+                withAnimation {
+                    let newFilter = FieldFilter(field: model.fields.first ?? Field(type: .blob, name: "Empty", alias: "Empty"))
+                    model.fieldFilters.append(newFilter)
+                    print("field name:" + model.fieldFilters.last!.field.name)
+                }
+            } label: {
+                HStack {
+                    Image(systemName: "plus")
+                        .imageScale(.large)
+                        .padding(4)
+                    Text("Add Condition")
+                        .padding(.trailing)
+                }
+                .bold()
+            }
+            .id("plusButton")
+            .buttonBorderShape(.automatic)
+            .buttonStyle(.borderedProminent)
+                .shadow(radius: 8)
+        }
+    }
+}
+
+private struct AddButtonNoBorder: View {
+    @Environment(FilterViewModel.self) private var model
+    var body: some View {
+        HStack {
+            Button {
+                withAnimation {
+                    let newFilter = FieldFilter(field: model.fields.first ?? Field(type: .blob, name: "Empty", alias: "Empty"))
+                    model.fieldFilters.append(newFilter)
+                    print("field name:" + model.fieldFilters.last!.field.name)
+                }
+            } label: {
+                HStack {
+                    Image(systemName: "plus")
+//                        .imageScale(.large)
+                        .foregroundColor(.white)
+                        .padding(4)
+                        .background(Circle().fill(Color.blue))
+                    Text("Add Condition")
+                }
+                .bold()
+            }
+            .id("plusButton")
+        }
+    }
+}
+
 private struct FieldView: View {
     @Environment(FilterViewModel.self) private var model
-    @State private var selectedField: Field?
+    @State private var selectedField: Field
     @State private var fieldFilter: FieldFilter
     @State private var selectedCondition: UtilityNetworkAttributeComparison.Operator
     
@@ -127,7 +229,7 @@ private struct FieldView: View {
     init(fieldFilter: FieldFilter) {
         self.fieldFilter = fieldFilter
         selectedField = fieldFilter.field
-        selectedCondition = fieldFilter.operation
+        selectedCondition = fieldFilter.condition
     }
     
     var body: some View {
@@ -136,20 +238,23 @@ private struct FieldView: View {
             HStack {
                 Text("Field")
                 Spacer()
-                Text(selectedField?.title() ?? "None")
+                Text(selectedField.title())
             }
         } else {
             HStack {
                 Picker("Fields", selection: $selectedField) {
-                    Text("a field")
                     ForEach(model.fields, id: \.self) { field in
-                        Text(field.title()).tag(field.title() as String?)
+                        Text(field.title())
                     }
                 }
                 .pickerStyle(MenuPickerStyle())
+                .onChange(of: selectedField) {
+                    fieldFilter.field = selectedField
+                    print("selectedField: \(selectedField.title())")
+                }
             }
         }
-        
+
         // Condition
         HStack {
             Picker("Condition", selection: $selectedCondition) {
@@ -159,6 +264,9 @@ private struct FieldView: View {
                 }
             }
             .pickerStyle(MenuPickerStyle())
+            .onChange(of: selectedCondition) {
+                fieldFilter.condition = selectedCondition
+            }
         }
         
         

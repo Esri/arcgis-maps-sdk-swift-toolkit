@@ -35,6 +35,8 @@ extension FeatureFormView {
         @State private var queryIsRunning = false
         /// The task for the current query.
         @State private var queryTask: Task<Void, Never>?
+        /// The model for the filter view
+        @State private var filterViewModel = FilterViewModel()
         
         /// The asset type to use when querying for feature candidates.
         let assetType: UtilityAssetType
@@ -72,6 +74,13 @@ extension FeatureFormView {
                     }
                 }
             }
+            .onAppear {
+                filterViewModel.featureTable = form.feature.table as? ArcGISFeatureTable
+            }
+            .sheet(isPresented: $filterViewModel.isFilterViewPresented) {
+                FilterView()
+            }
+            .environment(filterViewModel)
         }
         
         /// A view to indicate no utility association candidate results were found.
@@ -153,34 +162,42 @@ extension FeatureFormView {
         /// A section with a text field to filter the candidates by name.
         var sectionForFilter: some View {
             Section {
-                Searchable(
-                    text: $filterPhrase,
-                    label: Text(
-                        "Filter candidates by name",
-                        bundle: .toolkitModule,
-                        comment: """
+                HStack {
+                    Searchable(
+                        text: $filterPhrase,
+                        label: Text(
+                            "Filter candidates by name",
+                            bundle: .toolkitModule,
+                            comment: """
                             A label for a search field to filter utility 
                             association candidate features by name.
                             """,
-                    ),
-                    prompt: Text(
-                        "Search Features",
-                        bundle: .toolkitModule,
-                        comment: """
+                        ),
+                        prompt: Text(
+                            "Search Features",
+                            bundle: .toolkitModule,
+                            comment: """
                             A label for a search bar to search through feature 
                             candidates to use in a new utility association.
                             """
+                        )
                     )
-                )
-                .disabled(!queryForFirstPageIsComplete)
-                .task(id: filterPhrase) {
-                    try? await Task.sleep(for: .milliseconds(500))
-                    queryForFilterPhraseIsRunning = true
-                    while !Task.isCancelled, filteredCandidates.isEmpty, let nextQueryParameters {
-                        queryFeatures(parameters: nextQueryParameters)
-                        await queryTask?.value
+                    .disabled(!queryForFirstPageIsComplete)
+                    .task(id: filterPhrase) {
+                        try? await Task.sleep(for: .milliseconds(500))
+                        queryForFilterPhraseIsRunning = true
+                        while !Task.isCancelled, filteredCandidates.isEmpty, let nextQueryParameters {
+                            queryFeatures(parameters: nextQueryParameters)
+                            await queryTask?.value
+                        }
+                        queryForFilterPhraseIsRunning = false
                     }
-                    queryForFilterPhraseIsRunning = false
+                    
+                    Button {
+                        filterViewModel.isFilterViewPresented.toggle()
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease")
+                    }
                 }
             }
         }
