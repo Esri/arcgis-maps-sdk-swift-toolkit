@@ -33,8 +33,6 @@ public extension View {
 private struct AuthenticatorOverlayModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
-//    @State private var oAuthWebViewContext: _OAuthWebViewPresentationContext?
-    
     @State private var isOAuthWebViewPresented = false
     @State private var oAuthWebViewContent: () -> AnyView = { fatalError() }
     
@@ -55,6 +53,9 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
                     print("-- dismissing...")
                 } content: {
                     oAuthWebViewContent()
+                    // Use an overlay for the modified content, otherwise the webview
+                    // will be reloaded everytime because the parent view of the
+                    // embedded webview would have an unstable identity.
                         .overlay {
                             EmptyView()
                                 .modifier(
