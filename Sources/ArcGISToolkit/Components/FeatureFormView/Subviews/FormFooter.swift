@@ -25,14 +25,8 @@ struct FormFooter: View {
     /// to the ``FeatureFormView``.
     let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
     
-    /// The internally managed validation error visibility.
-    @Environment(\.validationErrorVisibilityInternal) var validationErrorVisibilityInternal
-    
-    /// An error thrown from a call to `FeatureForm.finishEditing()`.
-    @Binding var finishEditingError: (any Error)?
-    
-    /// The environment value to set the continuation to use when the user responds to the alert.
-    @Environment(\.setAlertContinuation) var setAlertContinuation
+    /// The model for the FeatureFormView containing the view.
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
     /// An action to run before saving.
     @Environment(\.beforeSaveAction) var beforeSaveAction
@@ -54,7 +48,7 @@ struct FormFooter: View {
         Button(role: .destructive) {
             featureForm.discardEdits()
             formHandlingEventAction?(.discardedEdits(willNavigate: false))
-            validationErrorVisibilityInternal.wrappedValue = .automatic
+            featureFormViewModel.validationErrorVisibilityInternal = .automatic
         } label: {
             Text(
                 "Discard",
@@ -76,12 +70,12 @@ struct FormFooter: View {
                         try await featureForm.finishEditing()
                         formHandlingEventAction?(.savedEdits(willNavigate: false))
                     } catch {
-                        finishEditingError = error
+                        featureFormViewModel.finishEditingError = error
                     }
                 }
             } else {
-                validationErrorVisibilityInternal.wrappedValue = .visible
-                setAlertContinuation?(false, {})
+                featureFormViewModel.validationErrorVisibilityInternal = .visible
+                featureFormViewModel.navigationAlertInfo = (false, {})
             }
         } label: {
             Text(

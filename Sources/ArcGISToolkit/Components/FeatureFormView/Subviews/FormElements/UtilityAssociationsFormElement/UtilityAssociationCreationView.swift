@@ -20,23 +20,22 @@ private import os
 extension FeatureFormView {
     /// A view to configure and add a utility network association.
     struct UtilityAssociationCreationView: View {
-        /// The navigation path for the navigation stack presenting this view.
-        @Environment(\.navigationPath) var navigationPath
+        /// The model for the FeatureFormView containing the view.
+        @Environment(FeatureFormViewModel.self) var featureFormViewModel
         
         /// The error to be presented when adding an association failed.
         @State private var addAssociationError: AddAssociationError?
         /// A Boolean value indicating if the alert is presented.
         @State private var alertIsPresented = false
         /// A Boolean value indicating if the content in a containment association is visible.
-        ///
-        /// See also: `includeContentVisibility`.
+        /// - SeeAlso: `includeContentVisibility`.
         @State private var contentIsVisible: Bool = false
-        /// How far along an edge the association is located.
-        @State private var fractionAlongEdge: Double = 0
-        /// The options for a utility network feature when creating an association.
-        @State private var options: UtilityAssociationFeatureOptions? = nil
         /// A Boolean value which indicates when the configured association is being added.
         @State private var isAddingAssociation = false
+        /// The options for a utility network feature when creating an association.
+        @State private var options: UtilityAssociationFeatureOptions? = nil
+        /// The percent along an edge the association is located.
+        @State private var percentAlong: Double = 0
         /// The terminal selection for the "from" side of the association.
         @State private var terminalForFromSide: UtilityTerminal? = nil
         /// The terminal selection for the "to" side of the association.
@@ -46,28 +45,30 @@ extension FeatureFormView {
         let candidate: UtilityAssociationFeatureCandidate
         /// The element to add the new association to.
         let element: UtilityAssociationsFormElement
-        /// The model for the feature form containing the element to add the association to.
-        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         
         var body: some View {
             List {
                 sectionForAssociation
                 sectionForFromElement
                 sectionForToElement
-                sectionForFractionAlongEdge
+                sectionForPercentAlong
                 sectionForAddButton
             }
             .alert(isPresented: $alertIsPresented, error: addAssociationError) {}
             .task {
                 options = try? await element.options(forAssociationCandidate: candidate.feature)
-                terminalForFromSide = candidateIsToElement
-                ? options?.formFeatureTerminalConfiguration?.terminals.first
-                : options?.candidateFeatureTerminalConfiguration?.terminals.first
-                terminalForToSide = candidateIsToElement
-                ? options?.candidateFeatureTerminalConfiguration?.terminals.first
-                : options?.formFeatureTerminalConfiguration?.terminals.first
+                if supportsTerminalSelection {
+                    terminalForFromSide = candidateIsToElement
+                    ? options?.formFeatureTerminalConfiguration?.terminals.first
+                    : options?.candidateFeatureTerminalConfiguration?.terminals.first
+                    terminalForToSide = candidateIsToElement
+                    ? options?.candidateFeatureTerminalConfiguration?.terminals.first
+                    : options?.formFeatureTerminalConfiguration?.terminals.first
+                }
             }
             .task(id: isAddingAssociation) {
                 guard isAddingAssociation else { return }
@@ -90,11 +91,11 @@ extension FeatureFormView {
                 } else {
                     result = switch (options.isFractionAlongEdgeValid, terminalForFromSide, terminalForToSide) {
                     case let (true, .some(terminal), .none):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge, terminal: terminal)
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong, terminal: terminal)
                     case let (true, .none, .some(terminal)):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge, terminal: terminal)
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong, terminal: terminal)
                     case (true, .none, .none):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: fractionAlongEdge)
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong)
                     case (false, _, _):
                         try await element.addAssociation(
                             feature: candidate.feature,
@@ -123,7 +124,9 @@ extension FeatureFormView {
                 // View.searchable(text:placement:prompt:) in these intermediate
                 // views to avoid errors here. (FB20395585)
                 // https://developer.apple.com/forums/thread/802221#802221021
-                navigationPath?.wrappedValue.removeLast(4)
+                await MainActor.run {
+                    featureFormViewModel.navigationPath.removeLast(4)
+                }
             } catch let error as ArcGIS.InvalidArgumentError {
                 addAssociationError = .other(error.details)
                 alertIsPresented = true
@@ -146,6 +149,11 @@ extension FeatureFormView {
             @unknown default:
                 true
             }
+        }
+        
+        /// The model for the feature form containing the element to add the association to.
+        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+            featureFormViewModel.getModel(form)
         }
         
         /// A Boolean value indicating whether content visibility should be specified for the new association.
@@ -202,12 +210,15 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the from side of the association.
         var sectionForFromElement: some View {
             Section {
-                LabeledContent {
-                    Text(candidateIsToElement ? embeddedFeatureFormViewModel.title : candidate.title)
-                } label: {
-                    Text.fromElement
+                if let embeddedFeatureFormViewModel {
+                    LabeledContent {
+                        Text(candidateIsToElement ? embeddedFeatureFormViewModel.title : candidate.title)
+                    } label: {
+                        Text.fromElement
+                    }
                 }
-                if let configuration = candidateIsToElement ? options?.formFeatureTerminalConfiguration : options?.candidateFeatureTerminalConfiguration {
+                if supportsTerminalSelection,
+                   let configuration = candidateIsToElement ? options?.formFeatureTerminalConfiguration : options?.candidateFeatureTerminalConfiguration {
                     Picker(selection: $terminalForFromSide) {
                         ForEach(configuration.terminals) {
                             Text($0.name)
@@ -223,12 +234,15 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the to side of the association.
         var sectionForToElement: some View {
             Section {
-                LabeledContent {
-                    Text(candidateIsToElement ? candidate.title : embeddedFeatureFormViewModel.title)
-                } label: {
-                    Text.toElement
+                if let embeddedFeatureFormViewModel {
+                    LabeledContent {
+                        Text(candidateIsToElement ? candidate.title : embeddedFeatureFormViewModel.title)
+                    } label: {
+                        Text.toElement
+                    }
                 }
-                if let configuration = candidateIsToElement ? options?.candidateFeatureTerminalConfiguration : options?.formFeatureTerminalConfiguration {
+                if supportsTerminalSelection,
+                   let configuration = candidateIsToElement ? options?.candidateFeatureTerminalConfiguration : options?.formFeatureTerminalConfiguration {
                     Picker(selection: $terminalForToSide) {
                         ForEach(configuration.terminals) {
                             Text($0.name)
@@ -241,20 +255,25 @@ extension FeatureFormView {
             }
         }
         
-        /// A section which contains the fraction along edge slider.
-        @ViewBuilder var sectionForFractionAlongEdge: some View {
+        /// A section which contains the percent along slider.
+        @ViewBuilder var sectionForPercentAlong: some View {
             if options?.isFractionAlongEdgeValid ?? false {
                 Section {
                     LabeledContent {
-                        Text(fractionAlongEdge, format: .percent.precision(.fractionLength(0)))
+                        Text(percentAlong, format: .percent.precision(.fractionLength(0)))
                     } label: {
-                        Text(LocalizedStringResource.fractionAlongEdge)
+                        Text(LocalizedStringResource.percentAlong)
                     }
-                    Slider(value: $fractionAlongEdge, in: 0...1) {
-                        Text(LocalizedStringResource.fractionAlongEdge)
+                    Slider(value: $percentAlong, in: 0...1, step: 0.01) {
+                        Text(LocalizedStringResource.percentAlong)
                     }
                 }
             }
+        }
+        
+        /// A Boolean value indicating whether the association should include terminal selections.
+        var supportsTerminalSelection: Bool {
+            filter.kind == .connectivity
         }
     }
     

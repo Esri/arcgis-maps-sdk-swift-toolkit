@@ -25,13 +25,7 @@ extension ArcGISFeature {
     ///
     /// This property is `nil` if there is no global ID.
     var globalID: UUID? {
-        if let id = attributes["globalid"] as? UUID {
-            return id
-        } else if let id = attributes["GLOBALID"] as? UUID {
-            return id
-        } else {
-            return nil
-        }
+        attributes.valueIgnoringCase(for: "globalid") as? UUID
     }
     
     /// The symbol for the feature from its layer.

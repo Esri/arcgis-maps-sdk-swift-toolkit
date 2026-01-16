@@ -28,15 +28,10 @@ struct GroupFormElementView<Content>: View where Content: View {
     @State private var isExpanded = false
     
     var body: some View {
-        DisclosureGroup(isExpanded: $isExpanded) {
-            ForEach(visibleElements, id: \.self) { element in
-                viewCreator(element)
-                    .padding(.leading, 16)
-            }
-        } label: {
-            Header(element: element)
-                .multilineTextAlignment(.leading)
-                .tint(.primary)
+        // Using the header of an empty Section ensures that consecutive collapsed
+        // GroupFormElements have spacing consistent with other form elements.
+        Section {} header: {
+            label
         }
         .onAppear {
             isExpanded = element.initialState == .expanded
@@ -53,8 +48,56 @@ struct GroupFormElementView<Content>: View where Content: View {
                 }
             }
         }
-        // Tints the disclosure triangle.
-        .inspectorTint(.blue)
+        
+        // GroupFormElement content is placed outside the Section above for the
+        // following reasons:
+        // 1. Avoids indentation introduced by components like a DisclosureGroup.
+        // 2. Avoids unwanted impacts on appearance from nested Sections.
+        // 3. Avoids the header receiving a pill-shaped background.
+        if isExpanded {
+            ForEach(visibleElements, id: \.self) { element in
+                Section {
+                    viewCreator(element)
+                } header: {
+                    FormElementHeader(element: element)
+                } footer: {
+                    FormElementFooter(element: element)
+                }
+                .textCase(nil)
+            }
+        }
+    }
+    
+    /// The label for the group element.
+    private var label: some View {
+        Button {
+            withAnimation {
+                isExpanded.toggle()
+            }
+        } label: {
+            VStack(alignment: .leading) {
+                HStack {
+                    Text(element.label)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .fontWeight(.bold)
+                        .foregroundStyle(.tertiary)
+                        .rotationEffect(.degrees(isExpanded ? 90 : 0))
+                }
+                if !element.description.isEmpty {
+                    Text(element.description)
+                        .accessibilityIdentifier("\(element.label) Description")
+                        .font(.footnote)
+                        .multilineTextAlignment(.leading)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(.secondary)
+        .textCase(nil)
     }
     
     /// The list of visible group elements.
@@ -62,27 +105,5 @@ struct GroupFormElementView<Content>: View where Content: View {
         element
             .elements
             .filter { elementVisibility[$0] == true }
-    }
-}
-
-extension GroupFormElementView {
-    /// A view displaying a label and description of a `GroupFormElement`.
-    struct Header: View {
-        let element: GroupFormElement
-        
-        var body: some View {
-            VStack(alignment: .leading) {
-                if !element.label.isEmpty {
-                    Text(element.label)
-                        .accessibilityIdentifier("\(element.label)")
-                }
-                if !element.description.isEmpty {
-                    Text(element.description)
-                        .accessibilityIdentifier("\(element.label) Description")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
-            }
-        }
     }
 }

@@ -36,6 +36,8 @@ struct FormElementFooter: View {
         case let element as UtilityAssociationsFormElement:
             UtilityAssociationsFormElementFooter(element: element)
         default:
+            // GroupFormElement's description is shown in the DisclosureGroup's
+            // label.
             EmptyView()
         }
     }
@@ -45,12 +47,10 @@ extension FormElementFooter {
     struct FieldFormElementFooter: View {
         /// The view model for the form.
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
-        
+        /// The model for the FeatureFormView containing the view.
+        @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         /// The developer configurable validation error visibility.
         @Environment(\.validationErrorVisibilityExternal) private var validationErrorVisibilityExternal
-        
-        /// The internally managed validation error visibility.
-        @Environment(\.validationErrorVisibilityInternal) private var validationErrorVisibilityInternal
         
         let element: FieldFormElement
         
@@ -235,7 +235,7 @@ extension FormElementFooter {
             (
                 embeddedFeatureFormViewModel.previouslyFocusedElements.contains(element)
                 || validationErrorVisibilityExternal == .visible
-                || validationErrorVisibilityInternal.wrappedValue == .visible
+                || featureFormViewModel.validationErrorVisibilityInternal == .visible
             )
         }
         

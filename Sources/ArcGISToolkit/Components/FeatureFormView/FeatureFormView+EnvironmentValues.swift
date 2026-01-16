@@ -19,25 +19,13 @@ extension EnvironmentValues /* FeatureFormView */ {
     /// The visibility of the "save" and "discard" buttons.
     @Entry var editingButtonVisibility: Visibility = .automatic
     
-    /// An error thrown from a call to `FeatureForm.finishEditing()`.
-    @Entry var finishEditingError: Binding<(any Error)?> = .constant(nil)
-    
     /// The environment value which declares whether navigation to forms for features associated via utility association form
     /// elements is disabled.
     @Entry var navigationIsDisabled = false
     
-    /// The navigation path for the navigation stack presenting this view.
-    @Entry var navigationPath: Binding<NavigationPath>?
-    
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Entry var onFormEditingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
     
-    /// The environment value to set the continuation to use when the user responds to the alert.
-    @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
-    
     /// The developer configurable validation error visibility.
     @Entry var validationErrorVisibilityExternal: FeatureFormView.ValidationErrorVisibility = .automatic
-    
-    /// The internally managed validation error visibility.
-    @Entry var validationErrorVisibilityInternal: Binding<FeatureFormView.ValidationErrorVisibility> = .constant(.automatic)
 }

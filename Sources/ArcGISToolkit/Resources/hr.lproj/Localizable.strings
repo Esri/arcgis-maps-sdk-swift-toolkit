@@ -1,3 +1,9 @@
+/* A label with the name of a terminal on an associated
+utility element (first variable) and a percentage
+(second variable) indicating the relative location along
+an edge where a utility association is (logically) located. */
+"%@, %@" = "%@, %@";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld odabrano";
 
@@ -14,7 +20,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "Područje karte trenutno se ne može preuzeti.";
 
-/* A label for an option to add a new utility association. */
+/* A label for a button to add a new utility association. */
+"Add" = "Dodaj";
+
+/* A label for a button to add a new utility network association. */
 "Add Association" = "Dodaj poveznicu";
 
 /* A label for a button to add a map area. */
@@ -32,9 +41,6 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Svi unosi i rezultati praćenja bit će izgubljeni.";
 
-/* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "Dopusti";
-
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "Došlo je do pogreške prilikom dohvaćanja područja karte.";
 
@@ -44,8 +50,17 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "Naziv područja";
 
+/* A navigation title for the Association Settings page. */
+"Association Settings" = "Postavke udruženja";
+
+/* A label in reference to a utility association type. */
+"Association Type" = "Vrsta udruženja";
+
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Poveznice";
+
+/* A label for the "Attachment" utility association kind. */
+"Attachment" = "Privitak";
 
 /* A label in reference to attachments. */
 "Attachments" = "Privici";
@@ -58,6 +73,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Potrebna je provjera autentičnosti";
+
+/* A section header label in reference to the asset
+types available to use when querying for utility
+association feature candidates. */
+"Available Asset Types" = "Dostupne vrste sredstava";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Natrag";
@@ -93,17 +113,36 @@ for the AR experience. */
 /* The status text when a map area download is cancelled. */
 "Cancelled" = "Poništeno";
 
+/* A label indicating that the remote host's certificate is not trusted. */
+"Cannot Verify Server Identity" = "Nije moguće potvrditi identitet poslužitelja";
+
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Potreban certifikat";
 
-/* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "Upozorenje o povjerenju certifikata";
+/* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to compass" = "Promijeni način automatskog pomicanja na kompas";
+
+/* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to navigation" = "Promijeni način automatskog pomicanja na navigaciju";
+
+/* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to recenter" = "Promijeni način automatskog pomicanja na ponovno centriranje";
+
+/* The accessibility hint of the location button. */
+"Change location display options" = "Promijeni opcije prikaza lokacije";
+
+/* A label of a mark on a chart. */
+"chart-mark-label-value" = "Vrijednost";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Odaberi iz Datoteka";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Odaberite iz Knjižnice";
+
+/* Instructional text for the user to choose a feature
+candidate to add as a utility association. */
+"Choose to add" = "Odaberite za dodavanje";
 
 /* Cities (Level of Detail) */
 "Cities" = "Gradovi";
@@ -120,14 +159,27 @@ for the AR experience. */
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Boja";
 
-/* A label indicating a utility association's 
-containment is not visible. */
-"Content" = "Sadržaj";
+/* The accessibility value of the location button when the auto-pan mode is compass navigation. */
+"Compass navigation" = "Navigacija pomoću kompasa";
+
+/* The accessibility label of the compass button. */
+"compass-button-accessibility-label" = "Kompas";
+
+/* A label for the "Connectivity" utility association kind. */
+"Connectivity" = "Povezivost";
+
+/* A label for the "Containment" utility association kind. */
+"Containment" = "Ograđivanje";
+
+/* A label indicating whether content in the new
+association is visible or not. */
+"Content Visible" = "Sadržaj je vidljiv";
 
 /* Continent (Level of Detail) */
 "Continent" = "Kontinent";
 
-/* A label for a button used to continue the authentication operation. */
+/* A button indicating the user accepts a potentially dangerous action.
+A label for a button used to continue the authentication operation. */
 "Continue" = "Nastavak";
 
 /* A label for a button to continue editing the feature form. */
@@ -135,6 +187,9 @@ containment is not visible. */
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Nije moguće dohvatiti područja karte za ovu kartu.";
+
+/* Localized text to display the number of items in a collection. */
+"Count %lld" = "Broj %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Županije";
@@ -150,9 +205,6 @@ containment is not visible. */
 
 /* The status text for an opened map area. */
 "Currently open" = "Trenutačno otvoreno";
-
-/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Opasno: Certifikat koji daje '%@' nije potpisan od strane pouzdanog autoriteta.";
 
 /* Text indicating a field's value must not exceed a maximum date. */
 "Date exceeds maximum" = "Datum premašuje maksimalnu vrijednost";
@@ -214,6 +266,9 @@ containment is not visible. */
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Dvostruke početne točke ne mogu se dodati.";
+
+/* The cardinal direction East. */
+"East" = "Istok";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -286,11 +341,14 @@ The variable provides additional data. */
 to be used as a trace starting point. */
 "Failed to set starting point" = "Postavljanje početne točke nije uspjelo";
 
+/* The accessibility value of the location button when the location display fails to start. */
+"Failed to start" = "Pokretanje nije uspjelo";
+
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
 "Feature Results" = "Rezultati geoobjekata";
 
-/* A field in a set of data contained in a popup. */
+/* A field in a dataset. */
 "Field" = "Polje";
 
 /* A label in reference to fields in a set of data contained in a popup. */
@@ -299,9 +357,21 @@ trace operation. */
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "Filtriraj";
 
+/* A label for a search field to filter utility 
+asset types by name. */
+"Filter asset types by name" = "Filtriraj vrstu sredstava po nazivu";
+
+/* A label for a search field to filter utility 
+association candidate features by name. */
+"Filter candidates by name" = "Filtriraj kandidate po imenu";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "Filtriraj mjesta usluge";
+
+/* A label for a search field to filter utility 
+association feature sources by name. */
+"Filter feature sources by name" = "Filtriraj izvore geoobjekata po imenu";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
@@ -317,8 +387,16 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "Završetak uređivanja nije uspio. %@";
 
-/* A label in reference to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an 
+edge of a utility network element. */
 "Fraction Along Edge" = "Frakcija uz rub";
+
+/* A label for the element on the "from" side of a utility association. */
+"From Element" = "Iz elementa";
+
+/* A label for a button to choose a feature for a new
+utility association from a network data source. */
+"From Network Data Source" = "Iz mrežnog izvora podataka";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
@@ -328,11 +406,37 @@ trace operation. */
 AR experience. */
 "heading" = "naslov";
 
+/* The accessibility value of a compass. The first
+variable is a heading in degrees and the second
+variable is a cardinal or intercardinal direction. */
+"Heading: %@ %@" = "Naslov: %@ %@";
+
+/* The section header for the auto-pan section in the location button context menu. */
+"Hide Location" = "Sakrij lokaciju";
+
+/* The accessibility hint of the hide location display context menu option. */
+"Hide location display" = "Sakrij prikaz lokacije";
+
 /* House Property (Level of Detail) */
 "House Property" = "Kućno vlasništvo";
 
 /* Houses (Level of Detail) */
 "Houses" = "Kuće";
+
+/* A label indicating that a challenge should be ignored. */
+"Ignore" = "Zanemari";
+
+/* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
+"Junction Edge Object Connectivity From Side" = "Povezanost objekta spoja i grane s početne strane";
+
+/* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
+"Junction Edge Object Connectivity Midspan" = "Povezanost objekta spoja i grane na sredini segmenta";
+
+/* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
+"Junction Edge Object Connectivity To Side" = "Povezanost objekta spoja i grane sa završne strane";
+
+/* A label for a pie chart legend item label. */
+"Label" = "Oznaka";
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Manje od minimalne vrijednosti";
@@ -345,6 +449,38 @@ AR experience. */
 
 /* The status text when a map area failed to load. */
 "Loading failed" = "Učitavanje nije uspjelo";
+
+/* The accessibility label of the location button when the location display is not showing. */
+"Location display" = "Prikaz lokacije";
+
+/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-compass" = "Kompas";
+
+/* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-navigation" = "Navigacija";
+
+/* The label text for turning the auto-pan mode off in the location button context menu. */
+"location-button-accessibility-value-off" = "Isključeno";
+
+/* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-recenter" = "Ponovno centriraj";
+
+/* The accessibility label of the location button when the 
+location display is showing and the button cycles 
+through auto-pan modes. */
+"location-button-auto-pan-accessibility-label" = "Automatsko pomicanje";
+
+/* The header of the auto-pan section in the location button context menu. */
+"location-button-auto-pan-section-header-title" = "Automatsko pomicanje";
+
+/* The accessibility value of the location button when the auto-pan mode is navigation. */
+"location-button-status-label-navigation" = "Navigacija";
+
+/* The accessibility value of the location button when the auto-pan mode is off. */
+"location-button-status-label-off" = "Isključeno";
+
+/* The accessibility value of the location button when the auto-pan mode is recenter. */
+"location-button-status-label-recenter" = "Ponovno centriraj";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Područja karte";
@@ -370,6 +506,12 @@ AR experience. */
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Način";
 
+/* A label for a button to view details for a list row. */
+"More Information" = "Više informacija";
+
+/* A label for a button to see more options for a list row. */
+"More Options" = "Više opcija";
+
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Naziv";
 
@@ -379,20 +521,40 @@ AR experience. */
 /* A label in reference to a specific utility network. */
 "Network" = "Mreža";
 
+/* A navigation title for a page listing
+data sources in a utility network. */
+"Network Data Source" = "Mrežni izvor podataka";
+
+/* A navigation title for a view to create a new association in. */
+"New Association" = "Novo povezivanje";
+
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Novi naziv";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "Novo praćenje";
 
-/* A label indicating that no associations are available for the popup element. */
+/* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "Nema poveznica";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Nema knjižnih oznaka";
 
+/* A label indicating no utility association 
+candidates matching the filter criteria were
+found. */
+"No Candidates Found" = "Nema pronađenih kandidata";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Nema dostupnih konfiguracija.";
+
+/* A label indicating no utility association 
+feature sources were found. */
+"No Feature Sources Found" = "Nema pronađenih izvora geoobjekata";
+
+/* A label indicating no utility association 
+filter results were found. */
+"No Filter Results Found" = "Nema pronađenih rezultata filtriranja";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Nema internetske veze";
@@ -418,6 +580,15 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "Nema vrijednosti";
 
+/* The cardinal direction North. */
+"North" = "Sjever";
+
+/* The intercardinal direction Northeast. */
+"Northeast" = "Sjeveroistok";
+
+/* The intercardinal direction Northwest. */
+"Northwest" = "Sjeverozapad";
+
 /* A trace function output result was not provided. */
 "Not Available" = "Nije dostupno";
 
@@ -433,8 +604,16 @@ AR experience. */
 /* A label for button to proceed with an operation. */
 "OK" = "U redu";
 
+/* A label indicating features can be selected by
+interactively tapping on the map. */
+"On Map" = "Na karti";
+
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Učitavanje mrežne karte nije uspjelo";
+
+/* Helper text indicating that an accompanying button only 
+removes only the association.  */
+"Only removes the association. The feature remains." = "Uklanja samo udruženje. Geoobjekt ostaje.";
 
 /* A label for a button to open a map area. */
 "Open" = "Otvori";
@@ -453,6 +632,10 @@ AR experience. */
 
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Potrebna lozinka";
+
+/* A label in reference to a percent along an 
+edge of a utility network element. */
+"Percent Along" = "Postotak dužine";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Omogućite pristup kameri u postavkama.";
@@ -481,6 +664,15 @@ The variable provides additional data. */
 /* A label for a button to refresh map area content. */
 "Refresh" = "Osvježi";
 
+/* A label for a button to remove a utility network association. */
+"Remove" = "Ukloni";
+
+/* A label for a button to remove a utility association. */
+"Remove Association" = "Ukloni udruženje";
+
+/* A label for a confirmation to remove a utility association. */
+"Remove association?" = "Ukloniti poveznicu?";
+
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Ukloni preuzimanje";
 
@@ -489,6 +681,9 @@ The variable provides additional data. */
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
 "Rename attachment" = "Preimenuj privitak";
+
+/* The accessibility hint of the compass component. */
+"Reorient map north" = "Orijentiraj kartu prema sjeveru";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -512,6 +707,14 @@ current visible extent of the map or scene. */
 
 /* A label for a button to save edits. */
 "Save Edits" = "Spremi uređivanja";
+
+/* A generic prompt for a search field where a more
+specific prompt has not been provided. */
+"Search" = "Pretraga";
+
+/* A label for a search bar to search through feature 
+candidates to use in a new utility association. */
+"Search Features" = "Pretraži geoobjekte";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Upit za pretraživanje";
@@ -538,6 +741,9 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "Prikaži sve";
 
+/* A label for a button to show the indicated feature on the map. */
+"Show On Map" = "Prikaži na karti";
+
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Web-mjesta";
 
@@ -547,9 +753,21 @@ or more levels in a floor-aware map or scene. */
 /* Small Building (Level of Detail) */
 "Small Building" = "Mala zgrada";
 
+/* The cardinal direction South. */
+"South" = "Jug";
+
+/* The intercardinal direction Southeast. */
+"Southeast" = "Jugoistok";
+
+/* The intercardinal direction Southwest. */
+"Southwest" = "Jugozapad";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Nepodudaranje prostorne reference.";
+
+/* The accessibility value of the location button when the location display is starting. */
+"Starting" = "Pokretanje";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
@@ -560,6 +778,12 @@ network trace operation. */
 
 /* States/Provinces (Level of Detail) */
 "States/Provinces" = "Pokrajine/Županije";
+
+/* The accessibility value of the location button when the location display is not showing. */
+"Stopped" = "Zaustavljeno";
+
+/* The accessibility value of the location button when the location display is stopping. */
+"Stopping" = "Zaustavljanje";
 
 /* Street (Level of Detail) */
 "Street" = "Ulica";
@@ -577,6 +801,9 @@ place an ArcGIS Scene. */
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "Dodirnite sliku za više informacija.";
+
+/* A label in reference to a utility terminal. */
+"Terminal" = "Terminal";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Konfiguracija terminala";
@@ -600,6 +827,9 @@ match the spatial reference of the map. */
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Obrazac nije poslan";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Identitet \"%@\" nije moguće potvrditi. Želite li se ipak povezati?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Karta nema prostornu referencu";
@@ -632,6 +862,9 @@ to be imported as an attachment. */
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Naziv";
 
+/* A label for the element on the "to" side of a utility association. */
+"To Element" = "U element";
+
 /* A label for a button to choose the current date for a field. */
 "Today" = "Danas";
 
@@ -650,8 +883,14 @@ to be imported as an attachment. */
 /* A label in reference to a utility network trace configuration. */
 "Trace Configuration" = "Konfiguracija praćenja";
 
+/* A label indicating that a utility network trace is running. */
+"Tracingâ€¦" = "Traganje";
+
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Pokušaj ponovno";
+
+/* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
+"Turn off auto-pan" = "Isključi automatsko pomicanje";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Nepoznato";
@@ -673,11 +912,11 @@ without saving. */
 /* A label in reference to a credential username. */
 "Username" = "Korisničko ime";
 
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "Nepoznato";
+
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Greške kod provjere valjanosti";
-
-/* A value in a set of data contained in a popup. */
-"Value" = "Vrijednost";
 
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
@@ -710,8 +949,15 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "Prikaži";
 
 /* A label indicating a utility association's 
+containment is not visible. */
+"Visible: false" = "Vidljivo: ne";
+
+/* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "Vidljivi sadržaj";
+"Visible: true" = "Vidljivo: da";
+
+/* The cardinal direction West. */
+"West" = "Zapad";
 
 /* World (Level of Detail) */
 "World" = "Svijet";

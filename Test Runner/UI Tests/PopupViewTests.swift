@@ -581,7 +581,7 @@ final class PopupViewTests: XCTestCase {
     func testUNASearchResults() {
         let app = XCUIApplication()
         let associationResults = app.staticTexts.matching(identifier: "Association Result")
-        let cancelButton = app.buttons["Cancel"]
+        let clearTextButton = app.buttons["Clear text"]
         let filterResult = app.buttons["Content, 6"]
         let popupTitle = app.navigationBars["Electric Distribution Assembly: Fuse Bank"]
         let groupResult = app.staticTexts["Electric Distribution Device, 6"]
@@ -630,12 +630,12 @@ final class PopupViewTests: XCTestCase {
             "There are filter results that do not contain \"Arrester\" in their title."
         )
         
-        // Expectation: The cancel button brings back all the results.
+        // Expectation: The clear text button brings back all the results.
         XCTAssertTrue(
-            cancelButton.exists,
-            "The \"Cancel\" button doesn't exist."
+            clearTextButton.exists,
+            "The \"Clear text\" button doesn't exist."
         )
-        cancelButton.tap()
+        clearTextButton.tap()
         
         XCTAssertTrue(
             app.wait(for: \.keyboards.count, toEqual: 0, timeout: 3),

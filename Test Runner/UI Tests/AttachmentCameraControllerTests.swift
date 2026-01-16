@@ -22,23 +22,21 @@ final class AttachmentCameraControllerTests: XCTestCase {
     
     /// Test `AttachmentCameraController.onCameraCaptureModeChanged(perform:)`
     func testOnCameraCaptureModeChanged() throws {
-        let isUnsupportedEnvironment: Bool
 #if targetEnvironment(simulator) || targetEnvironment(macCatalyst)
-        isUnsupportedEnvironment = true
-#else
-        isUnsupportedEnvironment = false
+        throw XCTSkip("This test intended for iOS devices only.")
 #endif
-        try XCTSkipIf(isUnsupportedEnvironment, "This test intended for iOS devices only.")
+        
+        guard #available(iOS 26.0, *) else {
+            throw XCTSkip("Unsupported iOS version")
+        }
         
         let app = XCUIApplication()
-        let cameraModeController = app.otherElements["CameraMode"]
+        let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
         let cameraModeLabel = app.staticTexts["Camera Capture Mode"]
-        let device = UIDevice.current.userInterfaceIdiom
-        let orientation = app.staticTexts["Device Orientation"]
+        let photoButton = app.buttons["PHOTO"]
+        let videoButton = app.buttons["VIDEO"]
         
         app.launch()
-        
-        let attachmentCameraControllerTestsButton = app.buttons["AttachmentCameraController Tests"]
         
         XCTAssertTrue(
             attachmentCameraControllerTestsButton.exists,
@@ -46,35 +44,25 @@ final class AttachmentCameraControllerTests: XCTestCase {
         )
         attachmentCameraControllerTestsButton.tap()
         
-        // Wait for camera access alert's allow button.
-        XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
-        allowButton.tap()
-        
-        XCTAssertTrue(
-            cameraModeController.waitForExistence(timeout: 5)
-        )
-        
-        if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
-            cameraModeController.swipeDown()
-        } else if orientation.label == "Landscape Left" {
-            cameraModeController.swipeUp()
-        } else /* iPhone - portrait */ {
-            cameraModeController.swipeRight()
+        if allowButton.waitForExistence(timeout: 1) {
+            // Provide camera permission if prompted.
+            allowButton.tap()
         }
         
-        // Wait for microphone access alert's allow button.
-        XCTAssertTrue(allowButton.waitForExistence(timeout: 5))
-        allowButton.tap()
+        XCTAssertTrue(videoButton.waitForExistence(timeout: 5))
+        
+        app.buttons["VIDEO"].tap()
+        
+        if allowButton.waitForExistence(timeout: 1) {
+            // Provide microphone permission if prompted.
+            allowButton.tap()
+        }
         
         XCTAssertEqual(cameraModeLabel.label, "Video")
         
-        if device == .pad || (device == .phone && orientation.label == "Landscape Right") {
-            cameraModeController.swipeUp()
-        } else if orientation.label == "Landscape Left" {
-            cameraModeController.swipeDown()
-        } else /* iPhone - portrait */ {
-            cameraModeController.swipeLeft()
-        }
+        XCTAssertTrue(photoButton.waitForExistence(timeout: 5))
+        
+        app.buttons["PHOTO"].tap()
         
         XCTAssertEqual(cameraModeLabel.label, "Photo")
     }

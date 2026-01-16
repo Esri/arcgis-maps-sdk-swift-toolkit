@@ -21,39 +21,45 @@ extension FeatureFormView {
         /// The view model for the form.
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
         
-        /// The model for fetching the form element's associations filter results.
-        @State private var associationsFilterResultsModel: AssociationsFilterResultsModel
-        
         /// The form element.
         let element: UtilityAssociationsFormElement
         
         init(element: UtilityAssociationsFormElement) {
             self.element = element
-            self._associationsFilterResultsModel = .init(wrappedValue: .init(element: element, includeEmptyFilterResults: true))
+        }
+        
+        /// The model for fetching the form element's associations filter results.
+        var associationsFilterResultsModel: AssociationsFilterResultsModel? {
+            embeddedFeatureFormViewModel.associationsFilterResultsModels[element]
         }
         
         var body: some View {
             Group {
-                switch associationsFilterResultsModel.result {
+                switch associationsFilterResultsModel?.result {
                 case .success(let results):
-                    FeatureFormGroupedContentView(content: results.map {
+                    ForEach(results, id: \.filter.kind) { result in
                         Row(
                             associationsFilterResultsModel: associationsFilterResultsModel,
                             element: element,
-                            filter: $0.filter
+                            filter: result.filter,
+                            form: embeddedFeatureFormViewModel.featureForm
                         )
                         .environment(embeddedFeatureFormViewModel)
-                    })
+                    }
                 case .failure(let error):
-                    FeatureFormGroupedContentView(content: [
-                        Text.errorFetchingFilterResults(error)
-                    ])
+                    Text.errorFetchingFilterResults(error)
                 case .none:
-                    FeatureFormGroupedContentView(content: [ProgressView()])
+                    ProgressView()
                 }
             }
             .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
-                associationsFilterResultsModel.fetchResults()
+                associationsFilterResultsModel?.fetchResults()
+            }
+            .task {
+                self.embeddedFeatureFormViewModel.associationsFilterResultsModels[element] = .init(
+                    element: element,
+                    includeEmptyFilterResults: true
+                )
             }
         }
     }
@@ -62,29 +68,30 @@ extension FeatureFormView {
     private struct Row: View {
         /// The view model for the form.
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
-        /// The navigation path for the navigation stack presenting this view.
-        @Environment(\.navigationPath) var navigationPath
+        /// The model for the FeatureFormView containing the view.
+        @Environment(FeatureFormViewModel.self) var featureFormViewModel
         
         /// The model containing the latest association filter results.
-        let associationsFilterResultsModel: AssociationsFilterResultsModel
+        let associationsFilterResultsModel: AssociationsFilterResultsModel?
         /// The form element containing the filter result.
         let element: UtilityAssociationsFormElement
         /// The referenced utility associations filter.
         let filter: UtilityAssociationsFilter
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         
         /// The referenced utility associations filter result.
         var result: UtilityAssociationsFilterResult? {
-            try? associationsFilterResultsModel.result?
+            try? associationsFilterResultsModel?.result?
                 .get()
                 .first(where: { $0.filter === filter } )
         }
         
         var body: some View {
             Button {
-                navigationPath?.wrappedValue.append(
+                featureFormViewModel.navigationPath.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
-                        embeddedFeatureFormViewModel,
-                        associationsFilterResultsModel,
+                        form,
                         element,
                         filter
                     )

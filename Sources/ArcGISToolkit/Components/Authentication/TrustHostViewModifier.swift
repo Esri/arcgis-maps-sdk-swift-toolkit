@@ -41,18 +41,18 @@ struct TrustHostViewModifier: ViewModifier {
             }
             .alert(
                 String(
-                    localized: "Certificate Trust Warning",
+                    localized: "Cannot Verify Server Identity",
                     bundle: .toolkitModule,
                     comment: "A label indicating that the remote host's certificate is not trusted."
                 ),
                 isPresented: $isPresented,
                 actions: {
-                    Button(role: .destructive) {
+                    Button {
                         isPresented = false
                         challenge.resume(with: .continueWithCredential(.serverTrust))
                     } label: {
                         Text(
-                            "Allow",
+                            "Continue",
                             bundle: .toolkitModule,
                             comment: "A button indicating the user accepts a potentially dangerous action."
                         )
@@ -66,7 +66,7 @@ struct TrustHostViewModifier: ViewModifier {
                 },
                 message: {
                     Text(
-                        "Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
+                        "The identity of \"\(challenge.host)\" cannot be verified. Would you like to connect anyway?",
                         bundle: .toolkitModule,
                         comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
                     )

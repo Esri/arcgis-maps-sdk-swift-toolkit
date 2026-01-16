@@ -18,24 +18,82 @@ import SwiftUI
 extension FeatureFormView {
     /// A view to choose a feature source when selecting a feature to create a utility association with.
     struct UtilityAssociationFeatureCandidatesView: View {
+        /// The model for the FeatureFormView containing the view.
+        @Environment(FeatureFormViewModel.self) var featureFormViewModel
+        
         /// The candidates that can be used to create an association.
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
         /// The phrase used to filter candidates by name.
         @State private var filterPhrase = ""
+        /// The parameters for retrieving the next page of results.
+        @State private var nextQueryParameters: QueryParameters?
+        /// A Boolean value indicating whether a filter based query is running.
+        @State private var queryForFilterPhraseIsRunning = false
+        /// A Boolean value indicating if the initial candidate query is complete.
+        @State private var queryForFirstPageIsComplete = false
+        /// A Boolean value indicating whether a query is running.
+        @State private var queryIsRunning = false
+        /// The task for the current query.
+        @State private var queryTask: Task<Void, Never>?
         
         /// The asset type to use when querying for feature candidates.
         let assetType: UtilityAssetType
         /// The element to add the new association to.
         let element: UtilityAssociationsFormElement
-        /// The model for the feature form containing the element to add the association to.
-        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         /// The filter to use when creating the association.
         let filter: UtilityAssociationsFilter
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
         /// The feature source to query and obtain candidates from.
         let source: UtilityAssociationFeatureSource
         
+        var body: some View {
+            List {
+                sectionForFilter
+                if !queryForFirstPageIsComplete {
+                    ProgressView()
+                        .task {
+                            let parameters = QueryParameters()
+                            parameters.whereClause = "1=1"
+                            queryFeatures(parameters: parameters)
+                            await queryTask?.value
+                            queryForFirstPageIsComplete = true
+                        }
+                } else {
+                    if filteredCandidates.isEmpty {
+                        if queryForFilterPhraseIsRunning {
+                            ProgressView()
+                                .id(filterPhrase)
+                        } else if !queryIsRunning {
+                            contentUnavailableView
+                        }
+                    } else {
+                        sectionForCandidates
+                    }
+                }
+            }
+        }
+        
+        /// A view to indicate no utility association candidate results were found.
+        var contentUnavailableView: some View {
+            ContentUnavailableView(
+                String(
+                    localized: LocalizedStringResource(
+                        "No Candidates Found",
+                        bundle: .toolkit,
+                        comment: """
+                        A label indicating no utility association 
+                        candidates matching the filter criteria were
+                        found.
+                        """
+                    )
+                ),
+                systemImage: "exclamationmark.magnifyingglass"
+            )
+        }
+        
         /// The candidates that can be used to create an association filtered by name.
-        private var filteredCandidates: [UtilityAssociationFeatureCandidate] {
+        var filteredCandidates: [UtilityAssociationFeatureCandidate] {
             if filterPhrase.isEmpty {
                 candidates
             } else {
@@ -43,41 +101,52 @@ extension FeatureFormView {
             }
         }
         
-        var body: some View {
-            List {
-                sectionForFilter
-                Section {
-                    ForEach(filteredCandidates, id: \.title) { candidate in
-                        NavigationLink(
-                            value: FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
-                                embeddedFeatureFormViewModel,
-                                candidate,
+        /// A section with the candidate results.
+        var sectionForCandidates: some View {
+            Section {
+                ForEach(filteredCandidates, id: \.feature.globalID) { candidate in
+                    Button {
+                        featureFormViewModel.navigationPath.append(
+                            FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
+                                form,
                                 element,
-                                filter
+                                filter,
+                                candidate
                             )
-                        ) {
+                        )
+                    } label: {
+                        HStack {
                             CandidateLabel(candidate: candidate)
                                 .lineLimit(4)
                                 .truncationMode(.middle)
+                            Spacer()
+                            ShowOnMapButton(feature: candidate.feature)
+                                .labelStyle(.iconOnly)
                         }
                     }
-                } header: {
-                    Text(
-                        "Choose to add",
-                        bundle: .toolkitModule,
-                        comment: """
-                            Instructional text for the user to choose a feature
-                            candidate to add as a utility association.
-                            """
-                    )
-                    .font(.caption)
-                    .textCase(nil)
+                    .tint(.primary)
                 }
-            }
-            .task {
-                let parameters = QueryParameters()
-                parameters.whereClause = "1=1"
-                candidates = (try? await source.queryFeatures(assetType: assetType, parameters: parameters).candidates) ?? []
+                if let nextQueryParameters {
+                    if filterPhrase.isEmpty {
+                        // Paging via scrolling
+                        ProgressView()
+                            .id(nextQueryParameters.resultOffset)
+                            .task {
+                                queryFeatures(parameters: nextQueryParameters)
+                            }
+                    }
+                }
+            } header: {
+                Text(
+                    "Choose to add",
+                    bundle: .toolkitModule,
+                    comment: """
+                        Instructional text for the user to choose a feature
+                        candidate to add as a utility association.
+                        """
+                )
+                .font(.caption)
+                .textCase(nil)
             }
         }
         
@@ -103,6 +172,27 @@ extension FeatureFormView {
                             """
                     )
                 )
+                .disabled(!queryForFirstPageIsComplete)
+                .task(id: filterPhrase) {
+                    try? await Task.sleep(for: .milliseconds(500))
+                    queryForFilterPhraseIsRunning = true
+                    while !Task.isCancelled, filteredCandidates.isEmpty, let nextQueryParameters {
+                        queryFeatures(parameters: nextQueryParameters)
+                        await queryTask?.value
+                    }
+                    queryForFilterPhraseIsRunning = false
+                }
+            }
+        }
+        
+        func queryFeatures(parameters: QueryParameters) {
+            queryTask?.cancel()
+            queryIsRunning = true
+            queryTask = Task {
+                let result = try? await source.queryFeatures(assetType: assetType, parameters: parameters)
+                candidates.append(contentsOf: result?.candidates ?? [])
+                nextQueryParameters = result?.nextQueryParams
+                queryIsRunning = false
             }
         }
     }
@@ -121,10 +211,14 @@ extension FeatureFormView {
             } icon: {
                 if let symbol {
                     symbol
+                        .foregroundStyle(.secondary)
                 } else {
                     ProgressView()
                         .task {
-                            symbol = await candidate.feature.symbol
+                            symbol = await candidate
+                                .feature
+                                .symbol
+                            ?? Image(systemName: "questionmark.circle")
                         }
                 }
             }

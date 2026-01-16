@@ -34,7 +34,7 @@ private struct PopupViewToolbar: ViewModifier {
             .toolbar {
                 if let isPresented {
                     ToolbarItem(placement: .topBarTrailing) {
-                        XButton(.dismiss) {
+                        DismissButton(kind: .close) {
                             isPresented.wrappedValue = false
                         }
                         .font(.headline)

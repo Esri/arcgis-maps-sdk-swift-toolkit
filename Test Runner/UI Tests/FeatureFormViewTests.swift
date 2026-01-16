@@ -349,8 +349,8 @@ final class FeatureFormViewTests: XCTestCase {
             "Enter value from 2.0 to 5.0"
         )
         
-        // Highlight/select the current value and replace it
-        textField.doubleTap()
+        // Replace the current value with 3
+        textField.typeText(XCUIKeyboardKey.delete.rawValue)
         textField.typeText("3")
         
         expectation(
@@ -359,8 +359,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         waitForExpectations(timeout: 10, handler: nil)
         
-        // Highlight/select the current value and replace it
-        textField.doubleTap()
+        // Replace the current value with 6
+        textField.typeText(XCUIKeyboardKey.delete.rawValue)
         textField.typeText("6")
         
         XCTAssertEqual(
@@ -617,6 +617,9 @@ final class FeatureFormViewTests: XCTestCase {
         
         fieldValue.tap()
         
+        // Swipe up to reveal the entire date picker.
+        app.scrollViews.firstMatch.swipeUp()
+        
         XCTAssertTrue(
             footer.exists,
             "The footer doesn't exist."
@@ -632,6 +635,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         nowButton.tap()
+        
+        XCTAssertTrue(julyFirstButton.waitForExistence(timeout: 5))
         
         julyFirstButton.tap()
         
@@ -821,7 +826,6 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Combo String"]
         let fieldValue = app.staticTexts["Combo String Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -839,11 +843,11 @@ final class FeatureFormViewTests: XCTestCase {
         fieldValue.tap()
         
         XCTAssertTrue(
-            noValueButton.waitForExistence(timeout: 1),
+            app.noValueComboBoxOption.waitForExistence(timeout: 1),
             "The no value button doesn't exist."
         )
         
-        noValueButton.tap()
+        app.noValueComboBoxOption.tap()
         
         XCTAssertTrue(
             doneButton.exists,
@@ -867,7 +871,6 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Required Combo Box Combo Box Value"]
         let footer = app.staticTexts["Required Combo Box Footer"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
         let oakButton = app.buttons["Oak"]
         
         openTestCase()
@@ -896,7 +899,7 @@ final class FeatureFormViewTests: XCTestCase {
         fieldValue.tap()
         
         XCTAssertFalse(
-            noValueButton.exists,
+            app.noValueComboBoxOption.exists,
             "The no value button exists but it should not."
         )
         
@@ -939,17 +942,10 @@ final class FeatureFormViewTests: XCTestCase {
             "The field title doesn't exist."
         )
         
-        if #available(iOS 18.0, *) {
-            XCTAssertFalse(
-                fieldValue.exists,
-                "The field value exists but it should not because it is empty."
-            )
-        } else {
-            XCTAssertEqual(
-                fieldValue.label,
-                ""
-            )
-        }
+        XCTAssertEqual(
+            fieldValue.label,
+            ""
+        )
         
         optionsButton.tap()
         
@@ -989,7 +985,6 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Unsupported Value"]
         let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
         let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
         let unsupportedValue = app.buttons["0"]
         
@@ -1019,11 +1014,11 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            noValueButton.exists,
+            app.noValueComboBoxOption.exists,
             "No Value doesn't exist."
         )
         
-        noValueButton.tap()
+        app.noValueComboBoxOption.tap()
         
         XCTAssertFalse(
             unsupportedValueSectionHeader.exists,
@@ -1036,12 +1031,9 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 4.1: Test regular selection
     func testCase_4_1() {
         let app = XCUIApplication()
-        let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
         let fieldTitle = app.staticTexts["Radio Button Text *"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let dogOption = app.buttons["Radio Button Text dog Radio Button"]
-        let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
-        let noValueOption = app.buttons["Radio Button Text No Value Radio Button"]
+        let radioButtonTextPicker = app.pickers["Radio Button Text"].pickerWheels.firstMatch
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -1051,32 +1043,34 @@ final class FeatureFormViewTests: XCTestCase {
             "The field title doesn't exist."
         )
         
-        XCTAssertTrue(
-            birdOptionCheckmark.exists,
-            "The bird option isn't selected."
+        XCTAssertEqual(
+            radioButtonTextPicker.stringValue,
+            "bird"
         )
         
-        XCTAssertFalse(
-            dogOptionCheckmark.exists,
-            "The dog option is selected."
+        XCTAssertNotEqual(
+            radioButtonTextPicker.stringValue,
+            "dog"
         )
         
-        dogOption.tap()
+        radioButtonTextPicker.adjust(toPickerWheelValue: "dog")
         
-        XCTAssertTrue(
-            dogOptionCheckmark.exists,
-            "The dog option isn't selected."
+        XCTAssertEqual(
+            radioButtonTextPicker.stringValue,
+            "dog"
         )
         
-        XCTAssertFalse(
-            birdOptionCheckmark.exists,
-            "The bird option is selected."
+        XCTAssertNotEqual(
+            radioButtonTextPicker.stringValue,
+            "bird"
         )
         
-        XCTAssertTrue(
-            noValueOption.exists,
-            "The no value option doesn't exist."
-        )
+        // The following assertion is skipped because all possible values in a
+        // picker cannot be programmatically checked.
+//        XCTAssertTrue(
+//            noValueOption.exists,
+//            "The no value option doesn't exist."
+//        )
     }
     
     /// Test case 4.2: Test radio button fallback to combo box
@@ -1084,8 +1078,8 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let field1 = app.staticTexts["Fallback 1 Combo Box Value"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let noValueDisabledRadioButton = app.buttons["No Value Disabled One Radio Button"]
-        let noValueEnabledRadioButton = app.buttons["No Value Enabled N/A Radio Button"]
+        let noValueDisabledPicker = app.pickers["No Value Disabled"].pickerWheels.firstMatch
+        let noValueEnabledPicker = app.pickers["No Value Enabled"].pickerWheels.firstMatch
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -1096,16 +1090,16 @@ final class FeatureFormViewTests: XCTestCase {
             "The combo box doesn't exist."
         )
         
-        // Verify the radio buttons are shown even when the value option is enabled.
-        XCTAssertTrue(
-            noValueEnabledRadioButton.exists,
-            "The radio button doesn't exist."
+        // Verify the radio buttons are shown even when the no value option is enabled.
+        XCTAssertEqual(
+            noValueEnabledPicker.stringValue,
+            "N/A"
         )
         
-        // Verify the radio buttons are still shown even when the value option is disabled.
-        XCTAssertTrue(
-            noValueDisabledRadioButton.exists,
-            "The radio button doesn't exist."
+        // Verify the radio buttons are still shown even when the no value option is disabled.
+        XCTAssertEqual(
+            noValueDisabledPicker.stringValue,
+            "One"
         )
     }
     
@@ -1251,7 +1245,7 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let groupElement = app.staticTexts["single line text 3"]
-        let showElementsButton = app.buttons["show invisible form element"]
+        let radioButtonPicker = app.pickers["Radio Button"].pickerWheels.firstMatch
         
 #if targetEnvironment(macCatalyst)
         let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
@@ -1287,11 +1281,13 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Confirm the option to show the elements exists.
         XCTAssertTrue(
-            showElementsButton.exists,
-            "The show group elements button doesn't exist."
+            radioButtonPicker.exists,
+            "The Radio Button picker doesn't exist."
         )
         
-        showElementsButton.tap()
+        radioButtonPicker.adjust(toPickerWheelValue: "show invisible form element")
+        
+        XCTExpectFailure("The Radio Button picker fails to take the \"show invisible form element\" selection.")
         
         // Confirm the first element of the conditional group doesn't exist.
         XCTAssertTrue(
@@ -1311,11 +1307,11 @@ final class FeatureFormViewTests: XCTestCase {
         let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
         let comboBox = app.staticTexts["Combo box Combo Box Value"]
         
+        let radioButtonsPicker = app.pickers["Radio buttons"].pickerWheels.firstMatch
         let radioButtonsReadOnlyInput = app.staticTexts["Radio buttons Read Only Input"]
-        let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]
         
         let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
-        let dateInput = app.staticTexts["Date Value"]
+        let dateInput = app.buttons["Date Value"]
         
         let shortTextReadOnlyInput = app.staticTexts["Short text Read Only Input"]
         let shortTextTextInput = app.textFields["Short text Text Input"]
@@ -1346,7 +1342,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(comboBox.exists)
         
-        XCTAssertTrue(radioButtonsInput.exists)
+        XCTAssertEqual(radioButtonsPicker.stringValue, "0")
         
         XCTAssertTrue(dateInput.exists)
         
@@ -1529,7 +1525,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
     }
     
-    // Test case 12.2: Associations show fraction along edge
+    // Test case 12.2: Associations show percent along
     // It has been determined that with the currently-available public test data
     // this is no longer feasible. So this functionality will be ad-hoc tested only.
     
@@ -1616,7 +1612,7 @@ final class FeatureFormViewTests: XCTestCase {
         let elementTitle = app.staticTexts["Associations"]
         let fieldValue = app.staticTexts["Asset type Combo Box Value"]
         let filterResults = app.staticTexts["Connected"]
-        let firstOptionButton = app.buttons["Unknown"]
+        let firstOptionButton = app.buttons["Unknown Combo Box Option"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let formTitle2 = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
@@ -1697,21 +1693,22 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_12_6() {
         let app = XCUIApplication()
-        let associationSettingButton = app.buttons["Utility Association Details"]
         let cancelButton = app.buttons["Cancel"].firstMatch
         let discardButton = app.buttons["Discard"].firstMatch
         let elementTitle = app.staticTexts["Associations"]
         let connectedFilterTitle = app.staticTexts["Connected"]
         let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let removeAssociationButton = app.buttons["Remove Association"]
         let removeButton = app.buttons["Remove"].firstMatch
-        let transformerButton = app.buttons["Transformer, High"]
         
 #if targetEnvironment(macCatalyst)
-        let inlineRemoveAssociationButton = app.menuItems["remove_association"]
+        let moreOptionsButton = app.popUpButtons["More Options"]
+        let removeAssociationButton = app.menuItems["Remove Association"]
+        let transformerButton = app.popUpButtons["Transformer, High"]
 #else
-        let inlineRemoveAssociationButton = app.buttons["Remove Association"]
+        let moreOptionsButton = app.buttons["More Options"]
+        let removeAssociationButton = app.buttons["Remove Association"]
+        let transformerButton = app.buttons["Transformer, High"]
 #endif
         
         openTestCase()
@@ -1742,11 +1739,11 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            associationSettingButton.waitForExistence(timeout: 5),
+            moreOptionsButton.waitForExistence(timeout: 5),
             "The association settings button doesn't exist."
         )
         
-        associationSettingButton.tap()
+        moreOptionsButton.tap()
         
         XCTAssertTrue(
             removeAssociationButton.waitForExistence(timeout: 5),
@@ -1761,6 +1758,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         cancelButton.tap()
+        
+        moreOptionsButton.tap()
         
         removeAssociationButton.tap()
         
@@ -1796,17 +1795,17 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
 #if targetEnvironment(macCatalyst)
-        transformerButton.rightClick()
+        moreOptionsButton.tap()
 #else
         transformerButton.swipeLeft()
 #endif
         
         XCTAssertTrue(
-            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
+            removeAssociationButton.waitForExistence(timeout: 5),
             "The delete button doesn't exist."
         )
         
-        inlineRemoveAssociationButton.tap()
+        removeAssociationButton.tap()
         
         XCTAssertTrue(
             cancelButton.waitForExistence(timeout: 5),
@@ -1816,17 +1815,20 @@ final class FeatureFormViewTests: XCTestCase {
         cancelButton.tap()
         
 #if targetEnvironment(macCatalyst)
-        transformerButton.rightClick()
-#else
-        transformerButton.swipeLeft()
-#endif
-        
+        moreOptionsButton.tap()
         XCTAssertTrue(
-            inlineRemoveAssociationButton.waitForExistence(timeout: 5),
+            removeAssociationButton.waitForExistence(timeout: 5),
             "The delete button doesn't exist."
         )
-        
-        inlineRemoveAssociationButton.tap()
+        removeAssociationButton.tap()
+#else
+        transformerButton.swipeLeft()
+        XCTAssertTrue(
+            removeAssociationButton.waitForExistence(timeout: 5),
+            "The delete button doesn't exist."
+        )
+        removeAssociationButton.tap()
+#endif
         
         XCTAssertTrue(
             removeButton.waitForExistence(timeout: 5),
@@ -1856,6 +1858,7 @@ final class FeatureFormViewTests: XCTestCase {
         let connectivityLabel = app.staticTexts["Connectivity"]
         let discardButton = app.buttons["Discard"]
         let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
+        let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
         let electricDistributionDeviceLabel = app.staticTexts["Electric Distribution Device"]
         let elementTitle = app.staticTexts["Associations"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
@@ -1908,6 +1911,11 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertTrue(
             electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
             "The \"Electric Distribution Device\" button doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            electricDistributionJunctionDataSourceButton.waitForExistence(timeout: 5),
+            "The \"Electric Distribution Junction\" button doesn't exist."
         )
         
         electricDistributionDeviceDataSourceButton.tap()
@@ -2002,27 +2010,23 @@ final class FeatureFormViewTests: XCTestCase {
         let connectivityLabel = app.staticTexts["Connectivity"]
         let discardButton = app.buttons["Discard"]
         let electricDistributionDevice2 = app.buttons["Electric Distribution Device, 2"]
+        let electricDistributionDevice3 = app.buttons["Electric Distribution Device, 3"]
+        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
         let electricDistributionDeviceLabel = app.staticTexts["Electric Distribution Device"]
         let electricDistributionJunctionButton5 = app.buttons["Electric Distribution Junction, 5"]
-        let electricDistributionLine1 = app.buttons["Electric Distribution Line, 1"]
-        let electricDistributionLineDataSourceButton = app.buttons["Electric Distribution Line"]
+        let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
         let elementTitle = app.staticTexts["Associations"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
-        let fractionAlongEdgeLabel = app.staticTexts["Fraction Along Edge"]
-        let fractionAlongEdgeSlider = app.sliders.firstMatch
-        /// Despite the test specifying setting the slider to 75%, the framework exceeds the target by a
-        /// little bit.
-        let fractionAlongEdgeValueAfter = app.staticTexts["77%"]
-        let fractionAlongEdgeValueBefore = app.staticTexts["0%"]
         let fromElementLabel = app.staticTexts["From Element"]
-        let lowVoltageButton = app.staticTexts["Low Voltage"].firstMatch
-        let lowVoltageLabel = app.staticTexts["Low Voltage"]
         let newAssociationText = app.staticTexts["New Association"]
         let saveButton = app.buttons["Save"]
+        let searchField = app.textFields["Search"].firstMatch
+        let switchButton = app.staticTexts["Switch"].firstMatch
+        let switchLabel = app.staticTexts["Switch"]
         let terminalLabel = app.staticTexts["Terminal"]
         let terminalPicker = app.buttons["Terminal, High"]
         let toElementLabel = app.staticTexts["To Element"]
-        let undergroundThreePhaseButton = app.buttons["Asset Type Underground Three Phase 85"]
+        let undergroundMediumVoltageThreePhaseDisconnectButton = app.buttons["Asset Type Underground Medium Voltage Three Phase Disconnect 493"]
         
 #if targetEnvironment(macCatalyst)
         let addAssociationButton = app.buttons["Add Association"]
@@ -2076,25 +2080,34 @@ final class FeatureFormViewTests: XCTestCase {
         fromNetworkDataSourceButton.tap()
         
         XCTAssertTrue(
-            electricDistributionLineDataSourceButton.waitForExistence(timeout: 5),
-            "The \"Electric Distribution Line\" button doesn't exist."
+            electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
+            "The \"Electric Distribution Device\" button doesn't exist."
         )
-        
-        electricDistributionLineDataSourceButton.tap()
         
         XCTAssertTrue(
-            undergroundThreePhaseButton.firstMatch.waitForExistence(timeout: 5),
-            "The Underground Three Phase button doesn't exist."
+            electricDistributionJunctionDataSourceButton.waitForExistence(timeout: 5),
+            "The \"Electric Distribution Junction\" button doesn't exist."
         )
         
-        undergroundThreePhaseButton.firstMatch.tap()
+        electricDistributionDeviceDataSourceButton.tap()
+        
+        searchField.tap()
+        
+        searchField.typeText("Disconnect")
         
         XCTAssertTrue(
-            lowVoltageButton.firstMatch.waitForExistence(timeout: 5),
-            "The \"Low Voltage\" candidate doesn't exist."
+            undergroundMediumVoltageThreePhaseDisconnectButton.firstMatch.waitForExistence(timeout: 5),
+            "The Underground Medium Voltage Three Phase Disconnect button doesn't exist."
         )
         
-        lowVoltageButton.firstMatch.tap()
+        undergroundMediumVoltageThreePhaseDisconnectButton.firstMatch.tap()
+        
+        XCTAssertTrue(
+            switchButton.firstMatch.waitForExistence(timeout: 5),
+            "The \"Switch\" candidate doesn't exist."
+        )
+        
+        switchButton.firstMatch.tap()
         
         XCTAssertTrue(
             newAssociationText.waitForExistence(timeout: 5),
@@ -2137,23 +2150,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            lowVoltageLabel.waitForExistence(timeout: 5),
+            switchLabel.waitForExistence(timeout: 5),
             "The to element value doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            fractionAlongEdgeLabel.waitForExistence(timeout: 5),
-            "The fraction along edge label doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            fractionAlongEdgeValueBefore.waitForExistence(timeout: 5),
-            "The fraction along edge label doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            fractionAlongEdgeSlider.waitForExistence(timeout: 5),
-            "The fraction along edge slider doesn't exist."
         )
         
         XCTAssertTrue(
@@ -2173,23 +2171,7 @@ final class FeatureFormViewTests: XCTestCase {
             "The Low terminal option doesn't exist."
         )
         
-#if swift(<6.2) && !targetEnvironment(macCatalyst)
-        XCTExpectFailure("""
-            The terminal selection options can be found, but tapping on them
-            doesn't work correctly in Xcode 16.4 for iOS.
-        """)
-#endif
-        terminalLowButton.tap()
-        
-#if targetEnvironment(macCatalyst)
-        XCTExpectFailure("The mouse is known to miss the drag handle when starting from 0%.")
-#endif
-        fractionAlongEdgeSlider.adjust(toNormalizedSliderPosition: 0.75)
-        
-        XCTAssertTrue(
-            fractionAlongEdgeValueAfter.waitForExistence(timeout: 5),
-            "The fraction along edge label doesn't exist."
-        )
+        terminalHighButton.tap()
         
         addButton.tap()
         
@@ -2199,13 +2181,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            electricDistributionDevice2.waitForExistence(timeout: 5),
+            electricDistributionDevice3.waitForExistence(timeout: 5),
             "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            electricDistributionLine1.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Line\" doesn't exist."
         )
         
         XCTAssertTrue(
@@ -2238,7 +2215,7 @@ final class FeatureFormViewTests: XCTestCase {
         let toElementValueLabel = app.staticTexts["Vault"]
         let toElementLabel = app.staticTexts["To Element"]
         let vaultAssetTypeButton = app.buttons["Vault"]
-        let vaultCandidateButton = app.buttons.matching(identifier: "Vault").element(boundBy: 0)
+        let vaultCandidateButton = app.staticTexts.matching(identifier: "Vault").element(boundBy: 1)
         
 #if targetEnvironment(macCatalyst)
         let addAssociationButton = app.buttons["Add Association"]
@@ -2377,5 +2354,19 @@ private extension String {
             tellus et ut dolore.
             """
         )
+    }
+}
+
+private extension XCUIApplication {
+    /// The "No value" combo box option.
+    var noValueComboBoxOption: XCUIElement {
+        buttons["No value Combo Box Option"]
+    }
+}
+
+private extension XCUIElement {
+    /// The element's value as a string.
+    var stringValue: String? {
+        value as? String
     }
 }

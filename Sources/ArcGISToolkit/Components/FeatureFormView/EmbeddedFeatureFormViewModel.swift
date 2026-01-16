@@ -19,6 +19,9 @@ private import os
 
 @MainActor @Observable
 class EmbeddedFeatureFormViewModel {
+    /// The models for fetching association filter results for each utility associations form element in the form.
+    var associationsFilterResultsModels: [UtilityAssociationsFormElement: AssociationsFilterResultsModel] = [:]
+    
     /// The current focused element, if one exists.
     var focusedElement: FormElement? {
         didSet {
@@ -44,11 +47,17 @@ class EmbeddedFeatureFormViewModel {
     var title = ""
     
     /// The list of visible form elements.
+    ///
+    /// - Note: The attachments element is appended, if configured, once the default visibility of all other
+    /// form elements has been evaluated. This prevents the attachments element from being initialized and
+    /// quickly removed when it is optimized out for being off-screen, therefore preventing a cancellation
+    /// error in `AttachmentsFeatureElementView`.
     var visibleElements: [FormElement] {
         var elements = featureForm
             .elements
-            .filter { elementVisibility[$0] == true }
-        if let attachmentsElement = featureForm.defaultAttachmentsElement {
+            .filter { elementVisibility[$0, default: false] }
+        if let attachmentsElement = featureForm.defaultAttachmentsElement,
+           elementVisibility.count == featureForm.elements.count {
             elements.append(attachmentsElement)
         }
         return elements
@@ -83,6 +92,7 @@ class EmbeddedFeatureFormViewModel {
     
     deinit {
         evaluateTask?.cancel()
+        monitorEditsTask?.cancel()
         visibilityTask?.cancel()
     }
     
@@ -104,9 +114,9 @@ class EmbeddedFeatureFormViewModel {
     private func monitorEdits() {
         monitorEditsTask?.cancel()
         monitorEditsTask = Task { [weak self] in
-            guard !Task.isCancelled, let self else { return }
+            guard !Task.isCancelled, let featureForm = self?.featureForm else { return }
             for await hasEdits in featureForm.$hasEdits.dropFirst() {
-                self.hasEdits = hasEdits
+                self?.hasEdits = hasEdits
             }
         }
     }

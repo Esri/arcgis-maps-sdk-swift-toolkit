@@ -35,8 +35,6 @@
 		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; };
 		8AC5AA652E428CB000F0F0E0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5AA642E428CAC00F0F0E0 /* UserDefaults.swift */; };
 		8AC5AA692E428D3E00F0F0E0 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5AA682E428D3C00F0F0E0 /* Binding.swift */; };
-		8AEE70482BEEC0B400C9949C /* RepresentedUITextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */; };
-		8AEE704A2BEEC18000C9949C /* RepresentedUITextViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */; };
 		97E45D7F2E15A1DE0038EA8B /* TestRunner.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 97E45D7E2E15A1DE0038EA8B /* TestRunner.xcconfig */; };
 		D7FDFCBC2DF208BD00ED91C1 /* PopupViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FDFCBB2DF208BD00ED91C1 /* PopupViewTests.swift */; };
 		D7FDFCBE2DF2090300ED91C1 /* PopupTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FDFCBD2DF2090300ED91C1 /* PopupTestView.swift */; };
@@ -103,8 +101,6 @@
 		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; };
 		8AC5AA642E428CAC00F0F0E0 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		8AC5AA682E428D3C00F0F0E0 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
-		8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentedUITextViewTests.swift; sourceTree = "<group>"; };
-		8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentedUITextViewTestView.swift; sourceTree = "<group>"; };
 		97E45D7E2E15A1DE0038EA8B /* TestRunner.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestRunner.xcconfig; sourceTree = "<group>"; };
 		D7FDFCBB2DF208BD00ED91C1 /* PopupViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewTests.swift; sourceTree = "<group>"; };
 		D7FDFCBD2DF2090300ED91C1 /* PopupTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupTestView.swift; sourceTree = "<group>"; };
@@ -192,7 +188,6 @@
 				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
 				D7FDFCBB2DF208BD00ED91C1 /* PopupViewTests.swift */,
 				8A3982E32E39428500A8F1AF /* UtilityNetworkTraceTests.swift */,
-				8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */,
 			);
 			path = "UI Tests";
 			sourceTree = "<group>";
@@ -220,7 +215,6 @@
 				8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */,
 				75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */,
 				D7FDFCBD2DF2090300ED91C1 /* PopupTestView.swift */,
-				8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */,
 				8A3982E12E39393500A8F1AF /* UtilityNetworkTraceTestView.swift */,
 			);
 			path = TestViews;
@@ -413,7 +407,6 @@
 				7584B7592B1A817A00772AB7 /* BookmarksTestCase3View.swift in Sources */,
 				8A3982E22E39394700A8F1AF /* UtilityNetworkTraceTestView.swift in Sources */,
 				8AC5AA692E428D3E00F0F0E0 /* Binding.swift in Sources */,
-				8AEE704A2BEEC18000C9949C /* RepresentedUITextViewTestView.swift in Sources */,
 				7584B7572B1A7AF100772AB7 /* BookmarksTestCase2View.swift in Sources */,
 				8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */,
 				8A1138132BC7407D007E0BFB /* BookmarksTestCase6View.swift in Sources */,
@@ -434,7 +427,6 @@
 				75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */,
 				8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */,
 				75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */,
-				8AEE70482BEEC0B400C9949C /* RepresentedUITextViewTests.swift in Sources */,
 				7552A76C2A573DFB0023DA5A /* BookmarksTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

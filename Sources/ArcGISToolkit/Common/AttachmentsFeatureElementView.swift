@@ -16,6 +16,8 @@ import ArcGIS
 import QuickLook
 import SwiftUI
 
+internal import os
+
 /// A view displaying an `AttachmentsFeatureElement`.
 struct AttachmentsFeatureElementView: View {
     /// The `AttachmentsFeatureElement` to display.
@@ -44,16 +46,16 @@ struct AttachmentsFeatureElementView: View {
     
     /// The state of the attachment models.
     private enum AttachmentModelsState {
-        /// Attachment models have not been initialized.
-        case notInitialized
         /// Attachments are being fetched and wrapped with models.
         case initializing
         /// Attachments have been fetched and wrapped with models.
         case initialized([AttachmentModel])
+        /// Attachments failed to load.
+        case loadFailed
     }
     
     /// The current state of the attachment models.
-    @State private var attachmentModelsState: AttachmentModelsState = .notInitialized
+    @State private var attachmentModelsState: AttachmentModelsState = .initializing
     
     /// Creates a new `AttachmentsFeatureElementView` for a Feature Form.
     /// - Parameter formElement: The `AttachmentsFeatureElement`.
@@ -76,12 +78,18 @@ struct AttachmentsFeatureElementView: View {
     var body: some View {
         Group {
             switch attachmentModelsState {
-            case .notInitialized, .initializing:
+            case .initializing:
                 ProgressView()
                     .padding()
                     .task {
-                        attachmentModelsState = .initializing
-                        let attachments = (try? await featureElement.featureAttachments) ?? []
+                        let attachments: [any FeatureAttachment]
+                        do {
+                            attachments = try await featureElement.featureAttachments
+                        } catch {
+                            Logger.attachmentsFeatureElementView.error("Attachments failed load. \(error.localizedDescription)")
+                            attachmentModelsState = .loadFailed
+                            return
+                        }
                         let attachmentModels = attachments
                             .reversed()
                             .map {
@@ -95,20 +103,31 @@ struct AttachmentsFeatureElementView: View {
                     }
             case .initialized(let attachmentModels):
                 if isShowingAttachmentsFormElement {
-                    // If showing a form element, don't show attachments in
-                    // a disclosure group, but also ALWAYS show
-                    // the list of attachments, even if there are none.
-                    attachmentHeader
-                    attachmentBody(attachmentModels: attachmentModels)
+                    if !attachmentModels.isEmpty {
+                        attachmentBody(attachmentModels: attachmentModels)
+                    }
+                    if isEditable,
+                       let element = featureElement as? AttachmentsFormElement {
+                        AttachmentImportMenu(element: element, onAdd: onAdd)
+                    }
                 } else if !attachmentModels.isEmpty {
                     DisclosureGroup(isExpanded: $isExpanded) {
                         attachmentBody(attachmentModels: attachmentModels)
                     } label: {
-                        attachmentHeader
-                            .catalystPadding(4)
+                        PopupElementHeader(
+                            title: featureElement.displayTitle,
+                            description: featureElement.description
+                        )
+                        .catalystPadding(4)
                     }
                     .disclosureGroupPadding()
                 }
+            case .loadFailed:
+                Text(
+                    "Attachments failed to load.",
+                    bundle: .toolkitModule,
+                    comment: "The status text when attachments failed to load."
+                )
             }
         }
         .onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
@@ -143,20 +162,6 @@ struct AttachmentsFeatureElementView: View {
                 } else {
                     AttachmentList(attachmentModels: attachmentModels)
                 }
-            }
-        }
-    }
-    
-    private var attachmentHeader: some View {
-        HStack {
-            PopupElementHeader(
-                title: featureElement.displayTitle,
-                description: featureElement.description
-            )
-            Spacer()
-            if isEditable,
-               let element = featureElement as? AttachmentsFormElement {
-                AttachmentImportMenu(element: element, onAdd: onAdd)
             }
         }
     }
