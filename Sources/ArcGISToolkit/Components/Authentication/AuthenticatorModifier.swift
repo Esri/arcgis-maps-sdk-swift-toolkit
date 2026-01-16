@@ -50,31 +50,7 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
 //                        showsNestedChallenges: true
 //                    )
 //                )
-            
-//                ._oAuthWebViewContentBinding(context: $oAuthWebViewContext)
-//                .sheet(item: $oAuthWebViewContext, onDismiss: {
-//                    print("-- dismissing")
-//                }, content: { context in
-//                    context.content
-//                        .modifier(
-//                            AuthenticatorModifier(
-//                                authenticator: authenticator,
-//                                showsNestedChallenges: true
-//                            )
-//                        )
-//                })
-            
-//                .sheet(isPresented: $isOAuthWebViewPresented) {
-//                    oAuthWebViewContent?
-//                        .modifier(
-//                            AuthenticatorModifier(
-//                                authenticator: authenticator,
-//                                showsNestedChallenges: true
-//                            )
-//                        )
-//                }
-            
-                ._oAuthWebView(isPresented: $isOAuthWebViewPresented, content: $oAuthWebViewContent)
+                ._oAuthWebViewPresenter(isPresented: $isOAuthWebViewPresented, content: $oAuthWebViewContent)
                 .sheet(isPresented: $isOAuthWebViewPresented) {
                     print("-- dismissing...")
                 } content: {
