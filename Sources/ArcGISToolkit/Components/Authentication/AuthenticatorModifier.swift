@@ -33,7 +33,10 @@ public extension View {
 private struct AuthenticatorOverlayModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
-    @State private var oAuthWebViewContext: _OAuthWebViewPresentationContext?
+//    @State private var oAuthWebViewContext: _OAuthWebViewPresentationContext?
+    
+    @State private var isOAuthWebViewPresented = false
+    @State private var oAuthWebViewContent: () -> AnyView = { fatalError() }
     
     @ViewBuilder func body(content: Content) -> some View {
         ZStack {
@@ -47,18 +50,20 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
 //                        showsNestedChallenges: true
 //                    )
 //                )
-                ._oAuthWebViewContentBinding(context: $oAuthWebViewContext)
-                .sheet(item: $oAuthWebViewContext, onDismiss: {
-                    print("-- dismissing")
-                }, content: { context in
-                    context.content
-                        .modifier(
-                            AuthenticatorModifier(
-                                authenticator: authenticator,
-                                showsNestedChallenges: true
-                            )
-                        )
-                })
+            
+//                ._oAuthWebViewContentBinding(context: $oAuthWebViewContext)
+//                .sheet(item: $oAuthWebViewContext, onDismiss: {
+//                    print("-- dismissing")
+//                }, content: { context in
+//                    context.content
+//                        .modifier(
+//                            AuthenticatorModifier(
+//                                authenticator: authenticator,
+//                                showsNestedChallenges: true
+//                            )
+//                        )
+//                })
+            
 //                .sheet(isPresented: $isOAuthWebViewPresented) {
 //                    oAuthWebViewContent?
 //                        .modifier(
@@ -68,6 +73,23 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
 //                            )
 //                        )
 //                }
+            
+                ._oAuthWebView(isPresented: $isOAuthWebViewPresented, content: $oAuthWebViewContent)
+                .sheet(isPresented: $isOAuthWebViewPresented) {
+                    print("-- dismissing...")
+                } content: {
+                    oAuthWebViewContent()
+                        .overlay {
+                            EmptyView()
+                                .modifier(
+                                    AuthenticatorModifier(
+                                        authenticator: authenticator,
+                                        showsNestedChallenges: true
+                                    )
+                                )
+                        }
+                }
+
         }
     }
 }
