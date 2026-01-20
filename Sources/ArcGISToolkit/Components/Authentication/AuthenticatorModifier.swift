@@ -32,7 +32,6 @@ public extension View {
 /// after a sheet was dismissed.
 private struct AuthenticatorOverlayModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
-    
     @State var oAuthWebViewPresentation = ArcGISEnvironment.authenticationManager._oAuthWebViewPresentation
     
     @ViewBuilder func body(content: Content) -> some View {
@@ -50,22 +49,13 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
     }
 }
 
-private struct OverlayModifier<Modifier: ViewModifier>: ViewModifier {
-    let modifier: Modifier
-    
-    @ViewBuilder func body(content: Content) -> some View {
-        content.overlay {
+private extension View {
+    /// Overlays an invisible view which has the supplied modifier applied to it.
+    @ViewBuilder func overlay<Modifier: ViewModifier>(with modifier: Modifier) -> some View {
+        overlay {
             Color.clear.frame(width: 0, height: 0)
                 .modifier(modifier)
         }
-    }
-}
-
-private extension View {
-    /// Presents user experiences for collecting network authentication credentials from the user.
-    /// - Parameter authenticator: The authenticator for which credentials will be prompted.
-    @ViewBuilder func overlay<Modifier: ViewModifier>(with modifier: Modifier) -> some View {
-        self.modifier(OverlayModifier(modifier: modifier))
     }
 }
 
