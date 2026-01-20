@@ -52,10 +52,7 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
 private extension View {
     /// Overlays an invisible view which has the supplied modifier applied to it.
     @ViewBuilder func invisibleOverlay<Modifier: ViewModifier>(with modifier: Modifier) -> some View {
-        overlay {
-            Color.clear.frame(width: 0, height: 0)
-                .modifier(modifier)
-        }
+        overlay { Color.clear.frame(width: 0, height: 0).modifier(modifier) }
     }
 }
 
