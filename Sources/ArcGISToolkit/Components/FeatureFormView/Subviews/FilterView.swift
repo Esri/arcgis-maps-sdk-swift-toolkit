@@ -119,7 +119,6 @@ struct FilterView: View {
 
     private func duplicateButton(_ filter: FieldFilter) -> Button<some View> {
         Button {
-//            if let index = model.fieldFilters.firstIndex(where: { $0.id == filter.id }) {
             if let index = model.fieldFilters.firstIndex(of: filter) {
                 let newFilter = filter.copy()
                 withAnimation {
