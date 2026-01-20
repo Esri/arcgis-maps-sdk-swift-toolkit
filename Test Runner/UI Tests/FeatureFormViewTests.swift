@@ -1029,6 +1029,7 @@ final class FeatureFormViewTests: XCTestCase {
     // - MARK: Test case 4: Radio Buttons input type
     
     /// Test case 4.1: Test regular selection
+    @available(visionOS, unavailable)
     func testCase_4_1() {
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["Radio Button Text *"]
@@ -1053,7 +1054,9 @@ final class FeatureFormViewTests: XCTestCase {
             "dog"
         )
         
+#if !os(visionOS)
         radioButtonTextPicker.adjust(toPickerWheelValue: "dog")
+#endif
         
         XCTAssertEqual(
             radioButtonTextPicker.stringValue,
@@ -1241,6 +1244,7 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 6.2: Test visibility of empty group
+    @available(visionOS, unavailable)
     func testCase_6_2() {
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
@@ -1285,7 +1289,9 @@ final class FeatureFormViewTests: XCTestCase {
             "The Radio Button picker doesn't exist."
         )
         
+#if !os(visionOS)
         radioButtonPicker.adjust(toPickerWheelValue: "show invisible form element")
+#endif
         
         XCTExpectFailure("The Radio Button picker fails to take the \"show invisible form element\" selection.")
         
