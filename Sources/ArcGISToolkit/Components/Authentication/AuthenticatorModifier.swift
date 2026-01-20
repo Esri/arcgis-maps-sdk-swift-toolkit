@@ -33,41 +33,39 @@ public extension View {
 private struct AuthenticatorOverlayModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
-    @State private var isOAuthWebViewPresented = false
-    @State private var oAuthWebViewContent: () -> AnyView = { fatalError() }
+    @State var oAuthWebViewPresentation = ArcGISEnvironment.authenticationManager._oAuthWebViewPresentation
     
     @ViewBuilder func body(content: Content) -> some View {
-        ZStack {
-            content
-            Color.clear
-                .frame(width: 0, height: 0)
-                .modifier(AuthenticatorModifier(authenticator: authenticator))
-//                ._oAuthWebViewSheet(
-//                    contentModifier: AuthenticatorModifier(
-//                        authenticator: authenticator,
-//                        showsNestedChallenges: true
-//                    )
-//                )
-                ._oAuthWebViewPresenter(isPresented: $isOAuthWebViewPresented, content: $oAuthWebViewContent)
-                .sheet(isPresented: $isOAuthWebViewPresented) {
-                    print("-- dismissing...")
-                } content: {
-                    oAuthWebViewContent()
-                    // Use an overlay for the modified content, otherwise the webview
-                    // will be reloaded everytime because the parent view of the
-                    // embedded webview would have an unstable identity.
-                        .overlay {
-                            EmptyView()
-                                .modifier(
-                                    AuthenticatorModifier(
-                                        authenticator: authenticator,
-                                        showsNestedChallenges: true
-                                    )
-                                )
-                        }
-                }
+        content
+            .overlay(with: AuthenticatorModifier(authenticator: authenticator))
+            .sheet(item: $oAuthWebViewPresentation.context) { context in
+                _OAuthWebView(context: context)
+                    .overlay(
+                        with: AuthenticatorModifier(
+                            authenticator: authenticator,
+                            showsNestedChallenges: true
+                        )
+                    )
+            }
+    }
+}
 
+private struct OverlayModifier<Modifier: ViewModifier>: ViewModifier {
+    let modifier: Modifier
+    
+    @ViewBuilder func body(content: Content) -> some View {
+        content.overlay {
+            Color.clear.frame(width: 0, height: 0)
+                .modifier(modifier)
         }
+    }
+}
+
+private extension View {
+    /// Presents user experiences for collecting network authentication credentials from the user.
+    /// - Parameter authenticator: The authenticator for which credentials will be prompted.
+    @ViewBuilder func overlay<Modifier: ViewModifier>(with modifier: Modifier) -> some View {
+        self.modifier(OverlayModifier(modifier: modifier))
     }
 }
 
