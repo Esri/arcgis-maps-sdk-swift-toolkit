@@ -18,8 +18,8 @@ extension XCTestCase {
     /// Skips the current test on the indicated platform(s).
     /// - Parameters:
     ///   - macCatalyst: Skip the test on Mac Catalyst.
-    ///   - simulator: Skip the test on simulators.
-    ///   - visionOS: Skip the test on visionOS.
+    ///   - simulator: Skip the test on iOS and visionOS simulators.
+    ///   - visionOS: Skip the test on visionOS devices and simulators.
     func skipIf(
         macCatalyst: Bool = false,
         simulator: Bool = false,
@@ -29,13 +29,15 @@ extension XCTestCase {
         if macCatalyst {
             throw XCTSkip("Not supported on Mac Catalyst.")
         }
-#elseif targetEnvironment(simulator)
+#endif
+#if targetEnvironment(simulator)
         if simulator {
-            throw XCTSkip("Not supported on simulators.")
+            throw XCTSkip("Not supported on iOS and visionOS simulators.")
         }
-#elseif os(visionOS)
+#endif
+#if os(visionOS)
         if visionOS {
-            throw XCTSkip("Not supported on visionOS.")
+            throw XCTSkip("Not supported on visionOS devices and simulators.")
         }
 #endif
     }
