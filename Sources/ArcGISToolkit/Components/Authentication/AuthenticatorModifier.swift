@@ -36,11 +36,11 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
     
     @ViewBuilder func body(content: Content) -> some View {
         content
-            .invisibleOverlay(with: AuthenticatorModifier(authenticator: authenticator))
+            .modifiedInvisibleOverlay(AuthenticatorModifier(authenticator: authenticator))
             .sheet(item: $oAuthWebViewPresentation.context) { context in
                 _OAuthWebView(context: context)
-                    .invisibleOverlay(
-                        with: AuthenticatorModifier(
+                    .modifiedInvisibleOverlay(
+                        AuthenticatorModifier(
                             authenticator: authenticator,
                             showsNestedChallenges: true
                         )
@@ -51,8 +51,12 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
 
 private extension View {
     /// Overlays an invisible view which has the supplied modifier applied to it.
-    @ViewBuilder func invisibleOverlay<Modifier: ViewModifier>(with modifier: Modifier) -> some View {
-        overlay { Color.clear.frame(width: 0, height: 0).modifier(modifier) }
+    func modifiedInvisibleOverlay(_ modifier: some ViewModifier) -> some View {
+        overlay {
+            Color.clear
+                .frame(width: 0, height: 0)
+                .modifier(modifier)
+        }
     }
 }
 
