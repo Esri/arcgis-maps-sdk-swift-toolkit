@@ -1030,7 +1030,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 4.1: Test regular selection
     func testCase_4_1() throws {
-        try skipIf(simulator: true, visionOS: true)
+        try skipIf(visionOS: true)
         
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["Radio Button Text *"]
@@ -1246,7 +1246,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 6.2: Test visibility of empty group
     func testCase_6_2() throws {
-        try skipIf(simulator: true, visionOS: true)
+        try skipIf(visionOS: true)
         
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
@@ -1295,7 +1295,9 @@ final class FeatureFormViewTests: XCTestCase {
         radioButtonPicker.adjust(toPickerWheelValue: "show invisible form element")
 #endif
         
+#if targetEnvironment(simulator)
         XCTExpectFailure("The Radio Button picker fails to take the \"show invisible form element\" selection.")
+#endif
         
         // Confirm the first element of the conditional group doesn't exist.
         XCTAssertTrue(
