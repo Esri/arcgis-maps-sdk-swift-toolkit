@@ -1029,8 +1029,9 @@ final class FeatureFormViewTests: XCTestCase {
     // - MARK: Test case 4: Radio Buttons input type
     
     /// Test case 4.1: Test regular selection
-    @available(visionOS, unavailable)
-    func testCase_4_1() {
+    func testCase_4_1() throws {
+        try skipIf(visionOS: true)
+        
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["Radio Button Text *"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
@@ -1244,8 +1245,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     /// Test case 6.2: Test visibility of empty group
-    @available(visionOS, unavailable)
-    func testCase_6_2() {
+    func testCase_6_2() throws {
+        try skipIf(visionOS: true)
+        
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let groupElement = app.staticTexts["single line text 3"]
