@@ -32,7 +32,7 @@ public extension View {
 /// after a sheet was dismissed.
 private struct AuthenticatorOverlayModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
-    @State var oAuthWebViewPresentation = ArcGISEnvironment.authenticationManager._oAuthWebViewPresentation
+    @Bindable var oAuthWebViewPresentation = ArcGISEnvironment.authenticationManager._oAuthWebViewPresentation
     
     @ViewBuilder func body(content: Content) -> some View {
         content
