@@ -22,7 +22,7 @@ final class AttachmentCameraControllerTests: XCTestCase {
     
     /// Test `AttachmentCameraController.onCameraCaptureModeChanged(perform:)`
     func testOnCameraCaptureModeChanged() throws {
-        try skipIf(iOSSimulator: true, macCatalyst: true)
+        try skipIf(macCatalyst: true, simulator: true, visionOS: true)
         
         guard #available(iOS 26.0, *) else {
             throw XCTSkip("Unsupported iOS version")

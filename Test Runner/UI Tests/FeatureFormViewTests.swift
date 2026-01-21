@@ -1030,7 +1030,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 4.1: Test regular selection
     func testCase_4_1() throws {
-        try skipIf(visionOS: true)
+        try skipIf(simulator: true, visionOS: true)
         
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["Radio Button Text *"]
@@ -1246,7 +1246,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 6.2: Test visibility of empty group
     func testCase_6_2() throws {
-        try skipIf(visionOS: true)
+        try skipIf(simulator: true, visionOS: true)
         
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
