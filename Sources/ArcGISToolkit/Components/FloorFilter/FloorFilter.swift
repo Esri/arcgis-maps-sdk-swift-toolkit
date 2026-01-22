@@ -321,6 +321,15 @@ struct LevelSelector26: View {
                                 .id(level.id)
                             }
                         }
+                        .modify {
+                            if #unavailable(iOS 18.0) {
+                                $0.onGeometryChange(for: CGFloat.self) { proxy in
+                                    proxy.frame(in: .global).height
+                                } action: { newHeight in
+                                    contentHeight = newHeight
+                                }
+                            }
+                        }
                     }
                     .modify {
                         if #available(iOS 18.0, *) {
@@ -341,6 +350,14 @@ struct LevelSelector26: View {
             }
             .onChange(of: isCollapsed) {
                 guard !isCollapsed else { return }
+                scrollToSelectedLevel(with: scrollView)
+            }
+            .onChange(of: model.selection) { _, _ in
+                guard model.selection?.facility != nil, !isCollapsed else { return }
+                scrollToSelectedLevel(with: scrollView)
+            }
+            .onAppear {
+                guard model.selection?.facility != nil, !isCollapsed else { return }
                 scrollToSelectedLevel(with: scrollView)
             }
         }
