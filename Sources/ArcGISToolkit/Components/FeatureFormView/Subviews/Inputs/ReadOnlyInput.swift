@@ -28,11 +28,11 @@ struct ReadOnlyInput: View {
     var body: some View {
         Group {
             if element.isMultiline {
-                modifiedValue
+                modifiedText
                     .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 ScrollView(.horizontal) {
-                    modifiedValue
+                    modifiedText
                 }
             }
         }
@@ -41,7 +41,7 @@ struct ReadOnlyInput: View {
     }
     
     /// The text to display for the element's current value with read-only modifiers.
-    var modifiedValue: some View {
+    var modifiedText: some View {
         text
             .accessibilityIdentifier("\(element.label) Read Only Input")
             .fixedSize(horizontal: false, vertical: true)
