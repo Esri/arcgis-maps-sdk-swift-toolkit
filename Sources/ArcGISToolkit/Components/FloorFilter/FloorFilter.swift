@@ -297,7 +297,7 @@ struct FloorFilter26: View {
             
             siteSelectorButton
         }
-        .frame(maxWidth: FloorFilter26.buttonSize)
+        .frame(width: width)
         .glassEffect(.regular, in: FloorFilter26.buttonShape)
         .clipShape(FloorFilter26.buttonShape)
     }
@@ -307,7 +307,7 @@ struct FloorFilter26: View {
             isSiteSelectorPresented.toggle()
         } label: {
             Image(systemName: "building.2")
-                .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
+                .frame(height: FloorFilter26.buttonSize)
                 .font(.system(size: FloorFilter26.fontSize))
         }
         .buttonStyle(.plain)
@@ -337,7 +337,7 @@ struct LevelSelector26: View {
                 } label: {
                     Image(systemName: "chevron.up")
                         .rotationEffect(isCollapsed ? .degrees(0) : .degrees(180))
-                        .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
+                        .frame(height: FloorFilter26.buttonSize)
                         .font(.system(size: FloorFilter26.fontSize))
                         .foregroundStyle(.secondary)
                 }
@@ -424,7 +424,8 @@ private struct LevelButton26: View {
         }
         label: {
             Text(level.shortName)
-                .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
+                .frame(minWidth: FloorFilter26.buttonSize)
+                .frame(height: FloorFilter26.buttonSize)
                 .font(.system(size: FloorFilter26.fontSize))
                 .foregroundStyle(isSelected ? .primary : .secondary)
                 .fontWeight(isSelected ? .semibold : .regular)
