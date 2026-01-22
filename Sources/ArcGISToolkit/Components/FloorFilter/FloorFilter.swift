@@ -276,7 +276,6 @@ public extension FloorFilter {
 
 @available(iOS 26.0, *)
 struct FloorFilter26: View {
-    @Namespace private var namespace
     @EnvironmentObject private var model: FloorFilterViewModel
     @State private var isSiteSelectorPresented = false
     
@@ -284,7 +283,7 @@ struct FloorFilter26: View {
     
     static var buttonShape = RoundedRectangle(cornerRadius: 18, style: .continuous)
     static let buttonSize: CGFloat = 56
-    static let padding: CGFloat = 4
+    static let padding: CGFloat = 3
     static let fontSize: CGFloat = 20
     
     var body: some View {
@@ -298,6 +297,7 @@ struct FloorFilter26: View {
             siteSelectorButton
         }
         .frame(width: width)
+        //.background(.regularMaterial)
         .glassEffect(.regular, in: FloorFilter26.buttonShape)
         .clipShape(FloorFilter26.buttonShape)
     }
@@ -307,11 +307,12 @@ struct FloorFilter26: View {
             isSiteSelectorPresented.toggle()
         } label: {
             Image(systemName: "building.2")
+                .frame(minWidth: FloorFilter26.buttonSize, maxWidth: .infinity)
                 .frame(height: FloorFilter26.buttonSize)
                 .font(.system(size: FloorFilter26.fontSize))
+                .contentShape(FloorFilter26.buttonShape)
         }
         .buttonStyle(.plain)
-        .contentShape(FloorFilter26.buttonShape)
         .popover(isPresented: $isSiteSelectorPresented) {
             SiteAndFacilitySelector(isPresented: $isSiteSelectorPresented)
                 // To work-around an iOS 26 bug on dark mode where the
@@ -323,7 +324,6 @@ struct FloorFilter26: View {
 
 @available(iOS 26.0, *)
 struct LevelSelector26: View {
-    @Namespace private var namespace
     @EnvironmentObject private var model: FloorFilterViewModel
     
     @State private var isCollapsed = false
@@ -337,12 +337,13 @@ struct LevelSelector26: View {
                 } label: {
                     Image(systemName: "chevron.up")
                         .rotationEffect(isCollapsed ? .degrees(0) : .degrees(180))
+                        .frame(minWidth: FloorFilter26.buttonSize, maxWidth: .infinity)
                         .frame(height: FloorFilter26.buttonSize)
                         .font(.system(size: FloorFilter26.fontSize))
                         .foregroundStyle(.secondary)
+                        .contentShape(FloorFilter26.buttonShape)
                 }
                 .buttonStyle(.plain)
-                .contentShape(FloorFilter26.buttonShape)
             }
             
             if !model.sortedLevels.isEmpty {
@@ -407,7 +408,6 @@ struct LevelSelector26: View {
 
 @available(iOS 26.0, *)
 private struct LevelButton26: View {
-    @Namespace private var namespace
     @EnvironmentObject var model: FloorFilterViewModel
     
     let level: FloorLevel
@@ -424,7 +424,7 @@ private struct LevelButton26: View {
         }
         label: {
             Text(level.shortName)
-                .frame(minWidth: FloorFilter26.buttonSize)
+                .frame(minWidth: FloorFilter26.buttonSize, maxWidth: .infinity)
                 .frame(height: FloorFilter26.buttonSize)
                 .font(.system(size: FloorFilter26.fontSize))
                 .foregroundStyle(isSelected ? .primary : .secondary)
@@ -438,8 +438,8 @@ private struct LevelButton26: View {
                         )
                     }
                 }
+                .contentShape(FloorFilter26.buttonShape)
         }
         .buttonStyle(.plain)
-        .contentShape(FloorFilter26.buttonShape)
     }
 }
