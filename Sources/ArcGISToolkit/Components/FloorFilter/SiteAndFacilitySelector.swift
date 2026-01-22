@@ -119,6 +119,10 @@ private struct SiteList: View {
                 }
         } label: {
             Text(String.allSites)
+#if targetEnvironment(macCatalyst)
+                // This works around a catalyst bug where button text is squished.
+                .fixedSize(horizontal: true, vertical: false)
+#endif
         }
     }
 }
