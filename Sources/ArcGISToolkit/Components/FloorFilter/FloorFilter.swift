@@ -190,6 +190,7 @@ public extension FloorFilter {
     }
 }
 
+/// The combined UI components for the floor filter.
 private struct FloorFilterBody: View {
     @EnvironmentObject private var model: FloorFilterViewModel
     @State private var isSiteSelectorPresented = false
@@ -255,6 +256,7 @@ private struct FloorFilterBody: View {
     }
 }
 
+/// The level selector portion of the floor filter.
 private struct LevelSelector: View {
     let isTopAligned: Bool
     
@@ -374,6 +376,7 @@ private struct LevelSelector: View {
     }
 }
 
+/// A level button within the level selector.
 private struct LevelButton: View {
     @EnvironmentObject var model: FloorFilterViewModel
     
