@@ -98,9 +98,6 @@ public struct FloorFilter: View {
     /// The view model used by the `FloorFilter`.
     @StateObject private var viewModel: FloorFilterViewModel
     
-    /// A Boolean value that indicates whether the site and facility selector is presented.
-    @State private var siteAndFacilitySelectorIsPresented = false
-    
     /// A Boolean value controlling whether a site is automatically selected upon load completion.
     ///
     /// This property is only relevant when the FloorManager contains a single site.
@@ -119,72 +116,6 @@ public struct FloorFilter: View {
     /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
     private var viewpoint: Binding<Viewpoint?>
     
-    /// Button to open and close the site and facility selector.
-    @ViewBuilder
-    private var sitesAndFacilitiesButton: some View {
-        if [.notLoaded, .loading].contains(viewModel.loadStatus) {
-            ProgressView()
-                .padding(.toolkitDefault)
-                .progressViewStyle(.circular)
-        } else if viewModel.loadStatus == .loaded {
-            Button {
-                siteAndFacilitySelectorIsPresented.toggle()
-            } label: {
-                Image(systemName: "building.2")
-                    .padding(.toolkitDefault)
-                    .contentShape(.rect(cornerRadius: 5))
-                    .hoverEffect()
-            }
-            .accessibilityIdentifier("Floor Filter button")
-            .buttonStyle(.plain)
-#if !os(visionOS)
-            .modify {
-                if #unavailable(iOS 26.0) {
-                    $0.foregroundStyle(.tint)
-                }
-            }
-#endif
-            .popover(isPresented: $siteAndFacilitySelectorIsPresented) {
-                SiteAndFacilitySelector(isPresented: $siteAndFacilitySelectorIsPresented)
-            }
-        } else {
-            Image(systemName: "exclamationmark.circle")
-                .padding(.toolkitDefault)
-        }
-    }
-    
-    /// A view that displays the level selector and the sites and facilities button.
-    private var levelSelectorContainer: some View {
-        VStack(spacing: 0) {
-            if isTopAligned {
-                sitesAndFacilitiesButton
-                if viewModel.hasLevelsToDisplay {
-                    //Divider()
-                    levelSelector
-                }
-            } else {
-                if viewModel.hasLevelsToDisplay {
-                    levelSelector
-                    //Divider()
-                }
-                sitesAndFacilitiesButton
-            }
-        }
-        .frame(width: levelSelectorWidth)
-        .modify {
-            if #available(iOS 26.0, *) {
-                $0.glassEffect(.regular.interactive())
-            } else {
-                $0.esriBorder()
-            }
-        }
-        .frame(
-            maxWidth: horizontalSizeClass == .compact ? .infinity : nil,
-            maxHeight: .infinity,
-            alignment: alignment
-        )
-    }
-    
     /// A Boolean value indicating whether the map or scene is currently being navigated.
     private var isNavigating: Binding<Bool>
     
@@ -193,57 +124,42 @@ public struct FloorFilter: View {
         alignment.vertical == .top
     }
     
-    /// A view that allows selecting between levels.
-    @ViewBuilder private var levelSelector: some View {
-        LevelSelector(
-            isTopAligned: isTopAligned,
-            levels: viewModel.sortedLevels
-        )
-    }
-    
     public var body: some View {
-        Group {
-            if #available(iOS 26.0, *) {
-                FloorFilter26(width: levelSelectorWidth, isTopAligned: isTopAligned)
-                    .environmentObject(viewModel)
-            } else {
-                levelSelectorContainer
+        FloorFilter26(width: levelSelectorWidth, isTopAligned: isTopAligned)
+            .environmentObject(viewModel)
+            .disabled(viewModel.loadStatus != .loaded)
+            .onChange(of: selection?.wrappedValue) {
+                let newValue = selection?.wrappedValue
+                // Prevent a double-set if the view model triggered the original change.
+                guard newValue != viewModel.selection else { return }
+                switch newValue {
+                case .site(let site): viewModel.setSite(site)
+                case .facility(let facility): viewModel.setFacility(facility)
+                case .level(let level): viewModel.setLevel(level)
+                case .none: viewModel.clearSelection()
+                }
             }
-        }
-        .environmentObject(viewModel)
-        .disabled(viewModel.loadStatus != .loaded)
-        .onChange(of: selection?.wrappedValue) {
-            let newValue = selection?.wrappedValue
-            // Prevent a double-set if the view model triggered the original change.
-            guard newValue != viewModel.selection else { return }
-            switch newValue {
-            case .site(let site): viewModel.setSite(site)
-            case .facility(let facility): viewModel.setFacility(facility)
-            case .level(let level): viewModel.setLevel(level)
-            case .none: viewModel.clearSelection()
+            .onChange(of: viewModel.loadStatus) {
+                if viewModel.loadStatus == .loaded,
+                   !automaticSingleSiteSelectionDisabled,
+                   viewModel.sites.count == 1,
+                   let firstSite = viewModel.sites.first {
+                    // If we have only one site, select it.
+                    viewModel.setSite(firstSite, zoomTo: true)
+                }
             }
-        }
-        .onChange(of: viewModel.loadStatus) {
-            if viewModel.loadStatus == .loaded,
-               !automaticSingleSiteSelectionDisabled,
-               viewModel.sites.count == 1,
-               let firstSite = viewModel.sites.first {
-                // If we have only one site, select it.
-                viewModel.setSite(firstSite, zoomTo: true)
+            .onChange(of: viewModel.selection) {
+                let newValue = viewModel.selection
+                // Prevent a double-set if the user triggered the original change.
+                guard selection?.wrappedValue != newValue else { return }
+                selection?.wrappedValue = newValue
             }
-        }
-        .onChange(of: viewModel.selection) {
-            let newValue = viewModel.selection
-            // Prevent a double-set if the user triggered the original change.
-            guard selection?.wrappedValue != newValue else { return }
-            selection?.wrappedValue = newValue
-        }
-        .onChange(of: viewpoint.wrappedValue) {
-            guard isNavigating.wrappedValue else { return }
-            if let newViewpoint = viewpoint.wrappedValue {
-                viewModel.onViewpointChanged(newViewpoint)
+            .onChange(of: viewpoint.wrappedValue) {
+                guard isNavigating.wrappedValue else { return }
+                if let newViewpoint = viewpoint.wrappedValue {
+                    viewModel.onViewpointChanged(newViewpoint)
+                }
             }
-        }
     }
 }
 
@@ -274,7 +190,6 @@ public extension FloorFilter {
     }
 }
 
-@available(iOS 26.0, *)
 struct FloorFilter26: View {
     @EnvironmentObject private var model: FloorFilterViewModel
     @State private var isSiteSelectorPresented = false
@@ -300,8 +215,17 @@ struct FloorFilter26: View {
             }
         }
         .frame(width: width)
-        //.background(.regularMaterial)
-        .glassEffect(.regular, in: FloorFilter26.buttonShape)
+        .modify {
+            if #available(iOS 26, *) {
+#if os(visionOS)
+                $0.glassBackgroundEffect(in: FloorFilter26.buttonShape)
+#else
+                $0.glassEffect(.regular, in: FloorFilter26.buttonShape)
+#endif
+            } else {
+                $0.background(.regularMaterial)
+            }
+        }
         .clipShape(FloorFilter26.buttonShape)
     }
     
@@ -331,7 +255,6 @@ struct FloorFilter26: View {
     }
 }
 
-@available(iOS 26.0, *)
 struct LevelSelector26: View {
     let isTopAligned: Bool
     
@@ -399,10 +322,14 @@ struct LevelSelector26: View {
                             }
                         }
                     }
-                    .onScrollGeometryChange(for: CGFloat.self) { geometry in
-                        geometry.contentSize.height
-                    } action: { _, newValue in
-                        contentHeight = newValue
+                    .modify {
+                        if #available(iOS 18.0, *) {
+                            $0.onScrollGeometryChange(for: CGFloat.self) { geometry in
+                                geometry.contentSize.height
+                            } action: { _, newValue in
+                                contentHeight = newValue
+                            }
+                        }
                     }
                     .clipShape(FloorFilter26.buttonShape)
                     .frame(maxHeight: contentHeight)
@@ -430,7 +357,6 @@ struct LevelSelector26: View {
     }
 }
 
-@available(iOS 26.0, *)
 private struct LevelButton26: View {
     @EnvironmentObject var model: FloorFilterViewModel
     
