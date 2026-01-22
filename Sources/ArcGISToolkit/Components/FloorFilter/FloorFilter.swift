@@ -24,7 +24,7 @@ import SwiftUI
 ///
 /// | iPhone | iPad |
 /// | ------ | ---- |
-/// | ![image](https://user-images.githubusercontent.com/3998072/202811733-dcd640e9-3b27-43a8-8bec-fd9aeb6798c7.png) | ![image](https://user-images.githubusercontent.com/3998072/202811772-bf6009e7-82ec-459f-86ae-6651f519b2ef.png) |
+/// | ![image](https://private-user-images.githubusercontent.com/3718875/539407695-f7c8747b-1269-48d8-9dac-b783a63d3f15.png) | ![image](https://private-user-images.githubusercontent.com/3718875/539407699-f2e338f9-f29d-4621-9823-098037e9a135.png) |
 ///
 /// **Features**
 ///
@@ -46,7 +46,7 @@ import SwiftUI
 ///
 /// | Sites Button |
 /// | ----------- |
-/// | ![Image of button that displays the list of sites when tapped](https://user-images.githubusercontent.com/3998072/203417956-5161103d-5d29-42fa-8564-de254159efe2.png) |
+/// | ![Image of button that displays the list of sites when tapped](https://private-user-images.githubusercontent.com/3718875/539408127-be79d4b2-080b-439a-b1f1-26eb7535850d.png) |
 ///
 /// When the Site button is tapped, a prompt opens so the user can select a site and then a
 /// facility. After selecting a site and facility, a list of levels is displayed. The list of sites
