@@ -113,7 +113,7 @@ public struct FloorFilter: View {
     private let alignment: Alignment
     
     /// The width of the level selector.
-    private var levelSelectorWidth: CGFloat = 60
+    private var levelSelectorWidth: CGFloat = 56
     
     /// The `Viewpoint` used to pan/zoom to the selected site/facility.
     /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
@@ -204,7 +204,7 @@ public struct FloorFilter: View {
     public var body: some View {
         Group {
             if #available(iOS 26.0, *) {
-                FloorFilter26()
+                FloorFilter26(width: levelSelectorWidth)
                     .environmentObject(viewModel)
             } else {
                 levelSelectorContainer
@@ -280,9 +280,11 @@ struct FloorFilter26: View {
     @EnvironmentObject private var model: FloorFilterViewModel
     @State private var isSiteSelectorPresented = false
     
+    let width: CGFloat
+    
     static var buttonShape = RoundedRectangle(cornerRadius: 18, style: .continuous)
     static let buttonSize: CGFloat = 56
-    static let padding: CGFloat = 2
+    static let padding: CGFloat = 4
     static let fontSize: CGFloat = 20
     
     var body: some View {
