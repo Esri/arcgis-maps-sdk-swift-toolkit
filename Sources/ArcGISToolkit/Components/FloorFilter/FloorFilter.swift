@@ -204,7 +204,7 @@ public struct FloorFilter: View {
     public var body: some View {
         Group {
             if #available(iOS 26.0, *) {
-                FloorFilter26(width: levelSelectorWidth)
+                FloorFilter26(width: levelSelectorWidth, isTopAligned: isTopAligned)
                     .environmentObject(viewModel)
             } else {
                 levelSelectorContainer
@@ -280,6 +280,7 @@ struct FloorFilter26: View {
     @State private var isSiteSelectorPresented = false
     
     let width: CGFloat
+    let isTopAligned: Bool
     
     static var buttonShape = RoundedRectangle(cornerRadius: 18, style: .continuous)
     static let buttonSize: CGFloat = 56
@@ -288,18 +289,26 @@ struct FloorFilter26: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            LevelSelector26()
-            
-            if !model.sortedLevels.isEmpty {
-                Divider()
+            if isTopAligned {
+                siteSelectorButton
+                divider
+                LevelSelector26(isTopAligned: isTopAligned)
+            } else {
+                LevelSelector26(isTopAligned: isTopAligned)
+                divider
+                siteSelectorButton
             }
-            
-            siteSelectorButton
         }
         .frame(width: width)
         //.background(.regularMaterial)
         .glassEffect(.regular, in: FloorFilter26.buttonShape)
         .clipShape(FloorFilter26.buttonShape)
+    }
+    
+    @ViewBuilder private var divider: some View {
+        if !model.sortedLevels.isEmpty {
+            Divider()
+        }
     }
     
     @ViewBuilder private var siteSelectorButton: some View {
@@ -324,18 +333,25 @@ struct FloorFilter26: View {
 
 @available(iOS 26.0, *)
 struct LevelSelector26: View {
-    @EnvironmentObject private var model: FloorFilterViewModel
+    let isTopAligned: Bool
     
+    @EnvironmentObject private var model: FloorFilterViewModel
     @State private var isCollapsed = false
     @State private var contentHeight: CGFloat = .zero
     
     var body: some View {
         VStack(spacing: 0) {
+            if isTopAligned {
+                if !model.sortedLevels.isEmpty {
+                    levelButtons
+                }
+            }
+            
             if model.sortedLevels.count > 1 {
                 Button {
                     isCollapsed.toggle()
                 } label: {
-                    Image(systemName: "chevron.up")
+                    Image(systemName: isTopAligned ? "chevron.down" : "chevron.up")
                         .rotationEffect(isCollapsed ? .degrees(0) : .degrees(180))
                         .frame(minWidth: FloorFilter26.buttonSize, maxWidth: .infinity)
                         .frame(height: FloorFilter26.buttonSize)
@@ -346,8 +362,10 @@ struct LevelSelector26: View {
                 .buttonStyle(.plain)
             }
             
-            if !model.sortedLevels.isEmpty {
-                levelButtons
+            if !isTopAligned {
+                if !model.sortedLevels.isEmpty {
+                    levelButtons
+                }
             }
         }
         .animation(.default, value: isCollapsed)
