@@ -125,7 +125,7 @@ public struct FloorFilter: View {
     }
     
     public var body: some View {
-        FloorFilter26(width: levelSelectorWidth, isTopAligned: isTopAligned)
+        FloorFilterBody(width: levelSelectorWidth, isTopAligned: isTopAligned)
             .environmentObject(viewModel)
             .disabled(viewModel.loadStatus != .loaded)
             .onChange(of: selection?.wrappedValue) {
@@ -190,7 +190,7 @@ public extension FloorFilter {
     }
 }
 
-struct FloorFilter26: View {
+private struct FloorFilterBody: View {
     @EnvironmentObject private var model: FloorFilterViewModel
     @State private var isSiteSelectorPresented = false
     
@@ -207,9 +207,9 @@ struct FloorFilter26: View {
             if isTopAligned {
                 siteSelectorButton
                 divider
-                LevelSelector26(isTopAligned: isTopAligned)
+                LevelSelector(isTopAligned: isTopAligned)
             } else {
-                LevelSelector26(isTopAligned: isTopAligned)
+                LevelSelector(isTopAligned: isTopAligned)
                 divider
                 siteSelectorButton
             }
@@ -220,13 +220,13 @@ struct FloorFilter26: View {
 #if os(visionOS)
                 $0.glassBackgroundEffect(in: FloorFilter26.buttonShape)
 #else
-                $0.glassEffect(.regular, in: FloorFilter26.buttonShape)
+                $0.glassEffect(.regular, in: FloorFilterBody.buttonShape)
 #endif
             } else {
                 $0.background(.regularMaterial)
             }
         }
-        .clipShape(FloorFilter26.buttonShape)
+        .clipShape(FloorFilterBody.buttonShape)
     }
     
     @ViewBuilder private var divider: some View {
@@ -240,10 +240,10 @@ struct FloorFilter26: View {
             isSiteSelectorPresented.toggle()
         } label: {
             Image(systemName: "building.2")
-                .frame(minWidth: FloorFilter26.buttonSize, maxWidth: .infinity)
-                .frame(height: FloorFilter26.buttonSize)
-                .font(.system(size: FloorFilter26.fontSize))
-                .contentShape(FloorFilter26.buttonShape)
+                .frame(minWidth: FloorFilterBody.buttonSize, maxWidth: .infinity)
+                .frame(height: FloorFilterBody.buttonSize)
+                .font(.system(size: FloorFilterBody.fontSize))
+                .contentShape(FloorFilterBody.buttonShape)
         }
         .buttonStyle(.plain)
         .popover(isPresented: $isSiteSelectorPresented) {
@@ -255,7 +255,7 @@ struct FloorFilter26: View {
     }
 }
 
-struct LevelSelector26: View {
+private struct LevelSelector: View {
     let isTopAligned: Bool
     
     @EnvironmentObject private var model: FloorFilterViewModel
@@ -276,11 +276,11 @@ struct LevelSelector26: View {
                 } label: {
                     Image(systemName: isTopAligned ? "chevron.down" : "chevron.up")
                         .rotationEffect(isCollapsed ? .degrees(0) : .degrees(180))
-                        .frame(minWidth: FloorFilter26.buttonSize, maxWidth: .infinity)
-                        .frame(height: FloorFilter26.buttonSize)
-                        .font(.system(size: FloorFilter26.fontSize))
+                        .frame(minWidth: FloorFilterBody.buttonSize, maxWidth: .infinity)
+                        .frame(height: FloorFilterBody.buttonSize)
+                        .font(.system(size: FloorFilterBody.fontSize))
                         .foregroundStyle(.secondary)
-                        .contentShape(FloorFilter26.buttonShape)
+                        .contentShape(FloorFilterBody.buttonShape)
                 }
                 .buttonStyle(.plain)
             }
@@ -299,7 +299,7 @@ struct LevelSelector26: View {
             VStack(spacing: 0) {
                 if isCollapsed || model.sortedLevels.count == 1 {
                     if let level = model.selection?.level {
-                        LevelButton26(
+                        LevelButton(
                             level: level,
                             isSelected: true,
                             isCollapsed: $isCollapsed
@@ -313,7 +313,7 @@ struct LevelSelector26: View {
                     ScrollView {
                         VStack(spacing: 0) {
                             ForEach(model.sortedLevels, id:\.id) { level in
-                                LevelButton26(
+                                LevelButton(
                                     level: level,
                                     isSelected: level == model.selection?.level,
                                     isCollapsed: $isCollapsed
@@ -340,7 +340,7 @@ struct LevelSelector26: View {
                             }
                         }
                     }
-                    .clipShape(FloorFilter26.buttonShape)
+                    .clipShape(FloorFilterBody.buttonShape)
                     .frame(maxHeight: contentHeight)
                     .transition(
                         .move(edge: isTopAligned ? .top : .bottom)
@@ -374,7 +374,7 @@ struct LevelSelector26: View {
     }
 }
 
-private struct LevelButton26: View {
+private struct LevelButton: View {
     @EnvironmentObject var model: FloorFilterViewModel
     
     let level: FloorLevel
@@ -391,21 +391,21 @@ private struct LevelButton26: View {
         }
         label: {
             Text(level.shortName)
-                .frame(minWidth: FloorFilter26.buttonSize, maxWidth: .infinity)
-                .frame(height: FloorFilter26.buttonSize)
-                .font(.system(size: FloorFilter26.fontSize))
+                .frame(minWidth: FloorFilterBody.buttonSize, maxWidth: .infinity)
+                .frame(height: FloorFilterBody.buttonSize)
+                .font(.system(size: FloorFilterBody.fontSize))
                 .foregroundStyle(isSelected ? .primary : .secondary)
                 .fontWeight(isSelected ? .semibold : .regular)
                 .modify {
                     if isSelected && !isCollapsed && model.sortedLevels.count > 1 {
                         $0.background(
                             Color(uiColor: .systemBackground).opacity(0.75)
-                                .clipShape(FloorFilter26.buttonShape)
-                                .padding(FloorFilter26.padding)
+                                .clipShape(FloorFilterBody.buttonShape)
+                                .padding(FloorFilterBody.padding)
                         )
                     }
                 }
-                .contentShape(FloorFilter26.buttonShape)
+                .contentShape(FloorFilterBody.buttonShape)
         }
         .buttonStyle(.plain)
     }
