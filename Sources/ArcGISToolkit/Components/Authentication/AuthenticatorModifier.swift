@@ -39,7 +39,12 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
             Color.clear
                 .frame(width: 0, height: 0)
                 .modifier(AuthenticatorModifier(authenticator: authenticator))
-                ._oAuthWebViewSheet()
+                ._oAuthWebViewSheet(
+                    contentModifier: AuthenticatorModifier(
+                        authenticator: authenticator,
+                        showsNestedChallenges: true
+                    )
+                )
         }
     }
 }
@@ -47,24 +52,31 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
 /// A view modifier that prompts for credentials.
 private struct AuthenticatorModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
+    /// A Boolean value indicating if challenges that arrive during the handling
+    /// of an OAuth challenge are to be shown.
+    var showsNestedChallenges: Bool = false
     
     @ViewBuilder func body(content: Content) -> some View {
-        switch authenticator.currentChallenge {
-        case let challenge as TokenChallengeContinuation:
-            content.modifier(LoginViewModifier(challenge: challenge))
-        case let challenge as NetworkChallengeContinuation:
-            switch challenge.kind {
-            case .serverTrust:
-                content.modifier(TrustHostViewModifier(challenge: challenge))
-            case .certificate:
-                content.modifier(CertificatePickerViewModifier(challenge: challenge))
-            case .login:
-                content.modifier(LoginViewModifier(challenge: challenge))
-            }
-        case .none:
+        if !showsNestedChallenges && authenticator.isHandlingOAuthChallenge {
             content
-        default:
-            fatalError("unknown challenge type")
+        } else {
+            switch authenticator.currentChallenge {
+            case let challenge as TokenChallengeContinuation:
+                content.modifier(LoginViewModifier(challenge: challenge))
+            case let challenge as NetworkChallengeContinuation:
+                switch challenge.kind {
+                case .serverTrust:
+                    content.modifier(TrustHostViewModifier(challenge: challenge))
+                case .certificate:
+                    content.modifier(CertificatePickerViewModifier(challenge: challenge))
+                case .login:
+                    content.modifier(LoginViewModifier(challenge: challenge))
+                }
+            case .none:
+                content
+            default:
+                fatalError("unknown challenge type")
+            }
         }
     }
 }
