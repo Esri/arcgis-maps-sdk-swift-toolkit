@@ -381,7 +381,10 @@ struct LevelSelector26: View {
                             isSelected: true,
                             isCollapsed: $isCollapsed
                         )
-                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .transition(
+                            .move(edge: isTopAligned ? .bottom : .top)
+                            .combined(with: .opacity)
+                        )
                     }
                 } else {
                     ScrollView {
@@ -403,7 +406,10 @@ struct LevelSelector26: View {
                     }
                     .clipShape(FloorFilter26.buttonShape)
                     .frame(maxHeight: contentHeight)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .transition(
+                        .move(edge: isTopAligned ? .top : .bottom)
+                        .combined(with: .opacity)
+                    )
                 }
             }
             .onChange(of: isCollapsed) {
