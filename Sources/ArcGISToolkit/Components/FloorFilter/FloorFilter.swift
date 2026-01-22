@@ -283,6 +283,7 @@ struct FloorFilter26: View {
     static var buttonShape = RoundedRectangle(cornerRadius: 18, style: .continuous)
     static let buttonSize: CGFloat = 56
     static let padding: CGFloat = 2
+    static let fontSize: CGFloat = 20
     
     var body: some View {
         VStack(spacing: 0) {
@@ -305,7 +306,7 @@ struct FloorFilter26: View {
         } label: {
             Image(systemName: "building.2")
                 .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
-                .font(.system(size: 22))
+                .font(.system(size: FloorFilter26.fontSize))
         }
         .buttonStyle(.plain)
         .contentShape(FloorFilter26.buttonShape)
@@ -335,7 +336,7 @@ struct LevelSelector26: View {
                     Image(systemName: "chevron.up")
                         .rotationEffect(isCollapsed ? .degrees(0) : .degrees(180))
                         .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
-                        .font(.system(size: 20))
+                        .font(.system(size: FloorFilter26.fontSize))
                         .foregroundStyle(.secondary)
                 }
                 .buttonStyle(.plain)
@@ -411,8 +412,6 @@ private struct LevelButton26: View {
     let isSelected: Bool
     @Binding var isCollapsed: Bool
     
-    let textSize: CGFloat = 56
-    
     var body: some View {
         Button {
             if isCollapsed && model.sortedLevels.count > 1 {
@@ -423,8 +422,8 @@ private struct LevelButton26: View {
         }
         label: {
             Text(level.shortName)
-                .frame(width: textSize, height: textSize)
-                .font(.system(size: 20))
+                .frame(width: FloorFilter26.buttonSize, height: FloorFilter26.buttonSize)
+                .font(.system(size: FloorFilter26.fontSize))
                 .foregroundStyle(isSelected ? .primary : .secondary)
                 .fontWeight(isSelected ? .semibold : .regular)
                 .modify {
