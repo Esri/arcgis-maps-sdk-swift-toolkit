@@ -280,28 +280,23 @@ struct FloorFilter26: View {
     @EnvironmentObject private var model: FloorFilterViewModel
     @State private var isSiteSelectorPresented = false
     
-    var buttonShape: some Shape {
-        RoundedRectangle(cornerRadius: 18, style: .continuous)
-    }
-    
+    static var buttonShape = RoundedRectangle(cornerRadius: 18, style: .continuous)
     static let buttonSize: CGFloat = 56
-    static let padding: CGFloat = 6
+    static let padding: CGFloat = 2
     
     var body: some View {
         VStack(spacing: 0) {
             LevelSelector26()
-                .padding(.horizontal, FloorFilter26.padding)
             
             if !model.sortedLevels.isEmpty {
                 Divider()
             }
             
             siteSelectorButton
-                .padding(.horizontal, FloorFilter26.padding)
         }
-        .frame(maxWidth: FloorFilter26.buttonSize + FloorFilter26.padding)
-        .glassEffect(.regular, in: buttonShape)
-        .clipShape(buttonShape)
+        .frame(maxWidth: FloorFilter26.buttonSize)
+        .glassEffect(.regular, in: FloorFilter26.buttonShape)
+        .clipShape(FloorFilter26.buttonShape)
     }
     
     @ViewBuilder private var siteSelectorButton: some View {
@@ -313,11 +308,11 @@ struct FloorFilter26: View {
                 .font(.system(size: 22))
         }
         .buttonStyle(.plain)
-        .contentShape(buttonShape)
+        .contentShape(FloorFilter26.buttonShape)
         .popover(isPresented: $isSiteSelectorPresented) {
             SiteAndFacilitySelector(isPresented: $isSiteSelectorPresented)
-            // To work-around an iOS 26 bug on dark mode where the
-            // sheet appears half in dark mode and half in light mode.
+                // To work-around an iOS 26 bug on dark mode where the
+                // sheet appears half in dark mode and half in light mode.
                 .background(Color(uiColor: .systemBackground))
         }
     }
@@ -330,10 +325,6 @@ struct LevelSelector26: View {
     
     @State private var isCollapsed = false
     @State private var contentHeight: CGFloat = .zero
-    
-    var buttonShape: some Shape {
-        RoundedRectangle(cornerRadius: 18, style: .continuous)
-    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -348,7 +339,7 @@ struct LevelSelector26: View {
                         .foregroundStyle(.secondary)
                 }
                 .buttonStyle(.plain)
-                .contentShape(buttonShape)
+                .contentShape(FloorFilter26.buttonShape)
             }
             
             if !model.sortedLevels.isEmpty {
@@ -388,9 +379,8 @@ struct LevelSelector26: View {
                     } action: { _, newValue in
                         contentHeight = newValue
                     }
-                    .clipShape(buttonShape)
+                    .clipShape(FloorFilter26.buttonShape)
                     .frame(maxHeight: contentHeight)
-                    .padding(.bottom, FloorFilter26.padding)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
@@ -423,10 +413,6 @@ private struct LevelButton26: View {
     
     let textSize: CGFloat = 56
     
-    var buttonShape: some Shape {
-        RoundedRectangle(cornerRadius: 18, style: .continuous)
-    }
-    
     var body: some View {
         Button {
             if isCollapsed && model.sortedLevels.count > 1 {
@@ -443,12 +429,15 @@ private struct LevelButton26: View {
                 .fontWeight(isSelected ? .semibold : .regular)
                 .modify {
                     if isSelected && !isCollapsed && model.sortedLevels.count > 1 {
-                        $0.background(Color(uiColor: .systemBackground).opacity(0.75))
-                            .clipShape(buttonShape)
+                        $0.background(
+                            Color(uiColor: .systemBackground).opacity(0.75)
+                                .clipShape(FloorFilter26.buttonShape)
+                                .padding(FloorFilter26.padding)
+                        )
                     }
                 }
         }
         .buttonStyle(.plain)
-        .contentShape(buttonShape)
+        .contentShape(FloorFilter26.buttonShape)
     }
 }
