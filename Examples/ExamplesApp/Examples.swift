@@ -41,12 +41,16 @@ struct Examples: View {
             }
             .navigationTitle("Toolkit Examples")
         } detail: {
-            if let selectedExample {
-                selectedExample.view
-                    .navigationTitle(selectedExample.name)
-                    .navigationBarTitleDisplayMode(.inline)
-            } else {
-                Text("Select an example")
+            // Workaround for https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/1249 with
+            // Apple Feedback #FB19470509 "Inconsistent task(priority:_:) behavior on views shown in NavigationSplitView detail column".
+            NavigationStack {
+                if let selectedExample {
+                    selectedExample.view
+                        .navigationTitle(selectedExample.name)
+                        .navigationBarTitleDisplayMode(.inline)
+                } else {
+                    Text("Select an example")
+                }
             }
         }
         // visionOS doesn't provide the column visibility toggle like
