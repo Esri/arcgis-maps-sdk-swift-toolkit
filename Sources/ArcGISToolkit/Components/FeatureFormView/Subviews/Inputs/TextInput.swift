@@ -252,27 +252,25 @@ private extension TextInput {
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
         var body: some View {
-            HStack {
-                FormElementHeader(element: element)
-                Button.done {
-                    dismiss()
-                }
-#if !os(visionOS)
-                .buttonStyle(.plain)
-                .foregroundStyle(Color.accentColor)
-#endif
+            NavigationStack {
+                TextEditor(text: $text)
+                    .focused($isFocused)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationTitle(element.label)
+                    .onAppear {
+                        isFocused = true
+                    }
+                    .onChange(of: isFocused) {
+                        embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                    }
+                    .scrollContentBackground(.hidden)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            DismissButton(kind: .confirm)
+                        }
+                    }
+                FormElementFooter(element: element)
             }
-            TextEditor(text: $text)
-                .focused($isFocused)
-                .onAppear {
-                    isFocused = true
-                }
-                .onChange(of: isFocused) {
-                    embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
-                }
-                .scrollContentBackground(.hidden)
-            Spacer()
-            FormElementFooter(element: element)
         }
     }
 }
