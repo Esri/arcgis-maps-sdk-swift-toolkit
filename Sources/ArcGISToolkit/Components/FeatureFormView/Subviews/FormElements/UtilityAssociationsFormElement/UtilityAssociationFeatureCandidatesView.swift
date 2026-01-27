@@ -38,6 +38,8 @@ extension FeatureFormView {
         /// The model for the filter view
         @State private var filterViewModel = FilterViewModel()
         
+        @State private var whereClause = "1=1"
+        
         /// The asset type to use when querying for feature candidates.
         let assetType: UtilityAssetType
         /// The element to add the new association to.
@@ -56,7 +58,7 @@ extension FeatureFormView {
                     ProgressView()
                         .task {
                             let parameters = QueryParameters()
-                            parameters.whereClause = "1=1"
+                            parameters.whereClause = filterViewModel.whereClause()
                             queryFeatures(parameters: parameters)
                             await queryTask?.value
                             queryForFirstPageIsComplete = true
@@ -77,8 +79,22 @@ extension FeatureFormView {
             .onAppear {
                 filterViewModel.featureTable = form.feature.table as? ArcGISFeatureTable
             }
+            .onChange(of: whereClause, { oldValue, newValue in
+                    Task {
+                        candidates.removeAll()
+                        let parameters = QueryParameters()
+                        parameters.whereClause = filterViewModel.whereClause()
+                        queryFeatures(parameters: parameters)
+                        await queryTask?.value
+                        queryForFirstPageIsComplete = true
+                    }
+
+            })
             .sheet(isPresented: $filterViewModel.isFilterViewPresented) {
-                FilterView()
+                FilterView() {
+                    queryForFirstPageIsComplete = false
+                    whereClause = filterViewModel.whereClause()
+                }
             }
             .environment(filterViewModel)
         }
@@ -205,10 +221,17 @@ extension FeatureFormView {
         func queryFeatures(parameters: QueryParameters) {
             queryTask?.cancel()
             queryIsRunning = true
+            print("whereClause = \(parameters.whereClause)")
             queryTask = Task {
-                let result = try? await source.queryFeatures(assetType: assetType, parameters: parameters)
-                candidates.append(contentsOf: result?.candidates ?? [])
-                nextQueryParameters = result?.nextQueryParams
+                do {
+                    let result = try? await source.queryFeatures(assetType: assetType, parameters: parameters)
+                    print("result candidates: \(result?.candidates)")
+                    candidates.append(contentsOf: result?.candidates ?? [])
+                    nextQueryParameters = result?.nextQueryParams
+                } catch {
+                    print("result error: \(error)")
+                    nextQueryParameters = nil
+                }
                 queryIsRunning = false
             }
         }

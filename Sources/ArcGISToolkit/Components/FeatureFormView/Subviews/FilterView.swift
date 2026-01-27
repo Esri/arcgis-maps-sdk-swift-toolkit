@@ -22,6 +22,9 @@ import SwiftUI
 
 struct FilterView: View {
     @Environment(FilterViewModel.self) private var model
+    var onApplyAction: (() -> Void)?
+    @State var whereClause: String = "<empty>"
+    
     var body: some View {
         NavigationStack {
             ScrollViewReader { proxy in
@@ -70,8 +73,9 @@ struct FilterView: View {
                         })
                     }
                     .onChange(of: model.fieldFilters) {
+                        whereClause = model.whereClause()
                         // Scroll to the last message when messages change
-                        if let lastFilter = model.fieldFilters.last {
+                        if let _ = model.fieldFilters.last {
                             print("onChangeOf model.fieldFilters")
                             // Why doesn't this work??
                             withAnimation {
@@ -80,6 +84,8 @@ struct FilterView: View {
                         }
                     }
                     Spacer()
+                    Text(whereClause)
+                        .foregroundStyle(.red)
                     HStack {
                         AddButtonNoBorder()
                             .buttonStyle(.borderless)
@@ -97,6 +103,9 @@ struct FilterView: View {
                     }
                     ToolbarItem(placement: .topBarTrailing) {
                         DismissButton(kind: .confirm){
+                            if let onApplyAction {
+                                onApplyAction()
+                            }
                             model.apply()
                         }
                     }
@@ -105,11 +114,9 @@ struct FilterView: View {
     }
     
     private func deleteButton(_ filter: FieldFilter) -> Button<some View> {
-        Button {
+        Button(role: .destructive) {
             if let index = model.fieldFilters.firstIndex(of: filter) {
-                withAnimation {
-                    model.fieldFilters.remove(at: index)
-                }
+                model.fieldFilters.remove(at: index)
             }
         } label: {
             Text("Delete")
@@ -133,6 +140,9 @@ struct FilterView: View {
 }
 
 #Preview {
+    
+    let table = ServiceFeatureTable(url: URL(string: "ey123_88e2785c46b7486aad07f0f97841dc4c/FeatureServer/0")!) as ArcGISFeatureTable
+    
     let filters: [FieldFilter] = {
         [
             FieldFilter(
@@ -141,8 +151,8 @@ struct FilterView: View {
                     name: ".int32",
                     alias: "Int32"
                 ),
-                condition: UtilityNetworkAttributeComparison.Operator.equal,
-                value: 1
+                condition: FilterOperator.equal,
+                value: "1"
             ),
             FieldFilter(
                 field: Field(
@@ -150,13 +160,14 @@ struct FilterView: View {
                     name: ".text",
                     alias: "Text"
                 ),
-                condition: UtilityNetworkAttributeComparison.Operator.notEqual,
+                condition: FilterOperator.notEqual,
                 value: "Bob"
             )
         ]
     }()
-//    let model = FilterViewModel(fieldFilters: filters)
-    let model = FilterViewModel(fieldFilters: [])
+//    let model = FilterViewModel(featureTable: table)
+//    let model = FilterViewModel(fieldFilters: [])
+    let model = FilterViewModel(fieldFilters: filters)
     FilterView()
         .environment(model)
 }
@@ -170,6 +181,7 @@ private struct AddButtonBordered: View {
                     let newFilter = FieldFilter(field: model.fields.first ?? Field(type: .blob, name: "Empty", alias: "Empty"))
                     model.fieldFilters.append(newFilter)
                     print("field name:" + model.fieldFilters.last!.field.name)
+                    print("fields: \(model.fields)")
                 }
             } label: {
                 HStack {
@@ -219,16 +231,16 @@ private struct FieldView: View {
     @Environment(FilterViewModel.self) private var model
     @State private var selectedField: Field
     @State private var fieldFilter: FieldFilter
-    @State private var selectedCondition: UtilityNetworkAttributeComparison.Operator
-    
-    private var conditions: [UtilityNetworkAttributeComparison.Operator] = {
-        return [.equal, .notEqual]
-    }()
+    @State private var selectedCondition: FilterOperator
+    @State private var conditions: [FilterOperator]
+    @State private var text: String
     
     init(fieldFilter: FieldFilter) {
         self.fieldFilter = fieldFilter
         selectedField = fieldFilter.field
         selectedCondition = fieldFilter.condition
+        conditions = (fieldFilter.field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
+        text = fieldFilter.value
     }
     
     var body: some View {
@@ -249,7 +261,9 @@ private struct FieldView: View {
                 .pickerStyle(MenuPickerStyle())
                 .onChange(of: selectedField) {
                     fieldFilter.field = selectedField
-                    print("selectedField: \(selectedField.title())")
+                    conditions = (selectedField.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(selectedField.isNullable)
+
+                    print("selectedField: \(selectedField.title()); type = \(selectedField.type); field.isNumeric = \(selectedField.type?.isNumeric)")
                 }
             }
         }
@@ -258,8 +272,8 @@ private struct FieldView: View {
         HStack {
             Picker("Condition", selection: $selectedCondition) {
                 ForEach(conditions, id: \.self) { condition in
-                    condition.icon()
-                        .tag(condition.title())
+                    Text(condition.displayName)
+//                        .tag(condition.displayName)
                 }
             }
             .pickerStyle(MenuPickerStyle())
@@ -274,16 +288,59 @@ private struct FieldView: View {
             Text("Value")
             Spacer()
             TextField(
-                text: $fieldFilter.formattedValue,
+                text: $text,
                 prompt: Text("Enter a value"),
                 label: {
                     Label("Value", systemImage: "swift")
                 }
             )
             .multilineTextAlignment(.trailing)
+            .keyboardType(keyboardType)
             .frame(alignment: .trailing)
+            .onChange(of: text) { oldValue, newValue in
+                print("text changed \(newValue)")
+                fieldFilter.value = newValue
+                print("text changed; fieldFilter.value \(fieldFilter.value)")
+            }
         }
     }
+}
+
+extension FieldView {
+    /// The keyboard type to use depending on where the input is numeric and decimal.
+    var keyboardType: UIKeyboardType {
+        guard let fieldType = selectedField.type else { return .default }
+        
+        return if fieldType.isNumeric {
+#if os(visionOS)
+            // The 'positiveNegativeButton' doesn't show on visionOS
+            // so we need to show this keyboard so the user can type
+            // a negative number.
+            .numbersAndPunctuation
+#else
+            if fieldType.isFloatingPoint { .decimalPad } else { .numberPad }
+#endif
+        } else {
+            .default
+        }
+    }
+    
+//    /// The button that allows a user to switch the numeric value between positive and negative.
+//    var positiveNegativeButton: some View {
+//        Button {
+//            if let value = Int(type) {
+//                text = String(value * -1)
+//            } else if let value = Float(text) {
+//                text = String(value * -1)
+//            } else if let value = Double(text) {
+//                text = String(value * -1)
+//            }
+//        } label: {
+//            Image(systemName: "plus.forwardslash.minus")
+//        }
+//        .inspectorTint(.blue)
+//    }
+
 }
 
 extension Field {
