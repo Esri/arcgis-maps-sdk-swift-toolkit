@@ -191,8 +191,13 @@ private struct FloorFilterBody: View {
     let width: CGFloat
     
     static let buttonShape = RoundedRectangle(cornerRadius: 18)
+    #if targetEnvironment(macCatalyst)
+    static let buttonSize: CGFloat = 48
+    static let fontSize: CGFloat = 18
+    #else
     static let buttonSize: CGFloat = 54
     static let fontSize: CGFloat = 20
+    #endif
     static let padding: CGFloat = 3
     
     var body: some View {
