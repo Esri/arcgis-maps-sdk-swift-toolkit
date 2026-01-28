@@ -23,7 +23,7 @@ class FilterViewModel {
             if let featureTable {
                 Task {
                     try? await featureTable.load()
-                    fields = supportedFields(featureTable.fields)
+                    fields = unaSupportedFields(featureTable.fields)
                 }
             }
         }
@@ -45,7 +45,7 @@ class FilterViewModel {
         }
         return clause
     }
-    
+        
     /// Initializes a filter view model.
     /// - Parameter featureTable: The feature table for the filter.
     init(featureTable: ArcGISFeatureTable? = nil, fieldFilters: [FieldFilter] = [FieldFilter]()) {
@@ -72,7 +72,7 @@ class FieldFilter {
         didSet {
             print("oldValue: \(oldValue.title()), newValue: \(field.title())")
             if oldValue !== field {
-             // We're changing the field, so reset the condition
+                // We're changing the field, so reset the condition
                 condition = firstCondition()
             }
         }
@@ -83,17 +83,23 @@ class FieldFilter {
 
     init(
         field: Field,
+    ) {
+        self.field = field
+        self.condition = firstCondition()
+    }
+
+    init(
+        field: Field,
+        condition: FilterOperator,
         name: String = "Condition",
-        condition: FilterOperator = FilterOperator.equal,
         value: String = ""
     ) {
         self.field = field
-        self.name = name
         self.condition = condition
+        self.name = name
         self.value = value
-        self.condition = firstCondition()
     }
-    
+
     func query() -> String {
         switch condition {
         case .startsWith:
@@ -130,8 +136,8 @@ extension FieldFilter {
     func copy() -> FieldFilter {
         FieldFilter(
             field: self.field,
-            name: self.name,
             condition: self.condition,
+            name: self.name,
             value: self.value
         )
     }
@@ -150,11 +156,28 @@ extension FieldFilter: Hashable {
 }
 
 extension FilterViewModel {
+    /// Returns the list of fields supported for filtering.
+    /// - Parameter allFields: The list of all candidate fields to filter by.
+    /// - Returns: The final list of supported fileds to filter by.
     private func supportedFields(_ allFields: [Field]) -> [Field] {
         allFields.filter { field in
             (field.type?.isNumeric ?? false) ||
+             field.type == .text ||
+             field.type == FieldType.oid
+        }
+    }
+    
+    /// Returns the list of fields supported for filtering by when used in a Utility Network workflow.
+    /// - Parameter allFields: The list of all candidate fields to filter by.
+    /// - Returns: The final list of supported fileds to filter by. This will automatically filter out the
+    /// `ASSETGROUP` and `ASSETTYPE` fields, as those are speciall fields for Utility Networks.
+    private func unaSupportedFields(_ allFields: [Field]) -> [Field] {
+        allFields.filter { field in
+            ((field.type?.isNumeric ?? false) ||
             field.type == .text ||
-            field.type == FieldType.oid
+            field.type == FieldType.oid) &&
+            field.name != "assetgroup" &&
+            field.name != "assettype"
         }
     }
 }

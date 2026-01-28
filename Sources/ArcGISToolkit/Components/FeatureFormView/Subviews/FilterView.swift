@@ -12,10 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//TODO:
-// - look at design and make sure FilterView matches that
-
-
 import ArcGIS
 import SwiftUI
 
@@ -27,6 +23,7 @@ struct FilterView: View {
         NavigationStack {
             ScrollViewReader { proxy in
                 if model.fieldFilters.isEmpty {
+                    Spacer()
                     Image(systemName: "line.3.horizontal.decrease.circle")
                         .font(.largeTitle)
                         .foregroundStyle(.gray)
@@ -40,9 +37,10 @@ struct FilterView: View {
                         .padding(.bottom)
                     HStack {
                         Spacer()
-                        AddButtonBordered()
+                        BorderedAddButton()
                         Spacer()
                     }
+                    Spacer()
                 } else {
                     List {
                         ForEach(model.fieldFilters, id: \.self) { filter in
@@ -73,8 +71,6 @@ struct FilterView: View {
                     .onChange(of: model.fieldFilters) {
                         // Scroll to the last message when messages change
                         if let lastFieldFilter = model.fieldFilters.last {
-//                            print("onChangeOf model.fieldFilters")
-                            // NOTE: Why doesn't this work??
                             withAnimation {
                                 proxy.scrollTo(lastFieldFilter.id, anchor: .bottom)
                             }
@@ -82,7 +78,7 @@ struct FilterView: View {
                     }
                     Spacer()
                     HStack {
-                        AddButtonNoBorder()
+                        NoBorderAddbutton()
                             .buttonStyle(.borderless)
                             .padding()
                         Spacer()
@@ -98,10 +94,10 @@ struct FilterView: View {
                     }
                     ToolbarItem(placement: .topBarTrailing) {
                         DismissButton(kind: .confirm){
+                            model.apply()
                             if let onApplyAction {
                                 onApplyAction()
                             }
-                            model.apply()
                         }
                     }
                 }
@@ -119,7 +115,7 @@ struct FilterView: View {
             Image(systemName: "trash")
         }
     }
-
+    
     private func duplicateButton(_ filter: FieldFilter) -> Button<some View> {
         Button {
             if let index = model.fieldFilters.firstIndex(of: filter) {
@@ -135,35 +131,7 @@ struct FilterView: View {
     }
 }
 
-#Preview {
-    let filters: [FieldFilter] = {
-        [
-            FieldFilter(
-                field: Field(
-                    type: .int32,
-                    name: ".int32",
-                    alias: "Int32"
-                ),
-                condition: FilterOperator.equal,
-                value: "1"
-            ),
-            FieldFilter(
-                field: Field(
-                    type: .text,
-                    name: ".text",
-                    alias: "Text"
-                ),
-                condition: FilterOperator.notEqual,
-                value: "Bob"
-            )
-        ]
-    }()
-    let model = FilterViewModel(fieldFilters: filters)
-    FilterView()
-        .environment(model)
-}
-
-private struct AddButtonBordered: View {
+private struct BorderedAddButton: View {
     @Environment(FilterViewModel.self) private var model
     var body: some View {
         HStack {
@@ -182,15 +150,15 @@ private struct AddButtonBordered: View {
                 }
                 .bold()
             }
-            .id("plusButton")
+            .id("BorderedAddButton")
             .buttonBorderShape(.automatic)
             .buttonStyle(.borderedProminent)
-                .shadow(radius: 8)
+            .shadow(radius: 8)
         }
     }
 }
 
-private struct AddButtonNoBorder: View {
+private struct NoBorderAddbutton: View {
     @Environment(FilterViewModel.self) private var model
     var body: some View {
         HStack {
@@ -209,24 +177,19 @@ private struct AddButtonNoBorder: View {
                 }
                 .bold()
             }
-            .id("plusButton")
+            .id("NoBorderAddbutton")
         }
     }
 }
 
 private struct FieldView: View {
     @Environment(FilterViewModel.self) private var model
-    @State private var selectedField: Field
     @State private var fieldFilter: FieldFilter
-    @State private var selectedCondition: FilterOperator
-    @State private var conditions: [FilterOperator]
+    @State private var conditions = [FilterOperator]()
     @State private var text: String
     
     init(fieldFilter: FieldFilter) {
         self.fieldFilter = fieldFilter
-        selectedField = fieldFilter.field
-        selectedCondition = fieldFilter.condition
-        conditions = (fieldFilter.field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
         text = fieldFilter.value
     }
     
@@ -237,40 +200,35 @@ private struct FieldView: View {
                 HStack {
                     Text("Field")
                     Spacer()
-                    Text(selectedField.title())
+                    Text(fieldFilter.field.title())
                 }
             } else {
                 HStack {
-                    Picker("Fields", selection: $selectedField/*$fieldFilter.field*/) {
-//                    Picker("Fields", selection: $selectedField) {
+                    Picker("Fields", selection: $fieldFilter.field) {
                         ForEach(model.fields, id: \.self) { field in
                             Text(field.title())
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
-//                    .onChange(of: fieldFilter.field) {
-                    .onChange(of: selectedField) {
-                        fieldFilter.field = selectedField
-                        //*** Make conditions be part of the FieldFilter?????
-                        conditions = (selectedField.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(selectedField.isNullable)
-                        selectedCondition = conditions.first ?? FilterOperator.equal
+                    .onChange(of: fieldFilter.field) {
+                        conditions = fieldConditions()
                     }
                 }
             }
             
             // Condition
             HStack {
-                Picker("Condition", selection: $selectedCondition) {
+                Picker("Condition", selection: $fieldFilter.condition) {
                     ForEach(conditions, id: \.self) { condition in
                         Text(condition.displayName)
                     }
                 }
                 .pickerStyle(MenuPickerStyle())
-                .onChange(of: selectedCondition) {
-                    fieldFilter.condition = selectedCondition
-                }
             }
-            
+            .onAppear(perform: {
+                conditions = fieldConditions()
+            })
+
             
             // Value
             HStack {
@@ -292,7 +250,7 @@ private struct FieldView: View {
 #if os(iOS)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
-                        if UIDevice.current.userInterfaceIdiom == .phone, (selectedField.type?.isNumeric ?? false) {
+                        if UIDevice.current.userInterfaceIdiom == .phone, (fieldFilter.field.type?.isNumeric ?? false) {
                             // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
                             positiveNegativeButton
                             Spacer()
@@ -320,12 +278,16 @@ private struct FieldView: View {
         }
         .tint(.blue)
     }
+    
+    private func fieldConditions() -> [FilterOperator] {
+        (fieldFilter.field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
+    }
 }
 
 extension FieldView {
     /// The keyboard type to use depending on where the input is numeric and decimal.
     var keyboardType: UIKeyboardType {
-        guard let fieldType = selectedField.type else { return .default }
+        guard let fieldType = fieldFilter.field.type else { return .default }
         
         return if fieldType.isNumeric {
 #if os(visionOS)
@@ -360,40 +322,30 @@ extension Field: @retroactive Hashable {
     }
 }
 
-extension UtilityNetworkAttributeComparison.Operator {
-    func icon() -> Image {
-        switch self {
-        case .equal:
-            return Image(systemName: "equal")
-        case .notEqual:
-            return Image(systemName: "notequal")
-        case .greaterThan,
-                .greaterThanEqual,
-                .lessThan,
-                .lessThanEqual,
-                .includesTheValues,
-                .doesNotIncludeTheValues,
-                .includesAny,
-                .doesNotIncludeAny:
-            return Image("circle.slash")
-        }
-    }
-    
-    func title() -> String {
-        switch self {
-        case .equal:
-            return "Equal"
-        case .notEqual:
-            return "Not equal"
-        case .greaterThan,
-                .greaterThanEqual,
-                .lessThan,
-                .lessThanEqual,
-                .includesTheValues,
-                .doesNotIncludeTheValues,
-                .includesAny,
-                .doesNotIncludeAny:
-            return "Not supported"
-        }
-    }
+#Preview {
+    let filters: [FieldFilter] = {
+        [
+            FieldFilter(
+                field: Field(
+                    type: .int32,
+                    name: ".int32",
+                    alias: "Int32"
+                ),
+                condition: FilterOperator.equal,
+                value: "1"
+            ),
+            FieldFilter(
+                field: Field(
+                    type: .text,
+                    name: ".text",
+                    alias: "Text"
+                ),
+                condition: FilterOperator.notEqual,
+                value: "Bob"
+            )
+        ]
+    }()
+    let model = FilterViewModel(fieldFilters: filters)
+    FilterView()
+        .environment(model)
 }

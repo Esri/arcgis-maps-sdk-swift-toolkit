@@ -212,7 +212,12 @@ extension FeatureFormView {
                     Button {
                         filterViewModel.isFilterViewPresented.toggle()
                     } label: {
-                        Image(systemName: "line.3.horizontal.decrease")
+                        if filterViewModel.fieldFilters.isEmpty {
+                            Image(systemName: "line.3.horizontal.decrease")
+                        } else {
+                            Image(systemName: "line.3.horizontal.decrease.circle")
+                                .font(.title2)
+                        }
                     }
                 }
             }
