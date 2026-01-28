@@ -1292,14 +1292,14 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
 #if !os(visionOS)
+        radioButtonPicker.adjust(toPickerWheelValue: "Everything is working great")
+        radioButtonPicker.adjust(toPickerWheelValue: "Everything could be working greater")
+        radioButtonPicker.adjust(toPickerWheelValue: "Its good Enough!")
+        radioButtonPicker.adjust(toPickerWheelValue: "Show Group Visible Dependent")
         radioButtonPicker.adjust(toPickerWheelValue: "show invisible form element")
 #endif
         
-#if targetEnvironment(simulator)
-        XCTExpectFailure("The Radio Button picker fails to take the \"show invisible form element\" selection.")
-#endif
-        
-        // Confirm the first element of the conditional group doesn't exist.
+        // Confirm the first element of the conditional group exists.
         XCTAssertTrue(
             groupElement.exists,
             "The first group element doesn't exist."
