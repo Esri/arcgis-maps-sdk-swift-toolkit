@@ -17,8 +17,10 @@ import SwiftUI
 
 /// A view for a read only field form element.
 struct ReadOnlyInput: View {
-    /// An identity for the displayed text. A new identity is generated when the element's value changes.
-    @State private var id = UUID()
+    /// The formatted version of the element's current value.
+    @State private var formattedValue = ""
+    /// The element's current value.
+    @State private var value: Any?
     
     /// The element the input belongs to.
     let element: FieldFormElement
@@ -26,11 +28,11 @@ struct ReadOnlyInput: View {
     var body: some View {
         Group {
             if element.isMultiline {
-                modifiedValue
+                modifiedText
                     .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 ScrollView(.horizontal) {
-                    modifiedValue
+                    modifiedText
                 }
             }
         }
@@ -39,15 +41,15 @@ struct ReadOnlyInput: View {
     }
     
     /// The text to display for the element's current value with read-only modifiers.
-    var modifiedValue: some View {
-        value
+    var modifiedText: some View {
+        text
             .accessibilityIdentifier("\(element.label) Read Only Input")
             .fixedSize(horizontal: false, vertical: true)
-            .id(id)
             .lineLimit(element.isMultiline ? nil : 1)
             .textSelection(.enabled)
-            .onValueChange(of: element) { _, _ in
-                id = UUID()
+            .onValueChange(of: element) { newValue, newFormattedValue in
+                formattedValue = newFormattedValue
+                value = newValue
             }
     }
     
@@ -55,8 +57,8 @@ struct ReadOnlyInput: View {
     ///
     /// For non-date fields, we always use the element's formatted value. This ensures that if the element
     /// uses a domain, we show the user-friendly coded value name.
-    var value: Text {
-        switch element.value {
+    var text: Text {
+        switch value {
         case nil:
             Text(verbatim: "--")
         case let value as Date:
@@ -66,7 +68,7 @@ struct ReadOnlyInput: View {
                 Text(value, format: .dateTime.day().month().year())
             }
         default:
-            Text(element.formattedValue)
+            Text(formattedValue)
         }
     }
 }
