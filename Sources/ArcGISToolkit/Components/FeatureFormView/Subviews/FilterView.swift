@@ -14,7 +14,6 @@
 
 //TODO:
 // - look at design and make sure FilterView matches that
-// - what about ... button for delete? (Match design)
 
 
 import ArcGIS
@@ -23,7 +22,6 @@ import SwiftUI
 struct FilterView: View {
     @Environment(FilterViewModel.self) private var model
     var onApplyAction: (() -> Void)?
-    @State var whereClause: String = "<empty>"
     
     var body: some View {
         NavigationStack {
@@ -73,19 +71,16 @@ struct FilterView: View {
                         })
                     }
                     .onChange(of: model.fieldFilters) {
-                        whereClause = model.whereClause()
                         // Scroll to the last message when messages change
-                        if let _ = model.fieldFilters.last {
-                            print("onChangeOf model.fieldFilters")
-                            // Why doesn't this work??
+                        if let lastFieldFilter = model.fieldFilters.last {
+//                            print("onChangeOf model.fieldFilters")
+                            // NOTE: Why doesn't this work??
                             withAnimation {
-                                proxy.scrollTo("plusButton", anchor: .bottom)
+                                proxy.scrollTo(lastFieldFilter.id, anchor: .bottom)
                             }
                         }
                     }
                     Spacer()
-                    Text(whereClause)
-                        .foregroundStyle(.red)
                     HStack {
                         AddButtonNoBorder()
                             .buttonStyle(.borderless)
@@ -111,6 +106,7 @@ struct FilterView: View {
                     }
                 }
         }
+        .background(Color(.systemGroupedBackground))
     }
     
     private func deleteButton(_ filter: FieldFilter) -> Button<some View> {
@@ -140,9 +136,6 @@ struct FilterView: View {
 }
 
 #Preview {
-    
-    let table = ServiceFeatureTable(url: URL(string: "ey123_88e2785c46b7486aad07f0f97841dc4c/FeatureServer/0")!) as ArcGISFeatureTable
-    
     let filters: [FieldFilter] = {
         [
             FieldFilter(
@@ -165,8 +158,6 @@ struct FilterView: View {
             )
         ]
     }()
-//    let model = FilterViewModel(featureTable: table)
-//    let model = FilterViewModel(fieldFilters: [])
     let model = FilterViewModel(fieldFilters: filters)
     FilterView()
         .environment(model)
@@ -180,8 +171,6 @@ private struct AddButtonBordered: View {
                 withAnimation {
                     let newFilter = FieldFilter(field: model.fields.first ?? Field(type: .blob, name: "Empty", alias: "Empty"))
                     model.fieldFilters.append(newFilter)
-                    print("field name:" + model.fieldFilters.last!.field.name)
-                    print("fields: \(model.fields)")
                 }
             } label: {
                 HStack {
@@ -209,12 +198,10 @@ private struct AddButtonNoBorder: View {
                 withAnimation {
                     let newFilter = FieldFilter(field: model.fields.first ?? Field(type: .blob, name: "Empty", alias: "Empty"))
                     model.fieldFilters.append(newFilter)
-                    print("field name:" + model.fieldFilters.last!.field.name)
                 }
             } label: {
                 HStack {
                     Image(systemName: "plus")
-//                        .imageScale(.large)
                         .foregroundColor(.white)
                         .padding(4)
                         .background(Circle().fill(Color.blue))
@@ -244,65 +231,94 @@ private struct FieldView: View {
     }
     
     var body: some View {
-        // Field
-        if model.fields.isEmpty {
-            HStack {
-                Text("Field")
-                Spacer()
-                Text(selectedField.title())
+        Group {
+            // Field
+            if model.fields.isEmpty {
+                HStack {
+                    Text("Field")
+                    Spacer()
+                    Text(selectedField.title())
+                }
+            } else {
+                HStack {
+                    Picker("Fields", selection: $selectedField/*$fieldFilter.field*/) {
+//                    Picker("Fields", selection: $selectedField) {
+                        ForEach(model.fields, id: \.self) { field in
+                            Text(field.title())
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+//                    .onChange(of: fieldFilter.field) {
+                    .onChange(of: selectedField) {
+                        fieldFilter.field = selectedField
+                        //*** Make conditions be part of the FieldFilter?????
+                        conditions = (selectedField.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(selectedField.isNullable)
+                        selectedCondition = conditions.first ?? FilterOperator.equal
+                    }
+                }
             }
-        } else {
+            
+            // Condition
             HStack {
-                Picker("Fields", selection: $selectedField) {
-                    ForEach(model.fields, id: \.self) { field in
-                        Text(field.title())
+                Picker("Condition", selection: $selectedCondition) {
+                    ForEach(conditions, id: \.self) { condition in
+                        Text(condition.displayName)
                     }
                 }
                 .pickerStyle(MenuPickerStyle())
-                .onChange(of: selectedField) {
-                    fieldFilter.field = selectedField
-                    conditions = (selectedField.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(selectedField.isNullable)
-
-                    print("selectedField: \(selectedField.title()); type = \(selectedField.type); field.isNumeric = \(selectedField.type?.isNumeric)")
+                .onChange(of: selectedCondition) {
+                    fieldFilter.condition = selectedCondition
                 }
             }
-        }
-
-        // Condition
-        HStack {
-            Picker("Condition", selection: $selectedCondition) {
-                ForEach(conditions, id: \.self) { condition in
-                    Text(condition.displayName)
-//                        .tag(condition.displayName)
+            
+            
+            // Value
+            HStack {
+                Text("Value")
+                Spacer()
+                TextField(
+                    text: $text,
+                    prompt: Text("Enter a value"),
+                    label: {
+                        Label("Value", systemImage: "swift")
+                    }
+                )
+                .multilineTextAlignment(.trailing)
+                .keyboardType(keyboardType)
+                .frame(alignment: .trailing)
+                .onChange(of: text) { oldValue, newValue in
+                    fieldFilter.value = newValue
                 }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .onChange(of: selectedCondition) {
-                fieldFilter.condition = selectedCondition
-            }
-        }
-        
-        
-        // Value
-        HStack {
-            Text("Value")
-            Spacer()
-            TextField(
-                text: $text,
-                prompt: Text("Enter a value"),
-                label: {
-                    Label("Value", systemImage: "swift")
+#if os(iOS)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        if UIDevice.current.userInterfaceIdiom == .phone, (selectedField.type?.isNumeric ?? false) {
+                            // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
+                            positiveNegativeButton
+                            Spacer()
+                        }
+                    }
                 }
-            )
-            .multilineTextAlignment(.trailing)
-            .keyboardType(keyboardType)
-            .frame(alignment: .trailing)
-            .onChange(of: text) { oldValue, newValue in
-                print("text changed \(newValue)")
-                fieldFilter.value = newValue
-                print("text changed; fieldFilter.value \(fieldFilter.value)")
+#endif
             }
         }
+        .id(fieldFilter.id)
+    }
+    
+    /// The button that allows a user to switch the numeric value between positive and negative.
+    var positiveNegativeButton: some View {
+        Button {
+            if let value = Int(text) {
+                text = String(value * -1)
+            } else if let value = Float(text) {
+                text = String(value * -1)
+            } else if let value = Double(text) {
+                text = String(value * -1)
+            }
+        } label: {
+            Image(systemName: "plus.forwardslash.minus")
+        }
+        .tint(.blue)
     }
 }
 
@@ -324,23 +340,6 @@ extension FieldView {
             .default
         }
     }
-    
-//    /// The button that allows a user to switch the numeric value between positive and negative.
-//    var positiveNegativeButton: some View {
-//        Button {
-//            if let value = Int(type) {
-//                text = String(value * -1)
-//            } else if let value = Float(text) {
-//                text = String(value * -1)
-//            } else if let value = Double(text) {
-//                text = String(value * -1)
-//            }
-//        } label: {
-//            Image(systemName: "plus.forwardslash.minus")
-//        }
-//        .inspectorTint(.blue)
-//    }
-
 }
 
 extension Field {
@@ -398,7 +397,3 @@ extension UtilityNetworkAttributeComparison.Operator {
         }
     }
 }
-
-//#Preview {
-//    FieldView()
-//}

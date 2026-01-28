@@ -20,11 +20,10 @@ import SwiftUI
 class FilterViewModel {
     public var featureTable: ArcGISFeatureTable? {
         didSet {
-            if let featureTable {print("featureTable didSet")
+            if let featureTable {
                 Task {
                     try? await featureTable.load()
                     fields = supportedFields(featureTable.fields)
-                    print("field: \(fields)")
                 }
             }
         }
@@ -66,9 +65,18 @@ class FilterViewModel {
     }
 }
 
+@Observable
 class FieldFilter {
     let id = UUID()
-    var field: Field
+    var field: Field {
+        didSet {
+            print("oldValue: \(oldValue.title()), newValue: \(field.title())")
+            if oldValue !== field {
+             // We're changing the field, so reset the condition
+                condition = firstCondition()
+            }
+        }
+    }
     var name = "Condition"
     var condition: FilterOperator = FilterOperator.equal
     var value = ""
@@ -82,27 +90,23 @@ class FieldFilter {
         self.field = field
         self.name = name
         self.condition = condition
-        print("Fieldfilter init value = \(value)")  //--Test this
         self.value = value
+        self.condition = firstCondition()
     }
     
     func query() -> String {
         switch condition {
         case .startsWith:
-            //                "${field.name} ${operator.sign} '${value}%'"
             return "\(field.name) \(condition.sqlOperator) '\(value)%'"
         case .endsWith:
-            //                "${field.name} ${operator.sign} '%${value}'"
             return "\(field.name) \(condition.sqlOperator) '%\(value)'"
         case .contains,
                 .doesNotContain:
-            //                "${field.name} ${operator.sign} '%${value}%'"
             return "\(field.name) \(condition.sqlOperator) '%\(value)%'"
         case .isBlank,
                 .isNotBlank,
                 .isEmpty,
                 .isNotEmpty:
-            //                "${field.name} ${operator.sign}"   // unary: no RHS value
             return "\(field.name) \(condition.sqlOperator)"   // unary: no RHS value
         case .equal,
                 .notEqual,
@@ -112,23 +116,24 @@ class FieldFilter {
                 .greaterThanOrEqual,
                 .lessThan,
                 .lessThanOrEqual:
-            //            "${field.name} ${operator.sign} $value"
             return "\(field.name) \(condition.sqlOperator) \(value)"
         }
+    }
+    
+    private func firstCondition() -> FilterOperator {
+        let conditions = (field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(field.isNullable)
+        return conditions.first ?? FilterOperator.equal
     }
 }
 
 extension FieldFilter {
     func copy() -> FieldFilter {
-        print("original: \(self)")
-        let newFilter = FieldFilter(
+        FieldFilter(
             field: self.field,
             name: self.name,
             condition: self.condition,
             value: self.value
         )
-        print("newFilter: \(newFilter); value = \(self.value); newFilter.value = \(newFilter.value)")
-        return newFilter
     }
 }
 
@@ -231,76 +236,3 @@ enum FilterOperator: String {
         return self.rawValue
     }
 }
-
-//protocol FilterOperator {
-//    var displayName: String { get }
-//    var sqlOperator: String { get }
-//}
-//
-//enum NumericFilterOperator: String, FilterOperator {
-//    case equal = "="
-//    case notEqual = "!="
-//    case greaterThan = ">"
-//    case greaterThanOrEqual = ">="
-//    case lessThan = "<"
-//    case lessThanOrEqual = "<="
-//    
-//    var sqlOperator: String {
-//        switch self {
-//        case .equal:
-//            return "="
-//        case .notEqual:
-//            return "<>"
-//        case .greaterThan:
-//            return ">"
-//        case .greaterThanOrEqual:
-//            return ">="
-//        case .lessThan:
-//            return "<"
-//        case .lessThanOrEqual:
-//            return "<="
-//        }
-//    }
-//    
-//    var displayName: String {
-//        return self.rawValue
-//    }
-//}
-//
-//enum TextFilterOperator: String, FilterOperator {
-//    case isOp = "is"
-//    case isNot = "is not"
-//    case startsWith = "starts with"
-//    case endsWith = "ends with"
-//    case contains = "contains the text"
-//    case doesNotContain = "does not contain the text"
-//    case isBlank = "is blank"
-//    case isNotBlank = "is not blank"
-//    case isEmpty = "is empty"
-//    case isNotEmpty = "is not empty"
-//
-//    var sqlOperator: String {
-//        switch self {
-//        case .isOp:
-//            return "="
-//        case .isNot:
-//            return "<>"
-//        case .startsWith, .endsWith, .contains:
-//            return "LIKE"
-//        case .doesNotContain:
-//            return "not LIKE"
-//        case .isBlank:
-//            return "IS NULL"
-//        case .isNotBlank:
-//            return "IS NOT NULL"
-//        case .isEmpty:
-//            return "= ''"
-//        case .isNotEmpty:
-//            return "<> ''"
-//        }
-//    }
-//    
-//    var displayName: String {
-//        return self.rawValue
-//    }
-//}

@@ -221,15 +221,12 @@ extension FeatureFormView {
         func queryFeatures(parameters: QueryParameters) {
             queryTask?.cancel()
             queryIsRunning = true
-            print("whereClause = \(parameters.whereClause)")
             queryTask = Task {
                 do {
                     let result = try? await source.queryFeatures(assetType: assetType, parameters: parameters)
-                    print("result candidates: \(result?.candidates)")
                     candidates.append(contentsOf: result?.candidates ?? [])
                     nextQueryParameters = result?.nextQueryParams
                 } catch {
-                    print("result error: \(error)")
                     nextQueryParameters = nil
                 }
                 queryIsRunning = false
