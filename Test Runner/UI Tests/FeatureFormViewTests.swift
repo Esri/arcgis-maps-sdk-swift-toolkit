@@ -1287,7 +1287,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Confirm the option to show the elements exists.
         XCTAssertTrue(
-            radioButtonPicker.waitForExistence(timeout: 5),
+            radioButtonPicker.exists,
             "The Radio Button picker doesn't exist."
         )
         
@@ -1301,7 +1301,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Confirm the first element of the conditional group exists.
         XCTAssertTrue(
-            groupElement.exists,
+            groupElement.waitForExistence(timeout: 5),
             "The first group element doesn't exist."
         )
     }
