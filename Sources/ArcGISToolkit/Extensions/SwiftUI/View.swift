@@ -79,9 +79,7 @@ extension View {
     func inspectorTint<S>(_ tint: S) -> some View where S: ShapeStyle {
         self.tint(tint)
     }
-}
-
-extension View {
+    
     /// Adds an action to perform when this view detects data emitted by the
     /// given async sequence. If `action` is `nil`, then the async sequence is not observed.
     /// The `action` closure is captured the first time the view appears.
@@ -107,9 +105,7 @@ extension View {
             self
         }
     }
-}
-
-extension View {
+    
     /// Modifies this view in a closure. This is useful for using an `if` statement
     /// to determine what modifier, if any, should be applied.
     @ViewBuilder
