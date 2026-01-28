@@ -116,13 +116,8 @@ public struct FloorFilter: View {
     /// A Boolean value indicating whether the map or scene is currently being navigated.
     private var isNavigating: Binding<Bool>
     
-    /// Indicates that the selector should be presented with a top oriented alignment configuration.
-    private var isTopAligned: Bool {
-        alignment.vertical == .top
-    }
-    
     public var body: some View {
-        FloorFilterBody(isTopAligned: isTopAligned, width: levelSelectorWidth)
+        FloorFilterBody(isTopAligned: alignment.vertical == .top, width: levelSelectorWidth)
             .environmentObject(viewModel)
             .disabled(viewModel.loadStatus != .loaded)
             .onChange(of: selection?.wrappedValue) {
@@ -264,34 +259,34 @@ private struct LevelSelector: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if isTopAligned {
-                if !model.sortedLevels.isEmpty {
+            if !model.sortedLevels.isEmpty {
+                if isTopAligned {
                     levelButtons
-                }
-            }
-            
-            if model.sortedLevels.count > 1 {
-                Button {
-                    isCollapsed.toggle()
-                } label: {
-                    Image(systemName: isTopAligned ? "chevron.down" : "chevron.up")
-                        .rotationEffect(isCollapsed ? .degrees(0) : .degrees(180))
-                        .frame(minWidth: FloorFilterBody.buttonSize, maxWidth: .infinity)
-                        .frame(height: FloorFilterBody.buttonSize)
-                        .font(.system(size: FloorFilterBody.fontSize))
-                        .foregroundStyle(.secondary)
-                        .contentShape(FloorFilterBody.buttonShape)
-                }
-                .buttonStyle(.plain)
-            }
-            
-            if !isTopAligned {
-                if !model.sortedLevels.isEmpty {
+                    collapseButton
+                } else {
+                    collapseButton
                     levelButtons
                 }
             }
         }
         .animation(.default, value: isCollapsed)
+    }
+    
+    @ViewBuilder private var collapseButton: some View {
+        if model.sortedLevels.count > 1 {
+            Button {
+                isCollapsed.toggle()
+            } label: {
+                Image(systemName: isTopAligned ? "chevron.down" : "chevron.up")
+                    .rotationEffect(isCollapsed ? .degrees(0) : .degrees(180))
+                    .frame(minWidth: FloorFilterBody.buttonSize, maxWidth: .infinity)
+                    .frame(height: FloorFilterBody.buttonSize)
+                    .font(.system(size: FloorFilterBody.fontSize))
+                    .foregroundStyle(.secondary)
+                    .contentShape(FloorFilterBody.buttonShape)
+            }
+            .buttonStyle(.plain)
+        }
     }
     
     @ViewBuilder private var levelButtons: some View {

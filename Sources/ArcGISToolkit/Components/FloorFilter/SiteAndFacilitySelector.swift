@@ -65,11 +65,10 @@ private struct SiteList: View {
     
     /// The filtered sites.
     var sites: [FloorSite] {
-        guard !searchText.isEmpty else {
-            return model.sites
-        }
-        return model.sites.filter {
-            $0.name.localizedStandardContains(searchText)
+        return if searchText.isEmpty {
+            model.sites
+        } else {
+            model.sites.filter { $0.name.localizedStandardContains(searchText) }
         }
     }
     
@@ -140,13 +139,13 @@ private struct FacilityList: View {
     /// The filtered facilities.
     var facilities: [FloorFacility] {
         let facilities = site?.facilities ?? model.facilities
-        
-        guard !searchText.isEmpty else {
-            return facilities.sorted(using: KeyPathComparator(\.name))
+        return if searchText.isEmpty {
+            facilities.sorted(using: KeyPathComparator(\.name))
+        } else {
+            facilities
+                .filter { $0.name.localizedStandardContains(searchText) }
+                .sorted(using: KeyPathComparator(\.name))
         }
-        return facilities
-            .filter { $0.name.localizedStandardContains(searchText) }
-            .sorted(using: KeyPathComparator(\.name))
     }
     
     var body: some View {
