@@ -125,7 +125,7 @@ public struct FloorFilter: View {
     }
     
     public var body: some View {
-        FloorFilterBody(width: levelSelectorWidth, isTopAligned: isTopAligned)
+        FloorFilterBody(isTopAligned: isTopAligned, width: levelSelectorWidth)
             .environmentObject(viewModel)
             .disabled(viewModel.loadStatus != .loaded)
             .onChange(of: selection?.wrappedValue) {
@@ -302,9 +302,9 @@ private struct LevelSelector: View {
                 if isCollapsed || model.sortedLevels.count == 1 {
                     if let level = model.selection?.level {
                         LevelButton(
-                            level: level,
+                            isCollapsed: $isCollapsed,
                             isSelected: true,
-                            isCollapsed: $isCollapsed
+                            level: level
                         )
                         .transition(
                             .move(edge: isTopAligned ? .bottom : .top)
@@ -316,9 +316,9 @@ private struct LevelSelector: View {
                         VStack(spacing: 0) {
                             ForEach(model.sortedLevels, id:\.id) { level in
                                 LevelButton(
-                                    level: level,
+                                    isCollapsed: $isCollapsed,
                                     isSelected: level == model.selection?.level,
-                                    isCollapsed: $isCollapsed
+                                    level: level
                                 )
                                 .id(level.id)
                             }

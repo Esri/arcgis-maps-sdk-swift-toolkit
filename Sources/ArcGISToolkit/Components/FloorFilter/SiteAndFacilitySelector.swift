@@ -40,7 +40,7 @@ struct SiteAndFacilitySelector: View {
             .navigationDestination(for: FloorFacility.self) { facility in
                 FacilityList(
                     isPresented: $isPresented,
-                    site: model.showingFaciltiesFromAllSites ? nil : facility.site
+                    site: model.showingFacilitiesFromAllSites ? nil : facility.site
                 )
             }
         }
@@ -82,7 +82,7 @@ private struct SiteList: View {
                     NavigationLink {
                         FacilityList(isPresented: $isPresented, site: site)
                             .onAppear {
-                                model.showingFaciltiesFromAllSites = false
+                                model.showingFacilitiesFromAllSites = false
                             }
                     } label: {
                         Text(site.name)
@@ -115,7 +115,7 @@ private struct SiteList: View {
         NavigationLink {
             FacilityList(isPresented: $isPresented, site: nil)
                 .onAppear {
-                    model.showingFaciltiesFromAllSites = true
+                    model.showingFacilitiesFromAllSites = true
                 }
         } label: {
             Text(String.allSites)
@@ -163,7 +163,7 @@ private struct FacilityList: View {
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text(facility.name)
-                                    if model.showingFaciltiesFromAllSites {
+                                    if model.showingFacilitiesFromAllSites {
                                         Text(facility.site?.name ?? "")
                                             .font(.footnote)
                                             .foregroundStyle(.secondary)
