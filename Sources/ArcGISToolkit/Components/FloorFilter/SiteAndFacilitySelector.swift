@@ -57,7 +57,7 @@ struct SiteAndFacilitySelector: View {
 private struct SiteList: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isPresented: Bool
-
+    
     /// The view model backing this view.
     @EnvironmentObject private var model: FloorFilterViewModel
     
@@ -78,7 +78,7 @@ private struct SiteList: View {
             if sites.isEmpty {
                 ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
             } else {
-                List(sites, id:\.id) { site in
+                List(sites) { site in
                     NavigationLink {
                         FacilityList(isPresented: $isPresented, site: site)
                             .onAppear {
@@ -130,7 +130,7 @@ private struct SiteList: View {
 private struct FacilityList: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isPresented: Bool
-
+    
     /// The view model backing this view.
     @EnvironmentObject private var model: FloorFilterViewModel
     
@@ -155,7 +155,7 @@ private struct FacilityList: View {
                 ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
             } else {
                 ScrollViewReader { scrollView in
-                    List(facilities, id:\.id) { facility in
+                    List(facilities) { facility in
                         Button {
                             model.setFacility(facility, zoomTo: true)
                             isPresented = false

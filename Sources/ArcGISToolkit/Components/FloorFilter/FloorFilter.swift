@@ -155,10 +155,10 @@ public struct FloorFilter: View {
                 selection?.wrappedValue = newValue
             }
             .onChange(of: viewpoint.wrappedValue) {
-                guard isNavigating.wrappedValue else { return }
-                if let newViewpoint = viewpoint.wrappedValue {
-                    viewModel.onViewpointChanged(newViewpoint)
+                guard isNavigating.wrappedValue, let newViewpoint = viewpoint.wrappedValue else {
+                    return
                 }
+                viewModel.onViewpointChanged(newViewpoint)
             }
     }
 }
@@ -195,13 +195,13 @@ private struct FloorFilterBody: View {
     @EnvironmentObject private var model: FloorFilterViewModel
     @State private var isSiteSelectorPresented = false
     
-    let width: CGFloat
     let isTopAligned: Bool
+    let width: CGFloat
     
-    static var buttonShape = RoundedRectangle(cornerRadius: 18, style: .continuous)
+    static let buttonShape = RoundedRectangle(cornerRadius: 18)
     static let buttonSize: CGFloat = 56
-    static let padding: CGFloat = 3
     static let fontSize: CGFloat = 20
+    static let padding: CGFloat = 3
     
     var body: some View {
         VStack(spacing: 0) {
@@ -335,9 +335,10 @@ private struct LevelSelector: View {
                     }
                     .modify {
                         if #available(iOS 18.0, *) {
-                            $0.onScrollGeometryChange(for: CGFloat.self) { geometry in
-                                geometry.contentSize.height
-                            } action: { _, newValue in
+                            $0.onScrollGeometryChange(
+                                for: CGFloat.self,
+                                of: \.contentSize.height
+                            ) { _, newValue in
                                 contentHeight = newValue
                             }
                         }
@@ -354,11 +355,7 @@ private struct LevelSelector: View {
                 guard !isCollapsed else { return }
                 scrollToSelectedLevel(with: scrollView)
             }
-            .onChange(of: model.selection) { _, _ in
-                guard model.selection?.facility != nil, !isCollapsed else { return }
-                scrollToSelectedLevel(with: scrollView)
-            }
-            .onAppear {
+            .onChange(of: model.selection, initial: true) {
                 guard model.selection?.facility != nil, !isCollapsed else { return }
                 scrollToSelectedLevel(with: scrollView)
             }
@@ -368,10 +365,9 @@ private struct LevelSelector: View {
     /// Scrolls the list within the provided proxy to the button representing the selected level.
     /// - Parameter scrollView: The scroll view proxy containing the scroll view.
     func scrollToSelectedLevel(with scrollView: ScrollViewProxy) {
-        if let level = model.selection?.level {
-            withAnimation {
-                scrollView.scrollTo(level.id)
-            }
+        guard let level = model.selection?.level else { return }
+        withAnimation {
+            scrollView.scrollTo(level.id)
         }
     }
 }
@@ -380,9 +376,9 @@ private struct LevelSelector: View {
 private struct LevelButton: View {
     @EnvironmentObject var model: FloorFilterViewModel
     
-    let level: FloorLevel
-    let isSelected: Bool
     @Binding var isCollapsed: Bool
+    let isSelected: Bool
+    let level: FloorLevel
     
     var body: some View {
         Button {
@@ -391,8 +387,7 @@ private struct LevelButton: View {
             } else {
                 model.setLevel(level)
             }
-        }
-        label: {
+        } label: {
             Text(level.shortName)
                 .frame(minWidth: FloorFilterBody.buttonSize, maxWidth: .infinity)
                 .frame(height: FloorFilterBody.buttonSize)
