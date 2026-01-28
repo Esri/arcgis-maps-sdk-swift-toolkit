@@ -80,15 +80,15 @@ extension FeatureFormView {
                 filterViewModel.featureTable = form.feature.table as? ArcGISFeatureTable
             }
             .onChange(of: whereClause, { oldValue, newValue in
-                    Task {
-                        candidates.removeAll()
-                        let parameters = QueryParameters()
-                        parameters.whereClause = filterViewModel.whereClause()
-                        queryFeatures(parameters: parameters)
-                        await queryTask?.value
-                        queryForFirstPageIsComplete = true
-                    }
-
+                Task {
+                    candidates.removeAll()
+                    let parameters = QueryParameters()
+                    parameters.whereClause = filterViewModel.whereClause()
+                    queryFeatures(parameters: parameters)
+                    await queryTask?.value
+                    queryForFirstPageIsComplete = true
+                }
+                
             })
             .sheet(isPresented: $filterViewModel.isFilterViewPresented) {
                 FilterView() {

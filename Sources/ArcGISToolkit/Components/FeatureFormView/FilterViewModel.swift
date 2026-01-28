@@ -31,7 +31,7 @@ class FilterViewModel {
     var fieldFilters: [FieldFilter]
     private var originalFieldFilters: [FieldFilter]
     var isFilterViewPresented = false
-
+    
     var fields = [Field]()
     
     func whereClause() -> String {
@@ -45,7 +45,7 @@ class FilterViewModel {
         }
         return clause
     }
-        
+    
     /// Initializes a filter view model.
     /// - Parameter featureTable: The feature table for the filter.
     init(featureTable: ArcGISFeatureTable? = nil, fieldFilters: [FieldFilter] = [FieldFilter]()) {
@@ -80,14 +80,14 @@ class FieldFilter {
     var name = "Condition"
     var condition: FilterOperator = FilterOperator.equal
     var value = ""
-
+    
     init(
         field: Field,
     ) {
         self.field = field
         self.condition = firstCondition()
     }
-
+    
     init(
         field: Field,
         condition: FilterOperator,
@@ -99,7 +99,7 @@ class FieldFilter {
         self.name = name
         self.value = value
     }
-
+    
     func query() -> String {
         switch condition {
         case .startsWith:
@@ -162,8 +162,8 @@ extension FilterViewModel {
     private func supportedFields(_ allFields: [Field]) -> [Field] {
         allFields.filter { field in
             (field.type?.isNumeric ?? false) ||
-             field.type == .text ||
-             field.type == FieldType.oid
+            field.type == .text ||
+            field.type == FieldType.oid
         }
     }
     
@@ -174,8 +174,8 @@ extension FilterViewModel {
     private func unaSupportedFields(_ allFields: [Field]) -> [Field] {
         allFields.filter { field in
             ((field.type?.isNumeric ?? false) ||
-            field.type == .text ||
-            field.type == FieldType.oid) &&
+             field.type == .text ||
+             field.type == FieldType.oid) &&
             field.name != "assetgroup" &&
             field.name != "assettype"
         }
@@ -199,7 +199,7 @@ enum FilterOperator: String {
     case isNotBlank = "is not blank"
     case isEmpty = "is empty"
     case isNotEmpty = "is not empty"
-
+    
     static func textFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .isOp,
@@ -216,16 +216,16 @@ enum FilterOperator: String {
         }
         return ops
     }
-
+    
     static func numericFilterOperators() -> [FilterOperator] { [
-            .equal,
-            .notEqual,
-            .greaterThan,
-            .greaterThanOrEqual,
-            .lessThan,
-            .lessThanOrEqual
-        ] }
-
+        .equal,
+        .notEqual,
+        .greaterThan,
+        .greaterThanOrEqual,
+        .lessThan,
+        .lessThanOrEqual
+    ] }
+    
     var sqlOperator: String {
         switch self {
         case .equal, .isOp:

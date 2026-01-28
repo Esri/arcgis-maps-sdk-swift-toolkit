@@ -228,7 +228,7 @@ private struct FieldView: View {
             .onAppear(perform: {
                 conditions = fieldConditions()
             })
-
+            
             
             // Value
             HStack {
