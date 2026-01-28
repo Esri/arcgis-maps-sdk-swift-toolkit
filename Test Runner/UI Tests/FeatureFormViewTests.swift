@@ -1287,7 +1287,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Confirm the option to show the elements exists.
         XCTAssertTrue(
-            radioButtonPicker.exists,
+            radioButtonPicker.waitForExistence(timeout: 5),
             "The Radio Button picker doesn't exist."
         )
         
