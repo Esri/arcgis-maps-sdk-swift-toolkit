@@ -31,8 +31,10 @@ struct EmbeddedPopupView: View {
         VStack(spacing: 0) {
             switch evaluationResult {
             case .success(let evaluatedElements):
-                PopupElementList(popupElements: evaluatedElements)
-                    .environment(\.popupTitle, popup.title)
+                PopupElementList(popupElements: evaluatedElements) {
+                    !popup.editSummary.isEmpty ? editSummary : nil
+                }
+                .environment(\.popupTitle, popup.title)
             case .failure(let error):
                 Text(
                     "Popup evaluation failed: \(error.localizedDescription)",
@@ -90,31 +92,44 @@ struct EmbeddedPopupView: View {
             return popup.evaluatedElements
         }
     }
+    
+    /// The edit summary of the popup.
+    private var editSummary: some View {
+        Text(popup.editSummary)
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .listSectionSeparator(.hidden, edges: .top)
+    }
 }
 
 extension EmbeddedPopupView {
-    private struct PopupElementList: View {
+    private struct PopupElementList<Content>: View where Content: View {
         let popupElements: [PopupElement]
         
+        let editSummary: () -> Content?
+        
         var body: some View {
-            List(popupElements) { popupElement in
-                Group {
-                    switch popupElement {
-                    case let popupElement as AttachmentsPopupElement:
-                        AttachmentsFeatureElementView(popupElement: popupElement)
-                    case let popupElement as FieldsPopupElement:
-                        FieldsPopupElementView(popupElement: popupElement)
-                    case let popupElement as MediaPopupElement:
-                        MediaPopupElementView(popupElement: popupElement)
-                    case let popupElement as TextPopupElement:
-                        TextPopupElementView(popupElement: popupElement)
-                    case let popupElement as UtilityAssociationsPopupElement:
-                        UtilityAssociationsPopupElementView(popupElement: popupElement)
-                    default:
-                        EmptyView()
+            List {
+                ForEach(popupElements) { popupElement in
+                    Group {
+                        switch popupElement {
+                        case let popupElement as AttachmentsPopupElement:
+                            AttachmentsFeatureElementView(popupElement: popupElement)
+                        case let popupElement as FieldsPopupElement:
+                            FieldsPopupElementView(popupElement: popupElement)
+                        case let popupElement as MediaPopupElement:
+                            MediaPopupElementView(popupElement: popupElement)
+                        case let popupElement as TextPopupElement:
+                            TextPopupElementView(popupElement: popupElement)
+                        case let popupElement as UtilityAssociationsPopupElement:
+                            UtilityAssociationsPopupElementView(popupElement: popupElement)
+                        default:
+                            EmptyView()
+                        }
                     }
+                    .popupListRowStyle()
                 }
-                .popupListRowStyle()
+                editSummary()
             }
             .listStyle(.plain)
         }
