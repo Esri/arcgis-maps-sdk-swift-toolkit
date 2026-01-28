@@ -246,6 +246,7 @@ private struct FloorFilterBody: View {
                 .font(.system(size: FloorFilterBody.fontSize))
                 .contentShape(FloorFilterBody.buttonShape)
         }
+        .accessibilityIdentifier(String.siteSelectorButtonAccessibilityIdentifier)
         .buttonStyle(.plain)
         .popover(isPresented: $isSiteSelectorPresented) {
             SiteAndFacilitySelector(isPresented: $isSiteSelectorPresented)
@@ -406,5 +407,15 @@ private struct LevelButton: View {
                 .contentShape(FloorFilterBody.buttonShape)
         }
         .buttonStyle(.plain)
+    }
+}
+
+private extension String {
+    static var siteSelectorButtonAccessibilityIdentifier: Self {
+        .init(
+            localized: "Floor Filter button",
+            bundle: .toolkitModule,
+            comment: "The accessibility identifier of the site selector button within the floor filter component."
+        )
     }
 }
