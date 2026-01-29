@@ -15,8 +15,13 @@
 import ArcGIS
 import SwiftUI
 
+/// A view allowing the user to assembly a list of `FieldFilters` used to filter a list of features.
 struct FilterView: View {
+    /// The model used by the view.
     @Environment(FilterViewModel.self) private var model
+    
+    /// The client-specified action to perform when the `Apply` button is tapped. There is no `cancel` action
+    /// as cancelling simply resets the list of `FieldFilters`.
     var onApplyAction: (() -> Void)?
     
     var body: some View {
@@ -105,6 +110,9 @@ struct FilterView: View {
         .background(Color(.systemGroupedBackground))
     }
     
+    /// Creates a `Button` used to delete a `FieldFilter`.
+    /// - Parameter filter: The `FieldFilter` to delete.
+    /// - Returns: The delete `Button`.
     private func deleteButton(_ filter: FieldFilter) -> Button<some View> {
         Button(role: .destructive) {
             if let index = model.fieldFilters.firstIndex(of: filter) {
@@ -116,6 +124,9 @@ struct FilterView: View {
         }
     }
     
+    /// Creates a `Button` used to duplicate a `FieldFilter`.
+    /// - Parameter filter: The `FieldFilter` to duplicate.
+    /// - Returns: The duplicate `Button`.
     private func duplicateButton(_ filter: FieldFilter) -> Button<some View> {
         Button {
             if let index = model.fieldFilters.firstIndex(of: filter) {
@@ -131,6 +142,7 @@ struct FilterView: View {
     }
 }
 
+/// A button, with a border, used to add a `FieldFilter` to the list of current `FieldFilters`.
 private struct BorderedAddButton: View {
     @Environment(FilterViewModel.self) private var model
     var body: some View {
@@ -158,6 +170,7 @@ private struct BorderedAddButton: View {
     }
 }
 
+/// A button, sans border, used to add a `FieldFilter` to the list of current `FieldFilters`.
 private struct NoBorderAddbutton: View {
     @Environment(FilterViewModel.self) private var model
     var body: some View {
@@ -182,15 +195,19 @@ private struct NoBorderAddbutton: View {
     }
 }
 
+/// A view representing a single `FieldFilter`, with options to select a field and condition/operation, and to set a value for the operation.
 private struct FieldView: View {
+    /// The mdoel used by the view.
     @Environment(FilterViewModel.self) private var model
+    
+    /// The `FieldFilter` represented by the view.
     @State private var fieldFilter: FieldFilter
+    
+    /// The list of conditions/operations the user is allowed to choose from.
     @State private var conditions = [FilterOperator]()
-    @State private var text: String
     
     init(fieldFilter: FieldFilter) {
         self.fieldFilter = fieldFilter
-        text = fieldFilter.value
     }
     
     var body: some View {
@@ -235,7 +252,7 @@ private struct FieldView: View {
                 Text("Value")
                 Spacer()
                 TextField(
-                    text: $text,
+                    text: $fieldFilter.value,
                     prompt: Text("Enter a value"),
                     label: {
                         Label("Value", systemImage: "swift")
@@ -244,9 +261,6 @@ private struct FieldView: View {
                 .multilineTextAlignment(.trailing)
                 .keyboardType(keyboardType)
                 .frame(alignment: .trailing)
-                .onChange(of: text) { oldValue, newValue in
-                    fieldFilter.value = newValue
-                }
 #if os(iOS)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
@@ -266,12 +280,12 @@ private struct FieldView: View {
     /// The button that allows a user to switch the numeric value between positive and negative.
     var positiveNegativeButton: some View {
         Button {
-            if let value = Int(text) {
-                text = String(value * -1)
-            } else if let value = Float(text) {
-                text = String(value * -1)
-            } else if let value = Double(text) {
-                text = String(value * -1)
+            if let value = Int(fieldFilter.value) {
+                fieldFilter.value = String(value * -1)
+            } else if let value = Float(fieldFilter.value) {
+                fieldFilter.value = String(value * -1)
+            } else if let value = Double(fieldFilter.value) {
+                fieldFilter.value = String(value * -1)
             }
         } label: {
             Image(systemName: "plus.forwardslash.minus")
@@ -279,6 +293,8 @@ private struct FieldView: View {
         .tint(.blue)
     }
     
+    /// Determines the conditions to dsiplay for the given `FieldFilter` field type.
+    /// - Returns: A list of conditions appropriate for the given `FieldFilter` field type.
     private func fieldConditions() -> [FilterOperator] {
         (fieldFilter.field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
     }
@@ -305,6 +321,8 @@ extension FieldView {
 }
 
 extension Field {
+    /// Determines the display title for the `Field`.
+    /// - Returns: A string representing the display fitle for the `Field`.
     func title() -> String {
         alias.isEmpty ? name : alias
     }

@@ -18,6 +18,7 @@ import SwiftUI
 
 @MainActor @Observable
 class FilterViewModel {
+    /// The feature table containing the fields to filter on.
     public var featureTable: ArcGISFeatureTable? {
         didSet {
             if let featureTable {
@@ -28,12 +29,20 @@ class FilterViewModel {
             }
         }
     }
+    /// The list of field filters the user has created.
     var fieldFilters: [FieldFilter]
+    
+    /// The original list of field filters, used when user cancels changes.
     private var originalFieldFilters: [FieldFilter]
+    
+    /// Determines if the filter view is presented.
     var isFilterViewPresented = false
     
+    /// The list of fields generated from the `featureTable`.
     var fields = [Field]()
     
+    /// The "where" clause assembled from the list of `FieldFilters`
+    /// - Returns: A string represented the SQL query assembled from the list of `FieldFilters`. The `FieldFilters` are joined by `AND`.
     func whereClause() -> String {
         var clause = ""
         for fieldFilter in fieldFilters {
@@ -54,31 +63,42 @@ class FilterViewModel {
         self.originalFieldFilters = fieldFilters
     }
     
+    /// Applies the current field filters.
     func apply() {
         isFilterViewPresented.toggle()
         self.originalFieldFilters = fieldFilters
     }
     
+    /// Cancels the current changes to the field filters.
     func cancel() {
         fieldFilters = originalFieldFilters
         isFilterViewPresented.toggle()
     }
 }
 
+/// A class representing a single filter operation.
 @Observable
 class FieldFilter {
+    /// The id of the filter.
     let id = UUID()
+    
+    /// The field being filtered on.
     var field: Field {
         didSet {
-            print("oldValue: \(oldValue.title()), newValue: \(field.title())")
             if oldValue !== field {
                 // We're changing the field, so reset the condition
                 condition = firstCondition()
             }
         }
     }
+    
+    /// The name of the filter.
     var name = "Condition"
+    
+    /// The operation used specify how the `value` should be applied to the `field`.
     var condition: FilterOperator = FilterOperator.equal
+    
+    /// The value to filter on.
     var value = ""
     
     init(
@@ -100,6 +120,8 @@ class FieldFilter {
         self.value = value
     }
     
+    /// This creates the SQL query for this filter field.
+    /// - Returns: A string representing a SQL query for the specified `field`, `condition`, and `value`.
     func query() -> String {
         switch condition {
         case .startsWith:
@@ -126,6 +148,9 @@ class FieldFilter {
         }
     }
     
+    /// Determines the appropriate set of filter operators for a field, depending on whether the field is numeric or textual.
+    /// It then returns the first available filter operator from that set. If no operators are found, it defaults to .equal.
+    /// - Returns: The first available filter operator from the appropriate set of filters.
     private func firstCondition() -> FilterOperator {
         let conditions = (field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(field.isNullable)
         return conditions.first ?? FilterOperator.equal
@@ -133,6 +158,8 @@ class FieldFilter {
 }
 
 extension FieldFilter {
+    /// Copies a `FieldFilter`
+    /// - Returns: An exact copy of `FieldFilter`.
     func copy() -> FieldFilter {
         FieldFilter(
             field: self.field,
@@ -182,6 +209,7 @@ extension FilterViewModel {
     }
 }
 
+/// All of the available filter operations.
 enum FilterOperator: String {
     case equal = "="
     case notEqual = "!="
@@ -200,6 +228,10 @@ enum FilterOperator: String {
     case isEmpty = "is empty"
     case isNotEmpty = "is not empty"
     
+    /// Returns a list of appropriate operations for text fields.
+    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `empty` and `notEmpty` operators
+    /// are added to the list. If `false`, no additional operators are added.
+    /// - Returns: The list of appropriate operations for text fields.
     static func textFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .isOp,
@@ -217,6 +249,8 @@ enum FilterOperator: String {
         return ops
     }
     
+    /// Returns a list of appropriate operations for numeric fields.
+    /// - Returns: The list of appropriate operations for numeric fields.
     static func numericFilterOperators() -> [FilterOperator] { [
         .equal,
         .notEqual,
@@ -226,6 +260,7 @@ enum FilterOperator: String {
         .lessThanOrEqual
     ] }
     
+    /// The SQL operator string represented by the operator.
     var sqlOperator: String {
         switch self {
         case .equal, .isOp:
@@ -255,6 +290,7 @@ enum FilterOperator: String {
         }
     }
     
+    /// The name used to display the operator.
     var displayName: String {
         return self.rawValue
     }
