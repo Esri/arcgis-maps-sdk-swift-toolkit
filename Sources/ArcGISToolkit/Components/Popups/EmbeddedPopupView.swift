@@ -31,9 +31,10 @@ struct EmbeddedPopupView: View {
         VStack(spacing: 0) {
             switch evaluationResult {
             case .success(let evaluatedElements):
-                PopupElementList(popupElements: evaluatedElements) {
-                    !popup.editSummary.isEmpty ? editSummary : nil
-                }
+                PopupElementList(
+                    popupElements: evaluatedElements,
+                    editSummary: popup.editSummary
+                )
                 .environment(\.popupTitle, popup.title)
             case .failure(let error):
                 Text(
@@ -92,21 +93,12 @@ struct EmbeddedPopupView: View {
             return popup.evaluatedElements
         }
     }
-    
-    /// The edit summary of the popup.
-    private var editSummary: some View {
-        Text(popup.editSummary)
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-            .listSectionSeparator(.hidden, edges: .top)
-    }
 }
 
 extension EmbeddedPopupView {
-    private struct PopupElementList<Content>: View where Content: View {
+    private struct PopupElementList: View {
         let popupElements: [PopupElement]
-        
-        let editSummary: () -> Content?
+        let editSummary: String
         
         var body: some View {
             List {
@@ -129,7 +121,13 @@ extension EmbeddedPopupView {
                     }
                     .popupListRowStyle()
                 }
-                editSummary()
+                
+                if !editSummary.isEmpty {
+                    Text(editSummary)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .listSectionSeparator(.hidden, edges: .top)
+                }
             }
             .listStyle(.plain)
         }
