@@ -27,28 +27,40 @@ struct SiteAndFacilitySelector: View {
     
     @State private var navigationPath = NavigationPath()
     
+    /// This is set to true when the view appears, allowing us to workaround
+    /// an iOS 26 bug where the allSites button is initially added to the
+    /// toolbar of the navigation stack of the presenting view, which causes
+    /// the attribution bar of the map to jump.
+    /// This delays showing the sub-views until the main view is ready to show.
+    @State private var readyToPresent = false
+    
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            VStack {
-                if model.sites.count > 1 {
-                    SiteList(isPresented: $isPresented)
-                } else {
-                    FacilityList(isPresented: $isPresented, site: nil)
+            if readyToPresent {
+                VStack {
+                    if model.sites.count > 1 {
+                        SiteList(isPresented: $isPresented)
+                    } else {
+                        FacilityList(isPresented: $isPresented, site: nil)
+                    }
                 }
-            }
-            .navigationDestination(for: FloorFacility.self) { facility in
-                FacilityList(
-                    isPresented: $isPresented,
-                    site: model.showingFacilitiesFromAllSites ? nil : facility.site
-                )
+                .navigationDestination(for: FloorFacility.self) { facility in
+                    FacilityList(
+                        isPresented: $isPresented,
+                        site: model.showingFacilitiesFromAllSites ? nil : facility.site
+                    )
+                }
+                .onAppear {
+                    // If there not multiple sites, then we go straight to the facilities list.
+                    guard model.sites.count > 1, let facility = model.selection?.facility else {
+                        return
+                    }
+                    navigationPath.append(facility)
+                }
             }
         }
         .onAppear {
-            // If there not multiple sites, then we go straight to the facilities list.
-            guard model.sites.count > 1, let facility = model.selection?.facility else {
-                return
-            }
-            navigationPath.append(facility)
+            readyToPresent = true
         }
         .frame(minWidth: 360, minHeight: 500)
     }
@@ -88,14 +100,14 @@ private struct SiteList: View {
                             .lineLimit(1)
                     }
                 }
+                .searchable(
+                    text: $searchText,
+                    placement: .navigationBarDrawer(displayMode: .always),
+                    prompt: String.filterSites
+                )
                 .listStyle(.plain)
             }
         }
-        .searchable(
-            text: $searchText,
-            placement: .navigationBarDrawer,
-            prompt: String.filterSites
-        )
         .navigationTitle(String.sites)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -179,6 +191,11 @@ private struct FacilityList: View {
                         }
                         .buttonStyle(.plain)
                     }
+                    .searchable(
+                        text: $searchText,
+                        placement: .navigationBarDrawer(displayMode: .always),
+                        prompt: String.filterFacilities
+                    )
                     .listStyle(.plain)
                     .onChange(of: model.selection) {
                         guard let floorFacility = model.selection?.facility else {
@@ -196,11 +213,6 @@ private struct FacilityList: View {
                 }
             }
         }
-        .searchable(
-            text: $searchText,
-            placement: .navigationBarDrawer,
-            prompt: String.filterFacilities
-        )
         .navigationTitle(String.selectAFacility)
         .navigationBarTitleDisplayMode(.inline)
     }
