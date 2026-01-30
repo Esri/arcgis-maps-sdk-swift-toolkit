@@ -22,237 +22,199 @@ struct SiteAndFacilitySelector: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isPresented: Bool
     
-    @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass: UserInterfaceSizeClass?
-    
     /// The view model used by the `SiteAndFacilitySelector`.
-    @EnvironmentObject var viewModel: FloorFilterViewModel
+    @EnvironmentObject private var model: FloorFilterViewModel
     
-    /// A Boolean value indicating whether the user is typing into the text field.
-    @FocusState var textFieldIsFocused: Bool
+    @State private var navigationPath = NavigationPath()
     
-    /// A Boolean value indicating whether the user tapped the "All Sites" button.
-    @State private var allSitesIsSelected = false
-    
-    /// The site or facility filter phrase.
-    @State private var query = ""
-    
-    /// A Boolean value indicating whether the user pressed the back button in the header.
-    ///
-    /// This allows for browsing the site list while keeping the current selection unmodified.
-    @State private var userDidBackOutToSiteList = false
+    /// This is set to true when the view appears, allowing us to workaround
+    /// an iOS 26 bug where the allSites button is initially added to the
+    /// toolbar of the navigation stack of the presenting view, which causes
+    /// the attribution bar of the map to jump.
+    /// This delays showing the sub-views until the main view is ready to show.
+    @State private var readyToPresent = false
     
     var body: some View {
-        VStack {
-            header
-                .padding([.leading, .top, .trailing])
-            if (facilityListIsVisible && matchingFacilities.isEmpty) || (!facilityListIsVisible && matchingSites.isEmpty) {
-                Spacer()
-                ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
-                Spacer()
-            } else if facilityListIsVisible {
-                facilityList
-                    .transition(.move(edge: .trailing))
-            } else {
-                siteList
-                    .transition(.move(edge: .leading))
-            }
-        }
-        .animation(.default, value: facilityListIsVisible)
-        .animation(.default, value: textFieldIsFocused)
-        .clipped()
-    }
-    
-    /// Displays a list of facilities matching the filter criteria as determined by
-    /// `matchingFacilities`.
-    ///
-    /// If a certain facility is indicated as selected by the view model, it will have a
-    /// slightly different appearance.
-    ///
-    /// If `AutomaticSelectionMode` mode is in use, this list will automatically scroll to the
-    /// selected item.
-    var facilityList: some View {
-        ScrollViewReader { proxy in
-            List(matchingFacilities, id: \.id) { facility in
-                Button {
-                    viewModel.setFacility(facility, zoomTo: true)
-                    if horizontalSizeClass == .compact {
-                        isPresented = false
-                    }
-                } label: {
-                    VStack {
-                        Text(facility.name)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        if allSitesIsSelected, let siteName = facility.site?.name {
-                            Text(siteName)
-                                .font(.caption)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
+        NavigationStack(path: $navigationPath) {
+            if readyToPresent {
+                VStack {
+                    if model.sites.count > 1 {
+                        SiteList(isPresented: $isPresented)
+                    } else {
+                        FacilityList(isPresented: $isPresented, site: nil)
                     }
                 }
-                .contentShape(.rect)
-                .listRowBackground(facility.id == viewModel.selection?.facility?.id ? Color.secondary.opacity(0.5) : nil)
-            }
-#if !os(visionOS)
-            .listStyle(.plain)
-#endif
-            .onChange(of: viewModel.selection) {
-                if let floorFacility = viewModel.selection?.facility {
-                    withAnimation {
-                        proxy.scrollTo(
-                            floorFacility.id
-                        )
+                .navigationDestination(for: FloorFacility.self) { facility in
+                    FacilityList(
+                        isPresented: $isPresented,
+                        site: model.showingFacilitiesFromAllSites ? nil : facility.site
+                    )
+                }
+                .onAppear {
+                    // If there not multiple sites, then we go straight to the facilities list.
+                    guard model.sites.count > 1, let facility = model.selection?.facility else {
+                        return
                     }
+                    navigationPath.append(facility)
                 }
             }
         }
-    }
-    
-    /// The header at the top of the selector containing the navigation controls and text field.
-    var header: some View {
-        VStack {
-            if !textFieldIsFocused {
-                headerUpperHalf
-                    .transition(.opacity)
-            }
-            headerLowerHalf
-        }
-    }
-    
-    /// The portion of the header containing the text field.
-    var headerLowerHalf: some View {
-        HStack {
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.secondary)
-                TextField(facilityListIsVisible ? String.filterFacilities : String.filterSites, text: $query)
-                    .disableAutocorrection(true)
-                    .focused($textFieldIsFocused)
-                    .keyboardType(.alphabet)
-                    .onChange(of: facilityListIsVisible) {
-                        query.removeAll()
-                        textFieldIsFocused = false
-                    }
-                if textFieldIsFocused && !query.isEmpty {
-                    XButton(.clear) {
-                        query.removeAll()
-                    }
-                }
-            }
-            .padding(5)
-            .background(.quinary)
-            .clipShape(.rect(cornerRadius: 10))
-            if textFieldIsFocused {
-                Button.cancel {
-                    query.removeAll()
-                    textFieldIsFocused = false
-                }
-                .transition(.move(edge: .trailing))
-            }
-        }
-    }
-    
-    /// The portion of the header containing the navigation controls.
-    var headerUpperHalf: some View {
-        HStack {
-            Button {
-                userDidBackOutToSiteList = true
-            } label: {
-                Image(systemName: "chevron.left")
-                    .padding(.toolkitDefault)
-                    .contentShape(.rect)
-            }
-            .buttonStyle(.plain)
-            .opacity(backButtonIsVisible ? 1 : 0)
-            Spacer()
-            Group {
-                if allSitesIsSelected {
-                    Text(String.allSites)
-                } else if facilityListIsVisible {
-                    Text(viewModel.selection?.site?.name ?? String.selectAFacility)
-                } else {
-                    Text.sites
-                }
-            }
-            Spacer()
-            XButton(.dismiss) {
-                isPresented = false
-            }
-        }
-        .font(.title3)
-    }
-    
-    /// A view containing a list of the site names.
-    ///
-    /// If `AutomaticSelectionMode` mode is in use, items will automatically be
-    /// selected/deselected.
-    @ViewBuilder
-    var siteList: some View {
-        List(matchingSites) { site in
-            Button(site.name) {
-                userDidBackOutToSiteList = false
-                viewModel.setSite(site)
-            }
-        }
-#if !os(visionOS)
-        .listStyle(.plain)
-#endif
         .onAppear {
-            allSitesIsSelected = false
+            readyToPresent = true
         }
-        Button {
-            allSitesIsSelected = true
-            userDidBackOutToSiteList = false
-        } label: {
-            Text(String.allSites)
-        }
-        .buttonStyle(.bordered)
-        .padding(.bottom, horizontalSizeClass == .compact ? 5 : 0)
-        .transition(.move(edge: .bottom))
+        .frame(minWidth: 360, minHeight: 500)
     }
 }
 
-extension SiteAndFacilitySelector {
-    /// A Boolean value indicating whether the back button in the header navigations controls is visible..
-    var backButtonIsVisible: Bool {
-        facilityListIsVisible
-        && multipleSitesAreAvailable
-    }
+private struct SiteList: View {
+    /// Allows the user to toggle the visibility of the site and facility selector.
+    @Binding var isPresented: Bool
     
-    /// A Boolean value indicating whether the facility list is visible.
-    var facilityListIsVisible: Bool {
-        (allSitesIsSelected
-         || viewModel.selection != .none
-         || !multipleSitesAreAvailable)
-        && !userDidBackOutToSiteList
-    }
+    /// The view model backing this view.
+    @EnvironmentObject private var model: FloorFilterViewModel
     
-    /// A subset of `facilities` with names containing `query` or all `facilities` if
-    /// `query` is empty.
-    var matchingFacilities: [FloorFacility] {
-        let facilities = allSitesIsSelected ? viewModel.facilities : viewModel.selection?.site?.facilities ?? viewModel.facilities
-        guard !query.isEmpty else {
-            return facilities
-                .sorted { $0.name < $1.name }
-        }
-        return facilities
-            .filter { $0.name.localizedStandardContains(query) }
-            .sorted { $0.name < $1.name  }
-    }
+    @State private var searchText = ""
     
-    /// A subset of `sites` with names containing `query` or all `sites` if `query` is empty.
-    var matchingSites: [FloorSite] {
-        guard !query.isEmpty else {
-            return viewModel.sites
-        }
-        return viewModel.sites.filter {
-            $0.name.localizedStandardContains(query)
+    /// The filtered sites.
+    var sites: [FloorSite] {
+        return if searchText.isEmpty {
+            model.sites
+        } else {
+            model.sites.filter { $0.name.localizedStandardContains(searchText) }
         }
     }
     
-    /// A Boolean value indicating whether the floor aware data contains more than one site.
-    var multipleSitesAreAvailable: Bool {
-        viewModel.sites.count > 1
+    var body: some View {
+        VStack {
+            if sites.isEmpty {
+                ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
+            } else {
+                List(sites) { site in
+                    NavigationLink {
+                        FacilityList(isPresented: $isPresented, site: site)
+                            .onAppear {
+                                model.showingFacilitiesFromAllSites = false
+                            }
+                    } label: {
+                        Text(site.name)
+                            .lineLimit(1)
+                    }
+                }
+                .searchable(
+                    text: $searchText,
+                    placement: .navigationBarDrawer(displayMode: .always),
+                    prompt: String.filterSites
+                )
+                .listStyle(.plain)
+            }
+        }
+        .navigationTitle(String.sites)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                DismissButton(kind: .cancel) {
+                    isPresented = false
+                }
+            }
+            ToolbarItem(placement: .bottomBar) {
+                allSitesButton
+            }
+        }
+    }
+    
+    @ViewBuilder var allSitesButton: some View {
+        NavigationLink {
+            FacilityList(isPresented: $isPresented, site: nil)
+                .onAppear {
+                    model.showingFacilitiesFromAllSites = true
+                }
+        } label: {
+            Text(String.allSites)
+#if targetEnvironment(macCatalyst)
+                // This works around a catalyst bug where button text is squished.
+                .fixedSize(horizontal: true, vertical: false)
+#endif
+        }
+    }
+}
+
+private struct FacilityList: View {
+    /// Allows the user to toggle the visibility of the site and facility selector.
+    @Binding var isPresented: Bool
+    
+    /// The view model backing this view.
+    @EnvironmentObject private var model: FloorFilterViewModel
+    
+    let site: FloorSite?
+    @State private var searchText = ""
+    
+    /// The filtered facilities.
+    var facilities: [FloorFacility] {
+        let facilities = site?.facilities ?? model.facilities
+        return if searchText.isEmpty {
+            facilities.sorted(using: KeyPathComparator(\.name))
+        } else {
+            facilities
+                .filter { $0.name.localizedStandardContains(searchText) }
+                .sorted(using: KeyPathComparator(\.name))
+        }
+    }
+    
+    var body: some View {
+        VStack {
+            if facilities.isEmpty {
+                ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
+            } else {
+                ScrollViewReader { scrollView in
+                    List(facilities) { facility in
+                        Button {
+                            model.setFacility(facility, zoomTo: true)
+                            isPresented = false
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(facility.name)
+                                    if model.showingFacilitiesFromAllSites {
+                                        Text(facility.site?.name ?? "")
+                                            .font(.footnote)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                Spacer()
+                                if facility.id == model.selection?.facility?.id {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(.primary)
+                                }
+                            }
+                            .contentShape(.rect)
+                            .lineLimit(1)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .searchable(
+                        text: $searchText,
+                        placement: .navigationBarDrawer(displayMode: .always),
+                        prompt: String.filterFacilities
+                    )
+                    .listStyle(.plain)
+                    .onChange(of: model.selection) {
+                        guard let floorFacility = model.selection?.facility else {
+                            return
+                        }
+                        withAnimation { scrollView.scrollTo(floorFacility.id) }
+                    }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                DismissButton(kind: .cancel) {
+                    isPresented = false
+                }
+            }
+        }
+        .navigationTitle(String.selectAFacility)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -309,13 +271,11 @@ private extension String {
                  """
         )
     }
-}
-
-private extension Text {
-    /// A label in reference to all of the sites in a floor-aware map or scene.
+    
+    /// A label directing the user to select a facility. A facility contains one or more levels in a floor-aware map or scene.
     static var sites: Self {
         .init(
-            "Sites",
+            localized: "Sites",
             bundle: .toolkitModule,
             comment: "A label in reference to all of the sites in a floor-aware map or scene."
         )
