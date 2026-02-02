@@ -186,7 +186,7 @@ extension FilterViewModel {
     /// - Parameter allFields: The list of all candidate fields to filter by.
     /// - Returns: The final list of supported fields to filter by. This will automatically filter out the
     /// `ASSETGROUP` and `ASSETTYPE` fields, as those are special fields for Utility Networks.
-    private func unaSupportedFields(_ allFields: [Field]) -> [Field] {
+    private func supportedUNFields(_ allFields: [Field]) -> [Field] {
         allFields.filter { field in
             ((field.type?.isNumeric ?? false) ||
              field.type == .text ||
@@ -219,7 +219,6 @@ enum FilterOperator: String {
     /// Returns a list of appropriate operations for text fields.
     /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `empty` and `notEmpty` operators
     /// are added to the list. If `false`, no additional operators are added.
-    /// - Returns: The list of appropriate operations for text fields.
     static func textFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .isOp,
@@ -238,7 +237,6 @@ enum FilterOperator: String {
     }
     
     /// Returns a list of appropriate operations for numeric fields.
-    /// - Returns: The list of appropriate operations for numeric fields.
     static func numericFilterOperators() -> [FilterOperator] { [
         .equal,
         .notEqual,

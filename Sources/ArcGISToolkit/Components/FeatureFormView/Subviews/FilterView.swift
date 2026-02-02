@@ -284,7 +284,6 @@ Picker(selection: $fieldFilter.condition) {
                 conditions = fieldConditions()
             }
             
-            
             // Value
             HStack {
                 Text.value
