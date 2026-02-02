@@ -115,6 +115,7 @@ struct FilterView: View {
                     }
                 }
         }
+        .environment(model)
         .background(Color(.systemGroupedBackground))
     }
     
@@ -247,13 +248,13 @@ private struct FieldView: View {
                 HStack {
                     Text.field
                     Spacer()
-                    Text(fieldFilter.field.title())
+                    Text(fieldFilter.field.title)
                 }
             } else {
                 HStack {
                     Picker(selection: $fieldFilter.field) {
                         ForEach(model.fields, id: \.self) { field in
-                            Text(field.title())
+                            Text(field.title)
                         }
                     } label: {
                         Text.fields
@@ -405,6 +406,5 @@ extension Field: @retroactive Hashable {
         ]
     }()
     let model = FilterViewModel(fieldFilters: filters)
-    FilterView()
-        .environment(model)
+    FilterView(model: model)
 }
