@@ -18,8 +18,7 @@ import SwiftUI
 /// A view allowing the user to assembly a list of `FieldFilters` used to filter a list of features.
 struct FilterView: View {
     /// The model used by the view.
-    @Environment(FilterViewModel.self) private var model
-
+    @Bindable var model: FilterViewModel
     @State private var showAlert = false
 
     /// The client-specified action to perform when the `Apply` button is tapped. There is no `cancel` action
@@ -35,13 +34,21 @@ struct FilterView: View {
                         .font(.largeTitle)
                         .foregroundStyle(.gray)
                         .padding()
-                    Text("No conditions added")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                    Text("Show features that meet all the conditions")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .padding(.bottom)
+                    Text(
+                        "No conditions added",
+                        bundle: .toolkitModule,
+                        comment: "A label indicating no field filtering conditions have been added."
+                    )
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    Text(
+                        "Show features that meet all the conditions",
+                        bundle: .toolkitModule,
+                        comment: "A label indicating the intended outcome of using the filter view."
+                    )
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .padding(.bottom)
                     HStack {
                         Spacer()
                         BorderedAddButton()
@@ -58,7 +65,7 @@ struct FilterView: View {
                                     Text(filter.name)
                                     Spacer()
                                     Menu {
-                                        // Duplicate the current filter
+                                        // Duplicate the current filter.
                                         duplicateButton(filter)
                                         // Delete the current filter.
                                         deleteButton(filter)
@@ -69,14 +76,14 @@ struct FilterView: View {
                                 }
                             }
                         }
-                        .onDelete(perform: { offsets in
+                        .onDelete { offsets in
                             withAnimation {
                                 model.fieldFilters.remove(atOffsets: offsets)
                             }
-                        })
+                        }
                     }
                     .onChange(of: model.fieldFilters) {
-                        // Scroll to the last message when messages change
+                        // Scroll to the last filter when the set changes
                         if let lastFieldFilter = model.fieldFilters.last {
                             withAnimation {
                                 proxy.scrollTo(lastFieldFilter.id, anchor: .bottom)
@@ -85,7 +92,7 @@ struct FilterView: View {
                     }
                     Spacer()
                     HStack {
-                        NoBorderAddbutton()
+                        NoBorderAddButton()
                             .buttonStyle(.borderless)
                             .padding()
                         Spacer()
@@ -104,7 +111,7 @@ struct FilterView: View {
                         }
                     }
                     ToolbarItem(placement: .topBarTrailing) {
-                        DismissButton(kind: .confirm){
+                        DismissButton(kind: .confirm) {
                             model.apply()
                             if let onApplyAction {
                                 onApplyAction()
@@ -138,8 +145,15 @@ struct FilterView: View {
                 model.fieldFilters.remove(at: index)
             }
         } label: {
-            Text("Delete")
-            Image(systemName: "trash")
+            Label {
+                Text(
+                    "Delete",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to delete a field filter."
+                )
+            } icon: {
+                Image(systemName: "trash")
+            }
         }
     }
     
@@ -155,8 +169,15 @@ struct FilterView: View {
                 }
             }
         } label: {
-            Text("Duplicate")
-            Image(systemName: "document.on.document")
+            Label {
+                Text(
+                    "Duplicate",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to duplicate a field filter."
+                )
+            } icon: {
+                Image(systemName: "document.on.document")
+            }
         }
     }
 }
@@ -176,8 +197,12 @@ private struct BorderedAddButton: View {
                     Image(systemName: "plus")
                         .imageScale(.large)
                         .padding(4)
-                    Text("Add Condition")
-                        .padding(.trailing)
+                    Text(
+                        "Add Condition",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to add a new field filtering condition."
+                    )
+                    .padding(.trailing)
                 }
                 .bold()
             }
@@ -190,7 +215,7 @@ private struct BorderedAddButton: View {
 }
 
 /// A button, sans border, used to add a `FieldFilter` to the list of current `FieldFilters`.
-private struct NoBorderAddbutton: View {
+private struct NoBorderAddButton: View {
     @Environment(FilterViewModel.self) private var model
     var body: some View {
         HStack {
@@ -205,18 +230,22 @@ private struct NoBorderAddbutton: View {
                         .foregroundColor(.white)
                         .padding(4)
                         .background(Circle().fill(Color.blue))
-                    Text("Add Condition")
+                    Text(
+                        "Add Condition",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to add a new field filtering condition."
+                    )
                 }
                 .bold()
             }
-            .id("NoBorderAddbutton")
+            .id("NoBorderAddButton")
         }
     }
 }
 
 /// A view representing a single `FieldFilter`, with options to select a field and condition/operation, and to set a value for the operation.
 private struct FieldView: View {
-    /// The mdoel used by the view.
+    /// The model used by the view.
     @Environment(FilterViewModel.self) private var model
     
     /// The `FieldFilter` represented by the view.
@@ -234,18 +263,20 @@ private struct FieldView: View {
             // Field
             if model.fields.isEmpty {
                 HStack {
-                    Text("Field")
+                    Text.field
                     Spacer()
-                    Text(fieldFilter.field.title())
+                    Text(fieldFilter.field.title)
                 }
             } else {
                 HStack {
-                    Picker("Fields", selection: $fieldFilter.field) {
+                    Picker(selection: $fieldFilter.field) {
                         ForEach(model.fields, id: \.self) { field in
-                            Text(field.title())
+                            Text(field.title)
                         }
+                    } label: {
+                        Text.fields
                     }
-                    .pickerStyle(MenuPickerStyle())
+                    .pickerStyle(.menu)
                     .onChange(of: fieldFilter.field) {
                         conditions = fieldConditions()
                     }
@@ -254,27 +285,36 @@ private struct FieldView: View {
             
             // Condition
             HStack {
-                Picker("Condition", selection: $fieldFilter.condition) {
+Picker(selection: $fieldFilter.condition) {
                     ForEach(conditions, id: \.self) { condition in
                         Text(condition.displayName)
                     }
+                } label: {
+                    Text(
+                        "Condition",
+                        bundle: .toolkitModule,
+                        comment: "A label for a control to pick a condition to filter fields in a table against."
+                    )
                 }
-                .pickerStyle(MenuPickerStyle())
+                .pickerStyle(.menu)
             }
-            .onAppear(perform: {
+            .onAppear {
                 conditions = fieldConditions()
-            })
-            
+            }
             
             // Value
             HStack {
-                Text("Value")
+                Text.value
                 Spacer()
                 TextField(
                     text: $fieldFilter.value,
-                    prompt: Text("Enter a value"),
+                    prompt: Text(
+                        "Enter a value",
+                        bundle: .toolkitModule,
+                        comment: "A prompt for a text field to enter a value."
+                    ),
                     label: {
-                        Label("Value", systemImage: "swift")
+                        Text.value
                     }
                 )
                 .multilineTextAlignment(.trailing)
@@ -312,7 +352,7 @@ private struct FieldView: View {
         .tint(.blue)
     }
     
-    /// Determines the conditions to dsiplay for the given `FieldFilter` field type.
+    /// Determines the conditions to display for the given `FieldFilter` field type.
     /// - Returns: A list of conditions appropriate for the given `FieldFilter` field type.
     private func fieldConditions() -> [FilterOperator] {
         (fieldFilter.field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
@@ -341,8 +381,8 @@ extension FieldView {
 
 extension Field {
     /// Determines the display title for the `Field`.
-    /// - Returns: A string representing the display fitle for the `Field`.
-    func title() -> String {
+    /// - Returns: A string representing the display title for the `Field`.
+    var title: String {
         alias.isEmpty ? name : alias
     }
 }
@@ -383,6 +423,6 @@ extension Field: @retroactive Hashable {
         ]
     }()
     let model = FilterViewModel(fieldFilters: filters)
-    FilterView()
+    FilterView(model: model)
         .environment(model)
 }

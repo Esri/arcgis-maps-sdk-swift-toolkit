@@ -13,8 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
-import Observation
-import SwiftUI
+import Foundation
 
 @MainActor @Observable
 class FilterViewModel {
@@ -35,8 +34,8 @@ class FilterViewModel {
     /// The original list of field filters, used when user cancels changes.
     private var originalFieldFilters: [FieldFilter]
     
-    /// Determines if the filter view is presented.
-    var isFilterViewPresented = false
+    /// A Boolean value indicating whether the filter view is presented.
+    var filterViewIsPresented = false
     
     /// The list of fields generated from the `featureTable`.
     var fields = [Field]()
@@ -132,31 +131,20 @@ class FieldFilter {
         self.value = value
     }
     
-    /// This creates the SQL query for this filter field.
+    /// Creates the SQL query for this field filter.
     /// - Returns: A string representing a SQL query for the specified `field`, `condition`, and `value`.
     func query() -> String {
         switch condition {
         case .startsWith:
-            return "\(field.name) \(condition.sqlOperator) '\(value)%'"
+            "\(field.name) \(condition.sqlOperator) '\(value)%'"
         case .endsWith:
-            return "\(field.name) \(condition.sqlOperator) '%\(value)'"
-        case .contains,
-                .doesNotContain:
-            return "\(field.name) \(condition.sqlOperator) '%\(value)%'"
-        case .isBlank,
-                .isNotBlank,
-                .isEmpty,
-                .isNotEmpty:
-            return "\(field.name) \(condition.sqlOperator)"   // unary: no RHS value
-        case .equal,
-                .notEqual,
-                .isOp,
-                .isNot,
-                .greaterThan,
-                .greaterThanOrEqual,
-                .lessThan,
-                .lessThanOrEqual:
-            return "\(field.name) \(condition.sqlOperator) \(value)"
+            "\(field.name) \(condition.sqlOperator) '%\(value)'"
+        case .contains, .doesNotContain:
+            "\(field.name) \(condition.sqlOperator) '%\(value)%'"
+        case .isBlank, .isNotBlank, .isEmpty, .isNotEmpty:
+            "\(field.name) \(condition.sqlOperator)"
+        case .equal, .notEqual, .isOp, .isNot, .greaterThan, .greaterThanOrEqual, .lessThan, .lessThanOrEqual:
+            "\(field.name) \(condition.sqlOperator) \(value)"
         }
     }
     
@@ -197,7 +185,7 @@ extension FieldFilter: Hashable {
 extension FilterViewModel {
     /// Returns the list of fields supported for filtering.
     /// - Parameter allFields: The list of all candidate fields to filter by.
-    /// - Returns: The final list of supported fileds to filter by.
+    /// - Returns: The final list of supported fields to filter by.
     private func supportedFields(_ allFields: [Field]) -> [Field] {
         allFields.filter { field in
             (field.type?.isNumeric ?? false) ||
@@ -208,9 +196,9 @@ extension FilterViewModel {
     
     /// Returns the list of fields supported for filtering by when used in a Utility Network workflow.
     /// - Parameter allFields: The list of all candidate fields to filter by.
-    /// - Returns: The final list of supported fileds to filter by. This will automatically filter out the
-    /// `ASSETGROUP` and `ASSETTYPE` fields, as those are speciall fields for Utility Networks.
-    private func unaSupportedFields(_ allFields: [Field]) -> [Field] {
+    /// - Returns: The final list of supported fields to filter by. This will automatically filter out the
+    /// `ASSETGROUP` and `ASSETTYPE` fields, as those are special fields for Utility Networks.
+    private func supportedUNFields(_ allFields: [Field]) -> [Field] {
         allFields.filter { field in
             ((field.type?.isNumeric ?? false) ||
              field.type == .text ||
@@ -243,7 +231,6 @@ enum FilterOperator: String {
     /// Returns a list of appropriate operations for text fields.
     /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `empty` and `notEmpty` operators
     /// are added to the list. If `false`, no additional operators are added.
-    /// - Returns: The list of appropriate operations for text fields.
     static func textFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .isOp,
@@ -262,7 +249,6 @@ enum FilterOperator: String {
     }
     
     /// Returns a list of appropriate operations for numeric fields.
-    /// - Returns: The list of appropriate operations for numeric fields.
     static func numericFilterOperators() -> [FilterOperator] { [
         .equal,
         .notEqual,
