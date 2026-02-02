@@ -19,7 +19,9 @@ import SwiftUI
 struct FilterView: View {
     /// The model used by the view.
     @Environment(FilterViewModel.self) private var model
-    
+
+    @State private var showAlert = false
+
     /// The client-specified action to perform when the `Apply` button is tapped. There is no `cancel` action
     /// as cancelling simply resets the list of `FieldFilters`.
     var onApplyAction: (() -> Void)?
@@ -94,7 +96,11 @@ struct FilterView: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
                         DismissButton(kind: .cancel){
-                            model.cancel()
+                            if model.hasChanges {
+                                showAlert = true
+                            } else {
+                                model.cancel()
+                            }
                         }
                     }
                     ToolbarItem(placement: .topBarTrailing) {
@@ -108,6 +114,19 @@ struct FilterView: View {
                 }
         }
         .background(Color(.systemGroupedBackground))
+        .alert("Filters have not been applied", isPresented: $showAlert) {
+            Button("Save", role: .none) {
+                model.apply()
+                if let onApplyAction {
+                    onApplyAction()
+                }
+            }
+            Button("Discard", role: .destructive) {
+                model.cancel()
+            }
+        } message: {
+            Text("Do you want to save your changes or discard them?")
+        }
     }
     
     /// Creates a `Button` used to delete a `FieldFilter`.

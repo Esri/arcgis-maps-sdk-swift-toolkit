@@ -41,6 +41,18 @@ class FilterViewModel {
     /// The list of fields generated from the `featureTable`.
     var fields = [Field]()
     
+    /// Specifies whether the list of Field Filters has changed since the last invocation.
+    var hasChanges: Bool {
+        guard fieldFilters.count == originalFieldFilters.count else { return true }
+        var filtersEqual = true
+        for i in 0..<fieldFilters.count {
+            let filter = fieldFilters[i]
+            let originalFilter = originalFieldFilters[i]
+            guard filter == originalFilter else { return true }
+        }
+        return false
+    }
+
     /// The "where" clause assembled from the list of `FieldFilters`
     /// - Returns: A string represented the SQL query assembled from the list of `FieldFilters`. The `FieldFilters` are joined by `AND`.
     func whereClause() -> String {
@@ -60,18 +72,18 @@ class FilterViewModel {
     init(featureTable: ArcGISFeatureTable? = nil, fieldFilters: [FieldFilter] = [FieldFilter]()) {
         self.featureTable = featureTable
         self.fieldFilters = fieldFilters
-        self.originalFieldFilters = fieldFilters
+        self.originalFieldFilters = fieldFilters.map { $0.copy() }
     }
     
     /// Applies the current field filters.
     func apply() {
+        self.originalFieldFilters = fieldFilters.map { $0.copy() }
         isFilterViewPresented.toggle()
-        self.originalFieldFilters = fieldFilters
     }
     
     /// Cancels the current changes to the field filters.
     func cancel() {
-        fieldFilters = originalFieldFilters
+        fieldFilters = originalFieldFilters.map { $0.copy() }
         isFilterViewPresented.toggle()
     }
 }
