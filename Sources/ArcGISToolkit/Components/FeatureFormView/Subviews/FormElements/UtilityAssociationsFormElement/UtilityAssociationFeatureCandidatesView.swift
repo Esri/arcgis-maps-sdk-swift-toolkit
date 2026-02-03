@@ -79,7 +79,7 @@ extension FeatureFormView {
             .onAppear {
                 filterViewModel.featureTable = form.feature.table as? ArcGISFeatureTable
             }
-            .onChange(of: whereClause, { oldValue, newValue in
+            .onChange(of: whereClause) { oldValue, newValue in
                 Task {
                     candidates.removeAll()
                     let parameters = QueryParameters()
@@ -89,7 +89,7 @@ extension FeatureFormView {
                     queryForFirstPageIsComplete = true
                 }
                 
-            })
+            }
             .sheet(isPresented: $filterViewModel.filterViewIsPresented) {
                 FilterView(model: filterViewModel) {
                     queryForFirstPageIsComplete = false
