@@ -23,16 +23,16 @@ class FilterViewModel {
             if let featureTable {
                 Task {
                     try? await featureTable.load()
-                    fields = unaSupportedFields(featureTable.fields)
+                    fields = supportedUNFields(featureTable.fields)
                 }
             }
         }
     }
     /// The list of field filters the user has created.
-    var fieldFilters: [FieldFilter]
+    var fieldFilters = [FieldFilter]()
     
     /// The original list of field filters, used when user cancels changes.
-    private var originalFieldFilters: [FieldFilter]
+    private var originalFieldFilters = [FieldFilter]()
     
     /// A Boolean value indicating whether the filter view is presented.
     var filterViewIsPresented = false
@@ -56,22 +56,20 @@ class FilterViewModel {
     
     /// Initializes a filter view model.
     /// - Parameter featureTable: The feature table for the filter.
-    init(featureTable: ArcGISFeatureTable? = nil, fieldFilters: [FieldFilter] = [FieldFilter]()) {
+    init(featureTable: ArcGISFeatureTable? = nil) {
         self.featureTable = featureTable
-        self.fieldFilters = fieldFilters
-        self.originalFieldFilters = fieldFilters
     }
-    
+
     /// Applies the current field filters.
     func apply() {
-        isFilterViewPresented.toggle()
+        filterViewIsPresented.toggle()
         self.originalFieldFilters = fieldFilters
     }
     
     /// Cancels the current changes to the field filters.
     func cancel() {
         fieldFilters = originalFieldFilters
-        isFilterViewPresented.toggle()
+        filterViewIsPresented.toggle()
     }
 }
 
@@ -91,9 +89,6 @@ class FieldFilter {
         }
     }
     
-    /// The name of the filter.
-    var name = "Condition"
-    
     /// The operation used specify how the `value` should be applied to the `field`.
     var condition: FilterOperator = FilterOperator.equal
     
@@ -110,12 +105,10 @@ class FieldFilter {
     init(
         field: Field,
         condition: FilterOperator,
-        name: String = "Condition",
         value: String = ""
     ) {
         self.field = field
         self.condition = condition
-        self.name = name
         self.value = value
     }
     
@@ -152,7 +145,6 @@ extension FieldFilter {
         FieldFilter(
             field: self.field,
             condition: self.condition,
-            name: self.name,
             value: self.value
         )
     }

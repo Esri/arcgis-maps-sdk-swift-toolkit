@@ -90,13 +90,12 @@ extension FeatureFormView {
                 }
                 
             })
-            .sheet(isPresented: $filterViewModel.isFilterViewPresented) {
-                FilterView() {
+            .sheet(isPresented: $filterViewModel.filterViewIsPresented) {
+                FilterView(model: filterViewModel) {
                     queryForFirstPageIsComplete = false
                     whereClause = filterViewModel.whereClause()
                 }
             }
-            .environment(filterViewModel)
         }
         
         /// A view to indicate no utility association candidate results were found.
@@ -210,7 +209,7 @@ extension FeatureFormView {
                     }
                     
                     Button {
-                        filterViewModel.isFilterViewPresented.toggle()
+                        filterViewModel.filterViewIsPresented.toggle()
                     } label: {
                         if filterViewModel.fieldFilters.isEmpty {
                             Image(systemName: "line.3.horizontal.decrease")

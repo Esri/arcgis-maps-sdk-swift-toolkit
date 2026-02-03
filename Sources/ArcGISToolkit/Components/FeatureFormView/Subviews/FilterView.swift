@@ -61,7 +61,13 @@ struct FilterView: View {
                                 FieldView(fieldFilter: filter)
                             } header: {
                                 HStack {
-                                    Text(filter.name)
+                                    Text(
+                                        String(
+                                            localized: "Condition \(model.fieldFilters.firstIndex(of: filter)! + 1)",
+                                            bundle: .toolkitModule,
+                                            comment: "A label for a control representing a condition and position index used to filter fields in a table."
+                                        )
+                                    )
                                     Spacer()
                                     Menu {
                                         // Duplicate the current filter.
@@ -257,7 +263,7 @@ private struct FieldView: View {
                             Text(field.title)
                         }
                     } label: {
-                        Text.fields
+                        Text.field
                     }
                     .pickerStyle(.menu)
                     .onChange(of: fieldFilter.field) {
@@ -268,7 +274,7 @@ private struct FieldView: View {
             
             // Condition
             HStack {
-Picker(selection: $fieldFilter.condition) {
+                Picker(selection: $fieldFilter.condition) {
                     ForEach(conditions, id: \.self) { condition in
                         Text(condition.displayName)
                     }
@@ -380,31 +386,4 @@ extension Field: @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(toJSON())
     }
-}
-
-#Preview {
-    let filters: [FieldFilter] = {
-        [
-            FieldFilter(
-                field: Field(
-                    type: .int32,
-                    name: ".int32",
-                    alias: "Int32"
-                ),
-                condition: FilterOperator.equal,
-                value: "1"
-            ),
-            FieldFilter(
-                field: Field(
-                    type: .text,
-                    name: ".text",
-                    alias: "Text"
-                ),
-                condition: FilterOperator.notEqual,
-                value: "Bob"
-            )
-        ]
-    }()
-    let model = FilterViewModel(fieldFilters: filters)
-    FilterView(model: model)
 }
