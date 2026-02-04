@@ -266,7 +266,6 @@ enum FilterOperator: String {
     }
     
     /// The name used to display the operator.
-    /// The name used to display the operator.
     var displayName: Text {
         switch self {
         case .isOp:
