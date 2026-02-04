@@ -25,6 +25,8 @@ extension FeatureFormView {
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
         /// The phrase used to filter candidates by name.
         @State private var filterPhrase = ""
+        /// The model for the filter view
+        @State private var filterViewModel = FilterViewModel()
         /// The parameters for retrieving the next page of results.
         @State private var nextQueryParameters: QueryParameters?
         /// A Boolean value indicating whether a filter based query is running.
@@ -35,8 +37,6 @@ extension FeatureFormView {
         @State private var queryIsRunning = false
         /// The task for the current query.
         @State private var queryTask: Task<Void, Never>?
-        /// The model for the filter view
-        @State private var filterViewModel = FilterViewModel()
         /// The attribute expression to query and filter candidates against.
         @State private var whereClause = "1=1"
         

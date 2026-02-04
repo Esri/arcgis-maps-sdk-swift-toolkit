@@ -14,6 +14,7 @@
 
 import ArcGIS
 import Foundation
+import SwiftUI
 
 @MainActor @Observable
 class FilterViewModel {
@@ -274,7 +275,60 @@ enum FilterOperator: String {
                 bundle: .toolkitModule,
                 comment: "A label for the \"is\" attribute query condition."
             )
-        // ... cases for each operator with words ...
+        case .isNot:
+            Text(
+                "is not",
+                bundle: .toolkitModule,
+                comment: "A label for the \"is not\" attribute query condition."
+            )
+        case .startsWith:
+            Text(
+                "starts with",
+                bundle: .toolkitModule,
+                comment: "A label for the \"starts with\" attribute query condition."
+            )
+        case .endsWith:
+            Text(
+                "ends with",
+                bundle: .toolkitModule,
+                comment: "A label for the \"ends with\" attribute query condition."
+            )
+        case .contains:
+            Text(
+                "contains the text",
+                bundle: .toolkitModule,
+                comment: "A label for the \"contains the text\" attribute query condition."
+            )
+        case .doesNotContain:
+            Text(
+                "does not contain the text",
+                bundle: .toolkitModule,
+                comment: "A label for the \"does not contain the text\" attribute query condition."
+            )
+        case .isBlank:
+            Text(
+                "is blank",
+                bundle: .toolkitModule,
+                comment: "A label for the \"is blank\" attribute query condition."
+            )
+        case .isNotBlank:
+            Text(
+                "is not blank",
+                bundle: .toolkitModule,
+                comment: "A label for the \"is not blank\" attribute query condition."
+            )
+        case .isEmpty:
+            Text(
+                "is empty",
+                bundle: .toolkitModule,
+                comment: "A label for the \"is empty\" attribute query condition."
+            )
+        case .isNotEmpty:
+            Text(
+                "is not empty",
+                bundle: .toolkitModule,
+                comment: "A label for the \"is not empty\" attribute query condition."
+            )
         default:
             Text(self.rawValue)
         }

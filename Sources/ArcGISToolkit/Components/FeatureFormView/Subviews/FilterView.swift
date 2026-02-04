@@ -273,7 +273,7 @@ private struct FieldView: View {
             HStack {
                 Picker(selection: $fieldFilter.condition) {
                     ForEach(conditions, id: \.self) { condition in
-                        Text(condition.displayName)
+                        condition.displayName
                     }
                 } label: {
                     Text(
