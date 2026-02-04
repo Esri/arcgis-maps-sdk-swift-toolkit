@@ -29,32 +29,32 @@ struct FilterView: View {
         NavigationStack {
             ScrollViewReader { proxy in
                 if model.fieldFilters.isEmpty {
-                    Spacer()
-                    Image(systemName: "line.3.horizontal.decrease.circle")
-                        .font(.largeTitle)
-                        .foregroundStyle(.gray)
-                        .padding()
-                    Text(
-                        "No conditions added",
-                        bundle: .toolkitModule,
-                        comment: "A label indicating no field filtering conditions have been added."
-                    )
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    Text(
-                        "Show features that meet all the conditions",
-                        bundle: .toolkitModule,
-                        comment: "A label indicating the intended outcome of using the filter view."
-                    )
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .padding(.bottom)
-                    HStack {
-                        Spacer()
+                    ContentUnavailableView {
+                        Label {
+                            Text(
+                                "No conditions added",
+                                bundle: .toolkitModule,
+                                comment: "A label indicating no field filtering conditions have been added."
+                            )
+                            .font(.title3)
+                            .fontWeight(.bold)
+                            Text(
+                                "Show features that meet all the conditions",
+                                bundle: .toolkitModule,
+                                comment: "A label indicating the intended outcome of using the filter view."
+                            )
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .padding(.bottom)
+                        } icon: {
+                            Image(systemName: "line.3.horizontal.decrease.circle")
+                                .font(.largeTitle)
+                                .foregroundStyle(.gray)
+                                .padding()
+                        }
+                    } actions: {
                         BorderedAddButton()
-                        Spacer()
                     }
-                    Spacer()
                 } else {
                     List {
                         ForEach(model.fieldFilters, id: \.self) { filter in
@@ -62,7 +62,15 @@ struct FilterView: View {
                                 FieldView(fieldFilter: filter)
                             } header: {
                                 HStack {
-                                    Text(filter.name)
+                                    if let index = model.fieldFilters.firstIndex(of: filter) {
+                                        Text(
+                                            String(
+                                                localized: "Condition \(index + 1)",
+                                                bundle: .toolkitModule,
+                                                comment: "A label for a control representing a condition and position index used to filter fields in a table."
+                                            )
+                                        )
+                                    }
                                     Spacer()
                                     Menu {
                                         // Duplicate the current filter.
@@ -82,9 +90,11 @@ struct FilterView: View {
                             }
                         }
                     }
-                    .onChange(of: model.fieldFilters) {
-                        // Scroll to the last filter when the set changes
-                        if let lastFieldFilter = model.fieldFilters.last {
+                    .onChange(of: model.fieldFilters) { oldValue, newValue in
+                        // Scroll to the last filter when a filter is added.
+                        // For delete, do nothing.
+                        if oldValue.count < newValue.count,
+                           let lastFieldFilter = model.fieldFilters.last {
                             withAnimation {
                                 proxy.scrollTo(lastFieldFilter.id, anchor: .bottom)
                             }
@@ -120,6 +130,7 @@ struct FilterView: View {
                     }
                 }
         }
+        .environment(model)
         .background(Color(.systemGroupedBackground))
         .alert("Filters have not been applied", isPresented: $showAlert) {
             Button("Save", role: .none) {
@@ -274,7 +285,7 @@ private struct FieldView: View {
                             Text(field.title)
                         }
                     } label: {
-                        Text.fields
+                        Text.field
                     }
                     .pickerStyle(.menu)
                     .onChange(of: fieldFilter.field) {
@@ -285,7 +296,7 @@ private struct FieldView: View {
             
             // Condition
             HStack {
-Picker(selection: $fieldFilter.condition) {
+                Picker(selection: $fieldFilter.condition) {
                     ForEach(conditions, id: \.self) { condition in
                         Text(condition.displayName)
                     }
@@ -397,32 +408,4 @@ extension Field: @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(toJSON())
     }
-}
-
-#Preview {
-    let filters: [FieldFilter] = {
-        [
-            FieldFilter(
-                field: Field(
-                    type: .int32,
-                    name: ".int32",
-                    alias: "Int32"
-                ),
-                condition: FilterOperator.equal,
-                value: "1"
-            ),
-            FieldFilter(
-                field: Field(
-                    type: .text,
-                    name: ".text",
-                    alias: "Text"
-                ),
-                condition: FilterOperator.notEqual,
-                value: "Bob"
-            )
-        ]
-    }()
-    let model = FilterViewModel(fieldFilters: filters)
-    FilterView(model: model)
-        .environment(model)
 }

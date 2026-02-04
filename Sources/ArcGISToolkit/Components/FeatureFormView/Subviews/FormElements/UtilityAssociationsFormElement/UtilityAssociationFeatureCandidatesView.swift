@@ -79,7 +79,7 @@ extension FeatureFormView {
             .onAppear {
                 filterViewModel.featureTable = form.feature.table as? ArcGISFeatureTable
             }
-            .onChange(of: whereClause, { oldValue, newValue in
+            .onChange(of: whereClause) { oldValue, newValue in
                 Task {
                     candidates.removeAll()
                     let parameters = QueryParameters()
@@ -89,14 +89,13 @@ extension FeatureFormView {
                     queryForFirstPageIsComplete = true
                 }
                 
-            })
-            .sheet(isPresented: $filterViewModel.isFilterViewPresented) {
-                FilterView() {
+            }
+            .sheet(isPresented: $filterViewModel.filterViewIsPresented) {
+                FilterView(model: filterViewModel) {
                     queryForFirstPageIsComplete = false
                     whereClause = filterViewModel.whereClause()
                 }
             }
-            .environment(filterViewModel)
         }
         
         /// A view to indicate no utility association candidate results were found.
@@ -210,7 +209,7 @@ extension FeatureFormView {
                     }
                     
                     Button {
-                        filterViewModel.isFilterViewPresented.toggle()
+                        filterViewModel.filterViewIsPresented.toggle()
                     } label: {
                         if filterViewModel.fieldFilters.isEmpty {
                             Image(systemName: "line.3.horizontal.decrease")
