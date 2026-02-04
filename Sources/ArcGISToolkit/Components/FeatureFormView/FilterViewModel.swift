@@ -38,7 +38,7 @@ class FilterViewModel {
     var filterViewIsPresented = false
     
     /// The list of fields generated from the `featureTable`.
-    var fields = [Field]()
+    private(set) var fields = [Field]()
     
     /// The "where" clause assembled from the list of `FieldFilters`
     /// - Returns: A string represented the SQL query assembled from the list of `FieldFilters`. The `FieldFilters` are joined by `AND`.
@@ -59,11 +59,11 @@ class FilterViewModel {
     init(featureTable: ArcGISFeatureTable? = nil) {
         self.featureTable = featureTable
     }
-
+    
     /// Applies the current field filters.
     func apply() {
         filterViewIsPresented.toggle()
-        self.originalFieldFilters = fieldFilters
+       originalFieldFilters = fieldFilters
     }
     
     /// Cancels the current changes to the field filters.
@@ -179,12 +179,8 @@ extension FilterViewModel {
     /// - Returns: The final list of supported fields to filter by. This will automatically filter out the
     /// `ASSETGROUP` and `ASSETTYPE` fields, as those are special fields for Utility Networks.
     private func supportedUNFields(_ allFields: [Field]) -> [Field] {
-        allFields.filter { field in
-            ((field.type?.isNumeric ?? false) ||
-             field.type == .text ||
-             field.type == FieldType.oid) &&
-            field.name != "assetgroup" &&
-            field.name != "assettype"
+        supportedFields(allFields).filter { field in
+            field.name != "assetgroup" && field.name != "assettype"
         }
     }
 }

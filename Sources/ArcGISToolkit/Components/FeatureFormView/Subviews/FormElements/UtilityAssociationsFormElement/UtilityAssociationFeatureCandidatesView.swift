@@ -37,7 +37,7 @@ extension FeatureFormView {
         @State private var queryTask: Task<Void, Never>?
         /// The model for the filter view
         @State private var filterViewModel = FilterViewModel()
-        
+        /// The attribute expression to query and filter candidates against.
         @State private var whereClause = "1=1"
         
         /// The asset type to use when querying for feature candidates.
@@ -79,22 +79,19 @@ extension FeatureFormView {
             .onAppear {
                 filterViewModel.featureTable = form.feature.table as? ArcGISFeatureTable
             }
-            .onChange(of: whereClause) { oldValue, newValue in
-                Task {
-                    candidates.removeAll()
-                    let parameters = QueryParameters()
-                    parameters.whereClause = filterViewModel.whereClause()
-                    queryFeatures(parameters: parameters)
-                    await queryTask?.value
-                    queryForFirstPageIsComplete = true
-                }
-                
-            }
             .sheet(isPresented: $filterViewModel.filterViewIsPresented) {
                 FilterView(model: filterViewModel) {
                     queryForFirstPageIsComplete = false
                     whereClause = filterViewModel.whereClause()
                 }
+            }
+            .task(id: whereClause) {
+                candidates.removeAll()
+                let parameters = QueryParameters()
+                parameters.whereClause = filterViewModel.whereClause()
+                queryFeatures(parameters: parameters)
+                await queryTask?.value
+                queryForFirstPageIsComplete = true
             }
         }
         
