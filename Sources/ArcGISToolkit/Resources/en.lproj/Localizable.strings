@@ -407,10 +407,6 @@ edge of a utility network element. */
 /* A label for the element on the "from" side of a utility association. */
 "From Element" = "From Element";
 
-/* A label for a button to choose a feature for a new
-utility association from a network data source. */
-"From Network Data Source" = "From Network Data Source";
-
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Function Results";
@@ -619,10 +615,6 @@ filter results were found. */
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
-
-/* A label indicating features can be selected by
-interactively tapping on the map. */
-"On Map" = "On Map";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Online Map Failed to Load";
