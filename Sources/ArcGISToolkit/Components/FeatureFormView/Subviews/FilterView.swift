@@ -183,32 +183,14 @@ private struct BorderedAddButton: View {
             Button {
                 withAnimation {
                     let newFilter = FieldFilter(field: model.fields.first ?? Field(type: .blob, name: "Empty", alias: "Empty"))
-                    model.fieldFilters.append(newFilter)
-                }
-            } label: {
-                HStack {
-                    Image(systemName: "plus")
-                        .imageScale(.large)
-                        .padding(4)
-                    Text(
-                        "Add Condition",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to add a new field filtering condition."
-                    )
-                    .padding(.trailing)
-                }
-                .bold()
-            }
-            .id("BorderedAddButton")
-            .buttonBorderShape(.automatic)
-            .buttonStyle(.borderedProminent)
-            .shadow(radius: 8)
-        }
+/// A button to add a `FieldFilter` to the list of current `FieldFilters`.
+private struct AddButton: View {
+    let useBorderedStyle: Bool
+    
+    init(useBorderedStyle: Bool = false) {
+        self.useBorderedStyle = useBorderedStyle
     }
-}
-
-/// A button, sans border, used to add a `FieldFilter` to the list of current `FieldFilters`.
-private struct NoBorderAddButton: View {
+    
     @Environment(FilterViewModel.self) private var model
     var body: some View {
         HStack {
@@ -220,18 +202,37 @@ private struct NoBorderAddButton: View {
             } label: {
                 HStack {
                     Image(systemName: "plus")
-                        .foregroundColor(.white)
-                        .padding(4)
-                        .background(Circle().fill(Color.blue))
+                        .modify {
+                            if useBorderedStyle {
+                                $0.imageScale(.large)
+                                .padding(4)
+                            } else {
+                                $0.foregroundColor(.white)
+                                .padding(4)
+                                .background(Circle().fill(Color.blue))
+                            }
+                        }
                     Text(
                         "Add Condition",
                         bundle: .toolkitModule,
                         comment: "A label for a button to add a new field filtering condition."
                     )
+                    .modify {
+                        if useBorderedStyle {
+                            $0.padding(.trailing)
+                        }
+                    }
                 }
                 .bold()
             }
-            .id("NoBorderAddButton")
+            .id("AddButton")
+            .modify {
+                if useBorderedStyle {
+                    $0.buttonBorderShape(.automatic)
+                    .buttonStyle(.borderedProminent)
+                    .shadow(radius: 8)
+                }
+            }
         }
     }
 }
