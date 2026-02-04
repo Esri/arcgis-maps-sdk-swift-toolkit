@@ -25,18 +25,24 @@ final class FloorFilterTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         
-        let filterButton = app.buttons["Floor Filter button"]
+        let filterButton = app.buttons["FloorFilter.siteSelectorButton"]
         let researchAnnexButton = app.buttons["Research Annex"]
         let latticeText = app.buttons["Lattice"]
-        let levelEightText = app.scrollViews.otherElements.buttons["8"]
-        let levelOneText = app.buttons["1"]
-        let collapseButton = app.buttons["Go Down"]
+        let levelEightText = app.buttons["FloorFilter.levelButton.8"]
+        let levelOneText = app.buttons["FloorFilter.levelButton.1"]
+        let collapseButton = app.buttons["FloorFilter.collapseButton"]
         
         // Open the Floor Filter component test view.
         app.buttons["Floor Filter Tests"].tap()
         
-        // Wait for floor aware data to load and then open the filter.
-        XCTAssertTrue(filterButton.waitForExistence(timeout: 10), "The filter button wasn't found.")
+        // Wait for floor filter button to appear.
+        XCTAssertTrue(filterButton.waitForExistence(timeout: 2), "The filter button wasn't found.")
+        
+        XCTAssertTrue(
+            filterButton.wait(for: \.isEnabled, toEqual: true, timeout: 10),
+            "Floor filter view model failed to load in time."
+        )
+        
         filterButton.tap()
         
         // Select the site named "Research Annex".
