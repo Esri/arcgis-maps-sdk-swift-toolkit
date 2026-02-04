@@ -52,7 +52,7 @@ struct FilterView: View {
                                 .padding()
                         }
                     } actions: {
-                        BorderedAddButton()
+                        AddButton(useBorderedStyle: true)
                     }
                 } else {
                     List {
@@ -101,9 +101,7 @@ struct FilterView: View {
                     }
                     Spacer()
                     HStack {
-                        NoBorderAddButton()
-                            .buttonStyle(.borderless)
-                            .padding()
+                        AddButton()
                         Spacer()
                     }
                 }
@@ -175,63 +173,56 @@ struct FilterView: View {
     }
 }
 
-/// A button, with a border, used to add a `FieldFilter` to the list of current `FieldFilters`.
-private struct BorderedAddButton: View {
-    @Environment(FilterViewModel.self) private var model
-    var body: some View {
-        HStack {
-            Button {
-                withAnimation {
-                    let newFilter = FieldFilter(field: model.fields.first ?? Field(type: .blob, name: "Empty", alias: "Empty"))
 /// A button to add a `FieldFilter` to the list of current `FieldFilters`.
 private struct AddButton: View {
+    /// Bool value specifying whether to draw the button with a border style.
     let useBorderedStyle: Bool
     
+    /// Creates an `AddButton`, alternately displaying it with a border style.
+    /// - Parameter useBorderedStyle: Bool value specifying whether to draw the button with a border style.
     init(useBorderedStyle: Bool = false) {
         self.useBorderedStyle = useBorderedStyle
     }
     
     @Environment(FilterViewModel.self) private var model
     var body: some View {
-        HStack {
-            Button {
-                withAnimation {
-                    let newFilter = FieldFilter(field: model.fields.first ?? Field(type: .blob, name: "Empty", alias: "Empty"))
-                    model.fieldFilters.append(newFilter)
-                }
-            } label: {
-                HStack {
-                    Image(systemName: "plus")
-                        .modify {
-                            if useBorderedStyle {
-                                $0.imageScale(.large)
-                                .padding(4)
-                            } else {
-                                $0.foregroundColor(.white)
-                                .padding(4)
-                                .background(Circle().fill(Color.blue))
-                            }
-                        }
-                    Text(
-                        "Add Condition",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to add a new field filtering condition."
-                    )
+        Button {
+            withAnimation {
+                let newFilter = FieldFilter(field: model.fields.first ?? Field(type: .blob, name: "Empty", alias: "Empty"))
+                model.fieldFilters.append(newFilter)
+            }
+        } label: {
+            HStack {
+                Image(systemName: "plus")
                     .modify {
                         if useBorderedStyle {
-                            $0.padding(.trailing)
+                            $0.imageScale(.large)
+                                .padding(4)
+                        } else {
+                            $0.foregroundColor(.white)
+                                .padding(4)
+                                .background(Circle().fill(Color.blue))
                         }
                     }
+                Text(
+                    "Add Condition",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to add a new field filtering condition."
+                )
+                .modify {
+                    if useBorderedStyle {
+                        $0.padding(.trailing)
+                    }
                 }
-                .bold()
             }
-            .id("AddButton")
-            .modify {
-                if useBorderedStyle {
-                    $0.buttonBorderShape(.automatic)
+            .bold()
+        }
+        .id("AddButton")
+        .modify {
+            if useBorderedStyle {
+                $0.buttonBorderShape(.automatic)
                     .buttonStyle(.borderedProminent)
                     .shadow(radius: 8)
-                }
             }
         }
     }
