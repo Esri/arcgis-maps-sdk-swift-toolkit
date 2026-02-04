@@ -265,7 +265,18 @@ enum FilterOperator: String {
     }
     
     /// The name used to display the operator.
-    var displayName: String {
-        return self.rawValue
+    /// The name used to display the operator.
+    var displayName: Text {
+        switch self {
+        case .isOp:
+            Text(
+                "is",
+                bundle: .toolkitModule,
+                comment: "A label for the \"is\" attribute query condition."
+            )
+        // ... cases for each operator with words ...
+        default:
+            Text(self.rawValue)
+        }
     }
 }
