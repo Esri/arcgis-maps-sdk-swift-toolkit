@@ -92,6 +92,7 @@ extension FeatureFormView {
             }
             .sheet(isPresented: $filterViewModel.filterViewIsPresented) {
                 FilterView(model: filterViewModel) {
+                    candidates.removeAll()
                     queryForFirstPageIsComplete = false
                     whereClause = filterViewModel.whereClause()
                 }

@@ -57,7 +57,7 @@ struct FilterView: View {
                     }
                 } else {
                     List {
-                        ForEach(model.fieldFilters, id: \.self) { filter in
+                        ForEach(model.fieldFilters, id: \.id) { filter in
                             Section {
                                 FieldView(fieldFilter: filter)
                             } header: {
@@ -132,18 +132,27 @@ struct FilterView: View {
         }
         .environment(model)
         .background(Color(.systemGroupedBackground))
-        .alert("Filters have not been applied", isPresented: $showAlert) {
-            Button("Save", role: .none) {
-                model.apply()
-                if let onApplyAction {
-                    onApplyAction()
-                }
-            }
-            Button("Discard", role: .destructive) {
+        .alert(
+            String(
+                localized: "Filters have not been applied",
+                bundle: .toolkitModule,
+                comment: "A notice used when closing the view and the filters have been applied/saved."
+            ),
+            isPresented: $showAlert
+        ) {
+            Button(role: .destructive) {
                 model.cancel()
+            } label: {
+                Text.discardEdits
             }
         } message: {
-            Text("Do you want to save your changes or discard them?")
+            Text(
+                String(
+                    localized: "Are you sure you want to discard the changes?",
+                    bundle: .toolkitModule,
+                    comment: "A question asking for confirmation to discard changes."
+                )
+            )
         }
     }
     
