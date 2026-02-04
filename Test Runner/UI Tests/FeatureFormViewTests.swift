@@ -1883,10 +1883,8 @@ final class FeatureFormViewTests: XCTestCase {
         
 #if targetEnvironment(macCatalyst)
         let addAssociationButton = app.buttons["Add Association"]
-        let fromNetworkDataSourceButton = app.menuItems["From Network Data Source"]
 #else
         let addAssociationButton = app.staticTexts["Add Association"]
-        let fromNetworkDataSourceButton = app.buttons["From Network Data Source"]
 #endif
         
         openTestCase()
@@ -1910,13 +1908,6 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         addAssociationButton.tap()
-        
-        XCTAssertTrue(
-            fromNetworkDataSourceButton.waitForExistence(timeout: 5),
-            "The \"From Network Data Source\" button doesn't exist."
-        )
-        
-        fromNetworkDataSourceButton.tap()
         
         XCTAssertTrue(
             electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
@@ -2040,12 +2031,10 @@ final class FeatureFormViewTests: XCTestCase {
         
 #if targetEnvironment(macCatalyst)
         let addAssociationButton = app.buttons["Add Association"]
-        let fromNetworkDataSourceButton = app.menuItems["From Network Data Source"]
         let terminalHighButton = app.menuItems["high"]
         let terminalLowButton = app.menuItems["low"]
 #else
         let addAssociationButton = app.staticTexts["Add Association"]
-        let fromNetworkDataSourceButton = app.buttons["From Network Data Source"]
         let terminalHighButton = app.buttons["High"]
         let terminalLowButton = app.buttons["Low"]
 #endif
@@ -2081,13 +2070,6 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         addAssociationButton.tap()
-        
-        XCTAssertTrue(
-            fromNetworkDataSourceButton.waitForExistence(timeout: 5),
-            "The \"From Network Data Source\" button doesn't exist."
-        )
-        
-        fromNetworkDataSourceButton.tap()
         
         XCTAssertTrue(
             electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
@@ -2258,13 +2240,6 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         addAssociationButton.tap()
-        
-        XCTAssertTrue(
-            fromNetworkDataSourceButton.waitForExistence(timeout: 5),
-            "The \"From Network Data Source\" button doesn't exist."
-        )
-        
-        fromNetworkDataSourceButton.tap()
         
         XCTAssertTrue(
             structureJunctionDataSourceButton.waitForExistence(timeout: 5),
