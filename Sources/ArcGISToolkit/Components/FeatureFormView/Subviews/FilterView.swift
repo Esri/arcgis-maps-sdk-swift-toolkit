@@ -102,6 +102,7 @@ struct FilterView: View {
                     Spacer()
                     HStack {
                         AddButton()
+                            .padding()
                         Spacer()
                     }
                 }

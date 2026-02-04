@@ -203,6 +203,7 @@ private extension Array where Element == FeatureEditResult {
 
 private extension URL {
     static var sampleData: Self {
-        .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
+        .init(string: "https://rt-server114.esri.com/portal/home/item.html?id=f997acc3f5894008b583307d55e1ae4e")!
+//        .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
     }
 }
