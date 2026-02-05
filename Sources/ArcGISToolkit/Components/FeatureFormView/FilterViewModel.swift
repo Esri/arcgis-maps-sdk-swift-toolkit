@@ -182,8 +182,10 @@ extension FilterViewModel {
     private func supportedFields(_ allFields: [Field]) -> [Field] {
         allFields.filter { field in
             (field.type?.isNumeric ?? false) ||
-            field.type == .text ||
-            field.type == FieldType.oid
+            field.type == .date ||
+            field.type == .dateOnly ||
+            field.type == .oid ||
+            field.type == .text
         }
     }
     
