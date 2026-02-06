@@ -338,9 +338,9 @@ private struct FieldView: View {
         .tint(.blue)
     }
     
-    /// Determines the conditions to display for the given `FieldFilter` field type.
-    /// - Returns: A list of conditions appropriate for the given `FieldFilter` field type.
-    private func fieldConditions() -> [FilterOperator] {
+    /// The operators supported for the given `FieldFilter` field type.
+    /// - Returns: A list of operators appropriate for the given `FieldFilter` field type.
+    private var supportedOperators: [FilterOperator] {
         (fieldFilter.field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
     }
 }
