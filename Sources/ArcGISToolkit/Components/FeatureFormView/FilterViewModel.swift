@@ -166,8 +166,14 @@ class FieldFilter {
     /// It then returns the first available filter operator from that set. If no operators are found, it defaults to .equal.
     /// - Returns: The first available filter operator from the appropriate set of filters.
     private func firstCondition() -> FilterOperator {
-        let conditions = (field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(field.isNullable)
-        return conditions.first ?? FilterOperator.equal
+        let type = field.type
+        let operators: [FilterOperator]
+        if type == .date || type == .dateOnly {
+            operators = FilterOperator.numericFilterOperators() + [.isBlank, .isNotBlank]
+        } else {
+            operators = (type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(field.isNullable)
+        }
+        return operators.first ?? FilterOperator.equal
     }
 }
 

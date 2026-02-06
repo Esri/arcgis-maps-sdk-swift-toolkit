@@ -377,7 +377,12 @@ private struct FieldView: View {
     /// Determines the conditions to display for the given `FieldFilter` field type.
     /// - Returns: A list of conditions appropriate for the given `FieldFilter` field type.
     private func fieldConditions() -> [FilterOperator] {
-        (fieldFilter.field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
+        let type = fieldFilter.field.type
+        if type == .date || type == .dateOnly {
+            return FilterOperator.numericFilterOperators() + [.isBlank, .isNotBlank]
+        } else {
+            return (type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
+        }
     }
 }
 
