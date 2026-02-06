@@ -264,7 +264,7 @@ private struct FieldView: View {
                     }
                     .pickerStyle(.menu)
                     .onChange(of: fieldFilter.field) {
-                        conditions = fieldConditions()
+                        conditions = supportedOperators
                     }
                 }
             }
@@ -285,7 +285,7 @@ private struct FieldView: View {
                 .pickerStyle(.menu)
             }
             .onAppear {
-                conditions = fieldConditions()
+                conditions = supportedOperators
             }
             
             // Value
