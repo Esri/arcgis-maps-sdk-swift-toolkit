@@ -128,7 +128,20 @@ class FieldFilter {
     /// Creates the SQL query for this field filter.
     /// - Returns: A string representing a SQL query for the specified `field`, `condition`, and `value`.
     func query() -> String {
-        switch condition {
+        var formattedValue = {
+            guard let fieldType = self.field.type else { return self.value }
+            
+            if fieldType == .text {
+                return self.value
+            } else if fieldType == .date {
+                return "timestamp '\(self.value)'"
+            } else if fieldType == .dateOnly {
+                return "date '\(self.value)'"
+            }
+            return self.value
+        }
+        
+        return switch condition {
         case .startsWith:
             "\(field.name) \(condition.sqlOperator) '\(value)%'"
         case .endsWith:
@@ -137,8 +150,9 @@ class FieldFilter {
             "\(field.name) \(condition.sqlOperator) '%\(value)%'"
         case .isBlank, .isNotBlank, .isEmpty, .isNotEmpty:
             "\(field.name) \(condition.sqlOperator)"
-        case .equal, .notEqual, .isOp, .isNot, .greaterThan, .greaterThanOrEqual, .lessThan, .lessThanOrEqual:
-            "\(field.name) \(condition.sqlOperator) \(value)"
+        default:
+//        case .equal, .notEqual, .isOp, .isNot, .greaterThan, .greaterThanOrEqual, .lessThan, .lessThanOrEqual:
+            "\(field.name) \(condition.sqlOperator) \(formattedValue)"
         }
     }
     
@@ -183,7 +197,7 @@ extension FilterViewModel {
         allFields.filter { field in
             (field.type?.isNumeric ?? false) ||
             field.type == .text ||
-            field.type == FieldType.oid
+            field.type == .oid
         }
     }
     
@@ -245,6 +259,12 @@ enum FilterOperator: String {
         .greaterThanOrEqual,
         .lessThan,
         .lessThanOrEqual
+    ] }
+    
+    /// Returns a list of appropriate operations for numeric fields.
+    static func equalityFilterOperators() -> [FilterOperator] { [
+        .equal,
+        .notEqual
     ] }
     
     /// The SQL operator string represented by the operator.

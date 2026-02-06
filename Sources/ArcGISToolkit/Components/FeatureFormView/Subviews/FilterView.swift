@@ -316,34 +316,54 @@ private struct FieldView: View {
             }
             
             // Value
-            HStack {
-                Text.value
-                Spacer()
-                TextField(
-                    text: $fieldFilter.value,
-                    prompt: Text(
-                        "Enter a value",
-                        bundle: .toolkitModule,
-                        comment: "A prompt for a text field to enter a value."
-                    ),
-                    label: {
-                        Text.value
+            if let domain = fieldFilter.field.domain as? CodedValueDomain {
+                HStack {
+                    Picker(selection: $fieldFilter.field.domain) {
+                        ForEach(conditions, id: \.self) { condition in
+                            condition.displayName
+                        }
+                    } label: {
+                        Text(
+                            "Condition",
+                            bundle: .toolkitModule,
+                            comment: "A label for a control to pick a condition to filter fields in a table against."
+                        )
                     }
-                )
-                .multilineTextAlignment(.trailing)
-                .keyboardType(keyboardType)
-                .frame(alignment: .trailing)
+                    .pickerStyle(.menu)
+                }
+                .onAppear {
+                    conditions = fieldConditions()
+                }
+            } else {
+                HStack {
+                    Text.value
+                    Spacer()
+                    TextField(
+                        text: $fieldFilter.value,
+                        prompt: Text(
+                            "Enter a value",
+                            bundle: .toolkitModule,
+                            comment: "A prompt for a text field to enter a value."
+                        ),
+                        label: {
+                            Text.value
+                        }
+                    )
+                    .multilineTextAlignment(.trailing)
+                    .keyboardType(keyboardType)
+                    .frame(alignment: .trailing)
 #if os(iOS)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        if UIDevice.current.userInterfaceIdiom == .phone, (fieldFilter.field.type?.isNumeric ?? false) {
-                            // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
-                            positiveNegativeButton
-                            Spacer()
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            if UIDevice.current.userInterfaceIdiom == .phone, (fieldFilter.field.type?.isNumeric ?? false) {
+                                // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
+                                positiveNegativeButton
+                                Spacer()
+                            }
                         }
                     }
-                }
 #endif
+                }
             }
         }
         .id(fieldFilter.id)
@@ -368,7 +388,19 @@ private struct FieldView: View {
     /// Determines the conditions to display for the given `FieldFilter` field type.
     /// - Returns: A list of conditions appropriate for the given `FieldFilter` field type.
     private func fieldConditions() -> [FilterOperator] {
-        (fieldFilter.field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
+        guard let fieldType = fieldFilter.field.type else { return [] }
+        
+        if fieldType.isNumeric && fieldFilter.field.domain is CodedValueDomain {
+            return FilterOperator.equalityFilterOperators()
+        } else if fieldType.isNumeric || fieldType == .oid {
+            return FilterOperator.numericFilterOperators()
+        } else if fieldType == .text {
+            return FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
+        } else if fieldType == .date || fieldType == .dateOnly {
+            return FilterOperator.equalityFilterOperators()
+        }
+        
+        return []
     }
 }
 
