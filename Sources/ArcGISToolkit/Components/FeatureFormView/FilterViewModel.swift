@@ -150,15 +150,25 @@ class FieldFilter {
     func query() -> String {
         switch condition {
         case .startsWith:
-            "\(field.name) \(condition.sqlOperator) '\(value)%'"
+            return "\(field.name) \(condition.sqlOperator) '\(value)%'"
         case .endsWith:
-            "\(field.name) \(condition.sqlOperator) '%\(value)'"
+            return "\(field.name) \(condition.sqlOperator) '%\(value)'"
         case .contains, .doesNotContain:
-            "\(field.name) \(condition.sqlOperator) '%\(value)%'"
+            return "\(field.name) \(condition.sqlOperator) '%\(value)%'"
         case .isBlank, .isNotBlank, .isEmpty, .isNotEmpty:
-            "\(field.name) \(condition.sqlOperator)"
+            return "\(field.name) \(condition.sqlOperator)"
         case .equal, .notEqual, .isOp, .isNot, .greaterThan, .greaterThanOrEqual, .lessThan, .lessThanOrEqual:
-            "\(field.name) \(condition.sqlOperator) \(value)"
+            let formattedValue = switch field.type {
+            case .date:
+                "timestamp '\(value)'"
+            case .dateOnly:
+                "date '\(value)'"
+            case .text:
+                "'\(value)'"
+            default:
+                value
+            }
+            return "\(field.name) \(condition.sqlOperator) \(formattedValue)"
         }
     }
     
