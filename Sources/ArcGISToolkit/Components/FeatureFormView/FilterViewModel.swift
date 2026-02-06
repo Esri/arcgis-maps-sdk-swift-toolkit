@@ -105,12 +105,26 @@ class FieldFilter {
     /// The operation used specify how the `value` should be applied to the `field`.
     var condition: FilterOperator = FilterOperator.equal
     
+    /// A date value for date pickers to bind to.
+    var dateValue: Date {
+        didSet {
+            guard field.type == .date || field.type == .dateOnly else { return }
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale(identifier: "en_US")
+            dateFormatter.setLocalizedDateFormatFromTemplate(
+                field.type == .dateOnly ? "MMM dd, yyyy" : "MMM dd, yyyy h:mm a"
+            )
+            value = dateFormatter.string(from: dateValue)
+        }
+    }
+    
     /// The value to filter on.
     var value = ""
     
     init(
         field: Field,
     ) {
+        self.dateValue = .now
         self.field = field
         self.condition = firstCondition()
     }
@@ -118,10 +132,12 @@ class FieldFilter {
     init(
         field: Field,
         condition: FilterOperator,
+        dateValue: Date,
         value: String = ""
     ) {
         self.field = field
         self.condition = condition
+        self.dateValue = dateValue
         self.value = value
     }
     
@@ -158,6 +174,7 @@ extension FieldFilter {
         FieldFilter(
             field: self.field,
             condition: self.condition,
+            dateValue: self.dateValue,
             value: self.value
         )
     }
