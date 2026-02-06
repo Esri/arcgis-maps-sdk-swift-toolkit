@@ -99,6 +99,10 @@ class FieldFilter {
                 // We're changing the field, so reset the condition
                 condition = firstCondition()
             }
+            
+            if oldValue.type != field.type {
+                dateValue = .now
+            }
         }
     }
     
