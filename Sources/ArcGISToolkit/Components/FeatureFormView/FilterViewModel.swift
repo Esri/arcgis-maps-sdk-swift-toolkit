@@ -99,11 +99,26 @@ class FieldFilter {
                 // We're changing the field, so reset the condition
                 condition = firstCondition()
             }
+            
+            if oldValue.type != field.type {
+                dateValue = .now
+            }
         }
     }
     
     /// The operation used specify how the `value` should be applied to the `field`.
     var condition: FilterOperator = FilterOperator.equal
+    
+    /// A date value for date pickers to bind to.
+    var dateValue: Date {
+        didSet {
+            guard field.type == .date || field.type == .dateOnly else { return }
+            let dateFormatter = ISO8601DateFormatter()
+            dateFormatter.timeZone = TimeZone.current
+            dateFormatter.formatOptions = field.type == .dateOnly ? [.withFullDate] : [.withFullDate, .withFullTime]
+            value = dateFormatter.string(from: dateValue)
+        }
+    }
     
     /// The value to filter on.
     var value = ""
@@ -111,6 +126,7 @@ class FieldFilter {
     init(
         field: Field,
     ) {
+        self.dateValue = .now
         self.field = field
         self.condition = firstCondition()
     }
@@ -118,10 +134,12 @@ class FieldFilter {
     init(
         field: Field,
         condition: FilterOperator,
+        dateValue: Date,
         value: String = ""
     ) {
         self.field = field
         self.condition = condition
+        self.dateValue = dateValue
         self.value = value
     }
     
@@ -130,15 +148,25 @@ class FieldFilter {
     func query() -> String {
         switch condition {
         case .startsWith:
-            "\(field.name) \(condition.sqlOperator) '\(value)%'"
+            return "\(field.name) \(condition.sqlOperator) '\(value)%'"
         case .endsWith:
-            "\(field.name) \(condition.sqlOperator) '%\(value)'"
+            return "\(field.name) \(condition.sqlOperator) '%\(value)'"
         case .contains, .doesNotContain:
-            "\(field.name) \(condition.sqlOperator) '%\(value)%'"
+            return "\(field.name) \(condition.sqlOperator) '%\(value)%'"
         case .isBlank, .isNotBlank, .isEmpty, .isNotEmpty:
-            "\(field.name) \(condition.sqlOperator)"
+            return "\(field.name) \(condition.sqlOperator)"
         case .equal, .notEqual, .isOp, .isNot, .greaterThan, .greaterThanOrEqual, .lessThan, .lessThanOrEqual:
-            "\(field.name) \(condition.sqlOperator) \(value)"
+            let formattedValue = switch field.type {
+            case .date:
+                "timestamp '\(value)'"
+            case .dateOnly:
+                "date '\(value)'"
+            case .text:
+                "'\(value)'"
+            default:
+                value
+            }
+            return "\(field.name) \(condition.sqlOperator) \(formattedValue)"
         }
     }
     
@@ -146,8 +174,14 @@ class FieldFilter {
     /// It then returns the first available filter operator from that set. If no operators are found, it defaults to .equal.
     /// - Returns: The first available filter operator from the appropriate set of filters.
     private func firstCondition() -> FilterOperator {
-        let conditions = (field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(field.isNullable)
-        return conditions.first ?? FilterOperator.equal
+        let type = field.type
+        let operators: [FilterOperator]
+        if type == .date || type == .dateOnly {
+            operators = FilterOperator.numericFilterOperators() + [.isBlank, .isNotBlank]
+        } else {
+            operators = (type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(field.isNullable)
+        }
+        return operators.first ?? FilterOperator.equal
     }
 }
 
@@ -158,6 +192,7 @@ extension FieldFilter {
         FieldFilter(
             field: self.field,
             condition: self.condition,
+            dateValue: self.dateValue,
             value: self.value
         )
     }
@@ -182,8 +217,10 @@ extension FilterViewModel {
     private func supportedFields(_ allFields: [Field]) -> [Field] {
         allFields.filter { field in
             (field.type?.isNumeric ?? false) ||
-            field.type == .text ||
-            field.type == FieldType.oid
+            field.type == .date ||
+            field.type == .dateOnly ||
+            field.type == .oid ||
+            field.type == .text
         }
     }
     

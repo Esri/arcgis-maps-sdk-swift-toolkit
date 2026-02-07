@@ -316,34 +316,43 @@ private struct FieldView: View {
             }
             
             // Value
-            HStack {
-                Text.value
-                Spacer()
-                TextField(
-                    text: $fieldFilter.value,
-                    prompt: Text(
-                        "Enter a value",
-                        bundle: .toolkitModule,
-                        comment: "A prompt for a text field to enter a value."
-                    ),
-                    label: {
-                        Text.value
-                    }
-                )
-                .multilineTextAlignment(.trailing)
-                .keyboardType(keyboardType)
-                .frame(alignment: .trailing)
+            if [FieldType.date, .dateOnly].contains(fieldFilter.field.type) {
+                DatePicker(
+                    selection: $fieldFilter.dateValue,
+                    displayedComponents: fieldFilter.field.type == .date ? [.date, .hourAndMinute] : [.date]
+                ) {
+                    Text.value
+                }
+            } else {
+                HStack {
+                    Text.value
+                    Spacer()
+                    TextField(
+                        text: $fieldFilter.value,
+                        prompt: Text(
+                            "Enter a value",
+                            bundle: .toolkitModule,
+                            comment: "A prompt for a text field to enter a value."
+                        ),
+                        label: {
+                            Text.value
+                        }
+                    )
+                    .multilineTextAlignment(.trailing)
+                    .keyboardType(keyboardType)
+                    .frame(alignment: .trailing)
 #if os(iOS)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        if UIDevice.current.userInterfaceIdiom == .phone, (fieldFilter.field.type?.isNumeric ?? false) {
-                            // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
-                            positiveNegativeButton
-                            Spacer()
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            if UIDevice.current.userInterfaceIdiom == .phone, (fieldFilter.field.type?.isNumeric ?? false) {
+                                // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
+                                positiveNegativeButton
+                                Spacer()
+                            }
                         }
                     }
-                }
 #endif
+                }
             }
         }
         .id(fieldFilter.id)
@@ -368,7 +377,12 @@ private struct FieldView: View {
     /// Determines the conditions to display for the given `FieldFilter` field type.
     /// - Returns: A list of conditions appropriate for the given `FieldFilter` field type.
     private func fieldConditions() -> [FilterOperator] {
-        (fieldFilter.field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
+        let type = fieldFilter.field.type
+        if type == .date || type == .dateOnly {
+            return FilterOperator.numericFilterOperators() + [.isBlank, .isNotBlank]
+        } else {
+            return (type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
+        }
     }
 }
 
