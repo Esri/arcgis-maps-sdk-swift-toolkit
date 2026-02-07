@@ -113,11 +113,9 @@ class FieldFilter {
     var dateValue: Date {
         didSet {
             guard field.type == .date || field.type == .dateOnly else { return }
-            let dateFormatter = DateFormatter()
-            dateFormatter.locale = Locale(identifier: "en_US")
-            dateFormatter.setLocalizedDateFormatFromTemplate(
-                field.type == .dateOnly ? "MMM dd, yyyy" : "MMM dd, yyyy h:mm a"
-            )
+            let dateFormatter = ISO8601DateFormatter()
+            dateFormatter.timeZone = TimeZone.current
+            dateFormatter.formatOptions = field.type == .dateOnly ? [.withFullDate] : [.withFullDate, .withFullTime]
             value = dateFormatter.string(from: dateValue)
         }
     }
