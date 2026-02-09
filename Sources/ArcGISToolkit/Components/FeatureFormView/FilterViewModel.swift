@@ -84,6 +84,12 @@ class FilterViewModel {
         filterViewIsPresented.toggle()
         fieldFilters = originalFieldFilters.map { $0.copy() }
     }
+    
+    func field(for name: String) -> Field? {
+        fields.first { field in
+            field.name == name
+        }
+    }
 }
 
 /// A class representing a single filter operation.
@@ -123,9 +129,7 @@ class FieldFilter {
     /// The value to filter on.
     var value = ""
     
-    init(
-        field: Field,
-    ) {
+    init(field: Field) {
         self.dateValue = .now
         self.field = field
         self.condition = firstCondition()
@@ -174,14 +178,21 @@ class FieldFilter {
     /// It then returns the first available filter operator from that set. If no operators are found, it defaults to .equal.
     /// - Returns: The first available filter operator from the appropriate set of filters.
     private func firstCondition() -> FilterOperator {
+        return supportedConditions.first ?? FilterOperator.equal
+    }
+    
+    /// The operators supported for the given `FieldFilter` field type.
+    /// - Returns: A list of operators appropriate for the given `FieldFilter` field type.
+    var supportedConditions: [FilterOperator] {
         let type = field.type
-        let operators: [FilterOperator]
-        if type == .date || type == .dateOnly {
-            operators = FilterOperator.numericFilterOperators() + [.isBlank, .isNotBlank]
-        } else {
-            operators = (type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(field.isNullable)
+        return switch type {
+        case .date, .dateOnly:
+            FilterOperator.numericFilterOperators(field.isNullable)
+        default:
+            type?.isNumeric == true
+            ? FilterOperator.numericFilterOperators(field.isNullable)
+            : FilterOperator.textFilterOperators(field.isNullable)
         }
-        return operators.first ?? FilterOperator.equal
     }
 }
 
@@ -275,14 +286,29 @@ enum FilterOperator: String {
     }
     
     /// Returns a list of appropriate operations for numeric fields.
-    static func numericFilterOperators() -> [FilterOperator] { [
-        .equal,
-        .notEqual,
-        .greaterThan,
-        .greaterThanOrEqual,
-        .lessThan,
-        .lessThanOrEqual
-    ] }
+    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `empty` and `notEmpty` operators
+    /// are added to the list. If `false`, no additional operators are added.
+    static func numericFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
+        var ops: [FilterOperator] = [
+            .equal,
+            .notEqual,
+            .greaterThan,
+            .greaterThanOrEqual,
+            .lessThan,
+            .lessThanOrEqual
+        ]
+        if fieldIsNullable {
+            ops.append(contentsOf: [.isBlank, .isNotBlank])
+        }
+        return ops
+    }
+    
+    var isUnary: Bool {
+        self == FilterOperator.isBlank ||
+        self == FilterOperator.isNotBlank ||
+        self == FilterOperator.isEmpty ||
+        self == FilterOperator.isNotEmpty
+    }
     
     /// The SQL operator string represented by the operator.
     var sqlOperator: String {
