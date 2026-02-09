@@ -352,9 +352,8 @@ extension FieldView {
         
         return if fieldType.isNumeric {
 #if os(visionOS)
-            // The 'positiveNegativeButton' doesn't show on visionOS
-            // so we need to show this keyboard so the user can type
-            // a negative number.
+            // On visionOS, the `positiveNegativeButton` is not available.
+            // Show the keyboard instead so the user can manually enter a negative number.
             .numbersAndPunctuation
 #else
             if fieldType.isFloatingPoint { .decimalPad } else { .numberPad }
