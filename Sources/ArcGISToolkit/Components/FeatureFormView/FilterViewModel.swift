@@ -64,7 +64,7 @@ class FilterViewModel {
     /// Applies the current field filters.
     func apply() {
         filterViewIsPresented.toggle()
-       originalFieldFilters = fieldFilters
+        originalFieldFilters = fieldFilters
     }
     
     /// Cancels the current changes to the field filters.
@@ -102,9 +102,7 @@ class FieldFilter {
     /// The value to filter on.
     var value = ""
     
-    init(
-        field: Field,
-    ) {
+    init(field: Field) {
         self.field = field
         self.condition = firstCondition()
     }
