@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-/// A view allowing the user to assembly a list of `FieldFilters` used to filter a list of features.
+/// A view allowing the user to assemble a list of `FieldFilters` used to filter a list of features.
 struct FilterView: View {
     /// The model used by the view.
     @Bindable var model: FilterViewModel
@@ -176,7 +176,7 @@ struct FilterView: View {
 
 /// A button to add a `FieldFilter` to the list of current `FieldFilters`.
 private struct AddButton: View {
-    /// Bool value specifying whether to draw the button with a border style.
+    /// A Boolean value indicating whether to draw the button with a border style.
     let useBorderedStyle: Bool
     
     /// Creates an `AddButton`, alternately displaying it with a border style.
