@@ -144,7 +144,9 @@ class FieldFilter {
     /// The operators supported for the given `FieldFilter` field type.
     /// - Returns: A list of operators appropriate for the given `FieldFilter` field type.
     var supportedConditions: [FilterOperator] {
-        (field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(field.isNullable)
+        field.type?.isNumeric == true
+        ? FilterOperator.numericFilterOperators()
+        : FilterOperator.textFilterOperators(field.isNullable)
     }
 }
 
