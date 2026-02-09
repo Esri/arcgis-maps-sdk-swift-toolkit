@@ -240,6 +240,7 @@ private struct FieldView: View {
     /// The list of conditions/operations the user is allowed to choose from.
     @State private var conditions = [FilterOperator]()
     
+    /// The name of the selected Field.
     @State private var selectedFieldName = ""
     
     init(fieldFilter: FieldFilter) {
@@ -266,7 +267,7 @@ private struct FieldView: View {
                     }
                     .pickerStyle(.menu)
                     .onChange(of: selectedFieldName) {
-                        guard let field = model.field(for: selectedFieldName) else { return }
+                        guard let field = model.field(named: selectedFieldName) else { return }
                         fieldFilter.field = field
                         conditions = fieldFilter.supportedConditions
                     }

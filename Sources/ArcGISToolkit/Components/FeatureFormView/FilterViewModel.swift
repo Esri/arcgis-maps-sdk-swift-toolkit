@@ -73,9 +73,9 @@ class FilterViewModel {
         filterViewIsPresented.toggle()
     }
     
-    func field(for name: String) -> Field? {
+    func field(named fieldName: String) -> Field? {
         fields.first { field in
-            field.name == name
+            field.name == fieldName
         }
     }
 }
@@ -145,7 +145,7 @@ class FieldFilter {
     /// - Returns: A list of operators appropriate for the given `FieldFilter` field type.
     var supportedConditions: [FilterOperator] {
         field.type?.isNumeric == true
-        ? FilterOperator.numericFilterOperators()
+        ? FilterOperator.numericFilterOperators(field.isNullable)
         : FilterOperator.textFilterOperators(field.isNullable)
     }
 }
@@ -237,14 +237,20 @@ enum FilterOperator: String {
     }
     
     /// Returns a list of appropriate operations for numeric fields.
-    static func numericFilterOperators() -> [FilterOperator] { [
-        .equal,
-        .notEqual,
-        .greaterThan,
-        .greaterThanOrEqual,
-        .lessThan,
-        .lessThanOrEqual
-    ] }
+    static func numericFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
+        var ops: [FilterOperator] = [
+            .equal,
+            .notEqual,
+            .greaterThan,
+            .greaterThanOrEqual,
+            .lessThan,
+            .lessThanOrEqual
+        ]
+        if fieldIsNullable {
+            ops.append(contentsOf: [.isBlank, .isNotBlank])
+        }
+        return ops
+}
     
     var isUnary: Bool {
         self == FilterOperator.isBlank ||
