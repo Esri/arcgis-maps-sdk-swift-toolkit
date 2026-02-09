@@ -85,9 +85,9 @@ class FilterViewModel {
         fieldFilters = originalFieldFilters.map { $0.copy() }
     }
     
-    func field(for name: String) -> Field? {
+    func field(named fieldName: String) -> Field? {
         fields.first { field in
-            field.name == name
+            field.name == fieldName
         }
     }
 }
@@ -108,7 +108,7 @@ class FieldFilter {
         }
     }
     
-    /// The operation used specify how the `value` should be applied to the `field`.
+    /// The operation used to specify how the value should be applied to the field.
     var condition: FilterOperator = FilterOperator.equal
     
     /// The value to filter on.
@@ -150,14 +150,14 @@ class FieldFilter {
     /// It then returns the first available filter operator from that set. If no operators are found, it defaults to .equal.
     /// - Returns: The first available filter operator from the appropriate set of filters.
     private func firstCondition() -> FilterOperator {
-        return supportedConditions.first ?? FilterOperator.equal
+        return supportedConditions.first ?? .equal
     }
     
     /// The operators supported for the given `FieldFilter` field type.
     /// - Returns: A list of operators appropriate for the given `FieldFilter` field type.
     var supportedConditions: [FilterOperator] {
         field.type?.isNumeric == true
-        ? FilterOperator.numericFilterOperators()
+        ? FilterOperator.numericFilterOperators(field.isNullable)
         : FilterOperator.textFilterOperators(field.isNullable)
     }
 }
@@ -249,15 +249,22 @@ enum FilterOperator: String {
     }
     
     /// Returns a list of appropriate operations for numeric fields.
-    static func numericFilterOperators() -> [FilterOperator] { [
-        .equal,
-        .notEqual,
-        .greaterThan,
-        .greaterThanOrEqual,
-        .lessThan,
-        .lessThanOrEqual
-    ] }
+    static func numericFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
+        var ops: [FilterOperator] = [
+            .equal,
+            .notEqual,
+            .greaterThan,
+            .greaterThanOrEqual,
+            .lessThan,
+            .lessThanOrEqual
+        ]
+        if fieldIsNullable {
+            ops.append(contentsOf: [.isBlank, .isNotBlank])
+        }
+        return ops
+}
     
+    /// A Boolean value indicating whether the operator functions on a single operand.
     var isUnary: Bool {
         self == FilterOperator.isBlank ||
         self == FilterOperator.isNotBlank ||

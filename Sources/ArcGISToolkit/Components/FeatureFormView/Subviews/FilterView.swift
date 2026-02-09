@@ -155,7 +155,7 @@ struct FilterView: View {
         }
     }
     
-    /// Creates a `Button` used to delete a `FieldFilter`.
+    /// Creates a `Button` that deletes the specified `FieldFilter`.
     /// - Parameter filter: The `FieldFilter` to delete.
     /// - Returns: The delete `Button`.
     private func deleteButton(_ filter: FieldFilter) -> Button<some View> {
@@ -176,7 +176,7 @@ struct FilterView: View {
         }
     }
     
-    /// Creates a `Button` used to duplicate a `FieldFilter`.
+    /// Creates a `Button` that duplicates the specified `FieldFilter`.
     /// - Parameter filter: The `FieldFilter` to duplicate.
     /// - Returns: The duplicate `Button`.
     private func duplicateButton(_ filter: FieldFilter) -> Button<some View> {
@@ -201,7 +201,7 @@ struct FilterView: View {
     }
 }
 
-/// A button to add a `FieldFilter` to the list of current `FieldFilters`.
+/// A button that adds a `FieldFilter` to the current `FieldFilters`.
 private struct AddButton: View {
     /// A Boolean value indicating whether to draw the button with a border style.
     let useBorderedStyle: Bool
@@ -267,6 +267,7 @@ private struct FieldView: View {
     /// The list of conditions/operations the user is allowed to choose from.
     @State private var conditions = [FilterOperator]()
     
+    /// The name of the selected Field.
     @State private var selectedFieldName = ""
     
     init(fieldFilter: FieldFilter) {
@@ -293,7 +294,7 @@ private struct FieldView: View {
                     }
                     .pickerStyle(.menu)
                     .onChange(of: selectedFieldName) {
-                        guard let field = model.field(for: selectedFieldName) else { return }
+                        guard let field = model.field(named: selectedFieldName) else { return }
                         fieldFilter.field = field
                         conditions = fieldFilter.supportedConditions
                     }
