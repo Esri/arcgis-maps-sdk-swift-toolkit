@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-/// A view allowing the user to assembly a list of `FieldFilters` used to filter a list of features.
+/// A view allowing the user to assemble a list of `FieldFilters` used to filter a list of features.
 struct FilterView: View {
     /// The model used by the view.
     @Bindable var model: FilterViewModel
@@ -203,11 +203,11 @@ struct FilterView: View {
 
 /// A button to add a `FieldFilter` to the list of current `FieldFilters`.
 private struct AddButton: View {
-    /// Bool value specifying whether to draw the button with a border style.
+    /// A Boolean value indicating whether to draw the button with a border style.
     let useBorderedStyle: Bool
     
     /// Creates an `AddButton`, alternately displaying it with a border style.
-    /// - Parameter useBorderedStyle: Bool value specifying whether to draw the button with a border style.
+    /// - Parameter useBorderedStyle: A Boolean value indicating whether to draw the button with a border style.
     init(useBorderedStyle: Bool = false) {
         self.useBorderedStyle = useBorderedStyle
     }
@@ -267,6 +267,8 @@ private struct FieldView: View {
     /// The list of conditions/operations the user is allowed to choose from.
     @State private var conditions = [FilterOperator]()
     
+    @State private var selectedFieldName = ""
+    
     init(fieldFilter: FieldFilter) {
         self.fieldFilter = fieldFilter
     }
@@ -282,16 +284,18 @@ private struct FieldView: View {
                 }
             } else {
                 HStack {
-                    Picker(selection: $fieldFilter.field) {
-                        ForEach(model.fields, id: \.self) { field in
+                    Picker(selection: $selectedFieldName) {
+                        ForEach(model.fields, id: \.name) { field in
                             Text(field.title)
                         }
                     } label: {
                         Text.field
                     }
                     .pickerStyle(.menu)
-                    .onChange(of: fieldFilter.field) {
-                        conditions = fieldConditions()
+                    .onChange(of: selectedFieldName) {
+                        guard let field = model.field(for: selectedFieldName) else { return }
+                        fieldFilter.field = field
+                        conditions = fieldFilter.supportedConditions
                     }
                 }
             }
@@ -312,38 +316,40 @@ private struct FieldView: View {
                 .pickerStyle(.menu)
             }
             .onAppear {
-                conditions = fieldConditions()
+                conditions = fieldFilter.supportedConditions
             }
             
             // Value
-            HStack {
-                Text.value
-                Spacer()
-                TextField(
-                    text: $fieldFilter.value,
-                    prompt: Text(
-                        "Enter a value",
-                        bundle: .toolkitModule,
-                        comment: "A prompt for a text field to enter a value."
-                    ),
-                    label: {
-                        Text.value
-                    }
-                )
-                .multilineTextAlignment(.trailing)
-                .keyboardType(keyboardType)
-                .frame(alignment: .trailing)
+            if !fieldFilter.condition.isUnary {
+                HStack {
+                    Text.value
+                    Spacer()
+                    TextField(
+                        text: $fieldFilter.value,
+                        prompt: Text(
+                            "Enter a value",
+                            bundle: .toolkitModule,
+                            comment: "A prompt for a text field to enter a value."
+                        ),
+                        label: {
+                            Text.value
+                        }
+                    )
+                    .multilineTextAlignment(.trailing)
+                    .keyboardType(keyboardType)
+                    .frame(alignment: .trailing)
 #if os(iOS)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        if UIDevice.current.userInterfaceIdiom == .phone, (fieldFilter.field.type?.isNumeric ?? false) {
-                            // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
-                            positiveNegativeButton
-                            Spacer()
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            if UIDevice.current.userInterfaceIdiom == .phone, (fieldFilter.field.type?.isNumeric ?? false) {
+                                // Known SwiftUI issue: This button is known to sometimes not appear.
+                                positiveNegativeButton
+                                Spacer()
+                            }
                         }
                     }
-                }
 #endif
+                }
             }
         }
         .id(fieldFilter.id)
@@ -364,12 +370,6 @@ private struct FieldView: View {
         }
         .tint(.blue)
     }
-    
-    /// Determines the conditions to display for the given `FieldFilter` field type.
-    /// - Returns: A list of conditions appropriate for the given `FieldFilter` field type.
-    private func fieldConditions() -> [FilterOperator] {
-        (fieldFilter.field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
-    }
 }
 
 extension FieldView {
@@ -379,9 +379,8 @@ extension FieldView {
         
         return if fieldType.isNumeric {
 #if os(visionOS)
-            // The 'positiveNegativeButton' doesn't show on visionOS
-            // so we need to show this keyboard so the user can type
-            // a negative number.
+            // On visionOS, the `positiveNegativeButton` is not available.
+            // Show the keyboard instead so the user can manually enter a negative number.
             .numbersAndPunctuation
 #else
             if fieldType.isFloatingPoint { .decimalPad } else { .numberPad }
@@ -397,17 +396,5 @@ extension Field {
     /// - Returns: A string representing the display title for the `Field`.
     var title: String {
         alias.isEmpty ? name : alias
-    }
-}
-
-extension Field: @retroactive Equatable {
-    public static func == (lhs: ArcGIS.Field, rhs: ArcGIS.Field) -> Bool {
-        lhs.toJSON() == rhs.toJSON()
-    }
-}
-
-extension Field: @retroactive Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(toJSON())
     }
 }
