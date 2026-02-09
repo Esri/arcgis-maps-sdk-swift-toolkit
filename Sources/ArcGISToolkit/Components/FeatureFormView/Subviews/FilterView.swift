@@ -180,7 +180,7 @@ private struct AddButton: View {
     let useBorderedStyle: Bool
     
     /// Creates an `AddButton`, alternately displaying it with a border style.
-    /// - Parameter useBorderedStyle: Bool value specifying whether to draw the button with a border style.
+    /// - Parameter useBorderedStyle: A Boolean value indicating whether to draw the button with a border style.
     init(useBorderedStyle: Bool = false) {
         self.useBorderedStyle = useBorderedStyle
     }
