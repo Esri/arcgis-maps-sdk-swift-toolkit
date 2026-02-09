@@ -72,6 +72,12 @@ class FilterViewModel {
         fieldFilters = originalFieldFilters
         filterViewIsPresented.toggle()
     }
+    
+    func field(for name: String) -> Field? {
+        fields.first { field in
+            field.name == name
+        }
+    }
 }
 
 /// A class representing a single filter operation.
@@ -134,8 +140,13 @@ class FieldFilter {
     /// It then returns the first available filter operator from that set. If no operators are found, it defaults to .equal.
     /// - Returns: The first available filter operator from the appropriate set of filters.
     private func firstCondition() -> FilterOperator {
-        let conditions = (field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(field.isNullable)
-        return conditions.first ?? FilterOperator.equal
+        return supportedConditions.first ?? FilterOperator.equal
+    }
+    
+    /// The operators supported for the given `FieldFilter` field type.
+    /// - Returns: A list of operators appropriate for the given `FieldFilter` field type.
+    var supportedConditions: [FilterOperator] {
+        (field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(field.isNullable)
     }
 }
 
@@ -234,6 +245,13 @@ enum FilterOperator: String {
         .lessThan,
         .lessThanOrEqual
     ] }
+    
+    var isUnary: Bool {
+        self == FilterOperator.isBlank ||
+        self == FilterOperator.isNotBlank ||
+        self == FilterOperator.isEmpty ||
+        self == FilterOperator.isNotEmpty
+    }
     
     /// The SQL operator string represented by the operator.
     var sqlOperator: String {

@@ -240,6 +240,8 @@ private struct FieldView: View {
     /// The list of conditions/operations the user is allowed to choose from.
     @State private var conditions = [FilterOperator]()
     
+    @State private var selectedFieldName = ""
+    
     init(fieldFilter: FieldFilter) {
         self.fieldFilter = fieldFilter
     }
@@ -255,16 +257,18 @@ private struct FieldView: View {
                 }
             } else {
                 HStack {
-                    Picker(selection: $fieldFilter.field) {
-                        ForEach(model.fields, id: \.self) { field in
+                    Picker(selection: $selectedFieldName) {
+                        ForEach(model.fields, id: \.name) { field in
                             Text(field.title)
                         }
                     } label: {
                         Text.field
                     }
                     .pickerStyle(.menu)
-                    .onChange(of: fieldFilter.field) {
-                        conditions = supportedOperators
+                    .onChange(of: selectedFieldName) {
+                        guard let field = model.field(for: selectedFieldName) else { return }
+                        fieldFilter.field = field
+                        conditions = fieldFilter.supportedConditions
                     }
                 }
             }
@@ -285,38 +289,40 @@ private struct FieldView: View {
                 .pickerStyle(.menu)
             }
             .onAppear {
-                conditions = supportedOperators
+                conditions = fieldFilter.supportedConditions
             }
             
             // Value
-            HStack {
-                Text.value
-                Spacer()
-                TextField(
-                    text: $fieldFilter.value,
-                    prompt: Text(
-                        "Enter a value",
-                        bundle: .toolkitModule,
-                        comment: "A prompt for a text field to enter a value."
-                    ),
-                    label: {
-                        Text.value
-                    }
-                )
-                .multilineTextAlignment(.trailing)
-                .keyboardType(keyboardType)
-                .frame(alignment: .trailing)
+            if !fieldFilter.condition.isUnary {
+                HStack {
+                    Text.value
+                    Spacer()
+                    TextField(
+                        text: $fieldFilter.value,
+                        prompt: Text(
+                            "Enter a value",
+                            bundle: .toolkitModule,
+                            comment: "A prompt for a text field to enter a value."
+                        ),
+                        label: {
+                            Text.value
+                        }
+                    )
+                    .multilineTextAlignment(.trailing)
+                    .keyboardType(keyboardType)
+                    .frame(alignment: .trailing)
 #if os(iOS)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        if UIDevice.current.userInterfaceIdiom == .phone, (fieldFilter.field.type?.isNumeric ?? false) {
-                            // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
-                            positiveNegativeButton
-                            Spacer()
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            if UIDevice.current.userInterfaceIdiom == .phone, (fieldFilter.field.type?.isNumeric ?? false) {
+                                // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
+                                positiveNegativeButton
+                                Spacer()
+                            }
                         }
                     }
-                }
 #endif
+                }
             }
         }
         .id(fieldFilter.id)
@@ -336,12 +342,6 @@ private struct FieldView: View {
             Image(systemName: "plus.forwardslash.minus")
         }
         .tint(.blue)
-    }
-    
-    /// The operators supported for the given `FieldFilter` field type.
-    /// - Returns: A list of operators appropriate for the given `FieldFilter` field type.
-    private var supportedOperators: [FilterOperator] {
-        (fieldFilter.field.type?.isNumeric ?? false) ? FilterOperator.numericFilterOperators() : FilterOperator.textFilterOperators(fieldFilter.field.isNullable)
     }
 }
 
@@ -370,17 +370,5 @@ extension Field {
     /// - Returns: A string representing the display title for the `Field`.
     var title: String {
         alias.isEmpty ? name : alias
-    }
-}
-
-extension Field: @retroactive Equatable {
-    public static func == (lhs: ArcGIS.Field, rhs: ArcGIS.Field) -> Bool {
-        lhs.toJSON() == rhs.toJSON()
-    }
-}
-
-extension Field: @retroactive Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(toJSON())
     }
 }
