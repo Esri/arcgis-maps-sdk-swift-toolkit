@@ -266,7 +266,7 @@ private struct FieldView: View {
     /// The list of conditions/operations the user is allowed to choose from.
     @State private var conditions = [FilterOperator]()
     
-    /// The name of the selected Field.
+    /// The name of the selected field.
     @State private var selectedFieldName = ""
     
     init(fieldFilter: FieldFilter) {
