@@ -107,7 +107,19 @@ class FieldFilter {
             }
             
             if oldValue.type != field.type {
+                codedValue = nil
                 dateValue = .now
+            }
+        }
+    }
+    
+    /// A coded value for pickers to bind to.
+    var codedValue: CodedValue? {
+        didSet {
+            if let code = codedValue?.code {
+                value = "\(code)"
+            } else {
+                value.removeAll()
             }
         }
     }
@@ -138,11 +150,13 @@ class FieldFilter {
     init(
         field: Field,
         condition: FilterOperator,
+        codedValue: CodedValue?,
         dateValue: Date,
         value: String = ""
     ) {
         self.field = field
         self.condition = condition
+        self.codedValue = codedValue
         self.dateValue = dateValue
         self.value = value
     }
@@ -189,9 +203,15 @@ class FieldFilter {
         case .date, .dateOnly:
             FilterOperator.numericFilterOperators(field.isNullable)
         default:
-            type?.isNumeric == true
-            ? FilterOperator.numericFilterOperators(field.isNullable)
-            : FilterOperator.textFilterOperators(field.isNullable)
+            if type?.isNumeric ?? true {
+                if field.domain is CodedValueDomain {
+                    FilterOperator.codedValueOperators(field.isNullable)
+                } else {
+                    FilterOperator.numericFilterOperators(field.isNullable)
+                }
+            } else {
+                FilterOperator.textFilterOperators(field.isNullable)
+            }
         }
     }
 }
@@ -203,6 +223,7 @@ extension FieldFilter {
         FieldFilter(
             field: self.field,
             condition: self.condition,
+            codedValue: self.codedValue,
             dateValue: self.dateValue,
             value: self.value
         )
@@ -265,8 +286,22 @@ enum FilterOperator: String {
     case isEmpty = "is empty"
     case isNotEmpty = "is not empty"
     
+    /// Returns a list of appropriate operations for fields with coded value domains.
+    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
+    /// are added to the list. If `false`, no additional operators are added.
+    static func codedValueOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
+        var ops: [FilterOperator] = [
+            .equal,
+            .notEqual,
+        ]
+        if fieldIsNullable {
+            ops.append(contentsOf: [.isBlank, .isNotBlank])
+        }
+        return ops
+    }
+    
     /// Returns a list of appropriate operations for text fields.
-    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `empty` and `notEmpty` operators
+    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
     /// are added to the list. If `false`, no additional operators are added.
     static func textFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
@@ -286,7 +321,7 @@ enum FilterOperator: String {
     }
     
     /// Returns a list of appropriate operations for numeric fields.
-    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `empty` and `notEmpty` operators
+    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
     /// are added to the list. If `false`, no additional operators are added.
     static func numericFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
