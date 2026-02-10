@@ -41,24 +41,27 @@ class FilterViewModel {
     /// The list of fields generated from the `featureTable`.
     private(set) var fields = [Field]()
     
-    /// Specifies whether the list of Field Filters has changed since the last invocation.
+    /// Specifies whether the list of Field Filters has changed since the last invocation
+    /// by comparing whereClauses of the original and new `FieldFilter` lists.
     var hasChanges: Bool {
-        guard fieldFilters.count == originalFieldFilters.count else { return true }
-        var filtersEqual = true
-        for i in 0..<fieldFilters.count {
-            let filter = fieldFilters[i]
-            let originalFilter = originalFieldFilters[i]
-            guard filter == originalFilter else { return true }
-        }
-        return false
+        let originalWhereClause = whereClause(filters: originalFieldFilters)
+        let whereClause = whereClause(filters: fieldFilters)
+        return originalWhereClause != whereClause
     }
-
+    
     /// The "where" clause assembled from the list of `FieldFilters`
-    /// - Returns: A string represented the SQL query assembled from the list of `FieldFilters`. The `FieldFilters` are joined by `AND`.
+    /// - Returns: A string represented the SQL query assembled from the list of `fieldFilters`. The `fieldFilters` are joined by `AND`.
     func whereClause() -> String {
+        whereClause(filters: fieldFilters)
+    }
+    
+    /// The "where" clause assembled from the list of `FieldFilters`
+    /// - Parameter filters: The list of `FieldFilter`s used to generate the where clause
+    /// - Returns: A string represented the SQL query assembled from the list of `filters`. The `filters` are joined by `AND`.
+    private func whereClause(filters: [FieldFilter]) -> String {
         var clause = ""
-        for fieldFilter in fieldFilters {
-            if let index = fieldFilters.firstIndex(of: fieldFilter),
+        for fieldFilter in filters {
+            if let index = filters.firstIndex(of: fieldFilter),
                index >= 1 {
                 clause.append(" AND ")
             }
@@ -262,7 +265,7 @@ enum FilterOperator: String {
             ops.append(contentsOf: [.isBlank, .isNotBlank])
         }
         return ops
-}
+    }
     
     /// A Boolean value indicating whether the operator functions on a single operand.
     var isUnary: Bool {

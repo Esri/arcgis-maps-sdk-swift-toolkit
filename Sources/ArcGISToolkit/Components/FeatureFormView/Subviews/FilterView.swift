@@ -20,7 +20,7 @@ struct FilterView: View {
     /// The model used by the view.
     @Bindable var model: FilterViewModel
     @State private var showAlert = false
-
+    
     /// The client-specified action to perform when the `Apply` button is tapped. There is no `cancel` action
     /// as cancelling simply resets the list of `FieldFilters`.
     var onApplyAction: (() -> Void)?
@@ -293,6 +293,9 @@ private struct FieldView: View {
                         Text.field
                     }
                     .pickerStyle(.menu)
+                    .onAppear {
+                        selectedFieldName = fieldFilter.field.name
+                    }
                     .onChange(of: selectedFieldName) {
                         guard let field = model.field(named: selectedFieldName) else { return }
                         fieldFilter.field = field
