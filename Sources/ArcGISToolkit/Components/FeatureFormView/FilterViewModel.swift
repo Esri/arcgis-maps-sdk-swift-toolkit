@@ -49,13 +49,13 @@ class FilterViewModel {
         return originalWhereClause != whereClause
     }
     
-    /// The "where" clause assembled from the list of `FieldFilters`
+    /// The "where" clause assembled from the list of `FieldFilters`.
     /// - Returns: A string represented the SQL query assembled from the list of `fieldFilters`. The `fieldFilters` are joined by `AND`.
     func whereClause() -> String {
         whereClause(filters: fieldFilters)
     }
     
-    /// The "where" clause assembled from the list of `FieldFilters`
+    /// The "where" clause assembled from the list of `FieldFilters`.
     /// - Parameter filters: The list of `FieldFilter`s used to generate the where clause
     /// - Returns: A string represented the SQL query assembled from the list of `filters`. The `filters` are joined by `AND`.
     private func whereClause(filters: [FieldFilter]) -> String {
@@ -88,6 +88,9 @@ class FilterViewModel {
         fieldFilters = originalFieldFilters.map { $0.copy() }
     }
     
+    /// Returns the `Field` with the given name in the list of fields.
+    /// - Parameter fieldName: The name of the desired `Field`.
+    /// - Returns: The `Field` with the given `fieldName`.
     func field(named fieldName: String) -> Field? {
         fields.first { field in
             field.name == fieldName
@@ -117,11 +120,18 @@ class FieldFilter {
     /// The value to filter on.
     var value = ""
     
+    /// Creates a `FieldFilter`.
+    /// - Parameter field: The `Field` being filtered on.
     init(field: Field) {
         self.field = field
         self.condition = firstCondition()
     }
     
+    /// Creates a `FieldFilter`.
+    /// - Parameters:
+    ///   - field: The `Field` being filtered on.
+    ///   - condition: The `FilterOperator` used on the `Field`.
+    ///   - value: The string value used in the filter.
     init(
         field: Field,
         condition: FilterOperator,
