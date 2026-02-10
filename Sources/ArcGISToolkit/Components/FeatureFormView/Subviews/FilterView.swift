@@ -114,7 +114,7 @@ struct FilterView: View {
                     ToolbarItem(placement: .topBarLeading) {
                         DismissButton(kind: .cancel) {
                             if model.hasChanges {
-                                showAlert = true
+                                alertIsPresented = true
                             } else {
                                 model.cancel()
                             }
@@ -138,7 +138,7 @@ struct FilterView: View {
                 bundle: .toolkitModule,
                 comment: "A notice used when closing the view that the filters have not been applied/saved."
             ),
-            isPresented: $showAlert
+            isPresented: $alertIsPresented
         ) {
             Button(role: .destructive) {
                 model.cancel()
