@@ -19,8 +19,8 @@ import SwiftUI
 struct FilterView: View {
     /// The model used by the view.
     @Bindable var model: FilterViewModel
-    /// A Boolean value indicating whether to show an alert stating there are changes that need to be saved/discarded.
-    @State private var showAlert = false
+    /// A Boolean value indicating whether the alert stating there are changes that need to be saved/discarded is presented.
+    @State private var alertIsPresented = false
     
     /// The client-specified action to perform when the `Apply` button is tapped. There is no `cancel` action
     /// as cancelling simply resets the list of `FieldFilters`.
@@ -112,7 +112,7 @@ struct FilterView: View {
             Spacer()
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        DismissButton(kind: .cancel){
+                        DismissButton(kind: .cancel) {
                             if model.hasChanges {
                                 showAlert = true
                             } else {
@@ -133,10 +133,10 @@ struct FilterView: View {
         .environment(model)
         .background(Color(.systemGroupedBackground))
         .alert(
-            String(
-                localized: "Filters have not been applied",
+            Text(
+                "Filters have not been applied",
                 bundle: .toolkitModule,
-                comment: "A notice used when closing the view and the filters have been applied/saved."
+                comment: "A notice used when closing the view that the filters have not been applied/saved."
             ),
             isPresented: $showAlert
         ) {
@@ -147,11 +147,9 @@ struct FilterView: View {
             }
         } message: {
             Text(
-                String(
-                    localized: "Are you sure you want to discard the changes?",
-                    bundle: .toolkitModule,
-                    comment: "A question asking for confirmation to discard changes."
-                )
+                "Are you sure you want to discard the changes?",
+                bundle: .toolkitModule,
+                comment: "A question asking for confirmation to discard changes."
             )
         }
     }

@@ -49,15 +49,15 @@ class FilterViewModel {
         return originalWhereClause != whereClause
     }
     
-    /// The "where" clause assembled from the list of `FieldFilters`.
-    /// - Returns: A string represented the SQL query assembled from the list of `fieldFilters`. The `fieldFilters` are joined by `AND`.
+    /// The "where" clause assembled from the list of applied `FieldFilter`s.
+    /// - Returns: A SQL query assembled from the list of applied filters. The `fieldFilters` are joined by `AND`.
     func whereClause() -> String {
         whereClause(filters: fieldFilters)
     }
     
     /// The "where" clause assembled from the list of `FieldFilters`.
-    /// - Parameter filters: The list of `FieldFilter`s used to generate the where clause
-    /// - Returns: A string represented the SQL query assembled from the list of `filters`. The `filters` are joined by `AND`.
+    /// - Parameter filters: The list of `FieldFilter`s used to generate the where clause.
+    /// - Returns: A SQL query assembled from the list of applied filters. The `filters` are joined by `AND`.
     private func whereClause(filters: [FieldFilter]) -> String {
         var clause = ""
         for fieldFilter in filters {
