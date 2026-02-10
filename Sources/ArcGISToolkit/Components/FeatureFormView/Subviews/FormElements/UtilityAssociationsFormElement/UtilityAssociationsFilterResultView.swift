@@ -97,42 +97,20 @@ extension FeatureFormView {
                 associationsFilterResultsModel?.fetchResults()
             }
             .overlay(alignment: .bottomLeading) {
-                addAssociationMenu
+                addAssociationButton
                     .padding()
             }
         }
         
-        var addAssociationMenu: some View {
-            Menu {
-                Button {
-                    featureFormViewModel.navigationPath.append(
-                        FeatureFormView.NavigationPathItem.utilityAssociationFeatureSourcesView(
-                            form,
-                            element,
-                            filter
-                        )
+        var addAssociationButton: some View {
+            Button {
+                featureFormViewModel.navigationPath.append(
+                    FeatureFormView.NavigationPathItem.utilityAssociationFeatureSourcesView(
+                        form,
+                        element,
+                        filter
                     )
-                } label: {
-                    Text(
-                        "From Network Data Source",
-                        bundle: .toolkitModule,
-                        comment: """
-                            A label for a button to choose a feature for a new
-                            utility association from a network data source.
-                            """
-                    )
-                }
-                Button {} label: {
-                    Text(
-                        "On Map",
-                        bundle: .toolkitModule,
-                        comment: """
-                            A label indicating features can be selected by
-                            interactively tapping on the map.
-                            """
-                    )
-                }
-                .disabled(true)
+                )
             } label: {
                 Label {
                     Text(
