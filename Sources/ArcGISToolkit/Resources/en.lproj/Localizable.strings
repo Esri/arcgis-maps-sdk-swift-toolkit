@@ -29,6 +29,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to add a new file attachment. */
 "Add Attachment" = "Add Attachment";
 
+/* A label for a button to add a new field filtering condition. */
+"Add Condition" = "Add Condition";
+
 /* A label for a button to add a map area. */
 "Add Map Area" = "Add Map Area";
 
@@ -175,6 +178,12 @@ candidate to add as a utility association. */
 /* The accessibility label of the compass button. */
 "compass-button-accessibility-label" = "Compass";
 
+/* A label for a control to pick a condition to filter fields in a table against. */
+"Condition" = "Condition";
+
+/* A label for a control representing a condition and position index used to filter fields in a table. */
+"Condition %lld" = "Condition %lld";
+
 /* Confirm the current action and close a sheet or pop-up. */
 "Confirm" = "Confirm";
 
@@ -183,6 +192,9 @@ candidate to add as a utility association. */
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Containment";
+
+/* A label for the "contains the text" attribute query condition. */
+"contains the text" = "contains the text";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -231,7 +243,8 @@ A label for a button used to continue the authentication operation. */
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
 "Date must be on or before %@" = "Date must be on or before %@";
 
-/* A label for a button used to delete a utility network trace input component or result. */
+/* A label for a button to delete a field filter.
+A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Delete";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
@@ -258,6 +271,9 @@ A label for a button used to continue the authentication operation. */
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Dismiss";
 
+/* A label for the "does not contain the text" attribute query condition. */
+"does not contain the text" = "does not contain the text";
+
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Done";
 
@@ -275,6 +291,9 @@ A label for a button used to continue the authentication operation. */
 
 /* The status text when a map area is downloading. */
 "Downloading" = "Downloading";
+
+/* A label for a button to duplicate a field filter. */
+"Duplicate" = "Duplicate";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -297,6 +316,9 @@ AR experience. */
 /* An error message indicating the selected attachment is an empty file and not supported. */
 "Empty files are not supported." = "Empty files are not supported.";
 
+/* A label for the "ends with" attribute query condition. */
+"ends with" = "ends with";
+
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
@@ -307,6 +329,9 @@ hold the minimum and maximum length respectively. */
 
 /* An instruction to enter a name. */
 "Enter a name" = "Enter a name";
+
+/* A prompt for a text field to enter a value. */
+"Enter a value" = "Enter a value";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Enter Value";
@@ -435,6 +460,24 @@ variable is a cardinal or intercardinal direction. */
 /* A label indicating that a challenge should be ignored. */
 "Ignore" = "Ignore";
 
+/* A label for the "is" attribute query condition. */
+"is" = "is";
+
+/* A label for the "is blank" attribute query condition. */
+"is blank" = "is blank";
+
+/* A label for the "is empty" attribute query condition. */
+"is empty" = "is empty";
+
+/* A label for the "is not" attribute query condition. */
+"is not" = "is not";
+
+/* A label for the "is not blank" attribute query condition. */
+"is not blank" = "is not blank";
+
+/* A label for the "is not empty" attribute query condition. */
+"is not empty" = "is not empty";
+
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Junction Edge Object Connectivity From Side";
 
@@ -553,6 +596,9 @@ data sources in a utility network. */
 candidates matching the filter criteria were
 found. */
 "No Candidates Found" = "No Candidates Found";
+
+/* A label indicating no field filtering conditions have been added. */
+"No conditions added" = "No conditions added";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "No configurations available.";
@@ -749,6 +795,9 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "Show all";
 
+/* A label indicating the intended outcome of using the filter view. */
+"Show features that meet all the conditions" = "Show features that meet all the conditions";
+
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Show On Map";
 
@@ -780,6 +829,9 @@ match the spatial reference of the map or scene. */
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Starting Points";
+
+/* A label for the "starts with" attribute query condition. */
+"starts with" = "starts with";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "State/Province";
@@ -922,9 +974,6 @@ without saving. */
 
 /* A label in reference to a credential username. */
 "Username" = "Username";
-
-/* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "Unknown";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";
