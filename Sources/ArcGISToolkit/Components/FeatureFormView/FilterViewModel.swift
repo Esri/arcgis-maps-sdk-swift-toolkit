@@ -19,6 +19,9 @@ import SwiftUI
 @MainActor @Observable
 class FilterViewModel {
     /// The feature table containing the fields to filter on.
+    ///
+    /// Use this to auto-populate the filterable fields. Alternatively, use `setFields(_:)` to customize
+    /// the filterable fields.
     public var featureTable: ArcGISFeatureTable? {
         didSet {
             if let featureTable {
@@ -29,6 +32,7 @@ class FilterViewModel {
             }
         }
     }
+    
     /// The list of field filters the user has created.
     var fieldFilters = [FieldFilter]()
     
@@ -52,7 +56,16 @@ class FilterViewModel {
         }
         return false
     }
-
+    
+    /// Sets the fields to filter on.
+    ///
+    /// Use this to customize the filterable fields. Alternatively, set `featureTable` to auto-populate
+    /// the filterable fields.
+    /// - Parameter fields: The filterable fields.
+    func setFields(_ fields: [Field]) {
+        self.fields = supportedUNFields(fields)
+    }
+    
     /// The "where" clause assembled from the list of `FieldFilters`
     /// - Returns: A string represented the SQL query assembled from the list of `FieldFilters`. The `FieldFilters` are joined by `AND`.
     func whereClause() -> String {
