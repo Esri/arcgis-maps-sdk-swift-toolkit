@@ -88,13 +88,12 @@ extension FeatureFormView {
             .task(id: whereClause) {
                 // Only query on whereClause change if the first page query is complete.
                 // This will prevent running the initial query twice.
-                if queryForFirstPageIsComplete {
-                    candidates.removeAll()
-                    let parameters = QueryParameters()
-                    parameters.whereClause = filterViewModel.whereClause()
-                    queryFeatures(parameters: parameters)
-                    await queryTask?.value
-                }
+                guard queryForFirstPageIsComplete else { return }
+                candidates.removeAll()
+                let parameters = QueryParameters()
+                parameters.whereClause = filterViewModel.whereClause()
+                queryFeatures(parameters: parameters)
+                await queryTask?.value
             }
         }
         
