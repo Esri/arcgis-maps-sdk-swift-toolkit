@@ -82,17 +82,19 @@ extension FeatureFormView {
             .sheet(isPresented: $filterViewModel.filterViewIsPresented) {
                 FilterView(model: filterViewModel) {
                     candidates.removeAll()
-                    queryForFirstPageIsComplete = false
                     whereClause = filterViewModel.whereClause()
                 }
             }
             .task(id: whereClause) {
-                candidates.removeAll()
-                let parameters = QueryParameters()
-                parameters.whereClause = filterViewModel.whereClause()
-                queryFeatures(parameters: parameters)
-                await queryTask?.value
-                queryForFirstPageIsComplete = true
+                // Only query on whereClause change if the first page query is complete.
+                // This will prevent running the initial query twice.
+                if queryForFirstPageIsComplete {
+                    candidates.removeAll()
+                    let parameters = QueryParameters()
+                    parameters.whereClause = filterViewModel.whereClause()
+                    queryFeatures(parameters: parameters)
+                    await queryTask?.value
+                }
             }
         }
         
