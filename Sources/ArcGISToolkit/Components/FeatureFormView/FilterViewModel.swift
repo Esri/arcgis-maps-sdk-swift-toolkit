@@ -218,7 +218,7 @@ class FieldFilter {
         default:
             if type?.isNumeric ?? true {
                 if field.domain is CodedValueDomain {
-                    FilterOperator.codedValueOperators(field.isNullable)
+                    FilterOperator.codedValueFilterOperators(field.isNullable)
                 } else {
                     FilterOperator.numericFilterOperators(field.isNullable)
                 }
@@ -302,7 +302,7 @@ enum FilterOperator: String {
     /// Returns a list of appropriate operations for fields with coded value domains.
     /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
     /// are added to the list. If `false`, no additional operators are added.
-    static func codedValueOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
+    static func codedValueFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .equal,
             .notEqual,
