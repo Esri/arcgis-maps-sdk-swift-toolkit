@@ -77,7 +77,38 @@ extension FeatureFormView {
                 }
             }
             .onAppear {
-                filterViewModel.featureTable = form.feature.table as? ArcGISFeatureTable
+                let featureTable = form.feature.table as? ArcGISFeatureTable
+                let standardFields = featureTable?.fields ?? []
+                
+                func getFieldOverrides(table: ArcGISFeatureTable) -> [Field] {
+                    let subtype = table.featureSubtypes.first { subtype in
+                        subtype.code as? Int == assetType.assetGroup.code
+                    }
+                    return subtype?.fieldOverrides ?? standardFields
+                }
+                
+                let fields: [Field] = switch source.featureFormSource {
+                case let source as FeatureLayer:
+                    if let table = source.featureTable as? ArcGISFeatureTable {
+                        getFieldOverrides(table: table)
+                    } else {
+                        standardFields
+                    }
+                case let source as FeatureTable:
+                    if let table = source as? ArcGISFeatureTable {
+                        getFieldOverrides(table: table)
+                    } else {
+                        standardFields
+                    }
+                case let source as SubtypeSublayer:
+                    source.subtype.fieldOverrides ?? standardFields
+                case let source as SubtypeSubtable:
+                    source.subtype.fieldOverrides ?? standardFields
+                default:
+                    []
+                }
+                
+                filterViewModel.setFields(fields)
             }
             .sheet(isPresented: $filterViewModel.filterViewIsPresented) {
                 FilterView(model: filterViewModel) {
