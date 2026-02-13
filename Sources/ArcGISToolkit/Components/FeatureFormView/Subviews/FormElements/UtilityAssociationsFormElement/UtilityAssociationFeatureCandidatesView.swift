@@ -82,7 +82,7 @@ extension FeatureFormView {
                 
                 func getFieldOverrides(table: ArcGISFeatureTable) -> [Field] {
                     let subtype = table.featureSubtypes.first { subtype in
-                        subtype.code as? Int == assetType.assetGroup.code
+                        subtype.code as? Int == assetType.group?.code
                     }
                     return subtype?.fieldOverrides ?? standardFields
                 }
