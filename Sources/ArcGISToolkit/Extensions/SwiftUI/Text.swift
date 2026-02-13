@@ -32,18 +32,19 @@ extension Text {
             comment: "A label in reference to a utility association type."
         )
     }
+
+    /// Localized text for the word "Cancel".
+    static var cancel: Self {
+        .init(LocalizedStringResource.cancel)
+    }
     
+    /// Localized text for the phrase "Discard Edits".
     static var discardEdits: Self {
         .init(
             "Discard Edits",
             bundle: .toolkitModule,
             comment: "A label for a button to discard unsaved edits."
         )
-    }
-
-    /// Localized text for the word "Cancel".
-    static var cancel: Self {
-        .init(LocalizedStringResource.cancel)
     }
     
     /// Localized text for the word "Done".

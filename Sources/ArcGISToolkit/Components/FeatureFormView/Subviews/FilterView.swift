@@ -19,8 +19,9 @@ import SwiftUI
 struct FilterView: View {
     /// The model used by the view.
     @Bindable var model: FilterViewModel
-    @State private var showAlert = false
-
+    /// A Boolean value indicating whether the alert stating there are changes that need to be saved/discarded is presented.
+    @State private var alertIsPresented = false
+    
     /// The client-specified action to perform when the `Apply` button is tapped. There is no `cancel` action
     /// as cancelling simply resets the list of `FieldFilters`.
     var onApplyAction: (() -> Void)?
@@ -111,9 +112,9 @@ struct FilterView: View {
             Spacer()
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        DismissButton(kind: .cancel){
+                        DismissButton(kind: .cancel) {
                             if model.hasChanges {
-                                showAlert = true
+                                alertIsPresented = true
                             } else {
                                 model.cancel()
                             }
@@ -132,12 +133,12 @@ struct FilterView: View {
         .environment(model)
         .background(Color(.systemGroupedBackground))
         .alert(
-            String(
-                localized: "Filters have not been applied",
+            Text(
+                "Filters have not been applied",
                 bundle: .toolkitModule,
-                comment: "A notice used when closing the view and the filters have been applied/saved."
+                comment: "A notice used when closing the view that the filters have not been applied/saved."
             ),
-            isPresented: $showAlert
+            isPresented: $alertIsPresented
         ) {
             Button(role: .destructive) {
                 model.cancel()
@@ -146,16 +147,14 @@ struct FilterView: View {
             }
         } message: {
             Text(
-                String(
-                    localized: "Are you sure you want to discard the changes?",
-                    bundle: .toolkitModule,
-                    comment: "A question asking for confirmation to discard changes."
-                )
+                "Are you sure you want to discard the changes?",
+                bundle: .toolkitModule,
+                comment: "A question asking for confirmation to discard changes."
             )
         }
     }
     
-    /// Creates a `Button` used to delete a `FieldFilter`.
+    /// Creates a `Button` that deletes the specified `FieldFilter`.
     /// - Parameter filter: The `FieldFilter` to delete.
     /// - Returns: The delete `Button`.
     private func deleteButton(_ filter: FieldFilter) -> Button<some View> {
@@ -176,7 +175,7 @@ struct FilterView: View {
         }
     }
     
-    /// Creates a `Button` used to duplicate a `FieldFilter`.
+    /// Creates a `Button` that duplicates the specified `FieldFilter`.
     /// - Parameter filter: The `FieldFilter` to duplicate.
     /// - Returns: The duplicate `Button`.
     private func duplicateButton(_ filter: FieldFilter) -> Button<some View> {
@@ -201,7 +200,7 @@ struct FilterView: View {
     }
 }
 
-/// A button to add a `FieldFilter` to the list of current `FieldFilters`.
+/// A button that adds a `FieldFilter` to the current `FieldFilters`.
 private struct AddButton: View {
     /// A Boolean value indicating whether to draw the button with a border style.
     let useBorderedStyle: Bool
@@ -267,6 +266,7 @@ private struct FieldView: View {
     /// The list of conditions/operations the user is allowed to choose from.
     @State private var conditions = [FilterOperator]()
     
+    /// The name of the selected field.
     @State private var selectedFieldName = ""
     
     init(fieldFilter: FieldFilter) {
@@ -292,8 +292,11 @@ private struct FieldView: View {
                         Text.field
                     }
                     .pickerStyle(.menu)
+                    .onAppear {
+                        selectedFieldName = fieldFilter.field.name
+                    }
                     .onChange(of: selectedFieldName) {
-                        guard let field = model.field(for: selectedFieldName) else { return }
+                        guard let field = model.field(named: selectedFieldName) else { return }
                         fieldFilter.field = field
                         conditions = fieldFilter.supportedConditions
                     }
