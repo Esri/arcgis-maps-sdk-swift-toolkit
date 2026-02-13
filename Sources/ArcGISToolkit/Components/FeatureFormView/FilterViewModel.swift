@@ -41,24 +41,27 @@ class FilterViewModel {
     /// The list of fields generated from the `featureTable`.
     private(set) var fields = [Field]()
     
-    /// Specifies whether the list of Field Filters has changed since the last invocation.
+    /// Specifies whether the list of Field Filters has changed since the last invocation
+    /// by comparing whereClauses of the original and new `FieldFilter` lists.
     var hasChanges: Bool {
-        guard fieldFilters.count == originalFieldFilters.count else { return true }
-        var filtersEqual = true
-        for i in 0..<fieldFilters.count {
-            let filter = fieldFilters[i]
-            let originalFilter = originalFieldFilters[i]
-            guard filter == originalFilter else { return true }
-        }
-        return false
+        let originalWhereClause = whereClause(filters: originalFieldFilters)
+        let whereClause = whereClause(filters: fieldFilters)
+        return originalWhereClause != whereClause
     }
-
-    /// The "where" clause assembled from the list of `FieldFilters`
-    /// - Returns: A string represented the SQL query assembled from the list of `FieldFilters`. The `FieldFilters` are joined by `AND`.
+    
+    /// The "where" clause assembled from the list of applied `FieldFilter`s.
+    /// - Returns: A SQL query assembled from the list of applied filters. The `fieldFilters` are joined by `AND`.
     func whereClause() -> String {
+        whereClause(filters: fieldFilters)
+    }
+    
+    /// The "where" clause assembled from the list of `FieldFilters`.
+    /// - Parameter filters: The list of `FieldFilter`s used to generate the where clause.
+    /// - Returns: A SQL query assembled from the list of applied filters. The `filters` are joined by `AND`.
+    private func whereClause(filters: [FieldFilter]) -> String {
         var clause = ""
-        for fieldFilter in fieldFilters {
-            if let index = fieldFilters.firstIndex(of: fieldFilter),
+        for fieldFilter in filters {
+            if let index = filters.firstIndex(of: fieldFilter),
                index >= 1 {
                 clause.append(" AND ")
             }
@@ -85,9 +88,12 @@ class FilterViewModel {
         fieldFilters = originalFieldFilters.map { $0.copy() }
     }
     
-    func field(for name: String) -> Field? {
+    /// Returns the `Field` with the given name in the list of fields.
+    /// - Parameter fieldName: The name of the desired `Field`.
+    /// - Returns: The `Field` with the given `fieldName`.
+    func field(named fieldName: String) -> Field? {
         fields.first { field in
-            field.name == name
+            field.name == fieldName
         }
     }
 }
@@ -112,7 +118,7 @@ class FieldFilter {
         }
     }
     
-    /// The operation used specify how the `value` should be applied to the `field`.
+    /// The operation used to specify how the value should be applied to the field.
     var condition: FilterOperator = FilterOperator.equal
     
     /// A date value for date pickers to bind to.
@@ -129,12 +135,19 @@ class FieldFilter {
     /// The value to filter on.
     var value = ""
     
+    /// Creates a `FieldFilter`.
+    /// - Parameter field: The `Field` being filtered on.
     init(field: Field) {
         self.dateValue = .now
         self.field = field
         self.condition = firstCondition()
     }
     
+    /// Creates a `FieldFilter`.
+    /// - Parameters:
+    ///   - field: The `Field` being filtered on.
+    ///   - condition: The `FilterOperator` used on the `Field`.
+    ///   - value: The string value used in the filter.
     init(
         field: Field,
         condition: FilterOperator,
@@ -178,7 +191,7 @@ class FieldFilter {
     /// It then returns the first available filter operator from that set. If no operators are found, it defaults to .equal.
     /// - Returns: The first available filter operator from the appropriate set of filters.
     private func firstCondition() -> FilterOperator {
-        return supportedConditions.first ?? FilterOperator.equal
+        return supportedConditions.first ?? .equal
     }
     
     /// The operators supported for the given `FieldFilter` field type.
@@ -303,6 +316,7 @@ enum FilterOperator: String {
         return ops
     }
     
+    /// A Boolean value indicating whether the operator functions on a single operand.
     var isUnary: Bool {
         self == FilterOperator.isBlank ||
         self == FilterOperator.isNotBlank ||
