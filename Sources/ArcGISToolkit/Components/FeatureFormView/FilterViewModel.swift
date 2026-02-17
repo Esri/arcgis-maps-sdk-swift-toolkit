@@ -59,15 +59,9 @@ class FilterViewModel {
     /// - Parameter filters: The list of `FieldFilter` objects used to generate the where clause.
     /// - Returns: A SQL query assembled from the list of applied filters. The `FieldFilter` objects are joined by `AND`.
     private func whereClause(filters: [FieldFilter]) -> String {
-        var clause = ""
-        for fieldFilter in filters {
-            if let index = filters.firstIndex(of: fieldFilter),
-               index >= 1 {
-                clause.append(" AND ")
-            }
-            clause.append(fieldFilter.query())
-        }
-        return clause
+        guard !filters.isEmpty else { return "" }
+        return filters.map { $0.query() }
+            .joined(separator: " AND ")
     }
     
     /// Initializes a filter view model.
