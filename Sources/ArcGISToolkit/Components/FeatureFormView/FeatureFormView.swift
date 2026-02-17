@@ -197,7 +197,7 @@ public struct FeatureFormView: View {
                             featureFormViewModel.validationErrorVisibilityInternal = .automatic
                             continuation()
                         } label: {
-                            discardEdits
+                            Text.discardEdits
                         }
                         .onAppear {
                             if featureFormViewModel.presentedFormHasValidationErrors {
@@ -415,14 +415,6 @@ extension FeatureFormView {
             "Continue Editing",
             bundle: .toolkitModule,
             comment: "A label for a button to continue editing the feature form."
-        )
-    }
-    
-    var discardEdits: Text {
-        .init(
-            "Discard Edits",
-            bundle: .toolkitModule,
-            comment: "A label for a button to discard unsaved edits."
         )
     }
     

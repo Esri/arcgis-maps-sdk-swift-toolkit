@@ -50,6 +50,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "An error occurred while fetching map areas.";
 
+/* A question asking for confirmation to discard changes. */
+"Are you sure you want to discard the changes?" = "Are you sure you want to discard the changes?";
+
 /* The title for a map area. */
 "Area %lld" = "Area %lld";
 
@@ -414,6 +417,9 @@ association feature sources by name. */
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Filter sites";
+
+/* A notice used when closing the view and the filters have been applied/saved. */
+"Filters have not been applied" = "Filters have not been applied";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Find a place or address";
@@ -974,6 +980,9 @@ without saving. */
 
 /* A label in reference to a credential username. */
 "Username" = "Username";
+
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "Unknown";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";

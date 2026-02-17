@@ -41,18 +41,27 @@ class FilterViewModel {
     /// The list of fields generated from the `featureTable`.
     private(set) var fields = [Field]()
     
-    /// The "where" clause assembled from the list of `FieldFilters`
-    /// - Returns: A string represented the SQL query assembled from the list of `FieldFilters`. The `FieldFilters` are joined by `AND`.
+    /// Specifies whether the list of `FieldFilter` objects has changed since the last invocation
+    /// by comparing the whereClause values of the original and new lists.
+    var hasChanges: Bool {
+        let originalWhereClause = whereClause(filters: originalFieldFilters)
+        let whereClause = whereClause(filters: fieldFilters)
+        return originalWhereClause != whereClause
+    }
+    
+    /// The "where" clause assembled from the list of applied `FieldFilter` objects.
+    /// - Returns: A SQL query assembled from the list of applied filters. The `FieldFilter` objects are joined by `AND`.
     func whereClause() -> String {
-        var clause = ""
-        for fieldFilter in fieldFilters {
-            if let index = fieldFilters.firstIndex(of: fieldFilter),
-               index >= 1 {
-                clause.append(" AND ")
-            }
-            clause.append(fieldFilter.query())
-        }
-        return clause
+        whereClause(filters: fieldFilters)
+    }
+    
+    /// The "where" clause assembled from the list of `FieldFilter` objects.
+    /// - Parameter filters: The list of `FieldFilter` objects used to generate the where clause.
+    /// - Returns: A SQL query assembled from the list of applied filters. The `FieldFilter` objects are joined by `AND`.
+    private func whereClause(filters: [FieldFilter]) -> String {
+        guard !filters.isEmpty else { return "" }
+        return filters.map { $0.query() }
+            .joined(separator: " AND ")
     }
     
     /// Initializes a filter view model.
@@ -64,15 +73,18 @@ class FilterViewModel {
     /// Applies the current field filters.
     func apply() {
         filterViewIsPresented.toggle()
-        originalFieldFilters = fieldFilters
+        originalFieldFilters = fieldFilters.map { $0.copy() }
     }
     
     /// Cancels the current changes to the field filters.
     func cancel() {
-        fieldFilters = originalFieldFilters
         filterViewIsPresented.toggle()
+        fieldFilters = originalFieldFilters.map { $0.copy() }
     }
     
+    /// Returns the `Field` with the given name in the list of fields.
+    /// - Parameter fieldName: The name of the desired `Field`.
+    /// - Returns: The `Field` with the given field name.
     func field(named fieldName: String) -> Field? {
         fields.first { field in
             field.name == fieldName
@@ -102,11 +114,18 @@ class FieldFilter {
     /// The value to filter on.
     var value = ""
     
+    /// Creates a `FieldFilter`.
+    /// - Parameter field: The `Field` being filtered on.
     init(field: Field) {
         self.field = field
         self.condition = firstCondition()
     }
     
+    /// Creates a `FieldFilter`.
+    /// - Parameters:
+    ///   - field: The `Field` being filtered on.
+    ///   - condition: The `FilterOperator` used on the `Field`.
+    ///   - value: The string value used in the filter.
     init(
         field: Field,
         condition: FilterOperator,
@@ -250,7 +269,7 @@ enum FilterOperator: String {
             ops.append(contentsOf: [.isBlank, .isNotBlank])
         }
         return ops
-}
+    }
     
     /// A Boolean value indicating whether the operator functions on a single operand.
     var isUnary: Bool {
