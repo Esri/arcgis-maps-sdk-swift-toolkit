@@ -19,7 +19,7 @@ import SwiftUI
 struct FilterView: View {
     /// The model used by the view.
     @Bindable var model: FilterViewModel
-    /// A Boolean value indicating whether the alert stating there are changes that need to be saved/discarded is presented.
+    /// A Boolean value indicating whether an alert is presented stating that there are changes that need to be saved or discarded. 
     @State private var alertIsPresented = false
     
     /// The client-specified action to perform when the `Apply` button is tapped. There is no `cancel` action
