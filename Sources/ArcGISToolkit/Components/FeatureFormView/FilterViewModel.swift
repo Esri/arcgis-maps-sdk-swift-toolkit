@@ -41,33 +41,27 @@ class FilterViewModel {
     /// The list of fields generated from the `featureTable`.
     private(set) var fields = [Field]()
     
-    /// Specifies whether the list of Field Filters has changed since the last invocation
-    /// by comparing whereClauses of the original and new `FieldFilter` lists.
+    /// Specifies whether the list of `FieldFilter` objects has changed since the last invocation
+    /// by comparing the whereClause values of the original and new lists.
     var hasChanges: Bool {
         let originalWhereClause = whereClause(filters: originalFieldFilters)
         let whereClause = whereClause(filters: fieldFilters)
         return originalWhereClause != whereClause
     }
     
-    /// The "where" clause assembled from the list of applied `FieldFilter`s.
-    /// - Returns: A SQL query assembled from the list of applied filters. The `fieldFilters` are joined by `AND`.
+    /// The "where" clause assembled from the list of applied `FieldFilter` objects.
+    /// - Returns: A SQL query assembled from the list of applied filters. The `FieldFilter` objects are joined by `AND`.
     func whereClause() -> String {
         whereClause(filters: fieldFilters)
     }
     
-    /// The "where" clause assembled from the list of `FieldFilters`.
-    /// - Parameter filters: The list of `FieldFilter`s used to generate the where clause.
-    /// - Returns: A SQL query assembled from the list of applied filters. The `filters` are joined by `AND`.
+    /// The "where" clause assembled from the list of `FieldFilter` objects.
+    /// - Parameter filters: The list of `FieldFilter` objects used to generate the where clause.
+    /// - Returns: A SQL query assembled from the list of applied filters. The `FieldFilter` objects are joined by `AND`.
     private func whereClause(filters: [FieldFilter]) -> String {
-        var clause = ""
-        for fieldFilter in filters {
-            if let index = filters.firstIndex(of: fieldFilter),
-               index >= 1 {
-                clause.append(" AND ")
-            }
-            clause.append(fieldFilter.query())
-        }
-        return clause
+        guard !filters.isEmpty else { return "" }
+        return filters.map { $0.query() }
+            .joined(separator: " AND ")
     }
     
     /// Initializes a filter view model.
@@ -90,7 +84,7 @@ class FilterViewModel {
     
     /// Returns the `Field` with the given name in the list of fields.
     /// - Parameter fieldName: The name of the desired `Field`.
-    /// - Returns: The `Field` with the given `fieldName`.
+    /// - Returns: The `Field` with the given field name.
     func field(named fieldName: String) -> Field? {
         fields.first { field in
             field.name == fieldName
