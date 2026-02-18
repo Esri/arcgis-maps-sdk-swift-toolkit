@@ -195,7 +195,7 @@ final class FloorFilterViewModel: ObservableObject {
                   let extent2 = facility.geometry?.extent else {
                 return false
             }
-            return GeometryEngine.isGeometry(extent1, intersecting: extent2)
+            return (try? GeometryEngine.isGeometry(extent1, intersecting: extent2)) ?? false
         }
         
         if let facilityResult = facilityResult {
@@ -233,7 +233,7 @@ final class FloorFilterViewModel: ObservableObject {
                   let extent2 = site.geometry?.extent else {
                 return false
             }
-            return GeometryEngine.isGeometry(extent1, intersecting: extent2)
+            return (try? GeometryEngine.isGeometry(extent1, intersecting: extent2)) ?? false
         }
         
         if let siteResult {

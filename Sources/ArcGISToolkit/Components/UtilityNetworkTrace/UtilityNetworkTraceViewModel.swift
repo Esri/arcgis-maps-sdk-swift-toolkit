@@ -294,11 +294,9 @@ import SwiftUI
               let utilityElement = network.makeElement(arcGISFeature: feature) else { return }
         
         if utilityElement.networkSource.kind == .edge && geometry is Polyline {
-            if let mapPoint = startingPoint.mapPoint {
-                utilityElement.fractionAlongEdge = fractionAlongEdge(
-                    of: geometry,
-                    at: mapPoint
-                )
+            if let mapPoint = startingPoint.mapPoint,
+               let fractionAlongEdge = fractionAlongEdge(of: geometry, at: mapPoint) {
+                utilityElement.fractionAlongEdge = fractionAlongEdge
             } else {
                 utilityElement.fractionAlongEdge = 0.5
             }
@@ -513,8 +511,8 @@ extension UtilityNetworkTraceViewModel {
     private func fractionAlongEdge(
         of inputGeometry: Geometry,
         at point: Point
-    ) -> Double {
-        guard var geometry = inputGeometry as? Polyline else { return .zero }
+    ) -> Double? {
+        guard var geometry = inputGeometry as? Polyline else { return nil }
         // Remove Z
         if geometry.hasZ {
             geometry = GeometryEngine.makeGeometry(
@@ -525,15 +523,17 @@ extension UtilityNetworkTraceViewModel {
         
         // Confirm spatial references match
         if let spatialReference = point.spatialReference,
-           spatialReference != geometry.spatialReference,
-           let projectedGeometry = try? GeometryEngine.project(
-            geometry,
-            into: spatialReference
-           ) {
+           spatialReference != geometry.spatialReference {
+            guard let projectedGeometry = try? GeometryEngine.project(
+                geometry,
+                into: spatialReference
+            ) else {
+                return nil
+            }
             geometry = projectedGeometry
         }
         
-        return GeometryEngine.polyline(
+        return try? GeometryEngine.polyline(
             geometry,
             fractionalLengthClosestTo: point,
             tolerance: 10

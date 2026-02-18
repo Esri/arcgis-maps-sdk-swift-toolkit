@@ -111,10 +111,12 @@ public enum SearchOutcome: Sendable {
             guard !isEligibleForRequery else { return }
             
             // Check center difference.
-            let centerDiff = GeometryEngine.distance(
-                from: lastExtent.center,
-                to: newExtent.center
-            )
+            let centerDiff = (
+                try? GeometryEngine.distance(
+                    from: lastExtent.center,
+                    to: newExtent.center
+                )
+            ) ?? .zero
             let currentExtentAvg = (lastExtent.width + lastExtent.height) / 2.0
             let threshold = currentExtentAvg * 0.25
             isEligibleForRequery = centerDiff > threshold

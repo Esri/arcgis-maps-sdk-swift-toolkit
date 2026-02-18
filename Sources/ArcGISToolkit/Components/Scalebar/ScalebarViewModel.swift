@@ -271,7 +271,9 @@ final class ScalebarViewModel: ObservableObject {
                 spatialReference: spatialReference
             )
             let baseUnits = units.baseLinearUnit
-            let maxLengthGeodetic = GeometryEngine.geodeticLength(
+            // geodeticLength only throws if the supplied geometry does not
+            // have a spatial reference.
+            let maxLengthGeodetic = try! GeometryEngine.geodeticLength(
                 of: polyline,
                 lengthUnit: baseUnits,
                 curveType: geodeticCurveType
