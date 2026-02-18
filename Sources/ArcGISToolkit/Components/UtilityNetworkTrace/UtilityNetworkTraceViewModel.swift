@@ -234,7 +234,7 @@ import SwiftUI
         }?.utilityElement?.fractionAlongEdge = newValue
         if let geometry = startingPoint.geoElement.geometry,
            let polyline = geometry as? Polyline {
-            startingPoint.graphic?.geometry = GeometryEngine.point(
+            startingPoint.graphic?.geometry = try? GeometryEngine.point(
                 along: polyline,
                 atDistance: GeometryEngine.length(of: geometry) * newValue
             )
@@ -526,7 +526,7 @@ extension UtilityNetworkTraceViewModel {
         // Confirm spatial references match
         if let spatialReference = point.spatialReference,
            spatialReference != geometry.spatialReference,
-           let projectedGeometry = GeometryEngine.project(
+           let projectedGeometry = try? GeometryEngine.project(
             geometry,
             into: spatialReference
            ) {

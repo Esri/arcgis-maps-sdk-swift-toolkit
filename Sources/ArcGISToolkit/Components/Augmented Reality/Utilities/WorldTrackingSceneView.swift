@@ -223,7 +223,7 @@ struct WorldTrackingSceneView: View {
         
         // Measure the distance between the location datasource's reported location
         // and the camera's current location.
-        guard let result = GeometryEngine.geodeticDistance(
+        guard let result = try? GeometryEngine.geodeticDistance(
             from: currentCamera.location,
             to: currentLocation.position,
             distanceUnit: .meters,

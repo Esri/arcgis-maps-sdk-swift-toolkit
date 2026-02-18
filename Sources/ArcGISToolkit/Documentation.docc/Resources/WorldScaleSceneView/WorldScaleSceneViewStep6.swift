@@ -44,7 +44,7 @@ struct WorldScaleExampleView: View {
             guard let initialLocation = await locationDataSource.locations.first(where: { _ in true }) else { return }
             
             // Put a circle graphic around the initial location.
-            let circle = GeometryEngine.geodeticBuffer(
+            let circle = try? GeometryEngine.geodeticBuffer(
                 around: initialLocation.position,
                 distance: 20,
                 distanceUnit: .meters,

@@ -205,16 +205,17 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertGreaterThan(result.count, 1)
         
         let resultGeometryUnion: Geometry = try XCTUnwrap(
-            GeometryEngine.union(
+            try? GeometryEngine.union(
                 of: result.compactMap { $0.geoElement?.geometry }
             )
         )
         
-        XCTAssertTrue(
-            GeometryEngine.doesGeometry(
+        XCTAssertEqual(
+            try? GeometryEngine.doesGeometry(
                 model.queryArea!,
                 contain: resultGeometryUnion
-            )
+            ),
+            true
         )
         
         model.currentQuery = "Magers & Quinn Booksellers"
@@ -260,7 +261,7 @@ class SearchViewModelTests: XCTestCase {
         )
         
         var geodeticDistance = try XCTUnwrap (
-            GeometryEngine.geodeticDistance(
+            try? GeometryEngine.geodeticDistance(
                 from: .portland,
                 to: resultPoint,
                 distanceUnit: .meters,
@@ -287,7 +288,7 @@ class SearchViewModelTests: XCTestCase {
         
         // Web Mercator distance between .edinburgh and first result.
         geodeticDistance = try XCTUnwrap (
-            GeometryEngine.geodeticDistance(
+            try? GeometryEngine.geodeticDistance(
                 from: .edinburgh,
                 to: resultPoint,
                 distanceUnit: .meters,
@@ -315,16 +316,17 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertGreaterThan(result.count, 1)
         
         let resultGeometryUnion: Geometry = try XCTUnwrap(
-            GeometryEngine.union(
+            try? GeometryEngine.union(
                 of: result.compactMap { $0.geoElement?.geometry }
             )
         )
         
-        XCTAssertTrue(
-            GeometryEngine.doesGeometry(
+        XCTAssertEqual(
+            try? GeometryEngine.doesGeometry(
                 model.geoViewExtent!,
                 contain: resultGeometryUnion
-            )
+            ),
+            true
         )
         
         model.currentQuery = "Magers & Quinn Booksellers"

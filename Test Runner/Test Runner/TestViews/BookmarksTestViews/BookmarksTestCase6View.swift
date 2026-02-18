@@ -47,7 +47,7 @@ struct BookmarksTestCase6View: View {
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
                         if let center = viewpoint?.targetGeometry.extent.center,
-                           let point = GeometryEngine.project(center, into: .wgs84) {
+                           let point = try? GeometryEngine.project(center, into: .wgs84) {
                             Text(
                                 CoordinateFormatter.latitudeLongitudeString(
                                     from: point,
