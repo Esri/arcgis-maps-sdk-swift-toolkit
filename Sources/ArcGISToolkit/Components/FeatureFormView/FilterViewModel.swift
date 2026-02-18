@@ -163,7 +163,8 @@ class FieldFilter {
     /// The operators supported for the given `FieldFilter` field type.
     /// - Returns: A list of operators appropriate for the given `FieldFilter` field type.
     var supportedConditions: [FilterOperator] {
-        field.type?.isNumeric == true
+        guard let fieldType = field.type else { return [] }
+        return (fieldType.isNumeric || fieldType == .oid)
         ? FilterOperator.numericFilterOperators(field.isNullable)
         : FilterOperator.textFilterOperators(field.isNullable)
     }
@@ -211,7 +212,7 @@ extension FilterViewModel {
     /// `ASSETGROUP` and `ASSETTYPE` fields, as those are special fields for Utility Networks.
     private func supportedUNFields(_ allFields: [Field]) -> [Field] {
         supportedFields(allFields).filter { field in
-            field.name != "assetgroup" && field.name != "assettype"
+            field.name.lowercased() != "assetgroup" && field.name.lowercased() != "assettype"
         }
     }
 }
