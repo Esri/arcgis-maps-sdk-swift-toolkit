@@ -105,11 +105,26 @@ class FieldFilter {
                 // We're changing the field, so reset the condition
                 condition = firstCondition()
             }
+            
+            if oldValue.type != field.type {
+                dateValue = .now
+            }
         }
     }
     
     /// The operation used to specify how the value should be applied to the field.
     var condition: FilterOperator = FilterOperator.equal
+    
+    /// A date value for date pickers to bind to.
+    var dateValue: Date {
+        didSet {
+            guard field.type == .date || field.type == .dateOnly else { return }
+            let dateFormatter = ISO8601DateFormatter()
+            dateFormatter.timeZone = TimeZone.current
+            dateFormatter.formatOptions = field.type == .dateOnly ? [.withFullDate] : [.withFullDate, .withFullTime]
+            value = dateFormatter.string(from: dateValue)
+        }
+    }
     
     /// The value to filter on.
     var value = ""
@@ -117,6 +132,7 @@ class FieldFilter {
     /// Creates a `FieldFilter`.
     /// - Parameter field: The `Field` being filtered on.
     init(field: Field) {
+        self.dateValue = .now
         self.field = field
         self.condition = firstCondition()
     }
@@ -129,10 +145,12 @@ class FieldFilter {
     init(
         field: Field,
         condition: FilterOperator,
+        dateValue: Date,
         value: String = ""
     ) {
         self.field = field
         self.condition = condition
+        self.dateValue = dateValue
         self.value = value
     }
     
@@ -141,15 +159,25 @@ class FieldFilter {
     func query() -> String {
         switch condition {
         case .startsWith:
-            "\(field.name) \(condition.sqlOperator) '\(value)%'"
+            return "\(field.name) \(condition.sqlOperator) '\(value)%'"
         case .endsWith:
-            "\(field.name) \(condition.sqlOperator) '%\(value)'"
+            return "\(field.name) \(condition.sqlOperator) '%\(value)'"
         case .contains, .doesNotContain:
-            "\(field.name) \(condition.sqlOperator) '%\(value)%'"
+            return "\(field.name) \(condition.sqlOperator) '%\(value)%'"
         case .isBlank, .isNotBlank, .isEmpty, .isNotEmpty:
-            "\(field.name) \(condition.sqlOperator)"
+            return "\(field.name) \(condition.sqlOperator)"
         case .equal, .notEqual, .isOp, .isNot, .greaterThan, .greaterThanOrEqual, .lessThan, .lessThanOrEqual:
-            "\(field.name) \(condition.sqlOperator) \(value)"
+            let formattedValue = switch field.type {
+            case .date:
+                "timestamp '\(value)'"
+            case .dateOnly:
+                "date '\(value)'"
+            case .text:
+                "'\(value)'"
+            default:
+                value
+            }
+            return "\(field.name) \(condition.sqlOperator) \(formattedValue)"
         }
     }
     
@@ -163,10 +191,15 @@ class FieldFilter {
     /// The operators supported for the given `FieldFilter` field type.
     /// - Returns: A list of operators appropriate for the given `FieldFilter` field type.
     var supportedConditions: [FilterOperator] {
-        guard let fieldType = field.type else { return [] }
-        return (fieldType.isNumeric || fieldType == .oid)
-        ? FilterOperator.numericFilterOperators(field.isNullable)
-        : FilterOperator.textFilterOperators(field.isNullable)
+        let type = field.type
+        return switch type {
+        case .date, .dateOnly, .oid:
+            FilterOperator.numericFilterOperators(field.isNullable)
+        default:
+            type?.isNumeric == true
+            ? FilterOperator.numericFilterOperators(field.isNullable)
+            : FilterOperator.textFilterOperators(field.isNullable)
+        }
     }
 }
 
@@ -177,6 +210,7 @@ extension FieldFilter {
         FieldFilter(
             field: self.field,
             condition: self.condition,
+            dateValue: self.dateValue,
             value: self.value
         )
     }
@@ -201,8 +235,10 @@ extension FilterViewModel {
     private func supportedFields(_ allFields: [Field]) -> [Field] {
         allFields.filter { field in
             (field.type?.isNumeric ?? false) ||
-            field.type == .text ||
-            field.type == FieldType.oid
+            field.type == .date ||
+            field.type == .dateOnly ||
+            field.type == .oid ||
+            field.type == .text
         }
     }
     
@@ -257,6 +293,8 @@ enum FilterOperator: String {
     }
     
     /// Returns a list of appropriate operations for numeric fields.
+    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `empty` and `notEmpty` operators
+    /// are added to the list. If `false`, no additional operators are added.
     static func numericFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .equal,
