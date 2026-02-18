@@ -210,12 +210,11 @@ class SearchViewModelTests: XCTestCase {
             )
         )
         
-        XCTAssertEqual(
-            try? GeometryEngine.doesGeometry(
+        XCTAssertTrue(
+            try GeometryEngine.doesGeometry(
                 model.queryArea!,
                 contain: resultGeometryUnion
-            ),
-            true
+            )
         )
         
         model.currentQuery = "Magers & Quinn Booksellers"
@@ -321,12 +320,11 @@ class SearchViewModelTests: XCTestCase {
             )
         )
         
-        XCTAssertEqual(
-            try? GeometryEngine.doesGeometry(
+        XCTAssertTrue(
+            try GeometryEngine.doesGeometry(
                 model.geoViewExtent!,
                 contain: resultGeometryUnion
-            ),
-            true
+            )
         )
         
         model.currentQuery = "Magers & Quinn Booksellers"
