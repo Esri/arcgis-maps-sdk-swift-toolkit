@@ -101,9 +101,9 @@ extension FeatureFormView {
                         standardFields
                     }
                 case let source as SubtypeSublayer:
-                    source.subtype.fieldOverrides ?? standardFields
+                    source.subtype.fieldOverrides
                 case let source as SubtypeSubtable:
-                    source.subtype.fieldOverrides ?? standardFields
+                    source.subtype.fieldOverrides
                 default:
                     []
                 }
