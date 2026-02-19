@@ -84,6 +84,7 @@ extension FeatureFormView {
                     candidates.removeAll()
                     whereClause = filterViewModel.whereClause()
                 }
+                .interactiveDismissDisabled()
             }
             .task(id: whereClause) {
                 // Only query on whereClause change if the first page query is complete.
