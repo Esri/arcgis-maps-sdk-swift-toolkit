@@ -258,7 +258,7 @@ extension FeatureFormView {
             queryTask = Task {
                 do {
                     let result = try await source.queryFeatures(assetType: assetType, parameters: parameters)
-                    candidates.append(contentsOf: result.candidates ?? [])
+                    candidates.append(contentsOf: result.candidates)
                     nextQueryParameters = result.nextQueryParams
                 } catch {
                     nextQueryParameters = nil
