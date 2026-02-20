@@ -2227,7 +2227,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(
             containerFilterTitle.waitForExistence(timeout: 5),
-            "The filter result \"Connected\" doesn't exist."
+            "The filter result \"Container\" doesn't exist."
         )
         
         containerFilterTitle.tap()
