@@ -71,17 +71,26 @@ struct FilterView: View {
                                                 comment: "A label for a control representing a condition and position index used to filter fields in a table."
                                             )
                                         )
-                                    }
-                                    Spacer()
-                                    Menu {
-                                        // Duplicate the current filter.
-                                        duplicateButton(filter)
-                                        // Delete the current filter.
-                                        deleteButton(filter)
-                                    } label: {
-                                        Image(systemName: "ellipsis.circle")
-                                            .imageScale(.large)
-                                            .tint(.secondary)
+                                        Spacer()
+                                        Menu {
+                                            // Duplicate the current filter.
+                                            duplicateButton(filter)
+                                            // Delete the current filter.
+                                            deleteButton(filter)
+                                        } label: {
+                                            Label {
+                                                Text(
+                                                    "Condition \(index + 1) Options",
+                                                    bundle: .toolkitModule,
+                                                    comment: "A label for button to a open a menu with options for a condition used to filter fields in a table."
+                                                )
+                                            } icon: {
+                                                Image(systemName: "ellipsis.circle")
+                                                    .imageScale(.large)
+                                                    .tint(.secondary)
+                                            }
+                                            .labelStyle(.iconOnly)
+                                        }
                                     }
                                 }
                             }
