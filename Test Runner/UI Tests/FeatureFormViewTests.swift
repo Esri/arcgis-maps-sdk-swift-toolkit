@@ -2326,6 +2326,32 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     func testCase_13_4() {
+        let app = XCUIApplication()
+        
+        let addConditionButton = app.buttons["Add Condition"]
+        let cancelButton = app.buttons["Cancel"]
+        let conditionEqualsButton = app.buttons["Condition, ="]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let discardEditsButton = app.buttons["Discard Edits"]
+        let doneButton = app.buttons["Done"]
+        let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
+        let elementTitle = app.staticTexts["Associations"]
+        let filterButton = app.buttons["filter"]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
+        let isBlankOption = app.buttons["is blank"]
+        let lowVoltageSinglePhaseLineEnd = app.buttons["Low Voltage Single Phase Line End"]
+        let objectIDConditionLabel = app.staticTexts["Object ID"]
+        let phasesCurrentState = app.buttons["Phases Current State"]
+        let unsavedChangesAlert = app.alerts["Filters have not been applied"]
+        
+#if targetEnvironment(macCatalyst)
+        let addAssociationButton = app.buttons["Add Association"]
+#else
+        let addAssociationButton = app.staticTexts["Add Association"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
     }
 }
 
