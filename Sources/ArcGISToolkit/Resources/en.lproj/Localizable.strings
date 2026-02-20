@@ -405,6 +405,9 @@ trace operation. */
 asset types by name. */
 "Filter asset types by name" = "Filter asset types by name";
 
+/* A label for a button to filter utility association candidates by attributes. */
+"Filter Candidates" = "Filter Candidates";
+
 /* A label for a search field to filter utility 
 association candidate features by name. */
 "Filter candidates by name" = "Filter candidates by name";
@@ -983,9 +986,6 @@ without saving. */
 
 /* A label in reference to a credential username. */
 "Username" = "Username";
-
-/* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "Unknown";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";

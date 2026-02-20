@@ -241,14 +241,19 @@ extension FeatureFormView {
                     Button {
                         filterViewModel.filterViewIsPresented.toggle()
                     } label: {
-                        if filterViewModel.fieldFilters.isEmpty {
+                        Label {
+                            Text(
+                                "Filter Candidates",
+                                bundle: .toolkitModule,
+                                comment: "A label for a button to filter utility association candidates by attributes."
+                            )
+                        } icon: {
                             Image(systemName: "line.3.horizontal.decrease")
-                        } else {
-                            Image(systemName: "line.3.horizontal.decrease.circle")
-                                .font(.title2)
+                                .symbolVariant(filterViewModel.fieldFilters.isEmpty ? .none : .circle)
+                                .font(filterViewModel.fieldFilters.isEmpty ? .body : .title2)
                         }
+                        .labelStyle(.iconOnly)
                     }
-                    .accessibilityIdentifier("filter")
                 }
             }
         }

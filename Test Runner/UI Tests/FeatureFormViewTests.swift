@@ -2353,7 +2353,7 @@ final class FeatureFormViewTests: XCTestCase {
         let textField = app.textFields["Enter a value"]
         let equalOption = app.buttons["="]
         let equalStaticText = app.staticTexts["="]
-        let filterButton = app.buttons["filter"]
+        let filterButton = app.buttons["Filter Candidates"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let greaterThanButton = app.buttons[">"]
         let greaterThanLabels = app.staticTexts.matching(identifier: ">")
