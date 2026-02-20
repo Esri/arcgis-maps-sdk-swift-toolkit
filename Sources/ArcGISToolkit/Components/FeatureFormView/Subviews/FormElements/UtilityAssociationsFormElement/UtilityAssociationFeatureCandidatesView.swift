@@ -248,6 +248,7 @@ extension FeatureFormView {
                                 .font(.title2)
                         }
                     }
+                    .accessibilityIdentifier("filter")
                 }
             }
         }
