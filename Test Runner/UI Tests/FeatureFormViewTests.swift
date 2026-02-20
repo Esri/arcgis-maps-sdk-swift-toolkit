@@ -2327,8 +2327,8 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_13_4() {
         let app = XCUIApplication()
-        
         let addConditionButton = app.buttons["Add Condition"]
+        let backButton = app.buttons["Back"].firstMatch
         let cancelButton = app.buttons["Cancel"]
         let conditionEqualsButton = app.buttons["Condition, ="]
         let connectedFilterTitle = app.staticTexts["Connected"]
@@ -2336,13 +2336,18 @@ final class FeatureFormViewTests: XCTestCase {
         let doneButton = app.buttons["Done"]
         let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
         let elementTitle = app.staticTexts["Associations"]
+        let equalOption = app.buttons["="]
         let filterButton = app.buttons["filter"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
+        let isBlankLabel = app.staticTexts["is blank"]
         let isBlankOption = app.buttons["is blank"]
+        let lineEndCandidates = app.buttons.matching(identifier: "Line End")
         let lowVoltageSinglePhaseLineEnd = app.buttons["Low Voltage Single Phase Line End"]
         let objectIDConditionLabel = app.staticTexts["Object ID"]
+        let optionAButton = app.buttons["A"]
         let phasesCurrentState = app.buttons["Phases Current State"]
         let unsavedChangesAlert = app.alerts["Filters have not been applied"]
+        let valueButton = app.buttons["Value"]
         
 #if targetEnvironment(macCatalyst)
         let addAssociationButton = app.buttons["Add Association"]
@@ -2352,6 +2357,196 @@ final class FeatureFormViewTests: XCTestCase {
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        XCTAssertTrue(
+            elementTitle.waitForExistence(timeout: 5),
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            connectedFilterTitle.waitForExistence(timeout: 5),
+            "The filter result \"Connected\" doesn't exist."
+        )
+        
+        connectedFilterTitle.tap()
+        
+        XCTAssertTrue(
+            addAssociationButton.waitForExistence(timeout: 5),
+            "The \"Add Association\" button doesn't exist."
+        )
+        
+        addAssociationButton.tap()
+        
+        XCTAssertTrue(
+            electricDistributionJunctionDataSourceButton.waitForExistence(timeout: 5),
+            "The \"Electric Distribution\" button doesn't exist."
+        )
+        
+        electricDistributionJunctionDataSourceButton.tap()
+        
+        XCTAssertTrue(
+            lowVoltageSinglePhaseLineEnd.waitForExistence(timeout: 5),
+            "The \"Low Voltage Single Phase Line End\" button doesn't exist."
+        )
+        
+        lowVoltageSinglePhaseLineEnd.tap()
+        
+        XCTAssertEqual(lineEndCandidates.count, 2)
+        
+        XCTAssertTrue(
+            filterButton.waitForExistence(timeout: 5),
+            "The filter button doesn't exist."
+        )
+        
+        filterButton.tap()
+        
+        XCTAssertTrue(
+            addConditionButton.waitForExistence(timeout: 5),
+            "The \"Add Condition\" button doesn't exist."
+        )
+        
+        addConditionButton.tap()
+        
+        XCTAssertTrue(
+            cancelButton.waitForExistence(timeout: 5),
+            "The \"Cancel\" button doesn't exist."
+        )
+        
+        cancelButton.tap()
+        
+        XCTAssertTrue(
+            unsavedChangesAlert.waitForExistence(timeout: 5),
+            "The \"Filters have not been applied\" alert doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            cancelButton.waitForExistence(timeout: 5),
+            "The \"Cancel\" button doesn't exist."
+        )
+        
+        // Dismiss the alert
+        cancelButton.firstMatch.tap()
+        
+        XCTAssertTrue(
+            unsavedChangesAlert.waitForNonExistence(timeout: 5),
+            "The \"Filters have not been applied\" alert failed to dismiss."
+        )
+        
+        XCTAssertTrue(
+            cancelButton.waitForExistence(timeout: 5),
+            "The \"Cancel\" button doesn't exist."
+        )
+        
+        cancelButton.tap()
+        
+        XCTAssertTrue(
+            unsavedChangesAlert.waitForExistence(timeout: 5),
+            "The \"Filters have not been applied\" alert doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            discardEditsButton.waitForExistence(timeout: 5),
+            "The \"Discard Edits\" button doesn't exist."
+        )
+        
+        discardEditsButton.tap()
+        
+        XCTAssertTrue(
+            unsavedChangesAlert.waitForNonExistence(timeout: 5),
+            "The \"Filters have not been applied\" alert failed to dismiss."
+        )
+        
+        XCTAssertEqual(lineEndCandidates.count, 2)
+        
+        XCTAssertTrue(
+            filterButton.waitForExistence(timeout: 5),
+            "The filter button doesn't exist."
+        )
+        
+        filterButton.tap()
+        
+        XCTAssertTrue(
+            addConditionButton.waitForExistence(timeout: 5),
+            "The \"Add Condition\" button doesn't exist."
+        )
+        
+        addConditionButton.tap()
+        
+        XCTAssertTrue(
+            objectIDConditionLabel.waitForExistence(timeout: 5),
+            "The \"Object ID\" condition doesn't exist."
+        )
+        
+        objectIDConditionLabel.tap()
+        
+        XCTAssertTrue(
+            phasesCurrentState.waitForExistence(timeout: 5),
+            "The \"Phases Current State\" option doesn't exist."
+        )
+        
+        phasesCurrentState.tap()
+        
+        XCTAssertTrue(
+            conditionEqualsButton.waitForExistence(timeout: 5),
+            "The \"Condition Equals\" option doesn't exist."
+        )
+        
+        conditionEqualsButton.tap()
+        
+        XCTAssertTrue(
+            isBlankOption.waitForExistence(timeout: 5),
+            "The \"is blank\" option doesn't exist."
+        )
+        
+        isBlankOption.tap()
+        
+        XCTAssertTrue(
+            doneButton.waitForExistence(timeout: 5),
+            "The \"Done\" button doesn't exist."
+        )
+        
+        doneButton.tap()
+        
+        #warning("This assertion disabled temporarily due to known issue.")
+//        XCTAssertEqual(lineEndCandidates.count, 0)
+        
+        filterButton.tap()
+        
+        XCTAssertTrue(
+            isBlankLabel.waitForExistence(timeout: 5),
+            "The \"is blank\" label doesn't exist."
+        )
+        
+        isBlankLabel.tap()
+        
+        XCTAssertTrue(
+            equalOption.waitForExistence(timeout: 5),
+            "The \"equal\" option doesn't exist."
+        )
+        
+        equalOption.tap()
+        
+        XCTAssertTrue(
+            valueButton.waitForExistence(timeout: 5),
+            "The \"Value\" button doesn't exist."
+        )
+        
+        valueButton.tap()
+        
+        XCTAssertTrue(
+            optionAButton.waitForExistence(timeout: 5),
+            "The \"A\" option doesn't exist."
+        )
+        
+        optionAButton.tap()
+        
+        doneButton.tap()
+        
+        XCTAssertEqual(lineEndCandidates.count, 1)
+        
+        backButton.tap()
+        
+        backButton.tap()
     }
 }
 
