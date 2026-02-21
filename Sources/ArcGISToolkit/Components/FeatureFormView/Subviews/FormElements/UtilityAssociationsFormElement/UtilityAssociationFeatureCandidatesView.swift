@@ -241,7 +241,7 @@ extension FeatureFormView {
             let featureTable = form.feature.table as? ArcGISFeatureTable
             let standardFields = featureTable?.fields ?? []
             
-            func getFieldOverrides(table: ArcGISFeatureTable) -> [Field] {
+            func fields(from table: ArcGISFeatureTable) -> [Field] {
                 let subtype = table.featureSubtypes.first { subtype in
                     subtype.code as? Int == assetType.group?.code
                 }
@@ -251,13 +251,13 @@ extension FeatureFormView {
             let fields: [Field] = switch source.featureFormSource {
             case let source as FeatureLayer:
                 if let table = source.featureTable as? ArcGISFeatureTable {
-                    getFieldOverrides(table: table)
+                    fields(from: table)
                 } else {
                     standardFields
                 }
             case let source as FeatureTable:
                 if let table = source as? ArcGISFeatureTable {
-                    getFieldOverrides(table: table)
+                    fields(from: table)
                 } else {
                     standardFields
                 }
