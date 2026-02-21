@@ -77,38 +77,7 @@ extension FeatureFormView {
                 }
             }
             .onAppear {
-                let featureTable = form.feature.table as? ArcGISFeatureTable
-                let standardFields = featureTable?.fields ?? []
-                
-                func getFieldOverrides(table: ArcGISFeatureTable) -> [Field] {
-                    let subtype = table.featureSubtypes.first { subtype in
-                        subtype.code as? Int == assetType.group?.code
-                    }
-                    return subtype?.fieldOverrides ?? standardFields
-                }
-                
-                let fields: [Field] = switch source.featureFormSource {
-                case let source as FeatureLayer:
-                    if let table = source.featureTable as? ArcGISFeatureTable {
-                        getFieldOverrides(table: table)
-                    } else {
-                        standardFields
-                    }
-                case let source as FeatureTable:
-                    if let table = source as? ArcGISFeatureTable {
-                        getFieldOverrides(table: table)
-                    } else {
-                        standardFields
-                    }
-                case let source as SubtypeSublayer:
-                    source.subtype.fieldOverrides
-                case let source as SubtypeSubtable:
-                    source.subtype.fieldOverrides
-                default:
-                    []
-                }
-                
-                filterViewModel.setFields(fields)
+                setFilterableFields()
             }
             .sheet(isPresented: $filterViewModel.filterViewIsPresented) {
                 FilterView(model: filterViewModel) {
@@ -265,6 +234,42 @@ extension FeatureFormView {
                 }
                 queryIsRunning = false
             }
+        }
+        
+        /// Sets the fields that should be filterable with the filter view.
+        func setFilterableFields() {
+            let featureTable = form.feature.table as? ArcGISFeatureTable
+            let standardFields = featureTable?.fields ?? []
+            
+            func getFieldOverrides(table: ArcGISFeatureTable) -> [Field] {
+                let subtype = table.featureSubtypes.first { subtype in
+                    subtype.code as? Int == assetType.group?.code
+                }
+                return subtype?.fieldOverrides ?? standardFields
+            }
+            
+            let fields: [Field] = switch source.featureFormSource {
+            case let source as FeatureLayer:
+                if let table = source.featureTable as? ArcGISFeatureTable {
+                    getFieldOverrides(table: table)
+                } else {
+                    standardFields
+                }
+            case let source as FeatureTable:
+                if let table = source as? ArcGISFeatureTable {
+                    getFieldOverrides(table: table)
+                } else {
+                    standardFields
+                }
+            case let source as SubtypeSublayer:
+                source.subtype.fieldOverrides
+            case let source as SubtypeSubtable:
+                source.subtype.fieldOverrides
+            default:
+                []
+            }
+            
+            filterViewModel.setFields(fields)
         }
     }
     
