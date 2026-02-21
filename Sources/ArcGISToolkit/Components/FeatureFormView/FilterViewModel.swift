@@ -221,16 +221,16 @@ class FieldFilter {
         let type = field.type
         return switch type {
         case .date, .dateOnly:
-            FilterOperator.numericFilterOperators(field.isNullable)
+            FilterOperator.numericFilterOperators(fieldIsNullable: field.isNullable)
         default:
             if type?.isNumeric ?? true {
                 if field.domain is CodedValueDomain {
-                    FilterOperator.codedValueFilterOperators(field.isNullable)
+                    FilterOperator.codedValueFilterOperators(fieldIsNullable: field.isNullable)
                 } else {
-                    FilterOperator.numericFilterOperators(field.isNullable)
+                    FilterOperator.numericFilterOperators(fieldIsNullable: field.isNullable)
                 }
             } else {
-                FilterOperator.textFilterOperators(field.isNullable)
+                FilterOperator.textFilterOperators(fieldIsNullable: field.isNullable)
             }
         }
     }
@@ -309,7 +309,7 @@ enum FilterOperator: String {
     /// Returns a list of appropriate operations for fields with coded value domains.
     /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
     /// are added to the list. If `false`, no additional operators are added.
-    static func codedValueFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
+    static func codedValueFilterOperators(fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .equal,
             .notEqual,
@@ -323,7 +323,7 @@ enum FilterOperator: String {
     /// Returns a list of appropriate operations for text fields.
     /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
     /// are added to the list. If `false`, no additional operators are added.
-    static func textFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
+    static func textFilterOperators(fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .isOp,
             .isNot,
@@ -343,7 +343,7 @@ enum FilterOperator: String {
     /// Returns a list of appropriate operations for numeric fields.
     /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
     /// are added to the list. If `false`, no additional operators are added.
-    static func numericFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
+    static func numericFilterOperators(fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .equal,
             .notEqual,
