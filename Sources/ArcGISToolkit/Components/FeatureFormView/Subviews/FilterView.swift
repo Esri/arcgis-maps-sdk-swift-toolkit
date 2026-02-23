@@ -398,7 +398,7 @@ extension FieldView {
     var keyboardType: UIKeyboardType {
         guard let fieldType = fieldFilter.field.type else { return .default }
         
-        return if fieldType.isNumeric || fieldType == .oid {
+        return if fieldType.isNumeric {
 #if os(visionOS)
             // On visionOS, the `positiveNegativeButton` is not available.
             // Show the keyboard instead so the user can manually enter a negative number.
