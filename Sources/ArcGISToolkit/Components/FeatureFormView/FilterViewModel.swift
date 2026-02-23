@@ -150,10 +150,11 @@ class FieldFilter {
     var dateValue: Date {
         didSet {
             guard field.type == .date || field.type == .dateOnly else { return }
-            let dateFormatter = ISO8601DateFormatter()
-            dateFormatter.timeZone = TimeZone.current
-            dateFormatter.formatOptions = field.type == .dateOnly ? [.withFullDate] : [.withFullDate, .withFullTime]
-            value = dateFormatter.string(from: dateValue)
+            let style = Date.ISO8601FormatStyle(
+                timeZoneSeparator: .colon,
+                timeZone: .current
+            )
+            value = dateValue.formatted(style)
         }
     }
     
