@@ -2343,6 +2343,7 @@ final class FeatureFormViewTests: XCTestCase {
         let datePickers = XCUIApplication().datePickers
         let datePicker1 = datePickers.firstMatch
         let datePicker2 = datePickers.element(boundBy: 1)
+        let deleteButton = app.buttons["Delete"]
         let discardEditsButton = app.buttons["Discard Edits"]
         let dismissPopover = app.buttons["PopoverDismissRegion"]
         let doneButton = app.buttons["Done"]
@@ -2486,6 +2487,32 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         filterButton.tap()
+        
+        XCTAssertTrue(
+            addConditionButton.waitForExistence(timeout: 5),
+            "The \"Add Condition\" button doesn't exist."
+        )
+        
+        addConditionButton.tap()
+        
+        XCTAssertTrue(
+            objectIDConditionLabel.waitForExistence(timeout: 5),
+            "The \"Object ID\" condition doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            condition1Options.waitForExistence(timeout: 5),
+            "The \"Condition 1 Options\" menu doesn't exist."
+        )
+        
+        condition1Options.tap()
+        
+        XCTAssertTrue(
+            deleteButton.waitForExistence(timeout: 5),
+            "The \"Delete\" button doesn't exist."
+        )
+        
+        deleteButton.tap()
         
         XCTAssertTrue(
             addConditionButton.waitForExistence(timeout: 5),
