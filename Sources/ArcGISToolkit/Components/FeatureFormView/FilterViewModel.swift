@@ -220,7 +220,7 @@ class FieldFilter {
     var supportedConditions: [FilterOperator] {
         let type = field.type
         return switch type {
-        case .date, .dateOnly:
+        case .date, .dateOnly, .oid:
             FilterOperator.numericFilterOperators(fieldIsNullable: field.isNullable)
         default:
             if type?.isNumeric ?? true {
@@ -282,7 +282,7 @@ extension FilterViewModel {
     /// `ASSETGROUP` and `ASSETTYPE` fields, as those are special fields for Utility Networks.
     private func supportedUNFields(_ allFields: [Field]) -> [Field] {
         supportedFields(allFields).filter { field in
-            field.name != "assetgroup" && field.name != "assettype"
+            field.name.lowercased() != "assetgroup" && field.name.lowercased() != "assettype"
         }
     }
 }
