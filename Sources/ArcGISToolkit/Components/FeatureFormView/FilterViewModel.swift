@@ -19,9 +19,6 @@ import SwiftUI
 @MainActor @Observable
 class FilterViewModel {
     /// The feature table containing the fields to filter on.
-    ///
-    /// Use this to auto-populate the filterable fields. Alternatively, use `setFields(_:)` to customize
-    /// the filterable fields.
     public var featureTable: ArcGISFeatureTable? {
         didSet {
             if let featureTable {
@@ -32,7 +29,6 @@ class FilterViewModel {
             }
         }
     }
-    
     /// The list of field filters the user has created.
     var fieldFilters = [FieldFilter]()
     
@@ -51,15 +47,6 @@ class FilterViewModel {
         let originalWhereClause = whereClause(filters: originalFieldFilters)
         let whereClause = whereClause(filters: fieldFilters)
         return originalWhereClause != whereClause
-    }
-    
-    /// Sets the fields to filter on.
-    ///
-    /// Use this to customize the filterable fields. Alternatively, set `featureTable` to auto-populate
-    /// the filterable fields.
-    /// - Parameter fields: The filterable fields.
-    func setFields(_ fields: [Field]) {
-        self.fields = supportedUNFields(fields)
     }
     
     /// The "where" clause assembled from the list of applied `FieldFilter` objects.
@@ -120,19 +107,7 @@ class FieldFilter {
             }
             
             if oldValue.type != field.type {
-                codedValue = nil
                 dateValue = .now
-            }
-        }
-    }
-    
-    /// A coded value for pickers to bind to.
-    var codedValue: CodedValue? {
-        didSet {
-            if let code = codedValue?.code {
-                value = "\(code)"
-            } else {
-                value.removeAll()
             }
         }
     }
@@ -170,13 +145,11 @@ class FieldFilter {
     init(
         field: Field,
         condition: FilterOperator,
-        codedValue: CodedValue?,
         dateValue: Date,
         value: String = ""
     ) {
         self.field = field
         self.condition = condition
-        self.codedValue = codedValue
         self.dateValue = dateValue
         self.value = value
     }
@@ -220,18 +193,12 @@ class FieldFilter {
     var supportedConditions: [FilterOperator] {
         let type = field.type
         return switch type {
-        case .date, .dateOnly:
-            FilterOperator.numericFilterOperators(fieldIsNullable: field.isNullable)
+        case .date, .dateOnly, .oid:
+            FilterOperator.numericFilterOperators(field.isNullable)
         default:
-            if type?.isNumeric ?? true {
-                if field.domain is CodedValueDomain {
-                    FilterOperator.codedValueFilterOperators(fieldIsNullable: field.isNullable)
-                } else {
-                    FilterOperator.numericFilterOperators(fieldIsNullable: field.isNullable)
-                }
-            } else {
-                FilterOperator.textFilterOperators(fieldIsNullable: field.isNullable)
-            }
+            type?.isNumeric == true
+            ? FilterOperator.numericFilterOperators(field.isNullable)
+            : FilterOperator.textFilterOperators(field.isNullable)
         }
     }
 }
@@ -243,7 +210,6 @@ extension FieldFilter {
         FieldFilter(
             field: self.field,
             condition: self.condition,
-            codedValue: self.codedValue,
             dateValue: self.dateValue,
             value: self.value
         )
@@ -282,7 +248,7 @@ extension FilterViewModel {
     /// `ASSETGROUP` and `ASSETTYPE` fields, as those are special fields for Utility Networks.
     private func supportedUNFields(_ allFields: [Field]) -> [Field] {
         supportedFields(allFields).filter { field in
-            field.name != "assetgroup" && field.name != "assettype"
+            field.name.lowercased() != "assetgroup" && field.name.lowercased() != "assettype"
         }
     }
 }
@@ -306,24 +272,10 @@ enum FilterOperator: String {
     case isEmpty = "is empty"
     case isNotEmpty = "is not empty"
     
-    /// Returns a list of appropriate operations for fields with coded value domains.
-    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
-    /// are added to the list. If `false`, no additional operators are added.
-    static func codedValueFilterOperators(fieldIsNullable: Bool) -> [FilterOperator] {
-        var ops: [FilterOperator] = [
-            .equal,
-            .notEqual,
-        ]
-        if fieldIsNullable {
-            ops.append(contentsOf: [.isBlank, .isNotBlank])
-        }
-        return ops
-    }
-    
     /// Returns a list of appropriate operations for text fields.
-    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
+    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `empty` and `notEmpty` operators
     /// are added to the list. If `false`, no additional operators are added.
-    static func textFilterOperators(fieldIsNullable: Bool) -> [FilterOperator] {
+    static func textFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .isOp,
             .isNot,
@@ -341,9 +293,9 @@ enum FilterOperator: String {
     }
     
     /// Returns a list of appropriate operations for numeric fields.
-    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
+    /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `empty` and `notEmpty` operators
     /// are added to the list. If `false`, no additional operators are added.
-    static func numericFilterOperators(fieldIsNullable: Bool) -> [FilterOperator] {
+    static func numericFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .equal,
             .notEqual,
