@@ -90,22 +90,32 @@ extension FeatureFormView {
                     result = try await element.addAssociation(feature: candidate.feature, filter: filter, isContainmentVisible: contentIsVisible)
                 } else {
                     result = switch (options.isFractionAlongEdgeValid, terminalForFromSide, terminalForToSide) {
-                    case let (true, .some(terminal), .none):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong, terminal: terminal)
-                    case let (true, .none, .some(terminal)):
-                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong, terminal: terminal)
+                    case let (true, .some(terminalForFromSide), .none):
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong, terminal: terminalForFromSide)
+                    case let (true, .none, .some(terminalForToSide)):
+                        try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong, terminal: terminalForToSide)
                     case (true, .none, .none):
                         try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong)
                     case let (false, .some(terminalForFromSide), .some(terminalForToSide)):
                         try await element.addAssociation(
                             feature: candidate.feature,
-                            featureTerminal: candidateIsToElement
-                            ? terminalForToSide
-                            : terminalForFromSide,
+                            featureTerminal: candidateIsToElement ? terminalForToSide : terminalForFromSide,
                             filter: filter,
-                            currentFeatureTerminal: candidateIsToElement
-                            ? terminalForFromSide
-                            : terminalForToSide
+                            currentFeatureTerminal: candidateIsToElement ? terminalForFromSide : terminalForToSide
+                        )
+                    case let(false, .some(terminalForFromSide), .none):
+                        try await element.addAssociation(
+                            feature: candidate.feature,
+                            featureTerminal: candidateIsToElement ? nil : terminalForFromSide,
+                            filter: filter,
+                            currentFeatureTerminal: candidateIsToElement ? terminalForFromSide : nil
+                        )
+                    case let(false, .none, .some(terminalForToSide)):
+                        try await element.addAssociation(
+                            feature: candidate.feature,
+                            featureTerminal: candidateIsToElement ? terminalForToSide : nil,
+                            filter: filter,
+                            currentFeatureTerminal: candidateIsToElement ? nil : terminalForToSide
                         )
                     default:
                         try await element.addAssociation(feature: candidate.feature, filter: filter)
