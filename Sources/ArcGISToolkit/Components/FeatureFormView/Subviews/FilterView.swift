@@ -81,6 +81,7 @@ struct FilterView: View {
                                     } label: {
                                         Image(systemName: "ellipsis.circle")
                                             .imageScale(.large)
+                                            .tint(.secondary)
                                     }
                                 }
                             }
@@ -292,6 +293,7 @@ private struct FieldView: View {
                         Text.field
                     }
                     .pickerStyle(.menu)
+                    .tint(.primary)
                     .onAppear {
                         selectedFieldName = fieldFilter.field.name
                     }
@@ -317,6 +319,7 @@ private struct FieldView: View {
                     )
                 }
                 .pickerStyle(.menu)
+                .tint(.primary)
             }
             .onAppear {
                 conditions = fieldFilter.supportedConditions
