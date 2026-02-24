@@ -331,6 +331,15 @@ private struct FieldView: View {
                     ) {
                         Text.value
                     }
+                } else if let domain = fieldFilter.field.domain as? CodedValueDomain {
+                    Picker(selection: $fieldFilter.codedValue) {
+                        ForEach(domain.codedValues, id: \.self) {
+                            Text($0.name)
+                                .tag($0)
+                        }
+                    } label: {
+                        Text.value
+                    }
                 } else {
                     HStack {
                         Text.value
