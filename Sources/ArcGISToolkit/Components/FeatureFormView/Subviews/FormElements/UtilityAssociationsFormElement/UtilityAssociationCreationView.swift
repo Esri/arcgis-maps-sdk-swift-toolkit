@@ -96,7 +96,7 @@ extension FeatureFormView {
                         try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong, terminal: terminal)
                     case (true, .none, .none):
                         try await element.addAssociation(feature: candidate.feature, filter: filter, fractionAlongEdge: percentAlong)
-                    case (false, _, _):
+                    case let (false, .some(terminalForFromSide), .some(terminalForToSide)):
                         try await element.addAssociation(
                             feature: candidate.feature,
                             featureTerminal: candidateIsToElement
@@ -128,6 +128,9 @@ extension FeatureFormView {
                     featureFormViewModel.navigationPath.removeLast(4)
                 }
             } catch let error as ArcGIS.InvalidArgumentError {
+                addAssociationError = .other(error.details)
+                alertIsPresented = true
+            } catch let error as ArcGIS.InvalidCallError {
                 addAssociationError = .other(error.details)
                 alertIsPresented = true
             } catch {
