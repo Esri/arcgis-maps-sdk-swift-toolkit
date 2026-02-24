@@ -88,6 +88,8 @@ extension FeatureFormView {
                 let result: UtilityAssociationResult
                 if includeContentVisibility {
                     result = try await element.addAssociation(feature: candidate.feature, filter: filter, isContainmentVisible: contentIsVisible)
+                } else if filter.kind == .attachment || filter.kind == .structure {
+                    result = try await element.addAssociation(feature: candidate.feature, filter: filter)
                 } else {
                     result = switch (options.isFractionAlongEdgeValid, terminalForFromSide, terminalForToSide) {
                     case let (true, .some(terminalForFromSide), .none):
