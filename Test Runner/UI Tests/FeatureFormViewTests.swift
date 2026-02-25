@@ -2328,47 +2328,27 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_13_4() {
         let app = XCUIApplication()
         let addConditionButton = app.buttons["Add Condition"]
-        let assetIDButton = app.collectionViews.firstMatch.cells.buttons["Asset Id"]
-        let assetIDStaticText = app.staticTexts["Asset Id"]
-        let backButton = app.buttons["Back"].firstMatch
         let cancelButton = app.buttons["Cancel"]
         let condition1Options = app.buttons["Condition 1 Options"]
         let conditionEqualsButton = app.buttons["Condition, ="]
         let connectedFilterTitle = app.staticTexts["Connected"]
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM yyyy"
-        let currentMonthYear = formatter.string(from: Date())
-        let currentMonthYearLabel = app.staticTexts[currentMonthYear]
-        let dateInstalledButton = app.buttons["Date Installed"]
-        let datePickers = XCUIApplication().datePickers
-        let datePicker1 = datePickers.firstMatch
-        let datePicker2 = datePickers.element(boundBy: 1)
         let deleteButton = app.buttons["Delete"]
         let discardEditsButton = app.buttons["Discard Edits"]
-        let dismissPopover = app.buttons["PopoverDismissRegion"]
         let doneButton = app.buttons["Done"]
-        let duplicateButton = app.buttons["Duplicate"]
-        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
         let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
         let elementTitle = app.staticTexts["Associations"]
-        let textField = app.textFields["Enter a value"]
         let equalOption = app.buttons["="]
-        let equalStaticText = app.staticTexts["="]
         let filterButton = app.buttons["Filter Candidates"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
-        let greaterThanButton = app.buttons[">"]
-        let greaterThanLabels = app.staticTexts.matching(identifier: ">")
         let isBlankLabel = app.staticTexts["is blank"]
         let isBlankOption = app.buttons["is blank"]
-        let jan2014Label = app.staticTexts["January 2014"]
-        let lessThanButton = app.buttons["<"]
         let lineEndCandidates = app.buttons.matching(identifier: "Line End")
         let lowVoltageSinglePhaseLineEnd = app.buttons["Low Voltage Single Phase Line End"]
-        let municipalButton = app.buttons["Municipal"]
         let objectIDConditionLabel = app.staticTexts["Object ID"]
         let optionAButton = app.buttons["A"]
         let phasesCurrentState = app.buttons["Phases Current State"]
-        let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
         let unsavedChangesAlert = app.alerts["Filters have not been applied"]
         let valueButton = app.buttons["Value"]
         
@@ -2591,10 +2571,64 @@ final class FeatureFormViewTests: XCTestCase {
         doneButton.tap()
         
         XCTAssertEqual(lineEndCandidates.count, 1)
+    }
+    
+    func testCase_13_5() {
+        let app = XCUIApplication()
+        let addConditionButton = app.buttons["Add Condition"]
+        let condition1Options = app.buttons["Condition 1 Options"]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        let currentMonthYear = formatter.string(from: Date())
+        let currentMonthYearLabel = app.staticTexts[currentMonthYear]
+        let dateInstalledButton = app.buttons["Date Installed"]
+        let datePickers = XCUIApplication().datePickers
+        let datePicker1 = datePickers.firstMatch
+        let datePicker2 = datePickers.element(boundBy: 1)
+        let dismissPopover = app.buttons["PopoverDismissRegion"]
+        let doneButton = app.buttons["Done"]
+        let duplicateButton = app.buttons["Duplicate"]
+        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
+        let elementTitle = app.staticTexts["Associations"]
+        let equalStaticText = app.staticTexts["="]
+        let filterButton = app.buttons["Filter Candidates"]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
+        let greaterThanButton = app.buttons[">"]
+        let greaterThanLabels = app.staticTexts.matching(identifier: ">")
+        let jan2014Label = app.staticTexts["January 2014"]
+        let lessThanButton = app.buttons["<"]
+        let municipalButton = app.buttons["Municipal"]
+        let objectIDConditionLabel = app.staticTexts["Object ID"]
+        let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
         
-        backButton.tap()
+#if targetEnvironment(macCatalyst)
+        let addAssociationButton = app.buttons["Add Association"]
+#else
+        let addAssociationButton = app.staticTexts["Add Association"]
+#endif
         
-        backButton.tap()
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        XCTAssertTrue(
+            elementTitle.waitForExistence(timeout: 5),
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            connectedFilterTitle.waitForExistence(timeout: 5),
+            "The filter result \"Connected\" doesn't exist."
+        )
+        
+        connectedFilterTitle.tap()
+        
+        XCTAssertTrue(
+            addAssociationButton.waitForExistence(timeout: 5),
+            "The \"Add Association\" button doesn't exist."
+        )
+        
+        addAssociationButton.tap()
         
         XCTAssertTrue(
             electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
@@ -2632,30 +2666,6 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         objectIDConditionLabel.tap()
-        
-        XCTAssertTrue(
-            assetIDButton.waitForExistence(timeout: 5),
-            "The \"Asset Id\" option doesn't exist."
-        )
-        
-        assetIDButton.tap()
-        
-        textField.tap()
-        
-        textField.typeText("80929")
-        
-        doneButton.tap()
-        
-        XCTAssertEqual(streetLightCandidates.count, 1)
-        
-        filterButton.tap()
-        
-        XCTAssertTrue(
-            assetIDStaticText.waitForExistence(timeout: 5),
-            "The \"Asset Id\" label doesn't exist."
-        )
-        
-        assetIDStaticText.tap()
         
         XCTAssertTrue(
             dateInstalledButton.waitForExistence(timeout: 5),
@@ -2734,6 +2744,110 @@ final class FeatureFormViewTests: XCTestCase {
         
 #warning("This assertion disabled temporarily due to known issue.")
 //        XCTAssertEqual(streetLightCandidates.count, 1)
+    }
+    
+    func testCase_13_6() {
+        let app = XCUIApplication()
+        let addButton = app.buttons["Add"]
+        let addConditionButton = app.buttons["Add Condition"]
+        let attachmentFilterTitle = app.staticTexts["Attachment"]
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        let doneButton = app.buttons["Done"]
+        let electricDistributionDevice2Button = app.buttons["Electric Distribution Device, 2"]
+        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
+        let elementTitle = app.staticTexts["Associations"]
+        let textField = app.textFields["Enter a value"]
+        let filterButton = app.buttons["Filter Candidates"]
+        let formTitle = app.staticTexts["Structure Junction"]
+        let municipalButton = app.buttons["Municipal"]
+        let streetLightButton = app.buttons["Street Light"]
+        let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
+        
+#if targetEnvironment(macCatalyst)
+        let addAssociationButton = app.buttons["Add Association"]
+#else
+        let addAssociationButton = app.staticTexts["Add Association"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        XCTAssertTrue(
+            elementTitle.waitForExistence(timeout: 5),
+            "The element \"Associations\" doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            attachmentFilterTitle.waitForExistence(timeout: 5),
+            "The filter result \"Attachment\" doesn't exist."
+        )
+        
+        attachmentFilterTitle.tap()
+        
+        XCTAssertTrue(
+            addAssociationButton.waitForExistence(timeout: 5),
+            "The \"Add Association\" button doesn't exist."
+        )
+        
+        addAssociationButton.tap()
+        
+        XCTAssertTrue(
+            electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
+            "The \"Electric Distribution Device\" button doesn't exist."
+        )
+        
+        electricDistributionDeviceDataSourceButton.tap()
+        
+        XCTAssertTrue(
+            municipalButton.waitForExistence(timeout: 5),
+            "The \"Municipal\" button doesn't exist."
+        )
+        
+        municipalButton.tap()
+        
+        XCTAssertTrue(streetLightCandidates.count > 3)
+        
+        XCTAssertTrue(
+            filterButton.waitForExistence(timeout: 5),
+            "The filter button doesn't exist."
+        )
+        
+        filterButton.tap()
+        
+        XCTAssertTrue(
+            addConditionButton.waitForExistence(timeout: 5),
+            "The \"Add Condition\" button doesn't exist."
+        )
+        
+        addConditionButton.tap()
+        
+        textField.tap()
+        
+        textField.typeText("449")
+        
+        doneButton.tap()
+        
+        XCTAssertEqual(streetLightCandidates.count, 1)
+        
+        XCTAssertTrue(
+            streetLightButton.waitForExistence(timeout: 5),
+            "The \"Street Light\" button doesn't exist."
+        )
+        
+        streetLightButton.tap()
+        
+        XCTAssertTrue(
+            addButton.waitForExistence(timeout: 5),
+            "The \"Add\" button doesn't exist."
+        )
+        
+        addButton.tap()
+        
+        XCTAssertTrue(
+            electricDistributionDevice2Button.waitForExistence(timeout: 5),
+            "The 2nd association was not added."
+        )
     }
 }
 
