@@ -2556,8 +2556,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         doneButton.tap()
         
-#warning("This assertion disabled temporarily due to known issue.")
-//        XCTAssertEqual(lineEndCandidates.count, 0)
+        XCTAssertEqual(lineEndCandidates.count, 0)
         
         filterButton.tap()
         
