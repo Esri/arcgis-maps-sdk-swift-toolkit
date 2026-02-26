@@ -56,7 +56,7 @@ extension FeatureFormView {
                     )
                 }
                 Section {
-                    ForEach(filteredTypes, id: \.code) { assetType in
+                    ForEach(filteredTypes, id: \.qualifiedID) { assetType in
                         NavigationLink(
                             assetType.name,
                             value: FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(
@@ -84,5 +84,12 @@ extension FeatureFormView {
                 }
             }
         }
+    }
+}
+
+private extension UtilityAssetType {
+    /// An ID for the type composed of its code and group's code, if present.
+    var qualifiedID: String {
+        [code, group?.code].compactMap { "\($0)" }.joined(separator: "-")
     }
 }
