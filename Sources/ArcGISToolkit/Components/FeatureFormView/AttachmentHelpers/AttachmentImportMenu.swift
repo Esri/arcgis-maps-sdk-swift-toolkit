@@ -182,7 +182,7 @@ struct AttachmentImportMenu: View {
                     data: data
                 )
             }
-
+            
             guard let newAttachment else {
                 importState = .errored(.creationFailed)
                 return
