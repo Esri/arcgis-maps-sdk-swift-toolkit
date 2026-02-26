@@ -174,7 +174,6 @@ struct AttachmentImportMenu: View {
                     contentType: newAttachmentImportData.contentType,
                     fileURL: url
                 )
-
             } else if let data = newAttachmentImportData.data {
                 newAttachment = element.addAttachment(
                     name: fileName,
