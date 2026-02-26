@@ -151,6 +151,7 @@ class FieldFilter {
         didSet {
             guard field.type == .date || field.type == .dateOnly else { return }
             let style = Date.ISO8601FormatStyle(
+                dateTimeSeparator: .space,
                 timeZoneSeparator: .colon,
                 timeZone: .current
             )

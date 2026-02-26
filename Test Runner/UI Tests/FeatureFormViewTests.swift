@@ -2742,8 +2742,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         doneButton.tap()
         
-#warning("This assertion disabled temporarily due to known issue.")
-//        XCTAssertEqual(streetLightCandidates.count, 1)
+        XCTAssertEqual(streetLightCandidates.count, 1)
     }
     
     func testCase_13_6() {
