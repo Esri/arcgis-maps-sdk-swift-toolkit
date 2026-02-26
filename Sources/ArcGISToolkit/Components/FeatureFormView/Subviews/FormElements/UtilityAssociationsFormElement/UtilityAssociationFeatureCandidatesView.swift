@@ -77,44 +77,14 @@ extension FeatureFormView {
                 }
             }
             .onAppear {
-                let featureTable = form.feature.table as? ArcGISFeatureTable
-                let standardFields = featureTable?.fields ?? []
-                
-                func getFieldOverrides(table: ArcGISFeatureTable) -> [Field] {
-                    let subtype = table.featureSubtypes.first { subtype in
-                        subtype.code as? Int == assetType.group?.code
-                    }
-                    return subtype?.fieldOverrides ?? standardFields
-                }
-                
-                let fields: [Field] = switch source.featureFormSource {
-                case let source as FeatureLayer:
-                    if let table = source.featureTable as? ArcGISFeatureTable {
-                        getFieldOverrides(table: table)
-                    } else {
-                        standardFields
-                    }
-                case let source as FeatureTable:
-                    if let table = source as? ArcGISFeatureTable {
-                        getFieldOverrides(table: table)
-                    } else {
-                        standardFields
-                    }
-                case let source as SubtypeSublayer:
-                    source.subtype.fieldOverrides ?? standardFields
-                case let source as SubtypeSubtable:
-                    source.subtype.fieldOverrides ?? standardFields
-                default:
-                    []
-                }
-                
-                filterViewModel.setFields(fields)
+                setFilterableFields()
             }
             .sheet(isPresented: $filterViewModel.filterViewIsPresented) {
                 FilterView(model: filterViewModel) {
                     candidates.removeAll()
                     whereClause = filterViewModel.whereClause()
                 }
+                .interactiveDismissDisabled()
             }
             .task(id: whereClause) {
                 // Only query on whereClause change if the first page query is complete.
@@ -264,13 +234,49 @@ extension FeatureFormView {
             queryTask = Task {
                 do {
                     let result = try await source.queryFeatures(assetType: assetType, parameters: parameters)
-                    candidates.append(contentsOf: result.candidates ?? [])
+                    candidates.append(contentsOf: result.candidates)
                     nextQueryParameters = result.nextQueryParams
                 } catch {
                     nextQueryParameters = nil
                 }
                 queryIsRunning = false
             }
+        }
+        
+        /// Sets the fields that should be filterable with the filter view.
+        func setFilterableFields() {
+            let featureTable = form.feature.table as? ArcGISFeatureTable
+            let standardFields = featureTable?.fields ?? []
+            
+            func fields(from table: ArcGISFeatureTable) -> [Field] {
+                let subtype = table.featureSubtypes.first { subtype in
+                    subtype.code as? Int == assetType.group?.code
+                }
+                return subtype?.fieldOverrides ?? standardFields
+            }
+            
+            let fields: [Field] = switch source.featureFormSource {
+            case let source as FeatureLayer:
+                if let table = source.featureTable as? ArcGISFeatureTable {
+                    fields(from: table)
+                } else {
+                    standardFields
+                }
+            case let source as FeatureTable:
+                if let table = source as? ArcGISFeatureTable {
+                    fields(from: table)
+                } else {
+                    standardFields
+                }
+            case let source as SubtypeSublayer:
+                source.subtype.fieldOverrides
+            case let source as SubtypeSubtable:
+                source.subtype.fieldOverrides
+            default:
+                []
+            }
+            
+            filterViewModel.setFields(fields)
         }
     }
     

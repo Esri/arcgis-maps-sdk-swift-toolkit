@@ -45,8 +45,8 @@ class FilterViewModel {
     /// The list of fields generated from the `featureTable`.
     private(set) var fields = [Field]()
     
-    /// Specifies whether the list of Field Filters has changed since the last invocation
-    /// by comparing whereClauses of the original and new `FieldFilter` lists.
+    /// Specifies whether the list of `FieldFilter` objects has changed since the last invocation
+    /// by comparing the whereClause values of the original and new lists.
     var hasChanges: Bool {
         let originalWhereClause = whereClause(filters: originalFieldFilters)
         let whereClause = whereClause(filters: fieldFilters)
@@ -62,25 +62,19 @@ class FilterViewModel {
         self.fields = supportedUNFields(fields)
     }
     
-    /// The "where" clause assembled from the list of applied `FieldFilter`s.
-    /// - Returns: A SQL query assembled from the list of applied filters. The `fieldFilters` are joined by `AND`.
+    /// The "where" clause assembled from the list of applied `FieldFilter` objects.
+    /// - Returns: A SQL query assembled from the list of applied filters. The `FieldFilter` objects are joined by `AND`.
     func whereClause() -> String {
         whereClause(filters: fieldFilters)
     }
     
-    /// The "where" clause assembled from the list of `FieldFilters`.
-    /// - Parameter filters: The list of `FieldFilter`s used to generate the where clause.
-    /// - Returns: A SQL query assembled from the list of applied filters. The `filters` are joined by `AND`.
+    /// The "where" clause assembled from the list of `FieldFilter` objects.
+    /// - Parameter filters: The list of `FieldFilter` objects used to generate the where clause.
+    /// - Returns: A SQL query assembled from the list of applied filters. The `FieldFilter` objects are joined by `AND`.
     private func whereClause(filters: [FieldFilter]) -> String {
-        var clause = ""
-        for fieldFilter in filters {
-            if let index = filters.firstIndex(of: fieldFilter),
-               index >= 1 {
-                clause.append(" AND ")
-            }
-            clause.append(fieldFilter.query())
-        }
-        return clause
+        guard !filters.isEmpty else { return "" }
+        return filters.map { $0.query() }
+            .joined(separator: " AND ")
     }
     
     /// Initializes a filter view model.
@@ -103,7 +97,7 @@ class FilterViewModel {
     
     /// Returns the `Field` with the given name in the list of fields.
     /// - Parameter fieldName: The name of the desired `Field`.
-    /// - Returns: The `Field` with the given `fieldName`.
+    /// - Returns: The `Field` with the given field name.
     func field(named fieldName: String) -> Field? {
         fields.first { field in
             field.name == fieldName
@@ -228,17 +222,17 @@ class FieldFilter {
     var supportedConditions: [FilterOperator] {
         let type = field.type
         return switch type {
-        case .date, .dateOnly:
-            FilterOperator.numericFilterOperators(field.isNullable)
+        case .date, .dateOnly, .oid:
+            FilterOperator.numericFilterOperators(fieldIsNullable: field.isNullable)
         default:
             if type?.isNumeric ?? true {
                 if field.domain is CodedValueDomain {
-                    FilterOperator.codedValueFilterOperators(field.isNullable)
+                    FilterOperator.codedValueFilterOperators(fieldIsNullable: field.isNullable)
                 } else {
-                    FilterOperator.numericFilterOperators(field.isNullable)
+                    FilterOperator.numericFilterOperators(fieldIsNullable: field.isNullable)
                 }
             } else {
-                FilterOperator.textFilterOperators(field.isNullable)
+                FilterOperator.textFilterOperators(fieldIsNullable: field.isNullable)
             }
         }
     }
@@ -290,7 +284,7 @@ extension FilterViewModel {
     /// `ASSETGROUP` and `ASSETTYPE` fields, as those are special fields for Utility Networks.
     private func supportedUNFields(_ allFields: [Field]) -> [Field] {
         supportedFields(allFields).filter { field in
-            field.name != "assetgroup" && field.name != "assettype"
+            field.name.lowercased() != "assetgroup" && field.name.lowercased() != "assettype"
         }
     }
 }
@@ -317,7 +311,7 @@ enum FilterOperator: String {
     /// Returns a list of appropriate operations for fields with coded value domains.
     /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
     /// are added to the list. If `false`, no additional operators are added.
-    static func codedValueFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
+    static func codedValueFilterOperators(fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .equal,
             .notEqual,
@@ -331,7 +325,7 @@ enum FilterOperator: String {
     /// Returns a list of appropriate operations for text fields.
     /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
     /// are added to the list. If `false`, no additional operators are added.
-    static func textFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
+    static func textFilterOperators(fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .isOp,
             .isNot,
@@ -351,7 +345,7 @@ enum FilterOperator: String {
     /// Returns a list of appropriate operations for numeric fields.
     /// - Parameter fieldIsNullable: Specifies whether the field is nullable; if `true`, `isBlank` and `isNotBlank` operators
     /// are added to the list. If `false`, no additional operators are added.
-    static func numericFilterOperators(_ fieldIsNullable: Bool) -> [FilterOperator] {
+    static func numericFilterOperators(fieldIsNullable: Bool) -> [FilterOperator] {
         var ops: [FilterOperator] = [
             .equal,
             .notEqual,

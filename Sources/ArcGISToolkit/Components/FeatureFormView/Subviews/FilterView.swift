@@ -15,15 +15,15 @@
 import ArcGIS
 import SwiftUI
 
-/// A view allowing the user to assemble a list of `FieldFilters` used to filter a list of features.
+/// A view allowing the user to assemble a list of `FieldFilter` objects used to filter a list of features.
 struct FilterView: View {
     /// The model used by the view.
     @Bindable var model: FilterViewModel
-    /// A Boolean value indicating whether the alert stating there are changes that need to be saved/discarded is presented.
+    /// A Boolean value indicating whether an alert is presented stating that there are changes that need to be saved or discarded. 
     @State private var alertIsPresented = false
     
-    /// The client-specified action to perform when the `Apply` button is tapped. There is no `cancel` action
-    /// as cancelling simply resets the list of `FieldFilters`.
+    /// The client-specified action to perform when the `Apply` button is tapped. There is no `Cancel` action
+    /// as cancelling simply resets the list of `FieldFilter` objects.
     var onApplyAction: (() -> Void)?
     
     var body: some View {
@@ -210,7 +210,7 @@ struct FilterView: View {
     }
 }
 
-/// A button that adds a `FieldFilter` to the current `FieldFilters`.
+/// A button that adds a `FieldFilter` to the current  list of `FieldFilter` objects.
 private struct AddButton: View {
     /// A Boolean value indicating whether to draw the button with a border style.
     let useBorderedStyle: Bool
@@ -410,7 +410,7 @@ extension FieldView {
     var keyboardType: UIKeyboardType {
         guard let fieldType = fieldFilter.field.type else { return .default }
         
-        return if fieldType.isNumeric {
+        return if fieldType.isNumeric || fieldType == .oid {
 #if os(visionOS)
             // On visionOS, the `positiveNegativeButton` is not available.
             // Show the keyboard instead so the user can manually enter a negative number.
