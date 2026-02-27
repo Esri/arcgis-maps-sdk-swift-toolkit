@@ -141,17 +141,19 @@ struct AttachmentImportMenu: View {
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
             
-            let attachmentSize = Measurement(
-                value: Double(newAttachmentImportData.data.count),
-                unit: UnitInformationStorage.bytes
-            )
-            guard attachmentSize <= attachmentUploadSizeLimit else {
-                importState = .errored(.sizeLimitExceeded)
-                return
-            }
-            guard attachmentSize.value > .zero else {
-                importState = .errored(.emptyFilesNotSupported)
-                return
+            if let data = newAttachmentImportData.data {
+                let attachmentSize = Measurement(
+                    value: Double(data.count),
+                    unit: UnitInformationStorage.bytes
+                )
+                guard attachmentSize <= attachmentUploadSizeLimit else {
+                    importState = .errored(.sizeLimitExceeded)
+                    return
+                }
+                guard attachmentSize.value > .zero else {
+                    importState = .errored(.emptyFilesNotSupported)
+                    return
+                }
             }
             
             let fileName: String
@@ -164,11 +166,23 @@ struct AttachmentImportMenu: View {
                     fileName = "Unnamed Attachment"
                 }
             }
-            guard let newAttachment = element.addAttachment(
-                name: fileName,
-                contentType: newAttachmentImportData.contentType,
-                data: newAttachmentImportData.data
-            ) else {
+            
+            var newAttachment: FeatureAttachment? = nil
+            if let url = newAttachmentImportData.filePath {
+                newAttachment = try? await element.addAttachment(
+                    named: fileName,
+                    contentType: newAttachmentImportData.contentType,
+                    fileURL: url
+                )
+            } else if let data = newAttachmentImportData.data {
+                newAttachment = element.addAttachment(
+                    name: fileName,
+                    contentType: newAttachmentImportData.contentType,
+                    data: data
+                )
+            }
+            
+            guard let newAttachment else {
                 importState = .errored(.creationFailed)
                 return
             }
@@ -179,11 +193,10 @@ struct AttachmentImportMenu: View {
             importState = .importing
             switch result {
             case .success(let url):
-                // gain access to the url resource and verify there's data.
+                // gain access to the url resource.
                 if url.startAccessingSecurityScopedResource(),
-                   let contentType = url.contentType,
-                   let data = FileManager.default.contents(atPath: url.path) {
-                    importState = .finalizing(AttachmentImportData(contentType: contentType, data: data, fileName: url.lastPathComponent))
+                   let contentType = url.contentType {
+                    importState = .finalizing(AttachmentImportData(contentType: contentType, fileName: url.lastPathComponent, filePath: url))
                 } else {
                     importState = .errored(.dataInaccessible)
                 }
