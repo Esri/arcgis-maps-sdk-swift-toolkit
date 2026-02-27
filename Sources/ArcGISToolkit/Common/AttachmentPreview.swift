@@ -124,8 +124,8 @@ struct AttachmentPreview: View {
         ) {
             TextField(String.newName, text: $newAttachmentName)
                 .autocorrectionDisabled()
-            Button("Cancel", role: .cancel) { }
-            Button("OK") {
+            Button.cancel {}
+            Button.ok {
                 Task {
                     if let renamedAttachmentModel {
                         let currentName = renamedAttachmentModel.name
