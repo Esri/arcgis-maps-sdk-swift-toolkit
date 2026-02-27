@@ -2332,8 +2332,6 @@ final class FeatureFormViewTests: XCTestCase {
         let condition1Options = app.buttons["Condition 1 Options"]
         let conditionEqualsButton = app.buttons["Condition, ="]
         let connectedFilterTitle = app.staticTexts["Connected"]
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
         let deleteButton = app.buttons["Delete"]
         let discardEditsButton = app.buttons["Discard Edits"]
         let doneButton = app.buttons["Done"]
@@ -2750,8 +2748,6 @@ final class FeatureFormViewTests: XCTestCase {
         let addButton = app.buttons["Add"]
         let addConditionButton = app.buttons["Add Condition"]
         let attachmentFilterTitle = app.staticTexts["Attachment"]
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
         let doneButton = app.buttons["Done"]
         let electricDistributionDevice2Button = app.buttons["Electric Distribution Device, 2"]
         let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
