@@ -56,7 +56,7 @@ extension FeatureFormView {
                     )
                 }
                 Section {
-                    ForEach(filteredTypes, id: \.qualifiedID) { assetType in
+                    ForEach(filteredTypes, id: \.compositeID) { assetType in
                         NavigationLink(
                             assetType.name,
                             value: FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(
@@ -89,7 +89,12 @@ extension FeatureFormView {
 
 private extension UtilityAssetType {
     /// An ID for the type composed of its code and group's code, if present.
-    var qualifiedID: String {
-        [code, group?.code].compactMap { "\($0)" }.joined(separator: "-")
+    var compositeID: Int {
+        var hasher = Hasher()
+        hasher.combine(code)
+        if let groupCode = group?.code {
+            hasher.combine(groupCode)
+        }
+        return hasher.finalize()
     }
 }
