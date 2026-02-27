@@ -108,10 +108,8 @@ struct AttachmentPreview: View {
                                 }
                             }
                         }
-                        Button(role: .destructive) {
+                        Button.delete {
                             deletedAttachmentModel = attachmentModel
-                        } label: {
-                            Label("Delete", systemImage: "trash")
                         }
                     }
                 }

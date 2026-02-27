@@ -159,19 +159,9 @@ struct FilterView: View {
     /// - Parameter filter: The `FieldFilter` to delete.
     /// - Returns: The delete `Button`.
     private func deleteButton(_ filter: FieldFilter) -> Button<some View> {
-        Button(role: .destructive) {
+        Button.delete {
             if let index = model.fieldFilters.firstIndex(of: filter) {
                 model.fieldFilters.remove(at: index)
-            }
-        } label: {
-            Label {
-                Text(
-                    "Delete",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to delete a field filter."
-                )
-            } icon: {
-                Image(systemName: "trash")
             }
         }
     }

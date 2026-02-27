@@ -246,8 +246,7 @@ A label for a button used to continue the authentication operation. */
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
 "Date must be on or before %@" = "Date must be on or before %@";
 
-/* A label for a button to delete a field filter.
-A label for a button used to delete a utility network trace input component or result. */
+/* A label for a "Delete" button. */
 "Delete" = "Delete";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
