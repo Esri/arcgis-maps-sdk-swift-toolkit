@@ -17,7 +17,7 @@ import Foundation
 import SwiftUI
 
 @MainActor @Observable
-class FilterViewModel {
+final class FilterViewModel {
     /// The feature table containing the fields to filter on.
     ///
     /// Use this to auto-populate the filterable fields. Alternatively, use `setFields(_:)` to customize

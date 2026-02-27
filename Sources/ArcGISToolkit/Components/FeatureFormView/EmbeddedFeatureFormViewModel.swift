@@ -18,7 +18,7 @@ import Observation
 private import os
 
 @MainActor @Observable
-class EmbeddedFeatureFormViewModel {
+final class EmbeddedFeatureFormViewModel {
     /// The models for fetching association filter results for each utility associations form element in the form.
     var associationsFilterResultsModels: [UtilityAssociationsFormElement: AssociationsFilterResultsModel] = [:]
     
