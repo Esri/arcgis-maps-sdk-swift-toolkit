@@ -2359,214 +2359,76 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        elementTitle.assertExistence()
         
-        XCTAssertTrue(
-            connectedFilterTitle.waitForExistence(timeout: 5),
-            "The filter result \"Connected\" doesn't exist."
-        )
+        connectedFilterTitle.assertExistenceAndTap()
         
-        connectedFilterTitle.tap()
+        addAssociationButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addAssociationButton.waitForExistence(timeout: 5),
-            "The \"Add Association\" button doesn't exist."
-        )
+        electricDistributionJunctionDataSourceButton.assertExistenceAndTap()
         
-        addAssociationButton.tap()
-        
-        XCTAssertTrue(
-            electricDistributionJunctionDataSourceButton.waitForExistence(timeout: 5),
-            "The \"Electric Distribution Junction\" button doesn't exist."
-        )
-        
-        electricDistributionJunctionDataSourceButton.tap()
-        
-        XCTAssertTrue(
-            lowVoltageSinglePhaseLineEnd.waitForExistence(timeout: 5),
-            "The \"Low Voltage Single Phase Line End\" button doesn't exist."
-        )
-        
-        lowVoltageSinglePhaseLineEnd.tap()
+        lowVoltageSinglePhaseLineEnd.assertExistenceAndTap()
         
         XCTAssertEqual(lineEndCandidates.count, 2)
         
-        XCTAssertTrue(
-            filterButton.waitForExistence(timeout: 5),
-            "The filter button doesn't exist."
-        )
+        filterButton.assertExistenceAndTap()
         
-        filterButton.tap()
+        addConditionButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addConditionButton.waitForExistence(timeout: 5),
-            "The \"Add Condition\" button doesn't exist."
-        )
+        cancelButton.assertExistenceAndTap()
         
-        addConditionButton.tap()
-        
-        XCTAssertTrue(
-            cancelButton.waitForExistence(timeout: 5),
-            "The \"Cancel\" button doesn't exist."
-        )
-        
-        cancelButton.tap()
-        
-        XCTAssertTrue(
-            unsavedChangesAlert.waitForExistence(timeout: 5),
-            "The \"Filters have not been applied\" alert doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            cancelButton.waitForExistence(timeout: 5),
-            "The \"Cancel\" button doesn't exist."
-        )
+        unsavedChangesAlert.assertExistence()
         
         // Dismiss the alert
-        cancelButton.firstMatch.tap()
+        cancelButton.firstMatch.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            unsavedChangesAlert.waitForNonExistence(timeout: 5),
-            "The \"Filters have not been applied\" alert failed to dismiss."
-        )
+        unsavedChangesAlert.assertNonExistence()
         
-        XCTAssertTrue(
-            cancelButton.waitForExistence(timeout: 5),
-            "The \"Cancel\" button doesn't exist."
-        )
+        cancelButton.assertExistenceAndTap()
         
-        cancelButton.tap()
+        unsavedChangesAlert.assertExistence()
         
-        XCTAssertTrue(
-            unsavedChangesAlert.waitForExistence(timeout: 5),
-            "The \"Filters have not been applied\" alert doesn't exist."
-        )
+        discardEditsButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            discardEditsButton.waitForExistence(timeout: 5),
-            "The \"Discard Edits\" button doesn't exist."
-        )
-        
-        discardEditsButton.tap()
-        
-        XCTAssertTrue(
-            unsavedChangesAlert.waitForNonExistence(timeout: 5),
-            "The \"Filters have not been applied\" alert failed to dismiss."
-        )
+        unsavedChangesAlert.assertNonExistence()
         
         XCTAssertEqual(lineEndCandidates.count, 2)
         
-        XCTAssertTrue(
-            filterButton.waitForExistence(timeout: 5),
-            "The filter button doesn't exist."
-        )
+        filterButton.assertExistenceAndTap()
         
-        filterButton.tap()
+        addConditionButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addConditionButton.waitForExistence(timeout: 5),
-            "The \"Add Condition\" button doesn't exist."
-        )
+        objectIDConditionLabel.assertExistence()
         
-        addConditionButton.tap()
+        condition1Options.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            objectIDConditionLabel.waitForExistence(timeout: 5),
-            "The \"Object ID\" condition doesn't exist."
-        )
+        deleteButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            condition1Options.waitForExistence(timeout: 5),
-            "The \"Condition 1 Options\" menu doesn't exist."
-        )
+        addConditionButton.assertExistenceAndTap()
         
-        condition1Options.tap()
+        objectIDConditionLabel.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            deleteButton.waitForExistence(timeout: 5),
-            "The \"Delete\" button doesn't exist."
-        )
+        phasesCurrentState.assertExistenceAndTap()
         
-        deleteButton.tap()
+        conditionEqualsButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addConditionButton.waitForExistence(timeout: 5),
-            "The \"Add Condition\" button doesn't exist."
-        )
+        isBlankOption.assertExistenceAndTap()
         
-        addConditionButton.tap()
-        
-        XCTAssertTrue(
-            objectIDConditionLabel.waitForExistence(timeout: 5),
-            "The \"Object ID\" condition doesn't exist."
-        )
-        
-        objectIDConditionLabel.tap()
-        
-        XCTAssertTrue(
-            phasesCurrentState.waitForExistence(timeout: 5),
-            "The \"Phases Current State\" option doesn't exist."
-        )
-        
-        phasesCurrentState.tap()
-        
-        XCTAssertTrue(
-            conditionEqualsButton.waitForExistence(timeout: 5),
-            "The \"Condition Equals\" option doesn't exist."
-        )
-        
-        conditionEqualsButton.tap()
-        
-        XCTAssertTrue(
-            isBlankOption.waitForExistence(timeout: 5),
-            "The \"is blank\" option doesn't exist."
-        )
-        
-        isBlankOption.tap()
-        
-        XCTAssertTrue(
-            doneButton.waitForExistence(timeout: 5),
-            "The \"Done\" button doesn't exist."
-        )
-        
-        doneButton.tap()
+        doneButton.assertExistenceAndTap()
         
         XCTAssertEqual(lineEndCandidates.count, 0)
         
-        filterButton.tap()
+        filterButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            isBlankLabel.waitForExistence(timeout: 5),
-            "The \"is blank\" label doesn't exist."
-        )
+        isBlankLabel.assertExistenceAndTap()
         
-        isBlankLabel.tap()
+        equalOption.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            equalOption.waitForExistence(timeout: 5),
-            "The \"equal\" option doesn't exist."
-        )
+        valueButton.assertExistenceAndTap()
         
-        equalOption.tap()
+        optionAButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            valueButton.waitForExistence(timeout: 5),
-            "The \"Value\" button doesn't exist."
-        )
-        
-        valueButton.tap()
-        
-        XCTAssertTrue(
-            optionAButton.waitForExistence(timeout: 5),
-            "The \"A\" option doesn't exist."
-        )
-        
-        optionAButton.tap()
-        
-        doneButton.tap()
+        doneButton.assertExistenceAndTap()
         
         XCTAssertEqual(lineEndCandidates.count, 1)
     }
@@ -2607,136 +2469,58 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        elementTitle.assertExistence()
         
-        XCTAssertTrue(
-            connectedFilterTitle.waitForExistence(timeout: 5),
-            "The filter result \"Connected\" doesn't exist."
-        )
+        connectedFilterTitle.assertExistenceAndTap()
         
-        connectedFilterTitle.tap()
+        addAssociationButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addAssociationButton.waitForExistence(timeout: 5),
-            "The \"Add Association\" button doesn't exist."
-        )
+        electricDistributionDeviceDataSourceButton.assertExistenceAndTap()
         
-        addAssociationButton.tap()
-        
-        XCTAssertTrue(
-            electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
-            "The \"Electric Distribution Device\" button doesn't exist."
-        )
-        
-        electricDistributionDeviceDataSourceButton.tap()
-        
-        XCTAssertTrue(
-            municipalButton.waitForExistence(timeout: 5),
-            "The \"Municipal\" button doesn't exist."
-        )
-        
-        municipalButton.tap()
+        municipalButton.assertExistenceAndTap()
         
         XCTAssertTrue(streetLightCandidates.count > 3)
         
-        XCTAssertTrue(
-            filterButton.waitForExistence(timeout: 5),
-            "The filter button doesn't exist."
-        )
+        filterButton.assertExistenceAndTap()
         
-        filterButton.tap()
+        addConditionButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addConditionButton.waitForExistence(timeout: 5),
-            "The \"Add Condition\" button doesn't exist."
-        )
+        objectIDConditionLabel.assertExistenceAndTap()
         
-        addConditionButton.tap()
+        dateInstalledButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            objectIDConditionLabel.waitForExistence(timeout: 5),
-            "The \"Object ID\" condition doesn't exist."
-        )
+        equalStaticText.assertExistenceAndTap()
         
-        objectIDConditionLabel.tap()
+        greaterThanButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            dateInstalledButton.waitForExistence(timeout: 5),
-            "The \"Date Installed\" option doesn't exist."
-        )
+        datePicker1.assertExistenceAndTap()
         
-        dateInstalledButton.tap()
-        
-        XCTAssertTrue(
-            equalStaticText.waitForExistence(timeout: 5),
-            "The \"=\" label doesn't exist."
-        )
-        
-        equalStaticText.tap()
-        
-        XCTAssertTrue(
-            greaterThanButton.waitForExistence(timeout: 5),
-            "The \">\" option doesn't exist."
-        )
-        
-        greaterThanButton.tap()
-        
-        XCTAssertTrue(
-            datePicker1.waitForExistence(timeout: 5),
-            "The date picker for condition 1 doesn't exist."
-        )
-        
-        datePicker1.tap()
-        
-        currentMonthYearLabel.tap()
+        currentMonthYearLabel.assertExistenceAndTap()
         
         datePicker1.pickerWheels.element(boundBy: 0).adjust(toPickerWheelValue: "January")
         
         datePicker1.pickerWheels.element(boundBy: 1).adjust(toPickerWheelValue: "2014")
         
-        dismissPopover.firstMatch.tap()
+        dismissPopover.firstMatch.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            condition1Options.waitForExistence(timeout: 5),
-            "The \"Condition 1 Options\" menu doesn't exist."
-        )
+        condition1Options.assertExistenceAndTap()
         
-        condition1Options.tap()
+        duplicateButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            duplicateButton.waitForExistence(timeout: 5),
-            "The \"Duplicate\" button doesn't exist."
-        )
+        greaterThanLabels.element(boundBy: 1).assertExistenceAndTap()
         
-        duplicateButton.tap()
+        lessThanButton.assertExistenceAndTap()
         
-        greaterThanLabels.element(boundBy: 1).tap()
+        datePicker2.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            lessThanButton.waitForExistence(timeout: 5),
-            "The \"<\" option doesn't exist."
-        )
-        
-        lessThanButton.tap()
-        
-        XCTAssertTrue(
-            datePicker2.waitForExistence(timeout: 5),
-            "The date picker for condition 2 doesn't exist."
-        )
-        
-        datePicker2.tap()
-        
-        jan2014Label.tap()
+        jan2014Label.assertExistenceAndTap()
         
         datePicker2.pickerWheels.element(boundBy: 0).adjust(toPickerWheelValue: "March")
         datePicker2.pickerWheels.element(boundBy: 1).adjust(toPickerWheelValue: "2014")
         
-        dismissPopover.firstMatch.tap()
+        dismissPopover.firstMatch.assertExistenceAndTap()
         
-        doneButton.tap()
+        doneButton.assertExistenceAndTap()
         
         XCTAssertEqual(streetLightCandidates.count, 1)
     }
@@ -2766,81 +2550,35 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        elementTitle.assertExistence()
         
-        XCTAssertTrue(
-            attachmentFilterTitle.waitForExistence(timeout: 5),
-            "The filter result \"Attachment\" doesn't exist."
-        )
+        attachmentFilterTitle.assertExistenceAndTap()
         
-        attachmentFilterTitle.tap()
+        addAssociationButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addAssociationButton.waitForExistence(timeout: 5),
-            "The \"Add Association\" button doesn't exist."
-        )
+        electricDistributionDeviceDataSourceButton.assertExistenceAndTap()
         
-        addAssociationButton.tap()
-        
-        XCTAssertTrue(
-            electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
-            "The \"Electric Distribution Device\" button doesn't exist."
-        )
-        
-        electricDistributionDeviceDataSourceButton.tap()
-        
-        XCTAssertTrue(
-            municipalButton.waitForExistence(timeout: 5),
-            "The \"Municipal\" button doesn't exist."
-        )
-        
-        municipalButton.tap()
+        municipalButton.assertExistenceAndTap()
         
         XCTAssertTrue(streetLightCandidates.count > 3)
         
-        XCTAssertTrue(
-            filterButton.waitForExistence(timeout: 5),
-            "The filter button doesn't exist."
-        )
+        filterButton.assertExistenceAndTap()
         
-        filterButton.tap()
+        addConditionButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addConditionButton.waitForExistence(timeout: 5),
-            "The \"Add Condition\" button doesn't exist."
-        )
-        
-        addConditionButton.tap()
-        
-        textField.tap()
+        textField.assertExistenceAndTap()
         
         textField.typeText("449")
         
-        doneButton.tap()
+        doneButton.assertExistenceAndTap()
         
         XCTAssertEqual(streetLightCandidates.count, 1)
         
-        XCTAssertTrue(
-            streetLightButton.waitForExistence(timeout: 5),
-            "The \"Street Light\" button doesn't exist."
-        )
+        streetLightButton.assertExistenceAndTap()
         
-        streetLightButton.tap()
+        addButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addButton.waitForExistence(timeout: 5),
-            "The \"Add\" button doesn't exist."
-        )
-        
-        addButton.tap()
-        
-        XCTAssertTrue(
-            electricDistributionDevice2Button.waitForExistence(timeout: 5),
-            "The 2nd association was not added."
-        )
+        electricDistributionDevice2Button.assertExistence()
     }
 }
 
