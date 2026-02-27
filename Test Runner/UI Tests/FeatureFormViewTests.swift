@@ -2576,9 +2576,7 @@ final class FeatureFormViewTests: XCTestCase {
         let addConditionButton = app.buttons["Add Condition"]
         let condition1Options = app.buttons["Condition 1 Options"]
         let connectedFilterTitle = app.staticTexts["Connected"]
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        let currentMonthYear = formatter.string(from: Date())
+        let currentMonthYear = Date.now.formatted(.dateTime.month(.wide).year())
         let currentMonthYearLabel = app.staticTexts[currentMonthYear]
         let dateInstalledButton = app.buttons["Date Installed"]
         let datePickers = XCUIApplication().datePickers
