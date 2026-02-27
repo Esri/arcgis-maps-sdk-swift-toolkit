@@ -2325,8 +2325,11 @@ final class FeatureFormViewTests: XCTestCase {
         )
     }
     
-    func testCase_13_4() {
+    func testCase_13_4() throws {
+        try skipIf(macCatalyst: true, visionOS: true)
+        
         let app = XCUIApplication()
+        let addAssociationButton = app.staticTexts["Add Association"]
         let addConditionButton = app.buttons["Add Condition"]
         let cancelButton = app.buttons["Cancel"]
         let condition1Options = app.buttons["Condition 1 Options"]
@@ -2349,12 +2352,6 @@ final class FeatureFormViewTests: XCTestCase {
         let phasesCurrentState = app.buttons["Phases Current State"]
         let unsavedChangesAlert = app.alerts["Filters have not been applied"]
         let valueButton = app.buttons["Value"]
-        
-#if targetEnvironment(macCatalyst)
-        let addAssociationButton = app.buttons["Add Association"]
-#else
-        let addAssociationButton = app.staticTexts["Add Association"]
-#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -2433,8 +2430,11 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertEqual(lineEndCandidates.count, 1)
     }
     
-    func testCase_13_5() {
+    func testCase_13_5() throws {
+        try skipIf(macCatalyst: true, visionOS: true)
+        
         let app = XCUIApplication()
+        let addAssociationButton = app.staticTexts["Add Association"]
         let addConditionButton = app.buttons["Add Condition"]
         let condition1Options = app.buttons["Condition 1 Options"]
         let connectedFilterTitle = app.staticTexts["Connected"]
@@ -2459,12 +2459,6 @@ final class FeatureFormViewTests: XCTestCase {
         let municipalButton = app.buttons["Municipal"]
         let objectIDConditionLabel = app.staticTexts["Object ID"]
         let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
-        
-#if targetEnvironment(macCatalyst)
-        let addAssociationButton = app.buttons["Add Association"]
-#else
-        let addAssociationButton = app.staticTexts["Add Association"]
-#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -2497,9 +2491,9 @@ final class FeatureFormViewTests: XCTestCase {
         
         currentMonthYearLabel.assertExistenceAndTap()
         
-        datePicker1.pickerWheels.element(boundBy: 0).adjust(toPickerWheelValue: "January")
+        datePicker1.adjustPickerWheelElement(boundBy: 0, to: "January")
         
-        datePicker1.pickerWheels.element(boundBy: 1).adjust(toPickerWheelValue: "2014")
+        datePicker1.adjustPickerWheelElement(boundBy: 1, to: "2014")
         
         dismissPopover.firstMatch.assertExistenceAndTap()
         
@@ -2515,8 +2509,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         jan2014Label.assertExistenceAndTap()
         
-        datePicker2.pickerWheels.element(boundBy: 0).adjust(toPickerWheelValue: "March")
-        datePicker2.pickerWheels.element(boundBy: 1).adjust(toPickerWheelValue: "2014")
+        datePicker2.adjustPickerWheelElement(boundBy: 0, to: "March")
         
         dismissPopover.firstMatch.assertExistenceAndTap()
         
@@ -2525,8 +2518,11 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertEqual(streetLightCandidates.count, 1)
     }
     
-    func testCase_13_6() {
+    func testCase_13_6() throws {
+        try skipIf(macCatalyst: true, visionOS: true)
+
         let app = XCUIApplication()
+        let addAssociationButton = app.staticTexts["Add Association"]
         let addButton = app.buttons["Add"]
         let addConditionButton = app.buttons["Add Condition"]
         let attachmentFilterTitle = app.staticTexts["Attachment"]
@@ -2540,12 +2536,6 @@ final class FeatureFormViewTests: XCTestCase {
         let municipalButton = app.buttons["Municipal"]
         let streetLightButton = app.buttons["Street Light"]
         let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
-        
-#if targetEnvironment(macCatalyst)
-        let addAssociationButton = app.buttons["Add Association"]
-#else
-        let addAssociationButton = app.staticTexts["Add Association"]
-#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)

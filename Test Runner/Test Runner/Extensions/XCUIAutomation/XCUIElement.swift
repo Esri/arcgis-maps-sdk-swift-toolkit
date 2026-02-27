@@ -15,6 +15,17 @@
 import XCTest
 
 extension XCUIElement {
+    /// Manipulates a picker wheel element to change the value, based on a normalized position.
+    /// - Parameters:
+    ///   - index: The element index to use.
+    ///   - value: The targeted value.
+    /// - Note: This method is not supported on visionOS.
+    func adjustPickerWheelElement(boundBy index: Int, to value: String) {
+#if !os(visionOS)
+        pickerWheels.element(boundBy: index).adjust(toPickerWheelValue: value)
+#endif
+    }
+    
     /// Asserts that the element exists after an amount of time.
     /// - Parameters:
     ///   - timeout: The time, in seconds, the test allows for the element to become available. The
