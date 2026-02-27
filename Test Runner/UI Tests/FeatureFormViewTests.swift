@@ -2212,9 +2212,11 @@ final class FeatureFormViewTests: XCTestCase {
 #if targetEnvironment(macCatalyst)
         let addAssociationButton = app.buttons["Add Association"]
         let contentVisibleSwitch = app.checkBoxes["Content Visible"]
+        let fromNetworkDataSourceButton = app.menuItems["From Network Data Source"]
 #else
         let addAssociationButton = app.staticTexts["Add Association"]
         let contentVisibleSwitch = app.switches["Content Visible"].switches.firstMatch
+        let fromNetworkDataSourceButton = app.buttons["From Network Data Source"]
 #endif
         
         openTestCase()
@@ -2227,7 +2229,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(
             containerFilterTitle.waitForExistence(timeout: 5),
-            "The filter result \"Container\" doesn't exist."
+            "The filter result \"Connected\" doesn't exist."
         )
         
         containerFilterTitle.tap()
