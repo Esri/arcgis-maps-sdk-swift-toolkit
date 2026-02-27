@@ -41,7 +41,7 @@ extension XCUIElement {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
-        assertExistence(file: file, line: line)
+        assertExistence(timeout: timeout, file: file, line: line)
         tap()
     }
     
