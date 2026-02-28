@@ -2220,6 +2220,9 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElementsField.tap()
+        app.filterElementsField.typeText("Associations")
+        
         XCTAssertTrue(
             elementTitle.waitForExistence(timeout: 5),
             "The element \"Associations\" doesn't exist."
@@ -2341,6 +2344,11 @@ private extension String {
 }
 
 private extension XCUIApplication {
+    /// The element filter field.
+    var filterElementsField: XCUIElement {
+        searchFields["Filter Elements"]
+    }
+    
     /// The "No value" combo box option.
     var noValueComboBoxOption: XCUIElement {
         buttons["No value Combo Box Option"]
