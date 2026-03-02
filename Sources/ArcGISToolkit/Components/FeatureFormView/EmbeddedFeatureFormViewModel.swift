@@ -22,9 +22,6 @@ final class EmbeddedFeatureFormViewModel {
     /// The models for fetching association filter results for each utility associations form element in the form.
     var associationsFilterResultsModels: [UtilityAssociationsFormElement: AssociationsFilterResultsModel] = [:]
     
-    /// The phrase used to filter which elements are visible when running UI tests.
-    var elementFilterPhrase = ""
-    
     /// The current focused element, if one exists.
     var focusedElement: FormElement? {
         didSet {
@@ -63,11 +60,7 @@ final class EmbeddedFeatureFormViewModel {
            elementVisibility.count == featureForm.elements.count {
             elements.append(attachmentsElement)
         }
-        return elementFilterPhrase.isEmpty
-        ? elements
-        : elements.filter {
-            $0.label.localizedCaseInsensitiveContains(elementFilterPhrase)
-        }
+        return elements
     }
     
     /// A dictionary of each form element and whether or not it is visible.
