@@ -187,6 +187,9 @@ candidate to add as a utility association. */
 /* A label for a control representing a condition and position index used to filter fields in a table. */
 "Condition %lld" = "Condition %lld";
 
+/* A label for button to a open a menu with options for a condition used to filter fields in a table. */
+"Condition %lld Options" = "Condition %lld Options";
+
 /* Confirm the current action and close a sheet or pop-up. */
 "Confirm" = "Confirm";
 
@@ -400,6 +403,9 @@ trace operation. */
 /* A label for a search field to filter utility 
 asset types by name. */
 "Filter asset types by name" = "Filter asset types by name";
+
+/* A label for a button to filter utility association candidates by attributes. */
+"Filter Candidates" = "Filter Candidates";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -979,9 +985,6 @@ without saving. */
 
 /* A label in reference to a credential username. */
 "Username" = "Username";
-
-/* A label for an unknown utility association kind. */
-"utility-association-unknown-label" = "Unknown";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";
