@@ -1696,7 +1696,7 @@ final class FeatureFormViewTests: XCTestCase {
         let contentVisibleSwitch = app.checkBoxes["Content Visible"]
 #else
         let addAssociationButton = app.staticTexts["Add Association"]
-        let contentVisibleSwitch = app.switches["Content Visible"].switches.firstMatch
+        let contentVisibleSwitch = app.switches["Content Visible"]
 #endif
         
         openTestCase()
