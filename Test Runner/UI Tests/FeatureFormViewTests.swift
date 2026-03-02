@@ -57,15 +57,9 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            activityIndicator.waitForNonExistence(timeout: 5.0),
-            "Attachment loading took longer than 5 seconds."
-        )
+        activityIndicator.assertNonExistence()
         
-        XCTAssertTrue(
-            attachmentLabel.exists,
-            "The attachment was not present after loading completed."
-        )
+        attachmentLabel.assertExistence()
         
 #if targetEnvironment(macCatalyst)
         attachmentLabel.rightClick()
@@ -73,32 +67,15 @@ final class FeatureFormViewTests: XCTestCase {
         attachmentLabel.press(forDuration: 1)
 #endif
         
-        XCTAssertTrue(
-            rename.waitForExistence(timeout: 1),
-            "The rename button doesn't exist."
-        )
+        rename.assertExistenceAndTap()
         
-        rename.tap()
+        nameField.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            nameField.waitForExistence(timeout: 1),
-            "The name field doesn't exist."
-        )
-        
-        nameField.tap()
         app.typeText(#function)
         
-        XCTAssertTrue(
-            okButton.exists,
-            "The OK button doesn't exist."
-        )
+        okButton.assertExistenceAndTap()
         
-        okButton.tap()
-        
-        XCTAssertTrue(
-            renamedAttachmentLabel.waitForExistence(timeout: 2),
-            "The attachment was not present after renaming."
-        )
+        renamedAttachmentLabel.assertExistence()
     }
     
     // - MARK: Test case 1: Text Box with no hint, no description, value not required
@@ -115,10 +92,7 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        fieldTitle.assertExistence()
         
 #if !targetEnvironment(macCatalyst)
         XCTAssertFalse(
@@ -135,25 +109,16 @@ final class FeatureFormViewTests: XCTestCase {
         // Give focus to the target text field.
         textField.tap()
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        fieldTitle.assertExistence()
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
             "Maximum 256 characters"
         )
         
-        XCTAssertTrue(
-            characterIndicator.exists,
-            "The character indicator doesn't exist."
-        )
+        characterIndicator.assertExistence()
         
         XCTAssertEqual(
             characterIndicator.label,
@@ -175,39 +140,27 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        textField.tap()
+        textField.assertExistenceAndTap()
         
         app.typeText("Sample text")
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        fieldTitle.assertExistence()
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
             "Maximum 256 characters"
         )
         
-        XCTAssertTrue(
-            characterIndicator.exists,
-            "The character count doesn't exist."
-        )
+        characterIndicator.assertExistence()
         
         XCTAssertEqual(
             characterIndicator.label,
             "11"
         )
         
-        XCTAssertTrue(
-            clearButton.exists,
-            "The clear button doesn't exist."
-        )
+        clearButton.assertExistence()
         
 #if targetEnvironment(macCatalyst)
         app.typeText("\r")
@@ -254,35 +207,23 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.typeText(.loremIpsum257)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The title doesn't exist."
-        )
+        fieldTitle.assertExistence()
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
             "Maximum 256 characters"
         )
         
-        XCTAssertTrue(
-            characterIndicator.exists,
-            "The character count doesn't exist."
-        )
+        characterIndicator.assertExistence()
         
         XCTAssertEqual(
             characterIndicator.label,
             "257"
         )
         
-        XCTAssertTrue(
-            clearButton.exists,
-            "The clear button doesn't exist."
-        )
+        clearButton.assertExistence()
         
 #if targetEnvironment(macCatalyst)
         app.typeText("\r")
@@ -290,25 +231,16 @@ final class FeatureFormViewTests: XCTestCase {
         returnButton.tap()
 #endif
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The title doesn't exist."
-        )
+        fieldTitle.assertExistence()
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
             "Maximum 256 characters"
         )
         
-        XCTAssertFalse(
-            characterIndicator.exists,
-            "The character count exists."
-        )
+        characterIndicator.assertNonExistence()
         
         XCTAssertTrue(
             clearButton.isHittable,
@@ -394,27 +326,18 @@ final class FeatureFormViewTests: XCTestCase {
             "No Value"
         )
         
-        XCTAssertTrue(
-            footer.exists,
-            "The required label doesn't exist."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
             "Date Entry is Required"
         )
         
-        XCTAssertTrue(
-            calendarImage.exists,
-            "The calendar image doesn't exist."
-        )
+        calendarImage.assertExistence()
         
         fieldValue.tap()
         
-        XCTAssertTrue(
-            datePicker.exists,
-            "The date picker doesn't exist."
-        )
+        datePicker.assertExistence()
         
         XCTAssertEqual(
             fieldValue.label,
@@ -468,10 +391,7 @@ final class FeatureFormViewTests: XCTestCase {
             "Enter the launch date and time (July 16, 1969 13:32 UTC)"
         )
         
-        XCTAssertTrue(
-            datePicker.exists,
-            "The date picker doesn't exist."
-        )
+        datePicker.assertExistence()
         
         XCTAssertTrue(
             nowButton.isHittable,
@@ -560,15 +480,9 @@ final class FeatureFormViewTests: XCTestCase {
         
         fieldValue.tap()
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
-        XCTAssertTrue(
-            nowButton.waitForExistence(timeout: 2.5),
-            "The Now button doesn't exist."
-        )
+        nowButton.assertExistence()
         
         XCTAssertTrue(
             nowButton.isHittable,
@@ -620,10 +534,7 @@ final class FeatureFormViewTests: XCTestCase {
         // Swipe up to reveal the entire date picker.
         app.scrollViews.firstMatch.swipeUp()
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
@@ -849,12 +760,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.noValueComboBoxOption.tap()
         
-        XCTAssertTrue(
-            doneButton.exists,
-            "The done button doesn't exist."
-        )
-        
-        doneButton.tap()
+        doneButton.assertExistenceAndTap()
         
         XCTAssertEqual(
             fieldValue.label,
@@ -876,10 +782,7 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        fieldTitle.assertExistence()
         
         XCTAssertEqual(
             fieldValue.label,
@@ -891,31 +794,15 @@ final class FeatureFormViewTests: XCTestCase {
             "The clear button is hittable."
         )
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
         fieldValue.tap()
         
-        XCTAssertFalse(
-            app.noValueComboBoxOption.exists,
-            "The no value button exists but it should not."
-        )
+        app.noValueComboBoxOption.assertNonExistence()
         
-        XCTAssertTrue(
-            oakButton.exists,
-            "The Oak button doesn't exist."
-        )
+        oakButton.assertExistenceAndTap()
         
-        oakButton.tap()
-        
-        XCTAssertTrue(
-            doneButton.exists,
-            "The done button doesn't exist."
-        )
-        
-        doneButton.tap()
+        doneButton.assertExistenceAndTap()
         
         XCTAssertEqual(
             fieldValue.label,
@@ -937,27 +824,18 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        fieldTitle.assertExistence()
         
         XCTAssertEqual(
             fieldValue.label,
             ""
         )
         
-        optionsButton.tap()
+        optionsButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            firstOption.waitForExistence(timeout: 1),
-            "The First option doesn't exist."
-        )
+        firstOption.assertExistence()
         
-        XCTAssertFalse(
-            noValueButton.exists,
-            "No Value exists as an option but it shouldn't."
-        )
+        noValueButton.assertNonExistence()
         
         XCTAssertTrue(
             firstOption.isHittable,
@@ -966,12 +844,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         firstOption.tap()
         
-        XCTAssertTrue(
-            doneButton.exists,
-            "The done button doesn't exist."
-        )
-        
-        doneButton.tap()
+        doneButton.assertExistence()
         
         XCTAssertEqual(
             fieldValue.label,
@@ -991,10 +864,7 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        fieldTitle.assertExistence()
         
         XCTAssertEqual(
             fieldValue.label,
@@ -1003,27 +873,13 @@ final class FeatureFormViewTests: XCTestCase {
         
         fieldValue.tap()
         
-        XCTAssertTrue(
-            unsupportedValueSectionHeader.waitForExistence(timeout: 1),
-            "The Unsupported Value section doesn't exist."
-        )
+        unsupportedValueSectionHeader.assertExistence()
         
-        XCTAssertTrue(
-            unsupportedValue.exists,
-            "The Unsupported Value doesn't exist."
-        )
+        unsupportedValue.assertExistence()
         
-        XCTAssertTrue(
-            app.noValueComboBoxOption.exists,
-            "No Value doesn't exist."
-        )
+        app.noValueComboBoxOption.assertExistenceAndTap()
         
-        app.noValueComboBoxOption.tap()
-        
-        XCTAssertFalse(
-            unsupportedValueSectionHeader.exists,
-            "The Unsupported Value section exists."
-        )
+        unsupportedValueSectionHeader.assertNonExistence()
     }
     
     // - MARK: Test case 4: Radio Buttons input type
@@ -1040,10 +896,7 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        fieldTitle.assertExistence()
         
         XCTAssertEqual(
             radioButtonTextPicker.stringValue,
@@ -1089,10 +942,7 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         // Verify the Radio Button fallback to Combo Box was successful.
-        XCTAssertTrue(
-            field1.exists,
-            "The combo box doesn't exist."
-        )
+        field1.assertExistence()
         
         // Verify the radio buttons are shown even when the no value option is enabled.
         XCTAssertEqual(
@@ -1119,17 +969,14 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title isn't hittable."
-        )
+        fieldTitle.assertExistence()
         
         XCTAssertEqual(
             switchView.label,
             "2"
         )
         
-        switchView.tap()
+        switchView.assertExistenceAndTap()
         
         XCTAssertEqual(
             switchView.label,
@@ -1180,15 +1027,9 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        fieldTitle.assertExistence()
         
-        XCTAssertTrue(
-            fieldValue.exists,
-            "The combo box doesn't exist."
-        )
+        fieldValue.assertExistence()
     }
     
     /// Test case 6.1: Test initially expanded and collapsed
@@ -1211,15 +1052,9 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            expandedGroup.exists,
-            "The first group header doesn't exist."
-        )
+        expandedGroup.assertExistence()
         
-        XCTAssertTrue(
-            expandedGroupDescription.exists,
-            "The expanded group's description doesn't exist."
-        )
+        expandedGroupDescription.assertExistence()
         
         XCTAssertEqual(
             expandedGroupDescription.label,
@@ -1227,21 +1062,12 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         // Confirm the first element of the expanded group exists.
-        XCTAssertTrue(
-            expandedGroupFirstElement.exists,
-            "The first group element doesn't exist."
-        )
+        expandedGroupFirstElement.assertExistence()
         
-        XCTAssertTrue(
-            collapsedGroup.exists,
-            "The collapsed group header doesn't exist."
-        )
+        collapsedGroup.assertExistence()
         
         // Confirm the first element of the collapsed group doesn't exist.
-        XCTAssertFalse(
-            collapsedGroupFirstElement.exists,
-            "The first group element exists but should be hidden."
-        )
+        collapsedGroupFirstElement.assertNonExistence()
     }
     
     /// Test case 6.2: Test visibility of empty group
@@ -1264,15 +1090,9 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            hiddenElementsGroup.exists,
-            "The group header doesn't exist."
-        )
+        hiddenElementsGroup.assertExistence()
         
-        XCTAssertTrue(
-            hiddenElementsGroupDescription.exists,
-            "The expanded group's description doesn't exist."
-        )
+        hiddenElementsGroupDescription.assertExistence()
         
         XCTAssertEqual(
             hiddenElementsGroupDescription.label,
@@ -1280,16 +1100,10 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         // Confirm the first element of the conditional group doesn't exist.
-        XCTAssertFalse(
-            groupElement.exists,
-            "The first group element exists but should be hidden."
-        )
+        groupElement.assertNonExistence()
         
         // Confirm the option to show the elements exists.
-        XCTAssertTrue(
-            radioButtonPicker.exists,
-            "The Radio Button picker doesn't exist."
-        )
+        radioButtonPicker.assertExistence()
         
 #if !os(visionOS)
         radioButtonPicker.adjust(toPickerWheelValue: "Everything is working great")
@@ -1300,10 +1114,7 @@ final class FeatureFormViewTests: XCTestCase {
 #endif
         
         // Confirm the first element of the conditional group exists.
-        XCTAssertTrue(
-            groupElement.waitForExistence(timeout: 5),
-            "The first group element doesn't exist."
-        )
+        groupElement.assertExistence()
     }
     
     /// Test case 7.1: Test read only elements
@@ -1332,33 +1143,31 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(elementInTheGroupIsEditableReadOnlyInput.exists)
+        elementInTheGroupIsEditableReadOnlyInput.assertExistence()
         
-        XCTAssertTrue(comboBoxReadOnlyInput.exists)
+        comboBoxReadOnlyInput.assertExistence()
         
-        XCTAssertTrue(radioButtonsReadOnlyInput.exists)
+        radioButtonsReadOnlyInput.assertExistence()
         
-        XCTAssertTrue(dateReadOnlyInput.exists)
+        dateReadOnlyInput.assertExistence()
         
-        XCTAssertTrue(shortTextReadOnlyInput.exists)
+        shortTextReadOnlyInput.assertExistence()
         
-        XCTAssertTrue(longTextReadOnlyInput.exists)
+        longTextReadOnlyInput.assertExistence()
         
-        elementsAreEditableSwitch.tap()
+        elementsAreEditableSwitch.assertExistenceAndTap()
         
-        XCTAssertTrue(elementInTheGroupIsEditableSwitch.exists)
+        elementInTheGroupIsEditableSwitch.assertExistenceAndTap()
         
-        elementInTheGroupIsEditableSwitch.tap()
-        
-        XCTAssertTrue(comboBox.exists)
+        comboBox.assertExistence()
         
         XCTAssertEqual(radioButtonsPicker.stringValue, "0")
         
-        XCTAssertTrue(dateInput.exists)
+        dateInput.assertExistence()
         
-        XCTAssertTrue(shortTextTextInput.exists)
+        shortTextTextInput.assertExistence()
         
-        XCTAssertTrue(longTextTextInputPreview.exists)
+        longTextTextInputPreview.assertExistence()
     }
     
     func testCase_8_1() {
@@ -1374,17 +1183,17 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
-        XCTAssertTrue(placeholderImage.exists)
-        XCTAssertTrue(attachmentName.exists)
-        XCTAssertTrue(sizeLabel.exists)
-        XCTAssertTrue(downloadIcon.exists)
+        attachmentElementTitle.assertExistence()
+        placeholderImage.assertExistence()
+        attachmentName.assertExistence()
+        sizeLabel.assertExistence()
+        downloadIcon.assertExistence()
         
-        placeholderImage.tap()
+        placeholderImage.assertExistenceAndTap()
         
-        XCTAssertTrue(thumbnailImage.waitForExistence(timeout: 10))
-        XCTAssertFalse(placeholderImage.exists)
-        XCTAssertFalse(downloadIcon.exists)
+        thumbnailImage.assertExistence()
+        placeholderImage.assertNonExistence()
+        downloadIcon.assertNonExistence()
     }
     
     /// Test substitution
@@ -1399,24 +1208,21 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            titleTextField.waitForExistence(timeout: 10),
-            "The text field wasn't found after 10 seconds."
-        )
+        titleTextField.assertExistence()
         
         XCTAssertEqual(
             titleTextField.value as? String,
             "Redlands"
         )
         
-        XCTAssertTrue(redlandsText.exists)
+        redlandsText.assertExistence()
         
-        titleClearButton.tap()
-        titleTextField.tap()
+        titleClearButton.assertExistenceAndTap()
+        titleTextField.assertExistenceAndTap()
         
         titleTextField.typeText("Los Angeles")
         
-        XCTAssertTrue(losAngelesText.exists)
+        losAngelesText.assertExistence()
     }
     
     /// Test plain text
@@ -1428,7 +1234,7 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(plainText.exists)
+        plainText.assertExistence()
     }
     
     /// Test case 11.1: Barcode Scan and Clear buttons
@@ -1444,15 +1250,15 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
 #if !os(visionOS)
-        XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+        scanButton.assertExistence()
 #endif
-        XCTAssertFalse(clearButton.exists, "The clear button exists.")
+        clearButton.assertNonExistence()
         
-        fieldValue.tap()
+        fieldValue.assertExistenceAndTap()
         fieldValue.typeText("https://esri.com/this_is_a_string_longer_than_50_count_on_it")
         
 #if !os(visionOS)
-        XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+        scanButton.assertExistence()
 #endif
         XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
     }
@@ -1475,59 +1281,30 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        elementTitle.assertExistence()
         
-        XCTAssertTrue(
-            filterResults1.waitForExistence(timeout: 5),
-            "The filter result \"Connected\" doesn't exist."
-        )
+        filterResults1.assertExistence()
         
-        XCTAssertTrue(
-            filterResults2.exists,
-            "The filter result \"Structure\" doesn't exist."
-        )
+        filterResults2.assertExistence()
         
-        XCTAssertTrue(
-            filterResults3.exists,
-            "The filter result \"Container\" doesn't exist."
-        )
+        filterResults3.assertExistence()
         
         filterResults1.tap()
         
-        XCTAssertTrue(
-            networkSourceGroup1.exists,
-            "The network source group \"Electric Distribution Junction\" doesn't exist."
-        )
+        networkSourceGroup1.assertExistence()
         
-        XCTAssertTrue(
-            networkSourceGroup2Button.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
+        networkSourceGroup2Button.assertExistenceAndTap()
         
-        networkSourceGroup2Button.tap()
+        utilityElement1Button.assertExistence()
         
-        XCTAssertTrue(
-            utilityElement1Button.waitForExistence(timeout: 30),
-            "Feature \"Fuse\" failed to appear after 30 seconds."
-        )
-        
-        XCTAssertTrue(
-            utilityElement2Button.exists,
-            "The utility element \"Fuse\" doesn't exist."
-        )
+        utilityElement2Button.assertExistence()
         
         utilityElement1Button.tap()
         
         // Open new form
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            assetGroup.exists,
-            "The asset group \"Asset group\" doesn't exist."
-        )
+        assetGroup.assertExistence()
         
         XCTAssertEqual(
             fieldValue.label,
@@ -1550,30 +1327,14 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        elementTitle.assertExistence()
         
-        XCTAssertTrue(
-            filterResults.waitForExistence(timeout: 5),
-            "The filter result \"Content\" doesn't exist."
-        )
+        filterResults.assertExistenceAndTap()
         
-        filterResults.tap()
-        
-        XCTAssertTrue(
-            networkSourceGroupButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
-        
-        networkSourceGroupButton.tap()
+        networkSourceGroupButton.assertExistenceAndTap()
         
         // Expectation: a list of one utility elements with "Content"
-        XCTAssertTrue(
-            utilityElementButton.exists,
-            "The utility element \"Circuit Breaker\" doesn't exist."
-        )
+        utilityElementButton.assertExistence()
     }
     
     func testCase_12_4() {
@@ -1587,30 +1348,14 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        elementTitle.assertExistence()
         
-        XCTAssertTrue(
-            filterResults.waitForExistence(timeout: 5),
-            "The filter result \"Container\" doesn't exist."
-        )
+        filterResults.assertExistenceAndTap()
         
-        filterResults.tap()
-        
-        XCTAssertTrue(
-            networkSourceGroup.waitForExistence(timeout: 5),
-            "The network source group \"Structure Boundary\" doesn't exist."
-        )
-        
-        networkSourceGroup.tap()
+        networkSourceGroup.assertExistenceAndTap()
         
         // Expectation: a list of one utility elements with no "Containment Visible" label
-        XCTAssertTrue(
-            utilityElementButton.exists,
-            "The utility element \"Substation\" doesn't exist."
-        )
+        utilityElementButton.assertExistence()
     }
     
     func testCase_12_5() {
@@ -1631,38 +1376,17 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        elementTitle.assertExistence()
         
-        XCTAssertTrue(
-            filterResults.waitForExistence(timeout: 5),
-            "The filter result \"Connected\" doesn't exist."
-        )
+        filterResults.assertExistenceAndTap()
         
-        filterResults.tap()
+        networkSourceGroupButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            networkSourceGroupButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
-        
-        networkSourceGroupButton.tap()
-        
-        XCTAssertTrue(
-            utilityElementButton.waitForExistence(timeout: 5),
-            "The utility element \"Transformer\" doesn't exist."
-        )
-        
-        utilityElementButton.tap()
+        utilityElementButton.assertExistenceAndTap()
         
         assertFormOpened(titleElement: formTitle2)
         
-        XCTAssertTrue(
-            assetType.exists,
-            "The field form element \"Asset type *\"doesn't exist."
-        )
+        assetType.assertExistence()
         
         fieldValue.tap()
         
@@ -1684,21 +1408,12 @@ final class FeatureFormViewTests: XCTestCase {
         backButton.tap()
         
         // Expectation: an alert appears with "Discard Edits", "Save Edits", and "Continue Editing" options
-        XCTAssertTrue(
-            discardEditsButton.exists,
-            "The alert \"Discard Edits\" doesn't exist."
-        )
-        
-        // Tap the "Discard" option. Note that some platforms may use "Discard Edits".
-        discardEditsButton.tap()
+        discardEditsButton.assertExistenceAndTap()
         
         // Access the new `FeatureForm`
         // Expectation: the form title should be "Electric Distribution Junction"
         // Expectation: a list of one utility elements entitled "Transformer - 2552"
-        XCTAssertTrue(
-            utilityElementButton.waitForExistence(timeout: 5),
-            "The utility element \"Transformer - 2552\" doesn't exist."
-        )
+        utilityElementButton.assertExistence()
     }
     
     func testCase_12_6() {
@@ -1724,85 +1439,34 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: electricDistributionDevice)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        elementTitle.assertExistence()
         
-        XCTAssertTrue(
-            connectedFilterTitle.waitForExistence(timeout: 5),
-            "The filter result \"Connected\" doesn't exist."
-        )
+        connectedFilterTitle.assertExistenceAndTap()
         
-        connectedFilterTitle.tap()
+        networkSourceGroupButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            networkSourceGroupButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
+        transformerButton.assertExistence()
         
-        networkSourceGroupButton.tap()
+        moreOptionsButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            transformerButton.waitForExistence(timeout: 5),
-            "The \"Transformer\" association doesn't exist."
-        )
+        removeAssociationButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            moreOptionsButton.waitForExistence(timeout: 5),
-            "The association settings button doesn't exist."
-        )
-        
-        moreOptionsButton.tap()
-        
-        XCTAssertTrue(
-            removeAssociationButton.waitForExistence(timeout: 5),
-            "The remove association button doesn't exist."
-        )
-        
-        removeAssociationButton.tap()
-        
-        XCTAssertTrue(
-            cancelButton.waitForExistence(timeout: 5),
-            "The cancel button doesn't exist."
-        )
-        
-        cancelButton.tap()
+        cancelButton.assertExistenceAndTap()
         
         moreOptionsButton.tap()
         
         removeAssociationButton.tap()
         
-        XCTAssertTrue(
-            removeButton.waitForExistence(timeout: 5),
-            "The remove button doesn't exist."
-        )
+        removeButton.assertExistenceAndTap()
         
-        removeButton.tap()
+        // Expectation: Navigation returns to the "Connected" filter results page.
+        connectedFilterTitle.assertExistence()
         
-        XCTAssertTrue(
-            connectedFilterTitle.waitForExistence(timeout: 5),
-            #"Navigation did not return to the "Connected" filter results page."#
-        )
+        discardButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            discardButton.waitForExistence(timeout: 5),
-            "The discard button doesn't exist."
-        )
+        networkSourceGroupButton.assertExistenceAndTap()
         
-        discardButton.tap()
-        
-        XCTAssertTrue(
-            networkSourceGroupButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
-        
-        networkSourceGroupButton.tap()
-        
-        XCTAssertTrue(
-            transformerButton.waitForExistence(timeout: 5),
-            "The \"Transformer\" association doesn't exist."
-        )
+        transformerButton.assertExistence()
         
 #if targetEnvironment(macCatalyst)
         moreOptionsButton.tap()
@@ -1810,52 +1474,22 @@ final class FeatureFormViewTests: XCTestCase {
         transformerButton.swipeLeft()
 #endif
         
-        XCTAssertTrue(
-            removeAssociationButton.waitForExistence(timeout: 5),
-            "The delete button doesn't exist."
-        )
+        removeAssociationButton.assertExistenceAndTap()
         
-        removeAssociationButton.tap()
-        
-        XCTAssertTrue(
-            cancelButton.waitForExistence(timeout: 5),
-            "The cancel button doesn't exist."
-        )
-        
-        cancelButton.tap()
+        cancelButton.assertExistenceAndTap()
         
 #if targetEnvironment(macCatalyst)
         moreOptionsButton.tap()
-        XCTAssertTrue(
-            removeAssociationButton.waitForExistence(timeout: 5),
-            "The delete button doesn't exist."
-        )
-        removeAssociationButton.tap()
 #else
         transformerButton.swipeLeft()
-        XCTAssertTrue(
-            removeAssociationButton.waitForExistence(timeout: 5),
-            "The delete button doesn't exist."
-        )
-        removeAssociationButton.tap()
 #endif
+        removeAssociationButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            removeButton.waitForExistence(timeout: 5),
-            "The remove button doesn't exist."
-        )
+        removeButton.assertExistenceAndTap()
         
-        removeButton.tap()
+        discardButton.assertExistence()
         
-        XCTAssertTrue(
-            discardButton.waitForExistence(timeout: 5),
-            "The discard button doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            connectedFilterTitle.waitForExistence(timeout: 5),
-            #"Navigation did not return to the "Connected" filter results page."#
-        )
+        connectedFilterTitle.assertExistence()
     }
     
     func testCase_13_1() {
@@ -1890,116 +1524,47 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        elementTitle.assertExistence()
         
-        XCTAssertTrue(
-            connectedFilterTitle.waitForExistence(timeout: 5),
-            "The filter result \"Connected\" doesn't exist."
-        )
+        connectedFilterTitle.assertExistenceAndTap()
         
-        connectedFilterTitle.tap()
+        addAssociationButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addAssociationButton.waitForExistence(timeout: 5),
-            "The \"Add Association\" button doesn't exist."
-        )
+        electricDistributionDeviceDataSourceButton.assertExistence()
         
-        addAssociationButton.tap()
-        
-        XCTAssertTrue(
-            electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
-            "The \"Electric Distribution Device\" button doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            electricDistributionJunctionDataSourceButton.waitForExistence(timeout: 5),
-            "The \"Electric Distribution Junction\" button doesn't exist."
-        )
+        electricDistributionJunctionDataSourceButton.assertExistence()
         
         electricDistributionDeviceDataSourceButton.tap()
         
-        XCTAssertTrue(
-            searchField.waitForExistence(timeout: 5),
-            "The \"Search\" field doesn't exist."
-        )
-        
-        searchField.tap()
+        searchField.assertExistenceAndTap()
         
         searchField.typeText("Cabinet Fuse")
         
-        XCTAssertTrue(
-            cabinetFuseButton.waitForExistence(timeout: 5),
-            "The \"Search\" field doesn't exist."
-        )
+        cabinetFuseButton.assertExistenceAndTap()
         
-        cabinetFuseButton.tap()
+        fuseButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            fuseButton.firstMatch.waitForExistence(timeout: 5),
-            "The \"Fuse\" candidate doesn't exist."
-        )
+        newAssociationText.assertExistence()
         
-        fuseButton.tap()
+        associationTypeLabel.assertExistence()
         
-        XCTAssertTrue(
-            newAssociationText.waitForExistence(timeout: 5),
-            "The New Association header text doesn't exist."
-        )
+        connectivityLabel.assertExistence()
         
-        XCTAssertTrue(
-            associationTypeLabel.waitForExistence(timeout: 5),
-            "The association type label doesn't exist."
-        )
+        fromElementLabel.assertExistence()
         
-        XCTAssertTrue(
-            connectivityLabel.waitForExistence(timeout: 5),
-            "The association type value doesn't exist."
-        )
+        electricDistributionDeviceLabel.assertExistence()
         
-        XCTAssertTrue(
-            fromElementLabel.waitForExistence(timeout: 5),
-            "The from element label doesn't exist."
-        )
+        toElementLabel.assertExistence()
         
-        XCTAssertTrue(
-            electricDistributionDeviceLabel.waitForExistence(timeout: 5),
-            "The from element value doesn't exist."
-        )
+        fuseLabel.assertExistence()
         
-        XCTAssertTrue(
-            toElementLabel.waitForExistence(timeout: 5),
-            "The to element label doesn't exist."
-        )
+        addButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            fuseLabel.waitForExistence(timeout: 5),
-            "The to element value doesn't exist."
-        )
+        networkSourceGroupButtonAfter.assertExistence()
         
-        XCTAssertTrue(
-            addButton.waitForExistence(timeout: 5),
-            "The add button doesn't exist."
-        )
+        saveButton.assertExistence()
         
-        addButton.tap()
-        
-        XCTAssertTrue(
-            networkSourceGroupButtonAfter.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            saveButton.waitForExistence(timeout: 5),
-            "The save button doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            discardButton.waitForExistence(timeout: 5),
-            "The discard button doesn't exist."
-        )
+        discardButton.assertExistence()
     }
     
     func testCase_13_2() {
@@ -2042,150 +1607,67 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        elementTitle.assertExistence()
         
-        XCTAssertTrue(
-            connectedFilterTitle.waitForExistence(timeout: 5),
-            "The filter result \"Connected\" doesn't exist."
-        )
+        connectedFilterTitle.assertExistenceAndTap()
         
-        connectedFilterTitle.tap()
+        electricDistributionJunctionButton5.assertExistence()
         
-        XCTAssertTrue(
-            electricDistributionJunctionButton5.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Junction\" doesn't exist."
-        )
+        electricDistributionDevice2.assertExistence()
         
-        XCTAssertTrue(
-            electricDistributionDevice2.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
+        addAssociationButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addAssociationButton.waitForExistence(timeout: 5),
-            "The \"Add Association\" button doesn't exist."
-        )
+        electricDistributionDeviceDataSourceButton.assertExistence()
         
-        addAssociationButton.tap()
-        
-        XCTAssertTrue(
-            electricDistributionDeviceDataSourceButton.waitForExistence(timeout: 5),
-            "The \"Electric Distribution Device\" button doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            electricDistributionJunctionDataSourceButton.waitForExistence(timeout: 5),
-            "The \"Electric Distribution Junction\" button doesn't exist."
-        )
+        electricDistributionJunctionDataSourceButton.assertExistence()
         
         electricDistributionDeviceDataSourceButton.tap()
         
-        searchField.tap()
+        searchField.assertExistenceAndTap()
         
         searchField.typeText("Disconnect")
         
-        XCTAssertTrue(
-            undergroundMediumVoltageThreePhaseDisconnectButton.firstMatch.waitForExistence(timeout: 5),
-            "The Underground Medium Voltage Three Phase Disconnect button doesn't exist."
-        )
+        undergroundMediumVoltageThreePhaseDisconnectButton.firstMatch.assertExistenceAndTap()
         
-        undergroundMediumVoltageThreePhaseDisconnectButton.firstMatch.tap()
+        switchButton.firstMatch.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            switchButton.firstMatch.waitForExistence(timeout: 5),
-            "The \"Switch\" candidate doesn't exist."
-        )
+        newAssociationText.assertExistence()
         
-        switchButton.firstMatch.tap()
+        associationTypeLabel.assertExistence()
         
-        XCTAssertTrue(
-            newAssociationText.waitForExistence(timeout: 5),
-            "The New Association header text doesn't exist."
-        )
+        connectivityLabel.assertExistence()
         
-        XCTAssertTrue(
-            associationTypeLabel.waitForExistence(timeout: 5),
-            "The association type label doesn't exist."
-        )
+        fromElementLabel.assertExistence()
         
-        XCTAssertTrue(
-            connectivityLabel.waitForExistence(timeout: 5),
-            "The association type value doesn't exist."
-        )
+        electricDistributionDeviceLabel.assertExistence()
         
-        XCTAssertTrue(
-            fromElementLabel.waitForExistence(timeout: 5),
-            "The from element label doesn't exist."
-        )
+        terminalLabel.assertExistence()
         
-        XCTAssertTrue(
-            electricDistributionDeviceLabel.waitForExistence(timeout: 5),
-            "The from element value doesn't exist."
-        )
+        terminalPicker.assertExistence()
         
-        XCTAssertTrue(
-            terminalLabel.waitForExistence(timeout: 5),
-            "The terminal label doesn't exist."
-        )
+        toElementLabel.assertExistence()
         
-        XCTAssertTrue(
-            terminalPicker.waitForExistence(timeout: 5),
-            "The terminal picker doesn't exist."
-        )
+        switchLabel.assertExistence()
         
-        XCTAssertTrue(
-            toElementLabel.waitForExistence(timeout: 5),
-            "The to element label doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            switchLabel.waitForExistence(timeout: 5),
-            "The to element value doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            addButton.waitForExistence(timeout: 5),
-            "The add button doesn't exist."
-        )
+        addButton.assertExistence()
         
         terminalPicker.tap()
         
-        XCTAssertTrue(
-            terminalHighButton.waitForExistence(timeout: 5),
-            "The High terminal option doesn't exist."
-        )
+        terminalHighButton.assertExistence()
         
-        XCTAssertTrue(
-            terminalLowButton.waitForExistence(timeout: 5),
-            "The Low terminal option doesn't exist."
-        )
+        terminalLowButton.assertExistence()
         
         terminalHighButton.tap()
         
         addButton.tap()
         
-        XCTAssertTrue(
-            electricDistributionJunctionButton5.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Junction\" doesn't exist."
-        )
+        electricDistributionJunctionButton5.assertExistence()
         
-        XCTAssertTrue(
-            electricDistributionDevice3.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
+        electricDistributionDevice3.assertExistence()
         
-        XCTAssertTrue(
-            saveButton.waitForExistence(timeout: 5),
-            "The save button doesn't exist."
-        )
+        saveButton.assertExistence()
         
-        XCTAssertTrue(
-            discardButton.waitForExistence(timeout: 5),
-            "The discard button doesn't exist."
-        )
+        discardButton.assertExistence()
     }
     
     func testCase_13_3() {
@@ -2220,109 +1702,45 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        elementTitle.assertExistence()
         
-        XCTAssertTrue(
-            containerFilterTitle.waitForExistence(timeout: 5),
-            "The filter result \"Container\" doesn't exist."
-        )
+        containerFilterTitle.assertExistenceAndTap()
         
-        containerFilterTitle.tap()
+        addAssociationButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            addAssociationButton.waitForExistence(timeout: 5),
-            "The \"Add Association\" button doesn't exist."
-        )
+        structureJunctionDataSourceButton.assertExistenceAndTap()
         
-        addAssociationButton.tap()
+        vaultAssetTypeButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            structureJunctionDataSourceButton.waitForExistence(timeout: 5),
-            "The \"Structure Junction\" button doesn't exist."
-        )
+        vaultCandidateButton.assertExistenceAndTap()
         
-        structureJunctionDataSourceButton.tap()
+        newAssociationText.assertExistence()
         
-        XCTAssertTrue(
-            vaultAssetTypeButton.firstMatch.waitForExistence(timeout: 5),
-            "The Vault button doesn't exist."
-        )
+        associationTypeLabel.assertExistence()
         
-        vaultAssetTypeButton.tap()
+        containmentLabel.assertExistence()
         
-        XCTAssertTrue(
-            vaultCandidateButton.waitForExistence(timeout: 5),
-            "The \"Vault\" candidate doesn't exist."
-        )
+        contentVisibleSwitch.assertExistence()
         
-        vaultCandidateButton.tap()
+        fromElementLabel.assertExistence()
         
-        XCTAssertTrue(
-            newAssociationText.waitForExistence(timeout: 5),
-            "The New Association header text doesn't exist."
-        )
+        toElementValueLabel.assertExistence()
         
-        XCTAssertTrue(
-            associationTypeLabel.waitForExistence(timeout: 5),
-            "The association type label doesn't exist."
-        )
+        toElementLabel.assertExistence()
         
-        XCTAssertTrue(
-            containmentLabel.waitForExistence(timeout: 5),
-            "The association type value doesn't exist."
-        )
+        electricDistributionJunctionLabel.assertExistence()
         
-        XCTAssertTrue(
-            contentVisibleSwitch.waitForExistence(timeout: 5),
-            "The content visibility switch doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            fromElementLabel.waitForExistence(timeout: 5),
-            "The from element label doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            toElementValueLabel.waitForExistence(timeout: 5),
-            "The from element value doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            toElementLabel.waitForExistence(timeout: 5),
-            "The to element label doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            electricDistributionJunctionLabel.waitForExistence(timeout: 5),
-            "The to element value doesn't exist."
-        )
-        
-        XCTAssertTrue(
-            addButton.waitForExistence(timeout: 5),
-            "The add button doesn't exist."
-        )
+        addButton.assertExistence()
         
         contentVisibleSwitch.tap()
         
         addButton.tap()
         
-        XCTAssertTrue(
-            structureJunction2.waitForExistence(timeout: 5),
-            "The added structure junction doesn't exist."
-        )
+        structureJunction2.assertExistence()
         
-        XCTAssertTrue(
-            saveButton.waitForExistence(timeout: 5),
-            "The save button doesn't exist."
-        )
+        saveButton.assertExistence()
         
-        XCTAssertTrue(
-            discardButton.waitForExistence(timeout: 5),
-            "The discard button doesn't exist."
-        )
+        discardButton.assertExistence()
     }
     
     func testCase_13_4() throws {
