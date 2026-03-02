@@ -2326,6 +2326,252 @@ final class FeatureFormViewTests: XCTestCase {
             "The discard button doesn't exist."
         )
     }
+    
+    func testCase_13_4() throws {
+        try skipIf(macCatalyst: true, visionOS: true)
+        
+        let app = XCUIApplication()
+        let addAssociationButton = app.staticTexts["Add Association"]
+        let addConditionButton = app.buttons["Add Condition"]
+        let cancelButton = app.buttons["Cancel"]
+        let condition1Options = app.buttons["Condition 1 Options"]
+        let conditionEqualsButton = app.buttons["Condition, ="]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let deleteButton = app.buttons["Delete"]
+        let discardEditsButton = app.buttons["Discard Edits"]
+        let doneButton = app.buttons["Done"]
+        let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
+        let elementTitle = app.staticTexts["Associations"]
+        let equalOption = app.buttons["="]
+        let filterButton = app.buttons["Filter Candidates"]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
+        let isBlankLabel = app.staticTexts["is blank"]
+        let isBlankOption = app.buttons["is blank"]
+        let lineEndCandidates = app.buttons.matching(identifier: "Line End")
+        let lowVoltageSinglePhaseLineEnd = app.buttons["Low Voltage Single Phase Line End"]
+        let objectIDConditionLabel = app.staticTexts["Object ID"]
+        let optionAButton = app.buttons["A"]
+        let phasesCurrentState = app.buttons["Phases Current State"]
+        let unsavedChangesAlert = app.alerts["Filters have not been applied"]
+        let valueButton = app.buttons["Value"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        elementTitle.assertExistence()
+        
+        connectedFilterTitle.assertExistenceAndTap()
+        
+        addAssociationButton.assertExistenceAndTap()
+        
+        electricDistributionJunctionDataSourceButton.assertExistenceAndTap()
+        
+        lowVoltageSinglePhaseLineEnd.assertExistenceAndTap()
+        
+        XCTAssertEqual(lineEndCandidates.count, 2)
+        
+        filterButton.assertExistenceAndTap()
+        
+        addConditionButton.assertExistenceAndTap()
+        
+        cancelButton.assertExistenceAndTap()
+        
+        unsavedChangesAlert.assertExistence()
+        
+        // Dismiss the alert
+        cancelButton.firstMatch.assertExistenceAndTap()
+        
+        unsavedChangesAlert.assertNonExistence()
+        
+        cancelButton.assertExistenceAndTap()
+        
+        unsavedChangesAlert.assertExistence()
+        
+        discardEditsButton.assertExistenceAndTap()
+        
+        unsavedChangesAlert.assertNonExistence()
+        
+        XCTAssertEqual(lineEndCandidates.count, 2)
+        
+        filterButton.assertExistenceAndTap()
+        
+        addConditionButton.assertExistenceAndTap()
+        
+        objectIDConditionLabel.assertExistence()
+        
+        condition1Options.assertExistenceAndTap()
+        
+        deleteButton.assertExistenceAndTap()
+        
+        addConditionButton.assertExistenceAndTap()
+        
+        objectIDConditionLabel.assertExistenceAndTap()
+        
+        phasesCurrentState.assertExistenceAndTap()
+        
+        conditionEqualsButton.assertExistenceAndTap()
+        
+        isBlankOption.assertExistenceAndTap()
+        
+        doneButton.assertExistenceAndTap()
+        
+        XCTAssertEqual(lineEndCandidates.count, 0)
+        
+        filterButton.assertExistenceAndTap()
+        
+        isBlankLabel.assertExistenceAndTap()
+        
+        equalOption.assertExistenceAndTap()
+        
+        valueButton.assertExistenceAndTap()
+        
+        optionAButton.assertExistenceAndTap()
+        
+        doneButton.assertExistenceAndTap()
+        
+        XCTAssertEqual(lineEndCandidates.count, 1)
+    }
+    
+    func testCase_13_5() throws {
+        try skipIf(macCatalyst: true, visionOS: true)
+        
+        let app = XCUIApplication()
+        let addAssociationButton = app.staticTexts["Add Association"]
+        let addConditionButton = app.buttons["Add Condition"]
+        let condition1Options = app.buttons["Condition 1 Options"]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let currentMonthYear = Date.now.formatted(.dateTime.month(.wide).year())
+        let currentMonthYearLabel = app.staticTexts[currentMonthYear]
+        let dateInstalledButton = app.buttons["Date Installed"]
+        let datePickers = XCUIApplication().datePickers
+        let datePicker1 = datePickers.firstMatch
+        let datePicker2 = datePickers.element(boundBy: 1)
+        let dismissPopover = app.buttons["PopoverDismissRegion"]
+        let doneButton = app.buttons["Done"]
+        let duplicateButton = app.buttons["Duplicate"]
+        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
+        let elementTitle = app.staticTexts["Associations"]
+        let equalStaticText = app.staticTexts["="]
+        let filterButton = app.buttons["Filter Candidates"]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
+        let greaterThanButton = app.buttons[">"]
+        let greaterThanLabels = app.staticTexts.matching(identifier: ">")
+        let jan2014Label = app.staticTexts["January 2014"]
+        let lessThanButton = app.buttons["<"]
+        let municipalButton = app.buttons["Municipal"]
+        let objectIDConditionLabel = app.staticTexts["Object ID"]
+        let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        elementTitle.assertExistence()
+        
+        connectedFilterTitle.assertExistenceAndTap()
+        
+        addAssociationButton.assertExistenceAndTap()
+        
+        electricDistributionDeviceDataSourceButton.assertExistenceAndTap()
+        
+        municipalButton.assertExistenceAndTap()
+        
+        XCTAssertTrue(streetLightCandidates.count > 3)
+        
+        filterButton.assertExistenceAndTap()
+        
+        addConditionButton.assertExistenceAndTap()
+        
+        objectIDConditionLabel.assertExistenceAndTap()
+        
+        dateInstalledButton.assertExistenceAndTap()
+        
+        equalStaticText.assertExistenceAndTap()
+        
+        greaterThanButton.assertExistenceAndTap()
+        
+        datePicker1.assertExistenceAndTap()
+        
+        currentMonthYearLabel.assertExistenceAndTap()
+        
+        datePicker1.adjustPickerWheelElement(boundBy: 0, to: "January")
+        
+        datePicker1.adjustPickerWheelElement(boundBy: 1, to: "2014")
+        
+        dismissPopover.firstMatch.assertExistenceAndTap()
+        
+        condition1Options.assertExistenceAndTap()
+        
+        duplicateButton.assertExistenceAndTap()
+        
+        greaterThanLabels.element(boundBy: 1).assertExistenceAndTap()
+        
+        lessThanButton.assertExistenceAndTap()
+        
+        datePicker2.assertExistenceAndTap()
+        
+        jan2014Label.assertExistenceAndTap()
+        
+        datePicker2.adjustPickerWheelElement(boundBy: 0, to: "March")
+        
+        dismissPopover.firstMatch.assertExistenceAndTap()
+        
+        doneButton.assertExistenceAndTap()
+        
+        XCTAssertEqual(streetLightCandidates.count, 1)
+    }
+    
+    func testCase_13_6() throws {
+        try skipIf(macCatalyst: true, visionOS: true)
+
+        let app = XCUIApplication()
+        let addAssociationButton = app.staticTexts["Add Association"]
+        let addButton = app.buttons["Add"]
+        let addConditionButton = app.buttons["Add Condition"]
+        let attachmentFilterTitle = app.staticTexts["Attachment"]
+        let doneButton = app.buttons["Done"]
+        let electricDistributionDevice2Button = app.buttons["Electric Distribution Device, 2"]
+        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
+        let elementTitle = app.staticTexts["Associations"]
+        let textField = app.textFields["Enter a value"]
+        let filterButton = app.buttons["Filter Candidates"]
+        let formTitle = app.staticTexts["Structure Junction"]
+        let municipalButton = app.buttons["Municipal"]
+        let streetLightButton = app.buttons["Street Light"]
+        let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        elementTitle.assertExistence()
+        
+        attachmentFilterTitle.assertExistenceAndTap()
+        
+        addAssociationButton.assertExistenceAndTap()
+        
+        electricDistributionDeviceDataSourceButton.assertExistenceAndTap()
+        
+        municipalButton.assertExistenceAndTap()
+        
+        XCTAssertTrue(streetLightCandidates.count > 3)
+        
+        filterButton.assertExistenceAndTap()
+        
+        addConditionButton.assertExistenceAndTap()
+        
+        textField.assertExistenceAndTap()
+        
+        textField.typeText("449")
+        
+        doneButton.assertExistenceAndTap()
+        
+        XCTAssertEqual(streetLightCandidates.count, 1)
+        
+        streetLightButton.assertExistenceAndTap()
+        
+        addButton.assertExistenceAndTap()
+        
+        electricDistributionDevice2Button.assertExistence()
+    }
 }
 
 private extension String {
