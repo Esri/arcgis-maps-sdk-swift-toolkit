@@ -56,6 +56,27 @@ extension XCUIElement {
         tap()
     }
     
+    /// Asserts that the element's label equals an expected value after an amount of time.
+    /// - Parameters:
+    ///   - expectedLabel: The expected value of the label.
+    func assertLabel(
+        _ expectedLabel: String,
+        timeout: TimeInterval = .standard,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let predicate = NSPredicate(format: "label == %@", expectedLabel)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: self)
+        XCTWaiter().wait(for: [expectation], timeout: timeout)
+        XCTAssertEqual(
+            label,
+            expectedLabel,
+            "Expected label '\(expectedLabel)' but got '\(label)'.",
+            file: file,
+            line: line
+        )
+    }
+    
     /// Asserts that the element does not exist after an amount of time.
     /// - Parameters:
     ///   - timeout: The time, in seconds, the test allows for the element to become unavailable. The
