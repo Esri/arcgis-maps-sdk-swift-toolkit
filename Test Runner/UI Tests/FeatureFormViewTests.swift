@@ -1479,6 +1479,10 @@ final class FeatureFormViewTests: XCTestCase {
         transformerButton.swipeLeft()
 #endif
         
+#if os(visionOS)
+        XCTExpectFailure("The \"Remove Association\" button does not trigger properly in visionOS.")
+#endif
+        
         removeAssociationButton.assertExistenceAndTap()
         
         cancelButton.assertExistenceAndTap()
