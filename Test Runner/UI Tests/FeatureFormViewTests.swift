@@ -189,7 +189,6 @@ final class FeatureFormViewTests: XCTestCase {
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
-        let returnButton = app.buttons["Return"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
         openTestCase()
@@ -210,18 +209,11 @@ final class FeatureFormViewTests: XCTestCase {
         
         characterIndicator.assertExistence()
         
-        XCTAssertEqual(
-            characterIndicator.label,
-            "257"
-        )
+        characterIndicator.assertLabel("257")
         
         clearButton.assertExistence()
         
-#if targetEnvironment(macCatalyst)
         app.typeText("\r")
-#else
-        returnButton.tap()
-#endif
         
         fieldTitle.assertExistence()
         
