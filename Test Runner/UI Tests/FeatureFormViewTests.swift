@@ -668,11 +668,16 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.3: Pick a value
     func testCase_3_3() {
         let app = XCUIApplication()
-        let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Combo String"]
         let fieldValue = app.staticTexts["Combo String Combo Box Value"]
         let firstOptionButton = app.buttons["String 1"]
         let formTitle = app.staticTexts["comboBox"]
+        
+#if os(visionOS)
+        let doneButton = app.buttons["Confirm"]
+#else
+        let doneButton = app.buttons["Done"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -717,10 +722,15 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.4: Picker with a noValueLabel row
     func testCase_3_4() {
         let app = XCUIApplication()
-        let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Combo String"]
         let fieldValue = app.staticTexts["Combo String Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
+        
+#if os(visionOS)
+        let doneButton = app.buttons["Confirm"]
+#else
+        let doneButton = app.buttons["Done"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -756,12 +766,17 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_3_5() {
         let app = XCUIApplication()
         let clearButton = app.buttons["Required Combo Box Clear Button"]
-        let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Required Combo Box *"]
         let fieldValue = app.staticTexts["Required Combo Box Combo Box Value"]
         let footer = app.staticTexts["Required Combo Box Footer"]
         let formTitle = app.staticTexts["comboBox"]
         let oakButton = app.buttons["Oak"]
+        
+#if os(visionOS)
+        let doneButton = app.buttons["Confirm"]
+#else
+        let doneButton = app.buttons["Done"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -797,13 +812,18 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.6: noValueOption is 'Hide'
     func testCase_3_6() throws {
         let app = XCUIApplication()
-        let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Combo No Value False"]
         let fieldValue = app.staticTexts["Combo No Value False Combo Box Value"]
         let firstOption = app.buttons["First"]
         let formTitle = app.staticTexts["comboBox"]
         let noValueButton = app.buttons["No Value"]
         let optionsButton = app.images["Combo No Value False Options Button"]
+        
+#if os(visionOS)
+        let doneButton = app.buttons["Confirm"]
+#else
+        let doneButton = app.buttons["Done"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -828,7 +848,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         firstOption.tap()
         
-        doneButton.assertExistence()
+        doneButton.assertExistenceAndTap()
         
         XCTAssertEqual(
             fieldValue.label,
