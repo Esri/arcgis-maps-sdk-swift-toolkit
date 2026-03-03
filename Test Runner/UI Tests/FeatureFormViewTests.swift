@@ -84,7 +84,8 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_1_1() throws {
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
-        let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+        let fieldTitle = "Single Line No Value, Placeholder or Description"
+        let fieldLabel = app.staticTexts[fieldTitle]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
@@ -92,7 +93,9 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        fieldTitle.assertExistence()
+        app.filterElements(fieldTitle)
+        
+        fieldLabel.assertExistence()
         
 #if !targetEnvironment(macCatalyst)
         XCTAssertFalse(
@@ -109,7 +112,7 @@ final class FeatureFormViewTests: XCTestCase {
         // Give focus to the target text field.
         textField.tap()
         
-        fieldTitle.assertExistence()
+        fieldLabel.assertExistence()
         
         footer.assertExistence()
         
@@ -131,7 +134,8 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
-        let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+        let fieldTitle = "Single Line No Value, Placeholder or Description"
+        let fieldLabel = app.staticTexts[fieldTitle]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
@@ -139,11 +143,13 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElements(fieldTitle)
+        
         textField.assertExistenceAndTap()
         
         app.typeText("Sample text")
         
-        fieldTitle.assertExistence()
+        fieldLabel.assertExistence()
         
         footer.assertExistence()
         
@@ -161,7 +167,7 @@ final class FeatureFormViewTests: XCTestCase {
         app.typeText("\r")
         
         XCTAssertTrue(
-            fieldTitle.isHittable,
+            fieldLabel.isHittable,
             "The title isn't hittable."
         )
         
@@ -188,17 +194,20 @@ final class FeatureFormViewTests: XCTestCase {
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
-        let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+        let fieldTitle = "Single Line No Value, Placeholder or Description"
+        let fieldLabel = app.staticTexts[fieldTitle]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElements(fieldTitle)
+        
         textField.tap()
         
         app.typeText(.loremIpsum257)
         
-        fieldTitle.assertExistence()
+        fieldLabel.assertExistence()
         
         footer.assertExistence()
         
@@ -215,7 +224,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.typeText("\r")
         
-        fieldTitle.assertExistence()
+        fieldLabel.assertExistence()
         
         footer.assertExistence()
         
@@ -286,16 +295,19 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 2.1: Unfocused and focused state, no value, date required
     func testCase_2_1() throws {
         let app = XCUIApplication()
-        let calendarImage = app.images["Required Date Calendar Image"]
-        let clearButton = app.buttons["Required Date Clear Button"]
-        let datePicker = app.datePickers["Required Date Date Picker"]
-        let fieldValue = app.staticTexts["Required Date Value"]
-        let footer = app.staticTexts["Required Date Footer"]
+        let fieldTitle = "Required Date"
+        let calendarImage = app.images["\(fieldTitle) Calendar Image"]
+        let clearButton = app.buttons["\(fieldTitle) Clear Button"]
+        let datePicker = app.datePickers["\(fieldTitle) Date Picker"]
+        let fieldValue = app.staticTexts["\(fieldTitle) Value"]
+        let footer = app.staticTexts["\(fieldTitle) Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let nowButton = app.buttons["Required Date Now Button"]
+        let nowButton = app.buttons["\(fieldTitle) Now Button"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(fieldTitle)
         
         if fieldValue.label != "No Value" {
             clearButton.tap()
@@ -338,22 +350,22 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 2.2: Focused and unfocused state, with value (populated)
     func testCase_2_2() {
         let app = XCUIApplication()
-        let datePicker = app.datePickers["Launch Date and Time for Apollo 11 Date Picker"]
-        let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
-        let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
-        let footer = app.staticTexts["Launch Date and Time for Apollo 11 Footer"]
+        let fieldTitle = "Launch Date and Time for Apollo 11"
+        let datePicker = app.datePickers["\(fieldTitle) Date Picker"]
+        let fieldLabel = app.staticTexts[fieldTitle]
+        let fieldValue = app.staticTexts["\(fieldTitle) Value"]
+        let footer = app.staticTexts["\(fieldTitle) Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let nowButton = app.buttons["Launch Date and Time for Apollo 11 Now Button"]
+        let nowButton = app.buttons["\(fieldTitle) Now Button"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElements(fieldTitle)
+        
         fieldValue.tap()
         
-        XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
-        )
+        fieldLabel.assertExistence()
         
         let localDate = Calendar.current.date(
             from: DateComponents(
@@ -445,14 +457,17 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 2.4: Maximum date
     func testCase_2_4() {
         let app = XCUIApplication()
-        let clearButton = app.buttons["Launch Date Time End Clear Button"]
-        let fieldValue = app.staticTexts["Launch Date Time End Value"]
-        let footer = app.staticTexts["Launch Date Time End Footer"]
+        let fieldTitle = "Launch Date Time End"
+        let clearButton = app.buttons["\(fieldTitle) Clear Button"]
+        let fieldValue = app.staticTexts["\(fieldTitle) Value"]
+        let footer = app.staticTexts["\(fieldTitle) Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let nowButton = app.buttons["Launch Date Time End Now Button"]
+        let nowButton = app.buttons["\(fieldTitle) Now Button"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(fieldTitle)
         
         if fieldValue.label != "No Value" {
             clearButton.tap()
@@ -498,18 +513,21 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 2.5: Minimum date
     func testCase_2_5() {
         let app = XCUIApplication()
-        let datePicker = app.datePickers["start and end date time Date Picker"]
-        let fieldValue = app.staticTexts["start and end date time Value"]
-        let footer = app.staticTexts["start and end date time Footer"]
+        let fieldTitle = "start and end date time"
+        let datePicker = app.datePickers["\(fieldTitle) Date Picker"]
+        let fieldValue = app.staticTexts["\(fieldTitle) Value"]
+        let footer = app.staticTexts["\(fieldTitle) Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let nowButton = app.buttons["start and end date time Now Button"]
+        let nowButton = app.buttons["\(fieldTitle) Now Button"]
         let previousMonthButton = datePicker.buttons["Previous Month"]
         let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        fieldValue.tap()
+        app.filterElements(fieldTitle)
+        
+        fieldValue.assertExistenceAndTap()
         
         // Swipe up to reveal the entire date picker.
         app.scrollViews.firstMatch.swipeUp()
@@ -582,17 +600,20 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.1: Pre-existing value, description, clear button, no value label
     func testCase_3_1() {
         let app = XCUIApplication()
-        let clearButton = app.buttons["Combo String Clear Button"]
-        let fieldTitle = app.staticTexts["Combo String"]
-        let fieldValue = app.staticTexts["Combo String Combo Box Value"]
+        let fieldTitle = "Combo String"
+        let clearButton = app.buttons["\(fieldTitle) Clear Button"]
+        let fieldLabel = app.staticTexts[fieldTitle]
+        let fieldValue = app.staticTexts["\(fieldTitle) Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let footer = app.staticTexts["Combo String Footer"]
+        let footer = app.staticTexts["\(fieldTitle) Footer"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElements(fieldTitle)
+        
         XCTAssertTrue(
-            fieldTitle.isHittable,
+            fieldLabel.isHittable,
             "The field title isn't hittable."
         )
         
@@ -618,10 +639,7 @@ final class FeatureFormViewTests: XCTestCase {
             "No value"
         )
         
-        XCTAssertTrue(
-            footer.isHittable,
-            "The footer isn't hittable."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
@@ -761,10 +779,11 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.5: Required Value
     func testCase_3_5() {
         let app = XCUIApplication()
-        let clearButton = app.buttons["Required Combo Box Clear Button"]
-        let fieldTitle = app.staticTexts["Required Combo Box *"]
-        let fieldValue = app.staticTexts["Required Combo Box Combo Box Value"]
-        let footer = app.staticTexts["Required Combo Box Footer"]
+        let fieldTitle = "Required Combo Box"
+        let clearButton = app.buttons["\(fieldTitle) Clear Button"]
+        let fieldLabel = app.staticTexts["\(fieldTitle) *"]
+        let fieldValue = app.staticTexts["\(fieldTitle) Combo Box Value"]
+        let footer = app.staticTexts["\(fieldTitle) Footer"]
         let formTitle = app.staticTexts["comboBox"]
         let oakButton = app.buttons["Oak"]
         
@@ -777,7 +796,9 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        fieldTitle.assertExistence()
+        app.filterElements(fieldTitle)
+        
+        fieldLabel.assertExistence()
         
         XCTAssertEqual(
             fieldValue.label,
@@ -855,16 +876,19 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.7: Unsupported value
     func testCase_3_7() throws {
         let app = XCUIApplication()
-        let fieldTitle = app.staticTexts["Unsupported Value"]
-        let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
+        let fieldTitle = "Unsupported Value"
+        let fieldLabel = app.staticTexts[fieldTitle]
+        let fieldValue = app.staticTexts["\(fieldTitle) Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
+        let unsupportedValueSectionHeader = app.staticTexts["\(fieldTitle) Unsupported Value Section"]
         let unsupportedValue = app.buttons["0"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        fieldTitle.assertExistence()
+        app.filterElements(fieldTitle)
+        
+        fieldLabel.assertExistence()
         
         XCTAssertEqual(
             fieldValue.label,
@@ -886,75 +910,63 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 4.1: Test regular selection
     func testCase_4_1() throws {
-        try skipIf(visionOS: true)
-        
         let app = XCUIApplication()
-        let fieldTitle = app.staticTexts["Radio Button Text *"]
+        let birdOption = app.buttons["bird"]
+        let dogOption = app.buttons["dog"]
+        let fieldTitle = "Radio Button Text"
+        let fieldLabel = app.staticTexts["\(fieldTitle) *"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let radioButtonTextPicker = app.pickers["Radio Button Text"].pickerWheels.firstMatch
+        let noValueOption = app.buttons["No Value"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        fieldTitle.assertExistence()
+        app.filterElements(fieldTitle)
         
-        XCTAssertEqual(
-            radioButtonTextPicker.stringValue,
-            "bird"
-        )
+        fieldLabel.assertExistence()
+        noValueOption.assertExistence()
+        birdOption.assertExistence()
+        dogOption.assertExistence()
         
-        XCTAssertNotEqual(
-            radioButtonTextPicker.stringValue,
-            "dog"
-        )
+        XCTAssertTrue(birdOption.isSelected)
+        XCTAssertFalse(dogOption.isSelected)
         
-#if !os(visionOS)
-        radioButtonTextPicker.adjust(toPickerWheelValue: "dog")
-#endif
+        app.buttons["dog"].tap()
         
-        XCTAssertEqual(
-            radioButtonTextPicker.stringValue,
-            "dog"
-        )
-        
-        XCTAssertNotEqual(
-            radioButtonTextPicker.stringValue,
-            "bird"
-        )
-        
-        // The following assertion is skipped because all possible values in a
-        // picker cannot be programmatically checked.
-//        XCTAssertTrue(
-//            noValueOption.exists,
-//            "The no value option doesn't exist."
-//        )
+        XCTAssertTrue(dogOption.isSelected)
+        XCTAssertFalse(birdOption.isSelected)
     }
     
     /// Test case 4.2: Test radio button fallback to combo box
     func testCase_4_2() {
         let app = XCUIApplication()
-        let field1 = app.staticTexts["Fallback 1 Combo Box Value"]
+        let comboBoxOption = app.buttons["Fallback 1 Combo Box Value-Fallback 1 Options Button"]
+        let field1Title = "Fallback 1"
+        let field2Title = "No Value Enabled"
+        let field3Title = "No Value Disabled"
+        let field1 = app.staticTexts["\(field1Title) Combo Box Value"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let noValueDisabledPicker = app.pickers["No Value Disabled"].pickerWheels.firstMatch
-        let noValueEnabledPicker = app.pickers["No Value Enabled"].pickerWheels.firstMatch
+        let naOption = app.buttons["N/A"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElements(field1Title)
+        
         // Verify the Radio Button fallback to Combo Box was successful.
         field1.assertExistence()
+        comboBoxOption.assertExistence()
+        
+        app.filterElements(field2Title)
         
         // Verify the radio buttons are shown even when the no value option is enabled.
-        XCTAssertEqual(
-            noValueEnabledPicker.stringValue,
-            "N/A"
-        )
+        naOption.assertExistence()
+        XCTAssertTrue(naOption.isSelected)
+        
+        app.filterElements(field3Title)
         
         // Verify the radio buttons are still shown even when the no value option is disabled.
-        XCTAssertEqual(
-            noValueDisabledPicker.stringValue,
-            "One"
-        )
+        app.buttons["One"].assertExistence()
     }
     
     // - MARK: Test case 5: Switch input type
@@ -962,21 +974,36 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 5.1: Test switch on
     func testCase_5_1() {
         let app = XCUIApplication()
-        let fieldTitle = app.staticTexts["switch integer"]
+        let fieldTitle = "switch integer"
+        let fieldLabel = app.staticTexts[fieldTitle]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let switchView = app.switches["switch integer Switch"]
+        
+#if targetEnvironment(macCatalyst)
+        let switchView = app.checkBoxes["\(fieldTitle) Switch"]
+#else
+        let switchView = app.switches["\(fieldTitle) Switch"]
+        let control = switchView.switches.firstMatch
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        fieldTitle.assertExistence()
+        app.filterElements(fieldTitle)
+        
+        fieldLabel.assertExistence()
         
         XCTAssertEqual(
             switchView.label,
             "2"
         )
-        
+      
+#if targetEnvironment(macCatalyst)
         switchView.assertExistenceAndTap()
+#elseif os(visionOS)
+        switchView.assertExistenceAndTap()
+#else
+        control.assertExistenceAndTap()
+#endif
         
         XCTAssertEqual(
             switchView.label,
@@ -987,15 +1014,24 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 5.2: Test switch off
     func testCase_5_2() {
         let app = XCUIApplication()
-        let fieldTitle = app.staticTexts["switch string"]
+        let fieldTitle = "switch string"
+        let fieldLabel = app.staticTexts[fieldTitle]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let switchView = app.switches["switch string Switch"]
+        
+#if targetEnvironment(macCatalyst)
+        let switchView = app.checkBoxes["\(fieldTitle) Switch"]
+#else
+        let switchView = app.switches["\(fieldTitle) Switch"]
+        let control = switchView.switches.firstMatch
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElements(fieldTitle)
+        
         XCTAssertTrue(
-            fieldTitle.isHittable,
+            fieldLabel.isHittable,
             "The field title isn't hittable."
         )
         
@@ -1009,7 +1045,13 @@ final class FeatureFormViewTests: XCTestCase {
             "The switch isn't hittable."
         )
         
-        switchView.tap()
+#if targetEnvironment(macCatalyst)
+        switchView.assertExistenceAndTap()
+#elseif os(visionOS)
+        switchView.assertExistenceAndTap()
+#else
+        control.assertExistenceAndTap()
+#endif
         
         XCTAssertEqual(
             switchView.label,
@@ -1693,6 +1735,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fromElementLabel = app.staticTexts["From Element"]
         let newAssociationText = app.staticTexts["New Association"]
         let saveButton = app.buttons["Save"]
+        let searchField = app.textFields["Search"]
         let structureJunction2 = app.buttons["Structure Junction, 2"]
         let structureJunctionDataSourceButton = app.buttons["Structure Junction"]
         let toElementValueLabel = app.staticTexts["Vault"]
@@ -1711,6 +1754,8 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElements("Associations")
+        
         elementTitle.assertExistence()
         
         containerFilterTitle.assertExistenceAndTap()
@@ -1718,6 +1763,10 @@ final class FeatureFormViewTests: XCTestCase {
         addAssociationButton.assertExistenceAndTap()
         
         structureJunctionDataSourceButton.assertExistenceAndTap()
+        
+        searchField.assertExistenceAndTap()
+        
+        searchField.typeText("Vault")
         
         vaultAssetTypeButton.assertExistenceAndTap()
         
@@ -2020,9 +2069,39 @@ private extension String {
 }
 
 private extension XCUIApplication {
+    /// The element filter field.
+    var filterElementsField: XCUIElement {
+        searchFields["Filter Elements"]
+    }
+    
     /// The "No value" combo box option.
     var noValueComboBoxOption: XCUIElement {
         buttons["No value Combo Box Option"]
+    }
+    
+    
+    func filterElements(_ text: String) {
+        func focusFilter() {
+#if targetEnvironment(macCatalyst)
+            let searchButton = buttons["Search"]
+            if searchButton.waitForExistence(timeout: 5.0) {
+                searchButton.tap()
+            } else {
+                filterElementsField.assertExistenceAndTap()
+            }
+#else
+            filterElementsField.assertExistenceAndTap()
+#endif
+        }
+        
+        focusFilter()
+        
+        if buttons["Clear text"].exists {
+            buttons["Clear text"].tap()
+            focusFilter()
+        }
+        
+        filterElementsField.typeText(text)
     }
 }
 
