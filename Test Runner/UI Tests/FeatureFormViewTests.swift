@@ -269,11 +269,7 @@ final class FeatureFormViewTests: XCTestCase {
         textField.typeText(XCUIKeyboardKey.delete.rawValue)
         textField.typeText("3")
         
-        expectation(
-            for: NSPredicate(format: "label == \"Range domain 2-5\""),
-            evaluatedWith: footer
-        )
-        waitForExpectations(timeout: 10, handler: nil)
+        footer.assertLabel("Range domain 2-5")
         
         // Replace the current value with 6
         textField.typeText(XCUIKeyboardKey.delete.rawValue)
