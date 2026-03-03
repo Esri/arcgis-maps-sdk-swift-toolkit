@@ -1363,7 +1363,6 @@ final class FeatureFormViewTests: XCTestCase {
         let assetType = app.staticTexts["Asset type *"]
         let backButton = app.buttons["Back"]
         let discardEditsButton = app.buttons["Discard Edits"]
-        let doneButton = app.buttons["Done"]
         let elementTitle = app.staticTexts["Associations"]
         let fieldValue = app.staticTexts["Asset type Combo Box Value"]
         let filterResults = app.staticTexts["Connected"]
@@ -1372,6 +1371,12 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle2 = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
         let utilityElementButton = app.buttons["Transformer, High"]
+        
+#if os(visionOS)
+        let doneButton = app.buttons["Confirm"]
+#else
+        let doneButton = app.buttons["Done"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
