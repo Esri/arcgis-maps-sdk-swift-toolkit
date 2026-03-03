@@ -1797,6 +1797,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         lowVoltageSinglePhaseLineEnd.assertExistenceAndTap()
         
+        lineEndCandidates.firstMatch.assertExistence()
+        
         XCTAssertEqual(lineEndCandidates.count, 2)
         
         filterButton.assertExistenceAndTap()
@@ -1904,6 +1906,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         municipalButton.assertExistenceAndTap()
         
+        streetLightCandidates.firstMatch.assertExistence()
+        
         XCTAssertTrue(streetLightCandidates.count > 3)
         
         filterButton.assertExistenceAndTap()
@@ -1951,7 +1955,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_13_6() throws {
         try skipIf(macCatalyst: true, visionOS: true)
-
+        
         let app = XCUIApplication()
         let addAssociationButton = app.staticTexts["Add Association"]
         let addButton = app.buttons["Add"]
@@ -1980,6 +1984,8 @@ final class FeatureFormViewTests: XCTestCase {
         electricDistributionDeviceDataSourceButton.assertExistenceAndTap()
         
         municipalButton.assertExistenceAndTap()
+        
+        streetLightCandidates.firstMatch.assertExistence()
         
         XCTAssertTrue(streetLightCandidates.count > 3)
         
