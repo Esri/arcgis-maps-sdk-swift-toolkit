@@ -1078,33 +1078,30 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_6_1() {
         let app = XCUIApplication()
         let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
+        let collapsedGroupTitle = "Group with Multiple Form Elements 2"
+        let expandedGroupTitle = "Group with Multiple Form Elements"
         let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         
 #if targetEnvironment(macCatalyst)
-        let collapsedGroup = app.disclosureTriangles["Group with Multiple Form Elements 2"]
-        let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
-        let expandedGroupDescription = app.disclosureTriangles["Group with Multiple Form Elements Description"]
+        let collapsedGroup = app.buttons["\(collapsedGroupTitle), This group is not expanded for initial state"]
+        let expandedGroup = app.buttons["\(expandedGroupTitle), This Group is 'Expand initial state'\nThis group is Visible"]
 #else
-        let collapsedGroup = app.staticTexts["Group with Multiple Form Elements 2"]
-        let expandedGroup = app.staticTexts["Group with Multiple Form Elements"]
-        let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
+        let collapsedGroup = app.staticTexts[collapsedGroupTitle]
+        let expandedGroup = app.staticTexts[expandedGroupTitle]
 #endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElements(expandedGroupTitle)
+        
         expandedGroup.assertExistence()
-        
-        expandedGroupDescription.assertExistence()
-        
-        XCTAssertEqual(
-            expandedGroupDescription.label,
-            "This Group is 'Expand initial state'\nThis group is Visible"
-        )
         
         // Confirm the first element of the expanded group exists.
         expandedGroupFirstElement.assertExistence()
+        
+        app.filterElements(collapsedGroupTitle)
         
         collapsedGroup.assertExistence()
         
@@ -1117,6 +1114,7 @@ final class FeatureFormViewTests: XCTestCase {
         try skipIf(visionOS: true)
         
         let app = XCUIApplication()
+        let elementTitle = "Group with children that are visible dependent"
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let groupElement = app.staticTexts["single line text 3"]
         let radioButtonPicker = app.pickers["Radio Button"].pickerWheels.firstMatch
@@ -1132,6 +1130,8 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElements(elementTitle)
+        
         hiddenElementsGroup.assertExistence()
         
         hiddenElementsGroupDescription.assertExistence()
@@ -1144,6 +1144,8 @@ final class FeatureFormViewTests: XCTestCase {
         // Confirm the first element of the conditional group doesn't exist.
         groupElement.assertNonExistence()
         
+        app.filterElements("Group with Multiple Form Elements")
+        
         // Confirm the option to show the elements exists.
         radioButtonPicker.assertExistence()
         
@@ -1154,6 +1156,8 @@ final class FeatureFormViewTests: XCTestCase {
         radioButtonPicker.adjust(toPickerWheelValue: "Show Group Visible Dependent")
         radioButtonPicker.adjust(toPickerWheelValue: "show invisible form element")
 #endif
+        
+        app.filterElements(elementTitle)
         
         // Confirm the first element of the conditional group exists.
         groupElement.assertExistence()
