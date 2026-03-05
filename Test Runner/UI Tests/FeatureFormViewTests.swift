@@ -2038,8 +2038,6 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     func testCase_13_6() throws {
-        try skipIf(macCatalyst: true)
-        
         let app = XCUIApplication()
         let addAssociationButton = app.staticTexts["Add Association"]
         let addButton = app.buttons["Add"]
