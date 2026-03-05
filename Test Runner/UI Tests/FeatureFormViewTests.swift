@@ -1009,13 +1009,12 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 7.1: Test read only elements
     func testCase_7_1() throws {
         let app = XCUIApplication()
-        let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
-        
         let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
         let comboBox = app.staticTexts["Combo box Combo Box Value"]
         let dateElementTitle = "Date"
         let dateReadOnlyInput = app.staticTexts["\(dateElementTitle) Read Only Input"]
         let dateInput = app.buttons["\(dateElementTitle) Value"]
+        let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
         let groupElementTitle = "Group"
         let longTextFieldTitle = "Long text"
         let longTextReadOnlyInput = app.staticTexts["\(longTextFieldTitle) Read Only Input"]
@@ -2033,6 +2032,7 @@ private extension String {
 }
 
 private extension XCUIApplication {
+    /// The app's "Done"/checkmark button.
     var doneButton: XCUIElement {
 #if os(visionOS)
         buttons["Confirm"]
@@ -2059,24 +2059,17 @@ private extension XCUIApplication {
     /// Filters the elements in the form.
     /// - Parameter text: The title of the form element to filter with.
     func filterElements(_ text: String) {
-        func focusFilter() {
+        filterElementsField.assertExistenceAndTap()
+        
 #if targetEnvironment(macCatalyst)
-            let searchButton = buttons["Search"]
-            if searchButton.waitForExistence(timeout: 5.0) {
-                searchButton.tap()
-            } else {
-                filterElementsField.assertExistenceAndTap()
-            }
+        let hasCurrentValue = !(filterElementsField.stringValue?.isEmpty ?? true)
 #else
-            filterElementsField.assertExistenceAndTap()
+        let hasCurrentValue = filterElementsField.stringValue != filterElementsField.placeholderValue
 #endif
-        }
         
-        focusFilter()
-        
-        if !(filterElementsField.stringValue?.isEmpty ?? true) {
+        if hasCurrentValue {
             clearElementFilter()
-            focusFilter()
+            filterElementsField.assertExistenceAndTap()
         }
         
         filterElementsField.typeText(text)
