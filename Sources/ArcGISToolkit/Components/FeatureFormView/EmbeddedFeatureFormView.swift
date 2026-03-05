@@ -37,6 +37,7 @@ struct EmbeddedFeatureFormView: View {
                                 $0
                                     .searchable(
                                         text: $model.elementFilterPhrase,
+                                        placement: .navigationBarDrawer(displayMode: .always),
                                         prompt: Text(
                                             "Filter Elements",
                                             bundle: .toolkitModule,
