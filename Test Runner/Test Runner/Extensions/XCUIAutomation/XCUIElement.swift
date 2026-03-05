@@ -56,6 +56,19 @@ extension XCUIElement {
         tap()
     }
     
+    /// Asserts that the system can compute a hit point for the element.
+    func assertHittable(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        XCTAssertTrue(
+            isHittable,
+            "The \(description) isn't hittable.",
+            file: file,
+            line: line
+        )
+    }
+    
     /// Asserts that the element's label equals an expected value after an amount of time.
     /// - Parameters:
     ///   - expectedLabel: The expected value of the label.
