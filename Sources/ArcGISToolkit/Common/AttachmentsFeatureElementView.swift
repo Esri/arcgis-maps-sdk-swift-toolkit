@@ -61,9 +61,7 @@ struct AttachmentsFeatureElementView: View {
         case .none:
             ProgressView()
                 .padding()
-                .onAppear {
-                    loadAttachments()
-                }
+                .onAppear(perform: loadAttachments)
         case .success(let models):
             if let formElement {
                 Group {
