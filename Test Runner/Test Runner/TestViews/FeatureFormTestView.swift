@@ -256,6 +256,7 @@ private extension FeatureFormTestView {
     
     /// The set of all Form View UI test cases.
     var cases: [TestCase] {[
+        .init("testAttachmentLoadDurability", objectID: 1, portalID: .groupAndAttachments),
         .init("testAttachmentRenaming", objectID: 1, portalID: .attachmentMapID),
         .init("testCase_1_1", objectID: 1, portalID: .inputValidationMapID),
         .init("testCase_1_2", objectID: 1, portalID: .inputValidationMapID),
@@ -324,6 +325,7 @@ private extension String {
     static let attachmentMapID = "3e551c383fc949c7982ec73ba67d409b"
     static let comboBoxMapID = "ed930cf0eb724ea49c6bccd8fd3dd9af"
     static let dateMapID = "ec09090060664cbda8d814e017337837"
+    static let groupAndAttachments = "faae5df8d326413a8f187b7046bf70d3"
     static let groupElementMapID = "97495f67bd2e442dbbac485232375b07"
     static let inputValidationMapID = "5d69e2301ad14ec8a73b568dfc29450a"
     static let napervilleElectricUtilityNetwork = "471eb0bf37074b1fbb972b1da70fb310"

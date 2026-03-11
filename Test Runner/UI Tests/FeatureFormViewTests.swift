@@ -40,6 +40,22 @@ final class FeatureFormViewTests: XCTestCase {
         formViewTestsButton.tap()
     }
     
+    /// Verify that the attachments form element load isn't cancelled early when it's pushed below the fold
+    /// by a group element.
+    func testAttachmentLoadDurability() {
+        let app = XCUIApplication()
+        let attachmentLabel = app.staticTexts["esri.jpg"]
+        let elementTitle = "Attachments"
+        let formTitle = app.staticTexts["Group and Attachments"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        
+        attachmentLabel.assertExistence()
+    }
+    
     func testAttachmentRenaming() {
         let app = XCUIApplication()
         let activityIndicator = app.activityIndicators.firstMatch
