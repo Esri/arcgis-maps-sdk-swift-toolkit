@@ -147,7 +147,9 @@ struct AttachmentsFeatureElementView: View {
                     }
                 self.attachmentModels = .success(attachmentModels)
             } catch {
-                Logger.attachmentsFeatureElementView.error("Attachments failed load. \(error.localizedDescription)")
+                Logger.attachmentsFeatureElementView.error(
+                    "Attachments failed load. \(error.localizedDescription)"
+                )
                 attachmentModels = .failure(error)
             }
         }
