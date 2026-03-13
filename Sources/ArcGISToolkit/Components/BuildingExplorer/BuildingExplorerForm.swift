@@ -1,0 +1,411 @@
+// Copyright 2026 Esri
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import ArcGIS
+import SwiftUI
+
+/// The form which displays the content of the building explorer.
+struct BuildingExplorerForm: View {
+    /// The items to show in the form.
+    let items: [BuildingExplorerItem]
+    /// The proxy which we used to zoom into the building.
+    let localSceneViewProxy: LocalSceneViewProxy?
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    /// The currently selected explorer item.
+    @Binding var selection: BuildingExplorerItem
+    
+    /// The group sublayers which is used to show to build the toggles for the
+    /// discipline and categories.
+    @State private var groupSublayers: [BuildingGroupSublayer] = []
+    
+    /// A Boolean value indicating if the camera should change to zoom into
+    /// the building.
+    @State private var shouldZoomToBuilding = false
+    
+    @State private var layerIsVisible = false
+    
+    // Layer picker properties.
+    
+    /// The name of the selected layer in the layer picker.
+    @State private var selectedLayerName = ""
+    /// The names of the layers that can be selected in the picker.
+    @State private var layerNames: [String] = []
+    
+    // Level picker properties.
+    
+    /// The selected level in the level picker.
+    @State private var selectedLevel: String = ""
+    /// The available levels in the level picker.
+    @State private var availableLevels: [String] = []
+    
+    // Phase picker properties.
+    
+    /// The selected phase in the phase picker.
+    @State private var selectedPhase = ""
+    /// The available phase in the phase picker.
+    @State private var availablePhases: [String] = []
+    
+    @State private var phasePickerStyle: (any PickerStyle) = .automatic
+    
+    // Full model and sublayer toggle properties.
+    
+    /// A Boolean value indicating if the full model sublayer is showing.
+    @State private var showFullModel = true
+    /// The full model sublayer in the building scene layer.
+    @State private var fullModelSublayer: BuildingGroupSublayer?
+    /// The overview sublayer in the building scene layer.
+    @State private var overviewSublayer: BuildingSublayer?
+    
+    init(
+        items: [BuildingExplorerItem],
+        selection: Binding<BuildingExplorerItem?>,
+        localSceneViewProxy: LocalSceneViewProxy?
+    ) {
+        self.items = items
+        self._selection = .init {
+            // If we don't have a selection then this is the first
+            // time the explorer was opened and we can default to the
+            // first item.
+            selection.wrappedValue ?? items.first!
+        } set: {
+            selection.wrappedValue = $0
+        }
+        self.localSceneViewProxy = localSceneViewProxy
+    }
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    layerVisibilityToggle
+                    
+                    // These options are only helpful if the
+                    // layer is visible.
+                    if layerIsVisible {
+                        fullModelToggle
+                        
+                        zoomToButton
+                    }
+                }
+                
+                // Only show options to filter the full model
+                // if the full model is being shown and the BSL
+                // is visible.
+                if showFullModel && layerIsVisible {
+                    if !availableLevels.isEmpty {
+                        Section("Levels") { levelPicker }
+                        
+                    }
+                    
+                    if availablePhases.count > 1 {
+                        Section("Construction Phases") { phasePicker }
+                    }
+                    
+                    Section("Disciplines & Categories") {
+                        ForEach(groupSublayers) { sublayer in
+                            BuildingGroupSublayerToggleView(groupSublayer: sublayer)
+                        }
+                    }
+                }
+                
+            }
+            .onAppear { updateBuildingPicker() }
+            .toolbar {
+                ToolbarItem(placement: .principal) { layerPicker }
+                ToolbarItem(placement: .topBarTrailing) { xButton }
+            }
+        }
+    }
+    
+    /// The building scene layer visibility toggle.
+    private var layerVisibilityToggle: some View {
+        Toggle("Visible", isOn: $layerIsVisible)
+            .onChange(of: layerIsVisible) {
+                selection.layer.isVisible = layerIsVisible
+            }
+    }
+    
+    /// The layer picker which is used to switch between different building
+    /// scene layers in the scene.
+    private var layerPicker: some View {
+        Picker("Building Scene Layers", selection: $selectedLayerName) {
+            ForEach(layerNames, id: \.self) { layerName in
+                Text(layerName)
+            }
+        }
+        .labelsHidden()
+        .menuIndicator(.visible)
+        .task(id: selectedLayerName) {
+            selection = items.first(where: { $0.layer.name == selectedLayerName })!
+            
+            // Update explorer contents.
+            await updateForm()
+        }
+    }
+    
+    /// A toggle to switch between the visibility of the full model sublayer.
+    @ViewBuilder private var fullModelToggle: some View {
+        // We need a valid overview and full model for this
+        // toggle to be functional.
+        if let overviewSublayer, let fullModelSublayer {
+            Toggle("Full Model", isOn: $showFullModel)
+                .onChange(of: showFullModel) {
+                    let selectedLayer = selection.layer
+                    
+                    if !showFullModel {
+                        // Save last filter for when we come back to
+                        // full model.
+                        selection.filter = selectedLayer.activeFilter
+                        
+                        // We need to remove the filter now since it
+                        // isn't valid for the overview sublayer.
+                        // If a filter isn't valid then nothing renders
+                        // but we want to show the overview.
+                        selectedLayer.activeFilter = nil
+                    } else if let oldFilter = selection.filter {
+                        // If we saved a filter and the user switched between
+                        // overview and full model then they would see
+                        // the same filter from before.
+                        selectedLayer.activeFilter = oldFilter
+                    }
+                    
+                    fullModelSublayer.isVisible = showFullModel
+                    overviewSublayer.isVisible = !showFullModel
+                }
+        }
+    }
+    
+    /// The zoom to building button.
+    @ViewBuilder private var zoomToButton: some View {
+        if let proxy = localSceneViewProxy,
+           let layerExtent = selection.layer.fullExtent {
+            Button("Zoom to building", systemImage: "plus.magnifyingglass") {
+                shouldZoomToBuilding = true
+            }
+            .foregroundStyle(.primary)
+            .task(id: shouldZoomToBuilding) {
+                guard shouldZoomToBuilding else { return }
+                
+                let camera = Camera(
+                    lookingAt: layerExtent.center,
+                    distance: 250,
+                    heading: 40,
+                    pitch: 60,
+                    roll: .zero
+                )
+                await proxy.setViewpointCamera(camera, duration: 1.5)
+                
+                shouldZoomToBuilding = false
+            }
+        }
+    }
+    
+    /// The level picker to select a level on the building.
+    private var levelPicker: some View {
+        Picker("Level", selection: $selectedLevel) {
+            ForEach(availableLevels, id: \.self) { level in
+                Text(level)
+            }
+        }
+        .onChange(of: selectedLevel) {
+            if selection.level != selectedLevel {
+                selection.level = selectedLevel
+                
+                // Only change filter if the new selected level
+                // is different. If the user, has a filter
+                // already present then we don't want to
+                // change that when they open up the building
+                // explorer. Only change the filter if they
+                // selected a new level.
+                selection.layer.activeFilter = levelAndPhaseFilter
+            }
+        }
+    }
+    
+    /// The construction phase picker to select a phase on the building.
+    @ViewBuilder private var phasePicker: some View {
+        let picker = Picker("Phases", selection: $selectedPhase) {
+            ForEach(availablePhases, id: \.self) { phase in
+                Text(phase)
+            }
+        }
+            .onChange(of: selectedPhase) {
+                if selection.phase != selectedPhase {
+                    selection.phase = selectedPhase
+                    
+                    // Only change filter if the new selected phase
+                    // is different. If the user, has a filter
+                    // already present then we don't want to
+                    // change that when they open up the building
+                    // explorer. Only change the filter if they
+                    // selected a new phase.
+                    selection.layer.activeFilter = levelAndPhaseFilter
+                }
+            }
+        
+        if availablePhases.count <= 10 {
+            // The segmented control makes it easier to switch
+            // between the different phases. But we don't want this
+            // style if there are too many phases since it can
+            // get crowded.
+            picker
+                .pickerStyle(.segmented)
+        } else {
+            picker.pickerStyle(.automatic)
+        }
+    }
+    
+    /// The X button used to close the explorer.
+    @ViewBuilder private var xButton: some View {
+        if #available(iOS 26, visionOS 26, *) {
+            Button(role: .close) {
+                dismiss()
+            }
+        } else {
+            XButton(.dismiss)
+        }
+    }
+    
+    /// The filter used with the building scene layer to show the selected floor
+    /// and phase that the user has selected.
+    private var levelAndPhaseFilter: BuildingFilter? {
+        // If no level or phase is selected then we need show everything
+        // so return 'nil' for the filter.
+        guard selectedLevel != .allLabel || !selectedPhase.isEmpty else { return nil }
+        
+        // Construct the where clauses based on the selection state.
+        
+        var solidWhereClause = ""
+        var xrayWhereClause = ""
+        
+        if !selectedPhase.isEmpty {
+            solidWhereClause = "\(String.phaseFieldKey) <= \(selectedPhase)"
+        }
+        
+        if selectedLevel != .allLabel {
+            let levelSolidWhereClause = "\(String.levelFieldKey) = \(selectedLevel)"
+            xrayWhereClause = "\(String.levelFieldKey) < \(selectedLevel)"
+            
+            // Create or combine where clauses.
+            if solidWhereClause.isEmpty {
+                solidWhereClause = levelSolidWhereClause
+            } else {
+                solidWhereClause = "\(solidWhereClause) AND \(levelSolidWhereClause)"
+            }
+        }
+        
+        let solidFilterBlock = BuildingFilterBlock(
+            title: "Solid",
+            whereClause: solidWhereClause,
+            mode: .solid()
+        )
+        
+        let xrayFilterBlock = BuildingFilterBlock(
+            title: "Xray",
+            whereClause: xrayWhereClause,
+            mode: .xray()
+        )
+        let blocks = if xrayWhereClause.isEmpty {
+            [solidFilterBlock]
+        } else {
+            [solidFilterBlock, xrayFilterBlock]
+        }
+        
+        return BuildingFilter(
+            name: "Building Explorer filter",
+            description: "Show selected level and phases using filter blocks.",
+            blocks: blocks
+        )
+    }
+    
+    /// Updates the explorer when the view appears with the latest information
+    /// for the building scene layer picker.
+    private func updateBuildingPicker() {
+        // Update layer name picker.
+        
+        selectedLayerName = selection.layer.name
+        layerNames = items.map { $0.layer.name }
+    }
+    
+    /// Updates the contents of the form with the latest selected layer.
+    private func updateForm() async {
+        let selectedLayer = selection.layer
+        
+        layerIsVisible = selectedLayer.isVisible
+        
+        // According to the spec, if there is no full model then
+        // we should use the sublayers directly as the disciplines.
+        
+        var sublayers: [BuildingSublayer] = []
+        if let fullModelSublayer = selectedLayer.sublayers.first(where: { $0.modelName.lowercased() == .fullModelName }) as? BuildingGroupSublayer {
+            self.fullModelSublayer = fullModelSublayer
+            showFullModel = fullModelSublayer.isVisible
+            sublayers = fullModelSublayer.sublayers
+        } else {
+            sublayers = selectedLayer.sublayers
+        }
+        
+        groupSublayers = sublayers
+            .compactMap { $0 as? BuildingGroupSublayer }
+        overviewSublayer = selectedLayer.sublayers
+            .first(where: { $0.modelName.lowercased() == .overviewModelName })
+        
+        // Gets the level and phase statistics.
+        
+        guard let statistics = try? await selectedLayer.statistics,
+              let levelStatistics = statistics[.levelFieldKey],
+              let phaseStatistics = statistics[.phaseFieldKey] else { return }
+        
+        // Gets all the levels and phases and sort them.
+        
+        availableLevels = levelStatistics.mostFrequentValues.sorted { Int($0) ?? .zero > Int($1) ?? .zero } + [.allLabel]
+        availablePhases = phaseStatistics.mostFrequentValues.sorted { Int($0) ?? .zero < Int($1) ?? .zero }
+        
+        // Restore last selected level and phase if there was one.
+        // If not, give a default.
+        
+        selectedLevel = if selection.level.isEmpty {
+            .allLabel
+        } else {
+            selection.level
+        }
+        
+        selectedPhase = if selection.phase.isEmpty {
+            availablePhases.last ?? ""
+        } else {
+            selection.phase
+        }
+    }
+}
+
+private extension String {
+    /// The label used in the floor picker to see all the floors.
+    static var allLabel: String { "All" }
+    /// The model name of the full model sublayer.
+    /// - Note: This string is lowercased so the model name  it is being compared against
+    /// should be lowercased too. There shouldn't be a problem with the casing of the
+    /// model name but we are doing this just in case.
+    static var fullModelName: String { "fullmodel" }
+    /// The attribute name for the levels.
+    static var levelFieldKey: String { "BldgLevel" }
+    /// The model name of the overview sublayer.
+    /// - Note: This string is lowercased so the model name it is being compared against
+    /// should be lowercased too. There shouldn't be a problem with the casing of the
+    /// model name but we are doing this just in case.
+    static var overviewModelName: String { "overview" }
+    /// The attribute name for the phases.
+    static var phaseFieldKey: String { "CreatedPhase" }
+}
