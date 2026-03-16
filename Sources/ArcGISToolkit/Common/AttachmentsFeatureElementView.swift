@@ -24,7 +24,6 @@ struct AttachmentsFeatureElementView: View {
     let featureElement: AttachmentsFeatureElement
     
     @Environment(\.isPortraitOrientation) var isPortraitOrientation
-    
     @Environment(\.displayScale) var displayScale
     
     /// The view model for a form.
@@ -33,29 +32,14 @@ struct AttachmentsFeatureElementView: View {
     /// `featureElement` is an `AttachmentsFormElement`.
     private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel?
     
+    /// Models for the attachments held by the element.
+    @State private var attachmentModels: Result<[AttachmentModel], Error>?
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
-    
+    /// A Boolean value denoting whether the Disclosure Group is expanded.
+    @State private var isExpanded = true
     /// The last locally added attachment.
     @State private var lastAttachmentAdded: AttachmentModel?
-    
-    /// A Boolean value denoting if the view should be shown as regular width.
-    var isRegularWidth: Bool {
-        !isPortraitOrientation
-    }
-    
-    /// The state of the attachment models.
-    private enum AttachmentModelsState {
-        /// Attachments are being fetched and wrapped with models.
-        case initializing
-        /// Attachments have been fetched and wrapped with models.
-        case initialized([AttachmentModel])
-        /// Attachments failed to load.
-        case loadFailed
-    }
-    
-    /// The current state of the attachment models.
-    @State private var attachmentModelsState: AttachmentModelsState = .initializing
     
     /// Creates a new `AttachmentsFeatureElementView` for a Feature Form.
     /// - Parameter formElement: The `AttachmentsFeatureElement`.
@@ -72,66 +56,43 @@ struct AttachmentsFeatureElementView: View {
         self.embeddedFeatureFormViewModel = nil
     }
     
-    /// A Boolean value denoting whether the Disclosure Group is expanded.
-    @State private var isExpanded = true
-    
     var body: some View {
-        Group {
-            switch attachmentModelsState {
-            case .initializing:
-                ProgressView()
-                    .padding()
-                    .task {
-                        let attachments: [any FeatureAttachment]
-                        do {
-                            attachments = try await featureElement.featureAttachments
-                        } catch {
-                            Logger.attachmentsFeatureElementView.error("Attachments failed load. \(error.localizedDescription)")
-                            attachmentModelsState = .loadFailed
-                            return
-                        }
-                        let attachmentModels = attachments
-                            .reversed()
-                            .map {
-                                AttachmentModel(
-                                    attachment: $0,
-                                    displayScale: displayScale,
-                                    thumbnailSize: thumbnailSize
-                                )
-                            }
-                        attachmentModelsState = .initialized(attachmentModels)
+        switch attachmentModels {
+        case .none:
+            ProgressView()
+                .padding()
+                .onAppear(perform: loadAttachments)
+        case .success(let models):
+            if let formElement {
+                Group {
+                    if !models.isEmpty {
+                        attachmentBody(attachmentModels: models)
                     }
-            case .initialized(let attachmentModels):
-                if isShowingAttachmentsFormElement {
-                    if !attachmentModels.isEmpty {
-                        attachmentBody(attachmentModels: attachmentModels)
+                    if isEditable {
+                        AttachmentImportMenu(element: formElement, onAdd: onAdd)
                     }
-                    if isEditable,
-                       let element = featureElement as? AttachmentsFormElement {
-                        AttachmentImportMenu(element: element, onAdd: onAdd)
-                    }
-                } else if !attachmentModels.isEmpty {
-                    DisclosureGroup(isExpanded: $isExpanded) {
-                        attachmentBody(attachmentModels: attachmentModels)
-                    } label: {
-                        PopupElementHeader(
-                            title: featureElement.displayTitle,
-                            description: featureElement.description
-                        )
-                        .catalystPadding(4)
-                    }
-                    .disclosureGroupPadding()
                 }
-            case .loadFailed:
-                Text(
-                    "Attachments failed to load.",
-                    bundle: .toolkitModule,
-                    comment: "The status text when attachments failed to load."
-                )
+                .onAttachmentIsEditableChange(of: formElement) { newIsEditable in
+                    isEditable = newIsEditable
+                }
+            } else if !models.isEmpty {
+                DisclosureGroup(isExpanded: $isExpanded) {
+                    attachmentBody(attachmentModels: models)
+                } label: {
+                    PopupElementHeader(
+                        title: featureElement.displayTitle,
+                        description: featureElement.description
+                    )
+                    .catalystPadding(4)
+                }
+                .disclosureGroupPadding()
             }
-        }
-        .onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
-            isEditable = newIsEditable
+        case .failure(_):
+            Text(
+                "Attachments failed to load.",
+                bundle: .toolkitModule,
+                comment: "The status text when attachments failed to load."
+            )
         }
     }
     
@@ -164,17 +125,45 @@ struct AttachmentsFeatureElementView: View {
         }
     }
     
+    /// Loads the attachments associated with this element.
+    private func loadAttachments() {
+        // Use an unstructured task to prevent cancellation from view-shift.
+        // This can happen, for example, in FeatureFormView when the visibility
+        // of other elements is resolved during loading and the attachments
+        // element is pushed down below the fold.
+        Task {
+            do {
+                let attachments = try await featureElement.featureAttachments
+                let attachmentModels = attachments
+                    .reversed()
+                    .map {
+                        AttachmentModel(
+                            attachment: $0,
+                            displayScale: displayScale,
+                            thumbnailSize: thumbnailSize
+                        )
+                    }
+                self.attachmentModels = .success(attachmentModels)
+            } catch {
+                Logger.attachmentsFeatureElementView.error(
+                    "Attachments failed load. \(error.localizedDescription)"
+                )
+                attachmentModels = .failure(error)
+            }
+        }
+    }
+    
     /// Creates a model for the new attachment for display.
     /// - Parameter attachment: The added attachment.
     func onAdd(attachment: FeatureAttachment) -> Void {
-        guard case .initialized(var models) = attachmentModelsState else { return }
+        guard case .success(var models) = attachmentModels else { return }
         let newModel = AttachmentModel(
             attachment: attachment,
             displayScale: displayScale,
             thumbnailSize: thumbnailSize
         )
         models.insert(newModel, at: 0)
-        withAnimation { attachmentModelsState = .initialized(models) }
+        withAnimation { attachmentModels = .success(models) }
         embeddedFeatureFormViewModel?.evaluateExpressions()
         lastAttachmentAdded = newModel
     }
@@ -195,12 +184,11 @@ struct AttachmentsFeatureElementView: View {
     /// - Parameters:
     ///   - attachmentModel: The model for the attachment to delete.
     func onDelete(attachmentModel: AttachmentModel) -> Void {
-        if let element = featureElement as? AttachmentsFormElement,
-           let attachment = attachmentModel.attachment as? FormAttachment {
-            element.delete(attachment)
-            guard case .initialized(var models) = attachmentModelsState else { return }
+        if let formElement, let attachment = attachmentModel.attachment as? FormAttachment {
+            formElement.delete(attachment)
+            guard case .success(var models) = attachmentModels else { return }
             models.removeAll { $0 === attachmentModel }
-            withAnimation { attachmentModelsState = .initialized(models) }
+            withAnimation { attachmentModels = .success(models) }
             embeddedFeatureFormViewModel?.evaluateExpressions()
         }
     }
@@ -220,7 +208,7 @@ private extension AttachmentsFeatureElement {
 extension AttachmentsFeatureElementView {
     /// The size of thumbnail images, based on the attachment display type
     /// and the current size class of the view.
-    var thumbnailSize: CGSize {
+    private var thumbnailSize: CGSize {
         switch featureElement.attachmentsDisplayType {
         case .list:
             CGSize(width: 40, height: 40)
@@ -235,11 +223,13 @@ extension AttachmentsFeatureElementView {
         }
     }
     
-    /// A Boolean value indicating whether the feature Element
-    /// is an `AttachmentsFormElement`.
-    var isShowingAttachmentsFormElement: Bool {
-        featureElement is AttachmentsFormElement
+    /// The model's element as an attachments form element.
+    private var formElement: AttachmentsFormElement? {
+        featureElement as? AttachmentsFormElement
     }
+    
+    /// A Boolean value denoting if the view should be shown as regular width.
+    private var isRegularWidth: Bool { !isPortraitOrientation }
 }
 
 extension View {
@@ -250,18 +240,14 @@ extension View {
     /// - Returns: The modified view.
     @ViewBuilder
     func onAttachmentIsEditableChange(
-        of element: AttachmentsFeatureElement,
+        of element: AttachmentsFormElement,
         action: @escaping (_ newIsEditable: Bool) -> Void
     ) -> some View {
-        if let attachmentsFormElement = element as? AttachmentsFormElement {
-            self
-                .task(id: ObjectIdentifier(attachmentsFormElement)) {
-                    for await isEditable in attachmentsFormElement.$isEditable {
-                        action(isEditable)
-                    }
+        self
+            .task(id: ObjectIdentifier(element)) {
+                for await isEditable in element.$isEditable {
+                    action(isEditable)
                 }
-        } else {
-            self
-        }
+            }
     }
 }
