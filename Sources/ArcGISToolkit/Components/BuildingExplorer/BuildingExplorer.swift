@@ -56,9 +56,9 @@ public struct BuildingExplorer: View {
     private let localSceneViewProxy: LocalSceneViewProxy?
     
     /// An error that occurred while setting up the explorer.
-    @State private var setupError: (any Error)?
+    @State private var setUpError: (any Error)?
     /// A Boolean value indicating if the explorer finished setting up.
-    @State private var setupIsDone = false
+    @State private var setUpIsDone = false
     
     /// The items to use in the explorer.
     @Binding private var items: [BuildingExplorerItem]
@@ -88,37 +88,37 @@ public struct BuildingExplorer: View {
     
     public var body: some View {
         Group {
-            if setupIsDone {
+            if setUpIsDone {
                 BuildingExplorerForm(
                     items: items,
                     selection: $selection,
                     localSceneViewProxy: localSceneViewProxy
                 )
-            } else if let setupError {
-                ContentUnavailableView("\(setupError.localizedDescription)", systemImage: "exclamationmark.triangle")
+            } else if let setUpError {
+                ContentUnavailableView("\(setUpError.localizedDescription)", systemImage: "exclamationmark.triangle")
             } else {
                 ProgressView()
             }
         }
         .task {
-            await setup()
+            await setUp()
         }
     }
     
     /// Sets up the building explorer.
-    private func setup() async {
+    private func setUp() async {
         do {
             try await scene.load()
             
             guard scene.viewingMode == .local else {
-                throw SetupError.globalScenesNotSupported
+                throw SetUpError.globalScenesNotSupported
             }
             
             let buildingSceneLayers = scene.operationalLayers
                 .compactMap { $0 as? BuildingSceneLayer }
             
             guard !buildingSceneLayers.isEmpty else {
-                throw SetupError.noBuildingSceneLayers
+                throw SetUpError.noBuildingSceneLayers
             }
             
             await buildingSceneLayers.load()
@@ -147,9 +147,9 @@ public struct BuildingExplorer: View {
                 self.selection = items.first
             }
             
-            setupIsDone = true
+            setUpIsDone = true
         } catch {
-            setupError = error
+            setUpError = error
         }
     }
 }
@@ -167,9 +167,17 @@ private extension BuildingExplorer {
         var errorDescription: String? {
             switch self {
             case .globalScenesNotSupported:
-                "Global scenes aren't supported in the Building Explorer."
+                String(
+                    localized: "Global scenes aren't supported in the Building Explorer.",
+                    bundle: .toolkitModule,
+                    comment: "Description of error thrown when a global scene is being provided to the Building Explorer."
+                )
             case .noBuildingSceneLayers:
-                "No building scene layers in the scene."
+                String(
+                    localized: "No building scene layers in the scene.",
+                    bundle: .toolkitModule,
+                    comment: "Description of error thrown there are no building scene layers in the scene provided to the Building Explorer."
+                )
             }
         }
     }

@@ -45,3 +45,9 @@ struct BuildingExplorerExampleView: View {
         }
     }
 }
+
+#Preview {
+    NavigationStack {
+        BuildingExplorerExampleView()
+    }
+}

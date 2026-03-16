@@ -121,7 +121,7 @@ struct BuildingExplorerForm: View {
                 }
                 
             }
-            .onAppear { updateBuildingPicker() }
+            .onAppear(perform: updateBuildingPicker)
             .toolbar {
                 ToolbarItem(placement: .principal) { layerPicker }
                 ToolbarItem(placement: .topBarTrailing) { xButton }
