@@ -168,12 +168,14 @@ struct AttachmentImportMenu: View {
             }
             
             var newAttachment: FeatureAttachment? = nil
-            if let url = newAttachmentImportData.filePath {
+            if let url = newAttachmentImportData.filePath,
+               url.startAccessingSecurityScopedResource() {
                 newAttachment = try? await element.addAttachment(
                     named: fileName,
                     contentType: newAttachmentImportData.contentType,
                     fileURL: url
                 )
+                url.stopAccessingSecurityScopedResource()
             } else if let data = newAttachmentImportData.data {
                 newAttachment = element.addAttachment(
                     name: fileName,
