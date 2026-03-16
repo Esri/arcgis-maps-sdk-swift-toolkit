@@ -604,6 +604,10 @@ data sources in a utility network. */
 /* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "No Associations";
 
+/* A label indicating an element
+contains no file attachments. */
+"No attachments" = "No attachments";
+
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "No bookmarks";
 
