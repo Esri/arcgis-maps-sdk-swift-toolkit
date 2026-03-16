@@ -26,16 +26,16 @@ import SwiftUI
 ///
 /// **Features**
 /// - Support for multiple building scene layers within a scene.
-/// - Visiblity of the building scene layer can be toggled on and off.
-/// - Visbility of the full model can be toggled on and off. If the full model is turned off, the
-/// overview (shell of the building) will show. If the full model is turned on, the full model wil
+/// - Visibility of the building scene layer can be toggled on and off.
+/// - Visibility of the full model can be toggled on and off. If the full model is turned off, the
+/// overview (shell of the building) will show. If the full model is turned on, the full model will
 /// show and the overview will be turned off.
-/// - A button to zoom into the building.
+/// - A button to zoom to the building.
 /// - Selecting a level of the building to highlight in the building scene layer.
 ///     - The selected level and all of the features of the level are rendered normally using
 ///     the solid filter mode.
 ///     - Levels above are hidden.
-///     - Levels below are rendered using a xray filter mode.
+///     - Levels below are rendered using a X-ray filter mode.
 /// - Selecting a construction phase to highlight in the building scene layer.
 ///     - The selected phase is rendered normally using the solid filter mode.
 /// - Visibility of building feature categories and subcategories can be toggled on and off.
@@ -46,7 +46,7 @@ import SwiftUI
 ///
 /// - Note: The building explorer only supports local scenes and the scene must contain at least
 /// one building scene layer. If there is an active filter on the building scene layer that
-/// wasn't set by the explorer then it will be ignored.
+/// wasn't set by the explorer, then it will be ignored.
 /// - Since: 300.0
 public struct BuildingExplorer: View {
     /// The scene being used to create items for the explorer.
@@ -55,7 +55,7 @@ public struct BuildingExplorer: View {
     /// "Zoom to building" button.
     private let localSceneViewProxy: LocalSceneViewProxy?
     
-    /// An error that occured while setting up the explorer.
+    /// An error that occurred while setting up the explorer.
     @State private var setupError: (any Error)?
     /// A Boolean value indicating if the explorer finished setting up.
     @State private var setupIsDone = false
@@ -72,7 +72,7 @@ public struct BuildingExplorer: View {
     ///   - items: The items being shown in the building explorer.
     ///   - selection: The selected item in the building explorer.
     ///   - localSceneViewProxy: The proxy to provide access to the set viewpoint
-    ///   operation for the "Zoom to buildilng" button. If the proxy is `nil` then that button
+    ///   operation for the "Zoom to building" button. If the proxy is `nil` then that button
     ///   will not display.
     public init(
         scene: ArcGIS.Scene,
@@ -156,8 +156,8 @@ public struct BuildingExplorer: View {
 
 private extension BuildingExplorer {
     /// An error that can occur when setting up the explorer.
-    enum SetupError: LocalizedError {
-        /// Globe scenes are not supported in the Building Explorer. Only local scenes
+    enum SetUpError: LocalizedError {
+        /// Global scenes are not supported in the Building Explorer. Only local scenes
         /// are supported.
         case globalScenesNotSupported
         /// There are no building scene layers in the scene so there is nothing

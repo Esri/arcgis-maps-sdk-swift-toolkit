@@ -37,21 +37,21 @@ struct BuildingExplorerForm: View {
     
     @State private var layerIsVisible = false
     
-    // Layer picker properties.
+    // MARK: Layer picker properties.
     
     /// The name of the selected layer in the layer picker.
     @State private var selectedLayerName = ""
     /// The names of the layers that can be selected in the picker.
     @State private var layerNames: [String] = []
     
-    // Level picker properties.
+    // MARK: Level picker properties.
     
     /// The selected level in the level picker.
     @State private var selectedLevel: String = ""
     /// The available levels in the level picker.
     @State private var availableLevels: [String] = []
     
-    // Phase picker properties.
+    // MARK: Phase picker properties.
     
     /// The selected phase in the phase picker.
     @State private var selectedPhase = ""
@@ -60,7 +60,7 @@ struct BuildingExplorerForm: View {
     
     @State private var phasePickerStyle: (any PickerStyle) = .automatic
     
-    // Full model and sublayer toggle properties.
+    // MARK: Full model and sublayer toggle properties.
     
     /// A Boolean value indicating if the full model sublayer is showing.
     @State private var showFullModel = true
@@ -107,7 +107,6 @@ struct BuildingExplorerForm: View {
                 if showFullModel && layerIsVisible {
                     if !availableLevels.isEmpty {
                         Section("Levels") { levelPicker }
-                        
                     }
                     
                     if availablePhases.count > 1 {
