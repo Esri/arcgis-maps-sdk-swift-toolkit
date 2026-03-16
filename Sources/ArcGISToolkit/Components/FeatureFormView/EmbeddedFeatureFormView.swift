@@ -33,21 +33,18 @@ struct EmbeddedFeatureFormView: View {
                     if CommandLine.arguments.contains("-testCase") {
                         @Bindable var model = embeddedFeatureFormViewModel
                         form
-                            .modify {
-                                $0
-                                    .searchable(
-                                        text: $model.elementFilterPhrase,
-                                        placement: .navigationBarDrawer(displayMode: .always),
-                                        prompt: Text(
-                                            "Filter Elements",
-                                            bundle: .toolkitModule,
-                                            comment: """
-                                                Label for a text field used to 
-                                                filter visible elements in a form.
-                                                """
-                                        )
-                                    )
-                            }
+                            .searchable(
+                                text: $model.elementFilterPhrase,
+                                placement: .navigationBarDrawer(displayMode: .always),
+                                prompt: Text(
+                                    "Filter Elements",
+                                    bundle: .toolkitModule,
+                                    comment: """
+                                        Label for a text field used to 
+                                        filter visible elements in a form.
+                                        """
+                                )
+                            )
                     } else {
                         form
                     }
