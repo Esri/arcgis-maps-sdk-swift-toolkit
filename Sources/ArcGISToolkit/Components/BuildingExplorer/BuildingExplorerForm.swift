@@ -27,7 +27,7 @@ struct BuildingExplorerForm: View {
     /// The currently selected explorer item.
     @Binding var selection: BuildingExplorerItem
     
-    /// The group sublayers which is used to show to build the toggles for the
+    /// The group sublayers which is used to show the toggles for the
     /// discipline and categories.
     @State private var groupSublayers: [BuildingGroupSublayer] = []
     
@@ -224,7 +224,7 @@ struct BuildingExplorerForm: View {
                 selection.level = selectedLevel
                 
                 // Only change filter if the new selected level
-                // is different. If the user, has a filter
+                // is different. If the user has a filter
                 // already present then we don't want to
                 // change that when they open up the building
                 // explorer. Only change the filter if they
@@ -246,7 +246,7 @@ struct BuildingExplorerForm: View {
                     selection.phase = selectedPhase
                     
                     // Only change filter if the new selected phase
-                    // is different. If the user, has a filter
+                    // is different. If the user has a filter
                     // already present then we don't want to
                     // change that when they open up the building
                     // explorer. Only change the filter if they
