@@ -22,8 +22,6 @@ struct BuildingExplorerForm: View {
     /// The proxy which we used to zoom into the building.
     let localSceneViewProxy: LocalSceneViewProxy?
     
-    @Environment(\.dismiss) private var dismiss
-    
     /// The currently selected explorer item.
     @Binding var selection: BuildingExplorerItem
     
@@ -124,7 +122,7 @@ struct BuildingExplorerForm: View {
             .onAppear(perform: updateBuildingPicker)
             .toolbar {
                 ToolbarItem(placement: .principal) { layerPicker }
-                ToolbarItem(placement: .topBarTrailing) { xButton }
+                ToolbarItem(placement: .topBarTrailing) {  DismissButton(kind: .close) }
             }
         }
     }
@@ -264,17 +262,6 @@ struct BuildingExplorerForm: View {
                 .pickerStyle(.segmented)
         } else {
             picker.pickerStyle(.automatic)
-        }
-    }
-    
-    /// The X button used to close the explorer.
-    @ViewBuilder private var xButton: some View {
-        if #available(iOS 26, visionOS 26, *) {
-            Button(role: .close) {
-                dismiss()
-            }
-        } else {
-            XButton(.dismiss)
         }
     }
     
