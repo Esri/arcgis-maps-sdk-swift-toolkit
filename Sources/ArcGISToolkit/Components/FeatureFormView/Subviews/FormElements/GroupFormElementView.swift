@@ -25,7 +25,7 @@ struct GroupFormElementView<Content>: View where Content: View {
     /// A dictionary of each group element and whether or not it is visible.
     @State private var elementVisibility: [FormElement: Bool] = [:]
     /// A Boolean value indicating whether the group is expanded or collapsed.
-    @State private var isExpanded = false
+    @State private var isExpanded: Bool?
     
     var body: some View {
         // Using the header of an empty Section ensures that consecutive collapsed
@@ -34,7 +34,9 @@ struct GroupFormElementView<Content>: View where Content: View {
             label
         }
         .onAppear {
-            isExpanded = element.initialState == .expanded
+            if isExpanded == nil {
+                isExpanded = element.initialState == .expanded
+            }
         }
         .task {
             await withTaskGroup { group in
@@ -54,7 +56,7 @@ struct GroupFormElementView<Content>: View where Content: View {
         // 1. Avoids indentation introduced by components like a DisclosureGroup.
         // 2. Avoids unwanted impacts on appearance from nested Sections.
         // 3. Avoids the header receiving a pill-shaped background.
-        if isExpanded {
+        if isExpanded ?? false {
             ForEach(visibleElements, id: \.self) { element in
                 Section {
                     viewCreator(element)
@@ -72,7 +74,7 @@ struct GroupFormElementView<Content>: View where Content: View {
     private var label: some View {
         Button {
             withAnimation {
-                isExpanded.toggle()
+                isExpanded?.toggle()
             }
         } label: {
             VStack(alignment: .leading) {
@@ -85,7 +87,7 @@ struct GroupFormElementView<Content>: View where Content: View {
                     Image(systemName: "chevron.right")
                         .fontWeight(.bold)
                         .foregroundStyle(.tertiary)
-                        .rotationEffect(.degrees(isExpanded ? 90 : 0))
+                        .rotationEffect(.degrees((isExpanded ?? false) ? 90 : 0))
                 }
                 if !element.description.isEmpty {
                     Text(element.description)
