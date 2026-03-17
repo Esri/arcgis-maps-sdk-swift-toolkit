@@ -95,7 +95,16 @@ struct BuildingExplorerForm: View {
                     if layerIsVisible {
                         fullModelToggle
                         
-                        zoomToButton
+                        if showFullModel {
+                            if !availableLevels.isEmpty {
+                                levelPicker
+                                
+                            }
+                            
+                            if availablePhases.count > 1 {
+                                phasePicker
+                            }
+                        }
                     }
                 }
                 
@@ -103,14 +112,6 @@ struct BuildingExplorerForm: View {
                 // if the full model is being shown and the BSL
                 // is visible.
                 if showFullModel && layerIsVisible {
-                    if !availableLevels.isEmpty {
-                        Section("Levels") { levelPicker }
-                    }
-                    
-                    if availablePhases.count > 1 {
-                        Section("Construction Phases") { phasePicker }
-                    }
-                    
                     Section("Disciplines & Categories") {
                         ForEach(groupSublayers) { sublayer in
                             BuildingGroupSublayerToggleView(groupSublayer: sublayer)
@@ -119,10 +120,28 @@ struct BuildingExplorerForm: View {
                 }
                 
             }
+            .navigationBarTitleDisplayMode(.inline)
             .onAppear(perform: updateBuildingPicker)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) { zoomToButton }
+#if os(visionOS)
                 ToolbarItem(placement: .principal) { layerPicker }
-                ToolbarItem(placement: .topBarTrailing) {  DismissButton(kind: .close) }
+#else
+                ToolbarItem(placement: .principal) { Text(selectedLayerName) }
+#endif
+                ToolbarItem(placement: .topBarTrailing) { DismissButton(kind: .close) }
+            }
+// visionOS puts the title menu above the main window which doesn't
+// make sense in this context so we don't use the title menu
+// on visionOS. Instead we put the layer picker in a toolbar item.
+#if !os(visionOS)
+            .toolbarTitleMenu { layerPicker }
+#endif
+            .task(id: selectedLayerName) {
+                selection = items.first(where: { $0.layer.name == selectedLayerName })!
+                
+                // Update explorer contents.
+                await updateForm()
             }
         }
     }
@@ -143,14 +162,11 @@ struct BuildingExplorerForm: View {
                 Text(layerName)
             }
         }
-        .labelsHidden()
-        .menuIndicator(.visible)
-        .task(id: selectedLayerName) {
-            selection = items.first(where: { $0.layer.name == selectedLayerName })!
-            
-            // Update explorer contents.
-            await updateForm()
-        }
+#if os(visionOS)
+        .pickerStyle(.menu)
+#else
+        .pickerStyle(.inline)
+#endif
     }
     
     /// A toggle to switch between the visibility of the full model sublayer.
@@ -158,7 +174,7 @@ struct BuildingExplorerForm: View {
         // We need a valid overview and full model for this
         // toggle to be functional.
         if let overviewSublayer, let fullModelSublayer {
-            Toggle("Full Model", isOn: $showFullModel)
+            Toggle("Show Full Model", isOn: $showFullModel)
                 .onChange(of: showFullModel) {
                     let selectedLayer = selection.layer
                     
@@ -233,12 +249,11 @@ struct BuildingExplorerForm: View {
     }
     
     /// The construction phase picker to select a phase on the building.
-    @ViewBuilder private var phasePicker: some View {
-        let picker = Picker("Phases", selection: $selectedPhase) {
+    private var phasePicker: some View {
+        Picker("Construction Phase", selection: $selectedPhase) {
             ForEach(availablePhases, id: \.self) { phase in
                 Text(phase)
             }
-        }
             .onChange(of: selectedPhase) {
                 if selection.phase != selectedPhase {
                     selection.phase = selectedPhase
@@ -252,16 +267,6 @@ struct BuildingExplorerForm: View {
                     selection.layer.activeFilter = levelAndPhaseFilter
                 }
             }
-        
-        if availablePhases.count <= 10 {
-            // The segmented control makes it easier to switch
-            // between the different phases. But we don't want this
-            // style if there are too many phases since it can
-            // get crowded.
-            picker
-                .pickerStyle(.segmented)
-        } else {
-            picker.pickerStyle(.automatic)
         }
     }
     

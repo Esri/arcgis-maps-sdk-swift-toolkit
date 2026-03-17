@@ -26,11 +26,11 @@ import SwiftUI
 ///
 /// **Features**
 /// - Support for multiple building scene layers within a scene.
+/// - A button to zoom to the building (if the proxy is provided).
 /// - Visibility of the building scene layer can be toggled on and off.
 /// - Visibility of the full model can be toggled on and off. If the full model is turned off, the
 /// overview (shell of the building) will show. If the full model is turned on, the full model will
 /// show and the overview will be turned off.
-/// - A button to zoom to the building.
 /// - Selecting a level of the building to highlight in the building scene layer.
 ///     - The selected level and all of the features of the level are rendered normally using
 ///     the solid filter mode.
@@ -73,7 +73,7 @@ public struct BuildingExplorer: View {
     ///   - selection: The selected item in the building explorer.
     ///   - localSceneViewProxy: The proxy to provide access to the set viewpoint
     ///   operation for the "Zoom to building" button. If the proxy is `nil` then that button
-    ///   will not display.
+    ///   will not display in the toolbar.
     public init(
         scene: ArcGIS.Scene,
         items: Binding<[BuildingExplorerItem]>,
