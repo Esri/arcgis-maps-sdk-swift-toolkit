@@ -24,21 +24,17 @@ struct SwitchInput: View {
     
     /// A Boolean value indicating whether the initial element value was received.
     @State private var didReceiveInitialValue = false
-    
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
     /// In this scenario a ``ComboBoxInput`` should be used instead.
     @State private var fallbackToComboBox = false
-    
     /// A Boolean value indicating whether the switch is toggled on or off.
     @State private var isOn = false
-    
     /// The value represented by the switch.
     @State private var selectedValue: Bool?
     
     /// The element the input belongs to.
     private let element: FieldFormElement
-    
     /// The input configuration of the field.
     private let input: SwitchFormInput
     
