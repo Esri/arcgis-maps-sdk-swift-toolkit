@@ -56,10 +56,12 @@ extension FeatureFormView {
                 associationsFilterResultsModel?.fetchResults()
             }
             .task {
-                self.embeddedFeatureFormViewModel.associationsFilterResultsModels[element] = .init(
-                    element: element,
-                    includeEmptyFilterResults: true
-                )
+                if associationsFilterResultsModel == nil {
+                    self.embeddedFeatureFormViewModel.associationsFilterResultsModels[element] = .init(
+                        element: element,
+                        includeEmptyFilterResults: true
+                    )
+                }
             }
         }
     }

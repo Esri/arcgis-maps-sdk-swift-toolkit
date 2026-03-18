@@ -25,16 +25,19 @@ struct GroupFormElementView<Content>: View where Content: View {
     /// A dictionary of each group element and whether or not it is visible.
     @State private var elementVisibility: [FormElement: Bool] = [:]
     /// A Boolean value indicating whether the group is expanded or collapsed.
-    @State private var isExpanded = false
+    @State private var isExpanded: Bool
+    
+    init(element: GroupFormElement, viewCreator: @escaping (FormElement) -> Content) {
+        self.element = element
+        self.viewCreator = viewCreator
+        _isExpanded = State(initialValue: element.initialState == .expanded)
+    }
     
     var body: some View {
         // Using the header of an empty Section ensures that consecutive collapsed
         // GroupFormElements have spacing consistent with other form elements.
         Section {} header: {
             label
-        }
-        .onAppear {
-            isExpanded = element.initialState == .expanded
         }
         .task {
             await withTaskGroup { group in
