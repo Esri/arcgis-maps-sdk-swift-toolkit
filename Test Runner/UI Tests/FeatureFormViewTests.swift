@@ -1467,7 +1467,7 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let addButton = app.buttons["Add"]
         let associationTypeLabel = app.staticTexts["Association Type"]
-        let cabinetFuseButton = app.buttons["Cabinet Fuse"]
+        let cabinetFuseButton = app.buttons["Cabinet Fuse, Fuse"]
         let connectedFilterTitle = app.staticTexts["Connected"]
         let connectivityLabel = app.staticTexts["Connectivity"]
         let discardButton = app.buttons["Discard"]
@@ -1565,7 +1565,7 @@ final class FeatureFormViewTests: XCTestCase {
         let terminalLabel = app.staticTexts["Terminal"]
         let terminalPicker = app.buttons["Terminal, High"]
         let toElementLabel = app.staticTexts["To Element"]
-        let undergroundMediumVoltageThreePhaseDisconnectButton = app.buttons["Asset Type Underground Medium Voltage Three Phase Disconnect 493"]
+        let undergroundMediumVoltageThreePhaseDisconnectButton = app.buttons["Underground Medium Voltage Three Phase Disconnect, Switch"]
         
 #if targetEnvironment(macCatalyst)
         let addAssociationButton = app.buttons["Add Association"]
@@ -1664,7 +1664,7 @@ final class FeatureFormViewTests: XCTestCase {
         let structureJunctionDataSourceButton = app.buttons["Structure Junction"]
         let toElementValueLabel = app.staticTexts["Vault"]
         let toElementLabel = app.staticTexts["To Element"]
-        let vaultAssetTypeButton = app.buttons["Vault"]
+        let vaultAssetTypeButton = app.buttons["Vault, Vault"]
         let vaultCandidateButton = app.staticTexts.matching(identifier: "Vault").element(boundBy: 1)
         
 #if targetEnvironment(macCatalyst)
@@ -1738,7 +1738,7 @@ final class FeatureFormViewTests: XCTestCase {
         let filterButton = app.buttons["Filter Candidates"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let lineEndCandidates = app.buttons.matching(identifier: "Line End")
-        let lowVoltageSinglePhaseLineEnd = app.buttons["Low Voltage Single Phase Line End"]
+        let lowVoltageSinglePhaseLineEnd = app.buttons["Low Voltage Single Phase Line End, Line End"]
         let valueButton = app.buttons["Value"]
         
 #if os(visionOS) || targetEnvironment(macCatalyst)
@@ -1873,7 +1873,7 @@ final class FeatureFormViewTests: XCTestCase {
         let greaterThanLabels = app.staticTexts.matching(identifier: ">")
         let jan2014Label = app.staticTexts["January 2014"]
         let lessThanButton = app.buttons["<"]
-        let municipalButton = app.buttons["Municipal"]
+        let municipalButton = app.buttons["Municipal, Street Light"]
         let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
         
 #if os(visionOS) || targetEnvironment(macCatalyst)
@@ -1988,7 +1988,7 @@ final class FeatureFormViewTests: XCTestCase {
         let textField = app.textFields["Enter a value"]
         let filterButton = app.buttons["Filter Candidates"]
         let formTitle = app.staticTexts["Structure Junction"]
-        let municipalButton = app.buttons["Municipal"]
+        let municipalButton = app.buttons["Municipal, Street Light"]
         let streetLightButton = app.buttons["Street Light"]
         let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
         

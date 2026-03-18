@@ -151,7 +151,6 @@ extension ComboBoxInput {
         }
     }
     
-    
     /// The view that allows the user to filter and select coded values by name.
     ///
     /// Adds navigation context to support toolbar items and other visual elements in the picker.
