@@ -35,6 +35,6 @@ public final class BuildingExplorerItem {
 
 extension BuildingExplorerItem: @MainActor Equatable {
     public static func == (lhs: BuildingExplorerItem, rhs: BuildingExplorerItem) -> Bool {
-        lhs.layer.id == rhs.layer.id
+        lhs.layer === rhs.layer
     }
 }
