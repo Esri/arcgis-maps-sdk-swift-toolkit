@@ -249,8 +249,7 @@ A label for a button used to continue the authentication operation. */
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
 "Date must be on or before %@" = "Date must be on or before %@";
 
-/* A label for a button to delete a field filter.
-A label for a button used to delete a utility network trace input component or result. */
+/* A label for a "Delete" button. */
 "Delete" = "Delete";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
@@ -411,6 +410,10 @@ asset types by name. */
 /* A label for a search field to filter utility 
 association candidate features by name. */
 "Filter candidates by name" = "Filter candidates by name";
+
+/* Label for a text field used to 
+filter visible elements in a form. */
+"Filter Elements" = "Filter Elements";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -986,6 +989,9 @@ without saving. */
 
 /* A label in reference to a credential username. */
 "Username" = "Username";
+
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "Unknown";
 
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";

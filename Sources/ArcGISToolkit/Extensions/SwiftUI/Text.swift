@@ -32,7 +32,7 @@ extension Text {
             comment: "A label in reference to a utility association type."
         )
     }
-
+    
     /// Localized text for the word "Cancel".
     static var cancel: Self {
         .init(LocalizedStringResource.cancel)

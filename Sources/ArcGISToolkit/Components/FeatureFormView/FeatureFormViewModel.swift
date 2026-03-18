@@ -15,7 +15,7 @@
 import ArcGIS
 import Observation
 
-@Observable class FeatureFormViewModel {
+@Observable final class FeatureFormViewModel {
     /// The models for each feature form in the navigation path.
     private var formModels: [ObjectIdentifier: EmbeddedFeatureFormViewModel] = [:]
     

@@ -108,10 +108,8 @@ struct AttachmentPreview: View {
                                 }
                             }
                         }
-                        Button(role: .destructive) {
+                        Button.delete {
                             deletedAttachmentModel = attachmentModel
-                        } label: {
-                            Label("Delete", systemImage: "trash")
                         }
                     }
                 }
@@ -126,8 +124,8 @@ struct AttachmentPreview: View {
         ) {
             TextField(String.newName, text: $newAttachmentName)
                 .autocorrectionDisabled()
-            Button("Cancel", role: .cancel) { }
-            Button("OK") {
+            Button.cancel {}
+            Button.ok {
                 Task {
                     if let renamedAttachmentModel {
                         let currentName = renamedAttachmentModel.name

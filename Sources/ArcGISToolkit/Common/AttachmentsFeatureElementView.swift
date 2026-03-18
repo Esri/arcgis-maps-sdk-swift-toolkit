@@ -110,19 +110,17 @@ struct AttachmentsFeatureElementView: View {
                 proposedCellSize: thumbnailSize
             )
         case .auto:
-            Group {
-                if isRegularWidth {
-                    AttachmentPreview(
-                        attachmentModels: attachmentModels,
-                        editControlsDisabled: !isEditable,
-                        lastAttachmentAdded: lastAttachmentAdded,
-                        onRename: onRename,
-                        onDelete: onDelete,
-                        proposedCellSize: thumbnailSize
-                    )
-                } else {
-                    AttachmentList(attachmentModels: attachmentModels)
-                }
+            if isRegularWidth {
+                AttachmentPreview(
+                    attachmentModels: attachmentModels,
+                    editControlsDisabled: !isEditable,
+                    lastAttachmentAdded: lastAttachmentAdded,
+                    onRename: onRename,
+                    onDelete: onDelete,
+                    proposedCellSize: thumbnailSize
+                )
+            } else {
+                AttachmentList(attachmentModels: attachmentModels)
             }
         }
     }
