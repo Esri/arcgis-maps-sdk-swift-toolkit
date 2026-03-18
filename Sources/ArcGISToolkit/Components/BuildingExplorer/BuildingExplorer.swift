@@ -40,6 +40,11 @@ import SwiftUI
 ///     - The selected phase is rendered normally using the solid filter mode.
 /// - Visibility of building feature categories and subcategories can be toggled on and off.
 ///
+/// **Behavior**
+///
+/// The explorer uses a `NavigationStack` internally, so the preferred usage is a modal
+/// presentation where the explorer is placed in a sheet or popover.
+///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [BuildingExplorerExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BuildingExplorerExampleView.swift)
 /// in the project.
