@@ -363,7 +363,7 @@ struct BuildingExplorerForm: View {
         // Gets all the levels and phases and sort them.
         
         availableLevels = levelStatistics.mostFrequentValues.sorted { Int($0) ?? .zero > Int($1) ?? .zero } + [.allLabel]
-        availablePhases = phaseStatistics.mostFrequentValues.sorted { Int($0) ?? .zero < Int($1) ?? .zero }
+        availablePhases = phaseStatistics.mostFrequentValues.sorted { Int($0) ?? .zero > Int($1) ?? .zero }
         
         // Restore last selected level and phase if there was one.
         // If not, give a default.
@@ -375,7 +375,7 @@ struct BuildingExplorerForm: View {
         }
         
         selectedPhase = if selection.phase.isEmpty {
-            availablePhases.last ?? ""
+            availablePhases.first ?? ""
         } else {
             selection.phase
         }
