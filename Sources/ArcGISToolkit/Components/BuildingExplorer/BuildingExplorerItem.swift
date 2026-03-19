@@ -26,9 +26,6 @@ public final class BuildingExplorerItem {
     public internal(set) var level = ""
     /// The phase that is selected for this item.
     public internal(set) var phase = ""
-    /// The filter that was set on the building scene layer by
-    /// the building explorer.
-    public internal(set) var filter: BuildingFilter?
     
     init(layer: BuildingSceneLayer) { self.layer = layer }
 }

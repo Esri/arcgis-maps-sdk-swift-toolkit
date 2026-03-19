@@ -179,26 +179,7 @@ struct BuildingExplorerForm: View {
         // toggle to be functional.
         if let overviewSublayer, let fullModelSublayer {
             Toggle(String.showFullModel, isOn: $showFullModel)
-                .onChange(of: showFullModel) {
-                    let selectedLayer = selection.layer
-                    
-                    if !showFullModel {
-                        // Save last filter for when we come back to
-                        // full model.
-                        selection.filter = selectedLayer.activeFilter
-                        
-                        // We need to remove the filter now since it
-                        // isn't valid for the overview sublayer.
-                        // If a filter isn't valid then nothing renders
-                        // but we want to show the overview.
-                        selectedLayer.activeFilter = nil
-                    } else if let oldFilter = selection.filter {
-                        // If we saved a filter and the user switched between
-                        // overview and full model then they would see
-                        // the same filter from before.
-                        selectedLayer.activeFilter = oldFilter
-                    }
-                    
+                .onChange(of: showFullModel) {                    
                     fullModelSublayer.isVisible = showFullModel
                     overviewSublayer.isVisible = !showFullModel
                 }
