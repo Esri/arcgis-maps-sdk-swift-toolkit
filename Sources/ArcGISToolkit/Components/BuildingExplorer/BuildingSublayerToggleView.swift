@@ -26,13 +26,13 @@ struct BuildingSublayerToggleView: View {
     
     var body: some View {
         Toggle(sublayer.name, isOn: $isVisible)
-            .onChange(of: isVisible) {
-                sublayer.isVisible = isVisible
-            }
             .onAppear {
                 // Sets the value of the toggle to the
                 // current visibility of the sublayer.
                 isVisible = sublayer.isVisible
+            }
+            .onChange(of: isVisible) {
+                sublayer.isVisible = isVisible
             }
     }
 }

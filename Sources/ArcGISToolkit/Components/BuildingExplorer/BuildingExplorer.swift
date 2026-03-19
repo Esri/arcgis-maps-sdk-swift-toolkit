@@ -60,10 +60,8 @@ public struct BuildingExplorer: View {
     /// "Zoom to building" button.
     private let localSceneViewProxy: LocalSceneViewProxy?
     
-    /// An error that occurred while setting up the explorer.
-    @State private var setUpError: (any Error)?
-    /// A Boolean value indicating if the explorer finished setting up.
-    @State private var setUpIsDone = false
+    /// The result of setting up the explorer.
+    @State private var setUpResult: Result<Void, (any Error)>?
     
     /// The items to use in the explorer.
     @Binding private var items: [BuildingExplorerItem]
@@ -93,68 +91,63 @@ public struct BuildingExplorer: View {
     
     public var body: some View {
         Group {
-            if setUpIsDone {
+            switch setUpResult {
+            case .success(_):
                 BuildingExplorerForm(
                     items: items,
                     selection: $selection,
                     localSceneViewProxy: localSceneViewProxy
                 )
-            } else if let setUpError {
-                ContentUnavailableView("\(setUpError.localizedDescription)", systemImage: "exclamationmark.triangle")
-            } else {
+            case .failure(let failure):
+                ContentUnavailableView("\(failure.localizedDescription)", systemImage: "exclamationmark.triangle")
+            case nil:
                 ProgressView()
             }
         }
         .task {
-            await setUp()
+            setUpResult = await Result { try await setUp() }
         }
     }
     
     /// Sets up the building explorer.
-    private func setUp() async {
-        do {
-            try await scene.load()
-            
-            guard scene.viewingMode == .local else {
-                throw SetUpError.globalScenesNotSupported
+    private func setUp() async throws {
+        try await scene.load()
+        
+        guard scene.viewingMode == .local else {
+            throw SetUpError.globalScenesNotSupported
+        }
+        
+        let buildingSceneLayers = scene.operationalLayers
+            .compactMap { $0 as? BuildingSceneLayer }
+        
+        guard !buildingSceneLayers.isEmpty else {
+            throw SetUpError.noBuildingSceneLayers
+        }
+        
+        await buildingSceneLayers.load()
+        
+        let newItems: [BuildingExplorerItem] = buildingSceneLayers
+            .map {
+                let item = BuildingExplorerItem(layer: $0)
+                
+                // If this item is already in the items that was
+                // passed in then use that instead.
+                //
+                // If the item doesn't exist already then
+                // the operational layers could have changed
+                // and we should add the new item.
+                guard let matchingItem = items.first(where: { $0 == item }) else { return item }
+                
+                return matchingItem
             }
-            
-            let buildingSceneLayers = scene.operationalLayers
-                .compactMap { $0 as? BuildingSceneLayer }
-            
-            guard !buildingSceneLayers.isEmpty else {
-                throw SetUpError.noBuildingSceneLayers
-            }
-            
-            await buildingSceneLayers.load()
-            
-            let newItems: [BuildingExplorerItem] = buildingSceneLayers
-                .map {
-                    let item = BuildingExplorerItem(layer: $0)
-                    
-                    // If this item is already in the items that was
-                    // passed in then use that instead.
-                    //
-                    // If the item doesn't exist already then
-                    // the operational layers could have changed
-                    // and we should add the new item.
-                    guard let matchingItem = items.first(where: { $0 == item }) else { return item }
-                    
-                    return matchingItem
-                }
-                .sorted(by: { $0.layer.name < $1.layer.name })
-            
-            items = newItems
-            
-            // If we have a selection but it isn't in the items
-            // then default to the first item.
-            if let selection, !items.contains(selection) {
-                self.selection = items.first
-            }
-            
-            setUpIsDone = true
-        } catch {
-            setUpError = error
+            .sorted(by: { $0.layer.name < $1.layer.name })
+        
+        items = newItems
+        
+        // If we have a selection but it isn't in the items
+        // then default to the first item.
+        if let selection, !items.contains(selection) {
+            self.selection = items.first
         }
     }
 }

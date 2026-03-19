@@ -98,7 +98,6 @@ struct BuildingExplorerForm: View {
                         if showFullModel {
                             if !availableLevels.isEmpty {
                                 levelPicker
-                                
                             }
                             
                             if availablePhases.count > 1 {
@@ -269,7 +268,7 @@ struct BuildingExplorerForm: View {
         // Construct the where clauses based on the selection state.
         
         var solidWhereClause = ""
-        var xrayWhereClause = ""
+        var xRayWhereClause = ""
         
         if !selectedPhase.isEmpty {
             solidWhereClause = "\(String.phaseFieldKey) <= \(selectedPhase)"
@@ -277,7 +276,7 @@ struct BuildingExplorerForm: View {
         
         if selectedLevel != .allLabel {
             let levelSolidWhereClause = "\(String.levelFieldKey) = \(selectedLevel)"
-            xrayWhereClause = "\(String.levelFieldKey) < \(selectedLevel)"
+            xRayWhereClause = "\(String.levelFieldKey) < \(selectedLevel)"
             
             // Create or combine where clauses.
             if solidWhereClause.isEmpty {
@@ -295,10 +294,10 @@ struct BuildingExplorerForm: View {
         
         let xrayFilterBlock = BuildingFilterBlock(
             title: "Xray",
-            whereClause: xrayWhereClause,
+            whereClause: xRayWhereClause,
             mode: .xray()
         )
-        let blocks = if xrayWhereClause.isEmpty {
+        let blocks = if xRayWhereClause.isEmpty {
             [solidFilterBlock]
         } else {
             [solidFilterBlock, xrayFilterBlock]
