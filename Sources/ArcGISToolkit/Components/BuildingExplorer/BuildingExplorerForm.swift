@@ -112,10 +112,12 @@ struct BuildingExplorerForm: View {
                 // if the full model is being shown and the BSL
                 // is visible.
                 if showFullModel && layerIsVisible {
-                    Section("Disciplines & Categories") {
+                    Section {
                         ForEach(groupSublayers) { sublayer in
                             BuildingGroupSublayerToggleView(groupSublayer: sublayer)
                         }
+                    } header: {
+                        Text.disciplinesAndCategories
                     }
                 }
                 
@@ -127,13 +129,13 @@ struct BuildingExplorerForm: View {
 #if os(visionOS)
                 ToolbarItem(placement: .principal) { layerPicker }
 #else
-                ToolbarItem(placement: .principal) { Text(selectedLayerName) }
+                ToolbarItem(placement: .principal) { Text(verbatim: selectedLayerName) }
 #endif
                 ToolbarItem(placement: .topBarTrailing) { DismissButton(kind: .close) }
             }
-// visionOS puts the title menu above the main window which doesn't
-// make sense in this context so we don't use the title menu
-// on visionOS. Instead we put the layer picker in a toolbar item.
+            // visionOS puts the title menu above the main window which doesn't
+            // make sense in this context so we don't use the title menu
+            // on visionOS. Instead we put the layer picker in a toolbar item.
 #if !os(visionOS)
             .toolbarTitleMenu { layerPicker }
 #endif
@@ -148,7 +150,7 @@ struct BuildingExplorerForm: View {
     
     /// The building scene layer visibility toggle.
     private var layerVisibilityToggle: some View {
-        Toggle("Visible", isOn: $layerIsVisible)
+        Toggle(String.visible, isOn: $layerIsVisible)
             .onChange(of: layerIsVisible) {
                 selection.layer.isVisible = layerIsVisible
             }
@@ -157,10 +159,12 @@ struct BuildingExplorerForm: View {
     /// The layer picker which is used to switch between different building
     /// scene layers in the scene.
     private var layerPicker: some View {
-        Picker("Building Scene Layers", selection: $selectedLayerName) {
+        Picker(selection: $selectedLayerName) {
             ForEach(layerNames, id: \.self) { layerName in
-                Text(layerName)
+                Text(verbatim: layerName)
             }
+        } label: {
+            Text.buildingSceneLayers
         }
 #if os(visionOS)
         .pickerStyle(.menu)
@@ -174,7 +178,7 @@ struct BuildingExplorerForm: View {
         // We need a valid overview and full model for this
         // toggle to be functional.
         if let overviewSublayer, let fullModelSublayer {
-            Toggle("Show Full Model", isOn: $showFullModel)
+            Toggle(String.showFullModel, isOn: $showFullModel)
                 .onChange(of: showFullModel) {
                     let selectedLayer = selection.layer
                     
@@ -205,7 +209,7 @@ struct BuildingExplorerForm: View {
     @ViewBuilder private var zoomToButton: some View {
         if let proxy = localSceneViewProxy,
            let layerExtent = selection.layer.fullExtent {
-            Button("Zoom to building", systemImage: "plus.magnifyingglass") {
+            Button(String.zoomToBuilding, systemImage: "plus.magnifyingglass") {
                 shouldZoomToBuilding = true
             }
             .foregroundStyle(.primary)
@@ -228,10 +232,12 @@ struct BuildingExplorerForm: View {
     
     /// The level picker to select a level on the building.
     private var levelPicker: some View {
-        Picker("Level", selection: $selectedLevel) {
+        Picker(selection: $selectedLevel) {
             ForEach(availableLevels, id: \.self) { level in
-                Text(level)
+                Text(verbatim: level)
             }
+        } label: {
+            Text.level
         }
         .onChange(of: selectedLevel) {
             if selection.level != selectedLevel {
@@ -250,9 +256,9 @@ struct BuildingExplorerForm: View {
     
     /// The construction phase picker to select a phase on the building.
     private var phasePicker: some View {
-        Picker("Construction Phase", selection: $selectedPhase) {
+        Picker(selection: $selectedPhase) {
             ForEach(availablePhases, id: \.self) { phase in
-                Text(phase)
+                Text(verbatim: phase)
             }
             .onChange(of: selectedPhase) {
                 if selection.phase != selectedPhase {
@@ -267,6 +273,8 @@ struct BuildingExplorerForm: View {
                     selection.layer.activeFilter = levelAndPhaseFilter
                 }
             }
+        } label: {
+            Text.constructionPhase
         }
     }
     
@@ -399,4 +407,66 @@ private extension String {
     static var overviewModelName: String { "overview" }
     /// The attribute name for the phases.
     static var phaseFieldKey: String { "CreatedPhase" }
+}
+
+private extension String {
+    /// Localized text for the phrase "Show Full Model".
+    static var showFullModel: String {
+        .init(
+            localized: "Show Full Model",
+            bundle: .toolkitModule,
+            comment: "A label for the Show Full Model toggle in the Building Explorer."
+        )
+    }
+    /// Localized text for the word "visible".
+    static var visible: String {
+        .init(
+            localized: "Visible",
+            bundle: .toolkitModule,
+            comment: "A label for the visible toggle in the Building Explorer."
+        )
+    }
+    /// A localized label for a zoom to building button.
+    static var zoomToBuilding: String {
+        .init(
+            localized: "Zoom to building",
+            bundle: .toolkitModule,
+            comment: "A label for the zoom to building button in the Building Explorer."
+        )
+    }
+}
+
+private extension Text {
+    /// Localized text for the phrase "Building Scene Layers".
+    static var buildingSceneLayers: Self {
+        .init(
+            "Building Scene Layers",
+            bundle: .toolkitModule,
+            comment: "A label for layer picker in the Building Explorer."
+        )
+    }
+    /// Localized text for the phrase "Construction Phase".
+    static var constructionPhase: Self {
+        .init(
+            "Construction Phase",
+            bundle: .toolkitModule,
+            comment: "A label for construction phase picker in the Building Explorer."
+        )
+    }
+    /// Localized text for the phrase "Disciplines & Categories".
+    static var disciplinesAndCategories: Self {
+        .init(
+            "Disciplines & Categories",
+            bundle: .toolkitModule,
+            comment: "A label for Disciplines & Categories section in the Building Explorer."
+        )
+    }
+    /// Localized text for the word "Level".
+    static var level: Self {
+        .init(
+            "Level",
+            bundle: .toolkitModule,
+            comment: "A label for the level picker in the Building Explorer."
+        )
+    }
 }

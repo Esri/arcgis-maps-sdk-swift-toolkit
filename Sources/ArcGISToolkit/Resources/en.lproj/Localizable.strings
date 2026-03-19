@@ -103,6 +103,9 @@ association feature candidates. */
 /* Building (Level of Detail) */
 "Building" = "Building";
 
+/* A label for layer picker in the Building Explorer. */
+"Building Scene Layers" = "Building Scene Layers";
+
 /* Buildings (Level of Detail) */
 "Buildings" = "Buildings";
 
@@ -196,6 +199,9 @@ candidate to add as a utility association. */
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Connectivity";
 
+/* A label for construction phase picker in the Building Explorer. */
+"Construction Phase" = "Construction Phase";
+
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Containment";
 
@@ -273,6 +279,9 @@ A label for a button used to delete a utility network trace input component or r
 
 /* A question asking if the user would like to discard their unsaved edits. */
 "Discard Edits?" = "Discard Edits?";
+
+/* A label for Disciplines & Categories section in the Building Explorer. */
+"Disciplines & Categories" = "Disciplines & Categories";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Dismiss";
@@ -448,6 +457,9 @@ edge of a utility network element. */
 trace operation. */
 "Function Results" = "Function Results";
 
+/* Description of error thrown when a global scene is being provided to the Building Explorer. */
+"Global scenes aren't supported in the Building Explorer." = "Global scenes aren't supported in the Building Explorer.";
+
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
 "heading" = "heading";
@@ -504,6 +516,9 @@ variable is a cardinal or intercardinal direction. */
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Less than minimum value";
+
+/* A label for the level picker in the Building Explorer. */
+"Level" = "Level";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Level of Detail";
@@ -603,6 +618,9 @@ data sources in a utility network. */
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "No bookmarks";
+
+/* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
+"No building scene layers in the scene." = "No building scene layers in the scene.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -809,6 +827,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label indicating the intended outcome of using the filter view. */
 "Show features that meet all the conditions" = "Show features that meet all the conditions";
+
+/* A label for the Show Full Model toggle in the Building Explorer. */
+"Show Full Model" = "Show Full Model";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Show On Map";
@@ -1020,6 +1041,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "View";
 
+/* A label for the visible toggle in the Building Explorer. */
+"Visible" = "Visible";
+
 /* A label indicating a utility association's 
 containment is not visible. */
 "Visible: false" = "Visible: false";
@@ -1051,6 +1075,9 @@ The host is indicated in the variable. */
 
 /* A button to change the map to the extent of the selected trace. */
 "Zoom To" = "Zoom To";
+
+/* A label for the zoom to building button in the Building Explorer. */
+"Zoom to building" = "Zoom to building";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Zoom To Result";
