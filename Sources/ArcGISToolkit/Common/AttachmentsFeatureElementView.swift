@@ -65,7 +65,16 @@ struct AttachmentsFeatureElementView: View {
         case .success(let models):
             if let formElement {
                 Group {
-                    if !models.isEmpty {
+                    if models.isEmpty {
+                        Text(
+                            "No attachments",
+                            bundle: .toolkitModule,
+                            comment: """
+                                A label indicating an element
+                                contains no file attachments.
+                                """
+                        )
+                    } else {
                         attachmentBody(attachmentModels: models)
                     }
                     if isEditable {

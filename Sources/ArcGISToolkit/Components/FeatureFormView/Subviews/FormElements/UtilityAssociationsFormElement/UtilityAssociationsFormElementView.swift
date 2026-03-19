@@ -56,7 +56,8 @@ extension FeatureFormView {
                 associationsFilterResultsModel?.fetchResults()
             }
             .task {
-                self.embeddedFeatureFormViewModel.associationsFilterResultsModels[element] = .init(
+                guard associationsFilterResultsModel == nil else { return }
+                embeddedFeatureFormViewModel.associationsFilterResultsModels[element] = .init(
                     element: element,
                     includeEmptyFilterResults: true
                 )
