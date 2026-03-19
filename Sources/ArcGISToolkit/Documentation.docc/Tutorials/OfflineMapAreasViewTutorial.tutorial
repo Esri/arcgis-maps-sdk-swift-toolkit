@@ -81,10 +81,13 @@
             }
             
             @Step {
-                The job manager and the offline manager requires the following keys in the application's Information Property List to support background downloads and to support iOS 26 `BGContinuedProcessingTask`.
+                The job manager and the offline manager requires the following keys in the application's 
+                Information Property List to support background downloads and to support iOS 26 `BGContinuedProcessingTask`.
                 
-                For the job manager, add “com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck” 
-                to Permitted Background Task Scheduler Identifiers. For the offline manager, add “$(PRODUCT_BUNDLE_IDENTIFIER).cpt.jobs.\*” to Permitted Background Task Scheduler Identifiers. Then add "App downloads content from the network" to Required Background Modes.
+                For the job manager, add “com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck”
+                to Permitted Background Task Scheduler Identifiers. For the offline manager,
+                add “$(PRODUCT_BUNDLE_IDENTIFIER).cpt.jobs.\*” to Permitted Background Task Scheduler Identifiers.
+                Then add "App downloads content from the network" to Required Background Modes.
                 
                 @Image(source: InformationPropertyList, alt: "An image of the required keys in the Information Property List.")
             }
