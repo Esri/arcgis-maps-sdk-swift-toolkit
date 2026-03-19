@@ -48,9 +48,7 @@
                 The `OfflineMapAreasView` requires additional setup to use the job manager.
                 
                 Apply the view modifier `.offlineManager(configuration:onJobCompletion:)` at the entry point of
-                the application.
-                
-                Set the `preferredBackgroundStatusCheckSchedule` to `.regularInterval(interval: 30)`
+                the application. Set the `preferredBackgroundStatusCheckSchedule` to `.regularInterval(interval: 30)`
                 on the specified configuration to check the status of the download job in the
                 background every 30 seconds. Note that whether the system actually allows the job
                 to be checked at the preferred interval is at the discretion of the operating system.
@@ -83,18 +81,11 @@
             }
             
             @Step {
-                The job manager requires the following keys in the application's Information Property List 
-                to support background downloads.
+                The job manager and the offline manager requires the following keys in the application's Information Property List to support background downloads and to support iOS 26 `BGContinuedProcessingTask`.
                 
-                Add “com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck” 
-                to Permitted Background Task Scheduler Identifiers.
+                For the job manager, add “com.esri.ArcGISToolkit.jobManager.offlineManager.statusCheck” 
+                to Permitted Background Task Scheduler Identifiers. For the offline manager, add “$(PRODUCT_BUNDLE_IDENTIFIER).cpt.jobs.\*” to Permitted Background Task Scheduler Identifiers. Then add "App downloads content from the network" to Required Background Modes.
                 
-                The offline manager requires the following keys in the application's Information Property List 
-                to support iOS 26 `BGContinuedProcessingTask`.
-                
-                Add “$(PRODUCT_BUNDLE_IDENTIFIER).cpt.jobs.*” to Permitted Background Task Scheduler Identifiers.
-                    
-                Then add "App downloads content from the network" to Required Background Modes. 
                 @Image(source: InformationPropertyList, alt: "An image of the required keys in the Information Property List.")
             }
         }
