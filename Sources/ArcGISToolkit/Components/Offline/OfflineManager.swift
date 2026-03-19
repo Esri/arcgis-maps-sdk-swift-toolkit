@@ -36,7 +36,7 @@ import SwiftUI
 /// - Access map info for web maps that have saved map areas via `OfflineManager.shared.offlineMapInfos`.
 /// - Remove offline map areas from the device.
 /// - Run download jobs while the app is in the background.
-/// - Get notified when the jobs complete via the `OfflineManager/onJobCompletion` property.
+/// - Get notified when the jobs complete via ``SwiftUI/Scene/offlineManager(preferredBackgroundStatusCheckSchedule:jobCompletion:)`` or ``SwiftUI/Scene/offlineManager(configuration:onJobCompletion:)``.
 ///
 /// The component is useful both for building custom UI with the provided APIs,
 /// and for supporting workflows that require retrieving offline map areas
