@@ -1989,6 +1989,7 @@ final class FeatureFormViewTests: XCTestCase {
         let filterButton = app.buttons["Filter Candidates"]
         let formTitle = app.staticTexts["Structure Junction"]
         let municipalButton = app.buttons["Municipal, Street Light"]
+        let popoverDismissRegion = app.otherElements["PopoverDismissRegion"].firstMatch
         let streetLightButton = app.buttons["Street Light"]
         let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
         
@@ -2018,6 +2019,10 @@ final class FeatureFormViewTests: XCTestCase {
         textField.assertExistenceAndTap()
         
         textField.typeText("449")
+        
+        if popoverDismissRegion.exists {
+            popoverDismissRegion.tap()
+        }
         
         app.doneButton.assertExistenceAndTap()
         
