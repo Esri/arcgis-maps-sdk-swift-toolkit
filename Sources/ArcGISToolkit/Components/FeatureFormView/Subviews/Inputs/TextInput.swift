@@ -78,12 +78,6 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
-            .contentShape(.rect)
-            .onTapGesture {
-                if element.isMultiline {
-                    fullScreenTextInputIsPresented = true
-                }
-            }
 #if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
@@ -115,7 +109,11 @@ private extension TextInput {
                                 .environment(featureFormViewModel)
 #endif
                         }
-                        .frame(minHeight: 100, alignment: .top)
+                        .frame(maxWidth: .infinity, minHeight: 100, alignment: .topLeading)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            fullScreenTextInputIsPresented = true
+                        }
                 } else {
                     TextField(
                         element.label,
@@ -140,7 +138,6 @@ private extension TextInput {
                     }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
 #if os(iOS)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
@@ -166,6 +163,8 @@ private extension TextInput {
                     text.removeAll()
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
+                // Make the button reliably tappable on visionOS.
+                .hoverEffect(isEnabled: false)
             }
 #if !os(visionOS)
             if isBarcodeScanner {
