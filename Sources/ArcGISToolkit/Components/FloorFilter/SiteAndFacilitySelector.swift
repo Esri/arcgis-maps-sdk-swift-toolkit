@@ -166,7 +166,7 @@ private struct FacilityList: View {
                 ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
             } else {
                 ScrollViewReader { scrollView in
-                    List(facilities, id:\.self) { facility in
+                    List(facilities, id: \.self) { facility in
                         Button {
                             model.setFacility(facility, zoomTo: true)
                             isPresented = false
