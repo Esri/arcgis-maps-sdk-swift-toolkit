@@ -26,20 +26,25 @@ struct EmbeddedFeatureFormView: View {
         if let embeddedFeatureFormViewModel {
             ScrollViewReader { scrollView in
                 Group {
-                    let form = Form {
-                        sections
-                    }
+                    let form = Form { sections }
 #if RELEASE
                     form
 #else
                     if CommandLine.arguments.contains("-testCase") {
-                        // Use a ScrollView and VStack during UI testing
-                        // to make all form elements accessible.
-                        ScrollView {
-                            VStack {
-                                sections
-                            }
-                        }
+                        @Bindable var model = embeddedFeatureFormViewModel
+                        form
+                            .searchable(
+                                text: $model.elementFilterPhrase,
+                                placement: .navigationBarDrawer(displayMode: .always),
+                                prompt: Text(
+                                    "Filter Elements",
+                                    bundle: .toolkitModule,
+                                    comment: """
+                                        Label for a text field used to 
+                                        filter visible elements in a form.
+                                        """
+                                )
+                            )
                     } else {
                         form
                     }

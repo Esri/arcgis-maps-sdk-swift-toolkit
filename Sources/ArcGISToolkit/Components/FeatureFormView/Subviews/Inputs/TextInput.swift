@@ -145,7 +145,7 @@ private extension TextInput {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
-                        // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
+                        // Known SwiftUI issue: This button is known to sometimes not appear.
                         positiveNegativeButton
                         Spacer()
                     }
@@ -252,27 +252,25 @@ private extension TextInput {
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
         var body: some View {
-            HStack {
-                FormElementHeader(element: element)
-                Button.done {
-                    dismiss()
-                }
-#if !os(visionOS)
-                .buttonStyle(.plain)
-                .foregroundStyle(Color.accentColor)
-#endif
+            NavigationStack {
+                TextEditor(text: $text)
+                    .focused($isFocused)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationTitle(element.label)
+                    .onAppear {
+                        isFocused = true
+                    }
+                    .onChange(of: isFocused) {
+                        embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                    }
+                    .scrollContentBackground(.hidden)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            DismissButton(kind: .confirm)
+                        }
+                    }
+                FormElementFooter(element: element)
             }
-            TextEditor(text: $text)
-                .focused($isFocused)
-                .onAppear {
-                    isFocused = true
-                }
-                .onChange(of: isFocused) {
-                    embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
-                }
-                .scrollContentBackground(.hidden)
-            Spacer()
-            FormElementFooter(element: element)
         }
     }
 }

@@ -14,6 +14,26 @@
 
 import SwiftUI
 
+extension Button<Label<Text, Image>> {
+    /// Returns a button with the title "Delete" and the given action.
+    /// - Parameter action: The action to perform when the user triggers the
+    /// button.
+    /// - Returns: A button.
+    static nonisolated func delete(action: @escaping @MainActor () -> Void) -> Self {
+        Button(role: .destructive, action: action) {
+            Label {
+                Text(
+                    "Delete",
+                    bundle: .toolkitModule,
+                    comment: "A label for a \"Delete\" button."
+                )
+            } icon: {
+                Image(systemName: "trash")
+            }
+        }
+    }
+}
+
 extension Button<Text> {
     /// Returns a button with the title "Cancel" and the given action.
     /// - Parameter action: The action to perform when the user triggers the

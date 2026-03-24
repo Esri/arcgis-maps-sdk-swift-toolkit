@@ -378,18 +378,16 @@ extension FormElementFooter {
 private extension RangeDomain {
     /// String representations of the numeric minimum and maximum value of the range domain.
     var displayableNumericMinAndMax: (min: String, max: String)? {
-        if let min = minValue as? Float32, let max = maxValue as? Float32 {
-            return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
-        } else if let min = minValue as? Float64, let max = maxValue as? Float64 {
-            return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
-        } else if let min = minValue as? Int16, let max = maxValue as? Int16 {
-            return (min.formatted(), max.formatted())
-        } else if let min = minValue as? Int32, let max = maxValue as? Int32 {
-            return (min.formatted(), max.formatted())
-        } else if let min = minValue as? Int64, let max = maxValue as? Int64 {
-            return (min.formatted(), max.formatted())
-        } else {
-            return nil
+        func formatted<T: BinaryFloatingPoint>(_ value: T) -> String {
+            Double(value).formatted(.number.precision(.fractionLength(1...)))
+        }
+        
+        switch (minValue, maxValue) {
+        case let (min, max) as (Float32, Float32): return (formatted(min), formatted(max))
+        case let (min, max) as (Float64, Float64): return (formatted(min), formatted(max))
+        case let (min, max) as (any BinaryInteger, any BinaryInteger):
+            return ("\(min)", "\(max)")
+        default: return nil
         }
     }
 }

@@ -38,6 +38,15 @@ extension Text {
         .init(LocalizedStringResource.cancel)
     }
     
+    /// Localized text for the phrase "Discard Edits".
+    static var discardEdits: Self {
+        .init(
+            "Discard Edits",
+            bundle: .toolkitModule,
+            comment: "A label for a button to discard unsaved edits."
+        )
+    }
+    
     /// Localized text for the word "Done".
     static var done: Self {
         .init(
