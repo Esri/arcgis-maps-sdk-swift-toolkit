@@ -124,9 +124,6 @@ private extension TextInput {
                     .accessibilityIdentifier("\(element.label) Text Input")
                     .focused($isFocused)
                     .keyboardType(keyboardType)
-#if os(visionOS)
-                    .hoverEffectDisabled()
-#endif
                     .onChange(of: isFocused) {
                         embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
                     }
