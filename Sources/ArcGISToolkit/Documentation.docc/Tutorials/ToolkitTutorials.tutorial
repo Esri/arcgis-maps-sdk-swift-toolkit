@@ -35,6 +35,13 @@
         @TutorialReference(tutorial: "doc:BookmarksTutorial")
     }
     
+    @Chapter(name: "BuildingExplorer") {
+        The `BuildingExplorer` component enables a user to explore a building model
+        in a `BuildingSceneLayer`.
+        @Image(source: BuildingExplorer, alt: "An image of the BuildingExplorer component.")
+        @TutorialReference(tutorial: "doc:BuildingExplorerTutorial")
+    }
+    
     @Chapter(name: "Compass") {
         A `Compass` (alias North arrow) shows where north is in a MapView.
         @Image(source: Compass, alt: "An image of the Compass component.")
