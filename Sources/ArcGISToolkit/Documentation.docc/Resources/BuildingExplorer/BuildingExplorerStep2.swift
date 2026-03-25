@@ -7,15 +7,17 @@ struct BuildingExplorerExampleView: View {
     @State private var explorerIsVisible = false
     
     var body: some View {
-        LocalSceneViewReader { proxy in
-            LocalSceneView(scene: scene)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("Building Explorer", systemImage: "building") {
-                            explorerIsVisible = true
+        NavigationStack {
+            LocalSceneViewReader { proxy in
+                LocalSceneView(scene: scene)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Building Explorer", systemImage: "building") {
+                                explorerIsVisible = true
+                            }
                         }
                     }
-                }
+            }
         }
     }
 }

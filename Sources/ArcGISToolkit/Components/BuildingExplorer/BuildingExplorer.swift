@@ -47,7 +47,7 @@ import SwiftUI
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [BuildingExplorerExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BuildingExplorerExampleView.swift)
-/// in the project.
+/// in the project. To learn more about using the `BuildingExplorer` see the <doc:BuildingExplorerTutorial>.
 ///
 /// - Note: The building explorer only supports local scenes and the scene must contain at least
 /// one building scene layer. If there is an active filter on the building scene layer that

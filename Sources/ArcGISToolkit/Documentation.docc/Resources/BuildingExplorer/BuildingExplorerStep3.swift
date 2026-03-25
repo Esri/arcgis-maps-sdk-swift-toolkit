@@ -12,24 +12,26 @@ struct BuildingExplorerExampleView: View {
     @State private var selection: BuildingExplorerItem?
     
     var body: some View {
-        LocalSceneViewReader { proxy in
-            LocalSceneView(scene: scene)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("Building Explorer", systemImage: "building") {
-                            explorerIsVisible = true
-                        }
-                        .popover(isPresented: $explorerIsVisible) {
-                            BuildingExplorer(
-                                scene: scene,
-                                items: $items,
-                                selection: $selection
-                            )
-                            .frame(idealWidth: 400, idealHeight: 500)
-                            .presentationCompactAdaptation(.popover)
+        NavigationStack {
+            LocalSceneViewReader { proxy in
+                LocalSceneView(scene: scene)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Building Explorer", systemImage: "building") {
+                                explorerIsVisible = true
+                            }
+                            .popover(isPresented: $explorerIsVisible) {
+                                BuildingExplorer(
+                                    scene: scene,
+                                    items: $items,
+                                    selection: $selection
+                                )
+                                .frame(idealWidth: 400, idealHeight: 500)
+                                .presentationCompactAdaptation(.popover)
+                            }
                         }
                     }
-                }
+            }
         }
     }
 }
