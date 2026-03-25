@@ -160,8 +160,12 @@ private extension TextInput {
                     text.removeAll()
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
-                // Make the button reliably tappable on visionOS.
-                .hoverEffect(isEnabled: false)
+#if os(visionOS)
+                .buttonStyle(.bordered)
+                // Constrain the size of the bordered button on visionOS to
+                // prevent layout shift.
+                .frame(idealWidth: 21, idealHeight: 21)
+#endif
             }
 #if !os(visionOS)
             if isBarcodeScanner {
