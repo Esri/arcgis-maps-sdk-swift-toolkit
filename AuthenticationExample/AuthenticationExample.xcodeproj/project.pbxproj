@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		88AD13792834355000500B2E /* AuthenticationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AD13782834355000500B2E /* AuthenticationApp.swift */; };
-		88AD137B2834355000500B2E /* SigninView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AD137A2834355000500B2E /* SigninView.swift */; };
+		88AD137B2834355000500B2E /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AD137A2834355000500B2E /* SignInView.swift */; };
 		88AD137D2834355100500B2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88AD137C2834355100500B2E /* Assets.xcassets */; };
 		88AD13802834355100500B2E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88AD137F2834355100500B2E /* Preview Assets.xcassets */; };
 		88AD138A2834366100500B2E /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = 88AD13892834366100500B2E /* ArcGISToolkit */; };
@@ -198,7 +198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88AD138E283443F800500B2E /* MapItemView.swift in Sources */,
-				88AD137B2834355000500B2E /* SigninView.swift in Sources */,
+				88AD137B2834355000500B2E /* SignInView.swift in Sources */,
 				88D24DF4288F4BEB007A539C /* WebMapsView.swift in Sources */,
 				88D24DF2288F2FA1007A539C /* HomeView.swift in Sources */,
 				88D24DF8288F6002007A539C /* LoadableImageView.swift in Sources */,
