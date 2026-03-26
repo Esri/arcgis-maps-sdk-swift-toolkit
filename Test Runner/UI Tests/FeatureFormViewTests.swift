@@ -1154,10 +1154,6 @@ final class FeatureFormViewTests: XCTestCase {
         
         redlandsText.assertExistence()
         
-#if os(visionOS)
-        XCTExpectFailure("The clear button doesn't work as expected on visionOS.")
-#endif
-        
         titleClearButton.assertExistenceAndTap()
         titleTextField.assertExistenceAndTap()
         

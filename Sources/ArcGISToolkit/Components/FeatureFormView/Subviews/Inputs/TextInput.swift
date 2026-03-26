@@ -78,12 +78,6 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
-            .contentShape(.rect)
-            .onTapGesture {
-                if element.isMultiline {
-                    fullScreenTextInputIsPresented = true
-                }
-            }
 #if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
@@ -115,7 +109,11 @@ private extension TextInput {
                                 .environment(featureFormViewModel)
 #endif
                         }
-                        .frame(minHeight: 100, alignment: .top)
+                        .frame(maxWidth: .infinity, minHeight: 100, alignment: .topLeading)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            fullScreenTextInputIsPresented = true
+                        }
                 } else {
                     TextField(
                         element.label,
@@ -126,9 +124,6 @@ private extension TextInput {
                     .accessibilityIdentifier("\(element.label) Text Input")
                     .focused($isFocused)
                     .keyboardType(keyboardType)
-#if os(visionOS)
-                    .hoverEffectDisabled()
-#endif
                     .onChange(of: isFocused) {
                         embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
                     }
@@ -140,7 +135,6 @@ private extension TextInput {
                     }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
 #if os(iOS)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
@@ -166,6 +160,12 @@ private extension TextInput {
                     text.removeAll()
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
+#if os(visionOS)
+                .buttonStyle(.bordered)
+                // Constrain the size of the bordered button on visionOS to
+                // prevent layout shift.
+                .frame(idealWidth: 21, idealHeight: 21)
+#endif
             }
 #if !os(visionOS)
             if isBarcodeScanner {
