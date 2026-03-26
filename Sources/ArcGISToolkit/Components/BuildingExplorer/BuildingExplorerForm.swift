@@ -112,7 +112,7 @@ struct BuildingExplorerForm: View {
                 // is visible.
                 if showFullModel && layerIsVisible {
                     Section {
-                        ForEach(groupSublayers) { sublayer in
+                        ForEach(groupSublayers.sorted { $0.name < $1.name }) { sublayer in
                             BuildingGroupSublayerToggleView(groupSublayer: sublayer)
                         }
                     } header: {

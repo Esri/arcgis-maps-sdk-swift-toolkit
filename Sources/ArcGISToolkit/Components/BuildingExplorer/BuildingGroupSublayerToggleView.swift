@@ -26,7 +26,7 @@ struct BuildingGroupSublayerToggleView: View {
     
     var body: some View {
         DisclosureGroup {
-            ForEach(groupSublayer.sublayers) { sublayer in
+            ForEach(groupSublayer.sublayers.sorted { $0.name < $1.name }) { sublayer in
                 BuildingSublayerToggleView(sublayer: sublayer)
                     // If the group sublayer isn't visible then the toggles
                     // for its sublayers should be disabled.
