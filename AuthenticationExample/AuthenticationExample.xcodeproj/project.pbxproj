@@ -24,7 +24,7 @@
 		21B31E8B29EF53BE00A40B10 /* AuthenticationExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AuthenticationExample.entitlements; sourceTree = "<group>"; };
 		88AD13752834355000500B2E /* AuthenticationExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AuthenticationExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88AD13782834355000500B2E /* AuthenticationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationApp.swift; sourceTree = "<group>"; };
-		88AD137A2834355000500B2E /* SigninView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninView.swift; sourceTree = "<group>"; };
+		88AD137A2834355000500B2E /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		88AD137C2834355100500B2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		88AD137F2834355100500B2E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		88AD13862834355C00500B2E /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "arcgis-maps-sdk-swift-toolkit"; path = ..; sourceTree = "<group>"; };
@@ -77,7 +77,7 @@
 				88D24DF7288F6002007A539C /* LoadableImageView.swift */,
 				88D24DF3288F4BEB007A539C /* WebMapsView.swift */,
 				88AD138D283443F800500B2E /* MapItemView.swift */,
-				88AD137A2834355000500B2E /* SigninView.swift */,
+				88AD137A2834355000500B2E /* SignInView.swift */,
 				88D24DEF288F062D007A539C /* ProfileView.swift */,
 				88D24DF5288F5BAE007A539C /* UserView.swift */,
 				88AD137C2834355100500B2E /* Assets.xcassets */,
@@ -133,7 +133,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1320;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					88AD13742834355000500B2E = {
 						CreatedOnToolsVersion = 13.2.1;
