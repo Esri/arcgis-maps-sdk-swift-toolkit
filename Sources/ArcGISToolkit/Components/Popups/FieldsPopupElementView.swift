@@ -58,59 +58,28 @@ struct FieldsPopupElementView: View {
                 Text(field.label)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                FormattedValueText(formattedValue: field.formattedValue)
+                makeAttributedText(with: field.formattedValue)
                     .padding([.bottom], -1)
             }
             .background(Color.clear)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-    }
-    
-    private struct FormattedValueText: View {
         
-        let formattedValue: String
-        private let detector = PopupValueDetector()
-        
-        var body: some View {
-            switch detector.detect(in: formattedValue) {
-                
-            case .url(let url):
-                Link(destination: url) {
-                    Text(
-                        "View",
-                        bundle: .toolkitModule,
-                        comment: "E.g. Open a hyperlink."
-                    )
-                }
-#if os(visionOS)
-                .buttonStyle(.bordered)
-#else
-                .buttonStyle(.borderless)
-#endif
-                
-            case .phones(let phones):
-                Text(phoneAttributedText(phones: phones))
-                
-            case .none:
-                Text(formattedValue)
-            }
-        }
-        
-        private func phoneAttributedText(
-            phones: [(url: URL, range: NSRange)]
-        ) -> AttributedString {
-            
-            var attributed = AttributedString(formattedValue)
-            
-            for phone in phones {
+        /// Makes text with clickable links.
+        /// - Parameter string: A string that may contain hyperlinks and or phone numbers.
+        /// - Returns: Text where hyperlinks and phone numbers have been converted into interactive links.
+        private func makeAttributedText(with string: String) -> Text {
+            let detector = DataDetector()
+            let links = detector.detect(in: string)
+            var attributed = AttributedString(string)
+            for phone in links ?? [] {
                 if let range = Range(phone.range, in: attributed) {
                     attributed[range].link = phone.url
                     attributed[range].foregroundColor = .blue
                     attributed[range].underlineStyle = .single
                 }
             }
-            
-            return attributed
+            return Text(attributed)
         }
     }
 }
@@ -133,22 +102,17 @@ private extension FieldsPopupElement {
     }
 }
 
-private struct PopupValueDetector {
-    
-    enum DetectedValue {
-        case phones([(url: URL, range: NSRange)])
-        case url(URL)
+/// Matches natural language text for predefined data patterns including hyperlinks and phone number.
+private struct DataDetector {
+    struct DetectedValue {
+        let url: URL
+        let range: NSRange
     }
     
-    func detect(in text: String) -> DetectedValue? {
-        /// URL detection
-        if text.lowercased().starts(with: "http"),
-           let url = URL(string: text) {
-            return .url(url)
-        }
-        
-        /// Phone number detection
-        let types: NSTextCheckingResult.CheckingType = [.phoneNumber]
+    /// Detects hyperlinks and phone numbers in text.
+    /// - Parameter text: The text to search.
+    func detect(in text: String) -> [DetectedValue]? {
+        let types: NSTextCheckingResult.CheckingType = [.link, .phoneNumber]
         guard let detector = try? NSDataDetector(types: types.rawValue) else {
             return nil
         }
@@ -156,18 +120,18 @@ private struct PopupValueDetector {
         let fullRange = NSRange(text.startIndex..., in: text)
         let matches = detector.matches(in: text, options: [], range: fullRange)
         
-        let phones: [(URL, NSRange)] = matches.compactMap { match in
-            guard let phone = match.phoneNumber else { return nil }
-            
-            let cleaned = phone
-                .components(separatedBy: CharacterSet.decimalDigits.inverted)
-                .joined()
-            
-            guard let url = URL(string: "tel:\(cleaned)") else { return nil }
-            return (url, match.range)
+        return matches.compactMap { match in
+            if let phone = match.phoneNumber {
+                let cleaned = phone
+                    .components(separatedBy: CharacterSet.decimalDigits.inverted)
+                    .joined()
+                guard let url = URL(string: "tel:\(cleaned)") else { return nil }
+                return .init(url: url, range: match.range)
+            } else if let url = match.url {
+                return .init(url: url, range: match.range)
+            } else {
+                return nil
+            }
         }
-        
-        return phones.isEmpty ? nil : .phones(phones)
     }
-    
 }
