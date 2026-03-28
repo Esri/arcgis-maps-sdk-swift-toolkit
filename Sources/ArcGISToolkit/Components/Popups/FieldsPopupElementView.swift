@@ -101,37 +101,3 @@ private extension FieldsPopupElement {
         ) : title
     }
 }
-
-/// Matches natural language text for predefined data patterns including hyperlinks and phone number.
-private struct DataDetector {
-    struct DetectedValue {
-        let url: URL
-        let range: NSRange
-    }
-    
-    /// Detects hyperlinks and phone numbers in text.
-    /// - Parameter text: The text to search.
-    func detect(in text: String) -> [DetectedValue]? {
-        let types: NSTextCheckingResult.CheckingType = [.link, .phoneNumber]
-        guard let detector = try? NSDataDetector(types: types.rawValue) else {
-            return nil
-        }
-        
-        let fullRange = NSRange(text.startIndex..., in: text)
-        let matches = detector.matches(in: text, options: [], range: fullRange)
-        
-        return matches.compactMap { match in
-            if let phone = match.phoneNumber {
-                let cleaned = phone
-                    .components(separatedBy: CharacterSet.decimalDigits.inverted)
-                    .joined()
-                guard let url = URL(string: "tel:\(cleaned)") else { return nil }
-                return .init(url: url, range: match.range)
-            } else if let url = match.url {
-                return .init(url: url, range: match.range)
-            } else {
-                return nil
-            }
-        }
-    }
-}
