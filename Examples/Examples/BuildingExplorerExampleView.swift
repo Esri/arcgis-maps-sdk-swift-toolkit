@@ -43,9 +43,9 @@ struct BuildingExplorerExampleView: View {
                             selection: $selection
                         )
                         .frame(idealWidth: 400, idealHeight: 500)
-                        .presentationDetents([.medium, .large])
                         .presentationBackgroundInteraction(.enabled)
                         .presentationContentInteraction(.scrolls)
+                        .presentationDetents([.medium, .large])
                     }
                 }
             }
