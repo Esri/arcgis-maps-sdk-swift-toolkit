@@ -52,7 +52,7 @@ final class FilterViewModel {
         let whereClause = whereClause(filters: fieldFilters)
         return originalWhereClause != whereClause
     }
-    
+
     /// Sets the fields to filter on.
     ///
     /// Use this to customize the filterable fields. Alternatively, set `featureTable` to auto-populate
@@ -120,7 +120,7 @@ class FieldFilter {
             }
             
             if oldValue.type != field.type {
-                codedValue = nil
+                codedValue = (field.domain as? CodedValueDomain)?.codedValues.first
                 dateValue = .now
             }
         }
@@ -153,33 +153,47 @@ class FieldFilter {
         }
     }
     
+    /// A Boolean value indicating whether the filter view is presented.
+    var selectedFieldName: String// {
+//        didSet {
+//            guard let field = model.field(named: selectedFieldName) else { return }
+//            self.field = field
+//        }
+//    }
+
     /// The value to filter on.
     var value = ""
     
     /// Creates a `FieldFilter`.
     /// - Parameter field: The `Field` being filtered on.
     init(field: Field) {
+        self.codedValue = (field.domain as? CodedValueDomain)?.codedValues.first
         self.dateValue = .now
         self.field = field
+        self.selectedFieldName = field.name
         self.condition = firstCondition()
+        self.value = codedValue?.name ?? ""
     }
     
     /// Creates a `FieldFilter`.
     /// - Parameters:
     ///   - field: The `Field` being filtered on.
+    ///   - codedValue: The codedValue used by the filter, if any.
     ///   - condition: The `FilterOperator` used on the `Field`.
+    ///   - dateValue: The dateValue used by the filter.
     ///   - value: The string value used in the filter.
     init(
         field: Field,
-        condition: FilterOperator,
         codedValue: CodedValue?,
+        condition: FilterOperator,
         dateValue: Date,
         value: String = ""
     ) {
-        self.field = field
-        self.condition = condition
         self.codedValue = codedValue
+        self.condition = condition
         self.dateValue = dateValue
+        self.field = field
+        self.selectedFieldName = field.name
         self.value = value
     }
     
@@ -244,8 +258,8 @@ extension FieldFilter {
     func copy() -> FieldFilter {
         FieldFilter(
             field: self.field,
-            condition: self.condition,
             codedValue: self.codedValue,
+            condition: self.condition,
             dateValue: self.dateValue,
             value: self.value
         )
