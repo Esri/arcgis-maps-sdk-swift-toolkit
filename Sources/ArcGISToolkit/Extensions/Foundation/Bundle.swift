@@ -20,5 +20,15 @@ extension Bundle {
     
     /// The toolkit module, which is either the resource bundle or the
     /// ArcGISToolkit framework, depending on how the toolkit was built.
-    static let toolkitModule = Bundle(identifier: toolkitIdentifier) ?? .module
+    static let toolkitModule: Bundle = {
+#if USE_BUNDLE_MACRO
+        #bundle
+#else
+        // Only create the bundle using the ID if the toolkit
+        // is being used as a built framework. Otherwise time-consuming
+        // heuristics will be used to locate the bundle and that
+        // can block the main thread.
+        Bundle(identifier: toolkitIdentifier)!
+#endif
+    }()
 }
