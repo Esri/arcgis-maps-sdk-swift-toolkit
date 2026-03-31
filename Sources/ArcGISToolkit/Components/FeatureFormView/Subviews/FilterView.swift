@@ -16,7 +16,8 @@ import ArcGIS
 import SwiftUI
 
 /// A view allowing the user to assemble a list of `FieldFilter` objects used to filter a list of features.
-struct FilterView: View {
+@_spi(PrototypeFilterView)
+public struct FilterView: View {
     /// The model used by the view.
     @Bindable var model: FilterViewModel
     /// A Boolean value indicating whether an alert is presented stating that there are changes that need to be saved or discarded. 
@@ -26,7 +27,16 @@ struct FilterView: View {
     /// as cancelling simply resets the list of `FieldFilter` objects.
     var onApplyAction: (() -> Void)?
     
-    var body: some View {
+    /// Creates a view allowing the user to assemble a list of `FieldFilter` objects used to filter a list of features.
+    /// - Parameters:
+    ///   - model: The model used by the view.
+    ///   - onApplyAction: The client-specified action to perform when the `Apply` button is tapped.
+    public init(model: FilterViewModel, onApplyAction: (() -> Void)? = nil) {
+        self.model = model
+        self.onApplyAction = onApplyAction
+    }
+    
+    public var body: some View {
         NavigationStack {
             ScrollViewReader { proxy in
                 if model.fieldFilters.isEmpty {
