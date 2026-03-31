@@ -214,7 +214,7 @@ private struct FloorFilterBody: View {
         }
         .frame(width: width)
         .modify {
-            if #available(iOS 26, *) {
+            if #available(iOS 26.0, *) {
 #if os(visionOS)
                 $0.glassBackgroundEffect(in: FloorFilterBody.buttonShape)
 #else
