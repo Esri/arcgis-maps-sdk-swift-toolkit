@@ -52,7 +52,7 @@ final class FilterViewModel {
         let whereClause = whereClause(filters: fieldFilters)
         return originalWhereClause != whereClause
     }
-
+    
     /// Sets the fields to filter on.
     ///
     /// Use this to customize the filterable fields. Alternatively, set `featureTable` to auto-populate
@@ -154,13 +154,8 @@ class FieldFilter {
     }
     
     /// A Boolean value indicating whether the filter view is presented.
-    var selectedFieldName: String// {
-//        didSet {
-//            guard let field = model.field(named: selectedFieldName) else { return }
-//            self.field = field
-//        }
-//    }
-
+    var selectedFieldName: String
+    
     /// The value to filter on.
     var value = ""
     
