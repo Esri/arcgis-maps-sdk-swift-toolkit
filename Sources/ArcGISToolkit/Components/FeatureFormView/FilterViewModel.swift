@@ -166,6 +166,7 @@ class FieldFilter {
         self.dateValue = .now
         self.field = field
         self.selectedFieldName = field.name
+        // Calculating the first condition requires that the field be set.
         self.condition = firstCondition()
         self.value = codedValue?.name ?? ""
     }

@@ -209,7 +209,7 @@ struct FilterView: View {
     let model = FilterViewModel()
     
     FilterView(model: model)
-        .task() {
+        .onAppear() {
             model.setFields(fields)
         }
 }
