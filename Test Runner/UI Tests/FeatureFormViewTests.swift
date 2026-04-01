@@ -882,7 +882,7 @@ final class FeatureFormViewTests: XCTestCase {
             switchView.label,
             "2"
         )
-      
+        
 #if targetEnvironment(macCatalyst) || os(visionOS)
         switchView.assertExistenceAndTap()
 #else
@@ -1949,11 +1949,6 @@ final class FeatureFormViewTests: XCTestCase {
         condition1Options.assertExistenceAndTap()
         
         duplicateButton.assertExistenceAndTap()
-        
-#if targetEnvironment(macCatalyst)
-        XCTExpectFailure("The condition doesn't duplicate correctly on Mac Catalyst. The selected field is not preserved.")
-#endif
-        
         greaterThanLabels.element(boundBy: 1).assertExistenceAndTap()
         
         lessThanButton.assertExistenceAndTap()
