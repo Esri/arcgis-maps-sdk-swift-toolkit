@@ -199,11 +199,12 @@ struct FilterView: View {
         }
     }
 }
+
 #Preview {
     let fields: [Field] = [
-        Field(type: .int32, name: "fieldOne", alias: "One", length: 30, domain: nil, isEditable: true, isNullable: false),
-        Field(type: .int32, name: "fieldTwo", alias: "Two", length: 30, domain: nil, isEditable: true, isNullable: false),
-        Field(type: .int32, name: "fieldThree", alias: "Three", length: 30, domain: nil, isEditable: true, isNullable: false)
+        Field(type: .int32, name: "fieldOne", alias: "One", length: 30, isNullable: false),
+        Field(type: .int32, name: "fieldTwo", alias: "Two", length: 30, isNullable: false),
+        Field(type: .int32, name: "fieldThree", alias: "Three", length: 30, isNullable: false)
     ]
     let model = FilterViewModel()
     

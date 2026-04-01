@@ -153,7 +153,7 @@ class FieldFilter {
         }
     }
     
-    /// A Boolean value indicating whether the filter view is presented.
+    /// The name of the selected field.
     var selectedFieldName: String
     
     /// The value to filter on.
