@@ -107,7 +107,7 @@ struct FilterView: View {
                         if oldValue.count < newValue.count,
                            let lastFieldFilter = model.fieldFilters.last {
                             withAnimation {
-                                proxy.scrollTo(lastFieldFilter.id, anchor: .bottom)
+                                proxy.scrollTo(lastFieldFilter.id, anchor: .top)
                             }
                         }
                     }
