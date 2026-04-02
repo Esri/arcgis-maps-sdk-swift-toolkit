@@ -238,7 +238,7 @@ struct BuildingExplorerForm: View {
     private var phasePicker: some View {
         Picker(selection: $selectedPhase) {
             ForEach(availablePhases, id: \.self) { phase in
-                Text(verbatim: "\(phase)")
+                Text(phase, format: .number)
                     .tag(phase)
             }
             .onChange(of: selectedPhase) {
