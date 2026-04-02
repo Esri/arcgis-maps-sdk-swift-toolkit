@@ -26,6 +26,12 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Dodaj asociacije";
 
+/* A label for a button to add a new file attachment. */
+"Add Attachment" = "Dodaj prilogo";
+
+/* A label for a button to add a new field filtering condition. */
+"Add Condition" = "Dodaj pogoj";
+
 /* A label for a button to add a map area. */
 "Add Map Area" = "Dodaj območje karte";
 
@@ -43,6 +49,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "Med pridobivanjem območij karte je prišlo do napake.";
+
+/* A question asking for confirmation to discard changes. */
+"Are you sure you want to discard the changes?" = "Ste prepričani, da želite zavreči spremembe?";
 
 /* The title for a map area. */
 "Area %lld" = "Območje %lld";
@@ -64,6 +73,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label in reference to attachments. */
 "Attachments" = "Priloge";
+
+/* The status text when attachments failed to load. */
+"Attachments failed to load." = "Nalaganje prilog ni uspelo.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "Prilog večjih od %@ ni mogoče prenesti.";
@@ -91,6 +103,9 @@ association feature candidates. */
 /* Building (Level of Detail) */
 "Building" = "Stavba";
 
+/* A label for layer picker in the Building Explorer. */
+"Building Scene Layers" = "Gradnja slojev 3D-prizora";
+
 /* Buildings (Level of Detail) */
 "Buildings" = "Stavbe";
 
@@ -104,7 +119,8 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Dostop do kamere je onemogočen";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Cancel your current action to close/hide a sheet or pop-up. */
 "Cancel" = "Prekliči";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -156,6 +172,9 @@ candidate to add as a utility association. */
 /* A directive to clear all of the completed utility network traces. */
 "Clear All Results" = "Počisti vse rezultate";
 
+/* Close/hide a sheet or pop-up. */
+"Close" = "Zapri";
+
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Barva";
 
@@ -165,11 +184,29 @@ candidate to add as a utility association. */
 /* The accessibility label of the compass button. */
 "compass-button-accessibility-label" = "Kompas";
 
+/* A label for a control to pick a condition to filter fields in a table against. */
+"Condition" = "Pogoj";
+
+/* A label for a control representing a condition and position index used to filter fields in a table. */
+"Condition %lld" = "Pogoj %lld";
+
+/* A label for button to a open a menu with options for a condition used to filter fields in a table. */
+"Condition %lld Options" = "Možnosti pogoja %lld";
+
+/* Confirm the current action and close a sheet or pop-up. */
+"Confirm" = "Potrdi";
+
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Povezljivost";
 
+/* A label for construction phase picker in the Building Explorer. */
+"Construction Phase" = "Faza izdelave";
+
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Zadrževanje";
+
+/* A label for the "contains the text" attribute query condition. */
+"contains the text" = "vsebuje besedilo";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -218,7 +255,7 @@ A label for a button used to continue the authentication operation. */
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
 "Date must be on or before %@" = "Datum mora biti na ali pred %@";
 
-/* A label for a button used to delete a utility network trace input component or result. */
+/* A label for a "Delete" button. */
 "Delete" = "Izbriši";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
@@ -242,8 +279,14 @@ A label for a button used to continue the authentication operation. */
 /* A question asking if the user would like to discard their unsaved edits. */
 "Discard Edits?" = "Ali želite zavreči urejanje?";
 
+/* A label for Disciplines & Categories section in the Building Explorer. */
+"Disciplines & Categories" = "Področja in kategorije";
+
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Opusti";
+
+/* A label for the "does not contain the text" attribute query condition. */
+"does not contain the text" = "ne vsebuje besedila";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Končano";
@@ -262,6 +305,9 @@ A label for a button used to continue the authentication operation. */
 
 /* The status text when a map area is downloading. */
 "Downloading" = "Prenašanje";
+
+/* A label for a button to duplicate a field filter. */
+"Duplicate" = "Podvoji";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -284,6 +330,9 @@ AR experience. */
 /* An error message indicating the selected attachment is an empty file and not supported. */
 "Empty files are not supported." = "Prazne datoteke niso podprte.";
 
+/* A label for the "ends with" attribute query condition. */
+"ends with" = "se konča s/z";
+
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
@@ -294,6 +343,9 @@ hold the minimum and maximum length respectively. */
 
 /* An instruction to enter a name. */
 "Enter a name" = "Vnesi ime";
+
+/* A prompt for a text field to enter a value. */
+"Enter a value" = "Vnesite vrednost";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Vnesite vrednost";
@@ -361,9 +413,16 @@ trace operation. */
 asset types by name. */
 "Filter asset types by name" = "Filtriraj tipe sredstev po imenu";
 
+/* A label for a button to filter utility association candidates by attributes. */
+"Filter Candidates" = "Filtriraj kandidate";
+
 /* A label for a search field to filter utility 
 association candidate features by name. */
 "Filter candidates by name" = "Filtriraj kandidate po imenu";
+
+/* Label for a text field used to 
+filter visible elements in a form. */
+"Filter Elements" = "Filtriraj elemente";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -376,6 +435,9 @@ association feature sources by name. */
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Filtriranje spletnih mest";
+
+/* A notice used when closing the view that the filters have not been applied/saved. */
+"Filters have not been applied" = "Filtri niso bili uporabljeni";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Najdi kraj ali naslov";
@@ -394,13 +456,12 @@ edge of a utility network element. */
 /* A label for the element on the "from" side of a utility association. */
 "From Element" = "Od elementa";
 
-/* A label for a button to choose a feature for a new
-utility association from a network data source. */
-"From Network Data Source" = "Od podatkovnega vira omrežja";
-
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Rezultati funkcije";
+
+/* Description of error thrown when a global scene is being provided to the Building Explorer. */
+"Global scenes aren't supported in the Building Explorer." = "Globalni 3D-prizori niso podprti v raziskovalcu stavb.";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -426,6 +487,24 @@ variable is a cardinal or intercardinal direction. */
 /* A label indicating that a challenge should be ignored. */
 "Ignore" = "Prezri";
 
+/* A label for the "is" attribute query condition. */
+"is" = "je";
+
+/* A label for the "is blank" attribute query condition. */
+"is blank" = "je prazno";
+
+/* A label for the "is empty" attribute query condition. */
+"is empty" = "je prazno";
+
+/* A label for the "is not" attribute query condition. */
+"is not" = "ni";
+
+/* A label for the "is not blank" attribute query condition. */
+"is not blank" = "ni prazno";
+
+/* A label for the "is not empty" attribute query condition. */
+"is not empty" = "ni prazno";
+
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Povezljivost objekta roba spoja s strani";
 
@@ -440,6 +519,9 @@ variable is a cardinal or intercardinal direction. */
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Manj kot najmanjša vrednost";
+
+/* A label for the level picker in the Building Explorer. */
+"Level" = "Stopnja";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Stopnja podrobnosti";
@@ -537,13 +619,23 @@ data sources in a utility network. */
 /* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "Brez asociacij";
 
+/* A label indicating an element
+contains no file attachments. */
+"No attachments" = "Brez prilog";
+
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Ni zaznamkov";
+
+/* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
+"No building scene layers in the scene." = "Brez gradnje slojev 3D-prizora v 3D-prizoru.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
 "No Candidates Found" = "Ni najdenih kandidatov";
+
+/* A label indicating no field filtering conditions have been added. */
+"No conditions added" = "Brez dodanih pogojev";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Na voljo ni nobena konfiguracija.";
@@ -601,12 +693,11 @@ filter results were found. */
 /* A label indicating that the map is offline disabled. */
 "Offline Disabled" = "Brez povezave onemogočeno";
 
+/* The default title of the live activity for taking a map offline. */
+"Offline Map" = "Karta brez povezave";
+
 /* A label for button to proceed with an operation. */
 "OK" = "V redu";
-
-/* A label indicating features can be selected by
-interactively tapping on the map. */
-"On Map" = "Na karti";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Spletne karte ni bilo mogoče naložiti";
@@ -741,6 +832,12 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "Prikaži vse";
 
+/* A label indicating the intended outcome of using the filter view. */
+"Show features that meet all the conditions" = "Prikaži geoobjekte, ki izpolnjujejo vse pogoje";
+
+/* A label for the Show Full Model toggle in the Building Explorer. */
+"Show Full Model" = "Pokaži cel model";
+
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Prikaži na karti";
 
@@ -772,6 +869,9 @@ match the spatial reference of the map or scene. */
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Začetne točke";
+
+/* A label for the "starts with" attribute query condition. */
+"starts with" = "se začne z";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Pokrajina";
@@ -858,6 +958,9 @@ to be imported as an attachment. */
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "Brez območij karte za to karto. Za začetek tapnite na gumb spodaj.";
+
+/* A notice communicating that a feature form has no elements. */
+"This form is empty." = "Ta oblika je prazna.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Naslov";
@@ -948,6 +1051,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Prikaži";
 
+/* A label for the visible toggle in the Building Explorer. */
+"Visible" = "Vidno";
+
 /* A label indicating a utility association's 
 containment is not visible. */
 "Visible: false" = "Vidno: neresnično";
@@ -979,6 +1085,9 @@ The host is indicated in the variable. */
 
 /* A button to change the map to the extent of the selected trace. */
 "Zoom To" = "Povečaj na";
+
+/* A label for the zoom to building button in the Building Explorer. */
+"Zoom to building" = "Povečaj na stavbo";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Približaj na rezultat";
