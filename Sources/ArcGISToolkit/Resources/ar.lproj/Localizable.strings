@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "إضافة اقتران";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "بيت_Add Attachment_______________لاحقة";
+"Add Attachment" = "إضافة مرفق";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "بيت_Add Condition______________لاحقة";
+"Add Condition" = "إضافة شرط";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "إضافة منطقة خريطة";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "حدث خطأ في أثناء جلب مناطق الخريطة.";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "بيت_Are you sure you want to discard the changes________________________لاحقة?";
+"Are you sure you want to discard the changes?" = "هل تريد بالتأكيد تجاهل التغييرات؟";
 
 /* The title for a map area. */
 "Area %lld" = "المنطقة %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "المرفقات";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "بيت_Attachments failed to load____________________________لاحقة.";
+"Attachments failed to load." = "فشل تحميل المرفقات.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "لا يمكن تنزيل المرفقات التي يزيد حجمها عن %@.";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "بناء";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "بيت_Building Scene Layers______________________لاحقة";
+"Building Scene Layers" = "إنشاء طبقات مشهد";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "مباني";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "مسح كافة النتائج";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "بيت_Close___________لاحقة";
+"Close" = "إغلاق";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "لون";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "البوصلة";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "بيت_Condition___________________لاحقة";
+"Condition" = "شرط";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "بيت_Condition %lld_______________لاحقة";
+"Condition %lld" = "الشرط %lld";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "بيت_Condition %lld Options_______________________لاحقة";
+"Condition %lld Options" = "خيارات الشرط %lld";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "بيت_Confirm_______________لاحقة";
+"Confirm" = "تأكيد";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "الاتصال";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "بيت_Construction Phase___________________لاحقة";
+"Construction Phase" = "مرحلة الإنشاء";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "الاحتواء";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "بيت_contains the text__________________لاحقة";
+"contains the text" = "يحتوي على النص";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "تجاهل التحريرات؟";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "بيت_Disciplines & Categories_________________________لاحقة";
+"Disciplines & Categories" = "الأنظمة والفئات";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "تجاهل";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "بيت_does not contain the text__________________________لاحقة";
+"does not contain the text" = "لا يحتوي على النص";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "تم";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "جارٍ التنزيل";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "بيت_Duplicate___________________لاحقة";
+"Duplicate" = "تكرار";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "الملفات الفارغة غير مدعومة.";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "بيت_ends with___________________لاحقة";
+"ends with" = "ينتهي بـ";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "أدخل اسمًا";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "بيت_Enter a value______________لاحقة";
+"Enter a value" = "أدخل قيمة";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "إدخال قيمة";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "تصفية أنواع الأصول حسب الاسم";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "بيت_Filter Candidates__________________لاحقة";
+"Filter Candidates" = "تصفية المرشحين";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "بيت_Filter Elements________________لاحقة";
+"Filter Elements" = "تصفية العناصر";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "تصفية المواقع";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "بيت_Filters have not been applied______________________________لاحقة";
+"Filters have not been applied" = "لم يتم تطبيق عوامل التصفية";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "العثور على مكان أو عنوان";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "نتائج الدالة";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "بيت_Global scenes aren't supported in the Building Explorer_____________________________لاحقة.";
+"Global scenes aren't supported in the Building Explorer." = "المشاهد العالمية غير مدعومة في مستكشف البناء.";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "تجاهل";
 
 /* A label for the "is" attribute query condition. */
-"is" = "بيت_is_____لاحقة";
+"is" = "هو";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "بيت_is blank_________________لاحقة";
+"is blank" = "خالٍ";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "بيت_is empty_________________لاحقة";
+"is empty" = "فارغ";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "بيت_is not_____________لاحقة";
+"is not" = "ليس";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "بيت_is not blank_____________لاحقة";
+"is not blank" = "ليس خاليًا";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "بيت_is not empty_____________لاحقة";
+"is not empty" = "ليس فارغًا";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "اتصال كائن حافة الوصلة من الجانب";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "أقل من أدنى قيمة";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "بيت_Level___________لاحقة";
+"Level" = "المستوى";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "مستوى التفاصيل";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "بيت_No attachments_______________لاحقة";
+"No attachments" = "لا توجد مرفقات";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "لا توجد إشارات مرجعية";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "بيت_No building scene layers in the scene____________________لاحقة.";
+"No building scene layers in the scene." = "لا توجد طبقات مشهد بناء في المشهد.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "لم يتم العثور على مرشحين";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "بيت_No conditions added____________________لاحقة";
+"No conditions added" = "لم تتم إضافة شروط";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "لا توجد تكوينات متاحة.";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "تم تعطيل عدم الاتصال";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "بيت_Offline Map____________لاحقة";
+"Offline Map" = "الخريطة غير متصلة";
 
 /* A label for button to proceed with an operation. */
 "OK" = "موافق";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "إظهار الكل";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "بيت_Show features that meet all the conditions______________________لاحقة";
+"Show features that meet all the conditions" = "إظهار المعالم التي تستوفي جميع الشروط";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "بيت_Show Full Model________________لاحقة";
+"Show Full Model" = "إظهار النموذج الكامل";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "إظهار على الخريطة";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "نقاط البداية";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "بيت_starts with____________لاحقة";
+"starts with" = "يبدأ بـ";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "الولاية/المقاطعة:";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "لا توجد مناطق خريطة لهذه الخريطة. اضغط على الزر أدناه للبدء.";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "بيت_This form is empty____________________لاحقة.";
+"This form is empty." = "هذا النموذج فارغ.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "العنوان";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "عرض";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "بيت_Visible_______________لاحقة";
+"Visible" = "مرئية";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "تكبير/تصغير إلى";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "بيت_Zoom to building_________________لاحقة";
+"Zoom to building" = "التكبير إلى المبنى";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "تكبير/تصغير إلى النتيجة";

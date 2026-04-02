@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "เพิ่มความสัมพันธ์";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "ก้_Add Attachment_______________ษฺ";
+"Add Attachment" = "เพิ่มไฟล์แนบ";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "ก้_Add Condition______________ษฺ";
+"Add Condition" = "เพิ่มเงื่อนไข";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "เพิ่มพื้นที่แผนที่";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "เกิดข้อผิดพลาดขึ้นขณะดึงข้อมูลพื้นที่แผนที่";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "ก้_Are you sure you want to discard the changes________________________ษฺ?";
+"Are you sure you want to discard the changes?" = "แน่ใจหรือว่าคุณต้องการละทิ้งการเปลี่ยนแปลง";
 
 /* The title for a map area. */
 "Area %lld" = "พื้นที่ %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "เอกสารแนบ";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "ก้_Attachments failed to load____________________________ษฺ.";
+"Attachments failed to load." = "โหลดไฟล์แนบไม่สำเร็จ";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "ไม่สามารถดาวน์โหลดไฟล์แนบที่ใหญ่เกิน %@ ได้";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "ขอบเขตอาคาร";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "ก้_Building Scene Layers______________________ษฺ";
+"Building Scene Layers" = "ชั้นข้อมูลซีนอาคาร";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "ขอบเขตอาคารต่างๆ";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "ล้างผลลัพธ์ทั้งหมด";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "ก้_Close___________ษฺ";
+"Close" = "ปิด";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "สี";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "เข็มทิศ";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "ก้_Condition___________________ษฺ";
+"Condition" = "เงื่อนไข";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "ก้_Condition %lld_______________ษฺ";
+"Condition %lld" = "เงื่อนไข %lld";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "ก้_Condition %lld Options_______________________ษฺ";
+"Condition %lld Options" = "ตัวเลือกเงื่อนไข %lld";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "ก้_Confirm_______________ษฺ";
+"Confirm" = "ยืนยัน";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "การเชื่อมต่อ";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "ก้_Construction Phase___________________ษฺ";
+"Construction Phase" = "เฟสการก่อสร้าง";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "การกักกัน";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "ก้_contains the text__________________ษฺ";
+"contains the text" = "มีข้อความ";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "ละทิ้งการแก้ไขหรือไม่";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "ก้_Disciplines & Categories_________________________ษฺ";
+"Disciplines & Categories" = "กฎระเบียบและหมวดหมู่";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "ยกเลิก";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "ก้_does not contain the text__________________________ษฺ";
+"does not contain the text" = "ไม่มีข้อความ";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "สำเร็จ";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "กำลังดาวน์โหลด";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "ก้_Duplicate___________________ษฺ";
+"Duplicate" = "ทำซ้ำ";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "ไม่รองรับไฟล์เปล่า";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "ก้_ends with___________________ษฺ";
+"ends with" = "ลงท้ายด้วย";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "ป้อนชื่อ";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "ก้_Enter a value______________ษฺ";
+"Enter a value" = "ป้อนค่า";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "ป้อนค่า";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "กรองประเภทแอสเซ็ตตามชื่อ";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "ก้_Filter Candidates__________________ษฺ";
+"Filter Candidates" = "แคนดิเดทตัวกรอง";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "ก้_Filter Elements________________ษฺ";
+"Filter Elements" = "องค์ประกอบตัวกรอง";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "กรองไซต์";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "ก้_Filters have not been applied______________________________ษฺ";
+"Filters have not been applied" = "ไม่ได้ใช้ตัวกรอง";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "ค้นหาสถานที่หรือที่อยู่";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "ผลลัพธ์ฟังก์ชัน";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "ก้_Global scenes aren't supported in the Building Explorer_____________________________ษฺ.";
+"Global scenes aren't supported in the Building Explorer." = "ใน Building Explorer ไม่รองรับซีนโกลบอล";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "ไม่สนใจ";
 
 /* A label for the "is" attribute query condition. */
-"is" = "ก้_is_____ษฺ";
+"is" = "เป็น";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "ก้_is blank_________________ษฺ";
+"is blank" = "ว่างเปล่า";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "ก้_is empty_________________ษฺ";
+"is empty" = "ว่างเปล่า";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "ก้_is not_____________ษฺ";
+"is not" = "ไม่ใช่";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "ก้_is not blank_____________ษฺ";
+"is not blank" = "ไม่ว่างเปล่า";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "ก้_is not empty_____________ษฺ";
+"is not empty" = "ไม่ว่างเปล่า";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "การเชื่อมต่อวัตถุระหว่างจุดเชื่อมและขอบจากด้านข้าง";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "น้อยกว่าค่าขั้นต่ำ";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "ก้_Level___________ษฺ";
+"Level" = "ระดับ";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "ระดับรายละเอียด";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "ก้_No attachments_______________ษฺ";
+"No attachments" = "ไม่มีไฟล์แนบ";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "ไม่มีบุ๊กมาร์ก";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "ก้_No building scene layers in the scene____________________ษฺ.";
+"No building scene layers in the scene." = "ไม่มีชั้นข้อมูลซีนอาคารในซีน";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "ไม่พบแคนดิเดท";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "ก้_No conditions added____________________ษฺ";
+"No conditions added" = "ไม่ได้เพิ่มเงื่อนไข";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "ไม่มีการกำหนดค่าที่พร้อมใช้งาน";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "ปิดใช้งานไว้ขณะออฟไลน์";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "ก้_Offline Map____________ษฺ";
+"Offline Map" = "แผนที่ออฟไลน์";
 
 /* A label for button to proceed with an operation. */
 "OK" = "ตกลง";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "แสดงทั้งหมด";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "ก้_Show features that meet all the conditions______________________ษฺ";
+"Show features that meet all the conditions" = "แสดงฟีเจอร์ที่เป็นไปตามเงื่อนไขทั้งหมด";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "ก้_Show Full Model________________ษฺ";
+"Show Full Model" = "แสดงแบบจำลองเวอร์ชันเต็ม";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "แสดงบนแผนที่";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "จุดเริ่มต้น";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "ก้_starts with____________ษฺ";
+"starts with" = "เริ่มต้นด้วย";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "รัฐ/จังหวัด";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "ไม่มีพื้นที่แผนที่สำหรับแผนที่นี้ แตะปุ่มด้านล่างเพื่อเริ่มใช้งาน";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "ก้_This form is empty____________________ษฺ.";
+"This form is empty." = "ฟอร์มนี้ว่างเปล่า";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "คำนำหน้า";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "ดู";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "ก้_Visible_______________ษฺ";
+"Visible" = "มองเห็นได้";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "ซูมไปยัง";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "ก้_Zoom to building_________________ษฺ";
+"Zoom to building" = "ซูมไปยังอาคาร";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "ซูมไปยังผลลัพธ์";

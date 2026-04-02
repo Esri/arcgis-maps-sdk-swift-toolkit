@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "Добавить связь";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "Ж_Add Attachment_______________Я";
+"Add Attachment" = "Добавить вложение";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "Ж_Add Condition______________Я";
+"Add Condition" = "Добавить условие";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Добавить область карты";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "При получении областе карты произошла ошибка.";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "Ж_Are you sure you want to discard the changes________________________Я?";
+"Are you sure you want to discard the changes?" = "Вы действительно хотите отменить изменения?";
 
 /* The title for a map area. */
 "Area %lld" = "Область %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Вложения";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "Ж_Attachments failed to load____________________________Я.";
+"Attachments failed to load." = "Не удалось загрузить вложения.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "Вложения размером более %@ невозможно загрузить.";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "Здание";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "Ж_Building Scene Layers______________________Я";
+"Building Scene Layers" = "Слои сцен зданий";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "Здания";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "Очистить все результаты";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "Ж_Close___________Я";
+"Close" = "Закрыть";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Цвет";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "Компас";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "Ж_Condition___________________Я";
+"Condition" = "Условие";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "Ж_Condition %lld_______________Я";
+"Condition %lld" = "Условие %lld";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "Ж_Condition %lld Options_______________________Я";
+"Condition %lld Options" = "Условие %lld Опции";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "Ж_Confirm_______________Я";
+"Confirm" = "Подтвердить";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Связность";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "Ж_Construction Phase___________________Я";
+"Construction Phase" = "Этап строительства";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Содержание";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "Ж_contains the text__________________Я";
+"contains the text" = "содержит текст";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "Отклонить изменения?";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "Ж_Disciplines & Categories_________________________Я";
+"Disciplines & Categories" = "Дисциплины и категории";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Убрать";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "Ж_does not contain the text__________________________Я";
+"does not contain the text" = "не содержит текст";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Готово";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "Загрузка";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "Ж_Duplicate___________________Я";
+"Duplicate" = "Дублировать";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "Пустые файлы не поддерживаются.";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "Ж_ends with___________________Я";
+"ends with" = "заканчивается на";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "Введите имя";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "Ж_Enter a value______________Я";
+"Enter a value" = "Введите значение";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Введите значение";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "Фильтр типов оборудования по имени";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "Ж_Filter Candidates__________________Я";
+"Filter Candidates" = "Фильтр кандидатов";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "Ж_Filter Elements________________Я";
+"Filter Elements" = "Фильтр элементов";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Фильтр участков";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "Ж_Filters have not been applied______________________________Я";
+"Filters have not been applied" = "Фильтры не применены";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Найти адрес или место";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "Результаты функции";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "Ж_Global scenes aren't supported in the Building Explorer_____________________________Я.";
+"Global scenes aren't supported in the Building Explorer." = "Глобальные сцены не поддерживаются в Building Explorer.";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "Игнорировать";
 
 /* A label for the "is" attribute query condition. */
-"is" = "Ж_is_____Я";
+"is" = "является";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "Ж_is blank_________________Я";
+"is blank" = "пустой";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "Ж_is empty_________________Я";
+"is empty" = "пусто";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "Ж_is not_____________Я";
+"is not" = "не является";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "Ж_is not blank_____________Я";
+"is not blank" = "не пустой";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "Ж_is not empty_____________Я";
+"is not empty" = "не пусто";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Связность соединение объект-ребро со стороны";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "Меньше минимального значения";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "Ж_Level___________Я";
+"Level" = "Уровень";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Уровень детальности";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "Ж_No attachments_______________Я";
+"No attachments" = "Нет вложений";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Нет закладок";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "Ж_No building scene layers in the scene____________________Я.";
+"No building scene layers in the scene." = "В сцене отсутствуют слои сцен зданий.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "Кандидаты не найдены";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "Ж_No conditions added____________________Я";
+"No conditions added" = "Условия не добавлены";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Нет доступных конфигураций.";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "Автономный режим отключен";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "Ж_Offline Map____________Я";
+"Offline Map" = "Автономная карта";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Показать все";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "Ж_Show features that meet all the conditions______________________Я";
+"Show features that meet all the conditions" = "Показать объекты, которые удовлетворяют всем условиям";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "Ж_Show Full Model________________Я";
+"Show Full Model" = "Показать полную модель";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Показать на карте";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "Начальные точки";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "Ж_starts with____________Я";
+"starts with" = "начинается с";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Штат/Провинция";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Для этой карты нет областей карты. Коснитесь кнопки ниже, чтобы начать.";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "Ж_This form is empty____________________Я.";
+"This form is empty." = "Эта форма пустая.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Заголовок";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "Просмотреть";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "Ж_Visible_______________Я";
+"Visible" = "Видимый";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "Приблизить к";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "Ж_Zoom to building_________________Я";
+"Zoom to building" = "Масштабировать до зданий";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Приблизить к результату";

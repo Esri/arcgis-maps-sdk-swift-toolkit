@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "Zuordnung hinzufügen";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "ä_Add Attachment_______________Ü";
+"Add Attachment" = "Anlage hinzufügen";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "ä_Add Condition______________Ü";
+"Add Condition" = "Bedingung hinzufügen";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Kartenbereich hinzufügen";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "Beim Abrufen der Kartenbereiche ist ein Fehler aufgetreten.";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "ä_Are you sure you want to discard the changes________________________Ü?";
+"Are you sure you want to discard the changes?" = "Möchten Sie die Änderungen wirklich verwerfen?";
 
 /* The title for a map area. */
 "Area %lld" = "Bereich %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Anlagen";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "ä_Attachments failed to load____________________________Ü.";
+"Attachments failed to load." = "Anlagen konnten nicht geladen werden.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "Anlagen, die größer als %@ sind, können nicht heruntergeladen werden.";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "Gebäude (Einzahl)";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "ä_Building Scene Layers______________________Ü";
+"Building Scene Layers" = "Gebäude-Szenen-Layer";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "Gebäude (Mehrzahl)";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "Alle Ergebnisse löschen";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "ä_Close___________Ü";
+"Close" = "Schließen";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Farbe";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "Kompass";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "ä_Condition___________________Ü";
+"Condition" = "Bedingung";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "ä_Condition %lld_______________Ü";
+"Condition %lld" = "Bedingung %lld";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "ä_Condition %lld Options_______________________Ü";
+"Condition %lld Options" = "Bedingung %lld Optionen";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "ä_Confirm_______________Ü";
+"Confirm" = "Bestätigen";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Konnektivität";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "ä_Construction Phase___________________Ü";
+"Construction Phase" = "Konstruktionsphase";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Containment";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "ä_contains the text__________________Ü";
+"contains the text" = "enthält den Text";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "Änderungen verwerfen?";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "ä_Disciplines & Categories_________________________Ü";
+"Disciplines & Categories" = "Disziplinen und Kategorien";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Schließen";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "ä_does not contain the text__________________________Ü";
+"does not contain the text" = "enthält nicht den Text";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Fertig";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "Wird heruntergeladen";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "ä_Duplicate___________________Ü";
+"Duplicate" = "Duplikat";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "Leere Dateien werden nicht unterstützt.";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "ä_ends with___________________Ü";
+"ends with" = "endet mit";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "Name eingeben";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "ä_Enter a value______________Ü";
+"Enter a value" = "Wert eingeben";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Wert eingeben";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "Objekttypen nach Name filtern";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "ä_Filter Candidates__________________Ü";
+"Filter Candidates" = "Kandidaten filtern";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "ä_Filter Elements________________Ü";
+"Filter Elements" = "Elemente filtern";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Sites filtern";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "ä_Filters have not been applied______________________________Ü";
+"Filters have not been applied" = "Es wurden keine Filter angewendet.";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Ort oder Adresse suchen";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "Funktionsergebnisse";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "ä_Global scenes aren't supported in the Building Explorer_____________________________Ü.";
+"Global scenes aren't supported in the Building Explorer." = "Globale Szenen werden im Gebäude-Explorer nicht unterstützt.";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "Ignorieren";
 
 /* A label for the "is" attribute query condition. */
-"is" = "ä_is_____Ü";
+"is" = "ist";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "ä_is blank_________________Ü";
+"is blank" = "ist leer";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "ä_is empty_________________Ü";
+"is empty" = "ist leer";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "ä_is not_____________Ü";
+"is not" = "ist nicht";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "ä_is not blank_____________Ü";
+"is not blank" = "ist nicht leer";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "ä_is not empty_____________Ü";
+"is not empty" = "ist nicht leer";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Knoten-Kanten-Objektkonnektivität (von Seite)";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "Kleiner als Minimalwert";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "ä_Level___________Ü";
+"Level" = "Ebene";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Detaillierungsebene";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "ä_No attachments_______________Ü";
+"No attachments" = "Keine Anlagen";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Keine Lesezeichen";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "ä_No building scene layers in the scene____________________Ü.";
+"No building scene layers in the scene." = "Die Szene enthält keine Gebäude-Szenen-Layer.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "Keine Kandidaten gefunden";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "ä_No conditions added____________________Ü";
+"No conditions added" = "Keine Bedingungen hinzugefügt";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Keine Konfigurationen verfügbar.";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "Offline deaktiviert";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "ä_Offline Map____________Ü";
+"Offline Map" = "Offline-Karte";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Alle anzeigen";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "ä_Show features that meet all the conditions______________________Ü";
+"Show features that meet all the conditions" = "Features, die alle Bedingungen erfüllen, anzeigen";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "ä_Show Full Model________________Ü";
+"Show Full Model" = "Vollständiges Modell anzeigen";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Auf Karte zeigen";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "Startpunkte";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "ä_starts with____________Ü";
+"starts with" = "beginnt mit";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Bundesland/Kanton";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Für diese Karte sind keine Kartenbereiche vorhanden. Tippen Sie auf die Schaltfläche unten, um zu beginnen.";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "ä_This form is empty____________________Ü.";
+"This form is empty." = "Dieses Formular ist leer.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Titel";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "Anzeigen";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "ä_Visible_______________Ü";
+"Visible" = "Sichtbar";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "Zoomen auf";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "ä_Zoom to building_________________Ü";
+"Zoom to building" = "Auf Gebäude zoomen";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Auf Ergebnis zoomen";

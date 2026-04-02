@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "Lisa seos";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "Š_Add Attachment_______________ä";
+"Add Attachment" = "Lisa manus";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "Š_Add Condition______________ä";
+"Add Condition" = "Lisa tingimus";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Lisa kaardiala";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "Kaardialade toomisel tekkis tõrge.";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "Š_Are you sure you want to discard the changes________________________ä?";
+"Are you sure you want to discard the changes?" = "Kas soovite kindlasti muudatustest loobuda?";
 
 /* The title for a map area. */
 "Area %lld" = "Ala %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Manused";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "Š_Attachments failed to load____________________________ä.";
+"Attachments failed to load." = "Manuste laadimine ebaõnnestus.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "Suuremaid manuseid kui %@ ei saa alla laadida.";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "Hoone";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "Š_Building Scene Layers______________________ä";
+"Building Scene Layers" = "Hoonete stseenikihid";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "Hooned";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "Kustuta kõik tulemused";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "Š_Close___________ä";
+"Close" = "Sule";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Värv";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "Kompass";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "Š_Condition___________________ä";
+"Condition" = "Tingimus";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "Š_Condition %lld_______________ä";
+"Condition %lld" = "Tingimus %lld";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "Š_Condition %lld Options_______________________ä";
+"Condition %lld Options" = "Tingimuse %lld valikud";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "Š_Confirm_______________ä";
+"Confirm" = "Kinnita";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Ühenduvus";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "Š_Construction Phase___________________ä";
+"Construction Phase" = "Koosteetapp";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Sisaldavus";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "Š_contains the text__________________ä";
+"contains the text" = "sisaldab teksti";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "Kas loobuda muudatustest?";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "Š_Disciplines & Categories_________________________ä";
+"Disciplines & Categories" = "Õppeained ja kategooriad";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Unusta";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "Š_does not contain the text__________________________ä";
+"does not contain the text" = "ei sisalda teksti";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Valmis";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "Allalaadimine";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "Š_Duplicate___________________ä";
+"Duplicate" = "Duplikaat";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "Tühje faile ei toetata.";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "Š_ends with___________________ä";
+"ends with" = "lõpeb:";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "Sisestage nimi";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "Š_Enter a value______________ä";
+"Enter a value" = "Sisesta väärtus";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Sisestage väärtus";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "Filtrivarade tüübid nime alusel";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "Š_Filter Candidates__________________ä";
+"Filter Candidates" = "Filtri kandidaadid";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "Š_Filter Elements________________ä";
+"Filter Elements" = "Filtri elemendid";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Filtreeri kohad";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "Š_Filters have not been applied______________________________ä";
+"Filters have not been applied" = "Filtreid pole rakendatud";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Otsi kohta või aadressi";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "Funktsiooni tulemused";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "Š_Global scenes aren't supported in the Building Explorer_____________________________ä.";
+"Global scenes aren't supported in the Building Explorer." = "Building Explorer ei toeta globaalseid stseene.";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "Eira";
 
 /* A label for the "is" attribute query condition. */
-"is" = "Š_is_____ä";
+"is" = "on";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "Š_is blank_________________ä";
+"is blank" = "on tühjaks jäetud";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "Š_is empty_________________ä";
+"is empty" = "on tühi";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "Š_is not_____________ä";
+"is not" = "ei ole";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "Š_is not blank_____________ä";
+"is not blank" = "ei ole tühjaks jäetud";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "Š_is not empty_____________ä";
+"is not empty" = "ei ole tühi";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Ühenduskoha serva objekti ühenduvus küljelt";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "Miinimumväärtusest väiksem";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "Š_Level___________ä";
+"Level" = "Tasand";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Detailsuse tase";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "Š_No attachments_______________ä";
+"No attachments" = "Manused puuduvad";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Järjehoidjaid pole";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "Š_No building scene layers in the scene____________________ä.";
+"No building scene layers in the scene." = "Stseenis ei ole hoonete stseenikihte.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "Kandidaate ei leitud";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "Š_No conditions added____________________ä";
+"No conditions added" = "Tingimusi ei lisatud";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Konfiguratsioone pole saadaval.";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "Võrguühenduseta olek keelatud";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "Š_Offline Map____________ä";
+"Offline Map" = "Võrguühenduseta kaart";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Kuva kõik";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "Š_Show features that meet all the conditions______________________ä";
+"Show features that meet all the conditions" = "Kuva kõigile tingimustele vastavad objektid";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "Š_Show Full Model________________ä";
+"Show Full Model" = "Kuva täismudel";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Kuva kaardil";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "Algspunktid";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "Š_starts with____________ä";
+"starts with" = "algab:";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Osariik/provints";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Sellel kaardil ei ole kaardialasid. Alustamiseks puudutage allolevat nuppu.";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "Š_This form is empty____________________ä.";
+"This form is empty." = "See vorm on tühi.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Pealkiri";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "Kuva";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "Š_Visible_______________ä";
+"Visible" = "Nähtav";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "Suumi:";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "Š_Zoom to building_________________ä";
+"Zoom to building" = "Suumi hoonele";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Suumi tulemini";
