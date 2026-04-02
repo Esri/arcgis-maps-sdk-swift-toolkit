@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "İlişkilendirme Ekle";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "ı_Add Attachment_______________İ";
+"Add Attachment" = "Ek Ekle";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "ı_Add Condition______________İ";
+"Add Condition" = "Koşul Ekle";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Harita Alanı Ekle";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "Harita alanları getirilirken bir hata oluştu.";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "ı_Are you sure you want to discard the changes________________________İ?";
+"Are you sure you want to discard the changes?" = "Değişikliklerden vazgeçmek istediğinize emin misiniz?";
 
 /* The title for a map area. */
 "Area %lld" = "Alan %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Ekler";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "ı_Attachments failed to load____________________________İ.";
+"Attachments failed to load." = "Ekler yüklenemedi.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "%@'den büyük ekler indirilemez.";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "Bina";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "ı_Building Scene Layers______________________İ";
+"Building Scene Layers" = "Sahne Katmanları Oluşturma";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "Binalar";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "Tüm Sonuçları Temizle";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "ı_Close___________İ";
+"Close" = "Kapat";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Renk";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "Pusula";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "ı_Condition___________________İ";
+"Condition" = "Koşul";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "ı_Condition %lld_______________İ";
+"Condition %lld" = "Koşul %lld";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "ı_Condition %lld Options_______________________İ";
+"Condition %lld Options" = "Koşul %lld Seçenekleri";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "ı_Confirm_______________İ";
+"Confirm" = "Onayla";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Bağlanırlık";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "ı_Construction Phase___________________İ";
+"Construction Phase" = "Yapım Aşaması";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Kapsama";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "ı_contains the text__________________İ";
+"contains the text" = "metni içeriyor";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "Düzenlemeler Atılsın Mı?";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "ı_Disciplines & Categories_________________________İ";
+"Disciplines & Categories" = "Disiplinler ve Kategoriler";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Vazgeç";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "ı_does not contain the text__________________________İ";
+"does not contain the text" = "metni içermiyor";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Tamam";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "İndiriliyor";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "ı_Duplicate___________________İ";
+"Duplicate" = "Çoğalt";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "Boş dosyalar desteklenmez.";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "ı_ends with___________________İ";
+"ends with" = "ile biter";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "Bir ad girin";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "ı_Enter a value______________İ";
+"Enter a value" = "Değer gir";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Değer Gir";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "Varlık türlerini ada göre filtrele";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "ı_Filter Candidates__________________İ";
+"Filter Candidates" = "Adayları Filtrele";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "ı_Filter Elements________________İ";
+"Filter Elements" = "Ögeleri Filtrele";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Siteleri filtrele";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "ı_Filters have not been applied______________________________İ";
+"Filters have not been applied" = "Filtreler uygulanamadı";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Bir yer veya adres bul";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "İşlev Sonuçları";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "ı_Global scenes aren't supported in the Building Explorer_____________________________İ.";
+"Global scenes aren't supported in the Building Explorer." = "Building Explorer'da küresel sahneler desteklenmiyor.";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "Yoksay";
 
 /* A label for the "is" attribute query condition. */
-"is" = "ı_is_____İ";
+"is" = "şu ise";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "ı_is blank_________________İ";
+"is blank" = "boşluk";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "ı_is empty_________________İ";
+"is empty" = "boş";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "ı_is not_____________İ";
+"is not" = "şu değil";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "ı_is not blank_____________İ";
+"is not blank" = "boşluk değil";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "ı_is not empty_____________İ";
+"is not empty" = "boş değil";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Kenardan Kavşak Kenar Nesnesi Bağlanırlığı";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "Minimum değerden daha küçük";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "ı_Level___________İ";
+"Level" = "Seviye";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Ayrıntı Seviyesi";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "ı_No attachments_______________İ";
+"No attachments" = "Ek yok";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Yer işareti yok";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "ı_No building scene layers in the scene____________________İ.";
+"No building scene layers in the scene." = "Sahnede bina sahnesi katmanı yok.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "Aday Bulunamadı";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "ı_No conditions added____________________İ";
+"No conditions added" = "Hiçbir koşul eklenmedi";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Kullanılabilir yapılandırma yok.";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "Çevrim Dışı Devre Dışı";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "ı_Offline Map____________İ";
+"Offline Map" = "Çevrim Dışı Harita";
 
 /* A label for button to proceed with an operation. */
 "OK" = "Tamam";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Tümünü göster";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "ı_Show features that meet all the conditions______________________İ";
+"Show features that meet all the conditions" = "Tüm koşulları karşılayan detayları göster";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "ı_Show Full Model________________İ";
+"Show Full Model" = "Tam Modeli Göster";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Harita Üzerinde Göster";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "Başlangıç Noktaları";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "ı_starts with____________İ";
+"starts with" = "şununla başlar";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Eyalet/İl";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Bu harita için herhangi bir harita alanı bulunmamaktadır. Başlamak için aşağıdaki butona dokunun.";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "ı_This form is empty____________________İ.";
+"This form is empty." = "Bu form boş.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Başlık";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "Görüntüle";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "ı_Visible_______________İ";
+"Visible" = "Görünür";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "Yakınlaştır";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "ı_Zoom to building_________________İ";
+"Zoom to building" = "Binaya yakınlaştır";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Sonuca Yakınlaştır";

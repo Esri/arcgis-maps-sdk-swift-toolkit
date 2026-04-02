@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "Associatie toevoegen";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "Ĳ_Add Attachment_______________ä";
+"Add Attachment" = "Bijlage toevoegen";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "Ĳ_Add Condition______________ä";
+"Add Condition" = "Voorwaarde toevoegen";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Kaartgebied toevoegen";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "Er is een fout opgetreden bij het ophalen van kaartgebieden.";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "Ĳ_Are you sure you want to discard the changes________________________ä?";
+"Are you sure you want to discard the changes?" = "Weet u zeker dat u de wijzigingen wilt verwijderen?";
 
 /* The title for a map area. */
 "Area %lld" = "Gebied %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Bijlagen";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "Ĳ_Attachments failed to load____________________________ä.";
+"Attachments failed to load." = "Kan bijlagen niet laden.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "U kunt geen bijlagen downloaden die groter zijn dan %@.";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "Gebouw";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "Ĳ_Building Scene Layers______________________ä";
+"Building Scene Layers" = "Bezig met bouwen scene layers";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "Gebouwen";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "Alle resultaten wissen";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "Ĳ_Close___________ä";
+"Close" = "Sluiten";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Kleur";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "Kompas";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "Ĳ_Condition___________________ä";
+"Condition" = "Voorwaarde";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "Ĳ_Condition %lld_______________ä";
+"Condition %lld" = "Voorwaarde %lld";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "Ĳ_Condition %lld Options_______________________ä";
+"Condition %lld Options" = "Voorwaarde %lld Opties";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "Ĳ_Confirm_______________ä";
+"Confirm" = "Bevestigen";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Connectiviteit";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "Ĳ_Construction Phase___________________ä";
+"Construction Phase" = "Bouwfase";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Inperking";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "Ĳ_contains the text__________________ä";
+"contains the text" = "bevat de tekst";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "Bewerkingen annuleren?";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "Ĳ_Disciplines & Categories_________________________ä";
+"Disciplines & Categories" = "Disciplines en categorieën";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Verwijderen";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "Ĳ_does not contain the text__________________________ä";
+"does not contain the text" = "bevat geen tekst met";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Gereed";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "Bezig met downloaden";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "Ĳ_Duplicate___________________ä";
+"Duplicate" = "Dupliceren";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "Er is geen ondersteuning voor lege bestanden.";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "Ĳ_ends with___________________ä";
+"ends with" = "eindigt op";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "Voer een naam in";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "Ĳ_Enter a value______________ä";
+"Enter a value" = "Voer een waarde in";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Waarde invoeren";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "Assettypes filteren op naam";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "Ĳ_Filter Candidates__________________ä";
+"Filter Candidates" = "Kandidaten filteren";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "Ĳ_Filter Elements________________ä";
+"Filter Elements" = "Elementen filteren";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Locaties filteren";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "Ĳ_Filters have not been applied______________________________ä";
+"Filters have not been applied" = "Filters zijn niet toegepast";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Een plaats of adres zoeken";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "Resultaten functie";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "Ĳ_Global scenes aren't supported in the Building Explorer_____________________________ä.";
+"Global scenes aren't supported in the Building Explorer." = "Gebouwenverkenner biedt geen ondersteuning voor mondiale scenes.";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "Negeren";
 
 /* A label for the "is" attribute query condition. */
-"is" = "Ĳ_is_____ä";
+"is" = "is";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "Ĳ_is blank_________________ä";
+"is blank" = "is blanco";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "Ĳ_is empty_________________ä";
+"is empty" = "is leeg";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "Ĳ_is not_____________ä";
+"is not" = "is niet";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "Ĳ_is not blank_____________ä";
+"is not blank" = "is niet blanco";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "Ĳ_is not empty_____________ä";
+"is not empty" = "is niet leeg";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Objectconnectiviteit junction-edge van zijkant";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "Minder dan minimumwaarde";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "Ĳ_Level___________ä";
+"Level" = "Verdieping";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Detailniveau";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "Ĳ_No attachments_______________ä";
+"No attachments" = "Geen bijlagen";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Geen bladwijzers";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "Ĳ_No building scene layers in the scene____________________ä.";
+"No building scene layers in the scene." = "De scene bevat geen gebouw-scenelagen.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "Kan geen kandidaten vinden";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "Ĳ_No conditions added____________________ä";
+"No conditions added" = "Er zijn geen voorwaarden toegevoegd";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Er zijn geen configuraties beschikbaar.";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "Offline uitgeschakeld";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "Ĳ_Offline Map____________ä";
+"Offline Map" = "Offline kaart";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Alles weergeven";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "Ĳ_Show features that meet all the conditions______________________ä";
+"Show features that meet all the conditions" = "Objecten weergeven die aan alle voorwaarden voldoen";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "Ĳ_Show Full Model________________ä";
+"Show Full Model" = "Volledig model weergeven";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Weergeven op kaart";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "Startpunten";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "Ĳ_starts with____________ä";
+"starts with" = "begint met";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Staat/provincie";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Er zijn geen kaartgebieden voor deze kaart. Tik op de onderstaande knop om aan de slag te gaan.";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "Ĳ_This form is empty____________________ä.";
+"This form is empty." = "Dit formulier is leeg";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Titel";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "Weergeven";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "Ĳ_Visible_______________ä";
+"Visible" = "Zichtbaar";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "Inzoomen op";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "Ĳ_Zoom to building_________________ä";
+"Zoom to building" = "Inzoomen op gebouw";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Inzoomen op resultaat";

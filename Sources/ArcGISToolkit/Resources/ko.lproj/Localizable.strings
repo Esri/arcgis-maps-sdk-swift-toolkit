@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "연관 추가";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "한_Add Attachment_______________빠";
+"Add Attachment" = "첨부 파일 추가";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "한_Add Condition______________빠";
+"Add Condition" = "조건 추가";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "맵 영역 추가";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "맵 영역을 가져오는 동안 오류가 발생했습니다.";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "한_Are you sure you want to discard the changes________________________빠?";
+"Are you sure you want to discard the changes?" = "변경 내용을 취소하시겠습니까?";
 
 /* The title for a map area. */
 "Area %lld" = "영역 %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "첨부 파일";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "한_Attachments failed to load____________________________빠.";
+"Attachments failed to load." = "첨부 파일을 불러오지 못했습니다.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "%@보다 큰 첨부 파일은 다운로드할 수 없습니다.";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "건물";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "한_Building Scene Layers______________________빠";
+"Building Scene Layers" = "건물 씬 레이어";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "건물";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "모든 결과 지우기";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "한_Close___________빠";
+"Close" = "닫기";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "색상";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "나침반";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "한_Condition___________________빠";
+"Condition" = "조건";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "한_Condition %lld_______________빠";
+"Condition %lld" = "조건 %lld";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "한_Condition %lld Options_______________________빠";
+"Condition %lld Options" = "조건 %lld 옵션";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "한_Confirm_______________빠";
+"Confirm" = "확인";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "연결성";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "한_Construction Phase___________________빠";
+"Construction Phase" = "생성 단계";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "포함성";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "한_contains the text__________________빠";
+"contains the text" = "다음 텍스트를 포함함";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "편집 내용을 취소하시겠습니까?";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "한_Disciplines & Categories_________________________빠";
+"Disciplines & Categories" = "분야 및 범주";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "해제";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "한_does not contain the text__________________________빠";
+"does not contain the text" = "다음 텍스트를 포함하지 않음";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "완료";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "다운로드 중";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "한_Duplicate___________________빠";
+"Duplicate" = "복제";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "비어 있는 파일은 지원되지 않습니다.";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "한_ends with___________________빠";
+"ends with" = "다음으로 끝남";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "이름 입력";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "한_Enter a value______________빠";
+"Enter a value" = "값 입력";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "값 입력";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "이름으로 자산 유형 필터링";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "한_Filter Candidates__________________빠";
+"Filter Candidates" = "후보 필터링";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "한_Filter Elements________________빠";
+"Filter Elements" = "요소 필터링";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "현장 필터링";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "한_Filters have not been applied______________________________빠";
+"Filters have not been applied" = "필터가 적용되지 않음";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "장소 또는 주소 찾기";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "함수 결과";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "한_Global scenes aren't supported in the Building Explorer_____________________________빠.";
+"Global scenes aren't supported in the Building Explorer." = "글로벌 씬은 건물 탐색기에서 지원되지 않습니다.";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "무시";
 
 /* A label for the "is" attribute query condition. */
-"is" = "한_is_____빠";
+"is" = "다음과 같음";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "한_is blank_________________빠";
+"is blank" = "비어 있음(blank)";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "한_is empty_________________빠";
+"is empty" = "비어 있음(empty)";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "한_is not_____________빠";
+"is not" = "다음과 같지 않음";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "한_is not blank_____________빠";
+"is not blank" = "비어 있지 않음(blank)";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "한_is not empty_____________빠";
+"is not empty" = "비어 있지 않음(empty)";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "정션 엣지 객체 연결성 시작 측면";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "최소값보다 작음";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "한_Level___________빠";
+"Level" = "레벨";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "세밀도";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "한_No attachments_______________빠";
+"No attachments" = "첨부 파일 없음";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "북마크 없음";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "한_No building scene layers in the scene____________________빠.";
+"No building scene layers in the scene." = "씬에 건물 씬 레이어가 없습니다.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "후보를 찾을 수 없음";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "한_No conditions added____________________빠";
+"No conditions added" = "추가된 조건 없음";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "사용 가능한 구성이 없습니다.";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "오프라인이 비활성화됨";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "한_Offline Map____________빠";
+"Offline Map" = "오프라인 맵";
 
 /* A label for button to proceed with an operation. */
 "OK" = "확인";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "모두 보기";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "한_Show features that meet all the conditions______________________빠";
+"Show features that meet all the conditions" = "모든 조건을 충족하는 피처만 표시";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "한_Show Full Model________________빠";
+"Show Full Model" = "전체 모델 표시";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "맵에 표시";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "시작점";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "한_starts with____________빠";
+"starts with" = "다음으로 시작함";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "시/도";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "이 맵에 대한 맵 영역이 없습니다. 시작하려면 아래 버튼을 누르세요.";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "한_This form is empty____________________빠.";
+"This form is empty." = "이 양식은 비어 있습니다.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "제목";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "보기";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "한_Visible_______________빠";
+"Visible" = "표시";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "확대";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "한_Zoom to building_________________빠";
+"Zoom to building" = "건물로 확대";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "결과 확대";

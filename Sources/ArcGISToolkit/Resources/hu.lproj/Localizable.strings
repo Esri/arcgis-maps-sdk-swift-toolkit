@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "Társítás hozzáadása";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "í_Add Attachment_______________ő";
+"Add Attachment" = "Csatolmány hozzáadása";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "í_Add Condition______________ő";
+"Add Condition" = "Feltétel hozzáadása";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Térképterület hozzáadása";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "Hiba történt a térképterületek lekérése közben.";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "í_Are you sure you want to discard the changes________________________ő?";
+"Are you sure you want to discard the changes?" = "Biztosan elveti a módosításokat?";
 
 /* The title for a map area. */
 "Area %lld" = "Terület %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Csatolmányok";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "í_Attachments failed to load____________________________ő.";
+"Attachments failed to load." = "A csatolmányok betöltése meghiúsult.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "A(z) %@ méretnél nagyobb csatolmányok nem tölthetők le.";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "Épület";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "í_Building Scene Layers______________________ő";
+"Building Scene Layers" = "Épület 3D térképrétege";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "Épületek";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "Összes eredmény törlése";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "í_Close___________ő";
+"Close" = "Bezárás";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Szín";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "Iránytű";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "í_Condition___________________ő";
+"Condition" = "Feltétel";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "í_Condition %lld_______________ő";
+"Condition %lld" = "%lld feltétel";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "í_Condition %lld Options_______________________ő";
+"Condition %lld Options" = "%lld feltétel opciói";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "í_Confirm_______________ő";
+"Confirm" = "Megerősít";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Összekapcsolhatóság";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "í_Construction Phase___________________ő";
+"Construction Phase" = "Szerkesztési fázis";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Befoglalás";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "í_contains the text__________________ő";
+"contains the text" = "tartalmazza a szöveget";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "Elveti a szerkesztéseket?";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "í_Disciplines & Categories_________________________ő";
+"Disciplines & Categories" = "Tudományágak és kategóriák";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Elrejtés";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "í_does not contain the text__________________________ő";
+"does not contain the text" = "nem tartalmazza a szöveget";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Kész";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "Letöltés";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "í_Duplicate___________________ő";
+"Duplicate" = "Másolás";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "Az üres fájlok nincsenek támogatva.";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "í_ends with___________________ő";
+"ends with" = "erre végződik";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "Név megadása";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "í_Enter a value______________ő";
+"Enter a value" = "Adjon meg egy értéket";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Adja meg az értéket";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "Eszköztípusok szűrése név szerint";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "í_Filter Candidates__________________ő";
+"Filter Candidates" = "Jelöltek szűrése";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "í_Filter Elements________________ő";
+"Filter Elements" = "Elemek szűrése";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Helyek szűrése";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "í_Filters have not been applied______________________________ő";
+"Filters have not been applied" = "A szűrők nincsenek alkalmazva";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Hely vagy cím keresése";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "Funkció eredményei";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "í_Global scenes aren't supported in the Building Explorer_____________________________ő.";
+"Global scenes aren't supported in the Building Explorer." = "A Building Explorer nem támogatja a globális 3D térképeket.";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "Kihagyás";
 
 /* A label for the "is" attribute query condition. */
-"is" = "í_is_____ő";
+"is" = "értéke a következő:";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "í_is blank_________________ő";
+"is blank" = "üres";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "í_is empty_________________ő";
+"is empty" = "üres";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "í_is not_____________ő";
+"is not" = "nem ez";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "í_is not blank_____________ő";
+"is not blank" = "nem üres";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "í_is not empty_____________ő";
+"is not empty" = "nem üres";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Csomópontél-objektum összekapcsolhatóság az oldaltól";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "Kisebb, mint a minimális érték";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "í_Level___________ő";
+"Level" = "Szint";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Részletességi szint";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "í_No attachments_______________ő";
+"No attachments" = "Nincsenek csatolmányok";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Nincsenek könyvjelzők";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "í_No building scene layers in the scene____________________ő.";
+"No building scene layers in the scene." = "Nincsenek épület-3D térképrétegek a 3D térképen.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "Nem találhatók jelöltek";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "í_No conditions added____________________ő";
+"No conditions added" = "Nem adtak hozzá feltételeket";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Nem állnak rendelkezésre konfigurációk.";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "Kapcsolat nélküli állapot letiltva";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "í_Offline Map____________ő";
+"Offline Map" = "Kapcsolat nélküli térkép";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Összes megjelenítése";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "í_Show features that meet all the conditions______________________ő";
+"Show features that meet all the conditions" = "Az összes feltételnek megfelelő vektoros elemek megjelenítése";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "í_Show Full Model________________ő";
+"Show Full Model" = "Teljes modell megjelenítése";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Megjelenítés a térképen";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "Kiindulási pontok";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "í_starts with____________ő";
+"starts with" = "ezzel kezdődik";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Állam/tartomány";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Ehhez a térképhez nincsenek térképterületek. A kezdéshez koppintson az alábbi gombra.";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "í_This form is empty____________________ő.";
+"This form is empty." = "Ez az űrlap üres.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Beosztás";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "Megtekintés";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "í_Visible_______________ő";
+"Visible" = "Látható";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "Nagyítás/kicsinyítés:";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "í_Zoom to building_________________ő";
+"Zoom to building" = "Nagyítás az épületre";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Nagyítás az eredményre";

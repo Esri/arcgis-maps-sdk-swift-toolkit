@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "Pridėti susiejimą";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "Į_Add Attachment_______________š";
+"Add Attachment" = "Pridėti priedą";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "Į_Add Condition______________š";
+"Add Condition" = "Pridėti sąlygą";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Pridėti žemėlapio teritoriją";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "Gaunant žemėlapio teritorijas įvyko klaida.";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "Į_Are you sure you want to discard the changes________________________š?";
+"Are you sure you want to discard the changes?" = "Ar tikrai norite atmesti pakeitimus?";
 
 /* The title for a map area. */
 "Area %lld" = "Teritorija %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Priedai";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "Į_Attachments failed to load____________________________š.";
+"Attachments failed to load." = "Nepavyko įkelti priedų.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "Didesnių nei %@ priedų atsisiųsti negalima.";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "Pastatas";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "Į_Building Scene Layers______________________š";
+"Building Scene Layers" = "Pastatų scenų sluoksniai";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "Pastatai";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "Išvalyti visus rezultatus";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "Į_Close___________š";
+"Close" = "Uždaryti";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Spalva";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "Kompasas";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "Į_Condition___________________š";
+"Condition" = "Sąlyga";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "Į_Condition %lld_______________š";
+"Condition %lld" = "Sąlyga %lld";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "Į_Condition %lld Options_______________________š";
+"Condition %lld Options" = "Sąlygos %lld parinktys";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "Į_Confirm_______________š";
+"Confirm" = "Patvirtinti";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Jungimas";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "Į_Construction Phase___________________š";
+"Construction Phase" = "Statybos etapas";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Apribojimas";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "Į_contains the text__________________š";
+"contains the text" = "yra tekstas";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "Atmesti keitimus?";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "Į_Disciplines & Categories_________________________š";
+"Disciplines & Categories" = "Dalykai ir kategorijos";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Atmesti";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "Į_does not contain the text__________________________š";
+"does not contain the text" = "nėra teksto";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Atlikta";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "Atsisiunčiama";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "Į_Duplicate___________________š";
+"Duplicate" = "Dubliuoti";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "Tušti failai nėra palaikomi.";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "Į_ends with___________________š";
+"ends with" = "baigiasi";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "Įveskite pavadinimą";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "Į_Enter a value______________š";
+"Enter a value" = "Įveskite reikšmę";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Įvesti reikšmę";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "Filtruoti išteklių tipus pagal pavadinimą";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "Į_Filter Candidates__________________š";
+"Filter Candidates" = "Filtruoti kandidatus";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "Į_Filter Elements________________š";
+"Filter Elements" = "Filtruoti elementus";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Filtruoti svetaines";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "Į_Filters have not been applied______________________________š";
+"Filters have not been applied" = "Filtrai nepritaikyti";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Rasti vietą arba adresą";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "Funkcijos rezultatai";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "Į_Global scenes aren't supported in the Building Explorer_____________________________š.";
+"Global scenes aren't supported in the Building Explorer." = "Pastatų tyrinėjimo priemonėje globalios scenos nepalaikomos.";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "Nepaisyti";
 
 /* A label for the "is" attribute query condition. */
-"is" = "Į_is_____š";
+"is" = "yra";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "Į_is blank_________________š";
+"is blank" = "yra be turinio";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "Į_is empty_________________š";
+"is empty" = "yra tuščias (-ia)";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "Į_is not_____________š";
+"is not" = "nėra";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "Į_is not blank_____________š";
+"is not blank" = "nėra be turinio";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "Į_is not empty_____________š";
+"is not empty" = "nėra tuščias (-ia)";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Sandūros-briaunos objekto jungimas iš šono";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "Mažiau negu minimali reikšmė";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "Į_Level___________š";
+"Level" = "Aukštas";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Detalumo lygis";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "Į_No attachments_______________š";
+"No attachments" = "Nėra priedų";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Nėra žymų";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "Į_No building scene layers in the scene____________________š.";
+"No building scene layers in the scene." = "Scenoje nėra pastatų scenų sluoksnių.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "Kandidatų nerasta";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "Į_No conditions added____________________š";
+"No conditions added" = "Nepridėta jokių sąlygų";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Galimų konfigūracijų nėra.";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "Darbo neprisijungus prie interneto režimas išjungtas";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "Į_Offline Map____________š";
+"Offline Map" = "Neprisijungus prie interneto naudojamas žemėlapis";
 
 /* A label for button to proceed with an operation. */
 "OK" = "Gerai";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Rodyti visus";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "Į_Show features that meet all the conditions______________________š";
+"Show features that meet all the conditions" = "Rodyti elementus, atitinkančius visas sąlygas";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "Į_Show Full Model________________š";
+"Show Full Model" = "Rodyti visą modelį";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Rodyti žemėlapyje";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "Pradžios taškai";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "Į_starts with____________š";
+"starts with" = "prasideda";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Valstija / provincija";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Nėra šio žemėlapio teritorijų. Norėdami pradėti, bakstelėkite toliau esantį mygtuką.";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "Į_This form is empty____________________š.";
+"This form is empty." = "Forma tuščia.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Pavadinimas";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "Peržiūrėkite";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "Į_Visible_______________š";
+"Visible" = "Matoma";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "Priartinti";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "Į_Zoom to building_________________š";
+"Zoom to building" = "Artinti pastatą";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Pritraukti prie rezultato";

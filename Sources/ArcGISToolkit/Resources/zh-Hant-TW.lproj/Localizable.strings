@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "新增關聯";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "試_Add Attachment_______________驗";
+"Add Attachment" = "新增附件";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "試_Add Condition______________驗";
+"Add Condition" = "新增條件";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "新增地圖區域";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "擷取地圖區域時發生錯誤。";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "試_Are you sure you want to discard the changes________________________驗?";
+"Are you sure you want to discard the changes?" = "是否確定要捨棄變更?";
 
 /* The title for a map area. */
 "Area %lld" = "區域 %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "附件(A)";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "試_Attachments failed to load____________________________驗.";
+"Attachments failed to load." = "附件無法載入。";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "無法下載大於 %@ 的附件。";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "建築物";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "試_Building Scene Layers______________________驗";
+"Building Scene Layers" = "正在建立場景圖層";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "建築物";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "清除所有結果";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "試_Close___________驗";
+"Close" = "關閉";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "顏色";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "羅儀盤";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "試_Condition___________________驗";
+"Condition" = "條件";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "試_Condition %lld_______________驗";
+"Condition %lld" = "條件 %lld";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "試_Condition %lld Options_______________________驗";
+"Condition %lld Options" = "條件 %lld 選項";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "試_Confirm_______________驗";
+"Confirm" = "確認";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "連線能力";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "試_Construction Phase___________________驗";
+"Construction Phase" = "建構階段";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "遏制";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "試_contains the text__________________驗";
+"contains the text" = "包含文字";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "放棄編輯內容?";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "試_Disciplines & Categories_________________________驗";
+"Disciplines & Categories" = "領域與類別";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "清除";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "試_does not contain the text__________________________驗";
+"does not contain the text" = "不包含文字";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "完成";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "正在下載";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "試_Duplicate___________________驗";
+"Duplicate" = "複製";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "不支援空白檔案。";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "試_ends with___________________驗";
+"ends with" = "結尾是";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "輸入名稱";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "試_Enter a value______________驗";
+"Enter a value" = "輸入值";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "輸入值";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "依名稱篩選資產類型";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "試_Filter Candidates__________________驗";
+"Filter Candidates" = "篩選候選者";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "試_Filter Elements________________驗";
+"Filter Elements" = "篩選元素";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "篩選網站";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "試_Filters have not been applied______________________________驗";
+"Filters have not been applied" = "尚未套用篩選器";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "尋找地點或地址";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "函數結果";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "試_Global scenes aren't supported in the Building Explorer_____________________________驗.";
+"Global scenes aren't supported in the Building Explorer." = "建築物 Explorer 不支援全球場景。";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "忽略";
 
 /* A label for the "is" attribute query condition. */
-"is" = "試_is_____驗";
+"is" = "等於";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "試_is blank_________________驗";
+"is blank" = "是空白";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "試_is empty_________________驗";
+"is empty" = "是空的";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "試_is not_____________驗";
+"is not" = "不是";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "試_is not blank_____________驗";
+"is not blank" = "不是空白";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "試_is not empty_____________驗";
+"is not empty" = "不是空的";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "接點至邊緣的物件連線能力來源端";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "小於最小值";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "試_Level___________驗";
+"Level" = "樓層";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "詳細程度";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "試_No attachments_______________驗";
+"No attachments" = "無附件";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "無書籤";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "試_No building scene layers in the scene____________________驗.";
+"No building scene layers in the scene." = "場景中沒有建築物場景圖層。";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "找不到候選者";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "試_No conditions added____________________驗";
+"No conditions added" = "未新增任何條件";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "無可用配置。";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "已停用離線";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "試_Offline Map____________驗";
+"Offline Map" = "離線地圖";
 
 /* A label for button to proceed with an operation. */
 "OK" = "確定";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "顯示全部";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "試_Show features that meet all the conditions______________________驗";
+"Show features that meet all the conditions" = "顯示符合所有條件的圖徵";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "試_Show Full Model________________驗";
+"Show Full Model" = "顯示完整模型";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "在地圖上顯示";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "起點";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "試_starts with____________驗";
+"starts with" = "開頭是";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "州/省";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "此地圖沒有地圖區域。 點一下下方按鈕開始使用。";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "試_This form is empty____________________驗.";
+"This form is empty." = "此表單是空的。";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "標題";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "查看";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "試_Visible_______________驗";
+"Visible" = "可見";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "縮放至";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "試_Zoom to building_________________驗";
+"Zoom to building" = "縮放至建築物";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "縮放至結果";

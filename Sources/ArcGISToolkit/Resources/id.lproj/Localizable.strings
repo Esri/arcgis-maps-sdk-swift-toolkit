@@ -27,10 +27,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Add Association" = "Tambahkan Asosiasi";
 
 /* A label for a button to add a new file attachment. */
-"Add Attachment" = "ng_Add Attachment_______________ny";
+"Add Attachment" = "Tambahkan Lampiran";
 
 /* A label for a button to add a new field filtering condition. */
-"Add Condition" = "ng_Add Condition______________ny";
+"Add Condition" = "Tambahkan Syarat";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Tambahkan Area Peta";
@@ -51,7 +51,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "An error occurred while fetching map areas." = "Terjadi kesalahan saat mengambil area peta.";
 
 /* A question asking for confirmation to discard changes. */
-"Are you sure you want to discard the changes?" = "ng_Are you sure you want to discard the changes________________________ny?";
+"Are you sure you want to discard the changes?" = "Anda yakin ingin membuang perubahan?";
 
 /* The title for a map area. */
 "Area %lld" = "Area %lld";
@@ -75,7 +75,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Attachments" = "Lampiran";
 
 /* The status text when attachments failed to load. */
-"Attachments failed to load." = "ng_Attachments failed to load____________________________ny.";
+"Attachments failed to load." = "Lampiran gagal dimuat.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "Lampiran berukuran lebih dari %@ tidak dapat diunduh.";
@@ -104,7 +104,7 @@ association feature candidates. */
 "Building" = "Gedung";
 
 /* A label for layer picker in the Building Explorer. */
-"Building Scene Layers" = "ng_Building Scene Layers______________________ny";
+"Building Scene Layers" = "Layer Scene Bangunan";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "Bangunan";
@@ -173,7 +173,7 @@ candidate to add as a utility association. */
 "Clear All Results" = "Hapus Semua Hasil";
 
 /* Close/hide a sheet or pop-up. */
-"Close" = "ng_Close___________ny";
+"Close" = "Tutup";
 
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Warna";
@@ -185,28 +185,28 @@ candidate to add as a utility association. */
 "compass-button-accessibility-label" = "Kompas";
 
 /* A label for a control to pick a condition to filter fields in a table against. */
-"Condition" = "ng_Condition___________________ny";
+"Condition" = "Syarat";
 
 /* A label for a control representing a condition and position index used to filter fields in a table. */
-"Condition %lld" = "ng_Condition %lld_______________ny";
+"Condition %lld" = "Syarat %lld";
 
 /* A label for button to a open a menu with options for a condition used to filter fields in a table. */
-"Condition %lld Options" = "ng_Condition %lld Options_______________________ny";
+"Condition %lld Options" = "Opsi Syarat %lld";
 
 /* Confirm the current action and close a sheet or pop-up. */
-"Confirm" = "ng_Confirm_______________ny";
+"Confirm" = "Konfirmasi";
 
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Konektivitas";
 
 /* A label for construction phase picker in the Building Explorer. */
-"Construction Phase" = "ng_Construction Phase___________________ny";
+"Construction Phase" = "Fase Konstruksi";
 
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Penahanan";
 
 /* A label for the "contains the text" attribute query condition. */
-"contains the text" = "ng_contains the text__________________ny";
+"contains the text" = "berisi teks";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -280,13 +280,13 @@ A label for a button used to continue the authentication operation. */
 "Discard Edits?" = "Hapus Editan?";
 
 /* A label for Disciplines & Categories section in the Building Explorer. */
-"Disciplines & Categories" = "ng_Disciplines & Categories_________________________ny";
+"Disciplines & Categories" = "Disiplin & Kategori";
 
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Tutup";
 
 /* A label for the "does not contain the text" attribute query condition. */
-"does not contain the text" = "ng_does not contain the text__________________________ny";
+"does not contain the text" = "tidak berisi teks";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Selesai";
@@ -307,7 +307,7 @@ A label for a button used to continue the authentication operation. */
 "Downloading" = "Mengunduh";
 
 /* A label for a button to duplicate a field filter. */
-"Duplicate" = "ng_Duplicate___________________ny";
+"Duplicate" = "Duplikasi";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -331,7 +331,7 @@ AR experience. */
 "Empty files are not supported." = "File kosong tidak didukung.";
 
 /* A label for the "ends with" attribute query condition. */
-"ends with" = "ng_ends with___________________ny";
+"ends with" = "diakhiri dengan";
 
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
@@ -345,7 +345,7 @@ hold the minimum and maximum length respectively. */
 "Enter a name" = "Masukkan nama";
 
 /* A prompt for a text field to enter a value. */
-"Enter a value" = "ng_Enter a value______________ny";
+"Enter a value" = "Masukkan nilai";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Masukkan Nilai";
@@ -414,7 +414,7 @@ asset types by name. */
 "Filter asset types by name" = "Filter jenis aset berdasarkan nama";
 
 /* A label for a button to filter utility association candidates by attributes. */
-"Filter Candidates" = "ng_Filter Candidates__________________ny";
+"Filter Candidates" = "Filter Kandidat";
 
 /* A label for a search field to filter utility 
 association candidate features by name. */
@@ -422,7 +422,7 @@ association candidate features by name. */
 
 /* Label for a text field used to 
 filter visible elements in a form. */
-"Filter Elements" = "ng_Filter Elements________________ny";
+"Filter Elements" = "Filter Elemen";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -437,7 +437,7 @@ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Filter situs";
 
 /* A notice used when closing the view that the filters have not been applied/saved. */
-"Filters have not been applied" = "ng_Filters have not been applied______________________________ny";
+"Filters have not been applied" = "Filter belum diterapkan";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Temukan tempat atau alamat";
@@ -461,7 +461,7 @@ trace operation. */
 "Function Results" = "Hasil Fungsi";
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
-"Global scenes aren't supported in the Building Explorer." = "ng_Global scenes aren't supported in the Building Explorer_____________________________ny.";
+"Global scenes aren't supported in the Building Explorer." = "Scene global tidak didukung di Penjelajah Bangunan.";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -488,22 +488,22 @@ variable is a cardinal or intercardinal direction. */
 "Ignore" = "Abaikan";
 
 /* A label for the "is" attribute query condition. */
-"is" = "ng_is_____ny";
+"is" = "adalah";
 
 /* A label for the "is blank" attribute query condition. */
-"is blank" = "ng_is blank_________________ny";
+"is blank" = "kosong";
 
 /* A label for the "is empty" attribute query condition. */
-"is empty" = "ng_is empty_________________ny";
+"is empty" = "kosong";
 
 /* A label for the "is not" attribute query condition. */
-"is not" = "ng_is not_____________ny";
+"is not" = "tidak";
 
 /* A label for the "is not blank" attribute query condition. */
-"is not blank" = "ng_is not blank_____________ny";
+"is not blank" = "tidak kosong";
 
 /* A label for the "is not empty" attribute query condition. */
-"is not empty" = "ng_is not empty_____________ny";
+"is not empty" = "tidak kosong";
 
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Konektivitas Objek Tepi Persimpangan Dari Samping";
@@ -521,7 +521,7 @@ variable is a cardinal or intercardinal direction. */
 "Less than minimum value" = "Kurang dari nilai minimal";
 
 /* A label for the level picker in the Building Explorer. */
-"Level" = "ng_Level___________ny";
+"Level" = "Level";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Tingkat Detail";
@@ -621,13 +621,13 @@ data sources in a utility network. */
 
 /* A label indicating an element
 contains no file attachments. */
-"No attachments" = "ng_No attachments_______________ny";
+"No attachments" = "Tidak ada lampiran";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Tidak ada bookmark";
 
 /* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
-"No building scene layers in the scene." = "ng_No building scene layers in the scene____________________ny.";
+"No building scene layers in the scene." = "Tidak ada layer scene bangunan di scene ini.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
@@ -635,7 +635,7 @@ found. */
 "No Candidates Found" = "Tidak Ditemukan Kandidat";
 
 /* A label indicating no field filtering conditions have been added. */
-"No conditions added" = "ng_No conditions added____________________ny";
+"No conditions added" = "Tidak ada syarat yang ditambahkan";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Tidak ada konfigurasi yang tersedia.";
@@ -694,7 +694,7 @@ filter results were found. */
 "Offline Disabled" = "Offline Dinonaktifkan";
 
 /* The default title of the live activity for taking a map offline. */
-"Offline Map" = "ng_Offline Map____________ny";
+"Offline Map" = "Peta Offline";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
@@ -833,10 +833,10 @@ or more levels in a floor-aware map or scene. */
 "Show all" = "Tampilkan semua";
 
 /* A label indicating the intended outcome of using the filter view. */
-"Show features that meet all the conditions" = "ng_Show features that meet all the conditions______________________ny";
+"Show features that meet all the conditions" = "Tampilkan fitur yang memenuhi semua syarat";
 
 /* A label for the Show Full Model toggle in the Building Explorer. */
-"Show Full Model" = "ng_Show Full Model________________ny";
+"Show Full Model" = "Tampilkan Model Lengkap";
 
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Tampilkan pada Peta";
@@ -871,7 +871,7 @@ network trace operation. */
 "Starting Points" = "Titik Awal";
 
 /* A label for the "starts with" attribute query condition. */
-"starts with" = "ng_starts with____________ny";
+"starts with" = "diawali dengan";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Negara Bagian/Provinsi";
@@ -960,7 +960,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Tidak ada area peta untuk peta ini. Ketuk tombol di bawah ini untuk memulai.";
 
 /* A notice communicating that a feature form has no elements. */
-"This form is empty." = "ng_This form is empty____________________ny.";
+"This form is empty." = "Formulir ini kosong";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Gelar";
@@ -1052,7 +1052,7 @@ The first and second parameter hold the minimum and maximum values respectively.
 "View" = "Lihat";
 
 /* A label for the visible toggle in the Building Explorer. */
-"Visible" = "ng_Visible_______________ny";
+"Visible" = "Terlihat";
 
 /* A label indicating a utility association's 
 containment is not visible. */
@@ -1087,7 +1087,7 @@ The host is indicated in the variable. */
 "Zoom To" = "Zoom Ke";
 
 /* A label for the zoom to building button in the Building Explorer. */
-"Zoom to building" = "ng_Zoom to building_________________ny";
+"Zoom to building" = "Perbesar tampilan bangunan";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Perbesar ke Hasil";
