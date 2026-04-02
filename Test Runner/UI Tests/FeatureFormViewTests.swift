@@ -1950,6 +1950,7 @@ final class FeatureFormViewTests: XCTestCase {
         condition1Options.assertExistenceAndTap()
         
         duplicateButton.assertExistenceAndTap()
+        
         greaterThanLabels.element(boundBy: 1).assertExistenceAndTap()
         
         lessThanButton.assertExistenceAndTap()
@@ -1981,6 +1982,7 @@ final class FeatureFormViewTests: XCTestCase {
 #endif
         
         app.doneButton.assertExistenceAndTap()
+        
         // This is needed for Mac Catalyst to allow the list to update,
         // but it causes no problems on iOS.
         streetLightCandidates.firstMatch.assertExistence()
