@@ -882,7 +882,7 @@ final class FeatureFormViewTests: XCTestCase {
             switchView.label,
             "2"
         )
-      
+        
 #if targetEnvironment(macCatalyst) || os(visionOS)
         switchView.assertExistenceAndTap()
 #else
@@ -1866,9 +1866,9 @@ final class FeatureFormViewTests: XCTestCase {
         let elementLabel = app.staticTexts[elementTitle]
         let filterButton = app.buttons["Filter Candidates"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
-        let greaterThanLabels = app.staticTexts.matching(identifier: ">")
+        // Using app.buttons allows this to work on both Mac Catalyst and iOS
+        let greaterThanLabels = app.buttons.matching(identifier: "Condition, >")
         let jan2014Label = app.staticTexts["January 2014"]
-        let lessThanButton = app.buttons["<"]
         let municipalButton = app.buttons["Municipal, Street Light"]
         let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
         
@@ -1887,11 +1887,13 @@ final class FeatureFormViewTests: XCTestCase {
         let dateInstalledButton = app.menuItems["date_installed"]
         let duplicateButton = app.menuItems["duplicate"]
         let greaterThanButton = app.menuItems[">"]
+        let lessThanButton = app.menuItems["<"]
 #else
         let condition1Options = app.buttons["Condition 1 Options"]
         let dateInstalledButton = app.buttons["Date Installed"]
         let duplicateButton = app.buttons["Duplicate"]
         let greaterThanButton = app.buttons[">"]
+        let lessThanButton = app.buttons["<"]
 #endif
         
         openTestCase()
@@ -1950,24 +1952,27 @@ final class FeatureFormViewTests: XCTestCase {
         
         duplicateButton.assertExistenceAndTap()
         
-#if targetEnvironment(macCatalyst)
-        XCTExpectFailure("The condition doesn't duplicate correctly on Mac Catalyst. The selected field is not preserved.")
-#endif
-        
         greaterThanLabels.element(boundBy: 1).assertExistenceAndTap()
         
         lessThanButton.assertExistenceAndTap()
         
         datePicker2.assertExistenceAndTap()
         
+#if targetEnvironment(macCatalyst)
+        datePicker2.typeKey(.leftArrow, modifierFlags: .function)
+        datePicker2.typeKey(.leftArrow, modifierFlags: .function)
+        datePicker2.typeText("3")
+        datePicker2.typeKey(.return, modifierFlags: .function)
+#else
         jan2014Label.assertExistenceAndTap()
-        
         datePicker2.adjustPickerWheelElement(boundBy: 0, to: "March")
-        
         dismissPopover.firstMatch.assertExistenceAndTap()
+#endif
         
         app.doneButton.assertExistenceAndTap()
         
+        streetLightCandidates.firstMatch.assertExistence()
+
         XCTAssertEqual(streetLightCandidates.count, 1)
     }
     

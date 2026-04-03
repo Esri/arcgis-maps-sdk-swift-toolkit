@@ -114,7 +114,7 @@ struct FilterView: View {
                         if oldValue.count < newValue.count,
                            let lastFieldFilter = model.fieldFilters.last {
                             withAnimation {
-                                proxy.scrollTo(lastFieldFilter.id, anchor: .bottom)
+                                proxy.scrollTo(lastFieldFilter.id, anchor: .top)
                             }
                         }
                     }
@@ -209,6 +209,20 @@ struct FilterView: View {
     }
 }
 
+#Preview {
+    let fields: [Field] = [
+        Field(type: .int32, name: "fieldOne", alias: "One", length: 30, isNullable: false),
+        Field(type: .int32, name: "fieldTwo", alias: "Two", length: 30, isNullable: false),
+        Field(type: .int32, name: "fieldThree", alias: "Three", length: 30, isNullable: false)
+    ]
+    let model = FilterViewModel()
+    
+    FilterView(model: model)
+        .onAppear {
+            model.setFields(fields)
+        }
+}
+
 /// A button that adds a `FieldFilter` to the current  list of `FieldFilter` objects.
 private struct AddButton: View {
     /// The index of the filter with a focused text field.
@@ -280,11 +294,9 @@ private struct FieldView: View {
     /// The list of conditions/operations the user is allowed to choose from.
     @State private var conditions = [FilterOperator]()
     
-    /// The name of the selected field.
-    @State private var selectedFieldName = ""
-    
     /// The index of the filter with a focused text field.
     let focusedField: FocusState<Int?>.Binding
+    
     /// The index of this field in the set of fields in the filter.
     let index: Int
     
@@ -305,7 +317,7 @@ private struct FieldView: View {
                 }
             } else {
                 HStack {
-                    Picker(selection: $selectedFieldName) {
+                    Picker(selection: $fieldFilter.selectedFieldName) {
                         ForEach(model.fields, id: \.name) { field in
                             Text(field.title)
                         }
@@ -314,11 +326,8 @@ private struct FieldView: View {
                     }
                     .pickerStyle(.menu)
                     .tint(.primary)
-                    .onAppear {
-                        selectedFieldName = fieldFilter.field.name
-                    }
-                    .onChange(of: selectedFieldName) {
-                        guard let field = model.field(named: selectedFieldName) else { return }
+                    .onChange(of: fieldFilter.selectedFieldName) {
+                        guard let field = model.field(named: fieldFilter.selectedFieldName) else { return }
                         fieldFilter.field = field
                         conditions = fieldFilter.supportedConditions
                     }
