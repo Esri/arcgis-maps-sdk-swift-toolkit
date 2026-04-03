@@ -72,9 +72,9 @@ struct FieldsPopupElementView: View {
             let detector = DataDetector()
             let links = detector.detect(in: string)
             var attributed = AttributedString(string)
-            for phone in links ?? [] {
-                if let range = Range(phone.range, in: attributed) {
-                    attributed[range].link = phone.url
+            for link in links ?? [] {
+                if let range = Range(link.range, in: attributed) {
+                    attributed[range].link = link.url
                     attributed[range].foregroundColor = .blue
                     attributed[range].underlineStyle = .single
                 }
