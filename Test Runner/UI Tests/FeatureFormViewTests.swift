@@ -1868,6 +1868,7 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["Electric Distribution Device"]
         // Using app.buttons allows this to work on both Mac Catalyst and iOS
         let greaterThanLabels = app.buttons.matching(identifier: "Condition, >")
+        let jan2014Label = app.staticTexts["January 2014"]
         let municipalButton = app.buttons["Municipal, Street Light"]
         let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
         
@@ -1956,35 +1957,20 @@ final class FeatureFormViewTests: XCTestCase {
         lessThanButton.assertExistenceAndTap()
         
         datePicker2.assertExistenceAndTap()
-
-#if os(visionOS)
-        XCTExpectFailure("Opening the date picker's month & year picker doesn't work as expected on visionOS.")
-        currentMonthYearLabel.assertExistenceAndTap()
-#elseif targetEnvironment(macCatalyst)
+        
+#if targetEnvironment(macCatalyst)
         datePicker2.typeKey(.leftArrow, modifierFlags: .function)
         datePicker2.typeKey(.leftArrow, modifierFlags: .function)
         datePicker2.typeText("3")
         datePicker2.typeKey(.return, modifierFlags: .function)
 #else
-        // Need to create the date set above so we can find it 
-        var components = DateComponents()
-        components.year = 2014
-        components.month = 1
-        components.day = 1
-
-        let calendar = Calendar.current
-        let newDate = try XCTUnwrap(calendar.date(from: components))
-        let monthYear2014 = newDate.formatted(.dateTime.month(.wide).year())
-        let monthYearLabel = app.staticTexts[monthYear2014]
-        monthYearLabel.assertExistenceAndTap()
+        jan2014Label.assertExistenceAndTap()
         datePicker2.adjustPickerWheelElement(boundBy: 0, to: "March")
         dismissPopover.firstMatch.assertExistenceAndTap()
 #endif
         
         app.doneButton.assertExistenceAndTap()
         
-        // This is needed for Mac Catalyst to allow the list to update,
-        // but it causes no problems on iOS.
         streetLightCandidates.firstMatch.assertExistence()
 
         XCTAssertEqual(streetLightCandidates.count, 1)
