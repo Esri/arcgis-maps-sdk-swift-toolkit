@@ -99,7 +99,11 @@ public struct BuildingExplorer: View {
                     localSceneViewProxy: localSceneViewProxy
                 )
             case .failure(let failure):
-                ContentUnavailableView("\(failure.localizedDescription)", systemImage: "exclamationmark.triangle")
+                ContentUnavailableView(
+                    failure.localizedDescription,
+                    systemImage: "exclamationmark.triangle"
+                )
+                EmptyView()
             case nil:
                 ProgressView()
             }
