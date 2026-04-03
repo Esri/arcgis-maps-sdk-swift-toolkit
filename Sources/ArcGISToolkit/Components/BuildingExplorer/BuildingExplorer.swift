@@ -103,7 +103,6 @@ public struct BuildingExplorer: View {
                     failure.localizedDescription,
                     systemImage: "exclamationmark.triangle"
                 )
-                EmptyView()
             case nil:
                 ProgressView()
             }
