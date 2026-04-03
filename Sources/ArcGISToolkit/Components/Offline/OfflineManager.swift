@@ -100,7 +100,7 @@ public class OfflineManager: ObservableObject {
     
     /// The configuration settings for the offline manager.
     /// - Since 300.0
-    public fileprivate(set) var configuration = OfflineManagerConfiguration()
+    public internal(set) var configuration = OfflineManagerConfiguration()
     
     /// Storage for jobs when we are not making use of the job manager.
     private var selfManagedJobs: [any JobProtocol] = []

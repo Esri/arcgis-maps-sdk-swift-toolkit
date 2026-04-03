@@ -43,7 +43,9 @@ struct BuildingExplorerExampleView: View {
                             selection: $selection
                         )
                         .frame(idealWidth: 400, idealHeight: 500)
-                        .presentationCompactAdaptation(.popover)
+                        .presentationBackgroundInteraction(.enabled)
+                        .presentationContentInteraction(.scrolls)
+                        .presentationDetents([.medium, .large])
                     }
                 }
             }

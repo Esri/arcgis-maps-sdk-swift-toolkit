@@ -26,6 +26,12 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "添加关联";
 
+/* A label for a button to add a new file attachment. */
+"Add Attachment" = "新增附件";
+
+/* A label for a button to add a new field filtering condition. */
+"Add Condition" = "添加条件";
+
 /* A label for a button to add a map area. */
 "Add Map Area" = "添加地图区域";
 
@@ -43,6 +49,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "获取地图区域时出错。";
+
+/* A question asking for confirmation to discard changes. */
+"Are you sure you want to discard the changes?" = "是否确定要放弃更改?";
 
 /* The title for a map area. */
 "Area %lld" = "区域 %lld";
@@ -64,6 +73,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label in reference to attachments. */
 "Attachments" = "附件";
+
+/* The status text when attachments failed to load. */
+"Attachments failed to load." = "无法加载附件。";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "无法下载大于 %@ 的附件。";
@@ -91,6 +103,9 @@ association feature candidates. */
 /* Building (Level of Detail) */
 "Building" = "建筑物";
 
+/* A label for layer picker in the Building Explorer. */
+"Building Scene Layers" = "建筑场景图层";
+
 /* Buildings (Level of Detail) */
 "Buildings" = "建筑群";
 
@@ -104,7 +119,8 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "照相机访问被禁用";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Cancel your current action to close/hide a sheet or pop-up. */
 "Cancel" = "取消";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -156,6 +172,9 @@ candidate to add as a utility association. */
 /* A directive to clear all of the completed utility network traces. */
 "Clear All Results" = "清除所有结果";
 
+/* Close/hide a sheet or pop-up. */
+"Close" = "关闭";
+
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "颜色";
 
@@ -165,11 +184,29 @@ candidate to add as a utility association. */
 /* The accessibility label of the compass button. */
 "compass-button-accessibility-label" = "罗盘";
 
+/* A label for a control to pick a condition to filter fields in a table against. */
+"Condition" = "条件";
+
+/* A label for a control representing a condition and position index used to filter fields in a table. */
+"Condition %lld" = "条件 %lld";
+
+/* A label for button to a open a menu with options for a condition used to filter fields in a table. */
+"Condition %lld Options" = "条件 %lld 选项";
+
+/* Confirm the current action and close a sheet or pop-up. */
+"Confirm" = "确认";
+
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "连通性";
 
+/* A label for construction phase picker in the Building Explorer. */
+"Construction Phase" = "建造阶段";
+
 /* A label for the "Containment" utility association kind. */
 "Containment" = "包含";
+
+/* A label for the "contains the text" attribute query condition. */
+"contains the text" = "包含文本";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -218,7 +255,7 @@ A label for a button used to continue the authentication operation. */
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
 "Date must be on or before %@" = "日期不得晚于 %@";
 
-/* A label for a button used to delete a utility network trace input component or result. */
+/* A label for a "Delete" button. */
 "Delete" = "删除";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
@@ -242,8 +279,14 @@ A label for a button used to continue the authentication operation. */
 /* A question asking if the user would like to discard their unsaved edits. */
 "Discard Edits?" = "放弃编辑内容?";
 
+/* A label for Disciplines & Categories section in the Building Explorer. */
+"Disciplines & Categories" = "专业和类别";
+
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "清除";
+
+/* A label for the "does not contain the text" attribute query condition. */
+"does not contain the text" = "不包含文本";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "完成";
@@ -262,6 +305,9 @@ A label for a button used to continue the authentication operation. */
 
 /* The status text when a map area is downloading. */
 "Downloading" = "正在下载";
+
+/* A label for a button to duplicate a field filter. */
+"Duplicate" = "复制";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -284,6 +330,9 @@ AR experience. */
 /* An error message indicating the selected attachment is an empty file and not supported. */
 "Empty files are not supported." = "不支持空文件。";
 
+/* A label for the "ends with" attribute query condition. */
+"ends with" = "结尾为";
+
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
@@ -294,6 +343,9 @@ hold the minimum and maximum length respectively. */
 
 /* An instruction to enter a name. */
 "Enter a name" = "输入名称";
+
+/* A prompt for a text field to enter a value. */
+"Enter a value" = "请输入一个值";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "输入值";
@@ -361,9 +413,16 @@ trace operation. */
 asset types by name. */
 "Filter asset types by name" = "按名称过滤资产类型";
 
+/* A label for a button to filter utility association candidates by attributes. */
+"Filter Candidates" = "过滤候选项";
+
 /* A label for a search field to filter utility 
 association candidate features by name. */
 "Filter candidates by name" = "按名称过滤候选项";
+
+/* Label for a text field used to 
+filter visible elements in a form. */
+"Filter Elements" = "过滤元素";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -376,6 +435,9 @@ association feature sources by name. */
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "过滤站点";
+
+/* A notice used when closing the view that the filters have not been applied/saved. */
+"Filters have not been applied" = "尚未应用过滤器";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "查找地点或地址";
@@ -394,13 +456,12 @@ edge of a utility network element. */
 /* A label for the element on the "from" side of a utility association. */
 "From Element" = "自元素";
 
-/* A label for a button to choose a feature for a new
-utility association from a network data source. */
-"From Network Data Source" = "从网络数据源";
-
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "函数结果";
+
+/* Description of error thrown when a global scene is being provided to the Building Explorer. */
+"Global scenes aren't supported in the Building Explorer." = "“建筑浏览器”中不支持全球场景。";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -426,6 +487,24 @@ variable is a cardinal or intercardinal direction. */
 /* A label indicating that a challenge should be ignored. */
 "Ignore" = "忽略";
 
+/* A label for the "is" attribute query condition. */
+"is" = "为";
+
+/* A label for the "is blank" attribute query condition. */
+"is blank" = "空白";
+
+/* A label for the "is empty" attribute query condition. */
+"is empty" = "为空";
+
+/* A label for the "is not" attribute query condition. */
+"is not" = "不等于";
+
+/* A label for the "is not blank" attribute query condition. */
+"is not blank" = "不为空";
+
+/* A label for the "is not empty" attribute query condition. */
+"is not empty" = "非空";
+
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "交汇点-边对象连通性“自”侧";
 
@@ -440,6 +519,9 @@ variable is a cardinal or intercardinal direction. */
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "低于最小值";
+
+/* A label for the level picker in the Building Explorer. */
+"Level" = "级别";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "细节层次";
@@ -537,13 +619,23 @@ data sources in a utility network. */
 /* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "无关联";
 
+/* A label indicating an element
+contains no file attachments. */
+"No attachments" = "无附件";
+
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "无书签";
+
+/* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
+"No building scene layers in the scene." = "场景中没有任何建筑场景图层。";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
 "No Candidates Found" = "未找到候选项";
+
+/* A label indicating no field filtering conditions have been added. */
+"No conditions added" = "未添加任何条件";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "无可用配置。";
@@ -601,12 +693,11 @@ filter results were found. */
 /* A label indicating that the map is offline disabled. */
 "Offline Disabled" = "禁用离线";
 
+/* The default title of the live activity for taking a map offline. */
+"Offline Map" = "离线地图";
+
 /* A label for button to proceed with an operation. */
 "OK" = "确定";
-
-/* A label indicating features can be selected by
-interactively tapping on the map. */
-"On Map" = "在地图上";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "在线地图加载失败";
@@ -741,6 +832,12 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "显示全部";
 
+/* A label indicating the intended outcome of using the filter view. */
+"Show features that meet all the conditions" = "显示满足所有条件的要素";
+
+/* A label for the Show Full Model toggle in the Building Explorer. */
+"Show Full Model" = "显示完整模型";
+
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "在地图上显示";
 
@@ -772,6 +869,9 @@ match the spatial reference of the map or scene. */
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "起点";
+
+/* A label for the "starts with" attribute query condition. */
+"starts with" = "开头为";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "州/省";
@@ -858,6 +958,9 @@ to be imported as an attachment. */
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "此地图没有任何地图区域。 点击下方按钮以开始使用。";
+
+/* A notice communicating that a feature form has no elements. */
+"This form is empty." = "此表单为空。";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "标题";
@@ -948,6 +1051,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "查看";
 
+/* A label for the visible toggle in the Building Explorer. */
+"Visible" = "可见";
+
 /* A label indicating a utility association's 
 containment is not visible. */
 "Visible: false" = "可见：false";
@@ -979,6 +1085,9 @@ The host is indicated in the variable. */
 
 /* A button to change the map to the extent of the selected trace. */
 "Zoom To" = "缩放至";
+
+/* A label for the zoom to building button in the Building Explorer. */
+"Zoom to building" = "缩放至建筑物";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "缩放至结果";
