@@ -332,9 +332,15 @@ final class FeatureFormViewTests: XCTestCase {
         
         datePicker.assertExistence()
         
-        XCTAssertEqual(
-            elementValue.label,
-            Date.now.formatted()
+        // Verify that the date picker defaulted selection to the current date
+        // and time, accounting for the possibility that the minute has changed
+        // since the picker was opened.
+        XCTAssertTrue(
+            [
+                Date.now.formatted(),
+                Date.now.addingTimeInterval(-60).formatted()
+            ]
+                .contains(elementValue.label)
         )
         
         nowButton.assertHittable()
