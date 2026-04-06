@@ -35,7 +35,7 @@ struct DataDetector {
         return matches.compactMap { match in
             if let phone = match.phoneNumber {
                 let cleaned = phone
-                    .components(separatedBy: CharacterSet.decimalDigits.inverted)
+                    .components(separatedBy: .decimalDigits.inverted)
                     .joined()
                 guard let url = URL(string: "tel:\(cleaned)") else { return nil }
                 return .init(url: url, range: match.range)
