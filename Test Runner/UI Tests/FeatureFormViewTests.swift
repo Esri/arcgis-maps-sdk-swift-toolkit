@@ -1735,7 +1735,7 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let lineEndCandidates = app.buttons.matching(identifier: "Line End")
         let lowVoltageSinglePhaseLineEnd = app.buttons["Low Voltage Single Phase Line End, Line End"]
-        let valueButton = app.buttons["Value"]
+        let valueButton = app.buttons["Value, Unknown"]
         
 #if os(visionOS) || targetEnvironment(macCatalyst)
         let isBlankLabel = app.buttons["Condition, is blank"]
@@ -1972,7 +1972,7 @@ final class FeatureFormViewTests: XCTestCase {
         app.doneButton.assertExistenceAndTap()
         
         streetLightCandidates.firstMatch.assertExistence()
-
+        
         XCTAssertEqual(streetLightCandidates.count, 1)
     }
     
