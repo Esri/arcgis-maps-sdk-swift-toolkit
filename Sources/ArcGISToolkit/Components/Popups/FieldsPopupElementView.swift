@@ -72,7 +72,7 @@ struct FieldsPopupElementView: View {
         let formattedValue: String
         
         var body: some View {
-            if formattedValue.lowercased().starts(with: "http"),
+            if formattedValue.lowercased().hasPrefix("http"),
                let url = URL(string: formattedValue) {
                 Link(destination: url) {
                     Text(
