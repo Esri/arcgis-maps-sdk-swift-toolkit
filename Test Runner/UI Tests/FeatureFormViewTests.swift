@@ -332,9 +332,15 @@ final class FeatureFormViewTests: XCTestCase {
         
         datePicker.assertExistence()
         
-        XCTAssertEqual(
-            elementValue.label,
-            Date.now.formatted()
+        // Verify that the date picker defaulted selection to the current date
+        // and time, accounting for the possibility that the minute has changed
+        // since the picker was opened.
+        XCTAssertTrue(
+            [
+                Date.now.formatted(),
+                Date.now.addingTimeInterval(-60).formatted()
+            ]
+                .contains(elementValue.label)
         )
         
         nowButton.assertHittable()
@@ -1735,7 +1741,7 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let lineEndCandidates = app.buttons.matching(identifier: "Line End")
         let lowVoltageSinglePhaseLineEnd = app.buttons["Low Voltage Single Phase Line End, Line End"]
-        let valueButton = app.buttons["Value"]
+        let valueButton = app.buttons["Value, Unknown"]
         
 #if os(visionOS) || targetEnvironment(macCatalyst)
         let isBlankLabel = app.buttons["Condition, is blank"]
@@ -1972,7 +1978,7 @@ final class FeatureFormViewTests: XCTestCase {
         app.doneButton.assertExistenceAndTap()
         
         streetLightCandidates.firstMatch.assertExistence()
-
+        
         XCTAssertEqual(streetLightCandidates.count, 1)
     }
     
