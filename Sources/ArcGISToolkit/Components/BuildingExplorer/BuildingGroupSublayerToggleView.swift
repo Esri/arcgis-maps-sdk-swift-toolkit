@@ -37,6 +37,7 @@ struct BuildingGroupSublayerToggleView: View {
                 .onChange(of: isVisible) {
                     groupSublayer.isVisible = isVisible
                 }
+                .catalystPadding(4)
         }
         .onAppear {
             // Sets the value of the toggle to the
