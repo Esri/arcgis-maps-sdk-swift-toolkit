@@ -120,8 +120,7 @@ public struct BuildingExplorer: View {
             throw SetUpError.globalScenesNotSupported
         }
         
-        let buildingSceneLayers = scene.operationalLayers
-            .compactMap { $0 as? BuildingSceneLayer }
+        let buildingSceneLayers = extractBuildingSceneLayers(from: scene.operationalLayers)
         
         guard !buildingSceneLayers.isEmpty else {
             throw SetUpError.noBuildingSceneLayers
@@ -152,6 +151,22 @@ public struct BuildingExplorer: View {
         if let selection, !items.contains(selection) {
             self.selection = items.first
         }
+    }
+    
+    /// Extracts the building scene layers from an array of layers.
+    /// - Parameter layers: The layers to extract the building scene layers from.
+    /// - Returns: The building scene layers.
+    private func extractBuildingSceneLayers(from layers: [Layer]) -> [BuildingSceneLayer] {
+        var buildingSceneLayers: [BuildingSceneLayer] = []
+        for layer in layers {
+            if let buildingSceneLayer = layer as? BuildingSceneLayer {
+                buildingSceneLayers.append(buildingSceneLayer)
+            } else if let groupLayer = layer as? GroupLayer {
+                buildingSceneLayers.append(contentsOf: extractBuildingSceneLayers(from: groupLayer.layers))
+            }
+        }
+        
+        return buildingSceneLayers
     }
 }
 
