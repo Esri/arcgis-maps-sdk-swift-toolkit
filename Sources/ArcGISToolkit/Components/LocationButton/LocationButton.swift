@@ -103,6 +103,9 @@ public struct LocationButton: View {
         .task(id: ObjectIdentifier(locationDisplay)) { await observeStatus() }
         .task(id: ObjectIdentifier(locationDisplay)) { await observeAutoPanMode() }
         .animation(.default, value: autoPanMode)
+#if targetEnvironment(macCatalyst)
+        .buttonStyle(.borderless)
+#endif
     }
     
     /// The accessibility label of the button.
