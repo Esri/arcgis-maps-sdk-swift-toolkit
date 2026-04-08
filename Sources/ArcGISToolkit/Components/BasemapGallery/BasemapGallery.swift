@@ -22,7 +22,7 @@ import ArcGIS
 ///
 /// | iPhone | iPad |
 /// | ------ | ---- |
-/// | ![image](https://user-images.githubusercontent.com/3998072/205385086-cb9bc0a0-3c46-484d-aefa-8878c7112a3e.png) | ![image](https://user-images.githubusercontent.com/3998072/205384854-79f25efe-25f4-4330-a487-b64b528a9daf.png) |
+/// | ![image](https://github.com/user-attachments/assets/b6fcdae6-74f7-41f3-9009-eb6dd6b1b9a0) | ![image](https://github.com/user-attachments/assets/bc6e5682-211d-43d3-a5c4-9c64919f6481) |
 ///
 /// > Note: `BasemapGallery` uses metered ArcGIS basemaps by default, so you will need to configure
 /// an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys)
