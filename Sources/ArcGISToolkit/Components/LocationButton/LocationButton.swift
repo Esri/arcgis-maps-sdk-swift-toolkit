@@ -104,7 +104,7 @@ public struct LocationButton: View {
         .task(id: ObjectIdentifier(locationDisplay)) { await observeAutoPanMode() }
         .animation(.default, value: autoPanMode)
 #if targetEnvironment(macCatalyst)
-        .buttonStyle(.plain)
+        .buttonStyle(.borderless)
 #endif
     }
     
