@@ -67,6 +67,15 @@ struct EmbeddedFeatureFormView: View {
             .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
                 embeddedFeatureFormViewModel.title = newTitle
             }
+            .overlay(alignment: .bottomLeading) {
+                if #available(iOS 26.0, *) {
+                    Button("Voice") {
+                        Task {
+                            await embeddedFeatureFormViewModel.autoFillForm()
+                        }
+                    }
+                }
+            }
             .preference(
                 key: PresentedFeatureFormPreferenceKey.self,
                 value: .init(object: embeddedFeatureFormViewModel)

@@ -43,6 +43,11 @@ final class EmbeddedFeatureFormViewModel {
         }
     }
     
+    /// Adapter used for AI-assisted autofill (available on iOS 26 and later). Usage is gated by availability checks.
+    /// Marked as `@ObservationIgnored` to avoid cross-actor observation and kept confined to the main actor.
+    @ObservationIgnored
+    var languageModelAdapter: EmbeddedFeatureFormView.LanguageModelAdapter?
+    
     /// The set of all elements which previously held focus.
     var previouslyFocusedElements = [FormElement]()
     
@@ -95,6 +100,16 @@ final class EmbeddedFeatureFormViewModel {
         evaluateTask?.cancel()
         monitorEditsTask?.cancel()
         visibilityTask?.cancel()
+    }
+    
+    @available(iOS 26.0, *)
+    func autoFillForm() async {
+        // Create a local adapter and use it for the async call so we don't access a main-actor property across suspension.
+        let adapter = EmbeddedFeatureFormView.LanguageModelAdapter()
+        adapter.formModel = self
+        self.languageModelAdapter = adapter
+        Logger.featureFormView.info("Auto-filling form.")
+        _ = try? await adapter.generateResponse(observation: "")
     }
     
     /// Performs an evaluation of all form expressions.
