@@ -126,7 +126,7 @@ final class EmbeddedFeatureFormViewModel {
         let fieldFormElements = featureForm
             .elements
             .compactMap { $0 as? FieldFormElement }
-        formResponse.answer.forEach { elementResponse in
+        formResponse.elementResponses.forEach { elementResponse in
             print("""
             \(elementResponse.fieldName)
                 Answered: \(elementResponse.answered)

@@ -26,22 +26,23 @@ extension EmbeddedFeatureFormView {
         struct FeatureFormResponse {
             // A property the model uses for reasoning.
             var reasoningSteps: String
-            
+            /// The answers for each question.
             @Guide(description: "The answers for each question.")
-            var answer: [FieldFormElementResponse]
+            var elementResponses: [FieldFormElementResponse]
         }
         
         @available(iOS 26.0, *)
         @Generable
         struct FieldFormElementResponse {
-            @Guide(description: "The field name of the question.")
-            var fieldName: String
-            
+            /// The answer to the question.
             @Guide(description: "The answer to the question.")
             var answer: String
-            
-            @Guide(description: "Whether you were able to answer the question with the given information. True for yes and false for no.")
+            /// Whether the question was answered successfully.
+            @Guide(description: "Whether the question was answered successfully.")
             var answered: Bool
+            /// The field name of the question.
+            @Guide(description: "The field name of the question.")
+            var fieldName: String
         }
         
         @available(iOS 26.0, *)
