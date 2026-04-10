@@ -64,20 +64,21 @@ final class EmbeddedFeatureFormViewModel {
         }
     }
     
-    /// A dictionary of each form element and whether or not it is visible.
-    private var elementVisibility: [FormElement: Bool] = [:]
-    
-    /// The expression evaluation task.
-    @ObservationIgnored
-    private var evaluateTask: Task<Void, Never>?
-    
     /// The feature form.
     let featureForm: FeatureForm
     
     /// <#Description#>
     var languageModelIsProcessing = false
     
+    /// <#Description#>
     var voiceObservationInProgress = false
+    
+    /// A dictionary of each form element and whether or not it is visible.
+    private var elementVisibility: [FormElement: Bool] = [:]
+    
+    /// The expression evaluation task.
+    @ObservationIgnored
+    private var evaluateTask: Task<Void, Never>?
     
     /// <#Description#>
     @ObservationIgnored
@@ -115,34 +116,42 @@ final class EmbeddedFeatureFormViewModel {
         voiceObservationInProgress = false
         languageModelIsProcessing = true
         speechRecognizer?.stopTranscribing()
-        languageModelAdapter = EmbeddedFeatureFormView.LanguageModelAdapter()
-        languageModelAdapter?.formModel = self
-        guard let observation = speechRecognizer?.transcript else {
+        languageModelAdapter = EmbeddedFeatureFormView.LanguageModelAdapter(formModel: self)
+        guard let transcript = speechRecognizer?.transcript else {
             Logger.featureFormView.info("No observation collected.")
             return
         }
         Logger.featureFormView.info("Auto-filling form.")
-        guard let formResponse = try? await languageModelAdapter?.generateResponse(observation: observation) else { return }
-        let fieldFormElements = featureForm
-            .elements
-            .compactMap { $0 as? FieldFormElement }
-        formResponse.elementResponses.forEach { elementResponse in
-            print("""
-            \(elementResponse.fieldName)
-                Answered: \(elementResponse.answered)
-                Answer: \(elementResponse.answer)
-            """)
-            if elementResponse.answered,
-               let element = fieldFormElements.first(where: { $0.fieldName == elementResponse.fieldName }) {
-                if !element.codedValues.isEmpty,
-                   let code = element.codedValues.first(where: { "\($0.code ?? "")" == elementResponse.answer })?.code {
-                    element.updateValue(code)
-                } else {
-                    element.updateValue(elementResponse.answer)
+        
+        func runQuestions() async {
+            guard let formResponse = try? await languageModelAdapter?.generateResponse(transcript: transcript) else { return }
+            let fieldFormElements = featureForm
+                .elements
+                .compactMap { $0 as? FieldFormElement }
+            formResponse.elementResponses.forEach { elementResponse in
+                if elementResponse.answered,
+                   let element = fieldFormElements.first(where: { $0.fieldName == elementResponse.fieldName }) {
+                    if !element.codedValues.isEmpty,
+                       let code = element.codedValues.first(where: { "\($0.code ?? "")" == elementResponse.answer })?.code {
+                        element.updateValue(code)
+                    } else {
+                        element.updateValue(elementResponse.answer)
+                    }
                 }
             }
+            _ = try? await featureForm.evaluateExpressions()
         }
-        evaluateExpressions()
+        
+        for iteration in 1...3 {
+            let visibleElements = visibleElements.count
+            Logger.featureFormView.info("Running iteration \(iteration)")
+            await runQuestions()
+            if self.visibleElements.count == visibleElements {
+                Logger.featureFormView.info("Visible elements did not change. Stopping after \(iteration) iterations")
+                break
+            }
+        }
+        
         languageModelIsProcessing = false
     }
     

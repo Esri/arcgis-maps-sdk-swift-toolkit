@@ -19,7 +19,7 @@ private import os
 
 extension EmbeddedFeatureFormView {
     class LanguageModelAdapter {
-        weak var formModel: EmbeddedFeatureFormViewModel?
+        private weak var formModel: EmbeddedFeatureFormViewModel?
         
         @available(iOS 26.0, *)
         @Generable
@@ -45,9 +45,13 @@ extension EmbeddedFeatureFormView {
             var fieldName: String
         }
         
+        init(formModel: EmbeddedFeatureFormViewModel) {
+            self.formModel = formModel
+        }
+        
         @available(iOS 26.0, *)
         @MainActor
-        func generateResponse(observation: String) async throws -> FeatureFormResponse? {
+        func generateResponse(transcript: String) async throws -> FeatureFormResponse? {
             guard let questions: String = formModel?.visibleElements.enumerated().compactMap({ (index, element) in
                 switch element {
                 case let element as FieldFormElement:
@@ -83,48 +87,58 @@ extension EmbeddedFeatureFormView {
                 }
             }).joined(separator: "\n") else { return nil }
             
-            let instructions = """
-                You are a helpful assistant translating a verbal observation
-                into answers for a fillable form.
-                
-                Use the observation to generate answers for the questions.
-                
-                You may not be able to answer each question with the given
-                observation, leave it unanswered if so.
-                
-                The observation may not address the questions in order.
-                
-                Do not use details from the question descriptions as answers.
-                
-                If insufficient data is provided to answer the question leave it
-                blank.
-                
-                If coded values are provided for the question and you can make a
-                determination of the best option, use the code for the best 
-                option as your answer.
-                """
-            
-            let session = LanguageModelSession(instructions: instructions)
+            let session = LanguageModelSession(instructions: Self.instructions)
             
             let prompt = """
                 The questions are:
                 \(questions)
                 
-                
-                The verbal observation was:
-                \(observation)
+                The transcript is:
+                \(transcript)
                 """
             
-            Logger.featureFormView.info("""
-                \(String(describing: self))
-                \(prompt)
-                """)
+            Logger.featureFormView.info("\(prompt, privacy: .sensitive)")
             
             let response = try await session.respond(
                 to: prompt,
                 generating: FeatureFormResponse.self
             )
+            
+            logResponse(response.content)
+            
             return response.content
         }
+        
+        @available(iOS 26.0, *)
+        func logResponse(_ response: FeatureFormResponse) {
+            var message = ""
+            response.elementResponses.forEach {
+                message.append(
+                    """
+                    \($0.fieldName)
+                        Answered: \($0.answered)
+                        Answer: \($0.answer)\n
+                    """
+                )
+            }
+            Logger.featureFormView.debug("\(message, privacy: .sensitive)")
+        }
+        
+        /// Instructions fed to the language model to convert the speech transcript to element responses.
+        static let instructions = """
+            You are a helpful assistant converting a transcript into answers for
+            a fillable form.
+            
+            You may not be able to answer every question with the information in
+            the transcript, leave the question unanswered if so.
+            
+            The transcript may not address the questions in order.
+            
+            Do not use any information from the question in your answers.
+            
+            If coded values are provided for the question and you can make a
+            determination of the best option, use the code for the best 
+            option as your answer.
+            """
     }
 }
