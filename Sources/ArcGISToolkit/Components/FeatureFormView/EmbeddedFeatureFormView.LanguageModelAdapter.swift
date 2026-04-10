@@ -39,6 +39,9 @@ extension EmbeddedFeatureFormView {
             
             @Guide(description: "The answer to the question.")
             var answer: String
+            
+            @Guide(description: "Whether you were able to answer the question with the given information. True for yes and false for no.")
+            var answered: Bool
         }
         
         @available(iOS 26.0, *)

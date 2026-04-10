@@ -115,7 +115,6 @@ final class EmbeddedFeatureFormViewModel {
         voiceObservationInProgress = false
         languageModelIsProcessing = true
         speechRecognizer?.stopTranscribing()
-        // Create a local adapter and use it for the async call so we don't access a main-actor property across suspension.
         languageModelAdapter = EmbeddedFeatureFormView.LanguageModelAdapter()
         languageModelAdapter?.formModel = self
         guard let observation = speechRecognizer?.transcript else {
@@ -123,15 +122,25 @@ final class EmbeddedFeatureFormViewModel {
             return
         }
         Logger.featureFormView.info("Auto-filling form.")
-        let response = try? await languageModelAdapter?.generateResponse(observation: observation)
+        guard let formResponse = try? await languageModelAdapter?.generateResponse(observation: observation) else { return }
         let fieldFormElements = featureForm
             .elements
             .compactMap { $0 as? FieldFormElement }
-        response?.answer.forEach { response in
-            print("\(response.fieldName): \(response.answer)")
-            fieldFormElements
-                .first(where: { $0.fieldName == response.fieldName })?
-                .updateValue(response.answer)
+        formResponse.answer.forEach { elementResponse in
+            print("""
+            \(elementResponse.fieldName)
+                Answered: \(elementResponse.answered)
+                Answer: \(elementResponse.answer)
+            """)
+            if elementResponse.answered,
+               let element = fieldFormElements.first(where: { $0.fieldName == elementResponse.fieldName }) {
+                if !element.codedValues.isEmpty,
+                   let code = element.codedValues.first(where: { "\($0.code ?? "")" == elementResponse.answer })?.code {
+                    element.updateValue(code)
+                } else {
+                    element.updateValue(elementResponse.answer)
+                }
+            }
         }
         evaluateExpressions()
         languageModelIsProcessing = false
