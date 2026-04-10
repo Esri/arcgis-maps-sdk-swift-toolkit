@@ -69,6 +69,8 @@
 	<string>This app uses your location to anchor virtual objects to real-world locations in an augmented reality experience.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app uses your microphone when recording video.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>The FeatureFormView toolkit component uses speech recognition to automically fill forms.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
