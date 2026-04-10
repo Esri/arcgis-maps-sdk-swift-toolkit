@@ -69,11 +69,32 @@ struct EmbeddedFeatureFormView: View {
             }
             .overlay(alignment: .bottomLeading) {
                 if #available(iOS 26.0, *) {
-                    Button("Voice") {
-                        Task {
-                            await embeddedFeatureFormViewModel.autoFillForm()
+                    Button {
+                        if embeddedFeatureFormViewModel.voiceObservationInProgress {
+                            Task {
+                                await embeddedFeatureFormViewModel.autoFillForm()
+                            }
+                        } else {
+                            embeddedFeatureFormViewModel.collectVoiceObservation()
                         }
+                    } label: {
+                        Group {
+                            if embeddedFeatureFormViewModel.languageModelIsProcessing {
+                                ProgressView()
+                            } else {
+                                if embeddedFeatureFormViewModel.voiceObservationInProgress {
+                                    Label("Stop Recording", systemImage: "microphone.badge.xmark.fill")
+                                } else {
+                                    Label("Start Recording", systemImage: "microphone.fill")
+                                }
+                            }
+                        }
+                        .font(.largeTitle)
+                        .labelStyle(.iconOnly)
                     }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(embeddedFeatureFormViewModel.languageModelIsProcessing)
+                    .padding(.leading)
                 }
             }
             .preference(

@@ -34,8 +34,8 @@ extension EmbeddedFeatureFormView {
         @available(iOS 26.0, *)
         @Generable
         struct FieldFormElementResponse {
-            @Guide(description: "The original question.")
-            var question: String
+            @Guide(description: "The field name of the question.")
+            var fieldName: String
             
             @Guide(description: "The answer to the question.")
             var answer: String
@@ -44,28 +44,60 @@ extension EmbeddedFeatureFormView {
         @available(iOS 26.0, *)
         @MainActor
         func generateResponse(observation: String) async throws -> FeatureFormResponse? {
-            print("Building Questions")
-            
-            guard let questions: String = formModel?.featureForm.elements.enumerated().map({ (ix, element) in
+            guard let questions: String = formModel?.visibleElements.enumerated().compactMap({ (index, element) in
                 switch element {
                 case let element as FieldFormElement:
+                    guard element.isEditable else { return nil }
+                    var base = """
+                    Question \(index+1):
+                        Field name: \(element.fieldName)
+                        Label: \(element.label)
+                        Description: \(element.description)
+                        Hint: \(element.hint)
                     """
-                    Question \(ix): \(element.label)
-                    """
+                    if !element.codedValues.isEmpty {
+                        base.append(
+                            """
+                            \n\tCoded Values:
+                            """
+                        )
+                        element.codedValues.forEach { codedValue in
+                            if let code = codedValue.code {
+                                base.append(
+                                    """
+                                    \n\t\tName: \(codedValue.name) Code: \(code)
+                                    """
+                                )
+                            }
+                        }
+                    }
+                    return base
                 case is GroupFormElement: // case let groupElement as GroupFormElement:
-                    ""
+                    return nil
                 default:
-                    ""
+                    return nil
                 }
             }).joined(separator: "\n") else { return nil }
             
-            print("Questions: \n\(questions)")
-            
             let instructions = """
-                You are a helpful assistant translating verbal observations into 
-                form answers.
+                You are a helpful assistant translating a verbal observation
+                into answers for a fillable form.
                 
-                Process the verbal observation and generate an answer for each question.
+                Use the observation to generate answers for the questions.
+                
+                You may not be able to answer each question with the given
+                observation, leave it unanswered if so.
+                
+                The observation may not address the questions in order.
+                
+                Do not use details from the question descriptions as answers.
+                
+                If insufficient data is provided to answer the question leave it
+                blank.
+                
+                If coded values are provided for the question and you can make a
+                determination of the best option, use the code for the best 
+                option as your answer.
                 """
             
             let session = LanguageModelSession(instructions: instructions)

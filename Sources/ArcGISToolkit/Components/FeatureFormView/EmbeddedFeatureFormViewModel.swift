@@ -43,11 +43,6 @@ final class EmbeddedFeatureFormViewModel {
         }
     }
     
-    /// Adapter used for AI-assisted autofill (available on iOS 26 and later). Usage is gated by availability checks.
-    /// Marked as `@ObservationIgnored` to avoid cross-actor observation and kept confined to the main actor.
-    @ObservationIgnored
-    var languageModelAdapter: EmbeddedFeatureFormView.LanguageModelAdapter?
-    
     /// The set of all elements which previously held focus.
     var previouslyFocusedElements = [FormElement]()
     
@@ -79,6 +74,19 @@ final class EmbeddedFeatureFormViewModel {
     /// The feature form.
     let featureForm: FeatureForm
     
+    /// <#Description#>
+    var languageModelIsProcessing = false
+    
+    var voiceObservationInProgress = false
+    
+    /// <#Description#>
+    @ObservationIgnored
+    private var languageModelAdapter: EmbeddedFeatureFormView.LanguageModelAdapter?
+    
+    /// <#Description#>
+    @ObservationIgnored
+    private var speechRecognizer: SpeechRecognizer?
+    
     /// The group of visibility tasks.
     @ObservationIgnored
     private var visibilityTask: Task<Void, Never>?
@@ -104,12 +112,38 @@ final class EmbeddedFeatureFormViewModel {
     
     @available(iOS 26.0, *)
     func autoFillForm() async {
+        voiceObservationInProgress = false
+        languageModelIsProcessing = true
+        speechRecognizer?.stopTranscribing()
         // Create a local adapter and use it for the async call so we don't access a main-actor property across suspension.
-        let adapter = EmbeddedFeatureFormView.LanguageModelAdapter()
-        adapter.formModel = self
-        self.languageModelAdapter = adapter
+        languageModelAdapter = EmbeddedFeatureFormView.LanguageModelAdapter()
+        languageModelAdapter?.formModel = self
+        guard let observation = speechRecognizer?.transcript else {
+            Logger.featureFormView.info("No observation collected.")
+            return
+        }
         Logger.featureFormView.info("Auto-filling form.")
-        _ = try? await adapter.generateResponse(observation: "")
+        let response = try? await languageModelAdapter?.generateResponse(observation: observation)
+        let fieldFormElements = featureForm
+            .elements
+            .compactMap { $0 as? FieldFormElement }
+        response?.answer.forEach { response in
+            print("\(response.fieldName): \(response.answer)")
+            fieldFormElements
+                .first(where: { $0.fieldName == response.fieldName })?
+                .updateValue(response.answer)
+        }
+        evaluateExpressions()
+        languageModelIsProcessing = false
+    }
+    
+    func collectVoiceObservation() {
+        if speechRecognizer == nil {
+            speechRecognizer = SpeechRecognizer()
+        }
+        speechRecognizer?.resetTranscript()
+        voiceObservationInProgress = true
+        speechRecognizer?.startTranscribing()
     }
     
     /// Performs an evaluation of all form expressions.
