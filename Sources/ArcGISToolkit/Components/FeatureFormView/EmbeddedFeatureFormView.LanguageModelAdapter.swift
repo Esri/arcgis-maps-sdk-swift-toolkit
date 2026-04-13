@@ -58,6 +58,7 @@ extension EmbeddedFeatureFormView {
                     Question \(index+1):
                         Field name: \(element.fieldName)
                         Label: \(element.label)
+                        Data Type: \(element.fieldType)
                     """
                     if !element.description.isEmpty {
                         base.append(
