@@ -131,18 +131,22 @@ final class EmbeddedFeatureFormViewModel {
             formResponse.elementResponses.forEach { elementResponse in
                 if elementResponse.answered,
                    let element = fieldFormElements.first(where: { $0.fieldName == elementResponse.fieldName }) {
-                    if !element.codedValues.isEmpty,
-                       let code = element.codedValues.first(where: { "\($0.code ?? "")" == elementResponse.answer })?.code {
-                        element.updateValue(code)
+                    if !element.codedValues.isEmpty {
+                        if let code = element.codedValues.first(where: { "\($0.code ?? "")" == elementResponse.answer })?.code {
+                            element.updateValue(code)
+                        } else if let code = element.codedValues.first(where: { $0.name == elementResponse.answer})?.code {
+                            element.updateValue(code)
+                        }
                     } else {
-                        element.updateValue(elementResponse.answer)
+                        element.convertAndUpdateValue(elementResponse.answer)
                     }
                 }
             }
             _ = try? await featureForm.evaluateExpressions()
         }
-        
-        for iteration in 1...3 {
+
+//        for iteration in 1...3 {
+        for iteration in 1...1 {
             let visibleElements = visibleElements.count
             Logger.featureFormView.info("Running iteration \(iteration)")
             await runQuestions()

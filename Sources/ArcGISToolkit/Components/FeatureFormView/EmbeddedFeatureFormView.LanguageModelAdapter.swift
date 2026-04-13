@@ -24,8 +24,6 @@ extension EmbeddedFeatureFormView {
         @available(iOS 26.0, *)
         @Generable
         struct FeatureFormResponse {
-            // A property the model uses for reasoning.
-            var reasoningSteps: String
             /// The answers for each question.
             @Guide(description: "The answers for each question.")
             var elementResponses: [FieldFormElementResponse]
@@ -60,20 +58,34 @@ extension EmbeddedFeatureFormView {
                     Question \(index+1):
                         Field name: \(element.fieldName)
                         Label: \(element.label)
-                        Description: \(element.description)
-                        Hint: \(element.hint)
                     """
+                    if !element.description.isEmpty {
+                        base.append(
+                            """
+                            \n\tDescription: \(element.description)
+                            """
+                        )
+                    }
+                    if !element.hint.isEmpty {
+                        base.append(
+                            """
+                            \n\tHint: \(element.hint)
+                            """
+                        )
+                    }
                     if !element.codedValues.isEmpty {
                         base.append(
                             """
-                            \n\tCoded Values:
+                            \n\tOptions:
                             """
                         )
-                        element.codedValues.forEach { codedValue in
+                        element.codedValues.enumerated().forEach { (index, codedValue) in
                             if let code = codedValue.code {
                                 base.append(
                                     """
-                                    \n\t\tName: \(codedValue.name) Code: \(code)
+                                    \n\t\tOption \(index+1):
+                                    \t\t\tName: \(codedValue.name)
+                                    \t\t\tCode: \(code)
                                     """
                                 )
                             }
@@ -136,7 +148,7 @@ extension EmbeddedFeatureFormView {
             
             Do not use any information from the question in your answers.
             
-            If coded values are provided for the question and you can make a
+            If options are provided for the question and you can make a
             determination of the best option, use the code for the best 
             option as your answer.
             """
