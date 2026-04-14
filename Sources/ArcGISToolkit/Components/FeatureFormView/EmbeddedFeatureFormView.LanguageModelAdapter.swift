@@ -15,11 +15,21 @@
 import ArcGIS
 import FoundationModels
 
-private import os
+internal import os
 
 extension EmbeddedFeatureFormView {
     class LanguageModelAdapter {
         private weak var formModel: EmbeddedFeatureFormViewModel?
+        
+        /// A type-erased language model session.
+        ///
+        /// Note: This is a temporary backing property for not being able to use the availability attribute on
+        /// stored properties. Once iOS 26 is the minimum required OS, this property can be removed.
+        private var _session: Any?
+        @available(iOS 26.0, *)
+        private var session: LanguageModelSession? {
+            _session as? LanguageModelSession
+        }
         
         @available(iOS 26.0, *)
         @Generable
@@ -45,6 +55,20 @@ extension EmbeddedFeatureFormView {
         
         init(formModel: EmbeddedFeatureFormViewModel) {
             self.formModel = formModel
+            if #available(iOS 26.0, *) {
+                let session = LanguageModelSession(instructions: Self.instructions)
+                session.prewarm()
+                _session = session
+            }
+        }
+        
+        /// A Boolean value indicating whether Foundation Models are available on the current device.
+        static public var isAvailable: Bool {
+            if #available(iOS 26.0, *) {
+                SystemLanguageModel.default.isAvailable
+            } else {
+                false
+            }
         }
         
         @available(iOS 26.0, *)
@@ -56,10 +80,19 @@ extension EmbeddedFeatureFormView {
                     guard element.isEditable else { return nil }
                     var base = """
                     Question \(index+1):
+                        Question: \(element.label)
                         Field name: \(element.fieldName)
-                        Label: \(element.label)
-                        Data Type: \(element.fieldType)
                     """
+                    if let fieldType = element.fieldType {
+                        base.append(
+                            """
+                            \n\tResponse Data Type: \(fieldType)
+                            """
+                        )
+                    }
+//                    if let t = element.input as TextBoxFormInput {
+//                        t.maxLength
+//                    }
                     if !element.description.isEmpty {
                         base.append(
                             """
@@ -100,8 +133,6 @@ extension EmbeddedFeatureFormView {
                 }
             }).joined(separator: "\n") else { return nil }
             
-            let session = LanguageModelSession(instructions: Self.instructions)
-            
             let prompt = """
                 The questions are:
                 \(questions)
@@ -112,13 +143,14 @@ extension EmbeddedFeatureFormView {
             
             Logger.featureFormView.info("\(prompt, privacy: .sensitive)")
             
-            let response = try await session.respond(
+            guard let response = try await session?.respond(
                 to: prompt,
                 generating: FeatureFormResponse.self
-            )
+            ) else {
+                return nil
+            }
             
             logResponse(response.content)
-            
             return response.content
         }
         
@@ -139,8 +171,7 @@ extension EmbeddedFeatureFormView {
         
         /// Instructions fed to the language model to convert the speech transcript to element responses.
         static let instructions = """
-            You are a helpful assistant converting a transcript into answers for
-            a fillable form.
+            Your task is to convert a transcript into form answers.
             
             You may not be able to answer every question with the information in
             the transcript, leave the question unanswered if so.

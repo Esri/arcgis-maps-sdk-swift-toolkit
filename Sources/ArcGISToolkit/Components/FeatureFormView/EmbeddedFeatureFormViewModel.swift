@@ -116,7 +116,6 @@ final class EmbeddedFeatureFormViewModel {
         voiceObservationInProgress = false
         languageModelIsProcessing = true
         speechRecognizer?.stopTranscribing()
-        languageModelAdapter = EmbeddedFeatureFormView.LanguageModelAdapter(formModel: self)
         guard let transcript = speechRecognizer?.transcript else {
             Logger.featureFormView.info("No observation collected.")
             return
@@ -134,7 +133,7 @@ final class EmbeddedFeatureFormViewModel {
                     if !element.codedValues.isEmpty {
                         if let code = element.codedValues.first(where: { "\($0.code ?? "")" == elementResponse.answer })?.code {
                             element.updateValue(code)
-                        } else if let code = element.codedValues.first(where: { $0.name == elementResponse.answer})?.code {
+                        } else if let code = element.codedValues.first(where: { $0.name.lowercased() == elementResponse.answer.lowercased() })?.code {
                             element.updateValue(code)
                         }
                     } else {
@@ -144,7 +143,7 @@ final class EmbeddedFeatureFormViewModel {
             }
             _ = try? await featureForm.evaluateExpressions()
         }
-
+        
 //        for iteration in 1...3 {
         for iteration in 1...1 {
             let visibleElements = visibleElements.count
@@ -166,6 +165,8 @@ final class EmbeddedFeatureFormViewModel {
         speechRecognizer?.resetTranscript()
         voiceObservationInProgress = true
         speechRecognizer?.startTranscribing()
+        // Prewarm the language model.
+        languageModelAdapter = EmbeddedFeatureFormView.LanguageModelAdapter(formModel: self)
     }
     
     /// Performs an evaluation of all form expressions.

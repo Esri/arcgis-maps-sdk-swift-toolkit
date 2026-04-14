@@ -14,6 +14,8 @@
 
 import Speech
 
+internal import os
+
 /// A helper for transcribing speech to text using SFSpeechRecognizer and AVAudioEngine.
 actor SpeechRecognizer: Observable {
     enum RecognizerError: Error {
@@ -44,7 +46,7 @@ actor SpeechRecognizer: Observable {
     init() {
         recognizer = SFSpeechRecognizer()
         guard recognizer != nil else {
-            transcribe(RecognizerError.nilRecognizer)
+            log(RecognizerError.nilRecognizer)
             return
         }
         
@@ -57,7 +59,7 @@ actor SpeechRecognizer: Observable {
                     throw RecognizerError.notPermittedToRecord
                 }
             } catch {
-                transcribe(error)
+                log(error)
             }
         }
     }
@@ -69,10 +71,7 @@ actor SpeechRecognizer: Observable {
     }
     
     @MainActor func resetTranscript() {
-        Task {
-            await reset()
-            transcript.removeAll()
-        }
+        transcript.removeAll()
     }
     
     @MainActor func stopTranscribing() {
@@ -87,7 +86,7 @@ actor SpeechRecognizer: Observable {
     /// The resulting transcription is continuously written to the published `transcript` property.
     private func transcribe() {
         guard let recognizer, recognizer.isAvailable else {
-            self.transcribe(RecognizerError.recognizerIsUnavailable)
+            log(RecognizerError.recognizerIsUnavailable)
             return
         }
         
@@ -95,12 +94,12 @@ actor SpeechRecognizer: Observable {
             let (audioEngine, request) = try Self.prepareEngine()
             self.audioEngine = audioEngine
             self.request = request
-            self.task = recognizer.recognitionTask(with: request, resultHandler: { [weak self] result, error in
+            task = recognizer.recognitionTask(with: request, resultHandler: { [weak self] result, error in
                 self?.recognitionHandler(audioEngine: audioEngine, result: result, error: error)
             })
         } catch {
-            self.reset()
-            self.transcribe(error)
+            reset()
+            log(error)
         }
     }
     
@@ -111,27 +110,32 @@ actor SpeechRecognizer: Observable {
         audioEngine = nil
         request = nil
         task = nil
+        do {
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch {
+            log(error)
+        }
     }
     
     private static func prepareEngine() throws -> (AVAudioEngine, SFSpeechAudioBufferRecognitionRequest) {
-        let audioEngine = AVAudioEngine()
+        let engine = AVAudioEngine()
         
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.shouldReportPartialResults = true
         
-        let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.playAndRecord, mode: .measurement, options: .duckOthers)
-        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-        let inputNode = audioEngine.inputNode
+        let session = AVAudioSession.sharedInstance()
+        try session.setCategory(.playAndRecord, mode: .measurement, options: .duckOthers)
+        try session.setActive(true, options: .notifyOthersOnDeactivation)
+        let inputNode = engine.inputNode
         
         let recordingFormat = inputNode.outputFormat(forBus: 0)
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
             request.append(buffer)
         }
-        audioEngine.prepare()
-        try audioEngine.start()
+        engine.prepare()
+        try engine.start()
         
-        return (audioEngine, request)
+        return (engine, request)
     }
     
     nonisolated private func recognitionHandler(audioEngine: AVAudioEngine, result: SFSpeechRecognitionResult?, error: Error?) {
@@ -148,32 +152,19 @@ actor SpeechRecognizer: Observable {
         }
     }
     
-    
-    nonisolated private func transcribe(_ message: String) {
-        Task { @MainActor in
-            transcript = message
-        }
-    }
-    
-    nonisolated private func transcribe(_ error: Error) {
+    nonisolated private func log(_ error: Error) {
         var errorMessage = ""
         if let error = error as? RecognizerError {
             errorMessage += error.message
         } else {
             errorMessage += error.localizedDescription
         }
-        Task { @MainActor [errorMessage] in
-            transcript = "<< \(errorMessage) >>"
-        }
+        Logger.speechToText.error("\(errorMessage)")
     }
-}
-
-extension SFSpeechRecognizer {
-    static func hasAuthorizationToRecognize() async -> Bool {
-        await withCheckedContinuation { continuation in
-            requestAuthorization { status in
-                continuation.resume(returning: status == .authorized)
-            }
+    
+    nonisolated private func transcribe(_ message: String) {
+        Task { @MainActor in
+            transcript = message
         }
     }
 }
@@ -183,6 +174,23 @@ extension AVAudioSession {
         await withCheckedContinuation { continuation in
             AVAudioApplication.requestRecordPermission { authorized in
                 continuation.resume(returning: authorized)
+            }
+        }
+    }
+}
+
+extension Logger {
+    /// A logger for the feature form view.
+    static var speechToText: Logger {
+        Logger(subsystem: "com.esri.ArcGISToolkit", category: "SpeechToText")
+    }
+}
+
+extension SFSpeechRecognizer {
+    static func hasAuthorizationToRecognize() async -> Bool {
+        await withCheckedContinuation { continuation in
+            requestAuthorization { status in
+                continuation.resume(returning: status == .authorized)
             }
         }
     }

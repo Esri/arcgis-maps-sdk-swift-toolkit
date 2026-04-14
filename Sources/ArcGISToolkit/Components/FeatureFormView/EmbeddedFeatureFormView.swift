@@ -68,7 +68,7 @@ struct EmbeddedFeatureFormView: View {
                 embeddedFeatureFormViewModel.title = newTitle
             }
             .overlay(alignment: .bottomLeading) {
-                if #available(iOS 26.0, *) {
+                if #available(iOS 26.0, *), EmbeddedFeatureFormView.LanguageModelAdapter.isAvailable {
                     Button {
                         if embeddedFeatureFormViewModel.voiceObservationInProgress {
                             Task {
