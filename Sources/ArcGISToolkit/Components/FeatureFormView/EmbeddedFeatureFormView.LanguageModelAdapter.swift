@@ -86,13 +86,10 @@ extension EmbeddedFeatureFormView {
                     if let fieldType = element.fieldType {
                         base.append(
                             """
-                            \n\tResponse Data Type: \(fieldType)
+                            \n\tAnswer Data Type: \(fieldType)
                             """
                         )
                     }
-//                    if let t = element.input as TextBoxFormInput {
-//                        t.maxLength
-//                    }
                     if !element.description.isEmpty {
                         base.append(
                             """
@@ -124,6 +121,24 @@ extension EmbeddedFeatureFormView {
                                 )
                             }
                         }
+                    } else if !(element.fieldType?.isNumeric ?? false), let input = element.input as? TextAreaFormInput {
+                        base.append(
+                            """
+                            \n\tAnswer Length: \(input.minLength)-\(input.maxLength) characters
+                            """
+                        )
+                    } else if !(element.fieldType?.isNumeric ?? false), let input = element.input as? TextBoxFormInput {
+                       base.append(
+                           """
+                           \n\tAnswer Length: \(input.minLength)-\(input.maxLength) characters
+                           """
+                       )
+                    } else if element.fieldType?.isNumeric ?? false, let rangeDomain = element.domain as? RangeDomain {
+                        base.append(
+                            """
+                            \n\tAnswer Range: \(rangeDomain.minValue)-\(rangeDomain.maxValue)
+                            """
+                        )
                     }
                     return base
                 case is GroupFormElement: // case let groupElement as GroupFormElement:
