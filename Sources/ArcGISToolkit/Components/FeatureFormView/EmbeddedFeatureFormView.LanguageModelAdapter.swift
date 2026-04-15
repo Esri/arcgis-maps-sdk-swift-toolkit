@@ -74,77 +74,91 @@ extension EmbeddedFeatureFormView {
         @available(iOS 26.0, *)
         @MainActor
         func generateResponse(transcript: String) async throws -> FeatureFormResponse? {
+            func writeElement(index: Int, element: FieldFormElement, groupIndex: Int? = nil) -> String? {
+                guard element.isEditable else { return nil }
+                let questionID = groupIndex != nil ? "Question \(index+1).\(groupIndex!+1):" : "Question \(index+1):"
+                var base = """
+                \(questionID)
+                    Question: \(element.label)
+                    Field name: \(element.fieldName)
+                """
+                if let fieldType = element.fieldType {
+                    base.append(
+                        """
+                        \n\tAnswer Data Type: \(fieldType)
+                        """
+                    )
+                }
+                if !element.description.isEmpty {
+                    base.append(
+                        """
+                        \n\tDescription: \(element.description)
+                        """
+                    )
+                }
+                if !element.hint.isEmpty {
+                    base.append(
+                        """
+                        \n\tHint: \(element.hint)
+                        """
+                    )
+                }
+                if !element.codedValues.isEmpty {
+                    base.append(
+                        """
+                        \n\tOptions:
+                        """
+                    )
+                    element.codedValues.enumerated().forEach { (index, codedValue) in
+                        if let code = codedValue.code {
+                            base.append(
+                                """
+                                \n\t\tOption \(index+1):
+                                \t\t\tName: \(codedValue.name)
+                                \t\t\tCode: \(code)
+                                """
+                            )
+                        }
+                    }
+                } else if !(element.fieldType?.isNumeric ?? false), let input = element.input as? TextAreaFormInput {
+                    base.append(
+                        """
+                        \n\tAnswer Length: \(input.minLength)-\(input.maxLength) characters
+                        """
+                    )
+                } else if !(element.fieldType?.isNumeric ?? false), let input = element.input as? TextBoxFormInput {
+                   base.append(
+                       """
+                       \n\tAnswer Length: \(input.minLength)-\(input.maxLength) characters
+                       """
+                   )
+                } else if element.fieldType?.isNumeric ?? false, let rangeDomain = element.domain as? RangeDomain {
+                    if let min = rangeDomain.minValue, let max = rangeDomain.maxValue {
+                        base.append(
+                            """
+                            \n\tAnswer Range: \(min)-\(max)
+                            """
+                        )
+                    }
+                }
+                return base
+            }
+            
+            func writeElement(index: Int, element: GroupFormElement) -> String? {
+                return element.elements.filter(\.isVisible).enumerated().compactMap({ (groupIndex, _element) in
+                    guard let element = _element as? FieldFormElement else { return nil }
+                    return writeElement(index: index, element: element, groupIndex: groupIndex)
+                }).joined(separator: "\n")
+            }
+            
             guard let questions: String = formModel?.visibleElements.enumerated().compactMap({ (index, element) in
                 switch element {
                 case let element as FieldFormElement:
-                    guard element.isEditable else { return nil }
-                    var base = """
-                    Question \(index+1):
-                        Question: \(element.label)
-                        Field name: \(element.fieldName)
-                    """
-                    if let fieldType = element.fieldType {
-                        base.append(
-                            """
-                            \n\tAnswer Data Type: \(fieldType)
-                            """
-                        )
-                    }
-                    if !element.description.isEmpty {
-                        base.append(
-                            """
-                            \n\tDescription: \(element.description)
-                            """
-                        )
-                    }
-                    if !element.hint.isEmpty {
-                        base.append(
-                            """
-                            \n\tHint: \(element.hint)
-                            """
-                        )
-                    }
-                    if !element.codedValues.isEmpty {
-                        base.append(
-                            """
-                            \n\tOptions:
-                            """
-                        )
-                        element.codedValues.enumerated().forEach { (index, codedValue) in
-                            if let code = codedValue.code {
-                                base.append(
-                                    """
-                                    \n\t\tOption \(index+1):
-                                    \t\t\tName: \(codedValue.name)
-                                    \t\t\tCode: \(code)
-                                    """
-                                )
-                            }
-                        }
-                    } else if !(element.fieldType?.isNumeric ?? false), let input = element.input as? TextAreaFormInput {
-                        base.append(
-                            """
-                            \n\tAnswer Length: \(input.minLength)-\(input.maxLength) characters
-                            """
-                        )
-                    } else if !(element.fieldType?.isNumeric ?? false), let input = element.input as? TextBoxFormInput {
-                       base.append(
-                           """
-                           \n\tAnswer Length: \(input.minLength)-\(input.maxLength) characters
-                           """
-                       )
-                    } else if element.fieldType?.isNumeric ?? false, let rangeDomain = element.domain as? RangeDomain {
-                        base.append(
-                            """
-                            \n\tAnswer Range: \(rangeDomain.minValue)-\(rangeDomain.maxValue)
-                            """
-                        )
-                    }
-                    return base
-                case is GroupFormElement: // case let groupElement as GroupFormElement:
-                    return nil
+                    writeElement(index: index, element: element)
+                case let element as GroupFormElement:
+                    writeElement(index: index, element: element)
                 default:
-                    return nil
+                    nil
                 }
             }).joined(separator: "\n") else { return nil }
             

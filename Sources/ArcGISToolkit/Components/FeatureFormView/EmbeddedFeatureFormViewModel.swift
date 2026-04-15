@@ -73,6 +73,9 @@ final class EmbeddedFeatureFormViewModel {
     /// <#Description#>
     var voiceObservationInProgress = false
     
+    /// <#Description#>
+    private var autoFilledElements = [String]()
+    
     /// A dictionary of each form element and whether or not it is visible.
     private var elementVisibility: [FormElement: Bool] = [:]
     
@@ -124,11 +127,20 @@ final class EmbeddedFeatureFormViewModel {
         
         func runQuestions() async {
             guard let formResponse = try? await languageModelAdapter?.generateResponse(transcript: transcript) else { return }
-            let fieldFormElements = featureForm
-                .elements
-                .compactMap { $0 as? FieldFormElement }
+            let fieldFormElements: [FieldFormElement] = visibleElements
+                .flatMap {
+                    switch $0 {
+                    case let e as FieldFormElement:
+                        return [e]
+                    case let e as GroupFormElement:
+                        return e.elements.filter(\.isVisible).compactMap { $0 as? FieldFormElement }
+                    default:
+                        return []
+                    }
+                }
+                .filter { !autoFilledElements.contains($0.fieldName) }
             formResponse.elementResponses.forEach { elementResponse in
-                if elementResponse.answered,
+                if elementResponse.answered, !elementResponse.answer.isEmpty,
                    let element = fieldFormElements.first(where: { $0.fieldName == elementResponse.fieldName }) {
                     if !element.codedValues.isEmpty {
                         if let code = element.codedValues.first(where: { "\($0.code ?? "")" == elementResponse.answer })?.code {
@@ -139,6 +151,7 @@ final class EmbeddedFeatureFormViewModel {
                     } else {
                         element.convertAndUpdateValue(elementResponse.answer)
                     }
+                    autoFilledElements.append(element.fieldName)
                 }
             }
             _ = try? await featureForm.evaluateExpressions()
