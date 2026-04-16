@@ -50,6 +50,8 @@ final class EmbeddedFeatureFormViewModel {
     var title = ""
     
     /// The list of visible form elements.
+    ///
+    /// - SeeAlso: `visibleElementsFlattened`
     var visibleElements: [FormElement] {
         var elements = featureForm
             .elements
@@ -62,6 +64,21 @@ final class EmbeddedFeatureFormViewModel {
         : elements.filter {
             $0.label.localizedCaseInsensitiveContains(elementFilterPhrase)
         }
+    }
+    
+    /// The list of visible form elements and inner visible group elements.
+    ///
+    /// - SeeAlso: `visibleElements`
+    var visibleElementsFlattened: [FormElement] {
+        visibleElements
+            .flatMap {
+                switch $0 {
+                case let group as GroupFormElement:
+                    return group.elements.filter(\.isVisible)
+                default:
+                    return [$0]
+                }
+            }
     }
     
     /// The feature form.
