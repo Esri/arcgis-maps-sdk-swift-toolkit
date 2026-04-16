@@ -136,6 +136,7 @@ final class EmbeddedFeatureFormViewModel {
         voiceObservationInProgress = false
         languageModelIsProcessing = true
         speechRecognizer?.stopTranscribing()
+        
         guard let transcript = speechRecognizer?.transcript else {
             Logger.featureFormView.info("No observation collected.")
             return
@@ -144,21 +145,12 @@ final class EmbeddedFeatureFormViewModel {
         
         func runQuestions() async {
             guard let formResponse = try? await languageModelAdapter?.generateResponse(transcript: transcript) else { return }
-            let fieldFormElements: [FieldFormElement] = visibleElements
-                .flatMap {
-                    switch $0 {
-                    case let e as FieldFormElement:
-                        return [e]
-                    case let e as GroupFormElement:
-                        return e.elements.filter(\.isVisible).compactMap { $0 as? FieldFormElement }
-                    default:
-                        return []
-                    }
-                }
+            let unfilledElements: [FieldFormElement] = visibleElementsFlattened
+                .compactMap { $0 as? FieldFormElement }
                 .filter { !autoFilledElements.contains($0.fieldName) }
             formResponse.elementResponses.forEach { elementResponse in
                 if elementResponse.answered, !elementResponse.answer.isEmpty,
-                   let element = fieldFormElements.first(where: { $0.fieldName == elementResponse.fieldName }) {
+                   let element = unfilledElements.first(where: { $0.fieldName == elementResponse.fieldName }) {
                     if !element.codedValues.isEmpty {
                         if let code = element.codedValues.first(where: { "\($0.code ?? "")" == elementResponse.answer })?.code {
                             element.updateValue(code)
@@ -174,17 +166,7 @@ final class EmbeddedFeatureFormViewModel {
             _ = try? await featureForm.evaluateExpressions()
         }
         
-//        for iteration in 1...3 {
-        for iteration in 1...1 {
-            let visibleElements = visibleElements.count
-            Logger.featureFormView.info("Running iteration \(iteration)")
-            await runQuestions()
-            if self.visibleElements.count == visibleElements {
-                Logger.featureFormView.info("Visible elements did not change. Stopping after \(iteration) iterations")
-                break
-            }
-        }
-        
+        await runQuestions()
         languageModelIsProcessing = false
     }
     
