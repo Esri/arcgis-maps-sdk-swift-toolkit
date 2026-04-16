@@ -196,6 +196,11 @@ final class EmbeddedFeatureFormViewModel {
         }
     }
     
+    /// <#Description#>
+    func onEditsDiscarded() {
+        autoFilledElements.removeAll()
+    }
+    
     /// Starts a task to monitor whether the associated form has edits.
     private func monitorEdits() {
         monitorEditsTask?.cancel()
