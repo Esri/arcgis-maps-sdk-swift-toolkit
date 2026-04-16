@@ -74,8 +74,18 @@ extension EmbeddedFeatureFormView {
         @available(iOS 26.0, *)
         @MainActor
         func generateResponse(transcript: String) async throws -> FeatureFormResponse? {
+            /// Generates the textual description of a `FieldFormElement`.
+            ///
+            /// The element is skipped if it is not editable or was already auto-filled.
+            /// - Parameters:
+            ///   - index: The index of the element in the top-level elements.
+            ///   - element: The element.
+            ///   - groupIndex: The index of the element in the group, if the element is in a group element.
+            /// - Returns: The textual description of a `FieldFormElement`.
             func writeElement(index: Int, element: FieldFormElement, groupIndex: Int? = nil) -> String? {
-                guard element.isEditable else { return nil }
+                guard element.isEditable,
+                      !(formModel?.autoFilledElements.contains(element.fieldName) ?? false) else { return nil }
+                
                 let questionID = groupIndex != nil ? "Question \(index+1).\(groupIndex!+1):" : "Question \(index+1):"
                 var base = """
                 \(questionID)

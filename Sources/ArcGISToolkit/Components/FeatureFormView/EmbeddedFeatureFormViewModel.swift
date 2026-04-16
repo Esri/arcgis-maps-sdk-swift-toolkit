@@ -85,13 +85,11 @@ final class EmbeddedFeatureFormViewModel {
     let featureForm: FeatureForm
     
     /// <#Description#>
+    var autoFilledElements = [String]()
+    /// <#Description#>
     var languageModelIsProcessing = false
-    
     /// <#Description#>
     var voiceObservationInProgress = false
-    
-    /// <#Description#>
-    private var autoFilledElements = [String]()
     
     /// A dictionary of each form element and whether or not it is visible.
     private var elementVisibility: [FormElement: Bool] = [:]
