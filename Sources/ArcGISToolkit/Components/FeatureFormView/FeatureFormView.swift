@@ -192,9 +192,8 @@ public struct FeatureFormView: View {
                 actions: {
                     if let (willNavigate, continuation) = featureFormViewModel.navigationAlertInfo {
                         Button(role: .destructive) {
-                            featureFormViewModel.presentedForm?.discardEdits()
+                            featureFormViewModel.discardEdits()
                             onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
-                            featureFormViewModel.validationErrorVisibilityInternal = .automatic
                             continuation()
                         } label: {
                             Text.discardEdits

@@ -40,6 +40,16 @@ import Observation
         formModels[ObjectIdentifier(form)] = EmbeddedFeatureFormViewModel(featureForm: form)
     }
     
+    /// Discards edits to elements and their associated attributes in the presented form.
+    @MainActor
+    func discardEdits() {
+        presentedForm?.discardEdits()
+        validationErrorVisibilityInternal = .automatic
+        if let presentedForm, let embeddedFormViewModel = getModel(presentedForm) {
+            embeddedFormViewModel.onEditsDiscarded()
+        }
+    }
+    
     /// Gets the model for the specified form.
     /// - Parameter form: The form to get a model for.
     /// - Returns: The model for the provided form.

@@ -40,9 +40,8 @@ struct FormFooter: View {
     
     var discardButton: some View {
         Button(role: .destructive) {
-            featureForm.discardEdits()
+            featureFormViewModel.discardEdits()
             formHandlingEventAction?(.discardedEdits(willNavigate: false))
-            featureFormViewModel.validationErrorVisibilityInternal = .automatic
         } label: {
             Text(
                 "Discard",
