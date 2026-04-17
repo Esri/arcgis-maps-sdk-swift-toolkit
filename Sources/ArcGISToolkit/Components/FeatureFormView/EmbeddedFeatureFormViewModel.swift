@@ -93,7 +93,7 @@ final class EmbeddedFeatureFormViewModel {
     
     /// <#Description#>
     @ObservationIgnored
-    /*private*/ var formAssistantModel: FormAssistantModel?
+    var formAssistantModel: FormAssistantModel?
     
     /// The group of visibility tasks.
     @ObservationIgnored
