@@ -73,10 +73,10 @@ struct EmbeddedFeatureFormView: View {
                     Button {
                         if embeddedFeatureFormViewModel.formAssistantModel?.voiceObservationInProgress ?? false {
                             Task {
-                                await embeddedFeatureFormViewModel.formAssistantModel?.autoFillForm()
+                                await embeddedFeatureFormViewModel.formAssistantModel?.stopVoiceCollection()
                             }
                         } else {
-                            embeddedFeatureFormViewModel.formAssistantModel?.collectVoiceObservation()
+                            embeddedFeatureFormViewModel.formAssistantModel?.startVoiceCollection()
                         }
                     } label: {
                         Group {

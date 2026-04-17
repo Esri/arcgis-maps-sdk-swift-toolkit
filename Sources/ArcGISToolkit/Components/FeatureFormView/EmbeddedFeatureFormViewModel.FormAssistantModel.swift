@@ -21,6 +21,9 @@ internal import os
 extension EmbeddedFeatureFormViewModel {
     /// <#Description#>
     @Observable class FormAssistantModel {
+        
+        // MARK: Associated types
+        
         @available(iOS 26.0, *)
         @Generable
         struct FeatureFormResponse {
@@ -43,27 +46,12 @@ extension EmbeddedFeatureFormViewModel {
             var fieldName: String
         }
         
-        /// <#Description#>
-        private var autoFilledElements = [String]()
-        /// <#Description#>
-        private weak var formModel: EmbeddedFeatureFormViewModel?
-        /// <#Description#>
-        private var speechRecognizer: SpeechRecognizer?
+        // MARK: Public members
         
         /// <#Description#>
         var languageModelIsProcessing = false
         /// <#Description#>
         var voiceObservationInProgress = false
-        
-        /// A type-erased language model session.
-        ///
-        /// Note: This is a temporary backing property for not being able to use the availability attribute on
-        /// stored properties. Once iOS 26 is the minimum required OS, this property can be removed.
-        private var _session: Any?
-        @available(iOS 26.0, *)
-        private var session: LanguageModelSession? {
-            _session as? LanguageModelSession
-        }
         
         init(formModel: EmbeddedFeatureFormViewModel) {
             self.formModel = formModel
@@ -83,9 +71,19 @@ extension EmbeddedFeatureFormViewModel {
             }
         }
         
+        @MainActor
+        func startVoiceCollection() {
+            if speechRecognizer == nil {
+                speechRecognizer = SpeechRecognizer()
+            }
+            speechRecognizer?.resetTranscript()
+            voiceObservationInProgress = true
+            speechRecognizer?.startTranscribing()
+        }
+        
         @available(iOS 26.0, *)
         @MainActor
-        func autoFillForm() async {
+        func stopVoiceCollection() async {
             voiceObservationInProgress = false
             languageModelIsProcessing = true
             speechRecognizer?.stopTranscribing()
@@ -123,19 +121,55 @@ extension EmbeddedFeatureFormViewModel {
             languageModelIsProcessing = false
         }
         
-        @MainActor
-        func collectVoiceObservation() {
-            if speechRecognizer == nil {
-                speechRecognizer = SpeechRecognizer()
-            }
-            speechRecognizer?.resetTranscript()
-            voiceObservationInProgress = true
-            speechRecognizer?.startTranscribing()
+        /// <#Description#>
+        func onEditsDiscarded() {
+            autoFilledElements.removeAll()
         }
         
+        // MARK: Private members
+        
+        /// <#Description#>
+        private var autoFilledElements = [String]()
+        /// <#Description#>
+        private weak var formModel: EmbeddedFeatureFormViewModel?
+        /// <#Description#>
+        private var speechRecognizer: SpeechRecognizer?
+        
+        /// A type-erased language model session.
+        ///
+        /// Note: This is a temporary backing property for not being able to use the availability attribute on
+        /// stored properties. Once iOS 26 is the minimum required OS, this property can be removed.
+        private var _session: Any?
+        @available(iOS 26.0, *)
+        private var session: LanguageModelSession? {
+            _session as? LanguageModelSession
+        }
+        
+        /// Instructions fed to the language model to convert the speech transcript to element responses.
+        private static let instructions = """
+            Your task is to convert a transcript into form answers.
+            
+            You may not be able to answer every question with the information in
+            the transcript, leave the question unanswered if so.
+            
+            The transcript may not address the questions in order.
+            
+            Do not use any information from the question in your answers.
+            
+            If options are provided for the question and you can make a
+            determination of the best option, use the code for the best 
+            option as your answer.
+            
+            If the answer data type is date, please provide your answer in ISO
+            8601 (yyyy-MM-dd'T'HH:mm:ssZ).
+            """
+        
+        /// <#Description#>
+        /// - Parameter transcript: <#transcript description#>
+        /// - Returns: <#description#>
         @available(iOS 26.0, *)
         @MainActor
-        func generateResponse(transcript: String) async throws -> FeatureFormResponse? {
+        private func generateResponse(transcript: String) async throws -> FeatureFormResponse? {
             /// Generates the textual description of a `FieldFormElement`.
             ///
             /// The element is skipped if it is not editable or was already auto-filled.
@@ -256,7 +290,7 @@ extension EmbeddedFeatureFormViewModel {
         }
         
         @available(iOS 26.0, *)
-        func logResponse(_ response: FeatureFormResponse) {
+        private func logResponse(_ response: FeatureFormResponse) {
             var message = ""
             response.elementResponses.forEach {
                 message.append(
@@ -269,29 +303,5 @@ extension EmbeddedFeatureFormViewModel {
             }
             Logger.featureFormView.debug("\(message, privacy: .sensitive)")
         }
-        
-        /// <#Description#>
-        func onEditsDiscarded() {
-            autoFilledElements.removeAll()
-        }
-        
-        /// Instructions fed to the language model to convert the speech transcript to element responses.
-        static let instructions = """
-            Your task is to convert a transcript into form answers.
-            
-            You may not be able to answer every question with the information in
-            the transcript, leave the question unanswered if so.
-            
-            The transcript may not address the questions in order.
-            
-            Do not use any information from the question in your answers.
-            
-            If options are provided for the question and you can make a
-            determination of the best option, use the code for the best 
-            option as your answer.
-            
-            If the answer data type is date, please provide your answer in ISO
-            8601 (yyyy-MM-dd'T'HH:mm:ssZ).
-            """
     }
 }
