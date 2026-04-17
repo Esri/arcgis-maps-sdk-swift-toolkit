@@ -37,6 +37,8 @@ extension EmbeddedFeatureFormViewModel {
         /// <#Description#>
         var voiceObservationInProgress = false
         
+        /// <#Description#>
+        /// - Parameter formModel: <#formModel description#>
         init(formModel: EmbeddedFeatureFormViewModel) {
             self.formModel = formModel
             if #available(iOS 26.0, *) {
@@ -46,6 +48,7 @@ extension EmbeddedFeatureFormViewModel {
             }
         }
         
+        /// <#Description#>
         @MainActor
         func startVoiceCollection() {
             if speechRecognizer == nil {
@@ -56,6 +59,7 @@ extension EmbeddedFeatureFormViewModel {
             speechRecognizer?.startTranscribing()
         }
         
+        /// <#Description#>
         @available(iOS 26.0, *)
         @MainActor
         func stopVoiceCollection() async {
@@ -115,6 +119,7 @@ extension EmbeddedFeatureFormViewModel {
         /// Note: This is a temporary backing property for not being able to use the availability attribute on
         /// stored properties. Once iOS 26 is the minimum required OS, this property can be removed.
         private var _session: Any?
+        /// <#Description#>
         @available(iOS 26.0, *)
         private var session: LanguageModelSession? {
             _session as? LanguageModelSession
@@ -264,6 +269,8 @@ extension EmbeddedFeatureFormViewModel {
             return response.content
         }
         
+        /// <#Description#>
+        /// - Parameter response: <#response description#>
         @available(iOS 26.0, *)
         private func logResponse(_ response: FeatureFormResponse) {
             var message = ""
@@ -281,6 +288,7 @@ extension EmbeddedFeatureFormViewModel {
         
         // MARK: Associated types
         
+        /// <#Description#>
         @available(iOS 26.0, *)
         @Generable
         struct FeatureFormResponse {
@@ -289,6 +297,7 @@ extension EmbeddedFeatureFormViewModel {
             var elementResponses: [FieldFormElementResponse]
         }
         
+        /// <#Description#>
         @available(iOS 26.0, *)
         @Generable
         struct FieldFormElementResponse {
