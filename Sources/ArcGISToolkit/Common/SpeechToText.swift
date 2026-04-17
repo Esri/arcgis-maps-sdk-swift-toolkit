@@ -18,6 +18,7 @@ internal import os
 
 /// A helper for transcribing speech to text using SFSpeechRecognizer and AVAudioEngine.
 actor SpeechRecognizer: Observable {
+    /// <#Description#>
     enum RecognizerError: Error {
         case nilRecognizer
         case notAuthorizedToRecognize
@@ -34,11 +35,16 @@ actor SpeechRecognizer: Observable {
         }
     }
     
+    /// <#Description#>
     @MainActor var transcript: String = ""
     
+    /// <#Description#>
     private var audioEngine: AVAudioEngine?
+    /// <#Description#>
     private var request: SFSpeechAudioBufferRecognitionRequest?
+    /// <#Description#>
     private var task: SFSpeechRecognitionTask?
+    /// <#Description#>
     private let recognizer: SFSpeechRecognizer?
     
     /// Initializes a new speech recognizer. If this is the first time you've used the class, it
@@ -64,16 +70,19 @@ actor SpeechRecognizer: Observable {
         }
     }
     
+    /// <#Description#>
     @MainActor func startTranscribing() {
         Task {
             await transcribe()
         }
     }
     
+    /// <#Description#>
     @MainActor func resetTranscript() {
         transcript.removeAll()
     }
     
+    /// <#Description#>
     @MainActor func stopTranscribing() {
         Task {
             await reset()
@@ -117,6 +126,8 @@ actor SpeechRecognizer: Observable {
         }
     }
     
+    /// <#Description#>
+    /// - Returns: <#description#>
     private static func prepareEngine() throws -> (AVAudioEngine, SFSpeechAudioBufferRecognitionRequest) {
         let engine = AVAudioEngine()
         
@@ -138,6 +149,11 @@ actor SpeechRecognizer: Observable {
         return (engine, request)
     }
     
+    /// <#Description#>
+    /// - Parameters:
+    ///   - audioEngine: <#audioEngine description#>
+    ///   - result: <#result description#>
+    ///   - error: <#error description#>
     nonisolated private func recognitionHandler(audioEngine: AVAudioEngine, result: SFSpeechRecognitionResult?, error: Error?) {
         let receivedFinalResult = result?.isFinal ?? false
         let receivedError = error != nil
@@ -152,6 +168,8 @@ actor SpeechRecognizer: Observable {
         }
     }
     
+    /// <#Description#>
+    /// - Parameter error: <#error description#>
     nonisolated private func log(_ error: Error) {
         var errorMessage = ""
         if let error = error as? RecognizerError {
@@ -162,6 +180,8 @@ actor SpeechRecognizer: Observable {
         Logger.speechToText.error("\(errorMessage)")
     }
     
+    /// <#Description#>
+    /// - Parameter message: <#message description#>
     nonisolated private func transcribe(_ message: String) {
         Task { @MainActor in
             transcript = message
@@ -170,6 +190,8 @@ actor SpeechRecognizer: Observable {
 }
 
 extension AVAudioSession {
+    /// <#Description#>
+    /// - Returns: <#description#>
     func hasPermissionToRecord() async -> Bool {
         await withCheckedContinuation { continuation in
             AVAudioApplication.requestRecordPermission { authorized in
@@ -187,6 +209,8 @@ extension Logger {
 }
 
 extension SFSpeechRecognizer {
+    /// <#Description#>
+    /// - Returns: <#description#>
     static func hasAuthorizationToRecognize() async -> Bool {
         await withCheckedContinuation { continuation in
             requestAuthorization { status in
