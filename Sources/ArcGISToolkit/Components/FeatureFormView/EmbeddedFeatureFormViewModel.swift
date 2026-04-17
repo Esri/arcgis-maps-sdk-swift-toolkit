@@ -100,7 +100,7 @@ final class EmbeddedFeatureFormViewModel {
     
     /// <#Description#>
     @ObservationIgnored
-    private var languageModelAdapter: EmbeddedFeatureFormView.LanguageModelAdapter?
+    private var languageModelAdapter: LanguageModelAdapter?
     
     /// <#Description#>
     @ObservationIgnored
@@ -176,7 +176,7 @@ final class EmbeddedFeatureFormViewModel {
         voiceObservationInProgress = true
         speechRecognizer?.startTranscribing()
         // Prewarm the language model.
-        languageModelAdapter = EmbeddedFeatureFormView.LanguageModelAdapter(formModel: self)
+        languageModelAdapter = LanguageModelAdapter(formModel: self)
     }
     
     /// Performs an evaluation of all form expressions.

@@ -17,7 +17,7 @@ import FoundationModels
 
 internal import os
 
-extension EmbeddedFeatureFormView {
+extension EmbeddedFeatureFormViewModel {
     class LanguageModelAdapter {
         private weak var formModel: EmbeddedFeatureFormViewModel?
         
