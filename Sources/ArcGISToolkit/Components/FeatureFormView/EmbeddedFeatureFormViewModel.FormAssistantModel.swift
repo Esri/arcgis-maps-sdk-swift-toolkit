@@ -21,32 +21,16 @@ internal import os
 extension EmbeddedFeatureFormViewModel {
     /// <#Description#>
     @Observable class FormAssistantModel {
-        
-        // MARK: Associated types
-        
-        @available(iOS 26.0, *)
-        @Generable
-        struct FeatureFormResponse {
-            /// The answers for each question.
-            @Guide(description: "The answers for each question.")
-            var elementResponses: [FieldFormElementResponse]
-        }
-        
-        @available(iOS 26.0, *)
-        @Generable
-        struct FieldFormElementResponse {
-            /// The answer to the question.
-            @Guide(description: "The answer to the question.")
-            var answer: String
-            /// Whether the question was answered successfully.
-            @Guide(description: "Whether the question was answered successfully.")
-            var answered: Bool
-            /// The field name of the question.
-            @Guide(description: "The field name of the question.")
-            var fieldName: String
-        }
-        
         // MARK: Public members
+        
+        /// A Boolean value indicating whether Foundation Models are available on the current device.
+        static public var isAvailable: Bool {
+            if #available(iOS 26.0, *) {
+                SystemLanguageModel.default.isAvailable
+            } else {
+                false
+            }
+        }
         
         /// <#Description#>
         var languageModelIsProcessing = false
@@ -59,15 +43,6 @@ extension EmbeddedFeatureFormViewModel {
                 let session = LanguageModelSession(instructions: Self.instructions)
                 session.prewarm()
                 _session = session
-            }
-        }
-        
-        /// A Boolean value indicating whether Foundation Models are available on the current device.
-        static public var isAvailable: Bool {
-            if #available(iOS 26.0, *) {
-                SystemLanguageModel.default.isAvailable
-            } else {
-                false
             }
         }
         
@@ -302,6 +277,30 @@ extension EmbeddedFeatureFormViewModel {
                 )
             }
             Logger.featureFormView.debug("\(message, privacy: .sensitive)")
+        }
+        
+        // MARK: Associated types
+        
+        @available(iOS 26.0, *)
+        @Generable
+        struct FeatureFormResponse {
+            /// The answers for each question.
+            @Guide(description: "The answers for each question.")
+            var elementResponses: [FieldFormElementResponse]
+        }
+        
+        @available(iOS 26.0, *)
+        @Generable
+        struct FieldFormElementResponse {
+            /// The answer to the question.
+            @Guide(description: "The answer to the question.")
+            var answer: String
+            /// Whether the question was answered successfully.
+            @Guide(description: "Whether the question was answered successfully.")
+            var answered: Bool
+            /// The field name of the question.
+            @Guide(description: "The field name of the question.")
+            var fieldName: String
         }
     }
 }
