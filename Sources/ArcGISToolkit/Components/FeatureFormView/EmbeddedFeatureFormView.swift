@@ -73,10 +73,10 @@ struct EmbeddedFeatureFormView: View {
                     Button {
                         if embeddedFeatureFormViewModel.languageModelAdapter?.voiceObservationInProgress ?? false {
                             Task {
-                                await embeddedFeatureFormViewModel.autoFillForm()
+                                await embeddedFeatureFormViewModel.languageModelAdapter?.autoFillForm()
                             }
                         } else {
-                            embeddedFeatureFormViewModel.collectVoiceObservation()
+                            embeddedFeatureFormViewModel.languageModelAdapter?.collectVoiceObservation()
                         }
                     } label: {
                         Group {
@@ -96,6 +96,7 @@ struct EmbeddedFeatureFormView: View {
                     .buttonStyle(.borderedProminent)
                     .disabled(embeddedFeatureFormViewModel.languageModelAdapter?.languageModelIsProcessing ?? false)
                     .padding(.leading)
+                    .onAppear(perform: embeddedFeatureFormViewModel.prepareFormAssistant)
                 }
             }
             .preference(

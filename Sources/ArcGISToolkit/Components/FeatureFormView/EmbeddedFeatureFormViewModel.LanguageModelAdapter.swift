@@ -87,6 +87,56 @@ extension EmbeddedFeatureFormViewModel {
         
         @available(iOS 26.0, *)
         @MainActor
+        func autoFillForm() async {
+            voiceObservationInProgress = false
+            languageModelIsProcessing = true
+            speechRecognizer?.stopTranscribing()
+            
+            guard let transcript = speechRecognizer?.transcript else {
+                Logger.featureFormView.info("No observation collected.")
+                return
+            }
+            Logger.featureFormView.info("Auto-filling form.")
+            
+            func runQuestions() async {
+                guard let formResponse = try? await generateResponse(transcript: transcript) else { return }
+                let unfilledElements: [FieldFormElement] = formModel?.visibleElementsFlattened
+                    .compactMap { $0 as? FieldFormElement } ?? []
+                    .filter { !autoFilledElements.contains($0.fieldName) }
+                formResponse.elementResponses.forEach { elementResponse in
+                    if elementResponse.answered, !elementResponse.answer.isEmpty,
+                       let element = unfilledElements.first(where: { $0.fieldName == elementResponse.fieldName }) {
+                        if !element.codedValues.isEmpty {
+                            if let code = element.codedValues.first(where: { "\($0.code ?? "")" == elementResponse.answer })?.code {
+                                element.updateValue(code)
+                            } else if let code = element.codedValues.first(where: { $0.name.lowercased() == elementResponse.answer.lowercased() })?.code {
+                                element.updateValue(code)
+                            }
+                        } else {
+                            element.convertAndUpdateValue(elementResponse.answer)
+                        }
+                        autoFilledElements.append(element.fieldName)
+                    }
+                }
+                formModel?.evaluateExpressions()
+            }
+            
+            await runQuestions()
+            languageModelIsProcessing = false
+        }
+        
+        @MainActor
+        func collectVoiceObservation() {
+            if speechRecognizer == nil {
+                speechRecognizer = SpeechRecognizer()
+            }
+            speechRecognizer?.resetTranscript()
+            voiceObservationInProgress = true
+            speechRecognizer?.startTranscribing()
+        }
+        
+        @available(iOS 26.0, *)
+        @MainActor
         func generateResponse(transcript: String) async throws -> FeatureFormResponse? {
             /// Generates the textual description of a `FieldFormElement`.
             ///
