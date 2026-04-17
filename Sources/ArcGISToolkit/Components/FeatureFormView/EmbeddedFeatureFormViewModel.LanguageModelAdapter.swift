@@ -13,13 +13,27 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
 import FoundationModels
 
 internal import os
 
 extension EmbeddedFeatureFormViewModel {
-    class LanguageModelAdapter {
+    @Observable class LanguageModelAdapter {
         private weak var formModel: EmbeddedFeatureFormViewModel?
+        
+        /// <#Description#>
+        var autoFilledElements = [String]()
+        
+        /// <#Description#>
+        /*private*/ var languageModelIsProcessing = false
+        
+        /// <#Description#>
+        @ObservationIgnored
+        /*private*/ var speechRecognizer: SpeechRecognizer?
+        
+        /// <#Description#>
+        /*private*/ var voiceObservationInProgress = false
         
         /// A type-erased language model session.
         ///
@@ -84,7 +98,7 @@ extension EmbeddedFeatureFormViewModel {
             /// - Returns: The textual description of a `FieldFormElement`.
             func writeElement(index: Int, element: FieldFormElement, groupIndex: Int? = nil) -> String? {
                 guard element.isEditable,
-                      !(formModel?.autoFilledElements.contains(element.fieldName) ?? false) else { return nil }
+                      !autoFilledElements.contains(element.fieldName) else { return nil }
                 
                 let questionID = groupIndex != nil ? "Question \(index+1).\(groupIndex!+1):" : "Question \(index+1):"
                 var base = """

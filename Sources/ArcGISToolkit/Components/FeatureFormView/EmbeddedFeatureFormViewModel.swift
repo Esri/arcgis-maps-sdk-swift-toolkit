@@ -84,13 +84,6 @@ final class EmbeddedFeatureFormViewModel {
     /// The feature form.
     let featureForm: FeatureForm
     
-    /// <#Description#>
-    var autoFilledElements = [String]()
-    /// <#Description#>
-    var languageModelIsProcessing = false
-    /// <#Description#>
-    var voiceObservationInProgress = false
-    
     /// A dictionary of each form element and whether or not it is visible.
     private var elementVisibility: [FormElement: Bool] = [:]
     
@@ -100,11 +93,7 @@ final class EmbeddedFeatureFormViewModel {
     
     /// <#Description#>
     @ObservationIgnored
-    private var languageModelAdapter: LanguageModelAdapter?
-    
-    /// <#Description#>
-    @ObservationIgnored
-    private var speechRecognizer: SpeechRecognizer?
+    /*private*/ var languageModelAdapter: LanguageModelAdapter?
     
     /// The group of visibility tasks.
     @ObservationIgnored
@@ -131,11 +120,11 @@ final class EmbeddedFeatureFormViewModel {
     
     @available(iOS 26.0, *)
     func autoFillForm() async {
-        voiceObservationInProgress = false
-        languageModelIsProcessing = true
-        speechRecognizer?.stopTranscribing()
+        languageModelAdapter?.voiceObservationInProgress = false
+        languageModelAdapter?.languageModelIsProcessing = true
+        languageModelAdapter?.speechRecognizer?.stopTranscribing()
         
-        guard let transcript = speechRecognizer?.transcript else {
+        guard let transcript = languageModelAdapter?.speechRecognizer?.transcript else {
             Logger.featureFormView.info("No observation collected.")
             return
         }
@@ -145,7 +134,7 @@ final class EmbeddedFeatureFormViewModel {
             guard let formResponse = try? await languageModelAdapter?.generateResponse(transcript: transcript) else { return }
             let unfilledElements: [FieldFormElement] = visibleElementsFlattened
                 .compactMap { $0 as? FieldFormElement }
-                .filter { !autoFilledElements.contains($0.fieldName) }
+                .filter { !(languageModelAdapter?.autoFilledElements.contains($0.fieldName) ?? false) }
             formResponse.elementResponses.forEach { elementResponse in
                 if elementResponse.answered, !elementResponse.answer.isEmpty,
                    let element = unfilledElements.first(where: { $0.fieldName == elementResponse.fieldName }) {
@@ -158,23 +147,23 @@ final class EmbeddedFeatureFormViewModel {
                     } else {
                         element.convertAndUpdateValue(elementResponse.answer)
                     }
-                    autoFilledElements.append(element.fieldName)
+                    languageModelAdapter?.autoFilledElements.append(element.fieldName)
                 }
             }
             _ = try? await featureForm.evaluateExpressions()
         }
         
         await runQuestions()
-        languageModelIsProcessing = false
+        languageModelAdapter?.languageModelIsProcessing = false
     }
     
     func collectVoiceObservation() {
-        if speechRecognizer == nil {
-            speechRecognizer = SpeechRecognizer()
+        if languageModelAdapter?.speechRecognizer == nil {
+            languageModelAdapter?.speechRecognizer = SpeechRecognizer()
         }
-        speechRecognizer?.resetTranscript()
-        voiceObservationInProgress = true
-        speechRecognizer?.startTranscribing()
+        languageModelAdapter?.speechRecognizer?.resetTranscript()
+        languageModelAdapter?.voiceObservationInProgress = true
+        languageModelAdapter?.speechRecognizer?.startTranscribing()
         // Prewarm the language model.
         languageModelAdapter = LanguageModelAdapter(formModel: self)
     }
@@ -195,7 +184,7 @@ final class EmbeddedFeatureFormViewModel {
     
     /// <#Description#>
     func onEditsDiscarded() {
-        autoFilledElements.removeAll()
+        languageModelAdapter?.autoFilledElements.removeAll()
     }
     
     /// Starts a task to monitor whether the associated form has edits.

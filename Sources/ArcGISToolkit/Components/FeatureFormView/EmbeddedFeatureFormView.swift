@@ -71,7 +71,7 @@ struct EmbeddedFeatureFormView: View {
                 if #available(iOS 26.0, *),
                    EmbeddedFeatureFormViewModel.LanguageModelAdapter.isAvailable {
                     Button {
-                        if embeddedFeatureFormViewModel.voiceObservationInProgress {
+                        if embeddedFeatureFormViewModel.languageModelAdapter?.voiceObservationInProgress ?? false {
                             Task {
                                 await embeddedFeatureFormViewModel.autoFillForm()
                             }
@@ -80,10 +80,10 @@ struct EmbeddedFeatureFormView: View {
                         }
                     } label: {
                         Group {
-                            if embeddedFeatureFormViewModel.languageModelIsProcessing {
+                            if embeddedFeatureFormViewModel.languageModelAdapter?.languageModelIsProcessing ?? false {
                                 ProgressView()
                             } else {
-                                if embeddedFeatureFormViewModel.voiceObservationInProgress {
+                                if embeddedFeatureFormViewModel.languageModelAdapter?.voiceObservationInProgress ?? false {
                                     Label("Stop Recording", systemImage: "microphone.badge.xmark.fill")
                                 } else {
                                     Label("Start Recording", systemImage: "microphone.fill")
@@ -94,7 +94,7 @@ struct EmbeddedFeatureFormView: View {
                         .labelStyle(.iconOnly)
                     }
                     .buttonStyle(.borderedProminent)
-                    .disabled(embeddedFeatureFormViewModel.languageModelIsProcessing)
+                    .disabled(embeddedFeatureFormViewModel.languageModelAdapter?.languageModelIsProcessing ?? false)
                     .padding(.leading)
                 }
             }
