@@ -19,7 +19,7 @@ import FoundationModels
 internal import os
 
 extension EmbeddedFeatureFormViewModel {
-    @Observable class LanguageModelAdapter {
+    @Observable class FormAssistantModel {
         private weak var formModel: EmbeddedFeatureFormViewModel?
         
         /// <#Description#>

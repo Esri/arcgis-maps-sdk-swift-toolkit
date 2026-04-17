@@ -93,7 +93,7 @@ final class EmbeddedFeatureFormViewModel {
     
     /// <#Description#>
     @ObservationIgnored
-    /*private*/ var languageModelAdapter: LanguageModelAdapter?
+    /*private*/ var formAssistantModel: FormAssistantModel?
     
     /// The group of visibility tasks.
     @ObservationIgnored
@@ -134,12 +134,12 @@ final class EmbeddedFeatureFormViewModel {
     
     /// <#Description#>
     func onEditsDiscarded() {
-        languageModelAdapter?.autoFilledElements.removeAll()
+        formAssistantModel?.autoFilledElements.removeAll()
     }
     
     func prepareFormAssistant() {
         // Prewarm the language model.
-        languageModelAdapter = LanguageModelAdapter(formModel: self)
+        formAssistantModel = FormAssistantModel(formModel: self)
     }
     
     /// Starts a task to monitor whether the associated form has edits.

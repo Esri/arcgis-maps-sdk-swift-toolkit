@@ -69,21 +69,21 @@ struct EmbeddedFeatureFormView: View {
             }
             .overlay(alignment: .bottomLeading) {
                 if #available(iOS 26.0, *),
-                   EmbeddedFeatureFormViewModel.LanguageModelAdapter.isAvailable {
+                   EmbeddedFeatureFormViewModel.FormAssistantModel.isAvailable {
                     Button {
-                        if embeddedFeatureFormViewModel.languageModelAdapter?.voiceObservationInProgress ?? false {
+                        if embeddedFeatureFormViewModel.formAssistantModel?.voiceObservationInProgress ?? false {
                             Task {
-                                await embeddedFeatureFormViewModel.languageModelAdapter?.autoFillForm()
+                                await embeddedFeatureFormViewModel.formAssistantModel?.autoFillForm()
                             }
                         } else {
-                            embeddedFeatureFormViewModel.languageModelAdapter?.collectVoiceObservation()
+                            embeddedFeatureFormViewModel.formAssistantModel?.collectVoiceObservation()
                         }
                     } label: {
                         Group {
-                            if embeddedFeatureFormViewModel.languageModelAdapter?.languageModelIsProcessing ?? false {
+                            if embeddedFeatureFormViewModel.formAssistantModel?.languageModelIsProcessing ?? false {
                                 ProgressView()
                             } else {
-                                if embeddedFeatureFormViewModel.languageModelAdapter?.voiceObservationInProgress ?? false {
+                                if embeddedFeatureFormViewModel.formAssistantModel?.voiceObservationInProgress ?? false {
                                     Label("Stop Recording", systemImage: "microphone.badge.xmark.fill")
                                 } else {
                                     Label("Start Recording", systemImage: "microphone.fill")
@@ -94,7 +94,7 @@ struct EmbeddedFeatureFormView: View {
                         .labelStyle(.iconOnly)
                     }
                     .buttonStyle(.borderedProminent)
-                    .disabled(embeddedFeatureFormViewModel.languageModelAdapter?.languageModelIsProcessing ?? false)
+                    .disabled(embeddedFeatureFormViewModel.formAssistantModel?.languageModelIsProcessing ?? false)
                     .padding(.leading)
                     .onAppear(perform: embeddedFeatureFormViewModel.prepareFormAssistant)
                 }
