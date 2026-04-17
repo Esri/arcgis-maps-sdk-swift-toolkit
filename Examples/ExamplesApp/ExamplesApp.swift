@@ -14,6 +14,7 @@
 
 import ArcGIS
 import SwiftUI
+import TipKit
 
 @main
 struct ExamplesApp: App {
@@ -24,6 +25,13 @@ struct ExamplesApp: App {
     }
     
     init() {
+        do {
+            try Tips.configure()
+        }
+        catch {
+            print("Error initializing TipKit \(error.localizedDescription)")
+        }
+        
         /*
          Use of ArcGIS location services, such as basemap styles, geocoding, and routing services, requires either user authentication or API key authentication. For more information see https://developers.arcgis.com/documentation/security-and-authentication/types-of-authentication/ or https://developers.arcgis.com/swift/security-and-authentication/.
          1) User authentication: Allows users with an ArcGIS account to sign into an application and access secure services.

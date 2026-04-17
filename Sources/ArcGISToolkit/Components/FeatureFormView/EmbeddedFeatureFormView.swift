@@ -14,6 +14,7 @@
 
 import ArcGIS
 import SwiftUI
+import TipKit
 
 struct EmbeddedFeatureFormView: View {
     /// The model for the FeatureFormView containing the view.
@@ -21,6 +22,8 @@ struct EmbeddedFeatureFormView: View {
     
     /// The feature form defining the editing experience.
     let form: FeatureForm
+    /// <#Description#>
+    let formAssistantTip = FormAssistantTip()
     
     var body: some View {
         if let embeddedFeatureFormViewModel {
@@ -106,6 +109,7 @@ struct EmbeddedFeatureFormView: View {
                     )
                     .shadow(radius: 8)
                     .padding(.leading)
+                    .popoverTip(formAssistantTip)
                     // TODO: Not working properly. Assistant doesn't work on 2nd open.
                     .onAppear(perform: embeddedFeatureFormViewModel.prepareFormAssistant)
                     // TODO: This approach doesn't work either.
