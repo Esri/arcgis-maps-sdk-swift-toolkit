@@ -134,7 +134,7 @@ final class EmbeddedFeatureFormViewModel {
     
     /// <#Description#>
     func onEditsDiscarded() {
-        formAssistantModel?.autoFilledElements.removeAll()
+        formAssistantModel?.onEditsDiscarded()
     }
     
     func prepareFormAssistant() {

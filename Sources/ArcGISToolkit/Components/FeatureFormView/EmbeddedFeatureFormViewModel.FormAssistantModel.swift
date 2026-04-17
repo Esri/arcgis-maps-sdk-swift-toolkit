@@ -19,32 +19,8 @@ import FoundationModels
 internal import os
 
 extension EmbeddedFeatureFormViewModel {
+    /// <#Description#>
     @Observable class FormAssistantModel {
-        private weak var formModel: EmbeddedFeatureFormViewModel?
-        
-        /// <#Description#>
-        var autoFilledElements = [String]()
-        
-        /// <#Description#>
-        /*private*/ var languageModelIsProcessing = false
-        
-        /// <#Description#>
-        @ObservationIgnored
-        /*private*/ var speechRecognizer: SpeechRecognizer?
-        
-        /// <#Description#>
-        /*private*/ var voiceObservationInProgress = false
-        
-        /// A type-erased language model session.
-        ///
-        /// Note: This is a temporary backing property for not being able to use the availability attribute on
-        /// stored properties. Once iOS 26 is the minimum required OS, this property can be removed.
-        private var _session: Any?
-        @available(iOS 26.0, *)
-        private var session: LanguageModelSession? {
-            _session as? LanguageModelSession
-        }
-        
         @available(iOS 26.0, *)
         @Generable
         struct FeatureFormResponse {
@@ -65,6 +41,28 @@ extension EmbeddedFeatureFormViewModel {
             /// The field name of the question.
             @Guide(description: "The field name of the question.")
             var fieldName: String
+        }
+        
+        /// <#Description#>
+        private var autoFilledElements = [String]()
+        /// <#Description#>
+        private weak var formModel: EmbeddedFeatureFormViewModel?
+        /// <#Description#>
+        private var speechRecognizer: SpeechRecognizer?
+        
+        /// <#Description#>
+        var languageModelIsProcessing = false
+        /// <#Description#>
+        var voiceObservationInProgress = false
+        
+        /// A type-erased language model session.
+        ///
+        /// Note: This is a temporary backing property for not being able to use the availability attribute on
+        /// stored properties. Once iOS 26 is the minimum required OS, this property can be removed.
+        private var _session: Any?
+        @available(iOS 26.0, *)
+        private var session: LanguageModelSession? {
+            _session as? LanguageModelSession
         }
         
         init(formModel: EmbeddedFeatureFormViewModel) {
@@ -270,6 +268,11 @@ extension EmbeddedFeatureFormViewModel {
                 )
             }
             Logger.featureFormView.debug("\(message, privacy: .sensitive)")
+        }
+        
+        /// <#Description#>
+        func onEditsDiscarded() {
+            autoFilledElements.removeAll()
         }
         
         /// Instructions fed to the language model to convert the speech transcript to element responses.
