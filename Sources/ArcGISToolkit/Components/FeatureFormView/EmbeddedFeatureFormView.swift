@@ -98,9 +98,12 @@ struct EmbeddedFeatureFormView: View {
                         .font(.largeTitle)
                         .labelStyle(.iconOnly)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.glassProminent)
                     .disabled(embeddedFeatureFormViewModel.formAssistantModel?.languageModelIsProcessing ?? false)
-                    .glassEffect()
+                    .sensoryFeedback(
+                        .impact,
+                        trigger: embeddedFeatureFormViewModel.formAssistantModel?.voiceObservationInProgress
+                    )
                     .shadow(radius: 8)
                     .padding(.leading)
                     // TODO: Not working properly. Assistant doesn't work on 2nd open.
