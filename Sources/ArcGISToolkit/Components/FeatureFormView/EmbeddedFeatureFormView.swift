@@ -85,18 +85,30 @@ struct EmbeddedFeatureFormView: View {
                             } else {
                                 if embeddedFeatureFormViewModel.formAssistantModel?.voiceObservationInProgress ?? false {
                                     Label("Stop Recording", systemImage: "microphone.badge.xmark.fill")
+                                        .symbolEffect(.pulse.byLayer, options: .repeat(.continuous))
+                                        .symbolRenderingMode(.multicolor)
                                 } else {
                                     Label("Start Recording", systemImage: "microphone.fill")
                                 }
                             }
                         }
+                        // Lock the button's size when the icon changes
+                        .frame(idealWidth: 34, idealHeight: 44)
+                        .fixedSize()
                         .font(.largeTitle)
                         .labelStyle(.iconOnly)
                     }
                     .buttonStyle(.borderedProminent)
                     .disabled(embeddedFeatureFormViewModel.formAssistantModel?.languageModelIsProcessing ?? false)
+                    .glassEffect()
+                    .shadow(radius: 8)
                     .padding(.leading)
+                    // TODO: Not working properly. Assistant doesn't work on 2nd open.
                     .onAppear(perform: embeddedFeatureFormViewModel.prepareFormAssistant)
+                    // TODO: This approach doesn't work either.
+//                    .task(id: ObjectIdentifier(embeddedFeatureFormViewModel)) {
+//                        embeddedFeatureFormViewModel.prepareFormAssistant()
+//                    }
                 }
             }
             .preference(
