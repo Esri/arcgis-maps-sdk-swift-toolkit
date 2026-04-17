@@ -222,6 +222,9 @@ extension EmbeddedFeatureFormView {
             If options are provided for the question and you can make a
             determination of the best option, use the code for the best 
             option as your answer.
+            
+            If the answer data type is date, please provide your answer in ISO
+            8601 (yyyy-MM-dd'T'HH:mm:ssZ).
             """
     }
 }

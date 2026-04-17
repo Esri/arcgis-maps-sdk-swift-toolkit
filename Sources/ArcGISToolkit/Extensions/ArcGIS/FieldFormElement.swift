@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
 
 extension FieldFormElement {
     /// The coded values of the element's domain.
@@ -31,7 +32,11 @@ extension FieldFormElement {
         if fieldType == .text {
             updateValue(value)
         } else if let fieldType {
-            if fieldType.isNumeric && value.isEmpty {
+            if fieldType == .date {
+                let formatter = ISO8601DateFormatter()
+                let date = formatter.date(from: value)
+                updateValue(date)
+            } else if fieldType.isNumeric && value.isEmpty {
                 updateValue(nil)
             } else if fieldType == .int16, let value = Int16(value) {
                 updateValue(value)
