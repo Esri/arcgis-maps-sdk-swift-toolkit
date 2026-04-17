@@ -141,7 +141,7 @@ extension EmbeddedFeatureFormViewModel {
             option as your answer.
             
             If the answer data type is date, please provide your answer in ISO
-            8601 (yyyy-MM-dd'T'HH:mm:ssZ).
+            8601 format (yyyy-MM-dd'T'HH:mm:ssZ).
             """
         
         /// <#Description#>
