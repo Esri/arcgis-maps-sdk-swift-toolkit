@@ -84,8 +84,6 @@ import ArcGIS
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: OfflineMapViewModel
-    /// The action to dismiss the view.
-    @Environment(\.dismiss) private var dismiss
     /// The web map to be taken offline.
     private let onlineMap: Map
     /// The currently selected map.
@@ -181,7 +179,7 @@ public struct OfflineMapAreasView: View {
             // or else the state is lost when backgrounding and foregrounding the application.
             .sheet(isPresented: $isAddingOnDemandArea) {
                 OnDemandConfigurationView(
-                    map: onlineMap.clone(),
+                    map: Map(item: onlineMap.item!),
                     title: mapViewModel.nextOnDemandAreaTitle(),
                     titleIsValidCheck: mapViewModel.isProposeOnDemandAreaTitleUnique(_:)
                 ) {
@@ -190,10 +188,8 @@ public struct OfflineMapAreasView: View {
             }
             .toolbar {
                 if shouldDismiss {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button.done {
-                            dismiss()
-                        }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        DismissButton(kind: .close)
                     }
                 }
             }
@@ -305,10 +301,11 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var noInternetNoAreasView: some View {
         ContentUnavailableView {
-            Label(
-                LocalizedStringResource.noInternetConnectionErrorMessage.key,
-                systemImage: "wifi.exclamationmark"
-            )
+            Label {
+                Text(.noInternetConnectionErrorMessage)
+            } icon: {
+                Image(systemName: "wifi.exclamationmark")
+            }
         } description: {
             Text(noMapAreasErrorMessage)
         } actions: {
@@ -318,7 +315,11 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var emptyPreplannedOfflineAreasView: some View {
         ContentUnavailableView {
-            Label(noMapAreas.key, systemImage: "arrow.down.circle")
+            Label {
+                Text(noMapAreas)
+            } icon: {
+                Image(systemName: "arrow.down.circle")
+            }
         } description: {
             Text(noOfflineMapAreasMessage)
         } actions: {
@@ -328,7 +329,11 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var preplannedErrorView: some View {
         ContentUnavailableView {
-            Label(errorFetchingAreas.key, systemImage: "exclamationmark.triangle")
+            Label {
+                Text(errorFetchingAreas)
+            } icon: {
+                Image(systemName: "exclamationmark.triangle")
+            }
         } description: {
             Text(errorFetchingAreasMessage)
         } actions: {
@@ -338,7 +343,11 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var emptyOnDemandOfflineAreasView: some View {
         ContentUnavailableView {
-            Label(noMapAreas.key, systemImage: "arrow.down.circle")
+            Label {
+                Text(noMapAreas)
+            } icon: {
+                Image(systemName: "arrow.down.circle")
+            }
         } description: {
             Text(emptyOnDemandMessage)
         } actions: {
@@ -359,11 +368,15 @@ public struct OfflineMapAreasView: View {
     }
     
     @ViewBuilder private var offlineDisabledView: some View {
-        ContentUnavailableView(
-            offlineDisabled.key,
-            systemImage: "exclamationmark.triangle",
-            description: Text(offlineDisabledMessage)
-        )
+        ContentUnavailableView {
+            Label {
+                Text(offlineDisabled)
+            } icon: {
+                Image(systemName: "exclamationmark.triangle")
+            }
+        } description: {
+            Text(offlineDisabledMessage)
+        }
     }
 }
 

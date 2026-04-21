@@ -33,22 +33,22 @@ struct AttachmentImportMenu: View {
     }
     
     /// A Boolean value indicating whether the attachment camera controller is presented.
-    @State private var cameraIsShowing = false
+    @State private var cameraControllerIsPresented = false
+    
+    /// Performs camera authorization request handling.
+    @State private var cameraRequester = CameraRequester()
     
     /// A Boolean value indicating whether the attachment file importer is presented.
-    @State private var fileImporterIsShowing = false
+    @State private var fileImporterIsPresented = false
     
     /// The current import state.
     @State private var importState: AttachmentImportState = .none
     
     /// A Boolean value indicating whether the microphone access alert is visible.
-    @State private var microphoneAccessAlertIsVisible = false
+    @State private var microphoneAccessAlertIsPresented = false
     
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
-    
-    /// Performs camera authorization request handling.
-    @StateObject private var cameraRequester = CameraRequester()
     
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
@@ -73,10 +73,10 @@ struct AttachmentImportMenu: View {
     @available(visionOS, unavailable)
     private func takePhotoOrVideoButton() -> Button<some View> {
         Button {
-            Task {
-                await cameraRequester.request {
-                    cameraIsShowing = true
-                } onAccessDenied: { }
+            if cameraRequester.authorizationStatus == .authorized {
+                cameraControllerIsPresented = true
+            } else {
+                cameraRequester.request()
             }
         } label: {
             Text(cameraButtonLabel)
@@ -95,7 +95,7 @@ struct AttachmentImportMenu: View {
     
     private func chooseFromFilesButton() -> Button<some View> {
         Button {
-            fileImporterIsShowing = true
+            fileImporterIsPresented = true
         } label: {
             Text(filesButtonLabel)
             Image(systemName: "folder")
@@ -117,14 +117,23 @@ struct AttachmentImportMenu: View {
             // Always show file picker, no matter the input type.
             chooseFromFilesButton()
         } label: {
-            Image(systemName: "plus")
-                .font(.title2)
-                .padding(5)
+            Text(
+                "Add Attachment",
+                bundle: .toolkitModule,
+                comment: "A label for a button to add a new file attachment."
+            )
+            .frame(maxWidth: .infinity)
+            .contentShape(.rect)
         }
         .disabled(importState.importInProgress)
         .cameraRequester(cameraRequester)
         .alert(importFailureAlertTitle, isPresented: errorIsPresented) { } message: {
             Text(importFailureAlertMessage)
+        }
+        .onChange(of: cameraRequester.authorizationStatus) { _, status in
+            if status == .authorized {
+                cameraControllerIsPresented = true
+            }
         }
 #if targetEnvironment(macCatalyst)
         .menuStyle(.borderlessButton)
@@ -132,17 +141,19 @@ struct AttachmentImportMenu: View {
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
             
-            let attachmentSize = Measurement(
-                value: Double(newAttachmentImportData.data.count),
-                unit: UnitInformationStorage.bytes
-            )
-            guard attachmentSize <= attachmentUploadSizeLimit else {
-                importState = .errored(.sizeLimitExceeded)
-                return
-            }
-            guard attachmentSize.value > .zero else {
-                importState = .errored(.emptyFilesNotSupported)
-                return
+            if let data = newAttachmentImportData.data {
+                let attachmentSize = Measurement(
+                    value: Double(data.count),
+                    unit: UnitInformationStorage.bytes
+                )
+                guard attachmentSize <= attachmentUploadSizeLimit else {
+                    importState = .errored(.sizeLimitExceeded)
+                    return
+                }
+                guard attachmentSize.value > .zero else {
+                    importState = .errored(.emptyFilesNotSupported)
+                    return
+                }
             }
             
             let fileName: String
@@ -155,26 +166,39 @@ struct AttachmentImportMenu: View {
                     fileName = "Unnamed Attachment"
                 }
             }
-            guard let newAttachment = element.addAttachment(
-                name: fileName,
-                contentType: newAttachmentImportData.contentType,
-                data: newAttachmentImportData.data
-            ) else {
+            
+            var newAttachment: FeatureAttachment? = nil
+            if let url = newAttachmentImportData.filePath,
+               url.startAccessingSecurityScopedResource() {
+                newAttachment = try? await element.addAttachment(
+                    named: fileName,
+                    contentType: newAttachmentImportData.contentType,
+                    fileURL: url
+                )
+                url.stopAccessingSecurityScopedResource()
+            } else if let data = newAttachmentImportData.data {
+                newAttachment = element.addAttachment(
+                    name: fileName,
+                    contentType: newAttachmentImportData.contentType,
+                    data: data
+                )
+            }
+            
+            guard let newAttachment else {
                 importState = .errored(.creationFailed)
                 return
             }
             onAdd?(newAttachment)
             importState = .none
         }
-        .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
+        .fileImporter(isPresented: $fileImporterIsPresented, allowedContentTypes: [.item]) { result in
             importState = .importing
             switch result {
             case .success(let url):
-                // gain access to the url resource and verify there's data.
+                // gain access to the url resource.
                 if url.startAccessingSecurityScopedResource(),
-                   let contentType = url.contentType,
-                   let data = FileManager.default.contents(atPath: url.path) {
-                    importState = .finalizing(AttachmentImportData(contentType: contentType, data: data, fileName: url.lastPathComponent))
+                   let contentType = url.contentType {
+                    importState = .finalizing(AttachmentImportData(contentType: contentType, fileName: url.lastPathComponent, filePath: url))
                 } else {
                     importState = .errored(.dataInaccessible)
                 }
@@ -186,18 +210,18 @@ struct AttachmentImportMenu: View {
             }
         }
 #if os(iOS)
-        .fullScreenCover(isPresented: $cameraIsShowing) {
+        .fullScreenCover(isPresented: $cameraControllerIsPresented) {
             AttachmentCameraController(
-                importState: $importState
+                importState: $importState, isPresented: $cameraControllerIsPresented
             )
 #if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
             .onCameraCaptureModeChanged { captureMode in
                 if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
-                    microphoneAccessAlertIsVisible = true
+                    microphoneAccessAlertIsPresented = true
                 }
             }
 #endif
-            .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsVisible) {
+            .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsPresented) {
                 appSettingsButton
                 Button(role: .cancel) { } label: {
                     Text(recordVideoOnlyButtonLabel)

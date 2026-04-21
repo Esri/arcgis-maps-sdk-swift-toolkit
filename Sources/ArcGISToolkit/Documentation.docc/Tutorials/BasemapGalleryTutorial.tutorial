@@ -25,12 +25,12 @@
             }
             
             @Step {
-                Host the BasemapGallery on top of the `MapView` in a sheet, passing in the list of basemap gallery items and the map.
+                Place a button in the navigation bar to open the gallery.
                 @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep3.swift)
             }
             
             @Step {
-                Place a button in the navigation bar to open the gallery.
+                Create a BasemapGallery, passing in the basemap gallery items and the map, and present it in a sheet.
                 @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep4.swift)
             }
             

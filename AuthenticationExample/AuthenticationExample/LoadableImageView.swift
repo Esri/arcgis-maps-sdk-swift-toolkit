@@ -57,11 +57,6 @@ struct LoadableImageView<FailureContent: View, LoadedContent: View>: View {
         self.loadedContent = loadedContent
     }
     
-    /// An error to signify that the loadable image had a null image once it loaded.
-    /// This shouldn't ever happen, but in the case that it does, the failure content
-    /// will be displayed.
-    private struct NoImageError: Error {}
-    
     var body: some View {
         Group {
             switch result {
@@ -74,8 +69,9 @@ struct LoadableImageView<FailureContent: View, LoadedContent: View>: View {
             case .success(let image):
                 loadedContent(Image(uiImage: image))
             }
-        }.task {
-            result = await Result {
+        }
+        .task {
+            result = await Result { [loadableImage] in
                 try await loadableImage.load()
                 guard let image = loadableImage.image else { throw NoImageError() }
                 return image
@@ -83,3 +79,8 @@ struct LoadableImageView<FailureContent: View, LoadedContent: View>: View {
         }
     }
 }
+
+/// An error to signify that the loadable image had a null image once it loaded.
+/// This shouldn't ever happen, but in the case that it does, the failure content
+/// will be displayed.
+private struct NoImageError: Error {}

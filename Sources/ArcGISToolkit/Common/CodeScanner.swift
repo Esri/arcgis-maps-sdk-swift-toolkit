@@ -19,41 +19,24 @@ import SwiftUI
 @available(visionOS, unavailable)
 struct CodeScanner: View {
     @Binding var code: String
-    
     @Binding var isPresented: Bool
     
-    @State private var cameraAccessIsAuthorized = false
-    
-    @StateObject private var cameraRequester = CameraRequester()
-    
     var body: some View {
-        if cameraAccessIsAuthorized {
-            CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
-                .ignoresSafeArea()
-                .overlay(alignment:.topTrailing) {
-                    Button.cancel {
-                        isPresented = false
-                    }
-                    .buttonStyle(.borderedProminent)
+        CodeScannerRepresentable(scannerIsPresented: $isPresented, scanOutput: $code)
+            .ignoresSafeArea()
+            .overlay(alignment:.topTrailing) {
+                Button.cancel {
+                    isPresented = false
+                }
+                .buttonStyle(.borderedProminent)
+                .padding()
+            }
+            .overlay(alignment: .bottom) {
+                FlashlightButton()
+                    .hiddenIfUnavailable()
+                    .font(.title)
                     .padding()
-                }
-                .overlay(alignment: .bottom) {
-                    FlashlightButton()
-                        .hiddenIfUnavailable()
-                        .font(.title)
-                        .padding()
-                }
-        } else {
-            Color.clear
-                .task {
-                    await cameraRequester.request {
-                        cameraAccessIsAuthorized = true
-                    } onAccessDenied: {
-                        isPresented = false
-                    }
-                }
-                .cameraRequester(cameraRequester)
-        }
+            }
     }
 }
 
@@ -410,19 +393,26 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
 }
 
 @available(visionOS, unavailable)
+@MainActor
 class RotationCoordinator {
-    private let rotationObservation: NSKeyValueObservation
-    
+    private let previewLayer: AVCaptureVideoPreviewLayer
     private let rotationCoordinator: AVCaptureDevice.RotationCoordinator
     
+    private var rotationObservation: NSKeyValueObservation!
+    
     init(videoCaptureDevice: AVCaptureDevice, previewLayer: AVCaptureVideoPreviewLayer) {
+        self.previewLayer = previewLayer
         rotationCoordinator = AVCaptureDevice.RotationCoordinator(device: videoCaptureDevice, previewLayer: previewLayer)
         rotationObservation = rotationCoordinator.observe(\.videoRotationAngleForHorizonLevelPreview, options: [.initial, .new]) { _, change in
-            if let angle = change.newValue {
+            if let newAngle = change.newValue {
                 Task { @MainActor in
-                    previewLayer.connection?.videoRotationAngle = angle
+                    self.updateVideoRotationAngle(newAngle)
                 }
             }
         }
+    }
+    
+    private func updateVideoRotationAngle(_ newAngle: Double) {
+        previewLayer.connection?.videoRotationAngle = newAngle
     }
 }

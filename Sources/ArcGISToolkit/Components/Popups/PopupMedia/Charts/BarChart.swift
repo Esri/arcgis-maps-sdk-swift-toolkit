@@ -45,15 +45,15 @@ struct BarChart: View {
             if isColumnChart {
                 // Vertical bars.
                 BarMark(
-                    x: .value(String.field, $0.label),
-                    y: .value(String.value, $0.value)
+                    x: .value(Text.field, $0.label),
+                    y: .value(Text.value, $0.value)
                 )
                 .foregroundStyle(Color($0.color))
             } else {
                 // Horizontal bars.
                 BarMark(
-                    x: .value(String.value, $0.value),
-                    y: .value(String.field, $0.label)
+                    x: .value(Text.value, $0.value),
+                    y: .value(Text.field, $0.label)
                 )
                 .foregroundStyle(Color($0.color))
             }

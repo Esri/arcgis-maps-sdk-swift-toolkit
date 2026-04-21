@@ -18,29 +18,31 @@ struct BasemapGalleryExampleView: View {
     
     var body: some View {
         MapView(map: map)
-            .sheet(isPresented: $basemapGalleryIsPresented) {
-                VStack(alignment: .trailing) {
-                    doneButton
-                        .padding()
-                    BasemapGallery(items: basemaps, geoModel: map)
-                        .style(.grid(maxItemWidth: 100))
-                        .padding()
-                }
-            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Toggle(isOn: $basemapGalleryIsPresented) {
-                        Image("basemap", label: Text("Show base map"))
+                    Button("Show basemaps", image: .basemap) {
+                        basemapGalleryIsPresented = true
+                    }
+                    .sheet(isPresented: $basemapGalleryIsPresented) {
+                        basemapGallerySheet
                     }
                 }
             }
     }
     
-    private var doneButton: some View {
-        Button {
-            basemapGalleryIsPresented.toggle()
-        } label: {
-            Text("Done")
+    var basemapGallerySheet: some View {
+        NavigationStack {
+            BasemapGallery(items: basemaps, geoModel: map)
+                .style(.grid(maxItemWidth: 100))
+                .navigationTitle("Basemaps")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") {
+                            basemapGalleryIsPresented = false
+                        }
+                    }
+                }
         }
     }
     

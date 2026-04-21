@@ -23,9 +23,6 @@ struct DateTimeInput: View {
     /// The current date selection.
     @State private var date: Date?
     
-    /// The formatted version of the element's current value.
-    @State private var formattedValue = ""
-    
     /// A Boolean value indicating whether a new date (or time is being set).
     @State private var isEditing = false
     
@@ -58,16 +55,11 @@ struct DateTimeInput: View {
             .onChange(of: date) {
                 guard date != element.value as? Date else { return }
                 element.updateValue(date)
-                formattedValue = element.formattedValue
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
-            .onValueChange(of: element) { newValue, newFormattedValue in
-                if newFormattedValue.isEmpty {
-                    date = nil
-                } else {
-                    date = newValue as? Date
-                }
-                formattedValue = newFormattedValue
+            .onValueChange(of: element) { newValue, _ in
+                guard let newDate = newValue as? Date, newDate != date else { return }
+                date = newDate
             }
             .onIsRequiredChange(of: element) { newIsRequired in
                 isRequired = newIsRequired
@@ -90,34 +82,7 @@ struct DateTimeInput: View {
     /// Elements for display the date selection.
     /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
-        HStack {
-            Text(!formattedValue.isEmpty ? formattedValue : .noValue)
-                .accessibilityIdentifier("\(element.label) Value")
-                .foregroundStyle(displayColor)
-            
-            Spacer()
-            
-            if isEditing {
-                todayOrNowButton
-            } else {
-                if date == nil {
-                    Image(systemName: "calendar")
-                        .font(.title2)
-                        .accessibilityIdentifier("\(element.label) Calendar Image")
-                        .foregroundStyle(.secondary)
-                } else if !isRequired {
-                    XButton(.clear) {
-                        embeddedFeatureFormViewModel.focusedElement = element
-                        defer { embeddedFeatureFormViewModel.focusedElement = nil }
-                        date = nil
-                    }
-                    .accessibilityIdentifier("\(element.label) Clear Button")
-                }
-            }
-        }
-        .formInputStyle(isTappable: true)
-        .frame(maxWidth: .infinity)
-        .onTapGesture {
+        Button {
             withAnimation {
                 if date == nil {
                     if dateRange.contains(.now) {
@@ -131,6 +96,44 @@ struct DateTimeInput: View {
                 isEditing.toggle()
                 embeddedFeatureFormViewModel.focusedElement = isEditing ? element : nil
             }
+        } label: {
+            HStack {
+                formattedDate
+                    .accessibilityIdentifier("\(element.label) Value")
+                    .foregroundStyle(displayColor)
+                if isEditing {
+                    Spacer()
+                    todayOrNowButton
+                } else if date == nil {
+                    Spacer()
+                    Image(systemName: "calendar")
+                        .font(.title2)
+                        .accessibilityIdentifier("\(element.label) Calendar Image")
+                        .foregroundStyle(.secondary)
+                } else if !isRequired {
+                    Spacer()
+                    XButton(.clear) {
+                        embeddedFeatureFormViewModel.focusedElement = element
+                        defer { embeddedFeatureFormViewModel.focusedElement = nil }
+                        date = nil
+                    }
+                    .accessibilityIdentifier("\(element.label) Clear Button")
+                    .buttonStyle(.plain)
+                    .tint(.secondary)
+                }
+            }
+        }
+    }
+    
+    /// The system formatted version of the element's current date.
+    var formattedDate: Text {
+        if let date {
+            Text(
+                date,
+                format: input.includesTime ? .dateTime : .dateTime.day().month().year()
+            )
+        } else {
+            Text(String.noValue)
         }
     }
     

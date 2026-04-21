@@ -19,6 +19,19 @@ import UniformTypeIdentifiers
 /// Data used to create the attachment.
 struct AttachmentImportData: Equatable {
     let contentType: UTType
-    let data: Data
+    var data: Data? = nil
     var fileName: String? = nil
+    var filePath: URL? = nil
+    
+    init(contentType: UTType, fileName: String? = nil, data: Data) {
+        self.contentType = contentType
+        self.fileName = fileName
+        self.data = data
+    }
+    
+    init(contentType: UTType, fileName: String? = nil, filePath: URL) {
+        self.contentType = contentType
+        self.fileName = fileName
+        self.filePath = filePath
+    }
 }

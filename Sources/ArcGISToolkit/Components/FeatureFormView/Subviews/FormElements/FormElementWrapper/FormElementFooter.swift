@@ -36,6 +36,8 @@ struct FormElementFooter: View {
         case let element as UtilityAssociationsFormElement:
             UtilityAssociationsFormElementFooter(element: element)
         default:
+            // GroupFormElement's description is shown in the DisclosureGroup's
+            // label.
             EmptyView()
         }
     }
@@ -45,12 +47,10 @@ extension FormElementFooter {
     struct FieldFormElementFooter: View {
         /// The view model for the form.
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
-        
+        /// The model for the FeatureFormView containing the view.
+        @Environment(FeatureFormViewModel.self) private var featureFormViewModel
         /// The developer configurable validation error visibility.
         @Environment(\.validationErrorVisibilityExternal) private var validationErrorVisibilityExternal
-        
-        /// The internally managed validation error visibility.
-        @Environment(\.validationErrorVisibilityInternal) private var validationErrorVisibilityInternal
         
         let element: FieldFormElement
         
@@ -235,7 +235,7 @@ extension FormElementFooter {
             (
                 embeddedFeatureFormViewModel.previouslyFocusedElements.contains(element)
                 || validationErrorVisibilityExternal == .visible
-                || validationErrorVisibilityInternal.wrappedValue == .visible
+                || featureFormViewModel.validationErrorVisibilityInternal == .visible
             )
         }
         
@@ -378,18 +378,16 @@ extension FormElementFooter {
 private extension RangeDomain {
     /// String representations of the numeric minimum and maximum value of the range domain.
     var displayableNumericMinAndMax: (min: String, max: String)? {
-        if let min = minValue as? Float32, let max = maxValue as? Float32 {
-            return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
-        } else if let min = minValue as? Float64, let max = maxValue as? Float64 {
-            return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
-        } else if let min = minValue as? Int16, let max = maxValue as? Int16 {
-            return (min.formatted(), max.formatted())
-        } else if let min = minValue as? Int32, let max = maxValue as? Int32 {
-            return (min.formatted(), max.formatted())
-        } else if let min = minValue as? Int64, let max = maxValue as? Int64 {
-            return (min.formatted(), max.formatted())
-        } else {
-            return nil
+        func formatted<T: BinaryFloatingPoint>(_ value: T) -> String {
+            Double(value).formatted(.number.precision(.fractionLength(1...)))
+        }
+        
+        switch (minValue, maxValue) {
+        case let (min, max) as (Float32, Float32): return (formatted(min), formatted(max))
+        case let (min, max) as (Float64, Float64): return (formatted(min), formatted(max))
+        case let (min, max) as (any BinaryInteger, any BinaryInteger):
+            return ("\(min)", "\(max)")
+        default: return nil
         }
     }
 }

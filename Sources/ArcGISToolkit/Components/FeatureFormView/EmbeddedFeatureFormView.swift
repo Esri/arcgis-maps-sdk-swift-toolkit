@@ -16,130 +16,134 @@ import ArcGIS
 import SwiftUI
 
 struct EmbeddedFeatureFormView: View {
-    /// A Boolean value indicating whether the deprecated FeatureFormView initializer was used.
-    @Environment(\.formDeprecatedInitializerWasUsed) var deprecatedInitializerWasUsed
+    /// The model for the FeatureFormView containing the view.
+    @Environment(FeatureFormViewModel.self) var featureFormViewModel: FeatureFormViewModel
     
-    /// The view model for the form.
-    @State private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
-    
-    /// Initializes a form view.
-    /// - Parameter featureForm: The feature form defining the editing experience.
-    init(featureForm: FeatureForm) {
-        self.embeddedFeatureFormViewModel = EmbeddedFeatureFormViewModel(featureForm: featureForm)
-    }
+    /// The feature form defining the editing experience.
+    let form: FeatureForm
     
     var body: some View {
-        ScrollViewReader { scrollViewProxy in
-            ScrollView {
-                VStack(alignment: .leading) {
-                    if deprecatedInitializerWasUsed, !embeddedFeatureFormViewModel.title.isEmpty {
-                        FormHeader(title: embeddedFeatureFormViewModel.title)
-                        Divider()
+        if let embeddedFeatureFormViewModel {
+            ScrollViewReader { scrollView in
+                Group {
+                    let form = Form { sections }
+#if RELEASE
+                    form
+#else
+                    if CommandLine.arguments.contains("-testCase") {
+                        @Bindable var model = embeddedFeatureFormViewModel
+                        form
+                            .searchable(
+                                text: $model.elementFilterPhrase,
+                                placement: .navigationBarDrawer(displayMode: .always),
+                                prompt: Text(
+                                    "Filter Elements",
+                                    bundle: .toolkitModule,
+                                    comment: """
+                                        Label for a text field used to 
+                                        filter visible elements in a form.
+                                        """
+                                )
+                            )
+                    } else {
+                        form
                     }
-                    ForEach(embeddedFeatureFormViewModel.visibleElements, id: \.self) { element in
-                        makeElement(element)
-                    }
-                    if let attachmentsElement = embeddedFeatureFormViewModel.featureForm.defaultAttachmentsElement {
-                        // The Toolkit currently only supports AttachmentsFormElements via the
-                        // default attachments element. Once AttachmentsFormElements can be authored
-                        // this can call makeElement(_:) instead and makeElement(_:) should have a
-                        // case added for AttachmentsFormElement.
-                        AttachmentsFeatureElementView(
-                            formElement: attachmentsElement,
-                            formViewModel: embeddedFeatureFormViewModel
-                        )
+#endif
+                }
+                .onChange(of: embeddedFeatureFormViewModel.focusedElement) { _, newFocusedElement in
+                    guard let newFocusedElement else { return }
+                    // The navigation bar may obscure section headers (FB19740517).
+                    withAnimation {
+                        scrollView.scrollTo(newFocusedElement, anchor: .top)
                     }
                 }
             }
-            .task {
-                for await hasEdits in embeddedFeatureFormViewModel.featureForm.$hasEdits.dropFirst() {
-                    if !hasEdits {
-                        embeddedFeatureFormViewModel.previouslyFocusedElements.removeAll()
-                    }
-                }
+            .environment(embeddedFeatureFormViewModel)
+            .featureFormToolbar(form, isAForm: true) {
+                featureFormViewModel.removeModel(form)
             }
-            .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
-                if let focusedElement = embeddedFeatureFormViewModel.focusedElement {
-                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
-                }
-            }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(embeddedFeatureFormViewModel.title)
             .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
                 embeddedFeatureFormViewModel.title = newTitle
             }
-            .navigationBarTitleDisplayMode(
-                .inline,
-                isApplied: !deprecatedInitializerWasUsed
+            .preference(
+                key: PresentedFeatureFormPreferenceKey.self,
+                value: .init(object: embeddedFeatureFormViewModel)
             )
-            .navigationTitle(
-                embeddedFeatureFormViewModel.title,
-                isApplied: !deprecatedInitializerWasUsed
-            )
-        }
 #if os(iOS)
-        .scrollDismissesKeyboard(.immediately)
+            .scrollDismissesKeyboard(.immediately)
 #endif
-        .environment(embeddedFeatureFormViewModel)
-        .padding([.horizontal])
-        .preference(
-            key: PresentedFeatureFormPreferenceKey.self,
-            value: .init(object: embeddedFeatureFormViewModel.featureForm)
-        )
-        .task {
-            await embeddedFeatureFormViewModel.initialEvaluation()
         }
-        .featureFormToolbar(embeddedFeatureFormViewModel.featureForm, isAForm: true)
+    }
+    
+    /// The view model for the form.
+    var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+        featureFormViewModel.getModel(form)
     }
 }
 
 extension EmbeddedFeatureFormView {
-    /// Makes UI for a form element.
+    /// Returns the section for the given form element.
+    ///
+    /// Padding is added to each footer to provide visual separation between
+    /// elements.
     /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeElement(_ element: FormElement) -> some View {
+    @ViewBuilder func section(for element: FormElement) -> some View {
         switch element {
         case let element as GroupFormElement:
-            GroupFormElementView(element: element) { internalMakeElement($0) }
+            GroupFormElementView(element: element, viewCreator: content(for:))
         default:
-            internalMakeElement(element)
-        }
-    }
-    
-    /// Makes UI for a field form element or a text form element.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func internalMakeElement(_ element: FormElement) -> some View {
-        switch element {
-        case let element as FieldFormElement:
-            makeFieldElement(element)
-        case let element as TextFormElement:
-            makeTextElement(element)
-        case let element as UtilityAssociationsFormElement:
-            if !deprecatedInitializerWasUsed {
-                makeUtilityAssociationsFormElement(element)
+            Section {
+                content(for: element)
+            } header: {
+                FormElementHeader(element: element)
+            } footer: {
+                FormElementFooter(element: element)
+                    .padding(.bottom)
             }
-        default:
-            EmptyView()
+            .textCase(nil)
         }
     }
     
-    /// Makes UI for a field form element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-        if !(element.input is UnsupportedFormInput) {
-            FormElementWrapper(element: element)
-            Divider()
+    /// Returns content for the section of the given form element.
+    /// - Parameter element: The element to generate the body for.
+    @ViewBuilder func content(for element: FormElement) -> some View {
+        if let embeddedFeatureFormViewModel {
+            switch element {
+            case let element as AttachmentsFormElement:
+                AttachmentsFeatureElementView(
+                    formElement: element,
+                    formViewModel: embeddedFeatureFormViewModel
+                )
+            case let element as FieldFormElement where !(element.input is UnsupportedFormInput):
+                FieldFormElementView(element: element)
+            case let element as TextFormElement:
+                TextFormElementView(element: element)
+            case let element as UtilityAssociationsFormElement:
+                FeatureFormView.UtilityAssociationsFormElementView(element: element)
+            default:
+                EmptyView()
+            }
         }
     }
     
-    /// Makes UI for a text form element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeTextElement(_ element: TextFormElement) -> some View {
-        TextFormElementView(element: element)
-        Divider()
-    }
-    
-    /// Makes UI for a utility associations element including a divider beneath it.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeUtilityAssociationsFormElement(_ element: UtilityAssociationsFormElement) -> some View {
-        FormElementWrapper(element: element)
-        Divider()
+    /// The sections for all visible form elements.
+    @ViewBuilder var sections: some View {
+        if let visibleElements = embeddedFeatureFormViewModel?.visibleElements {
+            ForEach(visibleElements, id: \.self, content: section(for:))
+        } else {
+            ContentUnavailableView {
+                Label {
+                    Text(
+                        "This form is empty.",
+                        bundle: .toolkitModule,
+                        comment: "A notice communicating that a feature form has no elements."
+                    )
+                } icon: {
+                    Image(systemName: "text.page.slash.fill")
+                }
+            }
+        }
     }
 }

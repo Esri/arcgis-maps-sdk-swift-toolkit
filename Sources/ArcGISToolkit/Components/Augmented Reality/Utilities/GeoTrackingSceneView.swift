@@ -133,6 +133,7 @@ public struct GeoTrackingSceneView: View {
                         arViewProxy.session.run(configuration, options: .resetTracking)
                     }
                     .allowsHitTesting(false)
+                    .ignoresSafeArea()
             }
 #endif
         }

@@ -1,4 +1,4 @@
-// Copyright 2023 Esri
+// Copyright 2025 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,16 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+import Foundation
 
-/// A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
-struct FormHeader: View /* Deprecated */ {
-    /// The title defined for the form.
-    let title: String
+extension UserDefaults {
+    /// The value `-layerName` launch argument.
+    var layerName: String? {
+        string(forKey: "layerName")
+    }
     
-    var body: some View {
-        Text(title)
-            .font(.title)
-            .fontWeight(.bold)
+    /// The value `-objectID` launch argument.
+    var objectID: Int? {
+        guard let objectIDString = string(forKey: "objectID") else {
+            return nil
+        }
+        return Int(objectIDString)
     }
 }

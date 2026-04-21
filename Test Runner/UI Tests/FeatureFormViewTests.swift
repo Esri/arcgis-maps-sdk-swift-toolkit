@@ -30,21 +30,71 @@ final class FeatureFormViewTests: XCTestCase {
     func openTestCase(id: String = #function) {
         let app = XCUIApplication()
         let formViewTestsButton = app.buttons["Feature Form Tests"]
+        
+        // Pass the name of the test function as the testCase, dropping the parentheses.
+        let testCaseArgument = ["-testCase", "\(id.dropLast(2))"]
+        app.launchArguments.append(contentsOf: testCaseArgument)
+        
         // Open tests
         app.launch()
         formViewTestsButton.tap()
+    }
+    
+    /// Verify that the attachments form element load isn't cancelled early when it's pushed below the fold
+    /// by a group element.
+    func testAttachmentLoadDurability() {
+        let app = XCUIApplication()
+        let attachmentLabel = app.staticTexts["esri.jpg"]
+        let elementTitle = "Attachments"
+        let formTitle = app.staticTexts["Group and Attachments"]
         
-        // Select test case
-        let testCase = String(id.dropLast(2))
-        let textField = app.textFields["Search"]
-        textField.tap()
-        textField.typeText(testCase)
-        let testCaseButton = app.buttons[testCase]
-        XCTAssertTrue(
-            testCaseButton.waitForExistence(timeout: 5),
-            "The button doesn't exist for \(testCase)"
-        )
-        testCaseButton.tap()
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        
+        attachmentLabel.assertExistence()
+    }
+    
+    func testAttachmentRenaming() {
+        let app = XCUIApplication()
+        let activityIndicator = app.activityIndicators.firstMatch
+        let attachmentLabel = app.staticTexts["EsriHQ.jpeg"]
+        let elementTitle = "Attachments"
+        let formTitle = app.staticTexts["Esri Location"]
+        let nameField = app.textFields["New name"]
+        let okButton = app.buttons["OK"]
+        let renamedAttachmentLabel = app.staticTexts["EsriHQ\(#function).jpeg"]
+#if targetEnvironment(macCatalyst)
+        let rename = app.menuItems["Rename"]
+#else
+        let rename = app.buttons["Rename"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        
+        activityIndicator.assertNonExistence()
+        
+        attachmentLabel.assertExistence()
+        
+#if targetEnvironment(macCatalyst)
+        attachmentLabel.rightClick()
+#else
+        attachmentLabel.press(forDuration: 1)
+#endif
+        
+        rename.assertExistenceAndTap()
+        
+        nameField.assertExistenceAndTap()
+        
+        app.typeText(#function)
+        
+        okButton.assertExistenceAndTap()
+        
+        renamedAttachmentLabel.assertExistence()
     }
     
     // - MARK: Test case 1: Text Box with no hint, no description, value not required
@@ -53,7 +103,8 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_1_1() throws {
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
-        let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+        let elementTitle = "Single Line No Value, Placeholder or Description"
+        let elementValue = app.staticTexts[elementTitle]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
@@ -61,10 +112,9 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        app.filterElements(elementTitle)
+        
+        elementValue.assertExistence()
         
 #if !targetEnvironment(macCatalyst)
         XCTAssertFalse(
@@ -81,25 +131,16 @@ final class FeatureFormViewTests: XCTestCase {
         // Give focus to the target text field.
         textField.tap()
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        elementValue.assertExistence()
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
             "Maximum 256 characters"
         )
         
-        XCTAssertTrue(
-            characterIndicator.exists,
-            "The character indicator doesn't exist."
-        )
+        characterIndicator.assertExistence()
         
         XCTAssertEqual(
             characterIndicator.label,
@@ -112,74 +153,48 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
-        let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+        let elementTitle = "Single Line No Value, Placeholder or Description"
+        let elementLabel = app.staticTexts[elementTitle]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
-        let returnButton = app.buttons["Return"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        textField.tap()
+        app.filterElements(elementTitle)
+        
+        textField.assertExistenceAndTap()
         
         app.typeText("Sample text")
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        elementLabel.assertExistence()
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
             "Maximum 256 characters"
         )
         
-        XCTAssertTrue(
-            characterIndicator.exists,
-            "The character count doesn't exist."
-        )
+        characterIndicator.assertExistence()
         
-        XCTAssertEqual(
-            characterIndicator.label,
-            "11"
-        )
+        characterIndicator.assertLabel("11")
         
-        XCTAssertTrue(
-            clearButton.exists,
-            "The clear button doesn't exist."
-        )
+        clearButton.assertExistence()
         
-#if targetEnvironment(macCatalyst)
         app.typeText("\r")
-#else
-        returnButton.tap()
-#endif
         
-        XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The title isn't hittable."
-        )
+        elementLabel.assertHittable()
         
         XCTAssertFalse(
             footer.isHittable,
             "The footer is hittable."
         )
         
-        XCTAssertTrue(
-            clearButton.isHittable,
-            "The clear button isn't hittable."
-        )
+        clearButton.assertHittable()
         
-        XCTAssertTrue(
-            textField.isHittable,
-            "The text field isn't hittable."
-        )
+        textField.assertHittable()
     }
     
     /// Test case 1.3: unfocused and focused state, with error value (> 256 chars)
@@ -189,82 +204,50 @@ final class FeatureFormViewTests: XCTestCase {
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
-        let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
-        let returnButton = app.buttons["Return"]
+        let elementTitle = "Single Line No Value, Placeholder or Description"
+        let elementLabel = app.staticTexts[elementTitle]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElements(elementTitle)
+        
         textField.tap()
         
         app.typeText(.loremIpsum257)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The title doesn't exist."
-        )
+        elementLabel.assertExistence()
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
             "Maximum 256 characters"
         )
         
-        XCTAssertTrue(
-            characterIndicator.exists,
-            "The character count doesn't exist."
-        )
+        characterIndicator.assertExistence()
         
-        XCTAssertEqual(
-            characterIndicator.label,
-            "257"
-        )
+        characterIndicator.assertLabel("257")
         
-        XCTAssertTrue(
-            clearButton.exists,
-            "The clear button doesn't exist."
-        )
+        clearButton.assertExistence()
         
-#if targetEnvironment(macCatalyst)
         app.typeText("\r")
-#else
-        returnButton.tap()
-#endif
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The title doesn't exist."
-        )
+        elementLabel.assertExistence()
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
             "Maximum 256 characters"
         )
         
-        XCTAssertFalse(
-            characterIndicator.exists,
-            "The character count exists."
-        )
+        characterIndicator.assertNonExistence()
         
-        XCTAssertTrue(
-            clearButton.isHittable,
-            "The clear button isn't hittable."
-        )
+        clearButton.assertHittable()
         
-        XCTAssertTrue(
-            textField.isHittable,
-            "The text field isn't hittable."
-        )
+        textField.assertHittable()
     }
     
     func testCase_1_4() {
@@ -276,10 +259,7 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertEqual(
-            textField.value as? String,
-            ""
-        )
+        XCTAssertTrue(textField.stringValue?.isEmpty ?? false)
         
         XCTAssertEqual(
             footer.label,
@@ -295,18 +275,14 @@ final class FeatureFormViewTests: XCTestCase {
             "Enter value from 2.0 to 5.0"
         )
         
-        // Highlight/select the current value and replace it
-        textField.doubleTap()
+        // Replace the current value with 3
+        textField.typeText(XCUIKeyboardKey.delete.rawValue)
         textField.typeText("3")
         
-        expectation(
-            for: NSPredicate(format: "label == \"Range domain 2-5\""),
-            evaluatedWith: footer
-        )
-        waitForExpectations(timeout: 10, handler: nil)
+        footer.assertLabel("Range domain 2-5")
         
-        // Highlight/select the current value and replace it
-        textField.doubleTap()
+        // Replace the current value with 6
+        textField.typeText(XCUIKeyboardKey.delete.rawValue)
         textField.typeText("6")
         
         XCTAssertEqual(
@@ -320,57 +296,56 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 2.1: Unfocused and focused state, no value, date required
     func testCase_2_1() throws {
         let app = XCUIApplication()
-        let calendarImage = app.images["Required Date Calendar Image"]
-        let clearButton = app.buttons["Required Date Clear Button"]
-        let datePicker = app.datePickers["Required Date Date Picker"]
-        let fieldValue = app.staticTexts["Required Date Value"]
-        let footer = app.staticTexts["Required Date Footer"]
+        let elementTitle = "Required Date"
+        let calendarImage = app.images["\(elementTitle) Calendar Image"]
+        let clearButton = app.buttons["\(elementTitle) Clear Button"]
+        let datePicker = app.datePickers["\(elementTitle) Date Picker"]
+        let elementValue = app.staticTexts["\(elementTitle) Value"]
+        let footer = app.staticTexts["\(elementTitle) Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let nowButton = app.buttons["Required Date Now Button"]
+        let nowButton = app.buttons["\(elementTitle) Now Button"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        if fieldValue.label != "No Value" {
+        app.filterElements(elementTitle)
+        
+        if elementValue.label != "No Value" {
             clearButton.tap()
         }
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "No Value"
         )
         
-        XCTAssertTrue(
-            footer.exists,
-            "The required label doesn't exist."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
             "Date Entry is Required"
         )
         
+        calendarImage.assertExistence()
+        
+        elementValue.tap()
+        
+        datePicker.assertExistence()
+        
+        // Verify that the date picker defaulted selection to the current date
+        // and time, accounting for the possibility that the minute has changed
+        // since the picker was opened.
         XCTAssertTrue(
-            calendarImage.exists,
-            "The calendar image doesn't exist."
+            [
+                Date.now.formatted(),
+                Date.now.addingTimeInterval(-60).formatted()
+            ]
+                .contains(elementValue.label)
         )
         
-        fieldValue.tap()
+        nowButton.assertHittable()
         
-        XCTAssertTrue(
-            datePicker.exists,
-            "The date picker doesn't exist."
-        )
-        
-        XCTAssertEqual(
-            fieldValue.label,
-            Date.now.formatted()
-        )
-        
-        XCTAssertTrue(
-            nowButton.isHittable,
-            "The now button isn't hittable."
-        )
+        elementValue.tap()
         
         XCTAssertEqual(
             footer.label,
@@ -381,22 +356,29 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 2.2: Focused and unfocused state, with value (populated)
     func testCase_2_2() {
         let app = XCUIApplication()
-        let datePicker = app.datePickers["Launch Date and Time for Apollo 11 Date Picker"]
-        let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
-        let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
-        let footer = app.staticTexts["Launch Date and Time for Apollo 11 Footer"]
+        let elementTitle = "Launch Date and Time for Apollo 11"
+        let datePicker = app.datePickers["\(elementTitle) Date Picker"]
+        let elementLabel = app.staticTexts[elementTitle]
+        let elementValue = app.staticTexts["\(elementTitle) Value"]
+        let footer = app.staticTexts["\(elementTitle) Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let nowButton = app.buttons["Launch Date and Time for Apollo 11 Now Button"]
+        let nowButton = app.buttons["\(elementTitle) Now Button"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        fieldValue.tap()
+        app.filterElements(elementTitle)
         
-        XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
+        elementLabel.assertExistence()
+        
+        XCTAssertEqual(
+            footer.label,
+            "Enter the launch date and time (July 16, 1969 13:32 UTC)"
         )
+        
+        elementValue.tap()
+        
+        datePicker.assertExistence()
         
         let localDate = Calendar.current.date(
             from: DateComponents(
@@ -405,31 +387,15 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             localDate?.formatted()
         )
         
-        XCTAssertEqual(
-            footer.label,
-            "Enter the launch date and time (July 16, 1969 13:32 UTC)"
-        )
+        nowButton.assertHittable()
         
-        XCTAssertTrue(
-            datePicker.exists,
-            "The date picker doesn't exist."
-        )
+        elementValue.tap()
         
-        XCTAssertTrue(
-            nowButton.isHittable,
-            "The now button isn't hittable."
-        )
-        
-        fieldValue.tap()
-        
-        XCTAssertTrue(
-            fieldValue.isHittable,
-            "The label isn't hittable."
-        )
+        elementValue.assertHittable()
         
         XCTAssertFalse(
             datePicker.isHittable,
@@ -441,7 +407,7 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_2_3() {
         let app = XCUIApplication()
         let datePicker = app.datePickers["Launch Date for Apollo 11 Date Picker"]
-        let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
+        let elementValue = app.staticTexts["Launch Date for Apollo 11 Value"]
         let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
         let todayButton = app.buttons["Launch Date for Apollo 11 Today Button"]
@@ -449,22 +415,16 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            footer.isHittable,
-            "The footer isn't hittable."
-        )
+        footer.assertExistence()
         
-        fieldValue.tap()
+        elementValue.tap()
         
         XCTAssertEqual(
             footer.label,
             "Enter the Date for the Apollo 11 launch"
         )
         
-        XCTAssertTrue(
-            fieldValue.isHittable,
-            "The field value isn't hittable."
-        )
+        elementValue.assertHittable()
         
         let localDate = Calendar.current.date(
             from: DateComponents(
@@ -472,65 +432,42 @@ final class FeatureFormViewTests: XCTestCase {
             )
         )
         
-        XCTExpectFailure("Time should not be included. Apollo #355")
-        
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             localDate?.formatted(.dateTime.day().month().year())
         )
         
-        XCTAssertTrue(
-            datePicker.isHittable,
-            "The date picker isn't hittable."
-        )
+        datePicker.assertHittable()
         
-        XCTAssertTrue(
-            todayButton.isHittable,
-            "The today button isn't hittable."
-        )
+        todayButton.assertHittable()
     }
     
     /// Test case 2.4: Maximum date
     func testCase_2_4() {
         let app = XCUIApplication()
-        let clearButton = app.buttons["Launch Date Time End Clear Button"]
-        let fieldValue = app.staticTexts["Launch Date Time End Value"]
-        let footer = app.staticTexts["Launch Date Time End Footer"]
+        let elementTitle = "Launch Date Time End"
+        let clearButton = app.buttons["\(elementTitle) Clear Button"]
+        let elementValue = app.staticTexts["\(elementTitle) Value"]
+        let footer = app.staticTexts["\(elementTitle) Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let nowButton = app.buttons["Launch Date Time End Now Button"]
+        let nowButton = app.buttons["\(elementTitle) Now Button"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        if fieldValue.label != "No Value" {
+        app.filterElements(elementTitle)
+        
+        if elementValue.label != "No Value" {
             clearButton.tap()
         }
         
-        fieldValue.tap()
+        footer.assertExistence()
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        elementValue.tap()
         
-        XCTAssertTrue(
-            nowButton.waitForExistence(timeout: 2.5),
-            "The Now button doesn't exist."
-        )
+        nowButton.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            nowButton.isHittable,
-            "The Now button wasn't hittable."
-        )
-        
-        nowButton.tap()
-        
-        XCTAssertTrue(
-            fieldValue.isHittable,
-            "The field wasn't hittable."
-        )
-        
-        fieldValue.tap()
+        elementValue.assertExistenceAndTap()
         
         XCTAssertEqual(
             footer.label,
@@ -544,7 +481,7 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             localDate?.formatted()
         )
     }
@@ -552,23 +489,25 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 2.5: Minimum date
     func testCase_2_5() {
         let app = XCUIApplication()
-        let datePicker = app.datePickers["start and end date time Date Picker"]
-        let fieldValue = app.staticTexts["start and end date time Value"]
-        let footer = app.staticTexts["start and end date time Footer"]
+        let elementTitle = "start and end date time"
+        let datePicker = app.datePickers["\(elementTitle) Date Picker"]
+        let elementValue = app.staticTexts["\(elementTitle) Value"]
+        let footer = app.staticTexts["\(elementTitle) Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let nowButton = app.buttons["start and end date time Now Button"]
+        let nowButton = app.buttons["\(elementTitle) Now Button"]
         let previousMonthButton = datePicker.buttons["Previous Month"]
         let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        fieldValue.tap()
+        app.filterElements(elementTitle)
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        elementValue.assertExistence()
+        
+        footer.assertExistence()
+        
+        elementValue.tap()
         
         XCTAssertEqual(
             footer.label,
@@ -581,6 +520,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         nowButton.tap()
         
+        XCTAssertTrue(julyFirstButton.waitForExistence(timeout: 5))
+        
         julyFirstButton.tap()
         
         let localDate = Calendar.current.date(
@@ -589,10 +530,7 @@ final class FeatureFormViewTests: XCTestCase {
             )
         )
         
-        XCTAssertEqual(
-            fieldValue.label,
-            localDate?.formatted()
-        )
+        elementValue.assertLabel(localDate!.formatted())
         
         XCTAssertFalse(
             previousMonthButton.isEnabled,
@@ -604,27 +542,19 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_2_6() {
         let app = XCUIApplication()
         let clearButton = app.buttons["Launch Date and Time for Apollo 11 Clear Button"]
-        let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
-        let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
+        let elementLabel = app.staticTexts["Launch Date and Time for Apollo 11"]
+        let elementValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
         let formTitle = app.staticTexts["DateTimePoint"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
-        )
+        elementLabel.assertHittable()
         
-        XCTAssertTrue(
-            clearButton.isHittable,
-            "The clear button isn't hittable."
-        )
-        
-        clearButton.tap()
+        clearButton.assertExistenceAndTap()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "No Value"
         )
     }
@@ -634,46 +564,32 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.1: Pre-existing value, description, clear button, no value label
     func testCase_3_1() {
         let app = XCUIApplication()
-        let clearButton = app.buttons["Combo String Clear Button"]
-        let fieldTitle = app.staticTexts["Combo String"]
-        let fieldValue = app.staticTexts["Combo String Combo Box Value"]
+        let elementTitle = "Combo String"
+        let clearButton = app.buttons["\(elementTitle) Clear Button"]
+        let elementLabel = app.staticTexts[elementTitle]
+        let elementValue = app.staticTexts["\(elementTitle) Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let footer = app.staticTexts["Combo String Footer"]
+        let footer = app.staticTexts["\(elementTitle) Footer"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
-        )
+        app.filterElements(elementTitle)
         
-        XCTAssertTrue(
-            fieldValue.isHittable,
-            "The field value isn't hittable."
-        )
+        elementLabel.assertHittable()
+        
+        elementValue.assertHittable()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "String 3"
         )
         
-        XCTAssertTrue(
-            clearButton.isHittable,
-            "The clear button isn't hittable."
-        )
+        clearButton.assertExistenceAndTap()
         
-        clearButton.tap()
+        elementValue.assertLabel("No value")
         
-        XCTAssertEqual(
-            fieldValue.label,
-            "No value"
-        )
-        
-        XCTAssertTrue(
-            footer.isHittable,
-            "The footer isn't hittable."
-        )
+        footer.assertExistence()
         
         XCTAssertEqual(
             footer.label,
@@ -684,80 +600,54 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.2: No pre-existing value, no value label, options button
     func testCase_3_2() {
         let app = XCUIApplication()
-        let fieldTitle = app.staticTexts["Combo Integer"]
-        let fieldValue = app.staticTexts["Combo Integer Combo Box Value"]
+        let elementLabel = app.staticTexts["Combo Integer"]
+        let elementValue = app.staticTexts["Combo Integer Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
         let optionsButton = app.images["Combo Integer Options Button"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
-        )
+        elementLabel.assertHittable()
         
-        XCTAssertTrue(
-            fieldValue.isHittable,
-            "The field value isn't hittable."
-        )
+        elementValue.assertHittable()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "No value"
         )
         
-        XCTAssertTrue(
-            optionsButton.isHittable,
-            "The options button isn't hittable."
-        )
+        optionsButton.assertHittable()
     }
     
     /// Test case 3.3: Pick a value
     func testCase_3_3() {
         let app = XCUIApplication()
-        let doneButton = app.buttons["Done"]
-        let fieldTitle = app.staticTexts["Combo String"]
-        let fieldValue = app.staticTexts["Combo String Combo Box Value"]
+        let elementLabel = app.staticTexts["Combo String"]
+        let elementValue = app.staticTexts["Combo String Combo Box Value"]
         let firstOptionButton = app.buttons["String 1"]
         let formTitle = app.staticTexts["comboBox"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
-        )
+        elementLabel.assertHittable()
         
-        XCTAssertTrue(
-            fieldValue.isHittable,
-            "The field value isn't hittable."
-        )
+        elementValue.assertHittable()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "String 3"
         )
         
-        fieldValue.tap()
+        elementValue.tap()
         
-        XCTAssertTrue(
-            firstOptionButton.isHittable,
-            "The first option (String 1) isn't hittable."
-        )
+        firstOptionButton.assertExistenceAndTap()
         
-        firstOptionButton.tap()
-        
-        XCTAssertTrue(
-            doneButton.isHittable,
-            "The done button isn't hittable."
-        )
-        
-        doneButton.tap()
+        app.doneButton.assertExistenceAndTap()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "String 1"
         )
     }
@@ -765,43 +655,33 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.4: Picker with a noValueLabel row
     func testCase_3_4() {
         let app = XCUIApplication()
-        let doneButton = app.buttons["Done"]
-        let fieldTitle = app.staticTexts["Combo String"]
-        let fieldValue = app.staticTexts["Combo String Combo Box Value"]
+        let elementLabel = app.staticTexts["Combo String"]
+        let elementValue = app.staticTexts["Combo String Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
-        )
+        elementLabel.assertHittable()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "String 3"
         )
         
-        fieldValue.tap()
+        elementValue.tap()
         
         XCTAssertTrue(
-            noValueButton.waitForExistence(timeout: 1),
+            app.noValueComboBoxOption.waitForExistence(timeout: 1),
             "The no value button doesn't exist."
         )
         
-        noValueButton.tap()
+        app.noValueComboBoxOption.tap()
         
-        XCTAssertTrue(
-            doneButton.exists,
-            "The done button doesn't exist."
-        )
-        
-        doneButton.tap()
+        app.doneButton.assertExistenceAndTap()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "No value"
         )
     }
@@ -809,25 +689,23 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.5: Required Value
     func testCase_3_5() {
         let app = XCUIApplication()
-        let clearButton = app.buttons["Required Combo Box Clear Button"]
-        let doneButton = app.buttons["Done"]
-        let fieldTitle = app.staticTexts["Required Combo Box *"]
-        let fieldValue = app.staticTexts["Required Combo Box Combo Box Value"]
-        let footer = app.staticTexts["Required Combo Box Footer"]
+        let elementTitle = "Required Combo Box"
+        let clearButton = app.buttons["\(elementTitle) Clear Button"]
+        let elementLabel = app.staticTexts["\(elementTitle) *"]
+        let elementValue = app.staticTexts["\(elementTitle) Combo Box Value"]
+        let footer = app.staticTexts["\(elementTitle) Footer"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
         let oakButton = app.buttons["Oak"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        app.filterElements(elementTitle)
+        
+        elementLabel.assertExistence()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "Pine"
         )
         
@@ -836,34 +714,18 @@ final class FeatureFormViewTests: XCTestCase {
             "The clear button is hittable."
         )
         
-        XCTAssertTrue(
-            footer.exists,
-            "The footer doesn't exist."
-        )
+        footer.assertExistence()
         
-        fieldValue.tap()
+        elementValue.tap()
         
-        XCTAssertFalse(
-            noValueButton.exists,
-            "The no value button exists but it should not."
-        )
+        app.noValueComboBoxOption.assertNonExistence()
         
-        XCTAssertTrue(
-            oakButton.exists,
-            "The Oak button doesn't exist."
-        )
+        oakButton.assertExistenceAndTap()
         
-        oakButton.tap()
-        
-        XCTAssertTrue(
-            doneButton.exists,
-            "The done button doesn't exist."
-        )
-        
-        doneButton.tap()
+        app.doneButton.assertExistenceAndTap()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "Oak"
         )
     }
@@ -871,9 +733,9 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.6: noValueOption is 'Hide'
     func testCase_3_6() throws {
         let app = XCUIApplication()
-        let doneButton = app.buttons["Done"]
-        let fieldTitle = app.staticTexts["Combo No Value False"]
-        let fieldValue = app.staticTexts["Combo No Value False Combo Box Value"]
+        let elementTitle = "Combo No Value False"
+        let elementLabel = app.staticTexts[elementTitle]
+        let elementValue = app.staticTexts["Combo No Value False Combo Box Value"]
         let firstOption = app.buttons["First"]
         let formTitle = app.staticTexts["comboBox"]
         let noValueButton = app.buttons["No Value"]
@@ -882,51 +744,24 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        app.filterElements(elementTitle)
         
-        if #available(iOS 18.0, *) {
-            XCTAssertFalse(
-                fieldValue.exists,
-                "The field value exists but it should not because it is empty."
-            )
-        } else {
-            XCTAssertEqual(
-                fieldValue.label,
-                ""
-            )
-        }
+        elementLabel.assertExistence()
         
-        optionsButton.tap()
+        XCTAssertTrue(elementValue.label.isEmpty)
         
-        XCTAssertTrue(
-            firstOption.waitForExistence(timeout: 1),
-            "The First option doesn't exist."
-        )
+        optionsButton.assertExistenceAndTap()
         
-        XCTAssertFalse(
-            noValueButton.exists,
-            "No Value exists as an option but it shouldn't."
-        )
+        firstOption.assertExistence()
         
-        XCTAssertTrue(
-            firstOption.isHittable,
-            "The First option isn't hittable."
-        )
+        noValueButton.assertNonExistence()
         
-        firstOption.tap()
+        firstOption.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            doneButton.exists,
-            "The done button doesn't exist."
-        )
-        
-        doneButton.tap()
+        app.doneButton.assertExistenceAndTap()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "First"
         )
     }
@@ -934,127 +769,97 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 3.7: Unsupported value
     func testCase_3_7() throws {
         let app = XCUIApplication()
-        let fieldTitle = app.staticTexts["Unsupported Value"]
-        let fieldValue = app.staticTexts["Unsupported Value Combo Box Value"]
+        let elementTitle = "Unsupported Value"
+        let elementLabel = app.staticTexts[elementTitle]
+        let elementValue = app.staticTexts["\(elementTitle) Combo Box Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let noValueButton = app.buttons["No value"]
-        let unsupportedValueSectionHeader = app.staticTexts["Unsupported Value Unsupported Value Section"]
+        let unsupportedValueSectionHeader = app.staticTexts["\(elementTitle) Unsupported Value Section"]
         let unsupportedValue = app.buttons["0"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        app.filterElements(elementTitle)
+        
+        elementLabel.assertExistence()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "0"
         )
         
-        fieldValue.tap()
+        elementValue.tap()
         
-        XCTAssertTrue(
-            unsupportedValueSectionHeader.waitForExistence(timeout: 1),
-            "The Unsupported Value section doesn't exist."
-        )
+        unsupportedValueSectionHeader.assertExistence()
         
-        XCTAssertTrue(
-            unsupportedValue.exists,
-            "The Unsupported Value doesn't exist."
-        )
+        unsupportedValue.assertExistence()
         
-        XCTAssertTrue(
-            noValueButton.exists,
-            "No Value doesn't exist."
-        )
+        app.noValueComboBoxOption.assertExistenceAndTap()
         
-        noValueButton.tap()
-        
-        XCTAssertFalse(
-            unsupportedValueSectionHeader.exists,
-            "The Unsupported Value section exists."
-        )
+        unsupportedValueSectionHeader.assertNonExistence()
     }
     
     // - MARK: Test case 4: Radio Buttons input type
     
     /// Test case 4.1: Test regular selection
-    func testCase_4_1() {
+    func testCase_4_1() throws {
         let app = XCUIApplication()
-        let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
-        let fieldTitle = app.staticTexts["Radio Button Text *"]
+        let birdOption = app.buttons["bird"]
+        let dogOption = app.buttons["dog"]
+        let elementTitle = "Radio Button Text"
+        let elementLabel = app.staticTexts["\(elementTitle) *"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let dogOption = app.buttons["Radio Button Text dog Radio Button"]
-        let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
-        let noValueOption = app.buttons["Radio Button Text No Value Radio Button"]
+        let noValueOption = app.buttons["No Value"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        app.filterElements(elementTitle)
         
-        XCTAssertTrue(
-            birdOptionCheckmark.exists,
-            "The bird option isn't selected."
-        )
+        elementLabel.assertExistence()
+        noValueOption.assertExistence()
+        birdOption.assertExistence()
+        dogOption.assertExistence()
         
-        XCTAssertFalse(
-            dogOptionCheckmark.exists,
-            "The dog option is selected."
-        )
+        XCTAssertTrue(birdOption.isSelected)
+        XCTAssertFalse(dogOption.isSelected)
         
-        dogOption.tap()
+        app.buttons["dog"].tap()
         
-        XCTAssertTrue(
-            dogOptionCheckmark.exists,
-            "The dog option isn't selected."
-        )
-        
-        XCTAssertFalse(
-            birdOptionCheckmark.exists,
-            "The bird option is selected."
-        )
-        
-        XCTAssertTrue(
-            noValueOption.exists,
-            "The no value option doesn't exist."
-        )
+        XCTAssertTrue(dogOption.isSelected)
+        XCTAssertFalse(birdOption.isSelected)
     }
     
     /// Test case 4.2: Test radio button fallback to combo box
     func testCase_4_2() {
         let app = XCUIApplication()
-        let field1 = app.staticTexts["Fallback 1 Combo Box Value"]
+        let comboBoxOption = app.buttons["Fallback 1 Combo Box Value-Fallback 1 Options Button"]
+        let element1Title = "Fallback 1"
+        let element1Value = app.staticTexts["\(element1Title) Combo Box Value"]
+        let element2Title = "No Value Enabled"
+        let element3Title = "No Value Disabled"
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let noValueDisabledRadioButton = app.buttons["No Value Disabled One Radio Button"]
-        let noValueEnabledRadioButton = app.buttons["No Value Enabled N/A Radio Button"]
+        let naOption = app.buttons["N/A"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
+        app.filterElements(element1Title)
+        
         // Verify the Radio Button fallback to Combo Box was successful.
-        XCTAssertTrue(
-            field1.exists,
-            "The combo box doesn't exist."
-        )
+        element1Value.assertExistence()
+        comboBoxOption.assertExistence()
         
-        // Verify the radio buttons are shown even when the value option is enabled.
-        XCTAssertTrue(
-            noValueEnabledRadioButton.exists,
-            "The radio button doesn't exist."
-        )
+        app.filterElements(element2Title)
         
-        // Verify the radio buttons are still shown even when the value option is disabled.
-        XCTAssertTrue(
-            noValueDisabledRadioButton.exists,
-            "The radio button doesn't exist."
-        )
+        // Verify the radio buttons are shown even when the no value option is enabled.
+        naOption.assertExistence()
+        XCTAssertTrue(naOption.isSelected)
+        
+        app.filterElements(element3Title)
+        
+        // Verify the radio buttons are still shown even when the no value option is disabled.
+        app.buttons["One"].assertExistence()
     }
     
     // - MARK: Test case 5: Switch input type
@@ -1062,165 +867,142 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 5.1: Test switch on
     func testCase_5_1() {
         let app = XCUIApplication()
-        let fieldTitle = app.staticTexts["switch integer"]
+        let elementTitle = "switch integer"
+        let elementLabel = app.staticTexts[elementTitle]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let switchView = app.switches["switch integer Switch"]
+        
+#if targetEnvironment(macCatalyst)
+        let switchView = app.checkBoxes["\(elementTitle) Switch"]
+#else
+        let switchView = app.switches["\(elementTitle) Switch"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title isn't hittable."
-        )
+        app.filterElements(elementTitle)
+        
+        elementLabel.assertExistence()
         
         XCTAssertEqual(
             switchView.label,
             "2"
         )
         
-        switchView.tap()
+#if targetEnvironment(macCatalyst) || os(visionOS)
+        switchView.assertExistenceAndTap()
+#else
+        switchView.switches.firstMatch.assertExistenceAndTap()
+#endif
         
-        XCTAssertEqual(
-            switchView.label,
-            "1"
-        )
+        switchView.assertLabel("1")
     }
     
     /// Test case 5.2: Test switch off
     func testCase_5_2() {
         let app = XCUIApplication()
-        let fieldTitle = app.staticTexts["switch string"]
+        let elementTitle = "switch string"
+        let elementLabel = app.staticTexts[elementTitle]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let switchView = app.switches["switch string Switch"]
+        
+#if targetEnvironment(macCatalyst)
+        let switchView = app.checkBoxes["\(elementTitle) Switch"]
+#else
+        let switchView = app.switches["\(elementTitle) Switch"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
-        )
+        app.filterElements(elementTitle)
+        
+        elementLabel.assertHittable()
         
         XCTAssertEqual(
             switchView.label,
             "1"
         )
         
-        XCTAssertTrue(
-            switchView.isHittable,
-            "The switch isn't hittable."
-        )
+#if targetEnvironment(macCatalyst) || os(visionOS)
+        switchView.assertExistenceAndTap()
+#else
+        switchView.switches.firstMatch.assertExistenceAndTap()
+#endif
         
-        switchView.tap()
-        
-        XCTAssertEqual(
-            switchView.label,
-            "2"
-        )
+        switchView.assertLabel("2")
     }
     
     /// Test case 5.3: Test switch with no value
     func testCase_5_3() {
         let app = XCUIApplication()
-        let fieldTitle = app.staticTexts["switch double"]
-        let fieldValue = app.staticTexts["switch double Combo Box Value"]
+        let elementLabel = app.staticTexts["switch double"]
+        let elementValue = app.staticTexts["switch double Combo Box Value"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            fieldTitle.exists,
-            "The field title doesn't exist."
-        )
+        elementLabel.assertExistence()
         
-        XCTAssertTrue(
-            fieldValue.exists,
-            "The combo box doesn't exist."
-        )
+        elementValue.assertExistence()
     }
     
     /// Test case 6.1: Test initially expanded and collapsed
     func testCase_6_1() {
         let app = XCUIApplication()
         let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
+        let collapsedGroupTitle = "Group with Multiple Form Elements 2"
+        let expandedGroupTitle = "Group with Multiple Form Elements"
         let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         
 #if targetEnvironment(macCatalyst)
-        let collapsedGroup = app.disclosureTriangles["Group with Multiple Form Elements 2"]
-        let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
-        let expandedGroupDescription = app.disclosureTriangles["Group with Multiple Form Elements Description"]
+        let collapsedGroup = app.buttons["\(collapsedGroupTitle), This group is not expanded for initial state"]
+        let expandedGroup = app.buttons["\(expandedGroupTitle), This Group is 'Expand initial state'\nThis group is Visible"]
 #else
-        let collapsedGroup = app.staticTexts["Group with Multiple Form Elements 2"]
-        let expandedGroup = app.staticTexts["Group with Multiple Form Elements"]
-        let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
+        let collapsedGroup = app.staticTexts[collapsedGroupTitle]
+        let expandedGroup = app.staticTexts[expandedGroupTitle]
 #endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            expandedGroup.exists,
-            "The first group header doesn't exist."
-        )
+        app.filterElements(expandedGroupTitle)
         
-        XCTAssertTrue(
-            expandedGroupDescription.exists,
-            "The expanded group's description doesn't exist."
-        )
-        
-        XCTAssertEqual(
-            expandedGroupDescription.label,
-            "This Group is 'Expand initial state'\nThis group is Visible"
-        )
+        expandedGroup.assertExistence()
         
         // Confirm the first element of the expanded group exists.
-        XCTAssertTrue(
-            expandedGroupFirstElement.exists,
-            "The first group element doesn't exist."
-        )
+        expandedGroupFirstElement.assertExistence()
         
-        XCTAssertTrue(
-            collapsedGroup.exists,
-            "The collapsed group header doesn't exist."
-        )
+        app.filterElements(collapsedGroupTitle)
+        
+        collapsedGroup.assertExistence()
         
         // Confirm the first element of the collapsed group doesn't exist.
-        XCTAssertFalse(
-            collapsedGroupFirstElement.exists,
-            "The first group element exists but should be hidden."
-        )
+        collapsedGroupFirstElement.assertNonExistence()
     }
     
     /// Test case 6.2: Test visibility of empty group
-    func testCase_6_2() {
+    func testCase_6_2() throws {
         let app = XCUIApplication()
+        let group1ElementTitle = "Group with children that are visible dependent"
+        let group1TextElementLabel = app.staticTexts["single line text 3"]
+        let group2ElementTitle = "Group with Multiple Form Elements"
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
-        let groupElement = app.staticTexts["single line text 3"]
-        let showElementsButton = app.buttons["show invisible form element"]
-        
-#if targetEnvironment(macCatalyst)
-        let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
-        let hiddenElementsGroupDescription = app.disclosureTriangles["Group with children that are visible dependent Description"]
-#else
-        let hiddenElementsGroup = app.staticTexts["Group with children that are visible dependent"]
-        let hiddenElementsGroupDescription = app.staticTexts["Group with children that are visible dependent Description"]
-#endif
+        let hiddenElementsGroup = app.staticTexts[group1ElementTitle]
+        let hiddenElementsGroupDescription = app.staticTexts["\(group1ElementTitle) Description"]
+        let radioOptionA = app.buttons["No value"]
+        let radioOptionB = app.buttons["Everything is working great"]
+        let radioOptionC = app.buttons["show invisible form element"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            hiddenElementsGroup.exists,
-            "The group header doesn't exist."
-        )
+        app.filterElements(group1ElementTitle)
         
-        XCTAssertTrue(
-            hiddenElementsGroupDescription.exists,
-            "The expanded group's description doesn't exist."
-        )
+        hiddenElementsGroup.assertExistence()
+        
+        hiddenElementsGroupDescription.assertExistence()
         
         XCTAssertEqual(
             hiddenElementsGroupDescription.label,
@@ -1228,79 +1010,107 @@ final class FeatureFormViewTests: XCTestCase {
         )
         
         // Confirm the first element of the conditional group doesn't exist.
-        XCTAssertFalse(
-            groupElement.exists,
-            "The first group element exists but should be hidden."
-        )
+        group1TextElementLabel.assertNonExistence()
         
-        // Confirm the option to show the elements exists.
-        XCTAssertTrue(
-            showElementsButton.exists,
-            "The show group elements button doesn't exist."
-        )
+        app.filterElements(group2ElementTitle)
         
-        showElementsButton.tap()
+#if targetEnvironment(macCatalyst)
+        radioOptionA.swipeUp()
+#endif
         
-        // Confirm the first element of the conditional group doesn't exist.
-        XCTAssertTrue(
-            groupElement.exists,
-            "The first group element doesn't exist."
-        )
+        // Show the invisible elements.
+        radioOptionB.assertExistenceAndTap()
+        radioOptionC.assertExistenceAndTap()
+        
+        app.filterElements(group1ElementTitle)
+        
+        // Confirm the first element of the conditional group exists.
+        group1TextElementLabel.assertExistence()
     }
     
     /// Test case 7.1: Test read only elements
     func testCase_7_1() throws {
         let app = XCUIApplication()
-        let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
-        let elementsAreEditableSwitch = app.switches["Elements are editable Switch"]
-        let elementInTheGroupIsEditableReadOnlyInput = app.staticTexts["Element in the group is editable Read Only Input"]
-        let elementInTheGroupIsEditableSwitch = app.switches["Element in the group is editable Switch"]
-        
         let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
         let comboBox = app.staticTexts["Combo box Combo Box Value"]
+        let dateElementTitle = "Date"
+        let dateReadOnlyInput = app.staticTexts["\(dateElementTitle) Read Only Input"]
+        let dateInput = app.buttons["\(dateElementTitle) Value"]
+        let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
+        let groupElementTitle = "Group"
+        let longTextFieldTitle = "Long text"
+        let longTextReadOnlyInput = app.staticTexts["\(longTextFieldTitle) Read Only Input"]
+        let longTextTextInputPreview = app.staticTexts["\(longTextFieldTitle) Text Input Preview"]
+        let radioButtonsElementTitle = "Radio buttons"
+        let radioButtonsOption0 = app.buttons["0"]
+        let radioButtonsReadOnlyInput = app.staticTexts["\(radioButtonsElementTitle) Read Only Input"]
+        let shortTextElementTitle = "Short text"
+        let shortTextReadOnlyInput = app.staticTexts["\(shortTextElementTitle) Read Only Input"]
+        let shortTextTextInput = app.textFields["\(shortTextElementTitle) Text Input"]
+        let switch1FieldTitle = "Elements are editable"
+        let switch2FieldTitle = "Element in the group is editable"
+        let switchReadOnlyInput = app.staticTexts["\(switch2FieldTitle) Read Only Input"]
         
-        let radioButtonsReadOnlyInput = app.staticTexts["Radio buttons Read Only Input"]
-        let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]
-        
-        let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
-        let dateInput = app.staticTexts["Date Value"]
-        
-        let shortTextReadOnlyInput = app.staticTexts["Short text Read Only Input"]
-        let shortTextTextInput = app.textFields["Short text Text Input"]
-        
-        let longTextReadOnlyInput = app.staticTexts["Long text Read Only Input"]
-        let longTextTextInputPreview = app.staticTexts["Long text Text Input Preview"]
+#if targetEnvironment(macCatalyst)
+        let switch1 = app.checkBoxes["\(switch1FieldTitle) Switch"]
+        let switch2 = app.checkBoxes["\(switch2FieldTitle) Switch"]
+#else
+        let switch1 = app.switches["\(switch1FieldTitle) Switch"]
+        let switch2 = app.switches["\(switch2FieldTitle) Switch"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(elementInTheGroupIsEditableReadOnlyInput.exists)
+        switchReadOnlyInput.assertExistence()
         
-        XCTAssertTrue(comboBoxReadOnlyInput.exists)
+        comboBoxReadOnlyInput.assertExistence()
         
-        XCTAssertTrue(radioButtonsReadOnlyInput.exists)
+        app.filterElements(radioButtonsElementTitle)
         
-        XCTAssertTrue(dateReadOnlyInput.exists)
+        radioButtonsReadOnlyInput.assertExistence()
         
-        XCTAssertTrue(shortTextReadOnlyInput.exists)
+        app.filterElements(dateElementTitle)
         
-        XCTAssertTrue(longTextReadOnlyInput.exists)
+        dateReadOnlyInput.assertExistence()
         
-        elementsAreEditableSwitch.tap()
+        app.filterElements(shortTextElementTitle)
         
-        XCTAssertTrue(elementInTheGroupIsEditableSwitch.exists)
+        shortTextReadOnlyInput.assertExistence()
         
-        elementInTheGroupIsEditableSwitch.tap()
+        app.filterElements(groupElementTitle)
         
-        XCTAssertTrue(comboBox.exists)
+        longTextReadOnlyInput.assertExistence()
         
-        XCTAssertTrue(radioButtonsInput.exists)
+        app.clearElementFilter()
         
-        XCTAssertTrue(dateInput.exists)
+#if targetEnvironment(macCatalyst) || os(visionOS)
+        switch1.assertExistenceAndTap()
+        switch2.assertExistenceAndTap()
+#else
+        switch1.switches.firstMatch.assertExistenceAndTap()
+        switch2.switches.firstMatch.assertExistenceAndTap()
+#endif
         
-        XCTAssertTrue(shortTextTextInput.exists)
+        comboBox.assertExistence()
         
-        XCTAssertTrue(longTextTextInputPreview.exists)
+        app.filterElements(radioButtonsElementTitle)
+        
+        radioButtonsOption0.assertExistence()
+        
+        XCTAssertTrue(radioButtonsOption0.isSelected)
+        
+        app.filterElements(dateElementTitle)
+        
+        dateInput.assertExistence()
+        
+        app.filterElements(shortTextElementTitle)
+        
+        shortTextTextInput.assertExistence()
+        
+        app.filterElements(groupElementTitle)
+        
+        longTextTextInputPreview.assertExistence()
     }
     
     func testCase_8_1() {
@@ -1316,17 +1126,17 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(attachmentElementTitle.waitForExistence(timeout: 10))
-        XCTAssertTrue(placeholderImage.exists)
-        XCTAssertTrue(attachmentName.exists)
-        XCTAssertTrue(sizeLabel.exists)
-        XCTAssertTrue(downloadIcon.exists)
+        attachmentElementTitle.assertExistence()
+        placeholderImage.assertExistence()
+        attachmentName.assertExistence()
+        sizeLabel.assertExistence()
+        downloadIcon.assertExistence()
         
-        placeholderImage.tap()
+        placeholderImage.assertExistenceAndTap()
         
-        XCTAssertTrue(thumbnailImage.waitForExistence(timeout: 10))
-        XCTAssertFalse(placeholderImage.exists)
-        XCTAssertFalse(downloadIcon.exists)
+        thumbnailImage.assertExistence()
+        placeholderImage.assertNonExistence()
+        downloadIcon.assertNonExistence()
     }
     
     /// Test substitution
@@ -1341,24 +1151,21 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            titleTextField.waitForExistence(timeout: 10),
-            "The text field wasn't found after 10 seconds."
-        )
+        titleTextField.assertExistence()
         
         XCTAssertEqual(
-            titleTextField.value as? String,
+            titleTextField.stringValue,
             "Redlands"
         )
         
-        XCTAssertTrue(redlandsText.exists)
+        redlandsText.assertExistence()
         
-        titleClearButton.tap()
-        titleTextField.tap()
+        titleClearButton.assertExistenceAndTap()
+        titleTextField.assertExistenceAndTap()
         
         titleTextField.typeText("Los Angeles")
         
-        XCTAssertTrue(losAngelesText.exists)
+        losAngelesText.assertExistence()
     }
     
     /// Test plain text
@@ -1370,31 +1177,31 @@ final class FeatureFormViewTests: XCTestCase {
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(plainText.exists)
+        plainText.assertExistence()
     }
     
     /// Test case 11.1: Barcode Scan and Clear buttons
     func testCase_11_1() {
         let app = XCUIApplication()
+        let barcodeValidationString = app.staticTexts["Barcode Footer"]
+        let clearButton = app.buttons["Barcode Clear Button"]
+        let elementValue = app.textFields["Barcode Text Input"]
         let formTitle = app.staticTexts["Test case 11.1 Layer"]
         let scanButton = app.buttons["Barcode Scan Button"]
-        let clearButton = app.buttons["Barcode Clear Button"]
-        let barcodeValidationString = app.staticTexts["Barcode Footer"]
-        let fieldValue = app.textFields["Barcode Text Input"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
 #if !os(visionOS)
-        XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+        scanButton.assertExistence()
 #endif
-        XCTAssertFalse(clearButton.exists, "The clear button exists.")
+        clearButton.assertNonExistence()
         
-        fieldValue.tap()
-        fieldValue.typeText("https://esri.com/this_is_a_string_longer_than_50_count_on_it")
+        elementValue.assertExistenceAndTap()
+        elementValue.typeText("https://esri.com/this_is_a_string_longer_than_50_count_on_it")
         
 #if !os(visionOS)
-        XCTAssertTrue(scanButton.exists, "The scan button doesn't exist.")
+        scanButton.assertExistence()
 #endif
         XCTAssertEqual(barcodeValidationString.label, "Maximum 50 characters")
     }
@@ -1402,245 +1209,839 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_12_1() {
         let app = XCUIApplication()
         let assetGroup = app.staticTexts["Asset group"]
-        let elementTitle = app.staticTexts["Associations"]
-        let fieldValue = app.staticTexts["Asset group Read Only Input"]
+        let elementTitle = "Associations"
+        let elementLabel = app.staticTexts[elementTitle]
+        let elementValue = app.staticTexts["Asset group Read Only Input"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let filterResults1 = app.staticTexts["Connected"]
         let filterResults2 = app.staticTexts["Structure"]
         let filterResults3 = app.staticTexts["Container"]
         let networkSourceGroup1 = app.staticTexts["Electric Distribution Junction"]
         let networkSourceGroup2Button = app.buttons["Electric Distribution Device, 2"]
+        
+#if targetEnvironment(macCatalyst)
+        let fuses = app.staticTexts.matching(identifier: "Fuse, Single Terminal")
+#else
         let fuses = app.buttons.matching(identifier: "Fuse, Single Terminal")
-        let utilityElement1Button = fuses.element(boundBy: 0)
-        let utilityElement2Button = fuses.element(boundBy: 1)
+#endif
+        
+        let fuseOption1 = fuses.element(boundBy: 0)
+        let fuseOption2 = fuses.element(boundBy: 1)
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        app.filterElements(elementTitle)
         
-        XCTAssertTrue(
-            filterResults1.waitForExistence(timeout: 5),
-            "The filter result \"Connected\" doesn't exist."
-        )
+        elementLabel.assertExistence()
         
-        XCTAssertTrue(
-            filterResults2.exists,
-            "The filter result \"Structure\" doesn't exist."
-        )
+        filterResults1.assertExistence()
         
-        XCTAssertTrue(
-            filterResults3.exists,
-            "The filter result \"Container\" doesn't exist."
-        )
+        filterResults2.assertExistence()
+        
+        filterResults3.assertExistence()
         
         filterResults1.tap()
         
-        XCTAssertTrue(
-            networkSourceGroup1.exists,
-            "The network source group \"Electric Distribution Junction\" doesn't exist."
-        )
+        networkSourceGroup1.assertExistence()
         
-        XCTAssertTrue(
-            networkSourceGroup2Button.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
+        networkSourceGroup2Button.assertExistenceAndTap()
         
-        networkSourceGroup2Button.tap()
+        fuseOption1.assertExistence()
         
-        XCTAssertTrue(
-            utilityElement1Button.waitForExistence(timeout: 30),
-            "Feature \"Fuse\" failed to appear after 30 seconds."
-        )
+        fuseOption2.assertExistence()
         
-        XCTAssertTrue(
-            utilityElement2Button.exists,
-            "The utility element \"Fuse\" doesn't exist."
-        )
-        
-        utilityElement1Button.tap()
+        fuseOption1.tap()
         
         // Open new form
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            assetGroup.exists,
-            "The asset group \"Asset group\" doesn't exist."
-        )
+        assetGroup.assertExistence()
         
         XCTAssertEqual(
-            fieldValue.label,
+            elementValue.label,
             "Fuse"
         )
     }
     
-    // Test case 12.2: Associations show fraction along edge
+    // Test case 12.2: Associations show percent along
     // It has been determined that with the currently-available public test data
     // this is no longer feasible. So this functionality will be ad-hoc tested only.
     
     func testCase_12_3() {
         let app = XCUIApplication()
-        let elementTitle = app.staticTexts["Associations"]
+        let elementTitle = "Associations"
+        let elementLabel = app.staticTexts[elementTitle]
         let filterResults = app.staticTexts["Content"]
         let formTitle = app.staticTexts["Structure Boundary"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let utilityElementButton = app.buttons["Circuit Breaker, Content"]
+        
+#if targetEnvironment(macCatalyst)
+        let circuitBreakerButton = app.staticTexts["Circuit Breaker, Visible: false"]
+#else
+        let circuitBreakerButton = app.buttons["Circuit Breaker, Visible: false"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        app.filterElements(elementTitle)
         
-        XCTAssertTrue(
-            filterResults.waitForExistence(timeout: 5),
-            "The filter result \"Content\" doesn't exist."
-        )
+        elementLabel.assertExistence()
         
-        filterResults.tap()
+        filterResults.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            networkSourceGroupButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
+        networkSourceGroupButton.assertExistenceAndTap()
         
-        networkSourceGroupButton.tap()
-        
-        // Expectation: a list of one utility elements with "Content"
-        XCTAssertTrue(
-            utilityElementButton.exists,
-            "The utility element \"Circuit Breaker\" doesn't exist."
-        )
+        // Expectation: a list of one utility element with label "Circuit Breaker"
+        circuitBreakerButton.assertExistence()
     }
     
     func testCase_12_4() {
         let app = XCUIApplication()
-        let elementTitle = app.staticTexts["Associations"]
+        let elementTitle = "Associations"
+        let elementLabel = app.staticTexts[elementTitle]
         let filterResults = app.staticTexts["Container"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroup = app.staticTexts["Structure Boundary"]
-        let utilityElementButton = app.buttons["Substation"]
+        
+#if targetEnvironment(macCatalyst)
+        let substationButton = app.staticTexts["Substation"]
+#else
+        let substationButton = app.buttons["Substation"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        app.filterElements(elementTitle)
         
-        XCTAssertTrue(
-            filterResults.waitForExistence(timeout: 5),
-            "The filter result \"Container\" doesn't exist."
-        )
+        elementLabel.assertExistence()
         
-        filterResults.tap()
+        filterResults.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            networkSourceGroup.waitForExistence(timeout: 5),
-            "The network source group \"Structure Boundary\" doesn't exist."
-        )
+        networkSourceGroup.assertExistenceAndTap()
         
-        networkSourceGroup.tap()
-        
-        // Expectation: a list of one utility elements with no "Containment Visible" label
-        XCTAssertTrue(
-            utilityElementButton.exists,
-            "The utility element \"Substation\" doesn't exist."
-        )
+        // Expectation: a list of one utility element with no "Containment Visible" label
+        substationButton.assertExistence()
     }
     
     func testCase_12_5() {
         let app = XCUIApplication()
         let assetType = app.staticTexts["Asset type *"]
         let backButton = app.buttons["Back"]
-        let discardEditsButton = app.buttons["Discard Edits"]
-        let doneButton = app.buttons["Done"]
-        let elementTitle = app.staticTexts["Associations"]
-        let fieldValue = app.staticTexts["Asset type Combo Box Value"]
+        let elementTitle = "Associations"
+        let elementLabel = app.staticTexts[elementTitle]
+        let elementValue = app.staticTexts["Asset type Combo Box Value"]
         let filterResults = app.staticTexts["Connected"]
-        let firstOptionButton = app.buttons["Unknown"]
+        let firstOptionButton = app.buttons["Unknown Combo Box Option"]
         let formTitle = app.staticTexts["Electric Distribution Device"]
         let formTitle2 = app.staticTexts["Electric Distribution Device"]
         let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
-        let utilityElementButton = app.buttons["Transformer, High"]
+        
+#if targetEnvironment(macCatalyst)
+        let discardEditsButton = app.buttons["Discard Edits"].firstMatch
+        let transformerButton = app.staticTexts["Transformer, High"]
+#else
+        let discardEditsButton = app.buttons["Discard Edits"]
+        let transformerButton = app.buttons["Transformer, High"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        XCTAssertTrue(
-            elementTitle.waitForExistence(timeout: 5),
-            "The element \"Associations\" doesn't exist."
-        )
+        app.filterElements(elementTitle)
         
-        XCTAssertTrue(
-            filterResults.waitForExistence(timeout: 5),
-            "The filter result \"Connected\" doesn't exist."
-        )
+        elementLabel.assertExistence()
         
-        filterResults.tap()
+        filterResults.assertExistenceAndTap()
         
-        XCTAssertTrue(
-            networkSourceGroupButton.waitForExistence(timeout: 5),
-            "The network source group \"Electric Distribution Device\" doesn't exist."
-        )
+        networkSourceGroupButton.assertExistenceAndTap()
         
-        networkSourceGroupButton.tap()
-        
-        XCTAssertTrue(
-            utilityElementButton.waitForExistence(timeout: 5),
-            "The utility element \"Transformer\" doesn't exist."
-        )
-        
-        utilityElementButton.tap()
+        transformerButton.assertExistenceAndTap()
         
         assertFormOpened(titleElement: formTitle2)
         
-        XCTAssertTrue(
-            assetType.exists,
-            "The field form element \"Asset type *\"doesn't exist."
-        )
+        assetType.assertExistence()
         
-        fieldValue.tap()
+        elementValue.tap()
         
-        XCTAssertTrue(
-            firstOptionButton.isHittable,
-            "The first option \"Unknown\" isn't hittable."
-        )
+        firstOptionButton.assertExistenceAndTap()
         
-        firstOptionButton.tap()
-        
-        XCTAssertTrue(
-            doneButton.isHittable,
-            "The done button isn't hittable."
-        )
-        
-        doneButton.tap()
+        app.doneButton.assertExistenceAndTap()
         
         // Tap the "Back" button
         backButton.tap()
         
         // Expectation: an alert appears with "Discard Edits", "Save Edits", and "Continue Editing" options
-        XCTAssertTrue(
-            discardEditsButton.exists,
-            "The alert \"Discard Edits\" doesn't exist."
-        )
-        
-        // Tap the "Discard" option. Note that some platforms may use "Discard Edits".
-        discardEditsButton.tap()
+        discardEditsButton.assertExistenceAndTap()
         
         // Access the new `FeatureForm`
         // Expectation: the form title should be "Electric Distribution Junction"
         // Expectation: a list of one utility elements entitled "Transformer - 2552"
-        XCTAssertTrue(
-            utilityElementButton.waitForExistence(timeout: 5),
-            "The utility element \"Transformer - 2552\" doesn't exist."
-        )
+        transformerButton.assertExistence()
+    }
+    
+    func testCase_12_6() {
+        let app = XCUIApplication()
+        let cancelButton = app.buttons["Cancel"].firstMatch
+        let discardButton = app.buttons["Discard"].firstMatch
+        let elementTitle = "Associations"
+        let elementLabel = app.staticTexts[elementTitle]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let electricDistributionDevice = app.staticTexts["Electric Distribution Device"]
+        let networkSourceGroupButton = app.buttons["Electric Distribution Device, 1"]
+        let removeButton = app.buttons["Remove"].firstMatch
+        
+#if targetEnvironment(macCatalyst)
+        let moreOptionsButton = app.popUpButtons["More Options"]
+        let removeAssociationButton = app.menuItems["Remove Association"]
+        let transformerButton = app.popUpButtons["Transformer, High"]
+#else
+        let moreOptionsButton = app.buttons["More Options"]
+        let removeAssociationButton = app.buttons["Remove Association"]
+        let transformerButton = app.buttons["Transformer, High"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: electricDistributionDevice)
+        
+        app.filterElements(elementTitle)
+        
+        elementLabel.assertExistence()
+        
+        connectedFilterTitle.assertExistenceAndTap()
+        
+        networkSourceGroupButton.assertExistenceAndTap()
+        
+        transformerButton.assertExistence()
+        
+        moreOptionsButton.assertExistenceAndTap()
+        
+        removeAssociationButton.assertExistenceAndTap()
+        
+        cancelButton.assertExistenceAndTap()
+        
+        moreOptionsButton.tap()
+        
+        removeAssociationButton.tap()
+        
+        removeButton.assertExistenceAndTap()
+        
+        // Expectation: Navigation returns to the "Connected" filter results page.
+        connectedFilterTitle.assertExistence()
+        
+        discardButton.assertExistenceAndTap()
+        
+        networkSourceGroupButton.assertExistenceAndTap()
+        
+        transformerButton.assertExistence()
+        
+#if targetEnvironment(macCatalyst)
+        moreOptionsButton.tap()
+#else
+        transformerButton.swipeLeft()
+#endif
+        
+#if os(visionOS)
+        XCTExpectFailure("The \"Remove Association\" button does not trigger properly in visionOS.")
+#endif
+        
+        removeAssociationButton.assertExistenceAndTap()
+        
+        cancelButton.assertExistenceAndTap()
+        
+#if targetEnvironment(macCatalyst)
+        moreOptionsButton.tap()
+#else
+        transformerButton.swipeLeft()
+#endif
+        removeAssociationButton.assertExistenceAndTap()
+        
+        removeButton.assertExistenceAndTap()
+        
+        discardButton.assertExistence()
+        
+        connectedFilterTitle.assertExistence()
+    }
+    
+    func testCase_13_1() {
+        let app = XCUIApplication()
+        let addButton = app.buttons["Add"]
+        let associationTypeLabel = app.staticTexts["Association Type"]
+        let cabinetFuseButton = app.buttons["Cabinet Fuse, Fuse"]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let connectivityLabel = app.staticTexts["Connectivity"]
+        let discardButton = app.buttons["Discard"]
+        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
+        let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
+        let electricDistributionDeviceLabel = app.staticTexts["Electric Distribution Device"]
+        let elementTitle = "Associations"
+        let elementLabel = app.staticTexts[elementTitle]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
+        let fromElementLabel = app.staticTexts["From Element"]
+        let fuseButton = app.staticTexts["Fuse"].firstMatch
+        let fuseLabel = app.staticTexts["Fuse"]
+        let networkSourceGroupButtonAfter = app.buttons["Electric Distribution Device, 2"]
+        let newAssociationText = app.staticTexts["New Association"]
+        let saveButton = app.buttons["Save"]
+        let searchField = app.textFields["Search"]
+        let toElementLabel = app.staticTexts["To Element"]
+        
+#if targetEnvironment(macCatalyst)
+        let addAssociationButton = app.buttons["Add Association"]
+#else
+        let addAssociationButton = app.staticTexts["Add Association"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        
+        elementLabel.assertExistence()
+        
+        connectedFilterTitle.assertExistenceAndTap()
+        
+        addAssociationButton.assertExistenceAndTap()
+        
+        electricDistributionDeviceDataSourceButton.assertExistence()
+        
+        electricDistributionJunctionDataSourceButton.assertExistence()
+        
+        electricDistributionDeviceDataSourceButton.tap()
+        
+        searchField.assertExistenceAndTap()
+        
+        searchField.typeText("Cabinet Fuse")
+        
+        cabinetFuseButton.assertExistenceAndTap()
+        
+        fuseButton.assertExistenceAndTap()
+        
+        newAssociationText.assertExistence()
+        
+        associationTypeLabel.assertExistence()
+        
+        connectivityLabel.assertExistence()
+        
+        fromElementLabel.assertExistence()
+        
+        electricDistributionDeviceLabel.assertExistence()
+        
+        toElementLabel.assertExistence()
+        
+        fuseLabel.assertExistence()
+        
+        addButton.assertExistenceAndTap()
+        
+        networkSourceGroupButtonAfter.assertExistence()
+        
+        saveButton.assertExistence()
+        
+        discardButton.assertExistence()
+    }
+    
+    func testCase_13_2() {
+        let app = XCUIApplication()
+        let addButton = app.buttons["Add"]
+        let associationTypeLabel = app.staticTexts["Association Type"]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let connectivityLabel = app.staticTexts["Connectivity"]
+        let discardButton = app.buttons["Discard"]
+        let electricDistributionDevice2 = app.buttons["Electric Distribution Device, 2"]
+        let electricDistributionDevice3 = app.buttons["Electric Distribution Device, 3"]
+        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
+        let electricDistributionDeviceLabel = app.staticTexts["Electric Distribution Device"]
+        let electricDistributionJunctionButton5 = app.buttons["Electric Distribution Junction, 5"]
+        let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
+        let elementTitle = "Associations"
+        let elementLabel = app.staticTexts[elementTitle]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
+        let fromElementLabel = app.staticTexts["From Element"]
+        let newAssociationText = app.staticTexts["New Association"]
+        let saveButton = app.buttons["Save"]
+        let searchField = app.textFields["Search"].firstMatch
+        let switchButton = app.staticTexts["Switch"].firstMatch
+        let switchLabel = app.staticTexts["Switch"]
+        let terminalLabel = app.staticTexts["Terminal"]
+        let terminalPicker = app.buttons["Terminal, High"]
+        let toElementLabel = app.staticTexts["To Element"]
+        let undergroundMediumVoltageThreePhaseDisconnectButton = app.buttons["Underground Medium Voltage Three Phase Disconnect, Switch"]
+        
+#if targetEnvironment(macCatalyst)
+        let addAssociationButton = app.buttons["Add Association"]
+        let terminalHighButton = app.menuItems["high"]
+        let terminalLowButton = app.menuItems["low"]
+#else
+        let addAssociationButton = app.staticTexts["Add Association"]
+        let terminalHighButton = app.buttons["High"]
+        let terminalLowButton = app.buttons["Low"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        
+        elementLabel.assertExistence()
+        
+        connectedFilterTitle.assertExistenceAndTap()
+        
+        electricDistributionJunctionButton5.assertExistence()
+        
+        electricDistributionDevice2.assertExistence()
+        
+        addAssociationButton.assertExistenceAndTap()
+        
+        electricDistributionDeviceDataSourceButton.assertExistence()
+        
+        electricDistributionJunctionDataSourceButton.assertExistence()
+        
+        electricDistributionDeviceDataSourceButton.tap()
+        
+        searchField.assertExistenceAndTap()
+        
+        searchField.typeText("Disconnect")
+        
+        undergroundMediumVoltageThreePhaseDisconnectButton.firstMatch.assertExistenceAndTap()
+        
+        switchButton.firstMatch.assertExistenceAndTap()
+        
+        newAssociationText.assertExistence()
+        
+        associationTypeLabel.assertExistence()
+        
+        connectivityLabel.assertExistence()
+        
+        fromElementLabel.assertExistence()
+        
+        electricDistributionDeviceLabel.assertExistence()
+        
+        terminalLabel.assertExistence()
+        
+        terminalPicker.assertExistence()
+        
+        toElementLabel.assertExistence()
+        
+        switchLabel.assertExistence()
+        
+        addButton.assertExistence()
+        
+        terminalPicker.tap()
+        
+        terminalHighButton.assertExistence()
+        
+        terminalLowButton.assertExistence()
+        
+        terminalHighButton.tap()
+        
+        addButton.tap()
+        
+        electricDistributionJunctionButton5.assertExistence()
+        
+        electricDistributionDevice3.assertExistence()
+        
+        saveButton.assertExistence()
+        
+        discardButton.assertExistence()
+    }
+    
+    func testCase_13_3() {
+        let app = XCUIApplication()
+        let addButton = app.buttons["Add"]
+        let associationTypeLabel = app.staticTexts["Association Type"]
+        let containerFilterTitle = app.staticTexts["Container"].firstMatch
+        let containmentLabel = app.staticTexts["Containment"]
+        let discardButton = app.buttons["Discard"]
+        let electricDistributionJunctionLabel = app.staticTexts["Electric Distribution Junction"]
+        let elementTitle = "Associations"
+        let elementLabel = app.staticTexts[elementTitle]
+        let formTitle = app.staticTexts["Electric Distribution Junction"]
+        let fromElementLabel = app.staticTexts["From Element"]
+        let newAssociationText = app.staticTexts["New Association"]
+        let saveButton = app.buttons["Save"]
+        let searchField = app.textFields["Search"]
+        let structureJunction2 = app.buttons["Structure Junction, 2"]
+        let structureJunctionDataSourceButton = app.buttons["Structure Junction"]
+        let toElementValueLabel = app.staticTexts["Vault"]
+        let toElementLabel = app.staticTexts["To Element"]
+        let vaultAssetTypeButton = app.buttons["Vault, Vault"]
+        let vaultCandidateButton = app.staticTexts.matching(identifier: "Vault").element(boundBy: 1)
+        
+#if targetEnvironment(macCatalyst)
+        let addAssociationButton = app.buttons["Add Association"]
+        let contentVisibleSwitch = app.checkBoxes["Content Visible"]
+#else
+        let addAssociationButton = app.staticTexts["Add Association"]
+        let contentVisibleSwitch = app.switches["Content Visible"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        
+        elementLabel.assertExistence()
+        
+        containerFilterTitle.assertExistenceAndTap()
+        
+        addAssociationButton.assertExistenceAndTap()
+        
+        structureJunctionDataSourceButton.assertExistenceAndTap()
+        
+        searchField.assertExistenceAndTap()
+        
+        searchField.typeText("Vault")
+        
+        vaultAssetTypeButton.assertExistenceAndTap()
+        
+        vaultCandidateButton.assertExistenceAndTap()
+        
+        newAssociationText.assertExistence()
+        
+        associationTypeLabel.assertExistence()
+        
+        containmentLabel.assertExistence()
+        
+        contentVisibleSwitch.assertExistence()
+        
+        fromElementLabel.assertExistence()
+        
+        toElementValueLabel.assertExistence()
+        
+        toElementLabel.assertExistence()
+        
+        electricDistributionJunctionLabel.assertExistence()
+        
+        addButton.assertExistence()
+        
+        contentVisibleSwitch.tap()
+        
+        addButton.tap()
+        
+        structureJunction2.assertExistence()
+        
+        saveButton.assertExistence()
+        
+        discardButton.assertExistence()
+    }
+    
+    func testCase_13_4() throws {
+        let app = XCUIApplication()
+        let addAssociationButton = app.staticTexts["Add Association"]
+        let addConditionButton = app.buttons["Add Condition"]
+        let cancelButton = app.buttons["Cancel"]
+        let conditionEqualsButton = app.buttons["Condition, ="]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let electricDistributionJunctionDataSourceButton = app.buttons["Electric Distribution Junction"]
+        let elementTitle = "Associations"
+        let elementLabel = app.staticTexts[elementTitle]
+        let filterButton = app.buttons["Filter Candidates"]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
+        let lineEndCandidates = app.buttons.matching(identifier: "Line End")
+        let lowVoltageSinglePhaseLineEnd = app.buttons["Low Voltage Single Phase Line End, Line End"]
+        let valueButton = app.buttons["Value, Unknown"]
+        
+#if os(visionOS) || targetEnvironment(macCatalyst)
+        let isBlankLabel = app.buttons["Condition, is blank"]
+        let objectIDField = app.buttons["Field, Object ID"]
+#else
+        let isBlankLabel = app.staticTexts["is blank"]
+        let objectIDField = app.staticTexts["Object ID"]
+#endif
+        
+#if targetEnvironment(macCatalyst)
+        let condition1Options = app.popUpButtons.firstMatch
+        let deleteButton = app.menuItems["delete"].firstMatch
+        let discardEditsButton = app.buttons["Discard Edits"].firstMatch
+        let equalOption = app.menuItems["="]
+        let isBlankOption = app.menuItems["is_blank"]
+        let optionAButton = app.menuItems["A"]
+        let phasesCurrentState = app.menuItems["phases_current_state"]
+        let unsavedChangesAlert = app.staticTexts["Filters have not been applied"]
+#else
+        let condition1Options = app.buttons["Condition 1 Options"]
+        let deleteButton = app.buttons["Delete"]
+        let discardEditsButton = app.buttons["Discard Edits"]
+        let equalOption = app.buttons["="]
+        let isBlankOption = app.buttons["is blank"]
+        let optionAButton = app.buttons["A"]
+        let phasesCurrentState = app.buttons["Phases Current State"]
+        let unsavedChangesAlert = app.alerts["Filters have not been applied"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        
+        elementLabel.assertExistence()
+        
+        connectedFilterTitle.assertExistenceAndTap()
+        
+        addAssociationButton.assertExistenceAndTap()
+        
+        electricDistributionJunctionDataSourceButton.assertExistenceAndTap()
+        
+        lowVoltageSinglePhaseLineEnd.assertExistenceAndTap()
+        
+        lineEndCandidates.firstMatch.assertExistence()
+        
+        XCTAssertEqual(lineEndCandidates.count, 2)
+        
+        filterButton.assertExistenceAndTap()
+        
+        addConditionButton.assertExistenceAndTap()
+        
+        cancelButton.assertExistenceAndTap()
+        
+        unsavedChangesAlert.assertExistence()
+        
+        // Dismiss the alert
+        cancelButton.firstMatch.assertExistenceAndTap()
+        
+        unsavedChangesAlert.assertNonExistence()
+        
+        cancelButton.assertExistenceAndTap()
+        
+        unsavedChangesAlert.assertExistence()
+        
+        discardEditsButton.assertExistenceAndTap()
+        
+        unsavedChangesAlert.assertNonExistence()
+        
+        lineEndCandidates.firstMatch.assertExistence()
+        
+        XCTAssertEqual(lineEndCandidates.count, 2)
+        
+        filterButton.assertExistenceAndTap()
+        
+        addConditionButton.assertExistenceAndTap()
+        
+        objectIDField.assertExistence()
+        
+        condition1Options.assertExistenceAndTap()
+        
+        deleteButton.assertExistenceAndTap()
+        
+        addConditionButton.assertExistenceAndTap()
+        
+        objectIDField.assertExistenceAndTap()
+        
+        phasesCurrentState.assertExistenceAndTap()
+        
+        conditionEqualsButton.assertExistenceAndTap()
+        
+        isBlankOption.assertExistenceAndTap()
+        
+        app.doneButton.assertExistenceAndTap()
+        
+        lineEndCandidates.firstMatch.assertNonExistence()
+        
+        filterButton.assertExistenceAndTap()
+        
+        isBlankLabel.assertExistenceAndTap()
+        
+        equalOption.assertExistenceAndTap()
+        
+        valueButton.assertExistenceAndTap()
+        
+        optionAButton.assertExistenceAndTap()
+        
+        app.doneButton.assertExistenceAndTap()
+        
+        lineEndCandidates.firstMatch.assertExistence()
+        
+        XCTAssertEqual(lineEndCandidates.count, 1)
+    }
+    
+    func testCase_13_5() throws {
+        let app = XCUIApplication()
+        let addAssociationButton = app.staticTexts["Add Association"]
+        let addConditionButton = app.buttons["Add Condition"]
+        let connectedFilterTitle = app.staticTexts["Connected"]
+        let currentMonthYear = Date.now.formatted(.dateTime.month(.wide).year())
+        let currentMonthYearLabel = app.staticTexts[currentMonthYear]
+        let datePickers = XCUIApplication().datePickers
+        let datePicker1 = datePickers.firstMatch
+        let datePicker2 = datePickers.element(boundBy: 1)
+        let dismissPopover = app.buttons["PopoverDismissRegion"]
+        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
+        let elementTitle = "Associations"
+        let elementLabel = app.staticTexts[elementTitle]
+        let filterButton = app.buttons["Filter Candidates"]
+        let formTitle = app.staticTexts["Electric Distribution Device"]
+        // Using app.buttons allows this to work on both Mac Catalyst and iOS
+        let greaterThanLabels = app.buttons.matching(identifier: "Condition, >")
+        let jan2014Label = app.staticTexts["January 2014"]
+        let municipalButton = app.buttons["Municipal, Street Light"]
+        let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
+        
+#if os(visionOS) || targetEnvironment(macCatalyst)
+        let currentMonthYearOption = app.buttons[currentMonthYear]
+        let equalsCondition = app.buttons["Condition, ="]
+        let objectIDField = app.buttons["Field, Object ID"]
+#else
+        let currentMonthYearOption = app.staticTexts[currentMonthYear]
+        let equalsCondition = app.staticTexts["="]
+        let objectIDField = app.staticTexts["Object ID"]
+#endif
+        
+#if targetEnvironment(macCatalyst)
+        let condition1Options = app.popUpButtons["Condition 1 Options"]
+        let dateInstalledButton = app.menuItems["date_installed"]
+        let duplicateButton = app.menuItems["duplicate"]
+        let greaterThanButton = app.menuItems[">"]
+        let lessThanButton = app.menuItems["<"]
+#else
+        let condition1Options = app.buttons["Condition 1 Options"]
+        let dateInstalledButton = app.buttons["Date Installed"]
+        let duplicateButton = app.buttons["Duplicate"]
+        let greaterThanButton = app.buttons[">"]
+        let lessThanButton = app.buttons["<"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        
+        elementLabel.assertExistence()
+        
+        connectedFilterTitle.assertExistenceAndTap()
+        
+        addAssociationButton.assertExistenceAndTap()
+        
+        electricDistributionDeviceDataSourceButton.assertExistenceAndTap()
+        
+        municipalButton.assertExistenceAndTap()
+        
+        streetLightCandidates.firstMatch.assertExistence()
+        
+        XCTAssertTrue(streetLightCandidates.count > 3)
+        
+        filterButton.assertExistenceAndTap()
+        
+        addConditionButton.assertExistenceAndTap()
+        
+        objectIDField.assertExistenceAndTap()
+        
+        dateInstalledButton.assertExistenceAndTap()
+        
+        equalsCondition.assertExistenceAndTap()
+        
+        greaterThanButton.assertExistenceAndTap()
+        
+        datePicker1.assertExistenceAndTap()
+        
+#if os(visionOS)
+        XCTExpectFailure("Opening the date picker's month & year picker doesn't work as expected on visionOS.")
+        currentMonthYearLabel.assertExistenceAndTap()
+#elseif targetEnvironment(macCatalyst)
+        datePicker1.typeKey(.leftArrow, modifierFlags: .function)
+        datePicker1.typeKey(.leftArrow, modifierFlags: .function)
+        datePicker1.typeText("1")
+        datePicker1.typeKey(.rightArrow, modifierFlags: .function)
+        datePicker1.typeText("1")
+        datePicker1.typeKey(.rightArrow, modifierFlags: .function)
+        datePicker1.typeText("2014")
+        datePicker1.typeKey(.return, modifierFlags: .function)
+#else
+        currentMonthYearLabel.assertExistenceAndTap()
+        datePicker1.adjustPickerWheelElement(boundBy: 0, to: "January")
+        datePicker1.adjustPickerWheelElement(boundBy: 1, to: "2014")
+        dismissPopover.firstMatch.assertExistenceAndTap()
+#endif
+        
+        condition1Options.assertExistenceAndTap()
+        
+        duplicateButton.assertExistenceAndTap()
+        
+        greaterThanLabels.element(boundBy: 1).assertExistenceAndTap()
+        
+        lessThanButton.assertExistenceAndTap()
+        
+        datePicker2.assertExistenceAndTap()
+        
+#if targetEnvironment(macCatalyst)
+        datePicker2.typeKey(.leftArrow, modifierFlags: .function)
+        datePicker2.typeKey(.leftArrow, modifierFlags: .function)
+        datePicker2.typeText("3")
+        datePicker2.typeKey(.return, modifierFlags: .function)
+#else
+        jan2014Label.assertExistenceAndTap()
+        datePicker2.adjustPickerWheelElement(boundBy: 0, to: "March")
+        dismissPopover.firstMatch.assertExistenceAndTap()
+#endif
+        
+        app.doneButton.assertExistenceAndTap()
+        
+        streetLightCandidates.firstMatch.assertExistence()
+        
+        XCTAssertEqual(streetLightCandidates.count, 1)
+    }
+    
+    func testCase_13_6() throws {
+        let app = XCUIApplication()
+        let addAssociationButton = app.staticTexts["Add Association"]
+        let addButton = app.buttons["Add"]
+        let addConditionButton = app.buttons["Add Condition"]
+        let attachmentFilterTitle = app.staticTexts["Attachment"]
+        let electricDistributionDevice2Button = app.buttons["Electric Distribution Device, 2"]
+        let electricDistributionDeviceDataSourceButton = app.buttons["Electric Distribution Device"]
+        let elementTitle = "Associations"
+        let elementLabel = app.staticTexts[elementTitle]
+        let textField = app.textFields["Enter a value"]
+        let filterButton = app.buttons["Filter Candidates"]
+        let formTitle = app.staticTexts["Structure Junction"]
+        let municipalButton = app.buttons["Municipal, Street Light"]
+        let popoverDismissRegion = app.otherElements["PopoverDismissRegion"].firstMatch
+        let streetLightButton = app.buttons["Street Light"]
+        let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        
+        elementLabel.assertExistence()
+        
+        attachmentFilterTitle.assertExistenceAndTap()
+        
+        addAssociationButton.assertExistenceAndTap()
+        
+        electricDistributionDeviceDataSourceButton.assertExistenceAndTap()
+        
+        municipalButton.assertExistenceAndTap()
+        
+        streetLightCandidates.firstMatch.assertExistence()
+        
+        XCTAssertTrue(streetLightCandidates.count > 3)
+        
+        filterButton.assertExistenceAndTap()
+        
+        addConditionButton.assertExistenceAndTap()
+        
+        textField.assertExistenceAndTap()
+        
+        textField.typeText("449")
+        
+        if popoverDismissRegion.exists {
+            popoverDismissRegion.tap()
+        }
+        
+        app.doneButton.assertExistenceAndTap()
+        
+        streetLightCandidates.firstMatch.assertExistence()
+        
+        XCTAssertEqual(streetLightCandidates.count, 1)
+        
+        streetLightButton.assertExistenceAndTap()
+        
+        addButton.assertExistenceAndTap()
+        
+        electricDistributionDevice2Button.assertExistence()
     }
 }
 
@@ -1655,5 +2056,57 @@ private extension String {
             tellus et ut dolore.
             """
         )
+    }
+}
+
+private extension XCUIApplication {
+    /// The app's "Done"/checkmark button.
+    var doneButton: XCUIElement {
+#if os(visionOS)
+        buttons["Confirm"]
+#else
+        buttons["Done"]
+#endif
+    }
+    
+    /// The element filter field.
+    var filterElementsField: XCUIElement {
+        searchFields["Filter Elements"]
+    }
+    
+    /// The "No value" combo box option.
+    var noValueComboBoxOption: XCUIElement {
+        buttons["No value Combo Box Option"]
+    }
+    
+    /// Clears the element filter in the form.
+    func clearElementFilter() {
+        buttons["Clear text"].assertExistenceAndTap()
+    }
+    
+    /// Filters the elements in the form.
+    /// - Parameter text: The title of the form element to filter with.
+    func filterElements(_ text: String) {
+        filterElementsField.assertExistenceAndTap()
+        
+#if targetEnvironment(macCatalyst)
+        let hasCurrentValue = !(filterElementsField.stringValue?.isEmpty ?? true)
+#else
+        let hasCurrentValue = filterElementsField.stringValue != filterElementsField.placeholderValue
+#endif
+        
+        if hasCurrentValue {
+            clearElementFilter()
+            filterElementsField.assertExistenceAndTap()
+        }
+        
+        filterElementsField.typeText(text)
+    }
+}
+
+private extension XCUIElement {
+    /// The element's value as a string.
+    var stringValue: String? {
+        value as? String
     }
 }

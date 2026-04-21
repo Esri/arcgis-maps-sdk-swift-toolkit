@@ -17,11 +17,16 @@ import SwiftUI
 
 /// A view for text input.
 struct TextInput: View {
-    /// The view model for the form.
+    /// The view model for the embedded feature form.
     @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+    /// The view model for the feature form.
+    @Environment(FeatureFormViewModel.self) private var featureFormViewModel
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
+    
+    /// Performs camera authorization request handling.
+    @State private var cameraRequester = CameraRequester()
     
     /// A Boolean value indicating whether the full screen text input is presented.
     @State private var fullScreenTextInputIsPresented = false
@@ -29,7 +34,16 @@ struct TextInput: View {
     /// A Boolean value indicating whether the code scanner is presented.
     @State private var scannerIsPresented = false
     
-    /// The current text value.
+    /// The element's current value.
+    ///
+    /// - Note: A string is used, irrespective of the element's field type, in order to take advantage of the
+    /// feature form's validation system. If the user enters an alphanumeric value into a numeric field, it
+    /// triggers a validation error that is shown in the UI. If a type respective of the field type is used
+    /// instead, when the user enters an alphanumeric string into a numeric field, the bound value is not
+    /// updated and the opportunity to present a validation error to the user is lost. Additionally, if the user
+    /// gives focus to another field, the bad value they've entered is lost, creating a potentially frustrating
+    /// user experience. The string approach affords the user the opportunity to return the input and resolve
+    /// the validation error.
     @State private var text = ""
     
     /// A Boolean value indicating whether the device camera is accessible for scanning.
@@ -64,17 +78,13 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
-            .onTapGesture {
-                if element.isMultiline {
-                    fullScreenTextInputIsPresented = true
-                }
-            }
 #if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
             }
 #endif
-            .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+            .onValueChange(of: element) { _, newFormattedValue in
+                guard text != newFormattedValue else { return }
                 text = newFormattedValue
             }
     }
@@ -83,7 +93,7 @@ struct TextInput: View {
 private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
-        HStack(alignment: .firstTextBaseline) {
+        HStack {
             Group {
                 if element.isMultiline {
                     Text(text)
@@ -96,9 +106,14 @@ private extension TextInput {
                                 .padding()
 #if targetEnvironment(macCatalyst)
                                 .environment(embeddedFeatureFormViewModel)
+                                .environment(featureFormViewModel)
 #endif
                         }
-                        .frame(minHeight: 100, alignment: .top)
+                        .frame(maxWidth: .infinity, minHeight: 100, alignment: .topLeading)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            fullScreenTextInputIsPresented = true
+                        }
                 } else {
                     TextField(
                         element.label,
@@ -109,11 +124,6 @@ private extension TextInput {
                     .accessibilityIdentifier("\(element.label) Text Input")
                     .focused($isFocused)
                     .keyboardType(keyboardType)
-#if os(visionOS)
-                    // No need for hover effect since it will be applied
-                    // properly at 'formInputStyle'.
-                    .hoverEffectDisabled()
-#endif
                     .onChange(of: isFocused) {
                         embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
                     }
@@ -125,12 +135,11 @@ private extension TextInput {
                     }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
 #if os(iOS)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
-                        // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
+                        // Known SwiftUI issue: This button is known to sometimes not appear.
                         positiveNegativeButton
                         Spacer()
                     }
@@ -151,12 +160,22 @@ private extension TextInput {
                     text.removeAll()
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
+#if os(visionOS)
+                .buttonStyle(.bordered)
+                // Constrain the size of the bordered button on visionOS to
+                // prevent layout shift.
+                .frame(idealWidth: 21, idealHeight: 21)
+#endif
             }
 #if !os(visionOS)
             if isBarcodeScanner {
                 Button {
                     embeddedFeatureFormViewModel.focusedElement = element
-                    scannerIsPresented = true
+                    if cameraRequester.authorizationStatus == .authorized {
+                        scannerIsPresented = true
+                    } else {
+                        cameraRequester.request()
+                    }
                 } label: {
                     Image(systemName: "barcode.viewfinder")
                         .font(.title2)
@@ -165,10 +184,15 @@ private extension TextInput {
                 .disabled(cameraIsDisabled)
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("\(element.label) Scan Button")
+                .cameraRequester(cameraRequester)
+                .onChange(of: cameraRequester.authorizationStatus) { _, newValue in
+                    if newValue == .authorized {
+                        scannerIsPresented = true
+                    }
+                }
             }
 #endif
         }
-        .formInputStyle(isTappable: true)
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
@@ -228,32 +252,25 @@ private extension TextInput {
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
         var body: some View {
-            HStack {
-                FormElementHeader(element: element)
-                Button("Done") {
-                    dismiss()
-                }
-#if !os(visionOS)
-                .buttonStyle(.plain)
-                .foregroundStyle(Color.accentColor)
-#endif
+            NavigationStack {
+                TextEditor(text: $text)
+                    .focused($isFocused)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationTitle(element.label)
+                    .onAppear {
+                        isFocused = true
+                    }
+                    .onChange(of: isFocused) {
+                        embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                    }
+                    .scrollContentBackground(.hidden)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            DismissButton(kind: .confirm)
+                        }
+                    }
+                FormElementFooter(element: element)
             }
-            RepresentedUITextView(initialText: text) { text in
-                guard text != element.formattedValue else { return }
-                element.convertAndUpdateValue(text)
-                embeddedFeatureFormViewModel.evaluateExpressions()
-            } onTextViewDidEndEditing: { text in
-                self.text = text
-            }
-            .focused($isFocused)
-            .onAppear {
-                isFocused = true
-            }
-            .onChange(of: isFocused) {
-                embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
-            }
-            Spacer()
-            FormElementFooter(element: element)
         }
     }
 }
@@ -261,41 +278,5 @@ private extension TextInput {
 private extension TextInput {
     private var isBarcodeScanner: Bool {
         element.input is BarcodeScannerFormInput
-    }
-}
-
-private extension View {
-    /// Wraps `onValueChange(of:action:)` with an additional boolean property that when false will
-    /// not monitor value changes.
-    /// - Parameters:
-    ///   - element: The form element to watch for changes on.
-    ///   - when: The boolean value which disables monitoring. When `true` changes will be monitored.
-    ///   - action: The action which watches for changes.
-    /// - Returns: The modified view.
-    func onValueChange(of element: FieldFormElement, when: Bool, action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void) -> some View {
-        modifier(
-            ConditionalChangeOfModifier(element: element, condition: when) { newValue, newFormattedValue in
-                action(newValue, newFormattedValue)
-            }
-        )
-    }
-}
-
-private struct ConditionalChangeOfModifier: ViewModifier {
-    let element: FieldFormElement
-    
-    let condition: Bool
-    
-    let action: (_ newValue: Any?, _ newFormattedValue: String) -> Void
-    
-    func body(content: Content) -> some View {
-        if condition {
-            content
-                .onValueChange(of: element) { newValue, newFormattedValue in
-                    action(newValue, newFormattedValue)
-                }
-        } else {
-            content
-        }
     }
 }

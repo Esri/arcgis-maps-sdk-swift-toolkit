@@ -79,10 +79,12 @@ struct Examples: View {
         return [
             .example("Basemap Gallery", content: BasemapGalleryExampleView()),
             .example("Bookmarks", content: BookmarksExampleView()),
+            .example("Building Explorer", content: BuildingExplorerExampleView()),
             .example("Compass", content: CompassExampleView()),
             .example("Feature Form", content: FeatureFormExampleView()),
             .example("Floating Panel", content: FloatingPanelExampleView()),
             .example("Floor Filter", content: FloorFilterExampleView()),
+            .example("Location Button", content: LocationButtonExampleView()),
             .example("Overview Map", content: OverviewMapExampleView()),
             .example("Popup", content: PopupExampleView()),
             .example("Scalebar", content: ScalebarExampleView()),

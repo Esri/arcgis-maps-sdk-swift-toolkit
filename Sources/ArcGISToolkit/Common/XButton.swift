@@ -40,6 +40,7 @@ struct XButton: View {
         Button(title, systemImage: "xmark") {
             action?() ?? dismiss()
         }
+        .accessibilityLabel(Text(title))
         .labelStyle(.iconOnly)
         .symbolRenderingMode(.hierarchical)
 #if !os(visionOS)
@@ -63,19 +64,11 @@ extension XButton {
 }
 
 #Preview {
-    @Previewable @State var isPresented = true
-    Button {
-        isPresented = true
-    } label: {
-        Text(verbatim: "Present")
-    }
-    .sheet(isPresented: $isPresented) {
-        EmptyView()
-            .overlay(alignment: .topTrailing) {
-                XButton(.dismiss)
-                    .font(.title)
-                    .padding()
-            }
-            .interactiveDismissDisabled()
+    NavigationStack {
+        VStack {
+            XButton(.clear)
+            XButton(.dismiss)
+        }
+        .navigationTitle("Preview")
     }
 }

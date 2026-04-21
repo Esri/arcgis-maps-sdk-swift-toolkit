@@ -1,3 +1,9 @@
+/* A label with the name of a terminal on an associated
+utility element (first variable) and a percentage
+(second variable) indicating the relative location along
+an edge where a utility association is (logically) located. */
+"%@, %@" = "%@, %@";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld selected";
 
@@ -14,8 +20,17 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "A map area cannot be downloaded at this time.";
 
-/* A label for an option to add a new utility association. */
+/* A label for a button to add a new utility association. */
+"Add" = "Add";
+
+/* A label for a button to add a new utility network association. */
 "Add Association" = "Add Association";
+
+/* A label for a button to add a new file attachment. */
+"Add Attachment" = "Add Attachment";
+
+/* A label for a button to add a new field filtering condition. */
+"Add Condition" = "Add Condition";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Add Map Area";
@@ -32,11 +47,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "All the trace inputs and results will be lost.";
 
-/* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "Allow";
-
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "An error occurred while fetching map areas.";
+
+/* A question asking for confirmation to discard changes. */
+"Are you sure you want to discard the changes?" = "Are you sure you want to discard the changes?";
 
 /* The title for a map area. */
 "Area %lld" = "Area %lld";
@@ -44,8 +59,17 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "Area Name";
 
+/* A navigation title for the Association Settings page. */
+"Association Settings" = "Association Settings";
+
+/* A label in reference to a utility association type. */
+"Association Type" = "Association Type";
+
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Associations";
+
+/* A label for the "Attachment" utility association kind. */
+"Attachment" = "Attachment";
 
 /* A label in reference to attachments. */
 "Attachments" = "Attachments";
@@ -62,6 +86,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Authentication Required";
 
+/* A section header label in reference to the asset
+types available to use when querying for utility
+association feature candidates. */
+"Available Asset Types" = "Available Asset Types";
+
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Back";
 
@@ -73,6 +102,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* Building (Level of Detail) */
 "Building" = "Building";
+
+/* A label for layer picker in the Building Explorer. */
+"Building Scene Layers" = "Building Scene Layers";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "Buildings";
@@ -87,7 +119,8 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Camera access is disabled";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Cancel your current action to close/hide a sheet or pop-up. */
 "Cancel" = "Cancel";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -96,17 +129,36 @@ for the AR experience. */
 /* The status text when a map area download is cancelled. */
 "Cancelled" = "Cancelled";
 
+/* A label indicating that the remote host's certificate is not trusted. */
+"Cannot Verify Server Identity" = "Cannot Verify Server Identity";
+
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificate Required";
 
-/* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "Certificate Trust Warning";
+/* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to compass" = "Change auto-pan mode to compass";
+
+/* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to navigation" = "Change auto-pan mode to navigation";
+
+/* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to recenter" = "Change auto-pan mode to recenter";
+
+/* The accessibility hint of the location button. */
+"Change location display options" = "Change location display options";
+
+/* A label of a mark on a chart. */
+"chart-mark-label-value" = "Value";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Choose From Files";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Choose From Library";
+
+/* Instructional text for the user to choose a feature
+candidate to add as a utility association. */
+"Choose to add" = "Choose to add";
 
 /* Cities (Level of Detail) */
 "Cities" = "Cities";
@@ -120,23 +172,51 @@ for the AR experience. */
 /* A directive to clear all of the completed utility network traces. */
 "Clear All Results" = "Clear All Results";
 
+/* Close/hide a sheet or pop-up. */
+"Close" = "Close";
+
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Color";
 
-/* An compass description to be read by a screen reader describing the
-current heading. The first variable being a degree value and the
-second being a corresponding cardinal direction (north, northeast,
-east, etc.). */
-"Compass, heading %lld degrees %@" = "Compass, heading %lld degrees %@";
+/* The accessibility value of the location button when the auto-pan mode is compass navigation. */
+"Compass navigation" = "Compass navigation";
 
-/* A label indicating a utility association's 
-containment is not visible. */
-"Content" = "Content";
+/* The accessibility label of the compass button. */
+"compass-button-accessibility-label" = "Compass";
+
+/* A label for a control to pick a condition to filter fields in a table against. */
+"Condition" = "Condition";
+
+/* A label for a control representing a condition and position index used to filter fields in a table. */
+"Condition %lld" = "Condition %lld";
+
+/* A label for button to a open a menu with options for a condition used to filter fields in a table. */
+"Condition %lld Options" = "Condition %lld Options";
+
+/* Confirm the current action and close a sheet or pop-up. */
+"Confirm" = "Confirm";
+
+/* A label for the "Connectivity" utility association kind. */
+"Connectivity" = "Connectivity";
+
+/* A label for construction phase picker in the Building Explorer. */
+"Construction Phase" = "Construction Phase";
+
+/* A label for the "Containment" utility association kind. */
+"Containment" = "Containment";
+
+/* A label for the "contains the text" attribute query condition. */
+"contains the text" = "contains the text";
+
+/* A label indicating whether content in the new
+association is visible or not. */
+"Content Visible" = "Content Visible";
 
 /* Continent (Level of Detail) */
 "Continent" = "Continent";
 
-/* A label for a button used to continue the authentication operation. */
+/* A button indicating the user accepts a potentially dangerous action.
+A label for a button used to continue the authentication operation. */
 "Continue" = "Continue";
 
 /* A label for a button to continue editing the feature form. */
@@ -144,6 +224,9 @@ containment is not visible. */
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Could not retrieve map areas for this map.";
+
+/* Localized text to display the number of items in a collection. */
+"Count %lld" = "Count %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Counties";
@@ -160,9 +243,6 @@ containment is not visible. */
 /* The status text for an opened map area. */
 "Currently open" = "Currently open";
 
-/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Dangerous: The certificate provided by '%@' is not signed by a trusted authority.";
-
 /* Text indicating a field's value must not exceed a maximum date. */
 "Date exceeds maximum" = "Date exceeds maximum";
 
@@ -175,7 +255,7 @@ containment is not visible. */
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
 "Date must be on or before %@" = "Date must be on or before %@";
 
-/* A label for a button used to delete a utility network trace input component or result. */
+/* A label for a "Delete" button. */
 "Delete" = "Delete";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
@@ -199,8 +279,14 @@ containment is not visible. */
 /* A question asking if the user would like to discard their unsaved edits. */
 "Discard Edits?" = "Discard Edits?";
 
+/* A label for Disciplines & Categories section in the Building Explorer. */
+"Disciplines & Categories" = "Disciplines & Categories";
+
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Dismiss";
+
+/* A label for the "does not contain the text" attribute query condition. */
+"does not contain the text" = "does not contain the text";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Done";
@@ -220,9 +306,15 @@ containment is not visible. */
 /* The status text when a map area is downloading. */
 "Downloading" = "Downloading";
 
+/* A label for a button to duplicate a field filter. */
+"Duplicate" = "Duplicate";
+
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Duplicate starting points cannot be added.";
+
+/* The cardinal direction East. */
+"East" = "East";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -238,6 +330,9 @@ AR experience. */
 /* An error message indicating the selected attachment is an empty file and not supported. */
 "Empty files are not supported." = "Empty files are not supported.";
 
+/* A label for the "ends with" attribute query condition. */
+"ends with" = "ends with";
+
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
@@ -248,6 +343,9 @@ hold the minimum and maximum length respectively. */
 
 /* An instruction to enter a name. */
 "Enter a name" = "Enter a name";
+
+/* A prompt for a text field to enter a value. */
+"Enter a value" = "Enter a value";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Enter Value";
@@ -295,11 +393,14 @@ The variable provides additional data. */
 to be used as a trace starting point. */
 "Failed to set starting point" = "Failed to set starting point";
 
+/* The accessibility value of the location button when the location display fails to start. */
+"Failed to start" = "Failed to start";
+
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
 "Feature Results" = "Feature Results";
 
-/* A field in a set of data contained in a popup. */
+/* A field in a dataset. */
 "Field" = "Field";
 
 /* A label in reference to fields in a set of data contained in a popup. */
@@ -308,13 +409,35 @@ trace operation. */
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "Filter";
 
+/* A label for a search field to filter utility 
+asset types by name. */
+"Filter asset types by name" = "Filter asset types by name";
+
+/* A label for a button to filter utility association candidates by attributes. */
+"Filter Candidates" = "Filter Candidates";
+
+/* A label for a search field to filter utility 
+association candidate features by name. */
+"Filter candidates by name" = "Filter candidates by name";
+
+/* Label for a text field used to 
+filter visible elements in a form. */
+"Filter Elements" = "Filter Elements";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "Filter facilities";
 
+/* A label for a search field to filter utility 
+association feature sources by name. */
+"Filter feature sources by name" = "Filter feature sources by name";
+
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Filter sites";
+
+/* A notice used when closing the view that the filters have not been applied/saved. */
+"Filters have not been applied" = "Filters have not been applied";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Find a place or address";
@@ -326,16 +449,34 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "Finish editing failed.\n%@";
 
-/* A label in reference to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an 
+edge of a utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
+
+/* A label for the element on the "from" side of a utility association. */
+"From Element" = "From Element";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Function Results";
 
+/* Description of error thrown when a global scene is being provided to the Building Explorer. */
+"Global scenes aren't supported in the Building Explorer." = "Global scenes aren't supported in the Building Explorer.";
+
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
 "heading" = "heading";
+
+/* The accessibility value of a compass. The first
+variable is a heading in degrees and the second
+variable is a cardinal or intercardinal direction. */
+"Heading: %@ %@" = "Heading: %@ %@";
+
+/* The section header for the auto-pan section in the location button context menu. */
+"Hide Location" = "Hide Location";
+
+/* The accessibility hint of the hide location display context menu option. */
+"Hide location display" = "Hide location display";
 
 /* House Property (Level of Detail) */
 "House Property" = "House Property";
@@ -343,8 +484,44 @@ AR experience. */
 /* Houses (Level of Detail) */
 "Houses" = "Houses";
 
+/* A label indicating that a challenge should be ignored. */
+"Ignore" = "Ignore";
+
+/* A label for the "is" attribute query condition. */
+"is" = "is";
+
+/* A label for the "is blank" attribute query condition. */
+"is blank" = "is blank";
+
+/* A label for the "is empty" attribute query condition. */
+"is empty" = "is empty";
+
+/* A label for the "is not" attribute query condition. */
+"is not" = "is not";
+
+/* A label for the "is not blank" attribute query condition. */
+"is not blank" = "is not blank";
+
+/* A label for the "is not empty" attribute query condition. */
+"is not empty" = "is not empty";
+
+/* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
+"Junction Edge Object Connectivity From Side" = "Junction Edge Object Connectivity From Side";
+
+/* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
+"Junction Edge Object Connectivity Midspan" = "Junction Edge Object Connectivity Midspan";
+
+/* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
+"Junction Edge Object Connectivity To Side" = "Junction Edge Object Connectivity To Side";
+
+/* A label for a pie chart legend item label. */
+"Label" = "Label";
+
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Less than minimum value";
+
+/* A label for the level picker in the Building Explorer. */
+"Level" = "Level";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Level of Detail";
@@ -354,6 +531,38 @@ AR experience. */
 
 /* The status text when a map area failed to load. */
 "Loading failed" = "Loading failed";
+
+/* The accessibility label of the location button when the location display is not showing. */
+"Location display" = "Location display";
+
+/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-compass" = "Compass";
+
+/* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-navigation" = "Navigation";
+
+/* The label text for turning the auto-pan mode off in the location button context menu. */
+"location-button-accessibility-value-off" = "Off";
+
+/* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-recenter" = "Recenter";
+
+/* The accessibility label of the location button when the 
+location display is showing and the button cycles 
+through auto-pan modes. */
+"location-button-auto-pan-accessibility-label" = "Auto-pan";
+
+/* The header of the auto-pan section in the location button context menu. */
+"location-button-auto-pan-section-header-title" = "Auto-pan";
+
+/* The accessibility value of the location button when the auto-pan mode is navigation. */
+"location-button-status-label-navigation" = "Navigation";
+
+/* The accessibility value of the location button when the auto-pan mode is off. */
+"location-button-status-label-off" = "Off";
+
+/* The accessibility value of the location button when the auto-pan mode is recenter. */
+"location-button-status-label-recenter" = "Recenter";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Map Areas";
@@ -379,6 +588,12 @@ AR experience. */
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Mode";
 
+/* A label for a button to view details for a list row. */
+"More Information" = "More Information";
+
+/* A label for a button to see more options for a list row. */
+"More Options" = "More Options";
+
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Name";
 
@@ -388,20 +603,50 @@ AR experience. */
 /* A label in reference to a specific utility network. */
 "Network" = "Network";
 
+/* A navigation title for a page listing
+data sources in a utility network. */
+"Network Data Source" = "Network Data Source";
+
+/* A navigation title for a view to create a new association in. */
+"New Association" = "New Association";
+
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "New name";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "New Trace";
 
-/* A label indicating that no associations are available for the popup element. */
+/* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "No Associations";
+
+/* A label indicating an element
+contains no file attachments. */
+"No attachments" = "No attachments";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "No bookmarks";
 
+/* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
+"No building scene layers in the scene." = "No building scene layers in the scene.";
+
+/* A label indicating no utility association 
+candidates matching the filter criteria were
+found. */
+"No Candidates Found" = "No Candidates Found";
+
+/* A label indicating no field filtering conditions have been added. */
+"No conditions added" = "No conditions added";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "No configurations available.";
+
+/* A label indicating no utility association 
+feature sources were found. */
+"No Feature Sources Found" = "No Feature Sources Found";
+
+/* A label indicating no utility association 
+filter results were found. */
+"No Filter Results Found" = "No Filter Results Found";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "No Internet Connection";
@@ -427,6 +672,15 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "No Value";
 
+/* The cardinal direction North. */
+"North" = "North";
+
+/* The intercardinal direction Northeast. */
+"Northeast" = "Northeast";
+
+/* The intercardinal direction Northwest. */
+"Northwest" = "Northwest";
+
 /* A trace function output result was not provided. */
 "Not Available" = "Not Available";
 
@@ -439,11 +693,18 @@ AR experience. */
 /* A label indicating that the map is offline disabled. */
 "Offline Disabled" = "Offline Disabled";
 
+/* The default title of the live activity for taking a map offline. */
+"Offline Map" = "Offline Map";
+
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Online Map Failed to Load";
+
+/* Helper text indicating that an accompanying button only 
+removes only the association.  */
+"Only removes the association. The feature remains." = "Only removes the association. The feature remains.";
 
 /* A label for a button to open a map area. */
 "Open" = "Open";
@@ -462,6 +723,10 @@ AR experience. */
 
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Password Required";
+
+/* A label in reference to a percent along an 
+edge of a utility network element. */
+"Percent Along" = "Percent Along";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Please enable camera access in settings.";
@@ -490,6 +755,15 @@ The variable provides additional data. */
 /* A label for a button to refresh map area content. */
 "Refresh" = "Refresh";
 
+/* A label for a button to remove a utility network association. */
+"Remove" = "Remove";
+
+/* A label for a button to remove a utility association. */
+"Remove Association" = "Remove Association";
+
+/* A label for a confirmation to remove a utility association. */
+"Remove association?" = "Remove association?";
+
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Remove Download";
 
@@ -498,6 +772,9 @@ The variable provides additional data. */
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
 "Rename attachment" = "Rename attachment";
+
+/* The accessibility hint of the compass component. */
+"Reorient map north" = "Reorient map north";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -521,6 +798,14 @@ current visible extent of the map or scene. */
 
 /* A label for a button to save edits. */
 "Save Edits" = "Save Edits";
+
+/* A generic prompt for a search field where a more
+specific prompt has not been provided. */
+"Search" = "Search";
+
+/* A label for a search bar to search through feature 
+candidates to use in a new utility association. */
+"Search Features" = "Search Features";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Search Query";
@@ -547,6 +832,15 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "Show all";
 
+/* A label indicating the intended outcome of using the filter view. */
+"Show features that meet all the conditions" = "Show features that meet all the conditions";
+
+/* A label for the Show Full Model toggle in the Building Explorer. */
+"Show Full Model" = "Show Full Model";
+
+/* A label for a button to show the indicated feature on the map. */
+"Show On Map" = "Show On Map";
+
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
 
@@ -556,19 +850,40 @@ or more levels in a floor-aware map or scene. */
 /* Small Building (Level of Detail) */
 "Small Building" = "Small Building";
 
+/* The cardinal direction South. */
+"South" = "South";
+
+/* The intercardinal direction Southeast. */
+"Southeast" = "Southeast";
+
+/* The intercardinal direction Southwest. */
+"Southwest" = "Southwest";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Spatial reference mismatch.";
 
+/* The accessibility value of the location button when the location display is starting. */
+"Starting" = "Starting";
+
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Starting Points";
+
+/* A label for the "starts with" attribute query condition. */
+"starts with" = "starts with";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "State/Province";
 
 /* States/Provinces (Level of Detail) */
 "States/Provinces" = "States/Provinces";
+
+/* The accessibility value of the location button when the location display is not showing. */
+"Stopped" = "Stopped";
+
+/* The accessibility value of the location button when the location display is stopping. */
+"Stopping" = "Stopping";
 
 /* Street (Level of Detail) */
 "Street" = "Street";
@@ -586,6 +901,9 @@ place an ArcGIS Scene. */
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "Tap on the image for more information.";
+
+/* A label in reference to a utility terminal. */
+"Terminal" = "Terminal";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminal Configuration";
@@ -609,6 +927,9 @@ match the spatial reference of the map. */
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "The form wasn't submitted";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "The identity of \"%@\" cannot be verified. Would you like to connect anyway?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "The map does not have a spatial reference.";
@@ -638,8 +959,14 @@ to be imported as an attachment. */
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "There are no map areas for this map. Tap the button below to get started.";
 
+/* A notice communicating that a feature form has no elements. */
+"This form is empty." = "This form is empty.";
+
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Title";
+
+/* A label for the element on the "to" side of a utility association. */
+"To Element" = "To Element";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Today";
@@ -659,8 +986,14 @@ to be imported as an attachment. */
 /* A label in reference to a utility network trace configuration. */
 "Trace Configuration" = "Trace Configuration";
 
+/* A label indicating that a utility network trace is running. */
+"Tracing…" = "Tracing…";
+
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Try Again";
+
+/* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
+"Turn off auto-pan" = "Turn off auto-pan";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Unknown";
@@ -682,11 +1015,11 @@ without saving. */
 /* A label in reference to a credential username. */
 "Username" = "Username";
 
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "Unknown";
+
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Validation Errors";
-
-/* A value in a set of data contained in a popup. */
-"Value" = "Value";
 
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
@@ -718,9 +1051,19 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "View";
 
+/* A label for the visible toggle in the Building Explorer. */
+"Visible" = "Visible";
+
+/* A label indicating a utility association's 
+containment is not visible. */
+"Visible: false" = "Visible: false";
+
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "Visible Content";
+"Visible: true" = "Visible: true";
+
+/* The cardinal direction West. */
+"West" = "West";
 
 /* World (Level of Detail) */
 "World" = "World";
@@ -742,6 +1085,9 @@ The host is indicated in the variable. */
 
 /* A button to change the map to the extent of the selected trace. */
 "Zoom To" = "Zoom To";
+
+/* A label for the zoom to building button in the Building Explorer. */
+"Zoom to building" = "Zoom to building";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Zoom To Result";

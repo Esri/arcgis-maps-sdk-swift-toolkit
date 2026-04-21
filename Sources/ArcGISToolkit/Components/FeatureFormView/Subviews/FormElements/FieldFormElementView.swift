@@ -15,6 +15,7 @@
 import ArcGIS
 import SwiftUI
 
+/// A view which creates the correct input view based on the field form element's input type and editable state.
 struct FieldFormElementView: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false

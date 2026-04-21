@@ -15,12 +15,39 @@
 import Foundation
 
 extension String {
+    /// A localized string for the word "Cancel".
+    static var cancel: Self {
+        .init(
+            localized: "Cancel",
+            bundle: .toolkitModule,
+            comment: "Cancel your current action to close/hide a sheet or pop-up."
+        )
+    }
+    
     /// A localized string for the word "Clear".
     static var clear: Self {
         .init(
             localized: "Clear",
             bundle: .toolkitModule,
             comment: "E.g. Remove text from a text field."
+        )
+    }
+    
+    /// A localized string for the word "Close".
+    static var close: Self {
+        .init(
+            localized: "Close",
+            bundle: .toolkitModule,
+            comment: "Close/hide a sheet or pop-up."
+        )
+    }
+    
+    /// A localized string for the word "Confirm".
+    static var confirm: Self {
+        .init(
+            localized: "Confirm",
+            bundle: .toolkitModule,
+            comment: "Confirm the current action and close a sheet or pop-up."
         )
     }
     
@@ -42,15 +69,6 @@ extension String {
         )
     }
     
-    /// A localized string for the word "Field".
-    static var field: Self {
-        .init(
-            localized: "Field",
-            bundle: .toolkitModule,
-            comment: "A field in a set of data contained in a popup."
-        )
-    }
-    
     /// A localized string for the phrase "No Value".
     static var noValue: Self {
         .init(
@@ -66,15 +84,6 @@ extension String {
             localized: "Settings",
             bundle: .toolkitModule,
             comment: "A label for a button to take the user to a contextually inferred settings page."
-        )
-    }
-    
-    /// A localized string for the word "Value".
-    static var value: Self {
-        .init(
-            localized: "Value",
-            bundle: .toolkitModule,
-            comment: "A value in a set of data contained in a popup."
         )
     }
 }

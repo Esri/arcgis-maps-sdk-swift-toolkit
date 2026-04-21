@@ -1,0 +1,46 @@
+@Tutorial(time: 10) {
+    @Intro(title: "BuildingExplorer Tutorial") {
+        The building explorer component enables a user to explore a building model
+        in a `BuildingSceneLayer`.
+        @Image(source: BuildingExplorer, alt: "An image of the BuildingExplorer component.")
+    }
+    
+    @Section(title: "Using the BuildingExplorer") {
+        @ContentAndMedia {
+            @Image(source: BuildingExplorer, alt: "An image of the BuildingExplorer component.")
+        }
+        
+        @Steps {
+            @Step {
+                To begin, set up the parent view.
+                Initialize a local scene that contains a building scene layer.
+                Finally, add a `LocalSceneView` to the body of view, passing in the scene.
+                @Code(name: "BuildingExplorerExampleView.swift", file: BuildingExplorerStep1.swift)
+            }
+            
+            @Step {
+                Add a button to present the `BuildingExplorer` component.
+                
+                The property `explorerIsVisible` will control when the 
+                `BuildingExplorer` is shown or hidden.
+                @Code(name: "BuildingExplorerExampleView.swift", file: BuildingExplorerStep2.swift)
+            }
+            
+            @Step {
+                Host the `BuildingExplorer` inside of a popover.
+                
+                Create two new properties `selection` and `items`.
+                `selection` will hold and update the selected item in the Building Explorer.
+                `items` will hold and update the items being shown in the Building Explorer.
+                @Code(name: "BuildingExplorerExampleView.swift", file: BuildingExplorerStep3.swift)
+            }
+            
+            @Step {
+                (Optional) Display a zoom to building button in the Building Explorer.
+                
+                Pass the `LocalSceneViewProxy` to the Building Explorer.
+                @Code(name: "BuildingExplorerExampleView.swift", file: BuildingExplorerStep4.swift)
+            }
+        }
+    }
+}

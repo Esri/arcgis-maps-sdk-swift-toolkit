@@ -23,24 +23,19 @@ struct FormElementHeader: View {
     let element: FormElement
     
     var body: some View {
-        HStack {
-            titleTextForElement
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            Spacer()
-        }
-        .padding(.top, formElementPadding)
+        title
+            .foregroundStyle(.secondary)
     }
     
     @ViewBuilder
-    var titleTextForElement: some View {
+    var title: some View {
         switch element {
+        case is GroupFormElement:
+            EmptyView()
         case let element as FieldFormElement:
             FieldFormElementTitle(element: element)
-        case let element as UtilityAssociationsFormElement:
-            Text(element.label)
         default:
-            EmptyView()
+            Text(element.label)
         }
     }
 }
@@ -51,7 +46,6 @@ extension FormElementHeader {
         
         /// A Boolean value indicating whether the input is editable.
         @State private var isEditable = false
-        
         /// A Boolean value indicating whether a value for the input is required.
         @State private var isRequired = false
         

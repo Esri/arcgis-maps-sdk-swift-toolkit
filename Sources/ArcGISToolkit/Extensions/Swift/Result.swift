@@ -23,15 +23,4 @@ public extension Result where Failure == Error {
             self = .failure(error)
         }
     }
-    
-    /// Converts the result to a `nil` in the case of a user cancelled error.
-    /// - Returns: `Self` or `nil` if there was a cancellation error.
-    /// - Attention: Deprecated at 200.3.
-    @available(*, deprecated, message: "Check the 'failure' case for 'CancellationError' instead.")
-    func cancellationToNil() -> Self? {
-        guard case .failure(_ as CancellationError) = self else {
-            return self
-        }
-        return nil
-    }
 }

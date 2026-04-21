@@ -134,21 +134,6 @@ private extension ArcGISCredential {
     }
 }
 
-private extension Binding where Value == Bool {
-    /// Creates a Boolean binding that wraps a binding to an optional.
-    ///
-    /// `wrappedValue` is `true` when the given optional value is non-`nil`. The
-    /// optional value is set to `nil` when the parent binding is set.
-    /// - Parameter optionalValue: A binding to the optional value to wrap.
-    init<T: Sendable>(optionalValue: Binding<T?>) {
-        self.init {
-            optionalValue.wrappedValue != nil
-        } set: { _ in
-            optionalValue.wrappedValue = nil
-        }
-    }
-}
-
 private extension Popup {
     /// The `objectid` attribute of the popup's geo element.
     var objectID: Int64? {
@@ -156,21 +141,6 @@ private extension Popup {
             return nil
         }
         return feature.attributes["objectid"] as? Int64
-    }
-}
-
-private extension UserDefaults {
-    /// The value `-layerName`  launch argument.
-    var layerName: String? {
-        string(forKey: "layerName")
-    }
-    
-    /// The value `-objectID`  launch argument.
-    var objectID: Int? {
-        guard let objectIDString = string(forKey: "objectID") else {
-            return nil
-        }
-        return Int(objectIDString)
     }
 }
 

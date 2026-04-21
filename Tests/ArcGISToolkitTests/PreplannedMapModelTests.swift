@@ -25,6 +25,7 @@ private extension PreplannedMapAreaProtocol {
     var description: String { "This is the description text" }
     var thumbnail: LoadableImage? { nil }
     var supportsRedownloading: Bool { true }
+    var sizeInBytes: Int { 1_234 }
     
     func retryLoad() async throws { }
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
@@ -188,12 +189,23 @@ class PreplannedMapModelTests: XCTestCase {
                 directoryHint: .isDirectory
             )
         
+#if os(iOS) && !targetEnvironment(macCatalyst)
+        if #available(iOS 26.0, *) {
+            // Make sure to specify to use the job manager so that the job can
+            // be found.
+            OfflineManager.shared.configuration = .init(useBGContinuedProcessingTasks: false)
+        }
+#endif
+        
         defer {
             // Clean up JobManager.
             OfflineManager.shared.jobManager.jobs.removeAll()
             
             // Clean up folder.
             try? FileManager.default.removeItem(at: mmpkDirectory)
+            
+            // Clean up OfflineManager
+            try? OfflineManager.shared.removeAllDownloads()
         }
         
         // Add a job to the job manager so that when creating the model it finds it.

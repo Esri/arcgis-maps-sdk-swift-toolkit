@@ -12,22 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-
-extension View {
-    /// Conditionally configures the title display mode for this view.
-    /// - Parameters:
-    ///   - displayMode: The style to use for displaying the title.
-    ///   - isApplied: A Boolean value indicating whether the display mode is applied to the view or not.
-    @ViewBuilder
-    func navigationBarTitleDisplayMode(
-        _ displayMode: NavigationBarItem.TitleDisplayMode,
-        isApplied: Bool
-    ) -> some View {
-        if isApplied {
-            self.navigationBarTitleDisplayMode(displayMode)
-        } else {
-            self
-        }
+extension Dictionary where Key == String {
+    /// Performs a case-insensitive key lookup on the dictionary.
+    /// - Parameter lookupKey: The key to lookup.
+    /// - Returns: The value for the key, if found.
+    func valueIgnoringCase(for lookupKey: String) -> Value? {
+        first { $0.key.caseInsensitiveCompare(lookupKey) == .orderedSame }?.value
     }
 }

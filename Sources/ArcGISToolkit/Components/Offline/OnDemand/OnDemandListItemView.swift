@@ -82,7 +82,7 @@ extension OnDemandMapModel: OfflineMapAreaListItemInfo {
     var listItemDescription: String {
         switch status {
         case .downloaded:
-            directorySizeText
+            sizeText
         default:
             ""
         }

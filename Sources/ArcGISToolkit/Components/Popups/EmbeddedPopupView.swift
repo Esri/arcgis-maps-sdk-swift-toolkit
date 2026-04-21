@@ -24,9 +24,6 @@ struct EmbeddedPopupView: View {
     /// The `Popup` to display.
     let popup: Popup
     
-    /// The properties used by the parent PopupView's deprecated members.
-    @Environment(\.deprecatedProperties) private var deprecatedProperties
-    
     /// The result of evaluating the popup expressions.
     @State private var evaluationResult: Result<[PopupElement], Error>?
     
@@ -34,8 +31,11 @@ struct EmbeddedPopupView: View {
         VStack(spacing: 0) {
             switch evaluationResult {
             case .success(let evaluatedElements):
-                PopupElementList(popupElements: evaluatedElements)
-                    .environment(\.popupTitle, popup.title)
+                PopupElementList(
+                    popupElements: evaluatedElements,
+                    editSummary: popup.editSummary
+                )
+                .environment(\.popupTitle, popup.title)
             case .failure(let error):
                 Text(
                     "Popup evaluation failed: \(error.localizedDescription)",
@@ -61,7 +61,9 @@ struct EmbeddedPopupView: View {
         .background(Color(.systemBackground))
 #endif
         .preference(key: PresentedPopupPreferenceKey.self, value: .init(object: popup))
-        .popupViewHeader(title: popup.title)
+        .popupViewToolbar()
+        .navigationTitle(popup.title)
+        .navigationBarTitleDisplayMode(.inline)
         .task(id: ObjectIdentifier(popup)) {
             // Initial evaluation for a newly assigned popup.
             guard !Task.isCancelled else { return }
@@ -90,47 +92,42 @@ struct EmbeddedPopupView: View {
             _ = try await popup.evaluateExpressions()
             return popup.evaluatedElements
         }
-        
-        // Logs an error if UtilityAssociationsFormElements are used with the deprecated initializer.
-        // This can be removed when `PopupView.init(popup:isPresented:)` is removed.
-        if deprecatedProperties.initializerWasUsed,
-           case .success(let evaluatedElements) = evaluationResult,
-           evaluatedElements.contains(where: { $0 is UtilityAssociationsPopupElement }) {
-            Logger.popupView.error(
-                "'UtilityAssociationsPopupElement's are not supported with this 'PopupView' initializer. Use 'init(root:isPresented:)' instead."
-            )
-        }
     }
 }
 
 extension EmbeddedPopupView {
     private struct PopupElementList: View {
         let popupElements: [PopupElement]
-        
-        /// The properties used by the parent PopupView's deprecated members.
-        @Environment(\.deprecatedProperties) private var deprecatedProperties
+        let editSummary: String
         
         var body: some View {
-            List(popupElements) { popupElement in
-                Group {
-                    switch popupElement {
-                    case let popupElement as AttachmentsPopupElement:
-                        AttachmentsFeatureElementView(popupElement: popupElement)
-                    case let popupElement as FieldsPopupElement:
-                        FieldsPopupElementView(popupElement: popupElement)
-                    case let popupElement as MediaPopupElement:
-                        MediaPopupElementView(popupElement: popupElement)
-                    case let popupElement as TextPopupElement:
-                        TextPopupElementView(popupElement: popupElement)
-                    case let popupElement as UtilityAssociationsPopupElement:
-                        if !deprecatedProperties.initializerWasUsed {
+            List {
+                ForEach(popupElements) { popupElement in
+                    Group {
+                        switch popupElement {
+                        case let popupElement as AttachmentsPopupElement:
+                            AttachmentsFeatureElementView(popupElement: popupElement)
+                        case let popupElement as FieldsPopupElement:
+                            FieldsPopupElementView(popupElement: popupElement)
+                        case let popupElement as MediaPopupElement:
+                            MediaPopupElementView(popupElement: popupElement)
+                        case let popupElement as TextPopupElement:
+                            TextPopupElementView(popupElement: popupElement)
+                        case let popupElement as UtilityAssociationsPopupElement:
                             UtilityAssociationsPopupElementView(popupElement: popupElement)
+                        default:
+                            EmptyView()
                         }
-                    default:
-                        EmptyView()
                     }
+                    .popupListRowStyle()
                 }
-                .popupListRowStyle()
+                
+                if !editSummary.isEmpty {
+                    Text(editSummary)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .listSectionSeparator(.hidden, edges: .top)
+                }
             }
             .listStyle(.plain)
         }
@@ -140,13 +137,6 @@ extension EmbeddedPopupView {
 extension EnvironmentValues {
     /// The title of the popup associated with the view.
     @Entry var popupTitle = ""
-}
-
-private extension Logger {
-    /// A logger for the popup view.
-    static var popupView: Logger {
-        Logger(subsystem: "com.esri.ArcGISToolkit", category: "PopupView")
-    }
 }
 
 extension View {

@@ -78,10 +78,8 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
         .task { thumbnailImage = await model.thumbnailImage }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button.done {
-                    dismiss()
-                }
+            ToolbarItem(placement: .topBarTrailing) {
+                DismissButton(kind: .close)
             }
         }
     }
@@ -115,8 +113,8 @@ struct OfflineMapAreaMetadataView<Metadata: OfflineMapAreaMetadata>: View {
                 .font(.title2)
                 .fontWeight(.bold)
             
-            if model.isDownloaded {
-                Text(model.directorySizeText)
+            if model.sizeInBytes > 0 {
+                Text(model.sizeText)
                     .lineLimit(1)
                     .foregroundStyle(.secondary)
             }
@@ -139,8 +137,9 @@ protocol OfflineMapAreaMetadata: ObservableObject {
     var isDownloaded: Bool { get }
     /// A Boolean value indicating if the area is in a state that allows download.
     var allowsDownload: Bool { get }
-    /// The size of the area on disk.
-    var directorySize: Int { get }
+    /// The size of the area to be downloaded, or the size once it is on the
+    /// local disk.
+    var sizeInBytes: Int { get }
     /// A Boolean value indicating whether the metadata view should be dismissed when the map area is deleted.
     var dismissMetadataViewOnDelete: Bool { get }
     /// The localized text for the button to remove a download.
@@ -152,13 +151,13 @@ protocol OfflineMapAreaMetadata: ObservableObject {
 }
 
 extension OfflineMapAreaMetadata {
-    private var directorySizeMeasurement: Measurement<UnitInformationStorage> {
-        Measurement(value: Double(directorySize), unit: .bytes)
+    private var sizeMeasurement: Measurement<UnitInformationStorage> {
+        Measurement(value: Double(sizeInBytes), unit: .bytes)
     }
     
-    var directorySizeText: String {
+    var sizeText: String {
         .init(
-            localized: "Size: \(directorySizeMeasurement, format: .byteCount(style: .file))",
+            localized: "Size: \(sizeMeasurement, format: .byteCount(style: .file))",
             bundle: .toolkitModule,
             comment: "A label for the file size of the map area."
         )
@@ -175,7 +174,7 @@ private class MockMetadata: OfflineMapAreaMetadata {
     var description: String { "" }
     var isDownloaded: Bool { true }
     var allowsDownload: Bool { true }
-    var directorySize: Int { 1_000_000_000 }
+    var sizeInBytes: Int { 1_000_000_000 }
     var dismissMetadataViewOnDelete: Bool { false }
     var removeDownloadButtonText: LocalizedStringResource { .removeDownload }
     

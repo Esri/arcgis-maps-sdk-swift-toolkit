@@ -1,3 +1,9 @@
+/* A label with the name of a terminal on an associated
+utility element (first variable) and a percentage
+(second variable) indicating the relative location along
+an edge where a utility association is (logically) located. */
+"%@, %@" = "%@, %@";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld kiválasztva";
 
@@ -14,8 +20,17 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "A térképterület jelenleg nem tölthető le.";
 
-/* A label for an option to add a new utility association. */
+/* A label for a button to add a new utility association. */
+"Add" = "Hozzáadás";
+
+/* A label for a button to add a new utility network association. */
 "Add Association" = "Társítás hozzáadása";
+
+/* A label for a button to add a new file attachment. */
+"Add Attachment" = "Csatolmány hozzáadása";
+
+/* A label for a button to add a new field filtering condition. */
+"Add Condition" = "Feltétel hozzáadása";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Térképterület hozzáadása";
@@ -32,11 +47,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Minden nyomkövetési bemenet és eredmény elveszik.";
 
-/* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "Megenged";
-
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "Hiba történt a térképterületek lekérése közben.";
+
+/* A question asking for confirmation to discard changes. */
+"Are you sure you want to discard the changes?" = "Biztosan elveti a módosításokat?";
 
 /* The title for a map area. */
 "Area %lld" = "Terület %lld";
@@ -44,11 +59,23 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "Terület neve";
 
+/* A navigation title for the Association Settings page. */
+"Association Settings" = "Társítási beállítások";
+
+/* A label in reference to a utility association type. */
+"Association Type" = "Társítás típusa";
+
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Társítások";
 
+/* A label for the "Attachment" utility association kind. */
+"Attachment" = "Csatolmány";
+
 /* A label in reference to attachments. */
 "Attachments" = "Csatolmányok";
+
+/* The status text when attachments failed to load. */
+"Attachments failed to load." = "A csatolmányok betöltése meghiúsult.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "A(z) %@ méretnél nagyobb csatolmányok nem tölthetők le.";
@@ -58,6 +85,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Hitelesítés szükséges";
+
+/* A section header label in reference to the asset
+types available to use when querying for utility
+association feature candidates. */
+"Available Asset Types" = "Elérhető eszköztípusok";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Vissza";
@@ -70,6 +102,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* Building (Level of Detail) */
 "Building" = "Épület";
+
+/* A label for layer picker in the Building Explorer. */
+"Building Scene Layers" = "Épület 3D térképrétege";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "Épületek";
@@ -84,7 +119,8 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "A kamera hozzáférése le van tiltva";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Cancel your current action to close/hide a sheet or pop-up. */
 "Cancel" = "Mégse";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -93,17 +129,36 @@ for the AR experience. */
 /* The status text when a map area download is cancelled. */
 "Cancelled" = "Megszakítva";
 
+/* A label indicating that the remote host's certificate is not trusted. */
+"Cannot Verify Server Identity" = "A szerver identitása nem ellenőrizhető";
+
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Megkövetelt tanúsítvány";
 
-/* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "Tanúsítvány-megbízhatósági figyelmeztetés";
+/* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to compass" = "Az automatikus pásztázás mód módosítása iránytűre";
+
+/* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to navigation" = "Az automatikus pásztázás mód módosítása navigációra";
+
+/* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to recenter" = "Az automatikus pásztázás mód módosítása újbóli központosításra";
+
+/* The accessibility hint of the location button. */
+"Change location display options" = "A helymegjelenítési opciók módosítása";
+
+/* A label of a mark on a chart. */
+"chart-mark-label-value" = "Érték";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Kiálasztás fájlokból";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Kiválasztás a könyvtárból";
+
+/* Instructional text for the user to choose a feature
+candidate to add as a utility association. */
+"Choose to add" = "Kiválasztás a hozzáadáshoz";
 
 /* Cities (Level of Detail) */
 "Cities" = "Városok";
@@ -117,23 +172,51 @@ for the AR experience. */
 /* A directive to clear all of the completed utility network traces. */
 "Clear All Results" = "Összes eredmény törlése";
 
+/* Close/hide a sheet or pop-up. */
+"Close" = "Bezárás";
+
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Szín";
 
-/* An compass description to be read by a screen reader describing the
-current heading. The first variable being a degree value and the
-second being a corresponding cardinal direction (north, northeast,
-east, etc.). */
-"Compass, heading %lld degrees %@" = "Iránytű, irány %lld fok %@";
+/* The accessibility value of the location button when the auto-pan mode is compass navigation. */
+"Compass navigation" = "Iránytűs navigáció";
 
-/* A label indicating a utility association's 
-containment is not visible. */
-"Content" = "Tartalom";
+/* The accessibility label of the compass button. */
+"compass-button-accessibility-label" = "Iránytű";
+
+/* A label for a control to pick a condition to filter fields in a table against. */
+"Condition" = "Feltétel";
+
+/* A label for a control representing a condition and position index used to filter fields in a table. */
+"Condition %lld" = "%lld feltétel";
+
+/* A label for button to a open a menu with options for a condition used to filter fields in a table. */
+"Condition %lld Options" = "%lld feltétel opciói";
+
+/* Confirm the current action and close a sheet or pop-up. */
+"Confirm" = "Megerősít";
+
+/* A label for the "Connectivity" utility association kind. */
+"Connectivity" = "Összekapcsolhatóság";
+
+/* A label for construction phase picker in the Building Explorer. */
+"Construction Phase" = "Szerkesztési fázis";
+
+/* A label for the "Containment" utility association kind. */
+"Containment" = "Befoglalás";
+
+/* A label for the "contains the text" attribute query condition. */
+"contains the text" = "tartalmazza a szöveget";
+
+/* A label indicating whether content in the new
+association is visible or not. */
+"Content Visible" = "Látható tartalom";
 
 /* Continent (Level of Detail) */
 "Continent" = "Földrész";
 
-/* A label for a button used to continue the authentication operation. */
+/* A button indicating the user accepts a potentially dangerous action.
+A label for a button used to continue the authentication operation. */
 "Continue" = "Folytatás";
 
 /* A label for a button to continue editing the feature form. */
@@ -141,6 +224,9 @@ containment is not visible. */
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Ehhez a térképhez nem sikerült lekérni a térképterületeket.";
+
+/* Localized text to display the number of items in a collection. */
+"Count %lld" = "Szám %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Megyék";
@@ -157,9 +243,6 @@ containment is not visible. */
 /* The status text for an opened map area. */
 "Currently open" = "Jelenleg nyitva";
 
-/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Veszélyes: %@ által megadott tanúsítványt nem megbízható hatóság írta alá.";
-
 /* Text indicating a field's value must not exceed a maximum date. */
 "Date exceeds maximum" = "A dátum túllépi a maximális értéket";
 
@@ -172,7 +255,7 @@ containment is not visible. */
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
 "Date must be on or before %@" = "A dátumnak a következő időpontra vagy azelőttre kell esnie: %@";
 
-/* A label for a button used to delete a utility network trace input component or result. */
+/* A label for a "Delete" button. */
 "Delete" = "Törlés";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
@@ -196,8 +279,14 @@ containment is not visible. */
 /* A question asking if the user would like to discard their unsaved edits. */
 "Discard Edits?" = "Elveti a szerkesztéseket?";
 
+/* A label for Disciplines & Categories section in the Building Explorer. */
+"Disciplines & Categories" = "Tudományágak és kategóriák";
+
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Elrejtés";
+
+/* A label for the "does not contain the text" attribute query condition. */
+"does not contain the text" = "nem tartalmazza a szöveget";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Kész";
@@ -217,9 +306,15 @@ containment is not visible. */
 /* The status text when a map area is downloading. */
 "Downloading" = "Letöltés";
 
+/* A label for a button to duplicate a field filter. */
+"Duplicate" = "Másolás";
+
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Duplikált kezdőpontok nem adhatók hozzá.";
+
+/* The cardinal direction East. */
+"East" = "Kelet";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -235,6 +330,9 @@ AR experience. */
 /* An error message indicating the selected attachment is an empty file and not supported. */
 "Empty files are not supported." = "Az üres fájlok nincsenek támogatva.";
 
+/* A label for the "ends with" attribute query condition. */
+"ends with" = "erre végződik";
+
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
@@ -245,6 +343,9 @@ hold the minimum and maximum length respectively. */
 
 /* An instruction to enter a name. */
 "Enter a name" = "Név megadása";
+
+/* A prompt for a text field to enter a value. */
+"Enter a value" = "Adjon meg egy értéket";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Adja meg az értéket";
@@ -292,11 +393,14 @@ The variable provides additional data. */
 to be used as a trace starting point. */
 "Failed to set starting point" = "A kiindulási pont beállítása sikertelen";
 
+/* The accessibility value of the location button when the location display fails to start. */
+"Failed to start" = "Elindítás sikertelen";
+
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
 "Feature Results" = "Vektoros elem eredményei";
 
-/* A field in a set of data contained in a popup. */
+/* A field in a dataset. */
 "Field" = "A mező";
 
 /* A label in reference to fields in a set of data contained in a popup. */
@@ -305,13 +409,35 @@ trace operation. */
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "Szűrő";
 
+/* A label for a search field to filter utility 
+asset types by name. */
+"Filter asset types by name" = "Eszköztípusok szűrése név szerint";
+
+/* A label for a button to filter utility association candidates by attributes. */
+"Filter Candidates" = "Jelöltek szűrése";
+
+/* A label for a search field to filter utility 
+association candidate features by name. */
+"Filter candidates by name" = "Jelöltek szűrése név szerint";
+
+/* Label for a text field used to 
+filter visible elements in a form. */
+"Filter Elements" = "Elemek szűrése";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "Létesítmények szűrése";
 
+/* A label for a search field to filter utility 
+association feature sources by name. */
+"Filter feature sources by name" = "Vektoroselem-források szűrése név szerint";
+
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Helyek szűrése";
+
+/* A notice used when closing the view that the filters have not been applied/saved. */
+"Filters have not been applied" = "A szűrők nincsenek alkalmazva";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Hely vagy cím keresése";
@@ -323,16 +449,34 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "A szerkesztés befejezése nem sikerült. %@";
 
-/* A label in reference to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an 
+edge of a utility network element. */
 "Fraction Along Edge" = "Részarány az él mentén";
+
+/* A label for the element on the "from" side of a utility association. */
+"From Element" = "Az elemtől";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Funkció eredményei";
 
+/* Description of error thrown when a global scene is being provided to the Building Explorer. */
+"Global scenes aren't supported in the Building Explorer." = "A Building Explorer nem támogatja a globális 3D térképeket.";
+
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
 "heading" = "mozgási irány";
+
+/* The accessibility value of a compass. The first
+variable is a heading in degrees and the second
+variable is a cardinal or intercardinal direction. */
+"Heading: %@ %@" = "Mozgási irány: %@ %@";
+
+/* The section header for the auto-pan section in the location button context menu. */
+"Hide Location" = "Hely elrejtése";
+
+/* The accessibility hint of the hide location display context menu option. */
+"Hide location display" = "Helymegjelenítés elrejtése";
 
 /* House Property (Level of Detail) */
 "House Property" = "Háztulajdonság";
@@ -340,8 +484,44 @@ AR experience. */
 /* Houses (Level of Detail) */
 "Houses" = "Házak";
 
+/* A label indicating that a challenge should be ignored. */
+"Ignore" = "Kihagyás";
+
+/* A label for the "is" attribute query condition. */
+"is" = "értéke a következő:";
+
+/* A label for the "is blank" attribute query condition. */
+"is blank" = "üres";
+
+/* A label for the "is empty" attribute query condition. */
+"is empty" = "üres";
+
+/* A label for the "is not" attribute query condition. */
+"is not" = "nem ez";
+
+/* A label for the "is not blank" attribute query condition. */
+"is not blank" = "nem üres";
+
+/* A label for the "is not empty" attribute query condition. */
+"is not empty" = "nem üres";
+
+/* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
+"Junction Edge Object Connectivity From Side" = "Csomópontél-objektum összekapcsolhatóság az oldaltól";
+
+/* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
+"Junction Edge Object Connectivity Midspan" = "Csomópontél-objektum összekapcsolhatóság közepe";
+
+/* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
+"Junction Edge Object Connectivity To Side" = "Csomópontél-objektum összekapcsolhatóság az oldalhoz";
+
+/* A label for a pie chart legend item label. */
+"Label" = "Felirat";
+
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Kisebb, mint a minimális érték";
+
+/* A label for the level picker in the Building Explorer. */
+"Level" = "Szint";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Részletességi szint";
@@ -351,6 +531,38 @@ AR experience. */
 
 /* The status text when a map area failed to load. */
 "Loading failed" = "Betöltés sikertelen";
+
+/* The accessibility label of the location button when the location display is not showing. */
+"Location display" = "Helymegjelenítés";
+
+/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-compass" = "Iránytű";
+
+/* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-navigation" = "Navigáció";
+
+/* The label text for turning the auto-pan mode off in the location button context menu. */
+"location-button-accessibility-value-off" = "Ki";
+
+/* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-recenter" = "Újbóli központosítás";
+
+/* The accessibility label of the location button when the 
+location display is showing and the button cycles 
+through auto-pan modes. */
+"location-button-auto-pan-accessibility-label" = "Automatikus pásztázás";
+
+/* The header of the auto-pan section in the location button context menu. */
+"location-button-auto-pan-section-header-title" = "Automatikus pásztázás";
+
+/* The accessibility value of the location button when the auto-pan mode is navigation. */
+"location-button-status-label-navigation" = "Navigáció";
+
+/* The accessibility value of the location button when the auto-pan mode is off. */
+"location-button-status-label-off" = "Ki";
+
+/* The accessibility value of the location button when the auto-pan mode is recenter. */
+"location-button-status-label-recenter" = "Újbóli központosítás";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Térképterületek";
@@ -376,6 +588,12 @@ AR experience. */
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Mód";
 
+/* A label for a button to view details for a list row. */
+"More Information" = "További információ";
+
+/* A label for a button to see more options for a list row. */
+"More Options" = "További lehetőségek";
+
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Név";
 
@@ -385,20 +603,50 @@ AR experience. */
 /* A label in reference to a specific utility network. */
 "Network" = "Hálózat";
 
+/* A navigation title for a page listing
+data sources in a utility network. */
+"Network Data Source" = "Hálózati adatforrás";
+
+/* A navigation title for a view to create a new association in. */
+"New Association" = "Új társítás";
+
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Új név";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "Új nyomkövetés";
 
-/* A label indicating that no associations are available for the popup element. */
+/* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "Nincsenek társítások";
+
+/* A label indicating an element
+contains no file attachments. */
+"No attachments" = "Nincsenek csatolmányok";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Nincsenek könyvjelzők";
 
+/* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
+"No building scene layers in the scene." = "Nincsenek épület-3D térképrétegek a 3D térképen.";
+
+/* A label indicating no utility association 
+candidates matching the filter criteria were
+found. */
+"No Candidates Found" = "Nem találhatók jelöltek";
+
+/* A label indicating no field filtering conditions have been added. */
+"No conditions added" = "Nem adtak hozzá feltételeket";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Nem állnak rendelkezésre konfigurációk.";
+
+/* A label indicating no utility association 
+feature sources were found. */
+"No Feature Sources Found" = "Nem találhatók vektoroselem-források";
+
+/* A label indicating no utility association 
+filter results were found. */
+"No Filter Results Found" = "Nincsenek szűrési találatok";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Nincs internetkapcsolat";
@@ -424,6 +672,15 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "Nincs érték";
 
+/* The cardinal direction North. */
+"North" = "Észak";
+
+/* The intercardinal direction Northeast. */
+"Northeast" = "Északkelet";
+
+/* The intercardinal direction Northwest. */
+"Northwest" = "Északnyugat";
+
 /* A trace function output result was not provided. */
 "Not Available" = "Nem áll rendelkezésre";
 
@@ -436,11 +693,18 @@ AR experience. */
 /* A label indicating that the map is offline disabled. */
 "Offline Disabled" = "Kapcsolat nélküli állapot letiltva";
 
+/* The default title of the live activity for taking a map offline. */
+"Offline Map" = "Kapcsolat nélküli térkép";
+
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Nem sikerült betölteni az online térképet";
+
+/* Helper text indicating that an accompanying button only 
+removes only the association.  */
+"Only removes the association. The feature remains." = "Csak a társítást távolítja el. A vektoros elem megmarad.";
 
 /* A label for a button to open a map area. */
 "Open" = "Megnyitva";
@@ -459,6 +723,10 @@ AR experience. */
 
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Jelszó szükséges";
+
+/* A label in reference to a percent along an 
+edge of a utility network element. */
+"Percent Along" = "Százalékos távolság";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Engedélyezze a kamerához való hozzáférést a beállításokban.";
@@ -487,6 +755,15 @@ The variable provides additional data. */
 /* A label for a button to refresh map area content. */
 "Refresh" = "Frissítés";
 
+/* A label for a button to remove a utility network association. */
+"Remove" = "Eltávolítás";
+
+/* A label for a button to remove a utility association. */
+"Remove Association" = "Társítás eltávolítása";
+
+/* A label for a confirmation to remove a utility association. */
+"Remove association?" = "Eltávolítja a társítást?";
+
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Letöltés eltávolítása";
 
@@ -495,6 +772,9 @@ The variable provides additional data. */
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
 "Rename attachment" = "Csatolmány átnevezése";
+
+/* The accessibility hint of the compass component. */
+"Reorient map north" = "Térkép újbóli tájolása észak felé";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -518,6 +798,14 @@ current visible extent of the map or scene. */
 
 /* A label for a button to save edits. */
 "Save Edits" = "Módosítások mentése";
+
+/* A generic prompt for a search field where a more
+specific prompt has not been provided. */
+"Search" = "Keresés";
+
+/* A label for a search bar to search through feature 
+candidates to use in a new utility association. */
+"Search Features" = "Vektoros elemek keresése";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Keresési lekérdezés";
@@ -544,6 +832,15 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "Összes megjelenítése";
 
+/* A label indicating the intended outcome of using the filter view. */
+"Show features that meet all the conditions" = "Az összes feltételnek megfelelő vektoros elemek megjelenítése";
+
+/* A label for the Show Full Model toggle in the Building Explorer. */
+"Show Full Model" = "Teljes modell megjelenítése";
+
+/* A label for a button to show the indicated feature on the map. */
+"Show On Map" = "Megjelenítés a térképen";
+
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Webhelyek";
 
@@ -553,19 +850,40 @@ or more levels in a floor-aware map or scene. */
 /* Small Building (Level of Detail) */
 "Small Building" = "Kis épület";
 
+/* The cardinal direction South. */
+"South" = "Dél";
+
+/* The intercardinal direction Southeast. */
+"Southeast" = "Délkelet";
+
+/* The intercardinal direction Southwest. */
+"Southwest" = "Délnyugat";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Térbeli referencia nem egyezik";
 
+/* The accessibility value of the location button when the location display is starting. */
+"Starting" = "Elindítás";
+
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Kiindulási pontok";
+
+/* A label for the "starts with" attribute query condition. */
+"starts with" = "ezzel kezdődik";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Állam/tartomány";
 
 /* States/Provinces (Level of Detail) */
 "States/Provinces" = "Államok/tartományok";
+
+/* The accessibility value of the location button when the location display is not showing. */
+"Stopped" = "Leállítva";
+
+/* The accessibility value of the location button when the location display is stopping. */
+"Stopping" = "Leállítás";
 
 /* Street (Level of Detail) */
 "Street" = "Utca";
@@ -583,6 +901,9 @@ place an ArcGIS Scene. */
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "További információkért koppintson a képre.";
+
+/* A label in reference to a utility terminal. */
+"Terminal" = "Terminál";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminál konfigurálása";
@@ -606,6 +927,9 @@ match the spatial reference of the map. */
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Az űrlap nem lett beküldve";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "A(z) „%@” identitása nem ellenőrizhető. Mindenképp szeretne csatlakozni?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "A térkép nem rendelkezik térbeli referenciával.";
@@ -635,8 +959,14 @@ to be imported as an attachment. */
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "Ehhez a térképhez nincsenek térképterületek. A kezdéshez koppintson az alábbi gombra.";
 
+/* A notice communicating that a feature form has no elements. */
+"This form is empty." = "Ez az űrlap üres.";
+
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Beosztás";
+
+/* A label for the element on the "to" side of a utility association. */
+"To Element" = "Az elemhez";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Ma";
@@ -656,8 +986,14 @@ to be imported as an attachment. */
 /* A label in reference to a utility network trace configuration. */
 "Trace Configuration" = "Nyomkövetés konfigurálása";
 
+/* A label indicating that a utility network trace is running. */
+"Tracingâ€¦" = "Nyomon követés";
+
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Próbálja meg újra";
+
+/* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
+"Turn off auto-pan" = "Automatikus pásztázás kikapcsolása";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Ismeretlen";
@@ -679,11 +1015,11 @@ without saving. */
 /* A label in reference to a credential username. */
 "Username" = "Felhasználónév";
 
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "Ismeretlen";
+
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Érvényesítési hibák";
-
-/* A value in a set of data contained in a popup. */
-"Value" = "Érték";
 
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
@@ -715,9 +1051,19 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Megtekintés";
 
+/* A label for the visible toggle in the Building Explorer. */
+"Visible" = "Látható";
+
+/* A label indicating a utility association's 
+containment is not visible. */
+"Visible: false" = "Látható: hamis";
+
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "Látható tartalom";
+"Visible: true" = "Látható: igaz";
+
+/* The cardinal direction West. */
+"West" = "Nyugat";
 
 /* World (Level of Detail) */
 "World" = "Világ";
@@ -739,6 +1085,9 @@ The host is indicated in the variable. */
 
 /* A button to change the map to the extent of the selected trace. */
 "Zoom To" = "Nagyítás/kicsinyítés:";
+
+/* A label for the zoom to building button in the Building Explorer. */
+"Zoom to building" = "Nagyítás az épületre";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Nagyítás az eredményre";

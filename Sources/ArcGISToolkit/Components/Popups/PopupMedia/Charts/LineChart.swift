@@ -37,13 +37,13 @@ struct LineChart: View {
     var body: some View {
         Chart(chartData) {
             LineMark(
-                x: .value(String.field, $0.label),
-                y: .value(String.value, $0.value)
+                x: .value(Text.field, $0.label),
+                y: .value(Text.value, $0.value)
             )
             .foregroundStyle(Color($0.color))
             PointMark(
-                x: .value(String.field, $0.label),
-                y: .value(String.value, $0.value)
+                x: .value(Text.field, $0.label),
+                y: .value(Text.value, $0.value)
             )
             .foregroundStyle(Color($0.color))
         }

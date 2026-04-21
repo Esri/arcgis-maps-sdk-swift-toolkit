@@ -15,7 +15,7 @@
 import SwiftUI
 
 /// Represents a cardinal or intercardinal direction.
-internal enum CompassDirection: String {
+enum CompassDirection {
     case north
     case northeast
     case east
@@ -26,30 +26,84 @@ internal enum CompassDirection: String {
     case northwest
 }
 
-internal extension CompassDirection {
+extension CompassDirection {
     /// Initializes a `CompassDirection` from a given degree value. All values will be normalized
     /// between 0° and 360°.
     init(_ degrees: Double) {
         let angle = Angle(degrees: degrees).normalizedDegrees
-        switch angle {
+        self = switch angle {
         case 0..<22.5, 337.5..<360:
-            self = .north
+            .north
         case 22.5..<67.5:
-            self = .northeast
+            .northeast
         case 67.5..<112.5:
-            self = .east
+            .east
         case 112.5..<157.5:
-            self = .southeast
+            .southeast
         case 157.5..<202.5:
-            self = .south
+            .south
         case 202.5..<247.5:
-            self = .southwest
+            .southwest
         case 247.5..<292.5:
-            self = .west
+            .west
         case 292.5..<337.5:
-            self = .northwest
+            .northwest
         default:
             fatalError()
+        }
+    }
+    
+    /// The name of this compass direction.
+    var name: Text {
+        switch self {
+        case .north:
+            Text(
+                "North",
+                bundle: .toolkitModule,
+                comment: "The cardinal direction North."
+            )
+        case .northeast:
+            Text(
+                "Northeast",
+                bundle: .toolkitModule,
+                comment: "The intercardinal direction Northeast."
+            )
+        case .east:
+            Text(
+                "East",
+                bundle: .toolkitModule,
+                comment: "The cardinal direction East."
+            )
+        case .southeast:
+            Text(
+                "Southeast",
+                bundle: .toolkitModule,
+                comment: "The intercardinal direction Southeast."
+            )
+        case .south:
+            Text(
+                "South",
+                bundle: .toolkitModule,
+                comment: "The cardinal direction South."
+            )
+        case .southwest:
+            Text(
+                "Southwest",
+                bundle: .toolkitModule,
+                comment: "The intercardinal direction Southwest."
+            )
+        case .west:
+            Text(
+                "West",
+                bundle: .toolkitModule,
+                comment: "The cardinal direction West."
+            )
+        case .northwest:
+            Text(
+                "Northwest",
+                bundle: .toolkitModule,
+                comment: "The intercardinal direction Northwest."
+            )
         }
     }
 }

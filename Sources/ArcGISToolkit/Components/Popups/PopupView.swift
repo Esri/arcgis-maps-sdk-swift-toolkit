@@ -67,9 +67,6 @@ public struct PopupView: View {
     /// A binding to a Boolean value that determines whether the view is presented.
     let isPresented: Binding<Bool>?
     
-    /// The properties used by the view's deprecated members.
-    var deprecatedProperties = DeprecatedProperties()
-    
     /// The closure to perform when a new popup is shown in the navigation stack.
     var onPopupChanged: ((Popup) -> Void)?
     
@@ -89,7 +86,6 @@ public struct PopupView: View {
             EmbeddedPopupView(popup: popup)
         }
         .environment(\.isPresented, isPresented)
-        .environment(\.deprecatedProperties, deprecatedProperties)
         .onPreferenceChange(PresentedPopupPreferenceKey.self) { wrappedPopup in
             guard let wrappedPopup else { return }
             onPopupChanged?(wrappedPopup.object)

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		88AD13792834355000500B2E /* AuthenticationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AD13782834355000500B2E /* AuthenticationApp.swift */; };
-		88AD137B2834355000500B2E /* SigninView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AD137A2834355000500B2E /* SigninView.swift */; };
+		88AD137B2834355000500B2E /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88AD137A2834355000500B2E /* SignInView.swift */; };
 		88AD137D2834355100500B2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88AD137C2834355100500B2E /* Assets.xcassets */; };
 		88AD13802834355100500B2E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88AD137F2834355100500B2E /* Preview Assets.xcassets */; };
 		88AD138A2834366100500B2E /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = 88AD13892834366100500B2E /* ArcGISToolkit */; };
@@ -24,7 +24,7 @@
 		21B31E8B29EF53BE00A40B10 /* AuthenticationExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AuthenticationExample.entitlements; sourceTree = "<group>"; };
 		88AD13752834355000500B2E /* AuthenticationExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AuthenticationExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88AD13782834355000500B2E /* AuthenticationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationApp.swift; sourceTree = "<group>"; };
-		88AD137A2834355000500B2E /* SigninView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninView.swift; sourceTree = "<group>"; };
+		88AD137A2834355000500B2E /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		88AD137C2834355100500B2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		88AD137F2834355100500B2E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		88AD13862834355C00500B2E /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "arcgis-maps-sdk-swift-toolkit"; path = ..; sourceTree = "<group>"; };
@@ -77,7 +77,7 @@
 				88D24DF7288F6002007A539C /* LoadableImageView.swift */,
 				88D24DF3288F4BEB007A539C /* WebMapsView.swift */,
 				88AD138D283443F800500B2E /* MapItemView.swift */,
-				88AD137A2834355000500B2E /* SigninView.swift */,
+				88AD137A2834355000500B2E /* SignInView.swift */,
 				88D24DEF288F062D007A539C /* ProfileView.swift */,
 				88D24DF5288F5BAE007A539C /* UserView.swift */,
 				88AD137C2834355100500B2E /* Assets.xcassets */,
@@ -133,7 +133,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1320;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					88AD13742834355000500B2E = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -198,7 +198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88AD138E283443F800500B2E /* MapItemView.swift in Sources */,
-				88AD137B2834355000500B2E /* SigninView.swift in Sources */,
+				88AD137B2834355000500B2E /* SignInView.swift in Sources */,
 				88D24DF4288F4BEB007A539C /* WebMapsView.swift in Sources */,
 				88D24DF2288F2FA1007A539C /* HomeView.swift in Sources */,
 				88D24DF8288F6002007A539C /* LoadableImageView.swift in Sources */,
@@ -263,7 +263,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -320,7 +320,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -354,7 +354,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.8.1;
+				MARKETING_VERSION = 300.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.Authentication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -392,7 +392,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.8.1;
+				MARKETING_VERSION = 300.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.Authentication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";

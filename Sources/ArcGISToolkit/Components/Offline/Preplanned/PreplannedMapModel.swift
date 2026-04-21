@@ -43,7 +43,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     @Published private(set) var mobileMapPackage: MobileMapPackage?
     
     /// The file size of the preplanned map area.
-    @Published private(set) var directorySize = 0
+    @Published private(set) var sizeInBytes = 0
     
     /// The currently running download job.
     @Published private(set) var job: DownloadPreplannedOfflineMapJob?
@@ -107,6 +107,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             // legacy webmaps that have incomplete metadata.
             // If the area loads, then you know for certain the status is complete.
             status = preplannedMapArea.packagingStatus.map(Status.init) ?? .packaged
+            sizeInBytes = preplannedMapArea.sizeInBytes
         } catch MappingError.packagingNotComplete {
             // Load will throw an `MappingError.packagingNotComplete` error if not complete,
             // this case is not a normal load failure.
@@ -124,12 +125,12 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             try await mmpk.load()
             status = .downloaded
             mobileMapPackage = mmpk
-            directorySize = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
+            sizeInBytes = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
         } catch {
             status = .mmpkLoadFailure(error)
             mobileMapPackage = nil
-            directorySize = 0
+            sizeInBytes = 0
             map = nil
         }
     }
@@ -175,7 +176,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
                 downloadDirectory: mmpkDirectoryURL
             )
             
-            OfflineManager.shared.start(job: job, portalItem: offlineMapTask.portalItem!)
+            OfflineManager.shared.startJob(job, portalItem: offlineMapTask.portalItem!, title: title)
             observeJob(job)
         } catch {
             status = .downloadFailure(error)
@@ -198,6 +199,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// when it's done, updates the status, removes the job from the job manager,
     /// and fires a user notification.
     private func observeJob(_ job: DownloadPreplannedOfflineMapJob) {
+        Logger.offlineManager.info("Observing DownloadPreplannedOfflineMapJob.")
         self.job = job
         status = .downloading
         Task { [weak self, job] in
@@ -329,6 +331,8 @@ protocol PreplannedMapAreaProtocol: Sendable {
     var thumbnail: LoadableImage? { get }
     /// A Boolean value indicating if this preplanned map area can be re-downloaded.
     var supportsRedownloading: Bool { get }
+    /// The size of the area in bytes.
+    var sizeInBytes: Int { get }
 }
 
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -338,8 +342,8 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
         let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
             preplannedMapArea: self
         )
-        // Set the update mode to no updates as the offline map is display-only.
-        parameters.updateMode = .noUpdates
+        // Set the update mode.
+        parameters.updateMode = await OfflineManager.shared.configuration.preplannedUpdateMode
         
         return parameters
     }
@@ -439,7 +443,7 @@ extension PreplannedMapModel {
                 offlineMapTask: offlineMapTask,
                 mapArea: mapArea,
                 portalItemID: portalItemID,
-                preplannedMapAreaID: mapArea.id!,
+                preplannedMapAreaID: mapArea.areaID,
                 onRemoveDownload: onRemoveDownload
             )
             preplannedMapModels.append(model)
@@ -472,7 +476,8 @@ extension PreplannedMapModel {
         return .init(
             title: item.title,
             description: item.description,
-            id: preplannedMapAreaID,
+            itemID: portalItemID,
+            areaID: preplannedMapAreaID,
             thumbnail: item.thumbnail
         )
     }
@@ -481,14 +486,31 @@ extension PreplannedMapModel {
 private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     var title: String
     var description: String
-    var id: Item.ID?
+    var itemID: Item.ID
+    var areaID: Item.ID
     var packagingStatus: PreplannedMapArea.PackagingStatus?
     var thumbnail: LoadableImage?
     var supportsRedownloading: Bool { false }
+    var sizeInBytes: Int {
+        FileManager.default.sizeOfDirectory(
+            at: .preplannedDirectory(
+                forPortalItemID: itemID,
+                preplannedMapAreaID: areaID
+            )
+        )
+    }
     
     func retryLoad() async throws {}
     
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
         fatalError()
+    }
+}
+
+extension PreplannedMapArea {
+    /// The download size of the preplanned map area in bytes,
+    /// including the basemap.
+    var sizeInBytes: Int {
+        packageItems.reduce(0, { $0 + $1.size })
     }
 }

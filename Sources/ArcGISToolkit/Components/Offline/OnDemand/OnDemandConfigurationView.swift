@@ -73,9 +73,7 @@ struct OnDemandConfigurationView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button.cancel {
-                        dismiss()
-                    }
+                    DismissButton(kind: .cancel)
                 }
             }
             .task { await loadMap() }
@@ -239,17 +237,25 @@ struct OnDemandConfigurationView: View {
     @ViewBuilder private var failedToLoadView: some View {
         VStack {
             if hasNoInternetConnection {
-                ContentUnavailableView(
-                    LocalizedStringResource.noInternetConnectionErrorMessage.key,
-                    systemImage: "wifi.exclamationmark",
-                    description: Text(cannotDownloadMessage)
-                )
+                ContentUnavailableView {
+                    Label {
+                        Text(.noInternetConnectionErrorMessage)
+                    } icon: {
+                        Image(systemName: "wifi.exclamationmark")
+                    }
+                } description: {
+                    Text(cannotDownloadMessage)
+                }
             } else {
-                ContentUnavailableView(
-                    failedToLoadMessage.key,
-                    systemImage: "exclamationmark.triangle",
-                    description: Text(cannotDownloadMessage)
-                )
+                ContentUnavailableView {
+                    Label {
+                        Text(failedToLoadMessage)
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle")
+                    }
+                } description: {
+                    Text(cannotDownloadMessage)
+                }
             }
             Button {
                 Task { await loadMap() }

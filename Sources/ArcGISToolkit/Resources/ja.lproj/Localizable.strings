@@ -1,3 +1,9 @@
+/* A label with the name of a terminal on an associated
+utility element (first variable) and a percentage
+(second variable) indicating the relative location along
+an edge where a utility association is (logically) located. */
+"%@, %@" = "%@、%@";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld が選択されました";
 
@@ -14,8 +20,17 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "現時点では、マップ エリアはダウンロードできません。";
 
-/* A label for an option to add a new utility association. */
+/* A label for a button to add a new utility association. */
+"Add" = "追加";
+
+/* A label for a button to add a new utility network association. */
 "Add Association" = "関連付けの追加";
+
+/* A label for a button to add a new file attachment. */
+"Add Attachment" = "アタッチメントの追加";
+
+/* A label for a button to add a new field filtering condition. */
+"Add Condition" = "条件の追加";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "マップ エリアの追加";
@@ -32,11 +47,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "トレースの入力および結果がすべて失われます。";
 
-/* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "許可";
-
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "マップ エリアの取得中にエラーが発生しました。";
+
+/* A question asking for confirmation to discard changes. */
+"Are you sure you want to discard the changes?" = "変更を破棄してもよろしいですか？";
 
 /* The title for a map area. */
 "Area %lld" = "エリア %lld";
@@ -44,11 +59,23 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "エリア名";
 
+/* A navigation title for the Association Settings page. */
+"Association Settings" = "関連付け設定";
+
+/* A label in reference to a utility association type. */
+"Association Type" = "関連付けタイプ";
+
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "関連付け";
 
+/* A label for the "Attachment" utility association kind. */
+"Attachment" = "添付ファイル";
+
 /* A label in reference to attachments. */
 "Attachments" = "添付ファイル";
+
+/* The status text when attachments failed to load. */
+"Attachments failed to load." = "アタッチメントの読み込みに失敗しました。";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "%@ より大きいアタッチメント ファイルは、ダウンロードできません。";
@@ -58,6 +85,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "認証が必要です";
+
+/* A section header label in reference to the asset
+types available to use when querying for utility
+association feature candidates. */
+"Available Asset Types" = "利用可能なアセット タイプ";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "戻る";
@@ -70,6 +102,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* Building (Level of Detail) */
 "Building" = "建物";
+
+/* A label for layer picker in the Building Explorer. */
+"Building Scene Layers" = "ビルディング シーン レイヤー";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "建物 (複数)";
@@ -84,7 +119,8 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "カメラへのアクセスが無効";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Cancel your current action to close/hide a sheet or pop-up. */
 "Cancel" = "キャンセル";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -93,17 +129,36 @@ for the AR experience. */
 /* The status text when a map area download is cancelled. */
 "Cancelled" = "キャンセル済";
 
+/* A label indicating that the remote host's certificate is not trusted. */
+"Cannot Verify Server Identity" = "サーバー ID を確認できません";
+
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "証明書が必要です";
 
-/* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "証明書の信頼性の警告";
+/* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to compass" = "自動移動モードをコンパスに変更";
+
+/* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to navigation" = "自動移動モードをナビゲーションに変更";
+
+/* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to recenter" = "自動移動モードをリセンターに変更";
+
+/* The accessibility hint of the location button. */
+"Change location display options" = "位置表示オプションの変更";
+
+/* A label of a mark on a chart. */
+"chart-mark-label-value" = "値";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "ファイルから選択";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "ライブラリから選択";
+
+/* Instructional text for the user to choose a feature
+candidate to add as a utility association. */
+"Choose to add" = "選択して追加";
 
 /* Cities (Level of Detail) */
 "Cities" = "都市 (複数)";
@@ -117,23 +172,51 @@ for the AR experience. */
 /* A directive to clear all of the completed utility network traces. */
 "Clear All Results" = "結果をすべて消去";
 
+/* Close/hide a sheet or pop-up. */
+"Close" = "閉じる";
+
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "色";
 
-/* An compass description to be read by a screen reader describing the
-current heading. The first variable being a degree value and the
-second being a corresponding cardinal direction (north, northeast,
-east, etc.). */
-"Compass, heading %lld degrees %@" = "コンパス、方位角 %lld 度 %@";
+/* The accessibility value of the location button when the auto-pan mode is compass navigation. */
+"Compass navigation" = "コンパス ナビゲーション";
 
-/* A label indicating a utility association's 
-containment is not visible. */
-"Content" = "コンテンツ";
+/* The accessibility label of the compass button. */
+"compass-button-accessibility-label" = "コンパス";
+
+/* A label for a control to pick a condition to filter fields in a table against. */
+"Condition" = "条件";
+
+/* A label for a control representing a condition and position index used to filter fields in a table. */
+"Condition %lld" = "条件 %lld";
+
+/* A label for button to a open a menu with options for a condition used to filter fields in a table. */
+"Condition %lld Options" = "条件 %lld のオプション";
+
+/* Confirm the current action and close a sheet or pop-up. */
+"Confirm" = "確認";
+
+/* A label for the "Connectivity" utility association kind. */
+"Connectivity" = "接続性";
+
+/* A label for construction phase picker in the Building Explorer. */
+"Construction Phase" = "構築フェーズ";
+
+/* A label for the "Containment" utility association kind. */
+"Containment" = "格納";
+
+/* A label for the "contains the text" attribute query condition. */
+"contains the text" = "テキストを含む";
+
+/* A label indicating whether content in the new
+association is visible or not. */
+"Content Visible" = "コンテンツ表示";
 
 /* Continent (Level of Detail) */
 "Continent" = "大陸";
 
-/* A label for a button used to continue the authentication operation. */
+/* A button indicating the user accepts a potentially dangerous action.
+A label for a button used to continue the authentication operation. */
 "Continue" = "続行";
 
 /* A label for a button to continue editing the feature form. */
@@ -141,6 +224,9 @@ containment is not visible. */
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "このマップのマップ エリアを取得できませんでした。";
+
+/* Localized text to display the number of items in a collection. */
+"Count %lld" = "カウント %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "郡 (複数)";
@@ -157,9 +243,6 @@ containment is not visible. */
 /* The status text for an opened map area. */
 "Currently open" = "現在開いている";
 
-/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "危険: %@ が提供する証明書は、信頼された認証機関が署名していません。";
-
 /* Text indicating a field's value must not exceed a maximum date. */
 "Date exceeds maximum" = "日付が最大値を超えています";
 
@@ -172,7 +255,7 @@ containment is not visible. */
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
 "Date must be on or before %@" = "日付は %@ かそれ以前にする必要があります";
 
-/* A label for a button used to delete a utility network trace input component or result. */
+/* A label for a "Delete" button. */
 "Delete" = "削除";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
@@ -196,8 +279,14 @@ containment is not visible. */
 /* A question asking if the user would like to discard their unsaved edits. */
 "Discard Edits?" = "編集を破棄しますか？";
 
+/* A label for Disciplines & Categories section in the Building Explorer. */
+"Disciplines & Categories" = "専門分野とカテゴリー";
+
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "終了";
+
+/* A label for the "does not contain the text" attribute query condition. */
+"does not contain the text" = "テキストを含まない";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "終了";
@@ -217,9 +306,15 @@ containment is not visible. */
 /* The status text when a map area is downloading. */
 "Downloading" = "ダウンロードしています";
 
+/* A label for a button to duplicate a field filter. */
+"Duplicate" = "複製";
+
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "重複する始点を追加することはできません。";
+
+/* The cardinal direction East. */
+"East" = "東";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -235,6 +330,9 @@ AR experience. */
 /* An error message indicating the selected attachment is an empty file and not supported. */
 "Empty files are not supported." = "空のファイルはサポートされていません。";
 
+/* A label for the "ends with" attribute query condition. */
+"ends with" = "で終わる";
+
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
@@ -245,6 +343,9 @@ hold the minimum and maximum length respectively. */
 
 /* An instruction to enter a name. */
 "Enter a name" = "名前を入力";
+
+/* A prompt for a text field to enter a value. */
+"Enter a value" = "値を入力";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "値を入力";
@@ -292,11 +393,14 @@ The variable provides additional data. */
 to be used as a trace starting point. */
 "Failed to set starting point" = "始点を設定できません";
 
+/* The accessibility value of the location button when the location display fails to start. */
+"Failed to start" = "開始できませんでした";
+
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
 "Feature Results" = "フィーチャ結果";
 
-/* A field in a set of data contained in a popup. */
+/* A field in a dataset. */
 "Field" = "フィールド";
 
 /* A label in reference to fields in a set of data contained in a popup. */
@@ -305,13 +409,35 @@ trace operation. */
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "フィルター";
 
+/* A label for a search field to filter utility 
+asset types by name. */
+"Filter asset types by name" = "名前でアセット タイプをフィルター";
+
+/* A label for a button to filter utility association candidates by attributes. */
+"Filter Candidates" = "候補の絞り込み";
+
+/* A label for a search field to filter utility 
+association candidate features by name. */
+"Filter candidates by name" = "名前で候補をフィルター";
+
+/* Label for a text field used to 
+filter visible elements in a form. */
+"Filter Elements" = "エレメントの絞り込み";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "施設のフィルター処理";
 
+/* A label for a search field to filter utility 
+association feature sources by name. */
+"Filter feature sources by name" = "名前でフィーチャ ソースをフィルター";
+
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "サイトのフィルター処理";
+
+/* A notice used when closing the view that the filters have not been applied/saved. */
+"Filters have not been applied" = "フィルターが適用されていません";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "場所または住所の検索";
@@ -323,16 +449,34 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "編集の完了に失敗しました。 %@";
 
-/* A label in reference to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an 
+edge of a utility network element. */
 "Fraction Along Edge" = "エッジに沿った部分";
+
+/* A label for the element on the "from" side of a utility association. */
+"From Element" = "始点エレメント";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "関数の結果";
 
+/* Description of error thrown when a global scene is being provided to the Building Explorer. */
+"Global scenes aren't supported in the Building Explorer." = "グローバル シーンは、ビルディング エクスプローラーではサポートされていません。";
+
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
 "heading" = "方位";
+
+/* The accessibility value of a compass. The first
+variable is a heading in degrees and the second
+variable is a cardinal or intercardinal direction. */
+"Heading: %@ %@" = "方位: %@ %@";
+
+/* The section header for the auto-pan section in the location button context menu. */
+"Hide Location" = "位置を表示しない";
+
+/* The accessibility hint of the hide location display context menu option. */
+"Hide location display" = "位置表示を行わない";
 
 /* House Property (Level of Detail) */
 "House Property" = "住宅物件";
@@ -340,8 +484,44 @@ AR experience. */
 /* Houses (Level of Detail) */
 "Houses" = "家屋";
 
+/* A label indicating that a challenge should be ignored. */
+"Ignore" = "無視";
+
+/* A label for the "is" attribute query condition. */
+"is" = "等しい";
+
+/* A label for the "is blank" attribute query condition. */
+"is blank" = "空白";
+
+/* A label for the "is empty" attribute query condition. */
+"is empty" = "空";
+
+/* A label for the "is not" attribute query condition. */
+"is not" = "等しくない";
+
+/* A label for the "is not blank" attribute query condition. */
+"is not blank" = "空白でない";
+
+/* A label for the "is not empty" attribute query condition. */
+"is not empty" = "空でない";
+
+/* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
+"Junction Edge Object Connectivity From Side" = "ジャンクション エッジ オブジェクトの接続性: From から";
+
+/* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
+"Junction Edge Object Connectivity Midspan" = "ジャンクション エッジ オブジェクトの接続性: 中間部分";
+
+/* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
+"Junction Edge Object Connectivity To Side" = "ジャンクション エッジ オブジェクトの接続性: To へ";
+
+/* A label for a pie chart legend item label. */
+"Label" = "ラベル";
+
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "最小値未満です";
+
+/* A label for the level picker in the Building Explorer. */
+"Level" = "レベル";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "詳細レベル";
@@ -351,6 +531,38 @@ AR experience. */
 
 /* The status text when a map area failed to load. */
 "Loading failed" = "読み込めませんでした";
+
+/* The accessibility label of the location button when the location display is not showing. */
+"Location display" = "位置表示";
+
+/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-compass" = "コンパス";
+
+/* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-navigation" = "ナビゲーション";
+
+/* The label text for turning the auto-pan mode off in the location button context menu. */
+"location-button-accessibility-value-off" = "オフ";
+
+/* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-recenter" = "リセンター";
+
+/* The accessibility label of the location button when the 
+location display is showing and the button cycles 
+through auto-pan modes. */
+"location-button-auto-pan-accessibility-label" = "自動移動";
+
+/* The header of the auto-pan section in the location button context menu. */
+"location-button-auto-pan-section-header-title" = "自動移動";
+
+/* The accessibility value of the location button when the auto-pan mode is navigation. */
+"location-button-status-label-navigation" = "ナビゲーション";
+
+/* The accessibility value of the location button when the auto-pan mode is off. */
+"location-button-status-label-off" = "オフ";
+
+/* The accessibility value of the location button when the auto-pan mode is recenter. */
+"location-button-status-label-recenter" = "リセンター";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "マップ エリア";
@@ -376,6 +588,12 @@ AR experience. */
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "モード";
 
+/* A label for a button to view details for a list row. */
+"More Information" = "追加情報";
+
+/* A label for a button to see more options for a list row. */
+"More Options" = "その他のオプション";
+
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "名前";
 
@@ -385,20 +603,50 @@ AR experience. */
 /* A label in reference to a specific utility network. */
 "Network" = "ネットワーク";
 
+/* A navigation title for a page listing
+data sources in a utility network. */
+"Network Data Source" = "ネットワーク データ ソース";
+
+/* A navigation title for a view to create a new association in. */
+"New Association" = "新しい関連付け";
+
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "新しい名前";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "新しいトレース";
 
-/* A label indicating that no associations are available for the popup element. */
+/* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "関連付けはありません";
+
+/* A label indicating an element
+contains no file attachments. */
+"No attachments" = "アタッチメントなし";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "ブックマークがありません";
 
+/* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
+"No building scene layers in the scene." = "シーンにビルディング シーン レイヤーがありません。";
+
+/* A label indicating no utility association 
+candidates matching the filter criteria were
+found. */
+"No Candidates Found" = "候補が見つかりません";
+
+/* A label indicating no field filtering conditions have been added. */
+"No conditions added" = "条件が追加されていません";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "使用できる構成がありません。";
+
+/* A label indicating no utility association 
+feature sources were found. */
+"No Feature Sources Found" = "フィーチャ ソースが見つかりません";
+
+/* A label indicating no utility association 
+filter results were found. */
+"No Filter Results Found" = "フィルター結果が見つかりません";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "インターネット接続なし";
@@ -424,6 +672,15 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "値なし";
 
+/* The cardinal direction North. */
+"North" = "北";
+
+/* The intercardinal direction Northeast. */
+"Northeast" = "北東";
+
+/* The intercardinal direction Northwest. */
+"Northwest" = "北西";
+
 /* A trace function output result was not provided. */
 "Not Available" = "利用不可";
 
@@ -436,11 +693,18 @@ AR experience. */
 /* A label indicating that the map is offline disabled. */
 "Offline Disabled" = "オフラインが無効";
 
+/* The default title of the live activity for taking a map offline. */
+"Offline Map" = "オフライン マップ";
+
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "オンライン マップを読み込めませんでした";
+
+/* Helper text indicating that an accompanying button only 
+removes only the association.  */
+"Only removes the association. The feature remains." = "関連付けのみを削除します。 フィーチャは維持されます。";
 
 /* A label for a button to open a map area. */
 "Open" = "開く";
@@ -459,6 +723,10 @@ AR experience. */
 
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "パスワードが必要です";
+
+/* A label in reference to a percent along an 
+edge of a utility network element. */
+"Percent Along" = "割合";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "設定でカメラへのアクセスを有効にしてください。";
@@ -487,6 +755,15 @@ The variable provides additional data. */
 /* A label for a button to refresh map area content. */
 "Refresh" = "更新";
 
+/* A label for a button to remove a utility network association. */
+"Remove" = "削除";
+
+/* A label for a button to remove a utility association. */
+"Remove Association" = "関連付けの削除";
+
+/* A label for a confirmation to remove a utility association. */
+"Remove association?" = "関連付けを削除しますか？";
+
 /* A label for a button to remove a map area download. */
 "Remove Download" = "ダウンロードの削除";
 
@@ -495,6 +772,9 @@ The variable provides additional data. */
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
 "Rename attachment" = "添付ファイル名の変更";
+
+/* The accessibility hint of the compass component. */
+"Reorient map north" = "マップを北向きに戻す";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -518,6 +798,14 @@ current visible extent of the map or scene. */
 
 /* A label for a button to save edits. */
 "Save Edits" = "編集内容の保存";
+
+/* A generic prompt for a search field where a more
+specific prompt has not been provided. */
+"Search" = "検索";
+
+/* A label for a search bar to search through feature 
+candidates to use in a new utility association. */
+"Search Features" = "フィーチャの検索";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "検索クエリ";
@@ -544,6 +832,15 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "すべて表示";
 
+/* A label indicating the intended outcome of using the filter view. */
+"Show features that meet all the conditions" = "すべての条件を満たすフィーチャを表示";
+
+/* A label for the Show Full Model toggle in the Building Explorer. */
+"Show Full Model" = "フル モデルの表示";
+
+/* A label for a button to show the indicated feature on the map. */
+"Show On Map" = "マップ上に表示";
+
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "サイト";
 
@@ -553,19 +850,40 @@ or more levels in a floor-aware map or scene. */
 /* Small Building (Level of Detail) */
 "Small Building" = "建物 (小)";
 
+/* The cardinal direction South. */
+"South" = "南";
+
+/* The intercardinal direction Southeast. */
+"Southeast" = "南東";
+
+/* The intercardinal direction Southwest. */
+"Southwest" = "南西";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "空間参照が一致しません。";
 
+/* The accessibility value of the location button when the location display is starting. */
+"Starting" = "開始しています";
+
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "始点";
+
+/* A label for the "starts with" attribute query condition. */
+"starts with" = "で始まる";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "都道府県";
 
 /* States/Provinces (Level of Detail) */
 "States/Provinces" = "都道府県 (複数)";
+
+/* The accessibility value of the location button when the location display is not showing. */
+"Stopped" = "停止しました";
+
+/* The accessibility value of the location button when the location display is stopping. */
+"Stopping" = "停止しています";
 
 /* Street (Level of Detail) */
 "Street" = "道路";
@@ -583,6 +901,9 @@ place an ArcGIS Scene. */
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "詳細については、画像をタップしてください。";
+
+/* A label in reference to a utility terminal. */
+"Terminal" = "ターミナル";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "ターミナル構成";
@@ -606,6 +927,9 @@ match the spatial reference of the map. */
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "フォームが送信されませんでした";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "%@ の ID を確認できません。 それでも接続しますか？";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "マップに空間参照がありません。";
@@ -635,8 +959,14 @@ to be imported as an attachment. */
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "このマップにはマップ エリアはありません。 以下のボタンをタップして開始します。";
 
+/* A notice communicating that a feature form has no elements. */
+"This form is empty." = "このフォームは空です。";
+
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "タイトル";
+
+/* A label for the element on the "to" side of a utility association. */
+"To Element" = "終点エレメント";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "今日";
@@ -656,8 +986,14 @@ to be imported as an attachment. */
 /* A label in reference to a utility network trace configuration. */
 "Trace Configuration" = "トレース構成";
 
+/* A label indicating that a utility network trace is running. */
+"Tracingâ€¦" = "トレースしています";
+
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "再試行";
+
+/* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
+"Turn off auto-pan" = "自動移動をオフ";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "不明";
@@ -679,11 +1015,11 @@ without saving. */
 /* A label in reference to a credential username. */
 "Username" = "ユーザー名";
 
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "不明";
+
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "整合チェック エラー";
-
-/* A value in a set of data contained in a popup. */
-"Value" = "値";
 
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
@@ -715,9 +1051,19 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "表示";
 
+/* A label for the visible toggle in the Building Explorer. */
+"Visible" = "表示";
+
+/* A label indicating a utility association's 
+containment is not visible. */
+"Visible: false" = "表示: false";
+
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "表示コンテンツ";
+"Visible: true" = "表示: true";
+
+/* The cardinal direction West. */
+"West" = "西";
 
 /* World (Level of Detail) */
 "World" = "世界";
@@ -739,6 +1085,9 @@ The host is indicated in the variable. */
 
 /* A button to change the map to the extent of the selected trace. */
 "Zoom To" = "ズーム";
+
+/* A label for the zoom to building button in the Building Explorer. */
+"Zoom to building" = "建物にズーム";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "結果にズーム";

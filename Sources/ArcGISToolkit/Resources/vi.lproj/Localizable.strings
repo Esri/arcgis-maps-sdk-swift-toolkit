@@ -1,3 +1,9 @@
+/* A label with the name of a terminal on an associated
+utility element (first variable) and a percentage
+(second variable) indicating the relative location along
+an edge where a utility association is (logically) located. */
+"%@, %@" = "%@, %@";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld đã chọn";
 
@@ -14,8 +20,17 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message explaining that a map area cannot be downloaded at this time. */
 "A map area cannot be downloaded at this time." = "Không thể tải xuống khu vực bản đồ vào lúc này.";
 
-/* A label for an option to add a new utility association. */
+/* A label for a button to add a new utility association. */
+"Add" = "Thêm";
+
+/* A label for a button to add a new utility network association. */
 "Add Association" = "Thêm Liên kết";
+
+/* A label for a button to add a new file attachment. */
+"Add Attachment" = "Thêm Tệp đính kèm";
+
+/* A label for a button to add a new field filtering condition. */
+"Add Condition" = "Thêm Điều kiện";
 
 /* A label for a button to add a map area. */
 "Add Map Area" = "Thêm Khu vực Bản đồ";
@@ -32,11 +47,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "Tất cả các đầu vào và kết quả truy dấu sẽ bị mất.";
 
-/* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "Cho phép";
-
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "Đã xảy ra lỗi khi tìm nạp khu vực bản đồ.";
+
+/* A question asking for confirmation to discard changes. */
+"Are you sure you want to discard the changes?" = "Bạn có chắc chắn muốn hủy bỏ các thay đổi không?";
 
 /* The title for a map area. */
 "Area %lld" = "Khu vực %lld";
@@ -44,11 +59,23 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A hint for the user to enter an area name in the text field. */
 "Area Name" = "Tên Khu vực";
 
+/* A navigation title for the Association Settings page. */
+"Association Settings" = "Thiết lập Liên kết";
+
+/* A label in reference to a utility association type. */
+"Association Type" = "Loại Liên kết";
+
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Liên kết";
 
+/* A label for the "Attachment" utility association kind. */
+"Attachment" = "Phần đính kèm";
+
 /* A label in reference to attachments. */
 "Attachments" = "Các tệp đính kèm";
+
+/* The status text when attachments failed to load. */
+"Attachments failed to load." = "Không thể tải tệp đính kèm.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "Không thể tải xuống tệp đính kèm lớn hơn %@.";
@@ -58,6 +85,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Yêu cầu Xác thực";
+
+/* A section header label in reference to the asset
+types available to use when querying for utility
+association feature candidates. */
+"Available Asset Types" = "Loại Tài sản Có sẵn";
 
 /* A generic label for navigating to the previous screen or returning to the previous context. */
 "Back" = "Quay lại";
@@ -70,6 +102,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* Building (Level of Detail) */
 "Building" = "Công trình";
+
+/* A label for layer picker in the Building Explorer. */
+"Building Scene Layers" = "Lớp Scene Công trình";
 
 /* Buildings (Level of Detail) */
 "Buildings" = "Công trình";
@@ -84,7 +119,8 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Quyền truy cập camera bị tắt";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Cancel your current action to close/hide a sheet or pop-up. */
 "Cancel" = "Hủy";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -93,17 +129,36 @@ for the AR experience. */
 /* The status text when a map area download is cancelled. */
 "Cancelled" = "Đã hủy bỏ";
 
+/* A label indicating that the remote host's certificate is not trusted. */
+"Cannot Verify Server Identity" = "Không thể Xác minh Danh tính Máy chủ";
+
 /* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Yêu cầu Chứng chỉ";
 
-/* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "Cảnh báo Độ tin cậy của Chứng chỉ";
+/* The accessibility hint for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to compass" = "Chuyển chế độ tự động di chuyển sang la bàn";
+
+/* The accessibility hint for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to navigation" = "Chuyển chế độ tự động di chuyển sang điều hướng";
+
+/* The accessibility hint for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"Change auto-pan mode to recenter" = "Chuyển chế độ tự động di chuyển sang về giữa";
+
+/* The accessibility hint of the location button. */
+"Change location display options" = "Thay đổi tùy chọn hiển thị vị trí";
+
+/* A label of a mark on a chart. */
+"chart-mark-label-value" = "Giá trị";
 
 /* A label for a button to choose an file from the user's files. */
 "Choose From Files" = "Chọn Từ Tệp";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose From Library" = "Chọn Từ Thư viện";
+
+/* Instructional text for the user to choose a feature
+candidate to add as a utility association. */
+"Choose to add" = "Chọn để thêm";
 
 /* Cities (Level of Detail) */
 "Cities" = "Thành phố";
@@ -117,23 +172,51 @@ for the AR experience. */
 /* A directive to clear all of the completed utility network traces. */
 "Clear All Results" = "Xóa Tất cả Kết quả";
 
+/* Close/hide a sheet or pop-up. */
+"Close" = "Đóng";
+
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Màu sắc";
 
-/* An compass description to be read by a screen reader describing the
-current heading. The first variable being a degree value and the
-second being a corresponding cardinal direction (north, northeast,
-east, etc.). */
-"Compass, heading %lld degrees %@" = "La bàn, góc %lld đầu mục %@";
+/* The accessibility value of the location button when the auto-pan mode is compass navigation. */
+"Compass navigation" = "Điều hướng bằng la bàn";
 
-/* A label indicating a utility association's 
-containment is not visible. */
-"Content" = "Nội dung";
+/* The accessibility label of the compass button. */
+"compass-button-accessibility-label" = "La bàn";
+
+/* A label for a control to pick a condition to filter fields in a table against. */
+"Condition" = "Điều kiện";
+
+/* A label for a control representing a condition and position index used to filter fields in a table. */
+"Condition %lld" = "Điều kiện %lld";
+
+/* A label for button to a open a menu with options for a condition used to filter fields in a table. */
+"Condition %lld Options" = "Tùy chọn Điều kiện %lld";
+
+/* Confirm the current action and close a sheet or pop-up. */
+"Confirm" = "Xác nhận";
+
+/* A label for the "Connectivity" utility association kind. */
+"Connectivity" = "Kết nối";
+
+/* A label for construction phase picker in the Building Explorer. */
+"Construction Phase" = "Giai đoạn Xây dựng";
+
+/* A label for the "Containment" utility association kind. */
+"Containment" = "Bộ chứa";
+
+/* A label for the "contains the text" attribute query condition. */
+"contains the text" = "chứa văn bản";
+
+/* A label indicating whether content in the new
+association is visible or not. */
+"Content Visible" = "Hiển thị nội dung";
 
 /* Continent (Level of Detail) */
 "Continent" = "Lục địa";
 
-/* A label for a button used to continue the authentication operation. */
+/* A button indicating the user accepts a potentially dangerous action.
+A label for a button used to continue the authentication operation. */
 "Continue" = "Tiếp";
 
 /* A label for a button to continue editing the feature form. */
@@ -141,6 +224,9 @@ containment is not visible. */
 
 /* An error message explaining that map areas could not be retrieved for this map. */
 "Could not retrieve map areas for this map." = "Không thể truy xuất khu vực bản đồ cho bản đồ này.";
+
+/* Localized text to display the number of items in a collection. */
+"Count %lld" = "Số lượng %lld";
 
 /* Counties (Level of Detail) */
 "Counties" = "Hạt";
@@ -157,9 +243,6 @@ containment is not visible. */
 /* The status text for an opened map area. */
 "Currently open" = "Hiện đang mở";
 
-/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Nguy hiểm: Chứng chỉ do '%@' cung cấp không được ký bởi cơ quan đáng tin cậy.";
-
 /* Text indicating a field's value must not exceed a maximum date. */
 "Date exceeds maximum" = "Ngày vượt quá giới hạn tối đa";
 
@@ -172,7 +255,7 @@ containment is not visible. */
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
 "Date must be on or before %@" = "Ngày phải vào hoặc trước %@";
 
-/* A label for a button used to delete a utility network trace input component or result. */
+/* A label for a "Delete" button. */
 "Delete" = "Xóa";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
@@ -196,8 +279,14 @@ containment is not visible. */
 /* A question asking if the user would like to discard their unsaved edits. */
 "Discard Edits?" = "Hủy Chỉnh sửa?";
 
+/* A label for Disciplines & Categories section in the Building Explorer. */
+"Disciplines & Categories" = "Quy tắc & Danh mục";
+
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Bỏ qua";
+
+/* A label for the "does not contain the text" attribute query condition. */
+"does not contain the text" = "không chứa văn bản";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Hoàn tất";
@@ -217,9 +306,15 @@ containment is not visible. */
 /* The status text when a map area is downloading. */
 "Downloading" = "Đang tải xuống";
 
+/* A label for a button to duplicate a field filter. */
+"Duplicate" = "Nhân bản";
+
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Không thể thêm điểm bắt đầu trùng lặp.";
+
+/* The cardinal direction East. */
+"East" = "Đông";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -235,6 +330,9 @@ AR experience. */
 /* An error message indicating the selected attachment is an empty file and not supported. */
 "Empty files are not supported." = "Không hỗ trợ tệp rỗng.";
 
+/* A label for the "ends with" attribute query condition. */
+"ends with" = "kết thúc với";
+
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
@@ -245,6 +343,9 @@ hold the minimum and maximum length respectively. */
 
 /* An instruction to enter a name. */
 "Enter a name" = "Nhập tên";
+
+/* A prompt for a text field to enter a value. */
+"Enter a value" = "Nhập giá trị";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Nhập Giá trị";
@@ -292,11 +393,14 @@ The variable provides additional data. */
 to be used as a trace starting point. */
 "Failed to set starting point" = "Không thể thiết lập điểm bắt đầu";
 
+/* The accessibility value of the location button when the location display fails to start. */
+"Failed to start" = "Không thể bắt đầu";
+
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
 "Feature Results" = "Kết quả Đối tượng";
 
-/* A field in a set of data contained in a popup. */
+/* A field in a dataset. */
 "Field" = "Trường";
 
 /* A label in reference to fields in a set of data contained in a popup. */
@@ -305,13 +409,35 @@ trace operation. */
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "Bộ lọc";
 
+/* A label for a search field to filter utility 
+asset types by name. */
+"Filter asset types by name" = "Lọc loại tài sản theo tên";
+
+/* A label for a button to filter utility association candidates by attributes. */
+"Filter Candidates" = "Lọc Ứng viên‎";
+
+/* A label for a search field to filter utility 
+association candidate features by name. */
+"Filter candidates by name" = "Lọc ứng viên theo tên‎";
+
+/* Label for a text field used to 
+filter visible elements in a form. */
+"Filter Elements" = "Lọc Phần tử";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "Lọc cơ sở";
 
+/* A label for a search field to filter utility 
+association feature sources by name. */
+"Filter feature sources by name" = "Lọc nguồn đối tượng theo tên";
+
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Lọc địa điểm";
+
+/* A notice used when closing the view that the filters have not been applied/saved. */
+"Filters have not been applied" = "Chưa áp dụng bộ lọc";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Tìm địa điểm hoặc địa chỉ";
@@ -323,16 +449,34 @@ contains one or more facilities in a floor-aware map or scene. */
 submitted with additional details. */
 "Finish editing failed.\n%@" = "Không thể hoàn tất chỉnh sửa. %@";
 
-/* A label in reference to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an 
+edge of a utility network element. */
 "Fraction Along Edge" = "Phân số Dọc theo Cạnh";
+
+/* A label for the element on the "from" side of a utility association. */
+"From Element" = "Từ Phần tử";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Kết quả Hàm";
 
+/* Description of error thrown when a global scene is being provided to the Building Explorer. */
+"Global scenes aren't supported in the Building Explorer." = "Scene toàn cầu không được hỗ trợ trong Building Explorer.";
+
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
 "heading" = "đầu mục";
+
+/* The accessibility value of a compass. The first
+variable is a heading in degrees and the second
+variable is a cardinal or intercardinal direction. */
+"Heading: %@ %@" = "Đầu mục: %@ %@";
+
+/* The section header for the auto-pan section in the location button context menu. */
+"Hide Location" = "Ẩn Vị trí";
+
+/* The accessibility hint of the hide location display context menu option. */
+"Hide location display" = "Ẩn thông tin hiển thị vị trí";
 
 /* House Property (Level of Detail) */
 "House Property" = "Thuộc tính Nhà ở";
@@ -340,8 +484,44 @@ AR experience. */
 /* Houses (Level of Detail) */
 "Houses" = "Nhà ở";
 
+/* A label indicating that a challenge should be ignored. */
+"Ignore" = "Bỏ qua";
+
+/* A label for the "is" attribute query condition. */
+"is" = "là";
+
+/* A label for the "is blank" attribute query condition. */
+"is blank" = "trống";
+
+/* A label for the "is empty" attribute query condition. */
+"is empty" = "trống";
+
+/* A label for the "is not" attribute query condition. */
+"is not" = "không phải là";
+
+/* A label for the "is not blank" attribute query condition. */
+"is not blank" = "không trống";
+
+/* A label for the "is not empty" attribute query condition. */
+"is not empty" = "không trống";
+
+/* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
+"Junction Edge Object Connectivity From Side" = "Kết nối đối tượng Junction và Edge Từ Phía";
+
+/* A label for the "Junction Edge Object Connectivity Midspan" utility association kind. */
+"Junction Edge Object Connectivity Midspan" = "Kết nối đối tượng Junction và Edge Từ Giữa";
+
+/* A label for the "Junction Edge Object Connectivity To Side" utility association kind. */
+"Junction Edge Object Connectivity To Side" = "Kết nối đối tượng Junction và Edge Đến Phía";
+
+/* A label for a pie chart legend item label. */
+"Label" = "Nhãn";
+
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Dưới giá trị tối thiểu";
+
+/* A label for the level picker in the Building Explorer. */
+"Level" = "Tầng";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Mức độ chi tiết";
@@ -351,6 +531,38 @@ AR experience. */
 
 /* The status text when a map area failed to load. */
 "Loading failed" = "Tải không thành công";
+
+/* The accessibility label of the location button when the location display is not showing. */
+"Location display" = "Hiển thị vị trí";
+
+/* The label text for choosing the 'compass navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-compass" = "La bàn";
+
+/* The label text for choosing the 'navigation' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-navigation" = "Điều hướng";
+
+/* The label text for turning the auto-pan mode off in the location button context menu. */
+"location-button-accessibility-value-off" = "Tắt";
+
+/* The label text for choosing the 'recenter' auto-pan mode in the location button context menu. */
+"location-button-accessibility-value-recenter" = "Về giữa";
+
+/* The accessibility label of the location button when the 
+location display is showing and the button cycles 
+through auto-pan modes. */
+"location-button-auto-pan-accessibility-label" = "Tự động di chuyển";
+
+/* The header of the auto-pan section in the location button context menu. */
+"location-button-auto-pan-section-header-title" = "Tự động di chuyển";
+
+/* The accessibility value of the location button when the auto-pan mode is navigation. */
+"location-button-status-label-navigation" = "Điều hướng";
+
+/* The accessibility value of the location button when the auto-pan mode is off. */
+"location-button-status-label-off" = "Tắt";
+
+/* The accessibility value of the location button when the auto-pan mode is recenter. */
+"location-button-status-label-recenter" = "Về giữa";
 
 /* A title for the offline map areas view. */
 "Map Areas" = "Khu vực Bản đồ";
@@ -376,6 +588,12 @@ AR experience. */
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Chế độ";
 
+/* A label for a button to view details for a list row. */
+"More Information" = "Thông tin khác";
+
+/* A label for a button to see more options for a list row. */
+"More Options" = "Tùy chọn khác";
+
 /* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Tên";
 
@@ -385,20 +603,50 @@ AR experience. */
 /* A label in reference to a specific utility network. */
 "Network" = "Mạng";
 
+/* A navigation title for a page listing
+data sources in a utility network. */
+"Network Data Source" = "‎Nguồn Dữ liệu Mạng";
+
+/* A navigation title for a view to create a new association in. */
+"New Association" = "Liên kết Mới";
+
 /* A label in reference to the new name of a file, shown in a file rename interface. */
 "New name" = "Tên mới";
 
 /* A label for a button to show new utility network trace configuration options. */
 "New Trace" = "Theo dõi Mới";
 
-/* A label indicating that no associations are available for the popup element. */
+/* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "Không có Liên kết";
+
+/* A label indicating an element
+contains no file attachments. */
+"No attachments" = "Không có tệp đính kèm";
 
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Không có đánh dấu phạm vi nào";
 
+/* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
+"No building scene layers in the scene." = "Không có lớp scene công trình nào trong scene này.";
+
+/* A label indicating no utility association 
+candidates matching the filter criteria were
+found. */
+"No Candidates Found" = "Không Tìm thấy Ứng viên";
+
+/* A label indicating no field filtering conditions have been added. */
+"No conditions added" = "Không có điều kiện nào được thêm";
+
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Không có cấu hình nào khả dụng.";
+
+/* A label indicating no utility association 
+feature sources were found. */
+"No Feature Sources Found" = "Không Tìm thấy Nguồn Đối tượng";
+
+/* A label indicating no utility association 
+filter results were found. */
+"No Filter Results Found" = "Không Tìm thấy Kết quả Lọc";
 
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "Không có Kết nối Internet";
@@ -424,6 +672,15 @@ AR experience. */
 /* A string indicating that no value has been set for a form field. */
 "No Value" = "Không có Giá trị";
 
+/* The cardinal direction North. */
+"North" = "Bắc";
+
+/* The intercardinal direction Northeast. */
+"Northeast" = "Đông bắc";
+
+/* The intercardinal direction Northwest. */
+"Northwest" = "Tây bắc";
+
 /* A trace function output result was not provided. */
 "Not Available" = "Không khả dụng";
 
@@ -436,11 +693,18 @@ AR experience. */
 /* A label indicating that the map is offline disabled. */
 "Offline Disabled" = "Đã tắt Ngoại tuyến";
 
+/* The default title of the live activity for taking a map offline. */
+"Offline Map" = "Bản đồ Ngoại tuyến";
+
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Tải Bản đồ Trực tuyến Không thành công";
+
+/* Helper text indicating that an accompanying button only 
+removes only the association.  */
+"Only removes the association. The feature remains." = "Chỉ gỡ bỏ liên kết. Vẫn giữ lại đối tượng.";
 
 /* A label for a button to open a map area. */
 "Open" = "Mở";
@@ -459,6 +723,10 @@ AR experience. */
 
 /* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Cần mật khẩu";
+
+/* A label in reference to a percent along an 
+edge of a utility network element. */
+"Percent Along" = "Phần trăm Dọc";
 
 /* A message for an alert requesting camera access. */
 "Please enable camera access in settings." = "Vui lòng bật quyền truy cập camera trong thiết lập.";
@@ -487,6 +755,15 @@ The variable provides additional data. */
 /* A label for a button to refresh map area content. */
 "Refresh" = "Làm mới";
 
+/* A label for a button to remove a utility network association. */
+"Remove" = "Gỡ bỏ";
+
+/* A label for a button to remove a utility association. */
+"Remove Association" = "Gỡ bỏ Liên kết";
+
+/* A label for a confirmation to remove a utility association. */
+"Remove association?" = "Gỡ bỏ liên kết?";
+
 /* A label for a button to remove a map area download. */
 "Remove Download" = "Xóa Tải xuống";
 
@@ -495,6 +772,9 @@ The variable provides additional data. */
 
 /* A label in reference to the action of renaming a file, shown in a file rename interface. */
 "Rename attachment" = "Đổi tên tệp đính kèm";
+
+/* The accessibility hint of the compass component. */
+"Reorient map north" = "Đổi hướng bản đồ về phía bắc";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
@@ -518,6 +798,14 @@ current visible extent of the map or scene. */
 
 /* A label for a button to save edits. */
 "Save Edits" = "Lưu Chỉnh sửa";
+
+/* A generic prompt for a search field where a more
+specific prompt has not been provided. */
+"Search" = "Tìm kiếm";
+
+/* A label for a search bar to search through feature 
+candidates to use in a new utility association. */
+"Search Features" = "Tìm kiếm Đối tượng";
 
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Truy vấn Tìm kiếm";
@@ -544,6 +832,15 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "Hiện tất cả";
 
+/* A label indicating the intended outcome of using the filter view. */
+"Show features that meet all the conditions" = "Hiển thị đối tượng đáp ứng tất cả điều kiện";
+
+/* A label for the Show Full Model toggle in the Building Explorer. */
+"Show Full Model" = "Hiển thị Toàn bộ Mô hình";
+
+/* A label for a button to show the indicated feature on the map. */
+"Show On Map" = "Hiển thị Trên Bản đồ";
+
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
 
@@ -553,19 +850,40 @@ or more levels in a floor-aware map or scene. */
 /* Small Building (Level of Detail) */
 "Small Building" = "Tòa nhà Nhỏ";
 
+/* The cardinal direction South. */
+"South" = "Nam";
+
+/* The intercardinal direction Southeast. */
+"Southeast" = "Đông nam";
+
+/* The intercardinal direction Southwest. */
+"Southwest" = "Tây nam";
+
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Tham chiếu không gian không trùng khớp.";
 
+/* The accessibility value of the location button when the location display is starting. */
+"Starting" = "Đang bắt đầu";
+
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Điểm Bắt đầu";
+
+/* A label for the "starts with" attribute query condition. */
+"starts with" = "bắt đầu với";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Tiểu bang/Tỉnh";
 
 /* States/Provinces (Level of Detail) */
 "States/Provinces" = "Các Tiểu bang/Tỉnh";
+
+/* The accessibility value of the location button when the location display is not showing. */
+"Stopped" = "Đã dừng";
+
+/* The accessibility value of the location button when the location display is stopping. */
+"Stopping" = "Đang dừng";
 
 /* Street (Level of Detail) */
 "Street" = "Đường phố";
@@ -583,6 +901,9 @@ place an ArcGIS Scene. */
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "Chạm vào hình ảnh để biết thêm thông tin.";
+
+/* A label in reference to a utility terminal. */
+"Terminal" = "Thiết bị đầu cuối";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Cấu hình Thiết bị đầu cuối";
@@ -606,6 +927,9 @@ match the spatial reference of the map. */
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Biểu mẫu chưa được gửi";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"The identity of \"%@\" cannot be verified. Would you like to connect anyway?" = "Không thể xác minh danh tính của \"%@\". Bạn vẫn muốn tiếp tục kết nối?";
 
 /* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "Bản đồ không có mục tham chiếu không gian.";
@@ -635,8 +959,14 @@ to be imported as an attachment. */
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "Không có khu vực bản đồ cho bản đồ này. Chạm vào nút bên dưới để bắt đầu.";
 
+/* A notice communicating that a feature form has no elements. */
+"This form is empty." = "Mẫu form này trống.";
+
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Tiêu đề";
+
+/* A label for the element on the "to" side of a utility association. */
+"To Element" = "Đến Phần tử";
 
 /* A label for a button to choose the current date for a field. */
 "Today" = "Hôm nay";
@@ -656,8 +986,14 @@ to be imported as an attachment. */
 /* A label in reference to a utility network trace configuration. */
 "Trace Configuration" = "Cấu hình truy dấu";
 
+/* A label indicating that a utility network trace is running. */
+"Tracingâ€¦" = "Truy vếtâ€¦";
+
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Thử lại";
+
+/* The accessibility hint for turning the auto-pan mode off in the location button context menu. */
+"Turn off auto-pan" = "Tắt tự động di chuyển";
 
 /* The default title of a map area with an unknown title. */
 "Unknown" = "Không xác định";
@@ -679,11 +1015,11 @@ without saving. */
 /* A label in reference to a credential username. */
 "Username" = "Tên người dùng";
 
+/* A label for an unknown utility association kind. */
+"utility-association-unknown-label" = "Không xác định";
+
 /* A label indicating the feature form has validation errors. */
 "Validation Errors" = "Lỗi Xác minh";
-
-/* A value in a set of data contained in a popup. */
-"Value" = "Giá trị";
 
 /* Text indicating a field's computed value must be within the
 allowed length range. The first and second parameter
@@ -715,9 +1051,19 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Xem";
 
+/* A label for the visible toggle in the Building Explorer. */
+"Visible" = "Hiển thị";
+
+/* A label indicating a utility association's 
+containment is not visible. */
+"Visible: false" = "Hiển thị: false";
+
 /* A label indicating a utility association's 
 containment is visible. */
-"Visible Content" = "Nội dung Hiển thị";
+"Visible: true" = "Hiển thị: true";
+
+/* The cardinal direction West. */
+"West" = "Tây";
 
 /* World (Level of Detail) */
 "World" = "Thế giới";
@@ -739,6 +1085,9 @@ The host is indicated in the variable. */
 
 /* A button to change the map to the extent of the selected trace. */
 "Zoom To" = "Phóng tới";
+
+/* A label for the zoom to building button in the Building Explorer. */
+"Zoom to building" = "Thu phóng tới công trình";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Thu phóng Kết quả";

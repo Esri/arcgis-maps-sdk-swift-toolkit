@@ -24,14 +24,36 @@ final class AssociationsFilterResultsModel {
     /// The task for fetching the associations filter results.
     @ObservationIgnored private var task: Task<Void, Never>?
     
-    /// Fetches the associations filter results from a given associations element.
-    /// - Parameter element: The element containing the associations filter results.
+    /// The element containing the association filters.
+    let element: UtilityAssociationsElement
+    
+    /// A Boolean value which determines if empty filter results are included.
+    let includeEmptyFilterResults: Bool
+    
+    /// - Parameters:
+    ///   - element: The element containing the association filters.
+    ///   - includeEmptyFilterResults: A Boolean value which determines if empty filter results are included. `False` by default.
     @MainActor
-    init(element: UtilityAssociationsElement) {
-        task = Task { [weak self] in
+    init(element: UtilityAssociationsElement, includeEmptyFilterResults: Bool = false) {
+        self.element = element
+        self.includeEmptyFilterResults = includeEmptyFilterResults
+        fetchResults()
+    }
+    
+    /// Fetches the associations filter results from a given associations element.
+    @MainActor
+    func fetchResults() {
+        let element = self.element
+        task?.cancel()
+        task = Task { [weak self, includeEmptyFilterResults] in
             guard !Task.isCancelled, let self else { return }
             let result = await Result {
-                try await element.associationsFilterResults.filter { $0.resultCount > 0 }
+                let allResults = try await element.associationsFilterResults
+                return if includeEmptyFilterResults {
+                    allResults
+                } else {
+                    allResults.filter { $0.resultCount > 0 }
+                }
             }
             withAnimation { self.result = result }
         }

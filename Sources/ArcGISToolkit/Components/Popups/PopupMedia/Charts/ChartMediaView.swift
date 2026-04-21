@@ -45,6 +45,7 @@ struct ChartMediaView: View {
     var body: some View {
         ZStack {
             ChartView(popupMedia: popupMedia, data: chartData)
+                .padding()
             VStack {
                 Spacer()
                 PopupMediaFooter(
@@ -58,6 +59,7 @@ struct ChartMediaView: View {
         }
         .frame(width: mediaSize.width, height: mediaSize.height)
         .clipShape(.rect(cornerRadius: cornerRadius))
+        .contentShape(.rect(cornerRadius: cornerRadius))
         .onTapGesture {
             isShowingDetailView = true
         }

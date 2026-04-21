@@ -54,16 +54,7 @@ public struct Bookmarks: View {
     @Binding private var isPresented: Bool
     
     /// The selected bookmark.
-    private var selection: Binding<Bookmark?>?
-    
-    /// User defined action to be performed when a bookmark is selected.
-    ///
-    /// Use this when you prefer to self-manage the response to a bookmark selection. Use either
-    /// `onSelectionChanged(perform:)` or `viewpoint` exclusively.
-    var selectionChangedAction: ((Bookmark) -> Void)? = nil
-    
-    /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
-    private var viewpoint: Binding<Viewpoint?>?
+    private var selection: Binding<Bookmark?>
     
     public var body: some View {
         VStack {
@@ -137,25 +128,17 @@ public extension Bookmarks {
 }
 
 extension Bookmarks {
-    /// Performs the necessary actions when a bookmark is selected.
-    ///
-    /// This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
-    /// binding (if provided) or calling the action provided by the `onSelectionChanged(perform:)` modifier.
-    /// - Parameter bookmark: The bookmark that was selected.
+    /// Selects the given bookmark and either sets the viewpoint on the geo view
+    /// (if a proxy was provided) or updates the `viewpoint` binding.
+    /// - Parameter bookmark: The bookmark to be selected.
     func selectBookmark(_ bookmark: Bookmark) {
-        selection?.wrappedValue = bookmark
+        selection.wrappedValue = bookmark
         isPresented = false
         
         if let geoViewProxy, let viewpoint = bookmark.viewpoint {
             Task {
                 await geoViewProxy.setViewpoint(viewpoint, duration: nil)
             }
-        } else if let viewpoint = viewpoint {
-            viewpoint.wrappedValue = bookmark.viewpoint
-        }
-        
-        if let selectionChangedAction {
-            selectionChangedAction(bookmark)
         }
     }
     
@@ -194,7 +177,7 @@ extension Bookmarks {
                 .buttonStyle(.plain)
 #endif
 #if targetEnvironment(macCatalyst)
-                .listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
+                .listRowBackground(bookmark == selection.wrappedValue ? nil : Color.clear)
 #endif
             }
 #if !os(visionOS)
@@ -230,59 +213,5 @@ extension Bookmarks {
         }
         .foregroundStyle(.primary)
         .padding()
-    }
-}
-
-public extension Bookmarks /* Deprecated */ {
-    /// Creates a `Bookmarks` component.
-    /// - Parameters:
-    ///   - isPresented: Determines if the bookmarks list is presented.
-    ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
-    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-    /// - Attention: Deprecated at 200.5.
-    @available(*, deprecated, message: "Use 'init(isPresented:bookmarks:selection:geoViewProxy:)' instead.")
-    init(
-        isPresented: Binding<Bool>,
-        bookmarks: [Bookmark],
-        viewpoint: Binding<Viewpoint?>? = nil
-    ) {
-        self.init(
-            bookmarkSource: .array(bookmarks),
-            geoViewProxy: nil,
-            isPresented: isPresented,
-            viewpoint: viewpoint
-        )
-    }
-    
-    /// Creates a `Bookmarks` component.
-    /// - Parameters:
-    ///   - isPresented: Determines if the bookmarks list is presented.
-    ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
-    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-    /// - Attention: Deprecated at 200.5.
-    @available(*, deprecated, message: "Use 'init(isPresented:geoModel:selection:geoViewProxy:)' instead.")
-    init(
-        isPresented: Binding<Bool>,
-        geoModel: GeoModel,
-        viewpoint: Binding<Viewpoint?>? = nil
-    ) {
-        self.init(
-            bookmarkSource: .geoModel(geoModel),
-            geoViewProxy: nil,
-            isPresented: isPresented,
-            viewpoint: viewpoint
-        )
-    }
-    
-    /// Sets an action to perform when the bookmark selection changes.
-    /// - Parameter action: The action to perform when the bookmark selection has changed.
-    /// - Attention: Deprecated at 200.5.
-    @available(*, deprecated)
-    func onSelectionChanged(
-        perform action: @escaping (Bookmark) -> Void
-    ) -> Bookmarks {
-        var copy = self
-        copy.selectionChangedAction = action
-        return copy
     }
 }

@@ -44,10 +44,6 @@ struct FloorFilterExampleView: View {
                         viewpoint: $viewpoint,
                         isNavigating: $isNavigating
                     )
-                    .frame(
-                        maxWidth: 400,
-                        maxHeight: 400
-                    )
                     .padding([.horizontal], 10)
                 } else if mapLoadError {
                     Label(

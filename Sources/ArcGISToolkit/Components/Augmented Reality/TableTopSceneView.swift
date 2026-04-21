@@ -141,6 +141,7 @@ public struct TableTopSceneView: View {
                         .sessionProvider(arViewProxy)
                         .active(coachingOverlayIsActive)
                         .allowsHitTesting(false)
+                        .ignoresSafeArea()
                         .overlay (alignment: .top) {
                             if !helpText.isEmpty {
                                 Text(helpText)

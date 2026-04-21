@@ -17,77 +17,96 @@ import SwiftUI
 
 /// Displays a group form element and manages the visibility of the elements within the group.
 struct GroupFormElementView<Content>: View where Content: View {
-    /// A Boolean value indicating whether the group is expanded or collapsed.
-    @State private var isExpanded = false
-    
-    /// The group of visibility tasks.
-    @State private var isVisibleTasks = [Task<Void, Never>]()
-    
-    /// The list of visible group elements.
-    @State private var visibleElements = [FormElement]()
-    
     /// The group form element.
     let element: GroupFormElement
-    
     /// The closure to perform to build an element in the group.
     let viewCreator: (FormElement) -> Content
     
-    /// Filters the group's elements by visibility.
-    private func updateVisibleElements() {
-        visibleElements = element.elements.filter { $0.isVisible }
+    /// A dictionary of each group element and whether or not it is visible.
+    @State private var elementVisibility: [FormElement: Bool] = [:]
+    /// A Boolean value indicating whether the group is expanded or collapsed.
+    @State private var isExpanded: Bool
+    
+    init(element: GroupFormElement, viewCreator: @escaping (FormElement) -> Content) {
+        self.element = element
+        self.viewCreator = viewCreator
+        _isExpanded = State(initialValue: element.initialState == .expanded)
     }
     
     var body: some View {
-        DisclosureGroup(isExpanded: $isExpanded) {
-            ForEach(visibleElements, id: \.self) { element in
-                viewCreator(element)
-                    .padding(.leading, 16)
-            }
-        } label: {
-            Header(element: element)
-                .multilineTextAlignment(.leading)
-                .tint(.primary)
+        // Using the header of an empty Section ensures that consecutive collapsed
+        // GroupFormElements have spacing consistent with other form elements.
+        Section {} header: {
+            label
         }
-        .onAppear {
-            isExpanded = element.initialState == .expanded
-            for element in element.elements {
-                let newTask = Task { @MainActor [self] in
-                    for await _ in element.$isVisible {
-                        self.updateVisibleElements()
+        .task {
+            await withTaskGroup { group in
+                for element in element.elements {
+                    group.addTask { @MainActor @Sendable in
+                        for await isVisible in element.$isVisible {
+                            guard !Task.isCancelled else { return }
+                            elementVisibility[element] = isVisible
+                        }
                     }
                 }
-                isVisibleTasks.append(newTask)
             }
         }
-        .onDisappear {
-            isVisibleTasks.forEach { task in
-                task.cancel()
-            }
-            isVisibleTasks.removeAll()
-        }
-        // Tints the disclosure triangle.
-        .inspectorTint(.blue)
-    }
-}
-
-extension GroupFormElementView {
-    /// A view displaying a label and description of a `GroupFormElement`.
-    struct Header: View {
-        let element: GroupFormElement
         
-        var body: some View {
+        // GroupFormElement content is placed outside the Section above for the
+        // following reasons:
+        // 1. Avoids indentation introduced by components like a DisclosureGroup.
+        // 2. Avoids unwanted impacts on appearance from nested Sections.
+        // 3. Avoids the header receiving a pill-shaped background.
+        if isExpanded {
+            ForEach(visibleElements, id: \.self) { element in
+                Section {
+                    viewCreator(element)
+                } header: {
+                    FormElementHeader(element: element)
+                } footer: {
+                    FormElementFooter(element: element)
+                }
+                .textCase(nil)
+            }
+        }
+    }
+    
+    /// The label for the group element.
+    private var label: some View {
+        Button {
+            withAnimation {
+                isExpanded.toggle()
+            }
+        } label: {
             VStack(alignment: .leading) {
-                if !element.label.isEmpty {
+                HStack {
                     Text(element.label)
-                        .accessibilityIdentifier("\(element.label)")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .fontWeight(.bold)
+                        .foregroundStyle(.tertiary)
+                        .rotationEffect(.degrees(isExpanded ? 90 : 0))
                 }
                 if !element.description.isEmpty {
                     Text(element.description)
                         .accessibilityIdentifier("\(element.label) Description")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .font(.footnote)
+                        .multilineTextAlignment(.leading)
                 }
             }
         }
+        .buttonStyle(.plain)
+        .foregroundStyle(.secondary)
+        .textCase(nil)
+    }
+    
+    /// The list of visible group elements.
+    private var visibleElements: [FormElement] {
+        element
+            .elements
+            .filter { elementVisibility[$0] == true }
     }
 }
