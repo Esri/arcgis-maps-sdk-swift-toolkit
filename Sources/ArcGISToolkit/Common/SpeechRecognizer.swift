@@ -20,7 +20,7 @@ internal import os
 actor SpeechRecognizer: Observable {
     // MARK: Public members
     
-    /// <#Description#>
+    /// A Boolean value indicating whether speech recognition is active.
     @MainActor
     var isRecording = false
     /// The complete transcript of the recognized speech.
@@ -50,9 +50,10 @@ actor SpeechRecognizer: Observable {
         }
     }
     
-    /// <#Description#>
+    /// Starts speech recognition.
     @MainActor
     func startTranscribing() {
+        // Clear the transcript from any previous sessions.
         transcript.removeAll()
         isRecording = true
         Task {
@@ -60,7 +61,7 @@ actor SpeechRecognizer: Observable {
         }
     }
     
-    /// <#Description#>
+    /// Ends speech recognition.
     @MainActor
     func stopTranscribing() {
         Task {
@@ -70,17 +71,17 @@ actor SpeechRecognizer: Observable {
     
     // MARK: Private members
     
-    /// <#Description#>
+    /// The engine to interface with the device's microphone.
     private var audioEngine: AVAudioEngine?
-    /// <#Description#>
+    /// Manages the speech recognition process.
     private let recognizer: SFSpeechRecognizer?
-    /// <#Description#>
+    /// The request to recognize speech from captured audio content.
     private var request: SFSpeechAudioBufferRecognitionRequest?
-    /// <#Description#>
+    /// A task object for monitoring the speech recognition progress.
     private var task: SFSpeechRecognitionTask?
     
-    /// <#Description#>
-    /// - Parameter error: <#error description#>
+    /// Writes information about an error to the log.
+    /// - Parameter error: The error to log.
     nonisolated private func log(_ error: Error) {
         var errorMessage = ""
         if let error = error as? RecognizerError {
@@ -91,8 +92,9 @@ actor SpeechRecognizer: Observable {
         Logger.speechToText.error("\(errorMessage)")
     }
     
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Creates the engine and request, configures the audio session and finally prepares and starts the
+    /// audio engine.
+    /// - Returns: The engine and request.
     private static func prepareEngine() throws -> (AVAudioEngine, SFSpeechAudioBufferRecognitionRequest) {
         let engine = AVAudioEngine()
         
@@ -114,12 +116,14 @@ actor SpeechRecognizer: Observable {
         return (engine, request)
     }
     
-    /// <#Description#>
+    /// Processes a speech recognition result.
     /// - Parameters:
-    ///   - audioEngine: <#audioEngine description#>
-    ///   - result: <#result description#>
-    ///   - error: <#error description#>
-    nonisolated private func recognitionHandler(
+    ///   - audioEngine: The engine processing the audio.
+    ///   - result: A speech recognition result containing the partial or final transcriptions of the audio
+    ///   content.
+    ///   - error: An error object if a problem occurred. This parameter is nil if speech recognition was
+    ///   successful.
+    nonisolated private func processResult(
         audioEngine: AVAudioEngine,
         result: SFSpeechRecognitionResult?,
         error: Error?
@@ -169,7 +173,7 @@ actor SpeechRecognizer: Observable {
             self.audioEngine = audioEngine
             self.request = request
             task = recognizer.recognitionTask(with: request, resultHandler: { [weak self] result, error in
-                self?.recognitionHandler(audioEngine: audioEngine, result: result, error: error)
+                self?.processResult(audioEngine: audioEngine, result: result, error: error)
             })
         } catch {
             reset()
@@ -177,15 +181,15 @@ actor SpeechRecognizer: Observable {
         }
     }
     
-    /// <#Description#>
-    /// - Parameter message: <#message description#>
+    /// Publishes a transcribed message to the actor's observable transcript.
+    /// - Parameter message: The message to be published.
     nonisolated private func transcribe(_ message: String) {
         Task { @MainActor in
             transcript = message
         }
     }
     
-    /// <#Description#>
+    /// A speech recognition error.
     private enum RecognizerError: Error {
         case nilRecognizer
         case notAuthorizedToRecognize
@@ -204,8 +208,7 @@ actor SpeechRecognizer: Observable {
 }
 
 extension AVAudioSession {
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// A Boolean value indicating whether the user has granted permission to record audio.
     static var hasPermissionToRecord: Bool {
         get async {
             await withCheckedContinuation { continuation in
@@ -225,8 +228,7 @@ extension Logger {
 }
 
 extension SFSpeechRecognizer {
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// A Boolean value indicating whether the user has granted permission to perform speech recognition.
     static var hasAuthorizationToRecognize: Bool {
         get async {
             await withCheckedContinuation { continuation in

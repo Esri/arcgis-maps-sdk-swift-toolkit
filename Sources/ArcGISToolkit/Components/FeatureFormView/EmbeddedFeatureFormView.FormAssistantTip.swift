@@ -15,13 +15,15 @@
 import TipKit
 
 extension EmbeddedFeatureFormView {
-    /// <#Description#>
+    /// A tip to help users discover the form assistant.
     struct FormAssistantTip: Tip {
         var title: Text {
+            // TODO: Localization
             Text("Fill out forms faster")
         }
         
         var message: Text? {
+            // TODO: Localization
             Text("Answer questions with your voice.")
         }
         

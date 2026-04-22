@@ -19,7 +19,8 @@ import FoundationModels
 internal import os
 
 extension EmbeddedFeatureFormViewModel {
-    /// <#Description#>
+    /// A model which manages speech recognition and a local language model to allow users to
+    /// easily fill out forms by voice.
     @Observable class FormAssistantModel {
         // MARK: Public members
         
@@ -32,16 +33,18 @@ extension EmbeddedFeatureFormViewModel {
             }
         }
         
-        /// <#Description#>
-        var languageModelIsProcessing = false
-        /// <#Description#>
+        /// A Boolean value indicating whether speech recognition is active.
         @MainActor
         var isRecording: Bool {
             speechRecognizer?.isRecording ?? false
         }
         
-        /// <#Description#>
-        /// - Parameter formModel: <#formModel description#>
+        /// A Boolean value that indicates whether the language model is processing the speech transcript
+        /// and determining form answers.
+        var languageModelIsProcessing = false
+        
+        /// Creates a form assistant model.
+        /// - Parameter formModel: The parent model that owns this model.
         init(formModel: EmbeddedFeatureFormViewModel) {
             self.formModel = formModel
             if #available(iOS 26.0, *) {
@@ -51,7 +54,7 @@ extension EmbeddedFeatureFormViewModel {
             }
         }
         
-        /// <#Description#>
+        /// Starts speech recognition.
         @MainActor
         func startVoiceCollection() {
             if speechRecognizer == nil {
@@ -60,7 +63,8 @@ extension EmbeddedFeatureFormViewModel {
             speechRecognizer?.startTranscribing()
         }
         
-        /// <#Description#>
+        /// Stops speech recognition, collects the transcribed speech, runs the language model and fills in
+        /// generated answers.
         @available(iOS 26.0, *)
         @MainActor
         func stopVoiceCollection() async {
@@ -100,26 +104,26 @@ extension EmbeddedFeatureFormViewModel {
             languageModelIsProcessing = false
         }
         
-        /// <#Description#>
+        /// Processes any side effects that should happen as a result of the user discarding edits to the form.
         func onEditsDiscarded() {
             autoFilledElements.removeAll()
         }
         
         // MARK: Private members
         
-        /// <#Description#>
+        /// A record of the elements the model has produced an accepted answer for.
         private var autoFilledElements = [String]()
-        /// <#Description#>
+        /// The embedded form model that owns this model.
         private weak var formModel: EmbeddedFeatureFormViewModel?
-        /// <#Description#>
+        /// The object that manages speech recognition.
         private var speechRecognizer: SpeechRecognizer?
         
-        /// A type-erased language model session.
+        /// A type-erased session that interacts with a language model.
         ///
         /// Note: This is a temporary backing property for not being able to use the availability attribute on
         /// stored properties. Once iOS 26 is the minimum required OS, this property can be removed.
         private var _session: Any?
-        /// <#Description#>
+        /// A session that interacts with a language model.
         @available(iOS 26.0, *)
         private var session: LanguageModelSession? {
             _session as? LanguageModelSession
@@ -144,9 +148,11 @@ extension EmbeddedFeatureFormViewModel {
             8601 format (yyyy-MM-dd'T'HH:mm:ssZ).
             """
         
-        /// <#Description#>
-        /// - Parameter transcript: <#transcript description#>
-        /// - Returns: <#description#>
+        /// Builds a textual representation of the feature form, including metadata from each visible form
+        /// element.
+        /// - Parameter transcript: The transcript generated from speech recognition.
+        /// - Returns: Returns a feature form response including values generated for form
+        /// elements.
         @available(iOS 26.0, *)
         @MainActor
         private func generateResponse(transcript: String) async throws -> FeatureFormResponse? {
@@ -269,8 +275,9 @@ extension EmbeddedFeatureFormViewModel {
             return response.content
         }
         
-        /// <#Description#>
-        /// - Parameter response: <#response description#>
+        /// Logs a feature form response, specifically the names of fields and whether a value was
+        /// generated for them.
+        /// - Parameter response: The response to log.
         @available(iOS 26.0, *)
         private func logResponse(_ response: FeatureFormResponse) {
             var message = ""
@@ -288,7 +295,8 @@ extension EmbeddedFeatureFormViewModel {
         
         // MARK: Associated types
         
-        /// <#Description#>
+        /// A response to an entire feature form.
+        /// - SeeAlso: `FieldFormElementResponse`
         @available(iOS 26.0, *)
         @Generable
         struct FeatureFormResponse {
@@ -297,7 +305,8 @@ extension EmbeddedFeatureFormViewModel {
             var elementResponses: [FieldFormElementResponse]
         }
         
-        /// <#Description#>
+        /// A response to an individual field form element in a feature form.
+        /// - SeeAlso: `FeatureFormResponse`
         @available(iOS 26.0, *)
         @Generable
         struct FieldFormElementResponse {

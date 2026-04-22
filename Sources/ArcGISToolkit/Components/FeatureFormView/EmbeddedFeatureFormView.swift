@@ -22,7 +22,7 @@ struct EmbeddedFeatureFormView: View {
     
     /// The feature form defining the editing experience.
     let form: FeatureForm
-    /// <#Description#>
+    /// A tip to help users discover the form assistant.
     let formAssistantTip = FormAssistantTip()
     
     var body: some View {

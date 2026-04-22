@@ -91,7 +91,7 @@ final class EmbeddedFeatureFormViewModel {
     @ObservationIgnored
     private var evaluateTask: Task<Void, Never>?
     
-    /// <#Description#>
+    /// The model which allows users to easily fill out forms by voice.
     @ObservationIgnored
     var formAssistantModel: FormAssistantModel?
     
@@ -132,11 +132,12 @@ final class EmbeddedFeatureFormViewModel {
         }
     }
     
-    /// <#Description#>
+    /// Processes any side effects that should happen as a result of the user discarding edits to the form.
     func onEditsDiscarded() {
         formAssistantModel?.onEditsDiscarded()
     }
     
+    /// Prepares the form assistant model for speech recognition.
     func prepareFormAssistant() {
         // Prewarm the language model.
         formAssistantModel = FormAssistantModel(formModel: self)
