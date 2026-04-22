@@ -74,7 +74,7 @@ struct EmbeddedFeatureFormView: View {
                 if #available(iOS 26.0, *),
                    EmbeddedFeatureFormViewModel.FormAssistantModel.isAvailable {
                     Button {
-                        if embeddedFeatureFormViewModel.formAssistantModel?.voiceObservationInProgress ?? false {
+                        if embeddedFeatureFormViewModel.formAssistantModel?.isRecording ?? false {
                             Task {
                                 await embeddedFeatureFormViewModel.formAssistantModel?.stopVoiceCollection()
                             }
@@ -86,7 +86,7 @@ struct EmbeddedFeatureFormView: View {
                             if embeddedFeatureFormViewModel.formAssistantModel?.languageModelIsProcessing ?? false {
                                 ProgressView()
                             } else {
-                                if embeddedFeatureFormViewModel.formAssistantModel?.voiceObservationInProgress ?? false {
+                                if embeddedFeatureFormViewModel.formAssistantModel?.isRecording ?? false {
                                     Label("Stop Recording", systemImage: "microphone.badge.xmark.fill")
                                         .symbolEffect(.pulse.byLayer, options: .repeat(.continuous))
                                         .symbolRenderingMode(.multicolor)
@@ -105,7 +105,7 @@ struct EmbeddedFeatureFormView: View {
                     .disabled(embeddedFeatureFormViewModel.formAssistantModel?.languageModelIsProcessing ?? false)
                     .sensoryFeedback(
                         .impact,
-                        trigger: embeddedFeatureFormViewModel.formAssistantModel?.voiceObservationInProgress
+                        trigger: embeddedFeatureFormViewModel.formAssistantModel?.isRecording
                     )
                     .shadow(radius: 8)
                     .padding(.leading)

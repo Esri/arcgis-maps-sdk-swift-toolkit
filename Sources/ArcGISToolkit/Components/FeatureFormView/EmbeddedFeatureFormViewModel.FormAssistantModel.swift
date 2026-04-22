@@ -35,7 +35,10 @@ extension EmbeddedFeatureFormViewModel {
         /// <#Description#>
         var languageModelIsProcessing = false
         /// <#Description#>
-        var voiceObservationInProgress = false
+        @MainActor
+        var isRecording: Bool {
+            speechRecognizer?.isRecording ?? false
+        }
         
         /// <#Description#>
         /// - Parameter formModel: <#formModel description#>
@@ -54,8 +57,6 @@ extension EmbeddedFeatureFormViewModel {
             if speechRecognizer == nil {
                 speechRecognizer = SpeechRecognizer()
             }
-            speechRecognizer?.resetTranscript()
-            voiceObservationInProgress = true
             speechRecognizer?.startTranscribing()
         }
         
@@ -63,7 +64,6 @@ extension EmbeddedFeatureFormViewModel {
         @available(iOS 26.0, *)
         @MainActor
         func stopVoiceCollection() async {
-            voiceObservationInProgress = false
             languageModelIsProcessing = true
             speechRecognizer?.stopTranscribing()
             
