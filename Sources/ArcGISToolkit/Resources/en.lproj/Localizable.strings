@@ -871,7 +871,7 @@ or more levels in a floor-aware map or scene. */
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Spatial reference mismatch.";
 
-/* No comment provided by engineer. */
+/* A label for a button to start speech detection. */
 "Start Recording" = "Start Recording";
 
 /* The accessibility value of the location button when the location display is starting. */
@@ -890,7 +890,7 @@ network trace operation. */
 /* States/Provinces (Level of Detail) */
 "States/Provinces" = "States/Provinces";
 
-/* No comment provided by engineer. */
+/* A label for a button to stop speech detection. */
 "Stop Recording" = "Stop Recording";
 
 /* The accessibility value of the location button when the location display is not showing. */

@@ -87,11 +87,27 @@ struct EmbeddedFeatureFormView: View {
                                 ProgressView()
                             } else {
                                 if embeddedFeatureFormViewModel.formAssistantModel?.isRecording ?? false {
-                                    Label("Stop Recording", systemImage: "microphone.badge.xmark.fill")
-                                        .symbolEffect(.pulse.byLayer, options: .repeat(.continuous))
-                                        .symbolRenderingMode(.multicolor)
+                                    Label {
+                                        Text(
+                                            "Stop Recording",
+                                            bundle: .toolkitModule,
+                                            comment: "A label for a button to stop speech detection."
+                                        )
+                                    } icon: {
+                                        Image(systemName: "microphone.badge.xmark.fill")
+                                    }
+                                    .symbolEffect(.pulse.byLayer, options: .repeat(.continuous))
+                                    .symbolRenderingMode(.multicolor)
                                 } else {
-                                    Label("Start Recording", systemImage: "microphone.fill")
+                                    Label {
+                                        Text(
+                                            "Start Recording",
+                                            bundle: .toolkitModule,
+                                            comment: "A label for a button to start speech detection."
+                                        )
+                                    } icon: {
+                                        Image(systemName: "microphone.fill")
+                                    }
                                 }
                             }
                         }
