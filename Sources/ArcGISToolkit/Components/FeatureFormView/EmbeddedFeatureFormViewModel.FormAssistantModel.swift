@@ -236,6 +236,11 @@ extension EmbeddedFeatureFormViewModel {
                 return base
             }
             
+            /// Generates the textual description of a `GroupFormElement`.
+            /// - Parameters:
+            ///   - index: The index of the group element in the set of visible top-level elements
+            ///   elements.
+            ///   - element: The group element.
             func writeElement(index: Int, element: GroupFormElement) -> String? {
                 return element.elements.filter(\.isVisible).enumerated().compactMap({ (groupIndex, _element) in
                     guard let element = _element as? FieldFormElement else { return nil }
