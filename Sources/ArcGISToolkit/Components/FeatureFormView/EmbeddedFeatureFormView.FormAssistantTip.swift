@@ -18,13 +18,25 @@ extension EmbeddedFeatureFormView {
     /// A tip to help users discover the form assistant.
     struct FormAssistantTip: Tip {
         var title: Text {
-            // TODO: Localization
-            Text("Fill out forms faster")
+            Text(
+                "Fill out forms faster",
+                bundle: .toolkitModule,
+                comment: """
+                    The title of a tip bubble that reveals to users the ability 
+                    to fill a form out with their voice.
+                    """
+            )
         }
         
         var message: Text? {
-            // TODO: Localization
-            Text("Answer questions with your voice.")
+            Text(
+                "Answer questions with your voice.",
+                bundle: .toolkitModule,
+                comment: """
+                    The content of a tip bubble that reveals to users the 
+                    ability to fill a form out with their voice.
+                    """
+            )
         }
         
         var image: Image? {

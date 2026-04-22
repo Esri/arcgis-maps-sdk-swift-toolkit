@@ -50,6 +50,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "An error occurred while fetching map areas.";
 
+/* The content of a tip bubble that reveals to users the 
+ability to fill a form out with their voice. */
+"Answer questions with your voice." = "Answer questions with your voice.";
+
 /* A question asking for confirmation to discard changes. */
 "Are you sure you want to discard the changes?" = "Are you sure you want to discard the changes?";
 
@@ -405,6 +409,10 @@ trace operation. */
 
 /* A label in reference to fields in a set of data contained in a popup. */
 "Fields" = "Fields";
+
+/* The title of a tip bubble that reveals to users the ability 
+to fill a form out with their voice. */
+"Fill out forms faster" = "Fill out forms faster";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
 "Filter" = "Filter";
@@ -863,6 +871,9 @@ or more levels in a floor-aware map or scene. */
 match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Spatial reference mismatch.";
 
+/* No comment provided by engineer. */
+"Start Recording" = "Start Recording";
+
 /* The accessibility value of the location button when the location display is starting. */
 "Starting" = "Starting";
 
@@ -878,6 +889,9 @@ network trace operation. */
 
 /* States/Provinces (Level of Detail) */
 "States/Provinces" = "States/Provinces";
+
+/* No comment provided by engineer. */
+"Stop Recording" = "Stop Recording";
 
 /* The accessibility value of the location button when the location display is not showing. */
 "Stopped" = "Stopped";
