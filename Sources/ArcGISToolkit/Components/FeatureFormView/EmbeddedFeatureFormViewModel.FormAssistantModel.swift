@@ -65,14 +65,23 @@ extension EmbeddedFeatureFormViewModel {
         @available(iOS 26.0, *)
         @MainActor
         func stopSpeechRecognition() async {
-            isRecording = false
-            languageModelIsProcessing = true
             speechRecognizer?.stopTranscribing()
+            
+            isRecording = false
+            
+            languageModelIsProcessing = true
+            defer { languageModelIsProcessing = false }
             
             guard let transcript = speechRecognizer?.transcript else {
                 Logger.featureFormView.info("No observation collected.")
                 return
             }
+            
+            guard !transcript.isEmpty else {
+                Logger.featureFormView.info("Transcript was empty.")
+                return
+            }
+            
             Logger.featureFormView.info("Auto-filling form.")
             
             func runQuestions() async {
@@ -99,7 +108,6 @@ extension EmbeddedFeatureFormViewModel {
             }
             
             await runQuestions()
-            languageModelIsProcessing = false
         }
         
         /// Processes any side effects that should happen as a result of the user discarding edits to the form.
