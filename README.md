@@ -13,9 +13,10 @@ To use Toolkit in your project:
 * **[Authenticator](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/authenticator)** - Displays a user interface when network and ArcGIS authentication challenges occur.
 * **[BasemapGallery](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/basemapgallery)** - Displays a collection of basemaps.
 * **[Bookmarks](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/bookmarks)** - Shows bookmarks, from a map, scene, or a list.
+* **[Building Explorer](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/buildingexplorer)** - Allows you to explore a building model in a `BuildingSceneLayer`.
 * **[Compass](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map points north.
 * **[FeatureFormView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/featureformview)** - Enables users to edit field values of a feature using pre-configured forms.
-* **[FloatingPanel](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floatingpanel)** - Allows display of view-related content in a "bottom sheet". 
+* **[FloatingPanel](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floatingpanel)** - Allows display of view-related content in a "bottom sheet".
 * **[FloorFilter](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floorfilter)** - Allows filtering of floor plan data in a geo view by a site, a building in the site, or a floor in the building.
 * **[FlyoverSceneView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/flyoversceneview)** - Allows you to explore a scene using your device as a window into the virtual world.
 * **[JobManager](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/jobmanager)** - Manages saving and loading jobs so that they can continue to run if the app is backgrounded or even terminated by the system.
@@ -37,9 +38,9 @@ To use Toolkit in your project:
 
 ### Swift Package Manager
 
-1. Open your Xcode project. In the menu bar, select **File** > **Add Packages...** 
-1. In the search bar, enter `https://github.com/Esri/arcgis-maps-sdk-swift-toolkit` as the package repository URL. 
-1. Optionally, select an option for the **Dependency Rule** if you want to specify an exact version or a range of versions to use.   
+1. Open your Xcode project. In the menu bar, select **File** > **Add Packages...**
+1. In the search bar, enter `https://github.com/Esri/arcgis-maps-sdk-swift-toolkit` as the package repository URL.
+1. Optionally, select an option for the **Dependency Rule** if you want to specify an exact version or a range of versions to use.
 1. Click **Add Package**.
 1. Add `import ArcGIS` and `import ArcGISToolkit` in your source code and start using the toolkit components.
 
@@ -94,7 +95,7 @@ Find a bug or want to request a new feature?  Please let us know by [submitting 
 Esri welcomes contributions from anyone and everyone. Please see our [guidelines for contributing](https://github.com/esri/contributing).
 
 ## Licensing
-Copyright 2022 - 2025 Esri
+Copyright 2022 - 2026 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

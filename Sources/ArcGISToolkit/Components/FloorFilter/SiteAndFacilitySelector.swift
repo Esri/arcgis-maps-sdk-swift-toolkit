@@ -135,6 +135,9 @@ private struct SiteList: View {
                 .fixedSize(horizontal: true, vertical: false)
 #endif
         }
+#if targetEnvironment(macCatalyst)
+        .buttonStyle(.plain)
+#endif
     }
 }
 

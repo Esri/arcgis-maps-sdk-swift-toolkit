@@ -214,7 +214,7 @@ private struct FloorFilterBody: View {
         }
         .frame(width: width)
         .modify {
-            if #available(iOS 26, *) {
+            if #available(iOS 26.0, *) {
 #if os(visionOS)
                 $0.glassBackgroundEffect(in: FloorFilterBody.buttonShape)
 #else
@@ -322,25 +322,17 @@ private struct LevelSelector: View {
                                 .id(level.id)
                             }
                         }
-                        .modify {
-                            if #unavailable(iOS 18.0) {
-                                $0.onGeometryChange(for: CGFloat.self) { proxy in
-                                    proxy.frame(in: .global).height
-                                } action: { newHeight in
-                                    contentHeight = newHeight
-                                }
-                            }
+                        .onGeometryChange(for: CGFloat.self) { geometry in
+                            geometry.frame(in: .global).height
+                        } action: { newHeight in
+                            contentHeight = newHeight
                         }
                     }
-                    .modify {
-                        if #available(iOS 18.0, *) {
-                            $0.onScrollGeometryChange(
-                                for: CGFloat.self,
-                                of: \.contentSize.height
-                            ) { _, newValue in
-                                contentHeight = newValue
-                            }
-                        }
+                    .onScrollGeometryChange(
+                        for: CGFloat.self,
+                        of: \.contentSize.height
+                    ) { _, newValue in
+                        contentHeight = newValue
                     }
                     .clipShape(FloorFilterBody.buttonShape)
                     .frame(maxHeight: contentHeight)

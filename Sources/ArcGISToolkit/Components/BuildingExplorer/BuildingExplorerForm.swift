@@ -52,9 +52,9 @@ struct BuildingExplorerForm: View {
     // MARK: Phase picker properties.
     
     /// The selected phase in the phase picker.
-    @State private var selectedPhase = ""
+    @State private var selectedPhase: Int?
     /// The available phase in the phase picker.
-    @State private var availablePhases: [String] = []
+    @State private var availablePhases: [Int] = []
     
     @State private var phasePickerStyle: (any PickerStyle) = .automatic
     
@@ -238,7 +238,8 @@ struct BuildingExplorerForm: View {
     private var phasePicker: some View {
         Picker(selection: $selectedPhase) {
             ForEach(availablePhases, id: \.self) { phase in
-                Text(verbatim: phase)
+                Text(phase, format: .number)
+                    .tag(phase)
             }
             .onChange(of: selectedPhase) {
                 if selection.phase != selectedPhase {
@@ -263,14 +264,14 @@ struct BuildingExplorerForm: View {
     private var levelAndPhaseFilter: BuildingFilter? {
         // If no level or phase is selected then we need show everything
         // so return 'nil' for the filter.
-        guard selectedLevel != .allLabel || !selectedPhase.isEmpty else { return nil }
+        guard selectedLevel != .allLabel || selectedPhase != nil else { return nil }
         
         // Construct the where clauses based on the selection state.
         
         var solidWhereClause = ""
         var xRayWhereClause = ""
         
-        if !selectedPhase.isEmpty {
+        if let selectedPhase {
             solidWhereClause = "\(String.phaseFieldKey) <= \(selectedPhase)"
         }
         
@@ -351,7 +352,9 @@ struct BuildingExplorerForm: View {
         // Gets all the levels and phases and sort them.
         
         availableLevels = levelStatistics.mostFrequentValues.sorted { Int($0) ?? .zero > Int($1) ?? .zero } + [.allLabel]
-        availablePhases = phaseStatistics.mostFrequentValues.sorted { Int($0) ?? .zero > Int($1) ?? .zero }
+        availablePhases = phaseStatistics.mostFrequentValues
+            .compactMap { Int($0) } // Make sure all phases are integers.
+            .sorted { $0 > $1 }
         
         // Restore last selected level and phase if there was one.
         // If not, give a default.
@@ -362,10 +365,10 @@ struct BuildingExplorerForm: View {
             selection.level
         }
         
-        selectedPhase = if selection.phase.isEmpty {
-            availablePhases.first ?? ""
+        selectedPhase = if let phase = selection.phase {
+            phase
         } else {
-            selection.phase
+            availablePhases.first
         }
     }
 }

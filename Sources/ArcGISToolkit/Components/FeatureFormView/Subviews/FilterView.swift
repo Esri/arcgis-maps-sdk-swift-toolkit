@@ -22,6 +22,9 @@ struct FilterView: View {
     /// A Boolean value indicating whether an alert is presented stating that there are changes that need to be saved or discarded. 
     @State private var alertIsPresented = false
     
+    /// The index of the filter with a focused text field.
+    @FocusState private var focusedTextField: Int?
+    
     /// The client-specified action to perform when the `Apply` button is tapped. There is no `Cancel` action
     /// as cancelling simply resets the list of `FieldFilter` objects.
     var onApplyAction: (() -> Void)?
@@ -54,16 +57,20 @@ struct FilterView: View {
                                 .padding()
                         }
                     } actions: {
-                        AddButton(useBorderedStyle: true)
+                        AddButton(focusedField: $focusedTextField, useBorderedStyle: true)
                     }
                 } else {
                     List {
                         ForEach(model.fieldFilters, id: \.id) { filter in
-                            Section {
-                                FieldView(fieldFilter: filter)
-                            } header: {
-                                HStack {
-                                    if let index = model.fieldFilters.firstIndex(of: filter) {
+                            if let index = model.fieldFilters.firstIndex(of: filter) {
+                                Section {
+                                    FieldView(
+                                        fieldFilter: filter,
+                                        focusedField: $focusedTextField,
+                                        index: index
+                                    )
+                                } header: {
+                                    HStack {
                                         Text(
                                             String(
                                                 localized: "Condition \(index + 1)",
@@ -107,13 +114,13 @@ struct FilterView: View {
                         if oldValue.count < newValue.count,
                            let lastFieldFilter = model.fieldFilters.last {
                             withAnimation {
-                                proxy.scrollTo(lastFieldFilter.id, anchor: .bottom)
+                                proxy.scrollTo(lastFieldFilter.id, anchor: .top)
                             }
                         }
                     }
                     Spacer()
                     HStack {
-                        AddButton()
+                        AddButton(focusedField: $focusedTextField)
                             .padding()
                         Spacer()
                     }
@@ -170,6 +177,7 @@ struct FilterView: View {
     private func deleteButton(_ filter: FieldFilter) -> Button<some View> {
         Button.delete {
             if let index = model.fieldFilters.firstIndex(of: filter) {
+                focusedTextField = nil
                 model.fieldFilters.remove(at: index)
             }
         }
@@ -182,6 +190,7 @@ struct FilterView: View {
         Button {
             if let index = model.fieldFilters.firstIndex(of: filter) {
                 let newFilter = filter.copy()
+                focusedTextField = nil
                 withAnimation {
                     model.fieldFilters.insert(newFilter, at: index + 1)
                 }
@@ -200,14 +209,32 @@ struct FilterView: View {
     }
 }
 
+#Preview {
+    let fields: [Field] = [
+        Field(type: .int32, name: "fieldOne", alias: "One", length: 30, isNullable: false),
+        Field(type: .int32, name: "fieldTwo", alias: "Two", length: 30, isNullable: false),
+        Field(type: .int32, name: "fieldThree", alias: "Three", length: 30, isNullable: false)
+    ]
+    let model = FilterViewModel()
+    
+    FilterView(model: model)
+        .onAppear {
+            model.setFields(fields)
+        }
+}
+
 /// A button that adds a `FieldFilter` to the current  list of `FieldFilter` objects.
 private struct AddButton: View {
+    /// The index of the filter with a focused text field.
+    let focusedField: FocusState<Int?>.Binding
     /// A Boolean value indicating whether to draw the button with a border style.
     let useBorderedStyle: Bool
     
     /// Creates an `AddButton`, alternately displaying it with a border style.
+    /// - Parameter focusedField: The index of the filter with a focused text field.
     /// - Parameter useBorderedStyle: A Boolean value indicating whether to draw the button with a border style.
-    init(useBorderedStyle: Bool = false) {
+    init(focusedField: FocusState<Int?>.Binding, useBorderedStyle: Bool = false) {
+        self.focusedField = focusedField
         self.useBorderedStyle = useBorderedStyle
     }
     
@@ -216,6 +243,7 @@ private struct AddButton: View {
         Button {
             withAnimation {
                 let newFilter = FieldFilter(field: model.fields.first ?? Field(type: .blob, name: "Empty", alias: "Empty"))
+                focusedField.wrappedValue = nil
                 model.fieldFilters.append(newFilter)
             }
         } label: {
@@ -266,11 +294,16 @@ private struct FieldView: View {
     /// The list of conditions/operations the user is allowed to choose from.
     @State private var conditions = [FilterOperator]()
     
-    /// The name of the selected field.
-    @State private var selectedFieldName = ""
+    /// The index of the filter with a focused text field.
+    let focusedField: FocusState<Int?>.Binding
     
-    init(fieldFilter: FieldFilter) {
+    /// The index of this field in the set of fields in the filter.
+    let index: Int
+    
+    init(fieldFilter: FieldFilter, focusedField: FocusState<Int?>.Binding, index: Int) {
         self.fieldFilter = fieldFilter
+        self.focusedField = focusedField
+        self.index = index
     }
     
     var body: some View {
@@ -284,7 +317,7 @@ private struct FieldView: View {
                 }
             } else {
                 HStack {
-                    Picker(selection: $selectedFieldName) {
+                    Picker(selection: $fieldFilter.selectedFieldName) {
                         ForEach(model.fields, id: \.name) { field in
                             Text(field.title)
                         }
@@ -293,11 +326,8 @@ private struct FieldView: View {
                     }
                     .pickerStyle(.menu)
                     .tint(.primary)
-                    .onAppear {
-                        selectedFieldName = fieldFilter.field.name
-                    }
-                    .onChange(of: selectedFieldName) {
-                        guard let field = model.field(named: selectedFieldName) else { return }
+                    .onChange(of: fieldFilter.selectedFieldName) {
+                        guard let field = model.field(named: fieldFilter.selectedFieldName) else { return }
                         fieldFilter.field = field
                         conditions = fieldFilter.supportedConditions
                     }
@@ -359,6 +389,7 @@ private struct FieldView: View {
                         )
                         .multilineTextAlignment(.trailing)
                         .keyboardType(keyboardType)
+                        .focused(focusedField, equals: index)
                         .frame(alignment: .trailing)
 #if os(iOS)
                         .toolbar {
