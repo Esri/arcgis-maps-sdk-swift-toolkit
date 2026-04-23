@@ -40,7 +40,11 @@ struct LocationButtonExampleView: View {
 #endif
                     .imageScale(.large)
                     .frame(minWidth: 50, minHeight: 50)
+#if !os(visionOS)
+                    // A glassy background comes by default on visionOS
+                    // buttons so this isn't needed on visionOS.
                     .background(.thinMaterial)
+#endif
                     .clipShape(.rect(cornerRadius: 10))
                     .shadow(radius: 8)
                     .padding()
