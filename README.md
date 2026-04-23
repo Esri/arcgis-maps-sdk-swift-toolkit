@@ -36,7 +36,7 @@ To use Toolkit in your project:
 
 ### Standalone Components
 
-If you want to use a specific component in your project, you can copy and paste the source code directly into your project without using the package.
+If you want to use a specific component in your project, you may copy and paste the source code. Retain all copyright notices and include a copy of the Apache 2.0 License.
 
 ### Swift Package Manager
 
