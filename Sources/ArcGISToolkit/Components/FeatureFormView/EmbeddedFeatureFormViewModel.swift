@@ -34,6 +34,9 @@ final class EmbeddedFeatureFormViewModel {
         }
     }
     
+    /// The model which allows users to easily fill out forms by voice.
+    var formAssistantModel: FormAssistantModel?
+    
     /// A Boolean value indicating whether the associated form has edits.
     var hasEdits = false {
         didSet {
@@ -90,10 +93,6 @@ final class EmbeddedFeatureFormViewModel {
     /// The expression evaluation task.
     @ObservationIgnored
     private var evaluateTask: Task<Void, Never>?
-    
-    /// The model which allows users to easily fill out forms by voice.
-    @ObservationIgnored
-    var formAssistantModel: FormAssistantModel?
     
     /// The group of visibility tasks.
     @ObservationIgnored

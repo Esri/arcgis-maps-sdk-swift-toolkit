@@ -20,9 +20,6 @@ internal import os
 actor SpeechRecognizer: Observable {
     // MARK: Public members
     
-    /// A Boolean value indicating whether speech recognition is active.
-    @MainActor
-    var isRecording = false
     /// The complete transcript of the recognized speech.
     @MainActor
     var transcript = ""
@@ -55,13 +52,12 @@ actor SpeechRecognizer: Observable {
     func startTranscribing() {
         // Clear the transcript from any previous sessions.
         transcript.removeAll()
-        isRecording = true
         Task {
             await transcribe()
         }
     }
     
-    /// Ends speech recognition.
+    /// Stops speech recognition.
     @MainActor
     func stopTranscribing() {
         Task {
@@ -152,9 +148,6 @@ actor SpeechRecognizer: Observable {
             try AVAudioSession.sharedInstance().setActive(false)
         } catch {
             log(error)
-        }
-        Task { @MainActor in
-            isRecording = false
         }
     }
     

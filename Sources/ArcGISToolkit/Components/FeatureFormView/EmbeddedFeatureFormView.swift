@@ -76,10 +76,10 @@ struct EmbeddedFeatureFormView: View {
                     Button {
                         if embeddedFeatureFormViewModel.formAssistantModel?.isRecording ?? false {
                             Task {
-                                await embeddedFeatureFormViewModel.formAssistantModel?.stopVoiceCollection()
+                                await embeddedFeatureFormViewModel.formAssistantModel?.stopSpeechRecognition()
                             }
                         } else {
-                            embeddedFeatureFormViewModel.formAssistantModel?.startVoiceCollection()
+                            embeddedFeatureFormViewModel.formAssistantModel?.startSpeechRecognition()
                         }
                     } label: {
                         Group {
@@ -126,12 +126,9 @@ struct EmbeddedFeatureFormView: View {
                     .shadow(radius: 8)
                     .padding(.leading)
                     .popoverTip(formAssistantTip)
-                    // TODO: Not working properly. Assistant doesn't work on 2nd open.
-                    .onAppear(perform: embeddedFeatureFormViewModel.prepareFormAssistant)
-                    // TODO: This approach doesn't work either.
-//                    .task(id: ObjectIdentifier(embeddedFeatureFormViewModel)) {
-//                        embeddedFeatureFormViewModel.prepareFormAssistant()
-//                    }
+                    .task(id: ObjectIdentifier(embeddedFeatureFormViewModel)) {
+                        embeddedFeatureFormViewModel.prepareFormAssistant()
+                    }
                 }
             }
             .preference(

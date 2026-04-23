@@ -34,11 +34,7 @@ extension EmbeddedFeatureFormViewModel {
         }
         
         /// A Boolean value indicating whether speech recognition is active.
-        @MainActor
-        var isRecording: Bool {
-            speechRecognizer?.isRecording ?? false
-        }
-        
+        var isRecording = false
         /// A Boolean value that indicates whether the language model is processing the speech transcript
         /// and determining form answers.
         var languageModelIsProcessing = false
@@ -56,10 +52,11 @@ extension EmbeddedFeatureFormViewModel {
         
         /// Starts speech recognition.
         @MainActor
-        func startVoiceCollection() {
+        func startSpeechRecognition() {
             if speechRecognizer == nil {
                 speechRecognizer = SpeechRecognizer()
             }
+            isRecording = true
             speechRecognizer?.startTranscribing()
         }
         
@@ -67,7 +64,8 @@ extension EmbeddedFeatureFormViewModel {
         /// generated answers.
         @available(iOS 26.0, *)
         @MainActor
-        func stopVoiceCollection() async {
+        func stopSpeechRecognition() async {
+            isRecording = false
             languageModelIsProcessing = true
             speechRecognizer?.stopTranscribing()
             
@@ -242,10 +240,11 @@ extension EmbeddedFeatureFormViewModel {
             ///   elements.
             ///   - element: The group element.
             func writeElement(index: Int, element: GroupFormElement) -> String? {
-                return element.elements.filter(\.isVisible).enumerated().compactMap({ (groupIndex, _element) in
+                return element.elements.filter(\.isVisible).enumerated().compactMap { (groupIndex, _element) in
                     guard let element = _element as? FieldFormElement else { return nil }
                     return writeElement(index: index, element: element, groupIndex: groupIndex)
-                }).joined(separator: "\n")
+                }
+                .joined(separator: "\n")
             }
             
             guard let questions: String = formModel?.visibleElements.enumerated().compactMap({ (index, element) in
