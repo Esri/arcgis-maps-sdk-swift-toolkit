@@ -71,6 +71,7 @@ struct FieldsPopupElementView: View {
         private func makeAttributedText(with string: String) -> Text {
             let detector = DataDetector()
             let links = detector.detect(in: string)
+            guard !(links?.isEmpty ?? true) else { return Text(string) }
             var attributed = AttributedString(string)
             for link in links ?? [] {
                 if let range = Range(link.range, in: attributed) {
