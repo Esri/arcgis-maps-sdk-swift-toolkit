@@ -242,6 +242,7 @@ private struct FloorFilterBody: View {
                 .frame(height: FloorFilterBody.buttonSize)
                 .font(.system(size: FloorFilterBody.fontSize))
                 .contentShape(FloorFilterBody.buttonShape)
+                .hoverEffect()
         }
         .accessibilityIdentifier("FloorFilter.siteSelectorButton")
         .buttonStyle(.plain)
@@ -289,6 +290,7 @@ private struct LevelSelector: View {
                     .font(.system(size: FloorFilterBody.fontSize))
                     .foregroundStyle(.secondary)
                     .contentShape(FloorFilterBody.buttonShape)
+                    .hoverEffect()
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("FloorFilter.collapseButton")
@@ -395,6 +397,7 @@ private struct LevelButton: View {
                     }
                 }
                 .contentShape(FloorFilterBody.buttonShape)
+                .hoverEffect()
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("FloorFilter.levelButton.\(level.shortName)")
