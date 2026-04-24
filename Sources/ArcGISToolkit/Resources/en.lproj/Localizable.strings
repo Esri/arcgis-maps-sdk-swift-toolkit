@@ -1048,9 +1048,6 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "Value must not be empty";
 
-/* E.g. Open a hyperlink. */
-"View" = "View";
-
 /* A label for the visible toggle in the Building Explorer. */
 "Visible" = "Visible";
 
