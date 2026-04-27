@@ -49,41 +49,15 @@ struct Carousel<Content: View>: View {
     }
     
     var body: some View {
-        if #available(iOS 18.0, *) {
-            iOS18Implementation
-        } else {
-            legacyImplementation
-        }
-    }
-    
-    var legacyImplementation: some View {
-        GeometryReader { geometry in
-            ScrollViewReader { scrollViewProxy in
-                ScrollView(.horizontal) {
-                    makeCommonScrollViewContent(scrollViewProxy)
-                }
-            }
-            .onAppear {
-                updateCellSizeForContainer(geometry.size.width)
-            }
-            .onChange(of: geometry.size.width) {
-                updateCellSizeForContainer(geometry.size.width)
-            }
-        }
-        // When a GeometryReader is within a List, height must be specified.
-        .frame(height: cellSize.height + scrollIndicatorOffset)
-    }
-    
-    @available(iOS 18.0, *)
-    var iOS18Implementation: some View {
-        ScrollViewReader { scrollViewProxy in
+        ScrollViewReader { scrollView in
             ScrollView(.horizontal) {
-                makeCommonScrollViewContent(scrollViewProxy)
+                makeCommonScrollViewContent(scrollView)
             }
         }
-        .onScrollGeometryChange(for: CGFloat.self) { geometry in
-            geometry.containerSize.width
-        } action: { _, newValue in
+        .onScrollGeometryChange(
+            for: CGFloat.self,
+            of: \.containerSize.width
+        ) { _, newValue in
             updateCellSizeForContainer(newValue)
         }
     }

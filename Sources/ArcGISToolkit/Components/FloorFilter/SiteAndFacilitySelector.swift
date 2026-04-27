@@ -105,7 +105,9 @@ private struct SiteList: View {
                     placement: .navigationBarDrawer(displayMode: .always),
                     prompt: String.filterSites
                 )
+#if !os(visionOS)
                 .listStyle(.plain)
+#endif
             }
         }
         .navigationTitle(String.sites)
@@ -192,14 +194,18 @@ private struct FacilityList: View {
                             .contentShape(.rect)
                             .lineLimit(1)
                         }
+#if !os(visionOS)
                         .buttonStyle(.plain)
+#endif
                     }
                     .searchable(
                         text: $searchText,
                         placement: .navigationBarDrawer(displayMode: .always),
                         prompt: String.filterFacilities
                     )
+#if !os(visionOS)
                     .listStyle(.plain)
+#endif
                     .onChange(of: model.selection) {
                         guard let floorFacility = model.selection?.facility else {
                             return

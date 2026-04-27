@@ -36,6 +36,10 @@ To use Toolkit in your project:
 
 ## Instructions
 
+### Standalone Components
+
+If you want to use a specific component in your project, you may copy and paste the source code. Retain all copyright notices and include a copy of the Apache 2.0 License.
+
 ### Swift Package Manager
 
 1. Open your Xcode project. In the menu bar, select **File** > **Add Packages...**

@@ -20,8 +20,8 @@ let package = Package(
     name: "arcgis-maps-sdk-swift-toolkit",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v17),
-        .macCatalyst(.v17),
+        .iOS(.v18),
+        .macCatalyst(.v18),
         .visionOS(.v2)
     ],
     products: [
