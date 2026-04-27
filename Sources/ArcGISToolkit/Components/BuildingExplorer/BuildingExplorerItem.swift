@@ -25,7 +25,7 @@ public final class BuildingExplorerItem {
     /// The level that is selected for this item.
     public internal(set) var level = ""
     /// The phase that is selected for this item.
-    public internal(set) var phase = ""
+    public internal(set) var phase: Int?
     
     init(layer: BuildingSceneLayer) { self.layer = layer }
 }

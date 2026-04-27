@@ -266,7 +266,7 @@ class ScannerViewController: UIViewController, @preconcurrency AVCaptureMetadata
                     )?.cgColor
                     if self.targetHits >= self.requiredTargetHits {
                         delegate?.didScanCode(stringValue)
-                        if #available(iOS 17.5, *), let metadataObject = overlayLayer.metadataObject {
+                        if let metadataObject = overlayLayer.metadataObject {
                             self.feedbackGenerator.selectionChanged(at: metadataObject.bounds.origin)
                         }
                         self.targetHits = 0
