@@ -1040,7 +1040,7 @@ final class FeatureFormViewTests: XCTestCase {
         let groupElementTitle = "Group"
         let longTextFieldTitle = "Long text"
         let longTextReadOnlyInput = app.staticTexts["\(longTextFieldTitle) Read Only Input"]
-        let longTextTextInputPreview = app.staticTexts["\(longTextFieldTitle) Text Input Preview"]
+        let longTextTextInputPreview = app.buttons["\(longTextFieldTitle) Text Input Preview"]
         let radioButtonsElementTitle = "Radio buttons"
         let radioButtonsOption0 = app.buttons["0"]
         let radioButtonsReadOnlyInput = app.staticTexts["\(radioButtonsElementTitle) Read Only Input"]
