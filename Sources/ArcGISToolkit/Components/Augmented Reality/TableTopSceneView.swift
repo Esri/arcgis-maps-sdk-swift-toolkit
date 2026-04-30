@@ -228,13 +228,18 @@ public struct TableTopSceneView: View {
     /// Creates a mesh resource for a plane anchor.
     /// - Parameter anchor: The plane anchor.
     private func makeMesh(from anchor: ARPlaneAnchor) -> MeshResource {
-        let positions = anchor.geometry.vertices.map { SIMD3<Float>($0.x, 0, $0.z) }
+        // Convert plane anchor vertices to SIMD3<Float> for use in the mesh descriptor.
+        let positions = anchor.geometry.vertices.map { SIMD3<Float>($0.x, $0.y, $0.z) }
+        // Convert plane anchor triangle indices to UInt32 for use in the mesh descriptor.
         let triangles = anchor.geometry.triangleIndices.map(UInt32.init)
         
+        // Create a mesh descriptor for the plane anchor geometry using
+        // the positions and triangle indices.
         var descriptor = MeshDescriptor()
         descriptor.positions = MeshBuffers.Positions(positions)
         descriptor.primitives = .triangles(triangles)
         
+        // Generate and return a mesh resource from the mesh descriptor.
         return try! MeshResource.generate(from: [descriptor])
     }
 #endif
