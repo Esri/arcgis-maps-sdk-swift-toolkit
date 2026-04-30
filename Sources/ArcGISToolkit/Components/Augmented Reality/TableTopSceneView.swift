@@ -133,7 +133,7 @@ public struct TableTopSceneView: View {
                         }
                     }
                     .onAppear {
-                        arViewProxy.session.run(configuration)
+                        arViewProxy.session.run(configuration, options: .removeExistingAnchors)
                     }
                     .onDisappear {
                         arViewProxy.session.pause()
@@ -194,7 +194,6 @@ public struct TableTopSceneView: View {
         )
         
         let planeEntity = ModelEntity(mesh: mesh, materials: [material])
-        planeEntity.position = [0, 0, 0]
         
         anchorEntity.addChild(planeEntity)
         arViewProxy.scene.addAnchor(anchorEntity)
@@ -219,7 +218,6 @@ public struct TableTopSceneView: View {
         guard let planeEntity = planeEntities[planeAnchor.identifier] else { return }
         
         planeEntity.model?.mesh = makeMesh(from: planeAnchor)
-        planeEntity.position = [0, 0, 0]
         
         // Set help text when plane visualization is updated.
         withAnimation {
@@ -230,18 +228,8 @@ public struct TableTopSceneView: View {
     /// Creates a mesh resource for a plane anchor.
     /// - Parameter anchor: The plane anchor.
     private func makeMesh(from anchor: ARPlaneAnchor) -> MeshResource {
-        let vertices = anchor.geometry.vertices
-        let triangleIndices = anchor.geometry.triangleIndices
-        
-        var positions = [SIMD3<Float>]()
-        var triangles = [UInt32]()
-        
-        for vertex in vertices {
-            positions.append([vertex.x, 0, vertex.z])
-        }
-        for index in triangleIndices {
-            triangles.append(UInt32(index))
-        }
+        let positions = anchor.geometry.vertices.map { SIMD3<Float>($0.x, 0, $0.z) }
+        let triangles = anchor.geometry.triangleIndices.map(UInt32.init)
         
         var descriptor = MeshDescriptor()
         descriptor.positions = MeshBuffers.Positions(positions)
