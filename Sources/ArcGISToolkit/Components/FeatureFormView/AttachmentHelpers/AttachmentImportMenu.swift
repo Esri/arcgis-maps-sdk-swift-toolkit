@@ -74,7 +74,6 @@ This will eventually be available on `element`.
         }
     }
     
-    @available(visionOS, unavailable)
     private func takePhotoOrVideoButton() -> Button<some View> {
         Button {
             if cameraRequester.authorizationStatus == .authorized {
@@ -113,14 +112,10 @@ This will eventually be available on `element`.
                 .catalystPadding(5)
         }
         Menu {
-            let newFileOption = Group {
-                takePhotoOrVideoButton()
-                    .modify {
+            let newFileOption = takePhotoOrVideoButton()
 #if os(visionOS)
-                            $0.disabled(true)
+                .modify { $0.disabled(true) }
 #endif
-                    }
-            }
             
             let existingFileOptions = Group {
                 chooseFromLibraryButton()
