@@ -122,18 +122,13 @@ This will eventually be available on `element`.
                 chooseFromFilesButton()
             }
             
-            if let imageInput {
-                switch imageInput.inputMethod {
-                case .any:
-                    newFileOption
-                    existingFileOptions
-                case .capture:
-                    newFileOption
-                case .upload:
-                    existingFileOptions
-                }
-            } else {
+            switch imageInput?.inputMethod {
+            case .some(.any), .none:
                 newFileOption
+                existingFileOptions
+            case .some(.capture):
+                newFileOption
+            case .some(.upload):
                 existingFileOptions
             }
             
