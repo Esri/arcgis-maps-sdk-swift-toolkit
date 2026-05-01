@@ -48,6 +48,10 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
+#warning("Prototype only. Do not merge to main.")
+    @State private var useImageAttachmentsFormInput = false
+    @State private var imageInput = _ImageAttachmentsFormInput(inputMethod: .any)
+    
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
         value: 999,
@@ -114,6 +118,22 @@ struct AttachmentImportMenu: View {
             chooseFromLibraryButton()
             // Always show file picker, no matter the input type.
             chooseFromFilesButton()
+            
+            Group {
+                Toggle("Use Image Input", isOn: $useImageAttachmentsFormInput)
+                if useImageAttachmentsFormInput {
+                    @Bindable var imageInput = imageInput
+                    Picker("Input Types", selection: $imageInput.inputMethod) {
+                        Text("Any")
+                            .tag(_ImageAttachmentsFormInput.InputMethod.any)
+                        Text("Capture")
+                            .tag(_ImageAttachmentsFormInput.InputMethod.capture)
+                        Text("Upload")
+                            .tag(_ImageAttachmentsFormInput.InputMethod.upload)
+                    }
+                }
+            }
+            .menuActionDismissBehavior(.disabled)
         } label: {
             Text(
                 "Add Attachment",

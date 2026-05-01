@@ -15,6 +15,7 @@
 import ArcGIS
 import SwiftUI
 
+#warning("Prototype only. Do not merge to main.")
 /// A prototype implementation for the image attachments form input class.
 @Observable
 class _ImageAttachmentsFormInput {
