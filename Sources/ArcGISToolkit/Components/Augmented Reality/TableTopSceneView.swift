@@ -15,6 +15,7 @@
 import ARKit
 import SwiftUI
 import ArcGIS
+import RealityKit
 
 /// A scene view that provides an augmented reality table top experience.
 @available(macCatalyst, unavailable)
@@ -34,6 +35,8 @@ public struct TableTopSceneView: View {
     @State private var helpText: String = ""
     /// A Boolean value that indicates whether the coaching overlay view is active.
     @State private var coachingOverlayIsActive: Bool = true
+    /// The entities for the identified planes.
+    @State private var planeEntities = [UUID: ModelEntity]()
     /// A Boolean value that indicates whether to hide the coaching overlay view.
     var coachingOverlayIsHidden: Bool = false
     /// The closure that builds the scene view.
@@ -110,11 +113,11 @@ public struct TableTopSceneView: View {
                             orientation: interfaceOrientation
                         )
                     }
-                    .onAddNode { parameters in
-                        addPlane(renderer: parameters.renderer, node: parameters.node, anchor: parameters.anchor)
+                    .onAddAnchor { planeAnchor in
+                        addPlane(for: planeAnchor)
                     }
-                    .onUpdateNode { parameters in
-                        updatePlane(with: parameters.node, for: parameters.anchor)
+                    .onUpdateAnchor { planeAnchor in
+                        updatePlane(for: planeAnchor)
                     }
                     .onTapGesture { screenPoint in
                         guard !initialTransformationIsSet else { return }
@@ -130,7 +133,7 @@ public struct TableTopSceneView: View {
                         }
                     }
                     .onAppear {
-                        arViewProxy.session.run(configuration)
+                        arViewProxy.session.run(configuration, options: .removeExistingAnchors)
                     }
                     .onDisappear {
                         arViewProxy.session.pause()
@@ -173,35 +176,29 @@ public struct TableTopSceneView: View {
     }
     
 #if os(iOS)
-    /// Visualizes a new node added to the scene as an AR Plane.
-    /// - Parameters:
-    ///   - renderer: The renderer for the scene.
-    ///   - node: The node to be added to the scene.
-    ///   - anchor: The anchor position of the node.
-    private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, anchor: ARAnchor) {
-        guard !initialTransformationIsSet,
-              let planeAnchor = anchor as? ARPlaneAnchor,
-              let device = renderer.device,
-              let planeGeometry = ARSCNPlaneGeometry(device: device)
-        else { return }
+    /// Visualizes a new AR Plane being added to the scene.
+    /// - Parameter planeAnchor: The plane anchor.
+    private func addPlane(for planeAnchor: ARPlaneAnchor) {
+        guard !initialTransformationIsSet else { return }
         
-        // Disable coaching overlay when a plane node is found.
+        // Disable coaching overlay when a plane is found.
         coachingOverlayIsActive = false
         
-        planeGeometry.update(from: planeAnchor.geometry)
+        let anchorEntity = AnchorEntity(anchor: planeAnchor)
         
-        // Add SCNMaterial to plane geometry.
-        let material = SCNMaterial()
-        material.isDoubleSided = true
-        material.diffuse.contents = UIColor.white.withAlphaComponent(0.65)
-        planeGeometry.materials = [material]
+        let mesh = makeMesh(from: planeAnchor)
+        let material = SimpleMaterial(
+            color: .white.withAlphaComponent(0.6),
+            roughness: 1,
+            isMetallic: true
+        )
         
-        // Create a SCNNode from plane geometry.
-        let planeNode = SCNNode(geometry: planeGeometry)
+        let planeEntity = ModelEntity(mesh: mesh, materials: [material])
         
-        // Add the visualization to the ARKit-managed node so that it tracks
-        // changes in the plane anchor as plane estimation continues.
-        node.addChildNode(planeNode)
+        anchorEntity.addChild(planeEntity)
+        arViewProxy.scene.addAnchor(anchorEntity)
+        
+        planeEntities[planeAnchor.identifier] = planeEntity
         
         // Set help text when plane is visualized.
         withAnimation {
@@ -209,28 +206,41 @@ public struct TableTopSceneView: View {
         }
     }
     
-    /// Visualizes a node updated in the scene as an AR Plane.
-    /// - Parameters:
-    ///   - node: The node to be updated in the scene.
-    ///   - anchor: The anchor position of the node.
-    private func updatePlane(with node: SCNNode, for anchor: ARAnchor) {
+    /// Visualizes an AR Plane update in the scene.
+    /// - Parameter planeAnchor: The plane anchor.
+    private func updatePlane(for planeAnchor: ARPlaneAnchor) {
         if initialTransformationIsSet {
-            node.removeFromParentNode()
+            planeEntities.values.forEach { $0.removeFromParent() }
+            planeEntities.removeAll()
             return
         }
         
-        guard let planeAnchor = anchor as? ARPlaneAnchor,
-              let planeNode = node.childNodes.first,
-              let planeGeometry = planeNode.geometry as? ARSCNPlaneGeometry
-        else { return }
+        guard let planeEntity = planeEntities[planeAnchor.identifier] else { return }
         
-        // Update extent visualization to the anchor's new geometry.
-        planeGeometry.update(from: planeAnchor.geometry)
+        planeEntity.model?.mesh = makeMesh(from: planeAnchor)
         
         // Set help text when plane visualization is updated.
         withAnimation {
             helpText = .planeFound
         }
+    }
+    
+    /// Creates a mesh resource for a plane anchor.
+    /// - Parameter anchor: The plane anchor.
+    private func makeMesh(from anchor: ARPlaneAnchor) -> MeshResource {
+        // Convert plane anchor vertices to SIMD3<Float> for use in the mesh descriptor.
+        let positions = anchor.geometry.vertices.map { SIMD3<Float>($0.x, $0.y, $0.z) }
+        // Convert plane anchor triangle indices to UInt32 for use in the mesh descriptor.
+        let triangles = anchor.geometry.triangleIndices.map(UInt32.init)
+        
+        // Create a mesh descriptor for the plane anchor geometry using
+        // the positions and triangle indices.
+        var descriptor = MeshDescriptor()
+        descriptor.positions = MeshBuffers.Positions(positions)
+        descriptor.primitives = .triangles(triangles)
+        
+        // Generate and return a mesh resource from the mesh descriptor.
+        return try! MeshResource.generate(from: [descriptor])
     }
 #endif
     
