@@ -17,8 +17,6 @@ import AVFoundation
 import SwiftUI
 import UniformTypeIdentifiers
 
-internal import os
-
 /// The context menu shown when the new attachment button is pressed.
 struct AttachmentImportMenu: View {
     /// The attachment form element displaying the menu.
