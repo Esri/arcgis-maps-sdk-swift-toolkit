@@ -48,9 +48,11 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
-#warning("Prototype only. Do not merge to main.")
-    @State private var useImageAttachmentsFormInput = false
-    @State private var imageInput = _ImageAttachmentsFormInput(inputMethod: .any)
+#warning("""
+Prototype only. Do not merge to main. 
+This will eventually be available on `element`.
+""")
+    @State private var imageInput: _ImageAttachmentsFormInput?
     
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
@@ -111,19 +113,52 @@ struct AttachmentImportMenu: View {
                 .catalystPadding(5)
         }
         Menu {
-            // Show photo/video and library picker.
-#if !os(visionOS)
-            takePhotoOrVideoButton()
+            let newFileOption = Group {
+                takePhotoOrVideoButton()
+                    .modify {
+#if os(visionOS)
+                            $0.disabled(true)
 #endif
-            chooseFromLibraryButton()
-            // Always show file picker, no matter the input type.
-            chooseFromFilesButton()
+                    }
+            }
             
-            Group {
-                Toggle("Use Image Input", isOn: $useImageAttachmentsFormInput)
-                if useImageAttachmentsFormInput {
+            let existingFileOptions = Group {
+                chooseFromLibraryButton()
+                chooseFromFilesButton()
+            }
+            
+            if let imageInput {
+                switch imageInput.inputMethod {
+                case .any:
+                    newFileOption
+                    existingFileOptions
+                case .capture:
+                    newFileOption
+                case .upload:
+                    existingFileOptions
+                }
+            } else {
+                newFileOption
+                existingFileOptions
+            }
+            
+#warning("For testing only. Do not merge to main.")
+            Section("Prototype Features") {
+                Toggle(
+                    "Use _ImageAttachmentsFormInput",
+                    isOn: Binding(get: {
+                        imageInput != nil
+                    }, set: { newValue in
+                        if newValue {
+                            imageInput = _ImageAttachmentsFormInput(inputMethod: .any)
+                        } else {
+                            imageInput = nil
+                        }
+                    })
+                )
+                if let imageInput {
                     @Bindable var imageInput = imageInput
-                    Picker("Input Types", selection: $imageInput.inputMethod) {
+                    Picker("Input Type", selection: $imageInput.inputMethod) {
                         Text("Any")
                             .tag(_ImageAttachmentsFormInput.InputMethod.any)
                         Text("Capture")
