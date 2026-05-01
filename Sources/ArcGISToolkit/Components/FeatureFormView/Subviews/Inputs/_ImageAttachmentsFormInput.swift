@@ -21,10 +21,11 @@ class _ImageAttachmentsFormInput {
     
     /// Number of pixels on the longest edge depending on orientation.
     ///
-    /// Larger images will be resized and aspect ratio is maintained. If maxImageSize is not specified, images will not be resized.
-    var maxImageSize: Int
+    /// Larger images will be resized and aspect ratio is maintained. If not specified, images will not be
+    /// resized.
+    var maxImageSize: Int? = nil
     
-    init(inputMethod: InputMethod, maxImageSize: Int) {
+    init(inputMethod: InputMethod, maxImageSize: Int? = nil) {
         self.inputMethod = inputMethod
         self.maxImageSize = maxImageSize
     }
