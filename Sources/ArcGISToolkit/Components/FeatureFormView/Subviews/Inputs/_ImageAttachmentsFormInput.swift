@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import ArcGIS
+import SwiftUI
 
 /// A prototype implementation for the image attachments form input class.
+@Observable
 class _ImageAttachmentsFormInput {
     /// <#Description#>
     var inputMethod: InputMethod
