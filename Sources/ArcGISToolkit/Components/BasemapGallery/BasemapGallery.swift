@@ -20,9 +20,7 @@ import ArcGIS
 /// `BasemapGallery` and a geo model was provided when the basemap gallery was created, the
 /// basemap of the `geoModel` is replaced with the basemap in the gallery.
 ///
-/// | iPhone | iPad |
-/// | ------ | ---- |
-/// | ![image](https://user-images.githubusercontent.com/3998072/205385086-cb9bc0a0-3c46-484d-aefa-8878c7112a3e.png) | ![image](https://user-images.githubusercontent.com/3998072/205384854-79f25efe-25f4-4330-a487-b64b528a9daf.png) |
+/// ![An image of the BasemapGallery component](BasemapGallery)
 ///
 /// > Note: `BasemapGallery` uses metered ArcGIS basemaps by default, so you will need to configure
 /// an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys)

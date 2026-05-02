@@ -14,6 +14,7 @@ Learn how to use ArcGISToolkit with <doc:ToolkitTutorials>
 - ``Authenticator``
 - ``BasemapGallery``
 - ``Bookmarks``
+- ``BuildingExplorer``
 - ``Compass``
 - ``FeatureFormView``
 - <doc:FloatingPanel>

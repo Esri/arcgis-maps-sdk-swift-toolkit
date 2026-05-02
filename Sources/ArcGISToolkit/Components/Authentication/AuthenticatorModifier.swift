@@ -32,19 +32,30 @@ public extension View {
 /// after a sheet was dismissed.
 private struct AuthenticatorOverlayModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
+    @Bindable var oAuthWebViewPresentation = ArcGISEnvironment.authenticationManager._oAuthWebViewPresentation
     
     @ViewBuilder func body(content: Content) -> some View {
-        ZStack {
-            content
+        content
+            .modifiedInvisibleOverlay(AuthenticatorModifier(authenticator: authenticator))
+            .sheet(item: $oAuthWebViewPresentation.context) { context in
+                _OAuthWebView(context: context)
+                    .modifiedInvisibleOverlay(
+                        AuthenticatorModifier(
+                            authenticator: authenticator,
+                            showsNestedChallenges: true
+                        )
+                    )
+            }
+    }
+}
+
+private extension View {
+    /// Overlays an invisible view which has the supplied modifier applied to it.
+    func modifiedInvisibleOverlay(_ modifier: some ViewModifier) -> some View {
+        overlay {
             Color.clear
                 .frame(width: 0, height: 0)
-                .modifier(AuthenticatorModifier(authenticator: authenticator))
-                ._oAuthWebViewSheet(
-                    contentModifier: AuthenticatorModifier(
-                        authenticator: authenticator,
-                        showsNestedChallenges: true
-                    )
-                )
+                .modifier(modifier)
         }
     }
 }

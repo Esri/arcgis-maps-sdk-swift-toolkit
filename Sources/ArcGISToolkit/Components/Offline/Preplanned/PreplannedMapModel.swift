@@ -199,6 +199,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     /// when it's done, updates the status, removes the job from the job manager,
     /// and fires a user notification.
     private func observeJob(_ job: DownloadPreplannedOfflineMapJob) {
+        Logger.offlineManager.info("Observing DownloadPreplannedOfflineMapJob.")
         self.job = job
         status = .downloading
         Task { [weak self, job] in

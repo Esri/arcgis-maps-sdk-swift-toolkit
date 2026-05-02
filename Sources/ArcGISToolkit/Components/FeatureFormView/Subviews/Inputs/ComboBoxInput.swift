@@ -151,7 +151,6 @@ extension ComboBoxInput {
         }
     }
     
-    
     /// The view that allows the user to filter and select coded values by name.
     ///
     /// Adds navigation context to support toolbar items and other visual elements in the picker.
@@ -205,18 +204,9 @@ extension ComboBoxInput {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
+                    DismissButton(kind: .confirm) {
                         isPresented = false
-                    } label: {
-                        Text.done
-                            .fontWeight(.semibold)
-#if !os(visionOS)
-                            .foregroundStyle(Color.accentColor)
-#endif
                     }
-#if !os(visionOS)
-                    .buttonStyle(.plain)
-#endif
                 }
             }
         }

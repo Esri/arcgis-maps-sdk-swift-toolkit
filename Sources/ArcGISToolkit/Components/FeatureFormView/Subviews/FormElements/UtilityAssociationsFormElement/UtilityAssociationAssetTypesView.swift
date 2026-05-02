@@ -31,11 +31,17 @@ extension FeatureFormView {
         let source: UtilityAssociationFeatureSource
         
         /// The filtered asset types that can be used to query for association candidates.
+        ///
+        /// Types are sorted first by their name and then by their group name.
         private var filteredTypes: [UtilityAssetType] {
+            let result: [UtilityAssetType]
             if filterPhrase.isEmpty {
-                source.assetTypes
+                result = source.assetTypes
             } else {
-                source.assetTypes.filter({ $0.name.localizedStandardContains(filterPhrase) })
+                result = source.assetTypes.filter({ $0.name.localizedStandardContains(filterPhrase) })
+            }
+            return result.sorted {
+                ($0.name, $0.group?.name ?? "") < ($1.name, $1.group?.name ?? "")
             }
         }
         
@@ -50,20 +56,29 @@ extension FeatureFormView {
                             comment: """
                                 A label for a search field to filter utility 
                                 asset types by name.
-                                """,
+                                """
                         ),
                         prompt: nil
                     )
                 }
                 Section {
-                    ForEach(filteredTypes, id: \.code) { assetType in
+                    ForEach(filteredTypes, id: \.compositeID) { assetType in
                         NavigationLink(
-                            assetType.name,
                             value: FeatureFormView.NavigationPathItem.utilityAssociationFeatureCandidatesView(
-                                form, element, filter, source, assetType
+                                form, element,
+                                filter,
+                                source, assetType
                             )
-                        )
-                        .accessibilityIdentifier("Asset Type \(assetType.name) \(assetType.code)")
+                        ) {
+                            VStack(alignment: .leading) {
+                                Text(assetType.name)
+                                if let group = assetType.group {
+                                    Text(group.name)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
                     }
                 } header: {
                     HStack {
@@ -84,5 +99,17 @@ extension FeatureFormView {
                 }
             }
         }
+    }
+}
+
+private extension UtilityAssetType {
+    /// An ID for the type composed of its code and group's code, if present.
+    var compositeID: Int {
+        var hasher = Hasher()
+        hasher.combine(code)
+        if let groupCode = group?.code {
+            hasher.combine(groupCode)
+        }
+        return hasher.finalize()
     }
 }

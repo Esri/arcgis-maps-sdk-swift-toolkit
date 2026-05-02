@@ -26,6 +26,12 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to add a new utility network association. */
 "Add Association" = "Legg til tilknytning";
 
+/* A label for a button to add a new file attachment. */
+"Add Attachment" = "Legg til vedlegg";
+
+/* A label for a button to add a new field filtering condition. */
+"Add Condition" = "Legg til betingelse";
+
 /* A label for a button to add a map area. */
 "Add Map Area" = "Legg til kartområde";
 
@@ -43,6 +49,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* An error message for when fetching map areas fails. */
 "An error occurred while fetching map areas." = "Det oppstod en feil ved henting av kartområder.";
+
+/* A question asking for confirmation to discard changes. */
+"Are you sure you want to discard the changes?" = "Er du sikker på at du vil forkaste endringene?";
 
 /* The title for a map area. */
 "Area %lld" = "Område %lld";
@@ -64,6 +73,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A label in reference to attachments. */
 "Attachments" = "Vedlegg";
+
+/* The status text when attachments failed to load. */
+"Attachments failed to load." = "Kan ikke laste inn vedleggene.";
 
 /* An error message explaining attachments larger than the provided maximum cannot be downloaded. */
 "Attachments larger than %@ cannot be downloaded." = "Vedlegg som er større enn %@, kan ikke lastes ned.";
@@ -91,6 +103,9 @@ association feature candidates. */
 /* Building (Level of Detail) */
 "Building" = "Bygning";
 
+/* A label for layer picker in the Building Explorer. */
+"Building Scene Layers" = "Bygningsscenelag";
+
 /* Buildings (Level of Detail) */
 "Buildings" = "Bygninger";
 
@@ -104,7 +119,8 @@ for the AR experience. */
 /* A title for an alert that camera access is disabled. */
 "Camera access is disabled" = "Kameratilgang deaktivert";
 
-/* A label for a button to cancel an operation. */
+/* A label for a button to cancel an operation.
+Cancel your current action to close/hide a sheet or pop-up. */
 "Cancel" = "Avbryt";
 
 /* A label for a button to cancel the starting point selection operation. */
@@ -156,6 +172,9 @@ candidate to add as a utility association. */
 /* A directive to clear all of the completed utility network traces. */
 "Clear All Results" = "Fjern alle resultater";
 
+/* Close/hide a sheet or pop-up. */
+"Close" = "Lukk";
+
 /* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Farge";
 
@@ -165,11 +184,29 @@ candidate to add as a utility association. */
 /* The accessibility label of the compass button. */
 "compass-button-accessibility-label" = "Kompass";
 
+/* A label for a control to pick a condition to filter fields in a table against. */
+"Condition" = "Betingelse";
+
+/* A label for a control representing a condition and position index used to filter fields in a table. */
+"Condition %lld" = "Betingelse %lld";
+
+/* A label for button to a open a menu with options for a condition used to filter fields in a table. */
+"Condition %lld Options" = "Betingelse %lld Alternativer";
+
+/* Confirm the current action and close a sheet or pop-up. */
+"Confirm" = "Bekreft";
+
 /* A label for the "Connectivity" utility association kind. */
 "Connectivity" = "Tilkobling";
 
+/* A label for construction phase picker in the Building Explorer. */
+"Construction Phase" = "Konstruksjonsfase";
+
 /* A label for the "Containment" utility association kind. */
 "Containment" = "Beholder";
+
+/* A label for the "contains the text" attribute query condition. */
+"contains the text" = "inneholder teksten";
 
 /* A label indicating whether content in the new
 association is visible or not. */
@@ -218,7 +255,7 @@ A label for a button used to continue the authentication operation. */
 /* Text indicating a field's value must be on or before the maximum date specified in the variable. */
 "Date must be on or before %@" = "Datoen må være den eller før %@";
 
-/* A label for a button used to delete a utility network trace input component or result. */
+/* A label for a "Delete" button. */
 "Delete" = "Slett";
 
 /* A label for a button used to delete all starting points on a pending utility network trace. */
@@ -242,8 +279,14 @@ A label for a button used to continue the authentication operation. */
 /* A question asking if the user would like to discard their unsaved edits. */
 "Discard Edits?" = "Forkaste endringene?";
 
+/* A label for Disciplines & Categories section in the Building Explorer. */
+"Disciplines & Categories" = "Virksomheter og kategorier";
+
 /* E.g. Close/hide a sheet or pop-up. */
 "Dismiss" = "Lukk";
+
+/* A label for the "does not contain the text" attribute query condition. */
+"does not contain the text" = "inneholder ikke teksten";
 
 /* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Ferdig";
@@ -262,6 +305,9 @@ A label for a button used to continue the authentication operation. */
 
 /* The status text when a map area is downloading. */
 "Downloading" = "Laster ned";
+
+/* A label for a button to duplicate a field filter. */
+"Duplicate" = "Dupliser";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
@@ -284,6 +330,9 @@ AR experience. */
 /* An error message indicating the selected attachment is an empty file and not supported. */
 "Empty files are not supported." = "Tomme filer støttes ikke.";
 
+/* A label for the "ends with" attribute query condition. */
+"ends with" = "slutter med";
+
 /* Text indicating a field's value must be within the
 allowed length range. The first and second parameter
 hold the minimum and maximum length respectively. */
@@ -294,6 +343,9 @@ hold the minimum and maximum length respectively. */
 
 /* An instruction to enter a name. */
 "Enter a name" = "Angi et navn";
+
+/* A prompt for a text field to enter a value. */
+"Enter a value" = "Oppgi en verdi";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Angi verdi";
@@ -361,9 +413,16 @@ trace operation. */
 asset types by name. */
 "Filter asset types by name" = "Filtrer ressurstyper etter navn";
 
+/* A label for a button to filter utility association candidates by attributes. */
+"Filter Candidates" = "Filtrer kandidater";
+
 /* A label for a search field to filter utility 
 association candidate features by name. */
 "Filter candidates by name" = "Filtrer kandidater etter navn";
+
+/* Label for a text field used to 
+filter visible elements in a form. */
+"Filter Elements" = "Filtrer elementer";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -376,6 +435,9 @@ association feature sources by name. */
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Filtrer steder";
+
+/* A notice used when closing the view that the filters have not been applied/saved. */
+"Filters have not been applied" = "Filtre er ikke blitt brukt";
 
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Finn et sted eller en adresse";
@@ -394,13 +456,12 @@ edge of a utility network element. */
 /* A label for the element on the "from" side of a utility association. */
 "From Element" = "Fra element";
 
-/* A label for a button to choose a feature for a new
-utility association from a network data source. */
-"From Network Data Source" = "Fra nettverksdatakilde";
-
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Funksjonresultater";
+
+/* Description of error thrown when a global scene is being provided to the Building Explorer. */
+"Global scenes aren't supported in the Building Explorer." = "Globale scener støttes ikke i Building Explorer";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -426,6 +487,24 @@ variable is a cardinal or intercardinal direction. */
 /* A label indicating that a challenge should be ignored. */
 "Ignore" = "Ignorer";
 
+/* A label for the "is" attribute query condition. */
+"is" = "er";
+
+/* A label for the "is blank" attribute query condition. */
+"is blank" = "er tom";
+
+/* A label for the "is empty" attribute query condition. */
+"is empty" = "er tom";
+
+/* A label for the "is not" attribute query condition. */
+"is not" = "er ikke";
+
+/* A label for the "is not blank" attribute query condition. */
+"is not blank" = "er ikke tom";
+
+/* A label for the "is not empty" attribute query condition. */
+"is not empty" = "er ikke tom";
+
 /* A label for the "Junction Edge Object Connectivity From Side" utility association kind. */
 "Junction Edge Object Connectivity From Side" = "Objekttilkobling for knutepunktkant fra siden";
 
@@ -440,6 +519,9 @@ variable is a cardinal or intercardinal direction. */
 
 /* Text indicating a field's value must be within the allowed range. */
 "Less than minimum value" = "Mindre enn minimumsverdi";
+
+/* A label for the level picker in the Building Explorer. */
+"Level" = "Nivå";
 
 /* A label for the level of detail picker view. */
 "Level of Detail" = "Detaljnivå";
@@ -537,13 +619,23 @@ data sources in a utility network. */
 /* A label indicating that no associations are available for the utility associations element. */
 "No Associations" = "Ingen tilknytninger";
 
+/* A label indicating an element
+contains no file attachments. */
+"No attachments" = "Ingen vedlegg";
+
 /* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "Ingen bokmerker";
+
+/* Description of error thrown there are no building scene layers in the scene provided to the Building Explorer. */
+"No building scene layers in the scene." = "Ingen bygningsscenelag i scenen.";
 
 /* A label indicating no utility association 
 candidates matching the filter criteria were
 found. */
 "No Candidates Found" = "Finner ingen kandidater";
+
+/* A label indicating no field filtering conditions have been added. */
+"No conditions added" = "Ingen betingelser lagt til";
 
 /* A statement that no utility trace configurations are available. */
 "No configurations available." = "Ingen konfigurasjoner tilgjengelig.";
@@ -601,12 +693,11 @@ filter results were found. */
 /* A label indicating that the map is offline disabled. */
 "Offline Disabled" = "Frakoblet modus deaktivert";
 
+/* The default title of the live activity for taking a map offline. */
+"Offline Map" = "Frakoblet kart";
+
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
-
-/* A label indicating features can be selected by
-interactively tapping on the map. */
-"On Map" = "På kart";
 
 /* A message explaining that the online map failed to load. */
 "Online Map Failed to Load" = "Kunne ikke laste inn det nettbaserte kartet";
@@ -741,6 +832,12 @@ or more levels in a floor-aware map or scene. */
 /* A label for a button to show all the association results. */
 "Show all" = "Vis alle";
 
+/* A label indicating the intended outcome of using the filter view. */
+"Show features that meet all the conditions" = "Vis geoobjekter som oppfyller alle betingelser";
+
+/* A label for the Show Full Model toggle in the Building Explorer. */
+"Show Full Model" = "Vis hele modellen";
+
 /* A label for a button to show the indicated feature on the map. */
 "Show On Map" = "Vis på kart";
 
@@ -772,6 +869,9 @@ match the spatial reference of the map or scene. */
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Startpunkter";
+
+/* A label for the "starts with" attribute query condition. */
+"starts with" = "begynner med";
 
 /* State/Province (Level of Detail) */
 "State/Province" = "Delstat/provins";
@@ -858,6 +958,9 @@ to be imported as an attachment. */
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "Det er ingen kartområder for dette kartet. Trykk på knappen nedenfor for å komme i gang.";
+
+/* A notice communicating that a feature form has no elements. */
+"This form is empty." = "Skjemaet er tomt.";
 
 /* A label for a text entry field that allows the user to filter a list of association results by title. */
 "Title" = "Tittel";
@@ -948,6 +1051,9 @@ The first and second parameter hold the minimum and maximum values respectively.
 /* E.g. Open a hyperlink. */
 "View" = "Vis";
 
+/* A label for the visible toggle in the Building Explorer. */
+"Visible" = "Synlig";
+
 /* A label indicating a utility association's 
 containment is not visible. */
 "Visible: false" = "Synlig: usann";
@@ -979,6 +1085,9 @@ The host is indicated in the variable. */
 
 /* A button to change the map to the extent of the selected trace. */
 "Zoom To" = "Zoom til";
+
+/* A label for the zoom to building button in the Building Explorer. */
+"Zoom to building" = "Zoom til bygningen";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom To Result" = "Zoom til resultatet";

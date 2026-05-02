@@ -54,6 +54,9 @@ final class FloorFilterViewModel: ObservableObject {
     /// The selected site, floor, or level.
     @Published private(set) var selection: FloorFilterSelection?
     
+    /// A Boolean value that indicates whether the selector is showing facilities from all sites.
+    @Published var showingFacilitiesFromAllSites = false
+    
     // MARK: Constants
     
     /// The selection behavior of the floor filter.

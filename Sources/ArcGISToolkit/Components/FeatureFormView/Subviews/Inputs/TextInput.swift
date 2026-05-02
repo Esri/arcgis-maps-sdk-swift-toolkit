@@ -78,12 +78,6 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 embeddedFeatureFormViewModel.evaluateExpressions()
             }
-            .contentShape(.rect)
-            .onTapGesture {
-                if element.isMultiline {
-                    fullScreenTextInputIsPresented = true
-                }
-            }
 #if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
                 CodeScanner(code: $text, isPresented: $scannerIsPresented)
@@ -102,20 +96,25 @@ private extension TextInput {
         HStack {
             Group {
                 if element.isMultiline {
-                    Text(text)
-                        .accessibilityIdentifier("\(element.label) Text Input Preview")
-                        .fixedSize(horizontal: false, vertical: true)
-                        .lineLimit(5)
-                        .truncationMode(.tail)
-                        .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(text: $text, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel)
-                                .padding()
+                    Button {
+                        fullScreenTextInputIsPresented = true
+                    } label: {
+                        Text(text)
+                            .lineLimit(5)
+                            .truncationMode(.tail)
+                            .frame(maxWidth: .infinity, minHeight: 100, alignment: .topLeading)
+                    }
+                    .foregroundStyle(.primary)
+                    .accessibilityIdentifier("\(element.label) Text Input Preview")
+                    .fixedSize(horizontal: false, vertical: true)
+                    .sheet(isPresented: $fullScreenTextInputIsPresented) {
+                        FullScreenTextInput(text: $text, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel)
+                            .padding()
 #if targetEnvironment(macCatalyst)
-                                .environment(embeddedFeatureFormViewModel)
-                                .environment(featureFormViewModel)
+                            .environment(embeddedFeatureFormViewModel)
+                            .environment(featureFormViewModel)
 #endif
-                        }
-                        .frame(minHeight: 100, alignment: .top)
+                    }
                 } else {
                     TextField(
                         element.label,
@@ -126,9 +125,6 @@ private extension TextInput {
                     .accessibilityIdentifier("\(element.label) Text Input")
                     .focused($isFocused)
                     .keyboardType(keyboardType)
-#if os(visionOS)
-                    .hoverEffectDisabled()
-#endif
                     .onChange(of: isFocused) {
                         embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
                     }
@@ -140,12 +136,11 @@ private extension TextInput {
                     }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
 #if os(iOS)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
-                        // Known SwiftUI issue: This button is known to sometimes not appear. (See Apollo #1159)
+                        // Known SwiftUI issue: This button is known to sometimes not appear.
                         positiveNegativeButton
                         Spacer()
                     }
@@ -166,6 +161,12 @@ private extension TextInput {
                     text.removeAll()
                 }
                 .accessibilityIdentifier("\(element.label) Clear Button")
+#if os(visionOS)
+                .buttonStyle(.bordered)
+                // Constrain the size of the bordered button on visionOS to
+                // prevent layout shift.
+                .frame(idealWidth: 21, idealHeight: 21)
+#endif
             }
 #if !os(visionOS)
             if isBarcodeScanner {
@@ -252,27 +253,25 @@ private extension TextInput {
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
         
         var body: some View {
-            HStack {
-                FormElementHeader(element: element)
-                Button.done {
-                    dismiss()
-                }
-#if !os(visionOS)
-                .buttonStyle(.plain)
-                .foregroundStyle(Color.accentColor)
-#endif
+            NavigationStack {
+                TextEditor(text: $text)
+                    .focused($isFocused)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationTitle(element.label)
+                    .onAppear {
+                        isFocused = true
+                    }
+                    .onChange(of: isFocused) {
+                        embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                    }
+                    .scrollContentBackground(.hidden)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            DismissButton(kind: .confirm)
+                        }
+                    }
+                FormElementFooter(element: element)
             }
-            TextEditor(text: $text)
-                .focused($isFocused)
-                .onAppear {
-                    isFocused = true
-                }
-                .onChange(of: isFocused) {
-                    embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
-                }
-                .scrollContentBackground(.hidden)
-            Spacer()
-            FormElementFooter(element: element)
         }
     }
 }

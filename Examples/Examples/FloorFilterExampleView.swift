@@ -72,10 +72,6 @@ struct FloorFilterExampleView: View {
                         viewpoint: $viewpoint,
                         isNavigating: $isNavigating
                     )
-                    .frame(
-                        maxWidth: 400,
-                        maxHeight: 400
-                    )
                     .padding([.horizontal], 10)
                     .padding([.vertical], 10 + attributionBarHeight)
                 } else if mapLoadError {

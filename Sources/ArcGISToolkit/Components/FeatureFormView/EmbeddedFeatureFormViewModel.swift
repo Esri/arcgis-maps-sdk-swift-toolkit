@@ -18,9 +18,12 @@ import Observation
 private import os
 
 @MainActor @Observable
-class EmbeddedFeatureFormViewModel {
+final class EmbeddedFeatureFormViewModel {
     /// The models for fetching association filter results for each utility associations form element in the form.
     var associationsFilterResultsModels: [UtilityAssociationsFormElement: AssociationsFilterResultsModel] = [:]
+    
+    /// The phrase used to filter which elements are visible when running UI tests.
+    var elementFilterPhrase = ""
     
     /// The current focused element, if one exists.
     var focusedElement: FormElement? {
@@ -47,20 +50,18 @@ class EmbeddedFeatureFormViewModel {
     var title = ""
     
     /// The list of visible form elements.
-    ///
-    /// - Note: The attachments element is appended, if configured, once the default visibility of all other
-    /// form elements has been evaluated. This prevents the attachments element from being initialized and
-    /// quickly removed when it is optimized out for being off-screen, therefore preventing a cancellation
-    /// error in `AttachmentsFeatureElementView`.
     var visibleElements: [FormElement] {
         var elements = featureForm
             .elements
             .filter { elementVisibility[$0, default: false] }
-        if let attachmentsElement = featureForm.defaultAttachmentsElement,
-           elementVisibility.count == featureForm.elements.count {
+        if let attachmentsElement = featureForm.defaultAttachmentsElement {
             elements.append(attachmentsElement)
         }
-        return elements
+        return elementFilterPhrase.isEmpty
+        ? elements
+        : elements.filter {
+            $0.label.localizedCaseInsensitiveContains(elementFilterPhrase)
+        }
     }
     
     /// A dictionary of each form element and whether or not it is visible.

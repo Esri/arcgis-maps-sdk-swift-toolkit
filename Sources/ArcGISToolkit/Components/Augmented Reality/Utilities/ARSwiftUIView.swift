@@ -15,9 +15,10 @@
 #if os(iOS)
 import ArcGIS
 import ARKit
+import RealityKit
 import SwiftUI
 
-typealias ARViewType = ARSCNView
+typealias ARViewType = RealityKit.ARView
 
 /// A SwiftUI version of an AR view.
 struct ARSwiftUIView {
@@ -27,10 +28,10 @@ struct ARSwiftUIView {
     private(set) var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
     /// The closure to call when the session's frame updates.
     private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-    /// The closure to call when a node corresponding to a new anchor has been added to the view.
-    private(set) var onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
-    /// The closure to call when a node has been updated to match it's corresponding anchor.
-    private(set) var onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+    /// The closure to call when a new plane anchor has been added to the view.
+    private(set) var onAddAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
+    /// The closure to call when a plane anchor has been updated.
+    private(set) var onUpdateAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
     
     /// The proxy.
     private let proxy: ARSwiftUIViewProxy
@@ -71,21 +72,21 @@ struct ARSwiftUIView {
         return view
     }
     
-    /// Sets the closure to call when a new node has been added to the scene.
-    func onAddNode(
-        perform action: @escaping @MainActor (SceneParameters) -> Void
+    /// Sets the closure to call when a new plane anchor has been added to the scene.
+    func onAddAnchor(
+        perform action: @escaping @MainActor (ARPlaneAnchor) -> Void
     ) -> Self {
         var view = self
-        view.onAddNodeAction = action
+        view.onAddAnchorAction = action
         return view
     }
     
-    /// Sets the closure to call when the scene's nodes are updated.
-    func onUpdateNode(
-        perform action: @escaping @MainActor (SceneParameters) -> Void
+    /// Sets the closure to call when the a plane anchor is updated.
+    func onUpdateAnchor(
+        perform action: @escaping @MainActor (ARPlaneAnchor) -> Void
     ) -> Self {
         var view = self
-        view.onUpdateNodeAction = action
+        view.onUpdateAnchorAction = action
         return view
     }
 }
@@ -93,7 +94,6 @@ struct ARSwiftUIView {
 extension ARSwiftUIView: UIViewRepresentable {
     func makeUIView(context: Context) -> ARViewType {
         let arView = ARViewType()
-        arView.delegate = context.coordinator
         arView.session.delegate = context.coordinator
         // Set the AR view on the proxy.
         proxy.arView = arView
@@ -107,8 +107,8 @@ extension ARSwiftUIView: UIViewRepresentable {
             onDidChangeGeoTrackingStatusAction: onDidChangeGeoTrackingStatusAction,
             onCameraDidChangeTrackingStateAction: onCameraDidChangeTrackingStateAction,
             onDidUpdateFrameAction: onDidUpdateFrameAction,
-            onAddNodeAction: onAddNodeAction,
-            onUpdateNodeAction: onUpdateNodeAction
+            onAddAnchorAction: onAddAnchorAction,
+            onUpdateAnchorAction: onUpdateAnchorAction
         )
     }
     
@@ -116,42 +116,46 @@ extension ARSwiftUIView: UIViewRepresentable {
         let onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
         let onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
         let onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-        let onAddNodeAction: (@MainActor (SceneParameters) -> Void)?
-        let onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+        let onAddAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
+        let onUpdateAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
         
         init(
             onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?,
             onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?,
             onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?,
-            onAddNodeAction: (@MainActor (SceneParameters) -> Void)?,
-            onUpdateNodeAction: (@MainActor (SceneParameters) -> Void)?
+            onAddAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?,
+            onUpdateAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
         ) {
             self.onDidChangeGeoTrackingStatusAction = onDidChangeGeoTrackingStatusAction
             self.onCameraDidChangeTrackingStateAction = onCameraDidChangeTrackingStateAction
             self.onDidUpdateFrameAction = onDidUpdateFrameAction
-            self.onAddNodeAction = onAddNodeAction
-            self.onUpdateNodeAction = onUpdateNodeAction
-        }
-    }
-}
-
-extension ARSwiftUIView.Coordinator: ARSCNViewDelegate {
-    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
-        Task { @MainActor [onAddNodeAction] in
-            onAddNodeAction?(sceneParameters)
-        }
-    }
-    
-    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        let sceneParameters = SceneParameters(renderer: renderer, node: node, anchor: anchor)
-        Task { @MainActor [onUpdateNodeAction] in
-            onUpdateNodeAction?(sceneParameters)
+            self.onAddAnchorAction = onAddAnchorAction
+            self.onUpdateAnchorAction = onUpdateAnchorAction
         }
     }
 }
 
 extension ARSwiftUIView.Coordinator: ARSessionDelegate {
+    func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
+        // Filter new plane anchors to use for horizontal plane visualization.
+        let planeAnchors = anchors.compactMap { $0 as? ARPlaneAnchor }
+        for anchor in planeAnchors {
+            Task { @MainActor [onAddAnchorAction] in
+                onAddAnchorAction?(anchor)
+            }
+        }
+    }
+    
+    func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
+        // Filter updated plane anchors to use for horizontal plane visualization.
+        let planeAnchors = anchors.compactMap { $0 as? ARPlaneAnchor }
+        for anchor in planeAnchors {
+            Task { @MainActor [onUpdateAnchorAction] in
+                onUpdateAnchorAction?(anchor)
+            }
+        }
+    }
+    
     func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
         onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
     }
@@ -165,14 +169,6 @@ extension ARSwiftUIView.Coordinator: ARSessionDelegate {
     }
 }
 
-/// A temporary type to workaround this issue:
-/// https://forums.developer.apple.com/forums/thread/765644
-struct SceneParameters: @unchecked Sendable {
-    let renderer: SCNSceneRenderer
-    let node: SCNNode
-    let anchor: ARAnchor
-}
-
 /// A proxy for the ARSwiftUIView.
 @MainActor
 class ARSwiftUIViewProxy: NSObject, @preconcurrency ARSessionProviding {
@@ -183,6 +179,11 @@ class ARSwiftUIViewProxy: NSObject, @preconcurrency ARSessionProviding {
     /// The AR session.
     @objc dynamic var session: ARSession {
         arView.session
+    }
+    
+    /// The scene.
+    var scene: RealityKit.Scene {
+        arView.scene
     }
 }
 
@@ -199,15 +200,12 @@ extension ARSwiftUIViewProxy {
     ///   - target: The type of surface the raycast can interact with.
     /// - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
     @MainActor func raycast(from screenPoint: CGPoint, allowing target: ARRaycastQuery.Target) -> TransformationMatrix? {
-        // Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
-        guard let query = arView.raycastQuery(
+        // Use the `raycast` method on ARView to get the location of `screenPoint`.
+        let results = arView.raycast(
             from: screenPoint,
             allowing: target,
             alignment: .any
-        ) else { return nil }
-        
-        let results = session.raycast(query)
-        
+        )
         // Get the worldTransform from the first result; if there's no worldTransform, return nil.
         guard let worldTransform = results.first?.worldTransform else { return nil }
         
