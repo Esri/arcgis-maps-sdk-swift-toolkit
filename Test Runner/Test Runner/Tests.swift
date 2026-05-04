@@ -23,6 +23,7 @@ struct Tests: View {
 #endif
                 NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
                 NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
+                NavigationLink("Building Explorer Tests", destination: BuildingExplorerTestViews())
                 NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
                 NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
                 NavigationLink("Popup Tests", destination: PopupTestView())
