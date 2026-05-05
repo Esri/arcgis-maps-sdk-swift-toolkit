@@ -17,46 +17,14 @@ import SwiftUI
 
 public extension View {
     func featureEditor(
-        feature: Binding<ArcGISFeature?>,
+        item: Binding<(any FeatureEditorItem)?>,
         geometryEditor: GeometryEditor,
         viewpoint: Binding<Viewpoint?>? = nil,
         contentInsets: Binding<EdgeInsets?>? = nil
     ) -> some View {
         modifier(
             FeatureEditorModifier(
-                item: feature,
-                geometryEditor: geometryEditor,
-                viewpoint: viewpoint,
-                contentInsets: contentInsets
-            )
-        )
-    }
-    
-    func featureEditor(
-        featureForm: Binding<FeatureForm?>,
-        geometryEditor: GeometryEditor,
-        viewpoint: Binding<Viewpoint?>? = nil,
-        contentInsets: Binding<EdgeInsets?>? = nil
-    ) -> some View {
-        modifier(
-            FeatureEditorModifier(
-                item: featureForm,
-                geometryEditor: geometryEditor,
-                viewpoint: viewpoint,
-                contentInsets: contentInsets
-            )
-        )
-    }
-    
-    func featureEditor(
-        popup: Binding<Popup?>,
-        geometryEditor: GeometryEditor,
-        viewpoint: Binding<Viewpoint?>? = nil,
-        contentInsets: Binding<EdgeInsets?>? = nil
-    ) -> some View {
-        modifier(
-            FeatureEditorModifier(
-                item: popup,
+                item: item,
                 geometryEditor: geometryEditor,
                 viewpoint: viewpoint,
                 contentInsets: contentInsets
@@ -65,8 +33,15 @@ public extension View {
     }
 }
 
-private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
-    @Binding var item: Item?
+/// An object that can be displayed and/or edited by the Feature Editor.
+public protocol FeatureEditorItem: AnyObject {}
+
+extension ArcGISFeature: FeatureEditorItem {}
+extension FeatureForm: FeatureEditorItem {}
+extension Popup: FeatureEditorItem {}
+
+private struct FeatureEditorModifier: ViewModifier {
+    @Binding var item: (any FeatureEditorItem)?
     let geometryEditor: GeometryEditor
     let viewpoint: Binding<Viewpoint?>?
     let contentInsets: Binding<EdgeInsets?>?
@@ -77,14 +52,18 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .inspector(isPresented: $isShowingInspector) {
+            .inspector(
+                // Workaround for bug where inspector sometimes sets binding on init
+                // which prevents it for appear when the binding is later set.
+                isPresented: isShowingInspector ? $isShowingInspector : .constant(false)
+            ) {
                 VStack(spacing: 0) {
                     if let featureForm {
                         FeatureEditorView(
                             rootFeatureForm: featureForm,
                             geometryEditor: geometryEditor,
                             viewpoint: viewpoint,
-                            isPresented: .init(optionalValue: $featureForm),
+                            isPresented: Binding(optionalValue: $featureForm),
                             presentationDetent: selectedPresentationDetent
                         )
                         .transition(item is Popup ? .move(edge: .trailing) : .opacity)
@@ -105,7 +84,6 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
                     if item is Popup {
                         // Stops the geometry edit if the form is closed back to a popup.
                         // Note: This can't be done in onDisappear, due to lag.
-                        print("stop", FileLocation())
                         geometryEditor.stop()
                     } else {
                         // Closes the inspector when the feature form is closed,
@@ -113,6 +91,7 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
                         isShowingInspector = false
                     }
                 }
+                .inspectorColumnWidth(ideal: 320)
                 .interactiveDismissDisabled()
                 .presentationContentInteraction(.scrolls)
                 .presentationBackgroundInteraction(.enabled)
@@ -135,7 +114,6 @@ private struct FeatureEditorModifier<Item: AnyObject>: ViewModifier {
                 // Stops the geometry editor. This needs to happen here because onChange won't fire
                 // after inspector is closed. This can happen due to upstream item changes.
                 // Note: This can't be done in onDisappear, due to lag.
-                print("stop", FileLocation())
                 geometryEditor.stop()
             }
             .animation(.default, value: isShowingInspector)
@@ -180,7 +158,6 @@ private struct FeatureEditorView: View {
     @State private var backgroundIsIntractable = UIDevice.current.backgroundIsIntractable
     @State private var presentedFeatureForm: FeatureForm?
     @State private var isSaving = false
-    
     @State private var isStarted = false
     @State private var canUndo = false
     @State private var geometry: Geometry?
@@ -190,20 +167,7 @@ private struct FeatureEditorView: View {
     var body: some View {
         FeatureFormView(root: rootFeatureForm, isPresented: $isPresented)
             .onFeatureFormChanged { presentedFeatureForm = $0 }
-            .onFormEditingEvent { event in
-                // Stops the geometry editor in preparation for startEditing() to run again
-                // and to make UI seem more responsive.
-                print("stop", FileLocation())
-                geometryEditor.stop()
-                
-                if case .savedEdits(let willNavigate) = event {
-                    isSaving = false
-                    
-                    // Closes the inspector when the form footer save button is pressed.
-                    guard !willNavigate else { return }
-                    isPresented = false
-                }
-            }
+            .onFormEditingEvent(perform: handleFormEditingEvent)
             .environment(\.beforeSaveAction, save)
             .environment(\.bottomToolbarContent, toolbarContent)
             .environment(\.hasEdits, canUndo)
@@ -214,6 +178,18 @@ private struct FeatureEditorView: View {
                 startGeometryEditor
             )
             .task(id: geometry, updateFeatureFormGeometry)
+    }
+    
+    /// The text for indicating that the geometry editor's geometry is invalid.
+    @ViewBuilder
+    private var invalidGeometryMessage: Text? {
+        if geometry?.sketchIsValid != true {
+            Text(
+                "The geometry is invalid. It must be corrected before saving.",
+                bundle: .toolkitModule,
+                comment: ""
+            )
+        }
     }
     
     @ViewBuilder
@@ -251,27 +227,24 @@ private struct FeatureEditorView: View {
     
     /// Starts the geometry editor using the feature form's feature.
     private func startGeometryEditor() async {
+        geometryEditor.stop()
+        
         do {
             // Load needed because canUpdateGeometry is always false otherwise.
             let feature = featureForm.feature
             try await feature.load()
             
-            if let buffer = feature.geometry?.extent.withBuilder({ $0.expand(by: 1.1) }),
-               !buffer.isEmpty {
-                viewpoint?.wrappedValue = Viewpoint(boundingGeometry: buffer)
-            }
+            centerViewpoint(on: feature)
             
             guard feature.canUpdateGeometry else { return }
             
             if let geometry = feature.geometry {
-                print("start(withInitial:)", FileLocation())
                 geometryEditor.start(withInitial: geometry)
             } else if let featureTable = feature.table {
                 // Load needed because geometryType is always nil otherwise.
                 try await featureTable.load()
                 
                 guard let geometryType = featureTable.geometryType else { return }
-                print("start(withType:)", FileLocation())
                 geometryEditor.start(withType: geometryType)
             }
         } catch {
@@ -283,12 +256,11 @@ private struct FeatureEditorView: View {
     ///
     /// This is needed update any geometry dependent form elements when the geometry changes.
     private func updateFeatureFormGeometry() async {
-        guard geometryEditor.isStarted, !isSaving, geometry != featureForm.feature.geometry else {
+        guard isStarted, !isSaving, geometry != featureForm.feature.geometry else {
             return
         }
         
         do {
-            print("form geometry", FileLocation())
             featureForm.feature.geometry = geometry
             try await featureForm.evaluateExpressions()
         } catch {
@@ -300,25 +272,38 @@ private struct FeatureEditorView: View {
         guard canUndo else { return }
         
         isSaving = true
-        print("save", FileLocation())
         featureForm.feature.geometry = geometry
     }
     
-    /// The text for indicating that the geometry editor's geometry is invalid.
-    @ViewBuilder
-    private var invalidGeometryMessage: Text? {
-        if !(geometry?.sketchIsValid ?? true) {
-            Text(
-                "The geometry is invalid. It must be corrected before saving.",
-                bundle: .toolkitModule,
-                comment: ""
-            )
+    private func handleFormEditingEvent(_ event: FeatureFormView.EditingEvent) {
+        switch event {
+        case let .savedEdits(willNavigate):
+            isSaving = false
+            
+            // Closes the inspector when the form footer save button is pressed.
+            guard !willNavigate else { return }
+            isPresented = false
+            
+        case let .showOnMapRequested(feature):
+            centerViewpoint(on: feature)
+            
+        default:
+            break
         }
+    }
+    
+    private func centerViewpoint(on feature: Feature) {
+        guard let viewpoint,
+              let buffer = feature.geometry?.extent.withBuilder({ $0.expand(by: 1.2) }),
+              !buffer.isEmpty else {
+            return
+        }
+        viewpoint.wrappedValue = Viewpoint(boundingGeometry: buffer)
     }
 }
 
 /// A button that presents a view for configuring given `SnapSettings`.
-private struct SnapSettingsButton: View {
+struct SnapSettingsButton: View {
     /// The snap settings to configure.
     let settings: SnapSettings
     
@@ -346,7 +331,7 @@ private struct SnapSettingsButton: View {
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
-                            XButton(.dismiss)
+                            DismissButton(kind: .close)
                         }
                     }
             }
@@ -413,22 +398,13 @@ private extension Binding where Value == Bool {
 
 // MARK: - Debug
 
-struct FileLocation: CustomDebugStringConvertible {
-    let file: NSString
-    let line: UInt
-    let function: StaticString
-    
-    init(
-        file: NSString = #filePath,
-        line: UInt = #line,
-        function: StaticString = #function
-    ) {
-        self.file = file
-        self.line = line
-        self.function = function
-    }
-    
-    var debugDescription: String {
-        "\(file.lastPathComponent):\(line) \(function)"
-    }
+func logging(
+    _ tag: String,
+    file: NSString = #filePath,
+    line: UInt = #line,
+    function: StaticString = #function,
+    action: @escaping () -> Void
+) {
+    print("\(tag) - \(file.lastPathComponent):\(line) \(function)")
+    action()
 }

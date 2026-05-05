@@ -142,27 +142,16 @@ private struct EmbeddedGeometryEditorToolbar: View {
     
     private let padding = 6.0
     
-    public var body: some View {
+    var body: some View {
         switch orientation {
         case .vertical:
-            VStack(spacing: 0) {
-                Group {
-                    ToolPicker()
-                    DeleteButton()
-                }
-                .padding(.horizontal, padding)
-                
-                Divider()
-                    .padding(.vertical, padding)
-                
-                Group {
-                    UndoButton()
-                    RedoButton()
-                }
-                .padding(.horizontal, padding)
+            VStack {
+                ToolPicker()
+                DeleteButton()
+                UndoButton()
+                RedoButton()
             }
-            .environment(\.labelPadding, padding)
-            .padding(.vertical, padding)
+            .environment(\.labelPadding, 8.5)
             .stackStyle()
             
         case .horizontal:
@@ -305,12 +294,20 @@ private extension GeometryEditor {
 }
 
 private extension View {
+    @ViewBuilder
     func stackStyle() -> some View {
-        self.fixedSize()
-            .labelStyle(.iconOnly)
-            .tint(.secondary)
-            .background()
-            .clipShape(.rect(cornerRadius: 8))
-            .shadow(radius: 1)
+        if #available(iOS 26.0, *) {
+            self.fixedSize()
+                .labelStyle(.iconOnly)
+                .font(.title2)
+                .glassEffect(.regular.interactive())
+        } else {
+            self.fixedSize()
+                .labelStyle(.iconOnly)
+                .tint(.secondary)
+                .background()
+                .clipShape(.rect(cornerRadius: 8))
+                .shadow(radius: 1)
+        }
     }
 }

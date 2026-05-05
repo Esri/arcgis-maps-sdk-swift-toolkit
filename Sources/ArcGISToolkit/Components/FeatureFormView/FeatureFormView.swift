@@ -103,7 +103,7 @@ public struct FeatureFormView: View {
     
     /// A Boolean value indicating whether there are edits needing handled before saving.
     private var hasErrors: Bool {
-        !featureFormViewModel.presentedFormHasValidationErrors
+        featureFormViewModel.presentedFormHasValidationErrors
         || externalValidationErrorMessage != nil
     }
     
@@ -119,7 +119,7 @@ public struct FeatureFormView: View {
     
     public var body: some View {
         if let rootFeatureForm {
-            NavigationStack(path: $featureFormViewModel.navigationPath) {
+            NestedNavigationStack(path: $featureFormViewModel.navigationPath) {
                 EmbeddedFeatureFormView(form: rootFeatureForm)
                     // Refresh the navigation stack's root view when the root
                     // feature form changes.
@@ -492,5 +492,30 @@ extension Logger {
     /// A logger for the feature form view.
     static var featureFormView: Logger {
         Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormView")
+    }
+}
+
+private struct NestedNavigationStack<Element: Hashable, Root: View>: View {
+    private let path: Binding<[Element]>
+    private let root: Root
+    
+    init(path: Binding<[Element]>, @ViewBuilder root: () -> Root) {
+        self.path = path
+        self.root = root()
+    }
+    
+    @Environment(\.navigationPath) private var environmentPath
+    
+    var body: some View {
+        if let environmentPath {
+            root
+                .onChange(of: path.wrappedValue) { oldPath, newPath in
+                    if let last = newPath.last, newPath == (oldPath + [last]) {
+                        environmentPath.wrappedValue.append(last)
+                    }
+                }
+        } else {
+            NavigationStack(path: path) { root }
+        }
     }
 }
