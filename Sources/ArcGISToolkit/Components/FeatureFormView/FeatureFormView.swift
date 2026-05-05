@@ -243,7 +243,7 @@ public struct FeatureFormView: View {
                 },
                 message: {
                     if !featureFormViewModel.presentedFormHasValidationErrors,
-                        let externalValidationErrorMessage {
+                       let externalValidationErrorMessage {
                         // TODO: will this break localization?
                         validationErrorsMessage + Text("\n") + externalValidationErrorMessage
                     } else if featureFormViewModel.presentedFormHasValidationErrors {

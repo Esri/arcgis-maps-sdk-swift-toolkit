@@ -155,24 +155,13 @@ private struct EmbeddedGeometryEditorToolbar: View {
             .stackStyle()
             
         case .horizontal:
-            HStack(spacing: 0) {
-                Group {
-                    ToolPicker()
-                    DeleteButton()
-                }
-                .padding(.vertical, padding)
-                
-                Divider()
-                    .padding(.horizontal, padding)
-                
-                Group {
-                    UndoButton()
-                    RedoButton()
-                }
-                .padding(.vertical, padding)
+            HStack {
+                ToolPicker()
+                DeleteButton()
+                UndoButton()
+                RedoButton()
             }
-            .environment(\.labelPadding, padding)
-            .padding(.horizontal, padding)
+            .environment(\.labelPadding, 8.5)
             .stackStyle()
             
         case nil:
@@ -296,12 +285,13 @@ private extension GeometryEditor {
 private extension View {
     @ViewBuilder
     func stackStyle() -> some View {
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26, *) {
             self.fixedSize()
                 .labelStyle(.iconOnly)
                 .font(.title2)
                 .glassEffect(.regular.interactive())
         } else {
+            // TODO: Update iOS 18 styling to mimic iOS 26.
             self.fixedSize()
                 .labelStyle(.iconOnly)
                 .tint(.secondary)

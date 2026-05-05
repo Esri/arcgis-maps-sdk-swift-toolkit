@@ -85,7 +85,7 @@ struct GeometryConstructionToolPicker: View {
             }
         }
         .overlay {
-            if isSaving, #available(iOS 26.0, *) {
+            if isSaving, #available(iOS 26, *) {
                 ProgressView("Saving")
                     .padding()
                     .glassEffect()
@@ -136,7 +136,7 @@ struct GeometryConstructionToolPicker: View {
                 sharedTemplate: template,
                 geometry: geometry
             )
-            try await source.addFeatures(featureCreationSet: featureSet)
+            try await source.addFeatures(using: featureSet)
             
             let featureFormItems = makeFeatureFormItems(
                 templateItem: templateItem,
