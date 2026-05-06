@@ -184,7 +184,8 @@ public struct TableTopSceneView: View {
         // Disable coaching overlay when a plane is found.
         coachingOverlayIsActive = false
         
-        let anchorEntity = AnchorEntity(anchor: planeAnchor)
+        let anchorEntity = AnchorEntity()
+        anchorEntity.transform = Transform(matrix: planeAnchor.transform)
         
         let mesh = makeMesh(from: planeAnchor)
         let material = SimpleMaterial(
