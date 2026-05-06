@@ -24,7 +24,6 @@ struct BuildingExplorerTestCase3View: View {
             .overlay(alignment: .top) {
                 if let selection = viewModel.selection {
                     Text(verbatim: "Selected level: \(selection.level)")
-                        .banner()
                 }
             }
             .sheet(isPresented: $viewModel.explorerIsVisible) {
@@ -33,6 +32,11 @@ struct BuildingExplorerTestCase3View: View {
                     items: $viewModel.items,
                     selection: $viewModel.selection
                 )
+                .overlay(alignment: .top) {
+                    if let selection = viewModel.selection {
+                        Text(verbatim: "Selected level: \(selection.level)")
+                    }
+                }
             }
     }
 }

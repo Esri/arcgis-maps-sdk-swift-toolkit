@@ -20,34 +20,31 @@ struct BuildingExplorerTestCase2View: View {
     @Bindable private var viewModel = BuildingExplorerTestViewModel()
     
     @State private var fullModelIsVisible = true
+    @State private var updateText = false
     
     var body: some View {
         LocalSceneView(scene: viewModel.scene)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Show Explorer") {
-                        viewModel.explorerIsVisible = true
-                    }
+            .sheet(isPresented: $viewModel.explorerIsVisible) {
+                VStack {
+                    Text(verbatim: "Full model is visible: \(fullModelIsVisible)")
+                    Button("Update") { updateText = true }
+                    BuildingExplorer(
+                        scene: viewModel.scene,
+                        items: $viewModel.items,
+                        selection: $viewModel.selection
+                    )
                 }
             }
-            .overlay(alignment: .top) {
-                Text(verbatim: "Full model is visible: \(fullModelIsVisible)")
-                    .banner()
-            }
-            .sheet(isPresented: $viewModel.explorerIsVisible) {
-                BuildingExplorer(
-                    scene: viewModel.scene,
-                    items: $viewModel.items,
-                    selection: $viewModel.selection
-                )
-            }
-            .task(id: viewModel.explorerIsVisible) {
-                // Once we close the explorer, then we know
-                // to update the banner.
-                if !viewModel.explorerIsVisible,
+            .task(id: updateText) {
+                // Once the button is pressed then
+                // we know to update the text.
+                if updateText,
                    let selection = viewModel.selection,
                    let fullModelSublayer = selection.layer.sublayers.first(where: { $0.modelName.lowercased() == "fullmodel" }) {
                     fullModelIsVisible = fullModelSublayer.isVisible
+                    
+                    // Reset Boolean.
+                    updateText = false
                 }
             }
     }

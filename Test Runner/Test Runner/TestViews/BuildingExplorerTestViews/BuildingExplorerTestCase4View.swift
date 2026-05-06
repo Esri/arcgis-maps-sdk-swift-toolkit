@@ -21,18 +21,17 @@ struct BuildingExplorerTestCase4View: View {
     
     var body: some View {
         LocalSceneView(scene: viewModel.scene)
-            .overlay(alignment: .top) {
-                if let selection = viewModel.selection, let phase = selection.phase {
-                    Text(verbatim: "Selected phase: \(phase)")
-                        .banner()
-                }
-            }
             .sheet(isPresented: $viewModel.explorerIsVisible) {
                 BuildingExplorer(
                     scene: viewModel.scene,
                     items: $viewModel.items,
                     selection: $viewModel.selection
                 )
+                .overlay(alignment: .top) {
+                    if let selection = viewModel.selection, let phase = selection.phase {
+                        Text(verbatim: "Selected phase: \(phase)")
+                    }
+                }
             }
     }
 }

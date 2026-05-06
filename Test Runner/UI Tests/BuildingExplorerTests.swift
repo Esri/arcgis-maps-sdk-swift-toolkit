@@ -21,7 +21,7 @@ final class BuildingExplorerTests: XCTestCase {
     }
     
     /// Tests the visible toggle.
-    func testCase1() {
+    func testCase_1_1() {
         let app = XCUIApplication()
         app.launch()
         
@@ -31,9 +31,9 @@ final class BuildingExplorerTests: XCTestCase {
         // Tap test case one button.
         app.buttons["Test Case 1"].assertExistenceAndTap()
         
-        // Tap the visible toggle.
-        
         let visibleToggle = app.switches["Visible"].switches.firstMatch
+        
+        // Tap the visible toggle.
         visibleToggle.assertExistenceAndTap()
         
         // Verify the layer is not visible anymore by checking
@@ -49,7 +49,7 @@ final class BuildingExplorerTests: XCTestCase {
     }
     
     /// Tests the full model toggle.
-    func testCase2() {
+    func testCase_1_2() {
         let app = XCUIApplication()
         app.launch()
         
@@ -58,30 +58,28 @@ final class BuildingExplorerTests: XCTestCase {
         
         // Tap test case two button.
         app.buttons["Test Case 2"].assertExistenceAndTap()
+                
+        let fullModelToggle = app.switches["Show Full Model"].switches.firstMatch
         
         // Tap the full model toggle.
-        
-        let fullModelToggle = app.switches["Show Full Model"].switches.firstMatch
         fullModelToggle.assertExistenceAndTap()
         
-        // Close the explorer so the view code knows to check
-        // the visibility of the full model sublayer.
-        let closeButton = app.buttons["Close"]
-        closeButton.assertExistenceAndTap()
+        let updateButton = app.buttons["Update"]
+        
+        // Press the update button to update the
+        // the visibility text of the full model sublayer.
+        updateButton.assertExistenceAndTap()
         
         // Verify the layer is not visible anymore by checking
         // the updated text in the banner.
         app.staticTexts["Full model is visible: false"].assertExistence()
         
-        // Tap "Show Explorer" button.
-        app.buttons["Show Explorer"].assertExistenceAndTap()
-        
         // Tap the full model toggle.
         fullModelToggle.assertExistenceAndTap()
         
-        // Close the explorer so the view code knows to check
-        // the visibility of the full model sublayer.
-        closeButton.assertExistenceAndTap()
+        // Press the update button to update the
+        // the visibility text of the full model sublayer.
+        updateButton.assertExistenceAndTap()
         
         // Verify the layer is not visible anymore by checking
         // the updated text in the banner.
@@ -89,7 +87,7 @@ final class BuildingExplorerTests: XCTestCase {
     }
     
     /// Tests the default level and level change.
-    func testCase3() {
+    func testCase_1_3() {
         let app = XCUIApplication()
         app.launch()
         
@@ -113,7 +111,7 @@ final class BuildingExplorerTests: XCTestCase {
     }
     
     /// Tests the default phase and phase change.
-    func testCase4() {
+    func testCase_1_4() {
         let app = XCUIApplication()
         app.launch()
         

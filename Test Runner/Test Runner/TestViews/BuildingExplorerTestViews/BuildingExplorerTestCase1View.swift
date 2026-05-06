@@ -23,16 +23,15 @@ struct BuildingExplorerTestCase1View: View {
     
     var body: some View {
         LocalSceneView(scene: viewModel.scene)
-            .overlay(alignment: .top) {
-                Text(verbatim: "Layer is visible: \(layerIsVisible)")
-                    .banner()
-            }
             .sheet(isPresented: $viewModel.explorerIsVisible) {
                 BuildingExplorer(
                     scene: viewModel.scene,
                     items: $viewModel.items,
                     selection: $viewModel.selection
                 )
+                .overlay(alignment: .top) {
+                    Text("Layer is visible: \(layerIsVisible.description)")
+                }
             }
             .task(id: viewModel.selection) {
                 if let selection = viewModel.selection {
