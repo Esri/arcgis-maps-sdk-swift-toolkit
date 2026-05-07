@@ -13,12 +13,36 @@
 // limitations under the License.
 
 import ArcGIS
+import ArcGISToolkit
 import SwiftUI
 
 struct ContentView: View {
-    @State private var map = Map(basemapStyle: .arcGISTopographic)
+    @State private var featureEditorModel = FeatureEditorModel()
+    @State private var isShowingMapView = true
     
     var body: some View {
-        MapView(map: map)
+        NavigationStack {
+            Button("Open Example") {
+                isShowingMapView = true
+            }
+            .navigationDestination(isPresented: $isShowingMapView) {
+                ExampleMapView()
+            }
+        }
+        .environment(featureEditorModel)
+        .featureEditor(
+            item: $featureEditorModel.featureEditorItem,
+            geometryEditor: featureEditorModel.geometryEditor,
+            viewpoint: $featureEditorModel.viewpoint,
+            contentInsets: $featureEditorModel.contentInsets
+        )
     }
+}
+
+@Observable
+final class FeatureEditorModel {
+    var featureEditorItem: (any FeatureEditorItem)?
+    let geometryEditor = GeometryEditor()
+    var viewpoint: Viewpoint?
+    var contentInsets: EdgeInsets?
 }

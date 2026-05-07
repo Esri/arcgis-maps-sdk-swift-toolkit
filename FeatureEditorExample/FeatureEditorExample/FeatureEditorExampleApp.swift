@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
 import SwiftUI
 
 @main
 struct FeatureEditorExampleApp: App {
-    var body: some SwiftUI.Scene {
+    var body: some Scene {
         WindowGroup {
             ContentView()
         }

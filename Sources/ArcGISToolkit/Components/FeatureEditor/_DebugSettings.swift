@@ -15,39 +15,47 @@
 import ArcGIS
 import Foundation
 
+@MainActor
 public enum _DebugSettings {}
+
 public extension _DebugSettings {
     static let disabled = true
     
+    // MARK: Feature Editor
+    
+    static var openFeatureEditor = disabled ? false : true
+    static let featureEditorIdentifyPoint = Point(
+        x: -9813064,
+        y: 5130209,
+        spatialReference: .webMercator
+    )
+    
     // MARK: Demo
     
-    static nonisolated(unsafe) var openDemo = disabled ? false : true
+    static var openDemo = disabled ? false : true
     static let demo = 2
-    
     
     // MARK: Programmatic Reticle Demo
     
-    static nonisolated(unsafe) var startReticleDemo = disabled ? false : true
+    static var startReticleDemo = disabled ? false : true
     static let reticleDemoGeometry = CGPoint(x: 267.5, y: 382.5)
-    
     
     // MARK: Group and Preset Templates Demo
     
-    static nonisolated(unsafe) var startTemplatesDemo = disabled ? false : true
+    static var startTemplatesDemo = disabled ? false : true
     
     static let openTemplatePicker = disabled ? false : true
     static let templatePickerSearch = disabled ? "" : "service"
     
-    static nonisolated(unsafe) var openTemplate = disabled ? false : true
+    static var openTemplate = disabled ? false : true
     static let selectedGroupItem = "Pipeline Line"
     static let selectedTemplateItem = "Service Pipe Group (Tee-Valve-Meter)"
     
-    static nonisolated(unsafe) var addTemplateGeometry = disabled ? false : true
+    static var addTemplateGeometry = disabled ? false : true
     static let templateGeometry = "{\"paths\":[[[-9810790.1490485538,5123470.000108473],[-9810795.5708231665,5123492.1209488912]]],\"spatialReference\":{\"wkid\":102100,\"latestWkid\":3857}}"
-    
     
     // MARK: Editing Associations Demo
     
-    static nonisolated(unsafe) var openAssociationsDemo = disabled ? false : true
+    static var openAssociationsDemo = disabled ? false : true
     static let associationsDemoGeometry = CGPoint(x: 461.0, y: 361.0)
 }
