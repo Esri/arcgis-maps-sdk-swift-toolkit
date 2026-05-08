@@ -12,20 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Visual scalebar styles.
-public enum ScalebarStyle: Sendable {
-    /// Displays a single unit with segmented bars of alternating fill color.
-    case alternatingBar
-    
-    /// Displays a single unit.
-    case bar
-    
-    /// Displays both metric and imperial units. The primary unit is displayed on top.
-    case dualUnitLine
-    
-    /// Displays a single unit with tick marks.
-    case graduatedLine
-    
-    /// Displays a single unit with endpoint tick marks.
-    case line
+extension Scalebar {
+    /// Visual scalebar styles.
+    public enum Style: Sendable {
+        /// Displays a single unit with segmented bars of alternating fill color.
+        case alternatingBar
+        
+        /// Displays a single unit.
+        case bar
+        
+        /// Displays both metric and imperial units. The primary unit is displayed on top.
+        case dualUnitLine
+        
+        /// Displays a single unit with tick marks.
+        case graduatedLine
+        
+        /// Displays a single unit with endpoint tick marks.
+        case line
+    }
 }
+
+@available(*, deprecated, renamed: "Scalebar.Style")
+public typealias ScalebarStyle = Scalebar.Style

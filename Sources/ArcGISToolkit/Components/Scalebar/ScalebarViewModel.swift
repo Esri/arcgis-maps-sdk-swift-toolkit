@@ -33,7 +33,7 @@ final class ScalebarViewModel: ObservableObject {
         guard let displayUnit = displayUnit else {
             return (.zero, "")
         }
-        let altUnit: ScalebarUnits = units == .imperial ? .metric : .imperial
+        let altUnit: Scalebar.Units = units == .imperial ? .metric : .imperial
         let altMapBaseLength = displayUnit.convert(
             to: altUnit.baseLinearUnit,
             value: lineMapLength
@@ -74,8 +74,8 @@ final class ScalebarViewModel: ObservableObject {
     init(
         _ maxWidth: Double,
         _ minScale: Double,
-        _ style: ScalebarStyle,
-        _ units: ScalebarUnits,
+        _ style: Scalebar.Style,
+        _ units: Scalebar.Units,
         _ useGeodeticCalculations: Bool
     ) {
         self.maxWidth = maxWidth
@@ -94,7 +94,7 @@ final class ScalebarViewModel: ObservableObject {
     private let minScale: Double
     
     /// The visual appearance of the scalebar.
-    private let style: ScalebarStyle
+    private let style: Scalebar.Style
     
     // - MARK: Private variables
     
@@ -130,7 +130,7 @@ final class ScalebarViewModel: ObservableObject {
     private var spatialReference: SpatialReference?
     
     /// Unit of measure in use.
-    private var units: ScalebarUnits
+    private var units: Scalebar.Units
     
     /// The units per point to calculate the scale with.
     private var unitsPerPoint: Double?
@@ -168,7 +168,7 @@ final class ScalebarViewModel: ObservableObject {
         // Cap segments at 4
         let maxNumSegments = min(suggestedNumSegments, 4)
         
-        let numSegments: Int = ScalebarUnits.numSegments(
+        let numSegments: Int = Scalebar.Units.numSegments(
             forDistance: lineMapLength,
             maxNumSegments: maxNumSegments
         )
