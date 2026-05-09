@@ -104,7 +104,7 @@ public struct Scalebar: View {
     static let lineWidth: Double = 2.0
     
     /// Appearance settings.
-    let settings: Scalebar.Settings
+    let settings: Settings
     
     /// The render style for this `Scalebar`.
     private let style: Scalebar.Style
