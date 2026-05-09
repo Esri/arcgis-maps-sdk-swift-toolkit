@@ -64,43 +64,25 @@ extension Scalebar {
         /// - Parameter multiplier: A distance to compute the multiplier for.
         /// - Returns: A list of segment options for a given multiplier.
         private static func segmentOptions(forMultiplier multiplier: Double) -> [Int] {
-            switch multiplier {
-            case 1:
-                return [1, 2, 4, 5]
-            case 1.2:
-                return [1, 2, 3, 4]
-            case 1.25:
-                return [1, 2]
-            case 1.5:
-                return [1, 2, 3, 5]
-            case 1.75:
-                return [1, 2]
-            case 2:
-                return [1, 2, 4, 5]
-            case 2.4:
-                return [1, 2, 3]
-            case 2.5:
-                return [1, 2, 5]
-            case 3:
-                return [1, 2, 3]
-            case 3.75:
-                return [1, 3]
-            case 4:
-                return [1, 2, 4]
-            case 5:
-                return [1, 2, 5]
-            case 6:
-                return [1, 2, 3]
-            case 7.5:
-                return [1, 2]
-            case 8:
-                return [1, 2, 4]
-            case 9:
-                return [1, 2, 3]
-            case 10:
-                return [1, 2, 5]
-            default:
-                return [1]
+            return switch multiplier {
+            case 1:     [1, 2, 4, 5]
+            case 1.2:   [1, 2, 3, 4]
+            case 1.25:  [1, 2]
+            case 1.5:   [1, 2, 3, 5]
+            case 1.75:  [1, 2]
+            case 2:     [1, 2, 4, 5]
+            case 2.4:   [1, 2, 3]
+            case 2.5:   [1, 2, 5]
+            case 3:     [1, 2, 3]
+            case 3.75:  [1, 3]
+            case 4:     [1, 2, 4]
+            case 5:     [1, 2, 5]
+            case 6:     [1, 2, 3]
+            case 7.5:   [1, 2]
+            case 8:     [1, 2, 4]
+            case 9:     [1, 2, 3]
+            case 10:    [1, 2, 5]
+            default:    [1]
             }
         }
         
