@@ -107,7 +107,7 @@ public struct Scalebar: View {
     let settings: Settings
     
     /// The render style for this `Scalebar`.
-    private let style: Scalebar.Style
+    private let style: Style
     
     // - MARK: Public methods/vars
     
