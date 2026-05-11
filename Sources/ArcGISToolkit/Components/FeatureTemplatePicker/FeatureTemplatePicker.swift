@@ -16,8 +16,9 @@ import ArcGIS
 import SwiftUI
 
 public extension View {
+    // TODO: make isPresented first?
     func featureTemplatePicker(
-        _ templates: [[Int: [SharedTemplate]]],
+        _ templateGroups: [[Int: [SharedTemplate]]],
         isPresented: Binding<Bool>,
         geometryEditor: GeometryEditor,
     ) -> some View {
@@ -26,7 +27,7 @@ public extension View {
             // which prevents it for appear when the binding is later set.
             isPresented: isPresented.wrappedValue ? isPresented : .constant(false)
         ) {
-            FeatureTemplatePicker(results: templates, geometryEditor: geometryEditor)
+            FeatureTemplatePicker(templateGroups: templateGroups, geometryEditor: geometryEditor)
                 .inspectorColumnWidth(min: 320, ideal: 320, max: 320)
                 .interactiveDismissDisabled()
                 .environment(\.isPresented, isPresented)
@@ -35,7 +36,7 @@ public extension View {
 }
 
 private struct FeatureTemplatePicker: View {
-    let results: [[Int: [SharedTemplate]]]
+    let templateGroups: [[Int: [SharedTemplate]]]
     let geometryEditor: GeometryEditor
     
     @Environment(\.isPresented) private var isPresented
@@ -52,8 +53,9 @@ private struct FeatureTemplatePicker: View {
                 if groupItem.name.localizedStandardContains(searchText) {
                     result.append(groupItem)
                 } else {
-                    let templateItems = groupItem.templateItems
-                        .filter { $0.template.name.localizedStandardContains(searchText) }
+                    let templateItems = groupItem.templateItems.filter { templateItem in
+                        templateItem.template.name.localizedStandardContains(searchText)
+                    }
                     guard !templateItems.isEmpty else { return }
                     
                     result.append(
@@ -64,7 +66,7 @@ private struct FeatureTemplatePicker: View {
         }
     }
     
-    public var body: some View {
+    var body: some View {
         NavigationStack(path: $navigationPath) {
             Group {
                 if let filteredGroupItems {
@@ -89,13 +91,16 @@ private struct FeatureTemplatePicker: View {
                             DismissButton(kind: .close) { isPresented?.wrappedValue = false }
                         }
                     }
-                    .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+                    .searchable(
+                        text: $searchText,
+                        placement: .navigationBarDrawer(displayMode: .always)
+                    )
                 } else {
                     ProgressView("Loading templates")
                 }
             }
             .navigationTitle("Create Features")
-            .task(id: results, setUp)
+            .task(id: templateGroups, setUp)
         }
         .environment(\.navigationPath, $navigationPath)
         .onChange(of: isPresented?.wrappedValue) {
@@ -106,9 +111,9 @@ private struct FeatureTemplatePicker: View {
     }
     
     private func setUp() async {
-        guard !results.isEmpty else { return }
+        guard !templateGroups.isEmpty else { return }
         
-        groupItems = await makeGroupItems(from: results)
+        groupItems = await makeGroupItems(from: templateGroups)
         print(
             "groupItems: \(groupItems!.count)",
             "templateItems: \(groupItems!.reduce(0, { $0 + $1.templateItems.count }))"
@@ -130,20 +135,22 @@ private struct FeatureTemplatePicker: View {
     }
     
     private func makeGroupItems(
-        from results: [[Int: [SharedTemplate]]]
+        from templateGroups: [[Int: [SharedTemplate]]]
     ) async -> [TemplatePickerGroupItem] {
         return await withTaskGroup(of: TemplatePickerGroupItem?.self) { taskGroup in
-            for templates in results {
-                guard let source = templates.values.first?.first?.source else { continue }
+            for templateGroup in templateGroups {
+                guard let source = templateGroup.values.first?.first?.source else { continue }
                 
-                for (layerID, layerTemplates) in templates {
-                    taskGroup.addTask { @Sendable in
-                        let featureTable = source.featureTable(withLayerID: layerID)!
-                        
+                for (layerID, templates) in templateGroup {
+                    guard let featureTable = source.featureTable(withLayerID: layerID) else {
+                        continue
+                    }
+                    
+                    taskGroup.addTask {
                         try! await featureTable.load()
-                        guard featureTable.hasGeometry, !layerTemplates.isEmpty else { return nil }
+                        guard featureTable.hasGeometry, !templates.isEmpty else { return nil }
                         
-                        let templateItems = layerTemplates
+                        let templateItems = templates
                             .map { TemplatePickerItem($0, layerID: layerID) }
                             .sorted { $0.template.name < $1.template.name }
                         
@@ -185,7 +192,6 @@ private struct TemplatePickerGroupItem: Hashable, Sendable {
     let name: String
     let templateItems: [TemplatePickerItem]
 }
-
 
 // MARK: - Extensions
 

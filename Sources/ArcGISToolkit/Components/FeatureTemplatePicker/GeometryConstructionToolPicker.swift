@@ -33,7 +33,7 @@ struct GeometryConstructionToolPicker: View {
             if let applicableToolKinds {
                 Picker("Tools", selection: $selectedToolKind) {
                     ForEach(applicableToolKinds, id: \.self) { toolKind in
-                        Label(toolKind.label, image: toolKind.icon)
+                        Label(toolKind.label, image: toolKind.calciteIcon)
                             .tag(toolKind as GeometryConstructionTool.Kind?)
                     }
                 }
@@ -95,6 +95,7 @@ struct GeometryConstructionToolPicker: View {
         .disabled(isSaving)
         .navigationTitle("Create Features")
         .onDisappear {
+            // Stops the geometry editor when navigating back from this view.
             geometryEditor.stop()
         }
     }
@@ -155,6 +156,8 @@ struct GeometryConstructionToolPicker: View {
     ) async throws {
         geometryEditor.stop()
         
+        // Starts the geometry editor with the last geometry when the
+        // CreatedFeaturesList back button is pressed.
         if let lastGeometry {
             self.lastGeometry = nil
             
@@ -250,7 +253,7 @@ private extension GeometryConstructionTool.Kind {
         }
     }
     
-    var icon: String {
+    var calciteIcon: String {
         switch self {
         case .autoCompleteFreehandPolygon: "lasso"
         case .autoCompletePolygon: "polygon-line-check"
