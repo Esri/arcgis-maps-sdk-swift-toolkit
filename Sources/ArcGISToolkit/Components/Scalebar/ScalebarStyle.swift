@@ -17,16 +17,12 @@ extension Scalebar {
     public enum Style: Sendable {
         /// Displays a single unit with segmented bars of alternating fill color.
         case alternatingBar
-        
         /// Displays a single unit.
         case bar
-        
         /// Displays both metric and imperial units. The primary unit is displayed on top.
         case dualUnitLine
-        
         /// Displays a single unit with tick marks.
         case graduatedLine
-        
         /// Displays a single unit with endpoint tick marks.
         case line
     }
