@@ -21,25 +21,18 @@ struct FeatureFormTestView: View {
     
     /// An error that occurred during testing.
     @State private var error: TestingError?
-    
     /// The form being edited in the form view.
     @State private var featureForm: FeatureForm?
-    
     /// The list of identify layer results.
     @State private var identifyLayerResults = [IdentifyLayerResult]()
-    
     /// A Boolean value indicating whether the initial draw of the map view completed.
     @State private var initialDrawCompleted = false
-    
     /// The `Map` displayed in the `MapView`.
     @State private var map: Map?
-    
     /// The string for the test search bar.
     @State private var searchTerm = ""
-    
     /// The current test case.
     @State private var testCase: TestCase?
-    
     /// The test setup task to run once was the map has finished its initial draw.
     @State private var testSetupTask: Task<Void, Never>?
     
@@ -75,7 +68,10 @@ struct FeatureFormTestView: View {
         .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(featureForm != nil)
         .sheet(isPresented: Binding(get: { featureForm != nil }, set: { _ in })) {
-            FeatureFormView(root: featureForm!)
+            if let featureForm, let testCase {
+                FeatureFormView(root: featureForm)
+                    .editingButtons(testCase.editingButtonsVisibility)
+            }
         }
         .task {
             await setup()
@@ -221,6 +217,8 @@ private extension FeatureFormTestView {
         
         /// Optional ArcGIS credential info for the test data.
         let credentialInfo: CredentialInfo?
+        /// The visibility of the form's Save and Discard buttons.
+        let editingButtonsVisibility: Visibility
         /// The name of the test case.
         let id: String
         /// The object ID of the feature being tested.
@@ -242,9 +240,11 @@ private extension FeatureFormTestView {
             objectID: Int,
             layerName: String = "",
             portalID: String,
-            credentialInfo: CredentialInfo? = nil
+            credentialInfo: CredentialInfo? = nil,
+            editingButtonsVisibility: Visibility = .automatic
         ) {
             self.credentialInfo = credentialInfo
+            self.editingButtonsVisibility = editingButtonsVisibility
             self.id = name
             self.objectID = objectID
             self.layerName = layerName
@@ -315,7 +315,6 @@ private extension ArcGISFeature {
         if let id = attributes["objectid"] as? Int64 {
             return id
         } else {
-            print(type(of: attributes["objectid"]!))
             return nil
         }
     }
