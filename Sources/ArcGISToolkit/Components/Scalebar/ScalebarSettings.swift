@@ -19,31 +19,22 @@ extension Scalebar {
     public struct Settings: Sendable {
         /// Determines if the scalebar should automatically hide/show itself.
         var autoHide: Bool
-        
         /// The time to wait in seconds before the scalebar hides itself.
         var autoHideDelay: TimeInterval
-        
         /// The corner radius used by bar style scalebar renders.
         var barCornerRadius: Double
-        
         /// The darker fill color used by the alternating bar style render.
         var fillColor1: Color
-        
         /// The lighter fill color used by the bar style renders.
         var fillColor2: Color
-        
         /// The color of the prominent scalebar line.
         var lineColor: Color
-        
         /// The shadow color used by all scalebar style renders.
         var shadowColor: Color
-        
         /// The shadow radius used by all scalebar style renders.
         var shadowRadius: Double
-        
         /// The text color used by all scalebar style renders.
         var textColor: Color
-        
         /// The text shadow color used by all scalebar style renders.
         var textShadowColor: Color
         
