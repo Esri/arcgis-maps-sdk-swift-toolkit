@@ -36,14 +36,26 @@ public extension View {
 }
 
 private struct FeatureTemplatePicker: View {
-    let templateGroups: [[Int: [SharedTemplate]]]
-    let geometryEditor: GeometryEditor
+    private typealias TemplateGroups = [[Int: [HashableWrapper<SharedTemplate>]]]
+    
+    private let templateGroups: TemplateGroups
+    private let geometryEditor: GeometryEditor
     
     @Environment(\.isPresented) private var isPresented
     
     @State private var groupItems: [TemplatePickerGroupItem]?
     @State private var navigationPath = NavigationPath()
     @State private var searchText = _DebugSettings.templatePickerSearch
+    
+    init(templateGroups: [[Int: [SharedTemplate]]], geometryEditor: GeometryEditor) {
+        self.templateGroups = templateGroups.reduce(into: []) { result, templateGroup in
+            let hashableTemplateGroup = templateGroup.mapValues { templates in
+                return templates.map { HashableWrapper($0) }
+            }
+            result.append(hashableTemplateGroup)
+        }
+        self.geometryEditor = geometryEditor
+    }
     
     private var filteredGroupItems: [TemplatePickerGroupItem]? {
         if searchText.isEmpty {
@@ -135,11 +147,13 @@ private struct FeatureTemplatePicker: View {
     }
     
     private func makeGroupItems(
-        from templateGroups: [[Int: [SharedTemplate]]]
+        from templateGroups: TemplateGroups
     ) async -> [TemplatePickerGroupItem] {
         return await withTaskGroup(of: TemplatePickerGroupItem?.self) { taskGroup in
             for templateGroup in templateGroups {
-                guard let source = templateGroup.values.first?.first?.source else { continue }
+                guard let source = templateGroup.values.first?.first?.wrappedValue.source else {
+                    continue
+                }
                 
                 for (layerID, templates) in templateGroup {
                     guard let featureTable = source.featureTable(withLayerID: layerID) else {
@@ -151,7 +165,7 @@ private struct FeatureTemplatePicker: View {
                         guard featureTable.hasGeometry, !templates.isEmpty else { return nil }
                         
                         let templateItems = templates
-                            .map { TemplatePickerItem($0, layerID: layerID) }
+                            .map { TemplatePickerItem($0.wrappedValue, layerID: layerID) }
                             .sorted { $0.template.name < $1.template.name }
                         
                         let groupName = featureTable.displayName
@@ -192,7 +206,3 @@ private struct TemplatePickerGroupItem: Hashable, Sendable {
     let name: String
     let templateItems: [TemplatePickerItem]
 }
-
-// MARK: - Extensions
-
-extension SharedTemplate: Hashable {}

@@ -286,6 +286,7 @@ private extension View {
     @ViewBuilder
     func stackStyle() -> some View {
         if #available(iOS 26, *) {
+            // TODO: Fix background switch with dark basemaps.
             self.fixedSize()
                 .labelStyle(.iconOnly)
                 .font(.title2)

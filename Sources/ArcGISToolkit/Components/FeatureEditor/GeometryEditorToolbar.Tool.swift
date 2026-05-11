@@ -82,7 +82,7 @@ extension GeometryEditorToolbar.Tool: CaseIterable {
         [
             .freehand,
             .programmaticReticle,
-            vertex,
+            .vertex,
             .vertexReticle,
             .shape(kind: .arrow),
             .shape(kind: .ellipse),
@@ -268,6 +268,7 @@ private extension ShapeTool.Kind {
     var systemImage: String {
         switch self {
         case .arrow: "arrowshape.right"
+            // TODO: Use ellipse image
         case .ellipse: "circle"
         case .rectangle: "rectangle"
         case .triangle: "triangle"
