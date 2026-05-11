@@ -258,6 +258,8 @@ private extension FeatureFormTestView {
     var cases: [TestCase] {[
         .init("testAttachmentLoadDurability", objectID: 1, portalID: .groupAndAttachments),
         .init("testAttachmentRenaming", objectID: 1, portalID: .attachmentMapID),
+        .init("testEditingButtonsHidden", objectID: 1, portalID: .placeOfInterestID, editingButtonsVisibility: .hidden),
+        .init("testEditingButtonsVisible", objectID: 1, portalID: .placeOfInterestID, editingButtonsVisibility: .visible),
         .init("testCase_1_1", objectID: 1, portalID: .inputValidationMapID),
         .init("testCase_1_2", objectID: 1, portalID: .inputValidationMapID),
         .init("testCase_1_3", objectID: 1, portalID: .inputValidationMapID),
@@ -328,6 +330,7 @@ private extension String {
     static let groupElementMapID = "97495f67bd2e442dbbac485232375b07"
     static let inputValidationMapID = "5d69e2301ad14ec8a73b568dfc29450a"
     static let napervilleElectricUtilityNetwork = "471eb0bf37074b1fbb972b1da70fb310"
+    static let placeOfInterestID = "f72207ac170a40d8992b7a3507b44fad"
     static let radioButtonMapID = "476e9b4180234961809485c8eff83d5d"
     static let rangeDomainMapID = "bb4c5e81740e4e7296943988c78a7ea6"
     static let readOnlyMapID = "1d6cd4607edf4a50ac10b5165926b597"

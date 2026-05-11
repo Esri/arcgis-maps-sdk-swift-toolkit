@@ -97,6 +97,40 @@ final class FeatureFormViewTests: XCTestCase {
         renamedAttachmentLabel.assertExistence()
     }
     
+    func testEditingButtonsHidden() {
+        let app = XCUIApplication()
+        let discardButton = app.buttons["Discard"]
+        let formTitle = app.staticTexts["Place of Interest"]
+        let funActivitiesButton = app.buttons["Fun Activities"]
+        let saveButton = app.buttons["Save"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        saveButton.assertNonExistence()
+        discardButton.assertNonExistence()
+        
+        funActivitiesButton.assertExistenceAndTap()
+        
+        // Verify the editing buttons are hidden after making a form edit.
+        saveButton.assertNonExistence()
+        discardButton.assertNonExistence()
+    }
+    
+    func testEditingButtonsVisible() {
+        let app = XCUIApplication()
+        let discardButton = app.buttons["Discard"]
+        let formTitle = app.staticTexts["Place of Interest"]
+        let saveButton = app.buttons["Save"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        // Verify the editing buttons are visible without making any form edits.
+        saveButton.assertExistence()
+        discardButton.assertExistence()
+    }
+    
     // - MARK: Test case 1: Text Box with no hint, no description, value not required
     
     /// Test case 1.1: unfocused and focused state, no value
