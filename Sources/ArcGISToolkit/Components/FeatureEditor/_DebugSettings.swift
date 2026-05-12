@@ -43,8 +43,6 @@ public extension _DebugSettings {
     // MARK: Group and Preset Templates Demo
     
     static var startTemplatesDemo = disabled ? false : true
-    
-    static let openTemplatePicker = disabled ? false : true
     static let templatePickerSearch = disabled ? "" : "service"
     
     static var openTemplate = disabled ? false : true

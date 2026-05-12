@@ -21,6 +21,7 @@ struct GeometryConstructionToolPicker: View {
     let geometryEditor: GeometryEditor
     
     @Environment(\.navigationPath) private var navigationPath
+    @Environment(\.templateAllowedTools) private var templateAllowedTools
     
     @State private var applicableToolKinds: [GeometryConstructionTool.Kind]?
     @State private var geometry: Geometry?
@@ -35,20 +36,18 @@ struct GeometryConstructionToolPicker: View {
                     ForEach(applicableToolKinds, id: \.self) { toolKind in
                         Label(toolKind.label, image: toolKind.calciteIcon)
                             .tag(toolKind as GeometryConstructionTool.Kind?)
+                            .selectionDisabled(!toolKind.isSupported)
                     }
                 }
                 .pickerStyle(.inline)
-                .task(id: selectedToolKind) {
-                    do {
-                        try await edit(item: templateItem, with: selectedToolKind!)
-                    } catch {
-                        print("Error editing template: \(error)")
-                    }
-                }
                 .task {
                     for await geometry in geometryEditor.$geometry {
                         self.geometry = geometry
                     }
+                }
+                .onChange(of: selectedToolKind) {
+                    guard let selectedToolKind else { return }
+                    edit(item: templateItem, with: selectedToolKind)
                 }
             } else {
                 ProgressView("Loading tools")
@@ -105,6 +104,10 @@ struct GeometryConstructionToolPicker: View {
             let template = templateItem.template
             try await template.load()
             
+            // TODO: Fail if no table because can't start geometry editor.
+            let templateTable = template.source.featureTable(withLayerID: templateItem.layerID)
+            try await templateTable?.load()
+            
             applicableToolKinds = GeometryConstructionTool.Kind.allCases.filter {
                 template.isTool($0, applicableForLayerWithID: templateItem.layerID)
             }
@@ -112,8 +115,10 @@ struct GeometryConstructionToolPicker: View {
             let defaultTool = template.defaultConstructionTool(forLayerWithID: templateItem.layerID)
             selectedToolKind = defaultTool?.kind
             
+            //            print(template.options(for: defaultTool!))
+            
             guard let selectedToolKind else { return }
-            try await edit(item: templateItem, with: selectedToolKind)
+            edit(item: templateItem, with: selectedToolKind)
             
             if _DebugSettings.addTemplateGeometry {
                 _DebugSettings.addTemplateGeometry = false
@@ -150,26 +155,20 @@ struct GeometryConstructionToolPicker: View {
         }
     }
     
-    private func edit(
-        item: TemplatePickerItem,
-        with toolKind: GeometryConstructionTool.Kind
-    ) async throws {
-        geometryEditor.stop()
-        
+    private func edit(item: TemplatePickerItem, with toolKind: GeometryConstructionTool.Kind) {
         // Starts the geometry editor with the last geometry when the
         // CreatedFeaturesList back button is pressed.
         if let lastGeometry {
             self.lastGeometry = nil
-            
-            //            geometryEditor.tool = toolKind.geometryEditorTool
             geometryEditor.start(withInitial: lastGeometry)
         } else if let table = item.template.source.featureTable(withLayerID: item.layerID) {
-            try await table.load()
-            
             guard let geometryType = table.geometryType else { return }
-            //            geometryEditor.tool = toolKind.geometryEditorTool
             geometryEditor.start(withType: geometryType)
+        } else {
+            fatalError("TODO: Handle no table geometry type")
         }
+        
+        templateAllowedTools?.wrappedValue = Set(toolKind.validToolbarTools)
     }
     
     private func makeFeatureFormItems(
@@ -282,40 +281,62 @@ private extension GeometryConstructionTool.Kind {
         }
     }
     
-    var geometryEditorTool: GeometryEditorTool {
+    var validToolbarTools: [GeometryEditorToolbar.Tool] {
         switch self {
-        case .autoCompletePolygon,
-                .line,
-                .multipoint,
-                .point,
-                .pointAlongLine,
-                .pointAndRotation,
-                .pointAtEndOfLine,
-                .polygon,
-                .radial,
-                .rightAnglePolyline,
-                .split,
-                .trace,
-                .twoPointLine:
-            return VertexTool()
-        case .autoCompleteFreehandPolygon,
-                .freehand,
-                .streamingPolygon,
-                .streamingPolyline:
-            return FreehandTool()
         case .circle:
-            let shapeTool = ShapeTool(kind: .ellipse)
-            shapeTool.configuration.scaleMode = .uniform
-            return shapeTool
+            let circleShapeTool = ShapeTool(kind: .ellipse)
+            circleShapeTool.configuration.scaleMode = .uniform
+            
+            let circleToolbarTool = GeometryEditorToolbar.CustomTool(
+                circleShapeTool,
+                label: "Circle",
+                systemImage: "circle",
+                supportedGeometryTypes: [Polygon.self, Polyline.self]
+            )
+            
+            return [.custom(circleToolbarTool)]
         case .ellipse:
-            return ShapeTool(kind: .ellipse)
-        case .rectangle,
-                .regularPolygon,
-                .regularPolyline,
-                .rightAnglePolygon:
-            return ShapeTool(kind: .rectangle)
-        @unknown default:
-            fatalError()
+            return [.shape(kind: .ellipse)]
+        case .freehand:
+            return [.freehand]
+        case .line, .polygon:
+            return GeometryEditorToolbar.Tool.vertexTools + GeometryEditorToolbar.Tool.shapeTools
+        case .point, .multipoint:
+            return GeometryEditorToolbar.Tool.vertexTools
+        case .rectangle:
+            return [.shape(kind: .rectangle)]
+        default:
+            return []
         }
+    }
+    
+    var isSupported: Bool {
+        let supportedCases: Set<Self> = [
+            .circle,
+            .ellipse,
+            .freehand,
+            .line,
+            .multipoint,
+            .point,
+            .polygon,
+            .rectangle
+        ]
+        return supportedCases.contains(self)
+    }
+}
+
+private extension GeometryEditorToolbar.Tool {
+    static var vertexTools: [Self] {
+        [.vertex, .vertexReticle, .programmaticReticle]
+    }
+    
+    static var shapeTools: [Self] {
+        ShapeTool.Kind.allCases.map(Self.shape(kind:))
+    }
+}
+
+private extension ShapeTool.Kind {
+    static var allCases: [Self] {
+        [.arrow, .ellipse, .rectangle, .triangle]
     }
 }

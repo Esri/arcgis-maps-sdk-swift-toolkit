@@ -23,6 +23,7 @@ struct ExampleMapView: View {
     @State private var map: Map = {
         let url = URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
         let map = Map(url: url)!
+//        map.basemap = Basemap(style: .arcGISNavigation)
         map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
         
         let envelope = Envelope(xRange: -9814090 ... -9812210, yRange: 5129650 ... 5130750)

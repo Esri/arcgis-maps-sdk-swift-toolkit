@@ -22,16 +22,36 @@ public extension View {
         isPresented: Binding<Bool>,
         geometryEditor: GeometryEditor,
     ) -> some View {
-        inspector(
-            // Workaround for bug where inspector sometimes sets binding on init
-            // which prevents it for appear when the binding is later set.
-            isPresented: isPresented.wrappedValue ? isPresented : .constant(false)
-        ) {
-            FeatureTemplatePicker(templateGroups: templateGroups, geometryEditor: geometryEditor)
-                .inspectorColumnWidth(min: 320, ideal: 320, max: 320)
-                .interactiveDismissDisabled()
-                .environment(\.isPresented, isPresented)
-        }
+        modifier(
+            FeatureTemplatePickerModifier(
+                templateGroups: templateGroups,
+                isPresented: isPresented,
+                geometryEditor: geometryEditor
+            )
+        )
+    }
+}
+
+private struct FeatureTemplatePickerModifier: ViewModifier {
+    let templateGroups: [[Int: [SharedTemplate]]]
+    @Binding var isPresented: Bool
+    let geometryEditor: GeometryEditor
+    
+    @State private var templateAllowedTools: Set<GeometryEditorToolbar.Tool> = []
+    
+    func body(content: Content) -> some View {
+        content
+            .inspector(
+                // Workaround for bug where inspector sometimes sets binding on init
+                // which prevents it for appear when the binding is later set.
+                isPresented: isPresented ? $isPresented : .constant(false)
+            ) {
+                FeatureTemplatePicker(templateGroups: templateGroups, geometryEditor: geometryEditor)
+                    .inspectorColumnWidth(min: 320, ideal: 320, max: 320)
+                    .interactiveDismissDisabled()
+                    .environment(\.isPresented, $isPresented)
+            }
+            .environment(\.templateAllowedTools, $templateAllowedTools)
     }
 }
 
