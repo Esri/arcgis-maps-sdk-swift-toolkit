@@ -24,7 +24,7 @@ extension Scalebar {
     }
 }
 
-private extension Scalebar.Units {
+extension Scalebar.Units {
     /// Multiplier options.
     /// This table must begin with 1 and end with 10.
     private static let roundNumberMultipliers: [Double] =
