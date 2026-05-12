@@ -24,12 +24,7 @@ extension Scalebar {
     }
 }
 
-private extension Scalebar.Units {
-    /// Multiplier options.
-    /// This table must begin with 1 and end with 10.
-    private static let roundNumberMultipliers: [Double] =
-        [1, 1.2, 1.25, 1.5, 1.75, 2, 2.4, 2.5, 3, 3.75, 4, 5, 6, 7.5, 8, 9, 10]
-    
+extension Scalebar.Units {
     /// Determines an appropriate base linear unit for this scalebar unit.
     /// - Returns: `LinearUnit.feet` or `LinearUnit.meters` depending on this unit.
     ///
@@ -39,53 +34,6 @@ private extension Scalebar.Units {
     /// unit that will be displayed.
     var baseLinearUnit: LinearUnit {
         return self == .imperial ? LinearUnit.feet : LinearUnit.meters
-    }
-    
-    /// Calculates a magnitude for a given distance.
-    /// - Parameter distance: A distance to compute the magnitude for.
-    /// - Returns: A magnitude for a given distance.
-    ///
-    /// For example:
-    /// A distance of 25 will return 10 as 10 is the highest power of 10 that will fit into 25.
-    /// A distance of 550 will return 100 as 100 is the highest power of 10 that will fit into 550.
-    /// A distance of 2,222 will return 1000 as 1000 is the highest power of 10 that will fit into 2,222.
-    private static func magnitude(forDistance distance: Double) -> Double {
-        return pow(10, floor(log10(distance)))
-    }
-    
-    /// Returns a multiplier for a given distance.
-    /// - Parameter distance: A distance to compute the multiplier for.
-    /// - Returns: A multiplier for a given distance.
-    private static func multiplier(forDistance distance: Double) -> Double {
-        let residual = distance / magnitude(forDistance: distance)
-        let multiplier = roundNumberMultipliers.filter { $0 <= residual }.last ?? 0
-        return multiplier
-    }
-    
-    /// Returns a list of segment options for a given multiplier.
-    /// - Parameter multiplier: A distance to compute the multiplier for.
-    /// - Returns: A list of segment options for a given multiplier.
-    private static func segmentOptions(forMultiplier multiplier: Double) -> [Int] {
-        return switch multiplier {
-        case 1:     [1, 2, 4, 5]
-        case 1.2:   [1, 2, 3, 4]
-        case 1.25:  [1, 2]
-        case 1.5:   [1, 2, 3, 5]
-        case 1.75:  [1, 2]
-        case 2:     [1, 2, 4, 5]
-        case 2.4:   [1, 2, 3]
-        case 2.5:   [1, 2, 5]
-        case 3:     [1, 2, 3]
-        case 3.75:  [1, 3]
-        case 4:     [1, 2, 4]
-        case 5:     [1, 2, 5]
-        case 6:     [1, 2, 3]
-        case 7.5:   [1, 2]
-        case 8:     [1, 2, 4]
-        case 9:     [1, 2, 3]
-        case 10:    [1, 2, 5]
-        default:    [1]
-        }
     }
     
     /// - Returns: The best number of segments so that we get relatively round numbers when the
@@ -146,6 +94,61 @@ private extension Scalebar.Units {
             return distance >= 2640 ? .miles : .feet
         case .metric:
             return distance >= 1000 ? .kilometers : .meters
+        }
+    }
+}
+
+private extension Scalebar.Units {
+    /// Multiplier options.
+    /// This table must begin with 1 and end with 10.
+    static let roundNumberMultipliers: [Double] = [
+        1, 1.2, 1.25, 1.5, 1.75, 2, 2.4, 2.5, 3, 3.75, 4, 5, 6, 7.5, 8, 9, 10
+    ]
+    
+    /// Calculates a magnitude for a given distance.
+    /// - Parameter distance: A distance to compute the magnitude for.
+    /// - Returns: A magnitude for a given distance.
+    ///
+    /// For example:
+    /// A distance of 25 will return 10 as 10 is the highest power of 10 that will fit into 25.
+    /// A distance of 550 will return 100 as 100 is the highest power of 10 that will fit into 550.
+    /// A distance of 2,222 will return 1000 as 1000 is the highest power of 10 that will fit into 2,222.
+    static func magnitude(forDistance distance: Double) -> Double {
+        return pow(10, floor(log10(distance)))
+    }
+    
+    /// Returns a multiplier for a given distance.
+    /// - Parameter distance: A distance to compute the multiplier for.
+    /// - Returns: A multiplier for a given distance.
+    static func multiplier(forDistance distance: Double) -> Double {
+        let residual = distance / magnitude(forDistance: distance)
+        let multiplier = roundNumberMultipliers.filter { $0 <= residual }.last ?? 0
+        return multiplier
+    }
+    
+    /// Returns a list of segment options for a given multiplier.
+    /// - Parameter multiplier: A distance to compute the multiplier for.
+    /// - Returns: A list of segment options for a given multiplier.
+    static func segmentOptions(forMultiplier multiplier: Double) -> [Int] {
+        return switch multiplier {
+        case 1:     [1, 2, 4, 5]
+        case 1.2:   [1, 2, 3, 4]
+        case 1.25:  [1, 2]
+        case 1.5:   [1, 2, 3, 5]
+        case 1.75:  [1, 2]
+        case 2:     [1, 2, 4, 5]
+        case 2.4:   [1, 2, 3]
+        case 2.5:   [1, 2, 5]
+        case 3:     [1, 2, 3]
+        case 3.75:  [1, 3]
+        case 4:     [1, 2, 4]
+        case 5:     [1, 2, 5]
+        case 6:     [1, 2, 3]
+        case 7.5:   [1, 2]
+        case 8:     [1, 2, 4]
+        case 9:     [1, 2, 3]
+        case 10:    [1, 2, 5]
+        default:    [1]
         }
     }
 }
