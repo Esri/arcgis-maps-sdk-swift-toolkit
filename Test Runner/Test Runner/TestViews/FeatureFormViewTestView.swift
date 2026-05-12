@@ -313,13 +313,7 @@ private extension ArcGISFeature {
         }
     }
     
-    var objectID: Int64? {
-        if let id = attributes["objectid"] as? Int64 {
-            return id
-        } else {
-            return nil
-        }
-    }
+    var objectID: Int64? { attributes["objectid"] as? Int64 }
 }
 
 private extension String {
