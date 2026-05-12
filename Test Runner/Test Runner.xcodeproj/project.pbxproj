@@ -40,7 +40,7 @@
 		8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */; };
 		8A9845772C3F444B001CCE22 /* AttachmentCameraControllerTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */; platformFilters = (ios, maccatalyst, ); };
 		8A99A0B42F20578B0021819A /* XCTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0332232F20562600D5B463 /* XCTestCase.swift */; };
-		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; };
+		8A9F898F2B5B4F0A0027215E /* FeatureFormViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormViewTestView.swift */; };
 		8AC5AA652E428CB000F0F0E0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5AA642E428CAC00F0F0E0 /* UserDefaults.swift */; };
 		8AC5AA692E428D3E00F0F0E0 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5AA682E428D3C00F0F0E0 /* Binding.swift */; };
 		8AF7DF432F52329B00174515 /* XCUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF7DF412F52324000174515 /* XCUIElement.swift */; };
@@ -115,7 +115,7 @@
 		8A9419632E035FED003C7D10 /* AppSecrets.swift.masque */ = {isa = PBXFileReference; lastKnownFileType = text; name = AppSecrets.swift.masque; path = ../AppSecrets.swift.masque; sourceTree = "<group>"; };
 		8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCameraControllerTests.swift; sourceTree = "<group>"; };
 		8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCameraControllerTestView.swift; sourceTree = "<group>"; };
-		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; };
+		8A9F898E2B5B4F0A0027215E /* FeatureFormViewTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormViewTestView.swift; sourceTree = "<group>"; };
 		8AC5AA642E428CAC00F0F0E0 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		8AC5AA682E428D3C00F0F0E0 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		8AF7DF412F52324000174515 /* XCUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUIElement.swift; sourceTree = "<group>"; };
