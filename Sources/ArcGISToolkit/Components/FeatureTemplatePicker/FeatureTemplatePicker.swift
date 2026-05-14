@@ -37,7 +37,8 @@ private struct FeatureTemplatePickerModifier: ViewModifier {
     @Binding var isPresented: Bool
     let geometryEditor: GeometryEditor
     
-    @State private var templateAllowedTools: Set<GeometryEditorToolbar.Tool> = []
+    @State private var templateAllowedTools: [GeometryEditorToolbar.Tool] = []
+    @State private var templateSelectedTool: GeometryEditorToolbar.Tool = .vertex
     
     func body(content: Content) -> some View {
         content
@@ -51,7 +52,8 @@ private struct FeatureTemplatePickerModifier: ViewModifier {
                     .interactiveDismissDisabled()
                     .environment(\.isPresented, $isPresented)
             }
-            .environment(\.templateAllowedTools, $templateAllowedTools)
+            .environment(\.templateAllowedTools, isPresented ? $templateAllowedTools : nil)
+            .environment(\.templateSelectedTool, isPresented ? $templateSelectedTool : nil)
     }
 }
 

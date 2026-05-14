@@ -22,6 +22,7 @@ struct GeometryConstructionToolPicker: View {
     
     @Environment(\.navigationPath) private var navigationPath
     @Environment(\.templateAllowedTools) private var templateAllowedTools
+    @Environment(\.templateSelectedTool) private var templateSelectedTool
     
     @State private var applicableToolKinds: [GeometryConstructionTool.Kind]?
     @State private var geometry: Geometry?
@@ -30,25 +31,22 @@ struct GeometryConstructionToolPicker: View {
     @State private var selectedToolKind: GeometryConstructionTool.Kind?
     
     var body: some View {
-        Form {
+        Group {
             if let applicableToolKinds {
-                Picker("Tools", selection: $selectedToolKind) {
-                    ForEach(applicableToolKinds, id: \.self) { toolKind in
-                        Label(toolKind.label, image: toolKind.calciteIcon)
-                            .tag(toolKind as GeometryConstructionTool.Kind?)
-                            .selectionDisabled(!toolKind.isSupported)
+                Text("Add a geometry using toolbar.")
+                    .task {
+                        for await geometry in geometryEditor.$geometry {
+                            self.geometry = geometry
+                        }
                     }
-                }
-                .pickerStyle(.inline)
-                .task {
-                    for await geometry in geometryEditor.$geometry {
-                        self.geometry = geometry
+                    .onChange(of: selectedToolKind) {
+                        guard let selectedToolKind else { return }
+                        edit(item: templateItem, with: selectedToolKind)
                     }
-                }
-                .onChange(of: selectedToolKind) {
-                    guard let selectedToolKind else { return }
-                    edit(item: templateItem, with: selectedToolKind)
-                }
+                    .onChange(of: templateAllowedTools == nil, initial: true) {
+                        guard let templateAllowedTools else { return }
+                        templateAllowedTools.wrappedValue = applicableToolKinds.map(\.validToolbarToolWithGroups)
+                    }
             } else {
                 ProgressView("Loading tools")
                     .frame(maxWidth: .infinity)
@@ -115,8 +113,6 @@ struct GeometryConstructionToolPicker: View {
             let defaultTool = template.defaultConstructionTool(forLayerWithID: templateItem.layerID)
             selectedToolKind = defaultTool?.kind
             
-            //            print(template.options(for: defaultTool!))
-            
             guard let selectedToolKind else { return }
             edit(item: templateItem, with: selectedToolKind)
             
@@ -167,8 +163,6 @@ struct GeometryConstructionToolPicker: View {
         } else {
             fatalError("TODO: Handle no table geometry type")
         }
-        
-        templateAllowedTools?.wrappedValue = Set(toolKind.validToolbarTools)
     }
     
     private func makeFeatureFormItems(
@@ -281,16 +275,45 @@ private extension GeometryConstructionTool.Kind {
         }
     }
     
+    var validToolbarTool: GeometryEditorToolbar.Tool? {
+        switch self {
+        case .circle:
+            let circleShapeTool = ShapeTool(kind: .ellipse)
+            circleShapeTool.configuration.scaleMode = .uniform
+            
+            let circleToolbarTool = GeometryEditorToolbar.ToolItem(
+                circleShapeTool,
+                label: "Circle",
+                icon: Image(systemName: "circle"),
+                supportedGeometryTypes: [Polygon.self, Polyline.self]
+            )
+            
+            return .custom(circleToolbarTool)
+        case .ellipse:
+            return .shape(kind: .ellipse)
+        case .freehand:
+            return .freehand
+        case .line, .polygon:
+            return .vertex
+        case .point, .multipoint:
+            return .vertex
+        case .rectangle:
+            return .shape(kind: .rectangle)
+        default:
+            return nil
+        }
+    }
+    
     var validToolbarTools: [GeometryEditorToolbar.Tool] {
         switch self {
         case .circle:
             let circleShapeTool = ShapeTool(kind: .ellipse)
             circleShapeTool.configuration.scaleMode = .uniform
             
-            let circleToolbarTool = GeometryEditorToolbar.CustomTool(
+            let circleToolbarTool = GeometryEditorToolbar.ToolItem(
                 circleShapeTool,
                 label: "Circle",
-                systemImage: "circle",
+                icon: Image(systemName: "circle"),
                 supportedGeometryTypes: [Polygon.self, Polyline.self]
             )
             
@@ -308,6 +331,16 @@ private extension GeometryConstructionTool.Kind {
         default:
             return []
         }
+    }
+    
+    var validToolbarToolWithGroups: GeometryEditorToolbar.Tool {
+        .group(
+            GeometryEditorToolbar.ToolGroup(
+                tools: validToolbarTools,
+                label: "\(label)",
+                icon: Image(calciteIcon)
+            )
+        )
     }
     
     var isSupported: Bool {

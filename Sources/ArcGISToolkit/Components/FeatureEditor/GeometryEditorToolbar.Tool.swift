@@ -46,12 +46,15 @@ public extension GeometryEditorToolbar {
         case shape(kind: ShapeTool.Kind)
         case vertex
         case vertexReticle
-        case custom(CustomTool)
+        case custom(ToolItem)
+        case group(ToolGroup)
         
         var geometryEditorTool: GeometryEditorTool {
             switch self {
             case .freehand:
                 FreehandTool()
+            case .group(let group):
+                group.tools.first?.geometryEditorTool ?? VertexTool()
             case .shape(let kind):
                 ShapeTool(kind: kind)
             case .programmaticReticle:
@@ -65,10 +68,12 @@ public extension GeometryEditorToolbar {
             }
         }
         
-        public var label: LocalizedStringResource {
+        public var label: String {
             switch self {
             case .freehand:
                 "Freehand"
+            case .group(let group):
+                group.label
             case .programmaticReticle:
                 "Programmatic Reticle"
             case .shape(let shape):
@@ -82,20 +87,23 @@ public extension GeometryEditorToolbar {
             }
         }
         
-        var systemImage: String {
+        var icon: Image {
             switch self {
             case .freehand:
-                "scribble"
+                Image(systemName: "scribble")
+            case .group(let group):
+                group.icon
             case .programmaticReticle:
-                "dot.viewfinder" // TODO: pick other symbol?
+                // TODO: pick other symbol?
+                Image(systemName: "dot.viewfinder")
             case .shape(let shape):
-                shape.systemImage
+                shape.icon
             case .vertex:
-                "point.3.connected.trianglepath.dotted"
+                Image(systemName: "point.3.connected.trianglepath.dotted")
             case .vertexReticle:
-                "dot.viewfinder"
+                Image(systemName: "dot.viewfinder")
             case .custom(let tool):
-                tool.systemImage
+                tool.icon
             }
         }
         
@@ -103,6 +111,8 @@ public extension GeometryEditorToolbar {
             switch self {
             case .freehand:
                 [Polygon.self, Polyline.self]
+            case .group(let group):
+                group.tools.flatMap(\.supportedGeometryTypes)
             case .programmaticReticle, .vertex, .vertexReticle:
                 [Multipoint.self, Point.self, Polygon.self, Polyline.self]
             case .shape(let kind):
@@ -113,6 +123,14 @@ public extension GeometryEditorToolbar {
                 }
             case .custom(let customTool):
                 customTool.supportedGeometryTypes
+            }
+        }
+        
+        var leafTools: [Self] {
+            if case .group(let group) = self {
+                group.tools.flatMap(\.leafTools)
+            } else {
+                [self]
             }
         }
     }
@@ -137,46 +155,51 @@ extension GeometryEditorToolbar.Tool: CaseIterable {
 // MARK: - CustomTool
 
 public extension GeometryEditorToolbar {
-    struct CustomTool: Hashable {
+    struct ToolItem: Hashable {
         let tool: GeometryEditorTool
-        let label: LocalizedStringResource
-        // TODO: Convert to image
-        let systemImage: String
+        let label: String
+        let icon: Image
         let supportedGeometryTypes: [Geometry.Type]
-        let geometryConstructionToolID: UUID?
         
         public init(
             _ tool: GeometryEditorTool,
-            label: LocalizedStringResource,
-            systemImage: String,
-            supportedGeometryTypes: [Geometry.Type] = [],
-            geometryConstructionToolID: UUID? = nil
+            label: String,
+            icon: Image,
+            supportedGeometryTypes: [Geometry.Type] = []
         ) {
             self.tool = tool
             self.label = label
-            self.systemImage = systemImage
+            self.icon = icon
             self.supportedGeometryTypes = supportedGeometryTypes
-            self.geometryConstructionToolID = geometryConstructionToolID
         }
         
         public static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.tool === rhs.tool
             && lhs.label == rhs.label
-            && lhs.systemImage == rhs.systemImage
+            && lhs.icon == rhs.icon
             && lhs.supportedGeometryTypeIDs == rhs.supportedGeometryTypeIDs
-            && lhs.geometryConstructionToolID == rhs.geometryConstructionToolID
         }
         
         public func hash(into hasher: inout Hasher) {
-            // TODO: Add label hash?
+            // TODO: Add icon hash?
             hasher.combine(ObjectIdentifier(tool))
-            hasher.combine(systemImage)
+            hasher.combine(label)
             hasher.combine(supportedGeometryTypeIDs)
-            hasher.combine(geometryConstructionToolID)
         }
         
         private var supportedGeometryTypeIDs: [ObjectIdentifier] {
             supportedGeometryTypes.map(ObjectIdentifier.init)
+        }
+    }
+    
+    struct ToolGroup: Hashable {
+        let tools: [Tool]
+        let label: String
+        let icon: Image
+        
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(tools)
+            hasher.combine(label)
         }
     }
 }
@@ -193,58 +216,66 @@ struct ToolPicker: View {
     @Environment(\.labelPadding) private var labelPadding
     
     /// The tool options to show in the picker.
-    @Environment(\.tools) private var tools
+    @Environment(\.tools) private var externalTools
     
     /// A user provided binding to the tool selected by the picker.
-    @Environment(\.selectedTool) private var externalSelectedTool
+    @Environment(\.selectedTool) private var userSelectedTool
     
     @Environment(\.templateAllowedTools) private var templateAllowedTools
+    @Environment(\.templateSelectedTool) private var templateSelectedTool
     
     @State private var geometry: Geometry?
     @State private var selectedTool: Tool = .vertex
     
+    private var externalSelectedTool: Binding<Tool>? {
+        templateSelectedTool ?? userSelectedTool
+    }
+    
+    private var selectableTools: [Tool] {
+        tools.flatMap(\.leafTools).uniqued()
+    }
+    
+    private var tools: [Tool] {
+        templateAllowedTools?.wrappedValue ?? externalTools
+    }
+    
     private var validTools: [Tool] {
         if let geometry, let templateAllowedTools = templateAllowedTools?.wrappedValue {
-            tools.filter { tool in
+            selectableTools.filter { tool in
                 isTool(tool, validFor: geometry, selection: selectedTool)
                 && isTool(tool, validFor: templateAllowedTools)
             }
         } else if let geometry {
-            tools.filter { tool in
+            selectableTools.filter { tool in
                 isTool(tool, validFor: geometry, selection: selectedTool)
             }
         } else if let templateAllowedTools = templateAllowedTools?.wrappedValue {
-            tools.filter { tool in
+            selectableTools.filter { tool in
                 isTool(tool, validFor: templateAllowedTools)
             }
         } else {
-            tools
+            selectableTools
         }
     }
     
     var body: some View {
         // Prevents the geometry editor tool from being overwritten when tools is empty.
-        if !tools.isEmpty {
+        if !selectableTools.isEmpty {
             Group {
                 // Don't show the menu if there is only one tool.
-                if tools.count > 1 {
+                if selectableTools.count > 1 {
                     Menu {
-                        Picker("Tool", selection: $selectedTool) { [validTools] in
-                            ForEach(tools, id: \.self) { tool in
-                                Label(tool.label, systemImage: tool.systemImage)
-                                    .selectionDisabled(!validTools.contains(tool))
-                            }
+                        ForEach(tools, id: \.self) { tool in
+                            toolMenu(for: tool)
                         }
                     } label: {
-                        Label("Tool", systemImage: selectedTool.systemImage)
+                        Label("Tool", image: selectedTool.icon)
                             .padding(labelPadding)
                     }
                 }
             }
             .onAppear(perform: setUp)
-            .onChange(of: validTools) {
-                updateSelectedTool()
-            }
+            .onChange(of: validTools, updateSelectedTool)
             .onChange(of: externalSelectedTool?.wrappedValue) {
                 // Sets selectedTool when externalSelectedTool is set externally.
                 guard let externalSelectedTool = externalSelectedTool?.wrappedValue,
@@ -276,6 +307,48 @@ struct ToolPicker: View {
         }
     }
     
+    @ViewBuilder
+    private func toolMenu(for tool: Tool, label: String? = nil, icon: Image? = nil) -> some View {
+        if case .group(let group) = tool {
+            let label = label ?? group.label
+            let icon = icon ?? group.icon
+            
+            switch group.tools.count {
+            case 0:
+                Button(action: {}) {
+                    Label(label, image: icon)
+                }
+                .disabled(true)
+            case 1:
+                AnyView(
+                    toolMenu(for: group.tools[0], label: label, icon: icon)
+                )
+            default:
+                Menu {
+                    ForEach(group.tools, id: \.self) { tool in
+                        AnyView(toolMenu(for: tool))
+                    }
+                } label: {
+                    Label(label, image: icon)
+                }
+            }
+        } else {
+            let binding = Binding(
+                get: { selectedTool == tool },
+                set: { isSelected in
+                    guard isSelected else { return }
+                    selectedTool = tool
+                }
+            )
+            
+            Toggle(isOn: binding) {
+                Label(label ?? tool.label, image: icon ?? tool.icon)
+            }
+            .toggleStyle(.button)
+            .disabled(!validTools.contains(tool))
+        }
+    }
+    
     /// Sets up the view's state when it appears.
     private func setUp() {
         if let externalSelectedTool = externalSelectedTool?.wrappedValue {
@@ -298,8 +371,9 @@ struct ToolPicker: View {
         geometryEditor.tool = selectedTool.geometryEditorTool
     }
     
-    private func isTool(_ tool: Tool, validFor templateAllowedTools: Set<Tool>) -> Bool {
-        return templateAllowedTools.isEmpty || templateAllowedTools.contains(tool)
+    private func isTool(_ tool: Tool, validFor templateAllowedTools: [Tool]) -> Bool {
+        return templateAllowedTools.isEmpty
+        || templateAllowedTools.flatMap(\.leafTools).contains(tool)
     }
     
     private func isTool(_ tool: Tool, validFor geometry: Geometry, selection: Tool) -> Bool {
@@ -325,7 +399,7 @@ struct ToolPicker: View {
     
     /// Logs an error for an invalid `externalSelectedTool` value.
     private func logExternalSelectionError(tool: Tool) {
-        let errorMessage = if tools.contains(tool){
+        let errorMessage = if selectableTools.contains(tool) {
             if let geometry {
                 "Tool '\(tool)' is not valid for geometry type '\(type(of: geometry))'."
             } else {
@@ -348,6 +422,12 @@ private extension EnvironmentValues {
     @Entry var selectedTool: Binding<GeometryEditorToolbar.Tool>?
 }
 
+private extension Label {
+    init(_ title: String, image: Image) where Title == Text, Icon == Image {
+        self.init(title: { Text(title) }, icon: { image })
+    }
+}
+
 private extension Logger {
     static var geometryEditorToolbar: Logger {
         Logger(subsystem: "com.esri.ArcGISToolkit", category: "GeometryEditorToolbar")
@@ -355,7 +435,7 @@ private extension Logger {
 }
 
 private extension ShapeTool.Kind {
-    var label: LocalizedStringResource {
+    var label: String {
         switch self {
         case .arrow: "Arrow"
         case .ellipse: "Ellipse"
@@ -366,15 +446,15 @@ private extension ShapeTool.Kind {
         }
     }
     
-    var systemImage: String {
-        switch self {
+    var icon: Image {
+        let systemName = switch self {
         case .arrow: "arrowshape.right"
-            // TODO: Use ellipse image
-        case .ellipse: "circle"
+        case .ellipse: "circle"    // TODO: Use ellipse image
         case .rectangle: "rectangle"
         case .triangle: "triangle"
         @unknown default:
             fatalError("Unknown ShapeTool.Kind: '\(self)'")
         }
+        return Image(systemName: systemName)
     }
 }

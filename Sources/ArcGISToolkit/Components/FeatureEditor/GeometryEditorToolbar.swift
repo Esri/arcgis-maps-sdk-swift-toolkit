@@ -255,7 +255,8 @@ extension EnvironmentValues {
     /// The amount of padding to add to a control's label. This is need to increase the hit box size.
     @Entry var labelPadding = 0.0
     
-    @Entry var templateAllowedTools: Binding<Set<GeometryEditorToolbar.Tool>>? = nil
+    @Entry var templateAllowedTools: Binding<[GeometryEditorToolbar.Tool]>? = nil
+    @Entry var templateSelectedTool: Binding<GeometryEditorToolbar.Tool>? = nil
 }
 
 private extension GeometryEditor {
