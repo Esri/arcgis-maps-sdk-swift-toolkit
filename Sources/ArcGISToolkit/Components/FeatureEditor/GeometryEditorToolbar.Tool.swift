@@ -227,6 +227,7 @@ struct ToolPicker: View {
     @State private var geometry: Geometry?
     @State private var selectedTool: Tool = .vertex
     
+    // TODO: Should we give developer access to internal template selection?
     private var externalSelectedTool: Binding<Tool>? {
         templateSelectedTool ?? userSelectedTool
     }
@@ -235,6 +236,7 @@ struct ToolPicker: View {
         tools.flatMap(\.leafTools).uniqued()
     }
     
+    // TODO: Should external tools override internal template tools?
     private var tools: [Tool] {
         templateAllowedTools?.wrappedValue ?? externalTools
     }
@@ -315,6 +317,8 @@ struct ToolPicker: View {
             
             switch group.tools.count {
             case 0:
+                // TODO: Hide unsupported tools, per Ting and Ryan.
+                // TODO: Should we allow developer to support unsupported tools?
                 Button(action: {}) {
                     Label(label, image: icon)
                 }

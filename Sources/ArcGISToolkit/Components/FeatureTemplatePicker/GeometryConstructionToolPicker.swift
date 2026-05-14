@@ -33,6 +33,7 @@ struct GeometryConstructionToolPicker: View {
     var body: some View {
         Group {
             if let applicableToolKinds {
+                // TODO: Update message or just show template picker instead?
                 Text("Add a geometry using toolbar.")
                     .task {
                         for await geometry in geometryEditor.$geometry {
