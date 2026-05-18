@@ -236,6 +236,7 @@ private extension View {
             .labelStyle(.iconOnly)
             .font(.title2)
             .buttonStyle(.borderless)
+            .menuIndicator(.hidden)
             .background(.regularMaterial)
             .clipShape(.capsule)
             .shadow(radius: 1)

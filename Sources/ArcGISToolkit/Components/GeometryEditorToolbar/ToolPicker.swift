@@ -37,7 +37,6 @@ struct ToolPicker: View {
             Label("Tool", systemImage: selectedTool.systemImage)
                 .controlLabelPadding()
         }
-        .menuIndicator(.hidden)
         .animation(.default, value: selectedTool)
         .onChange(of: selectableTools, initial: true) {
             // Sets the selection to the first valid tool if the current value is invalid.
