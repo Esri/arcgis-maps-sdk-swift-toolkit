@@ -39,18 +39,46 @@ public struct GeometryEditorToolbar: View {
         self._model = .init(wrappedValue: model)
     }
     
+    /// The padding to add to the control labels to increase their hit box size.
+    private let controlLabelPadding = 8.5
+    
     public var body: some View {
         Group {
             if model.isStarted {
                 switch layout {
                 case .vertical:
-                    VStack { controls }
-                        .stackStyle()
+                    VStack {
+                        ToolPicker()
+#if targetEnvironment(macCatalyst)
+                        // Needed because Mac Catalyst doesn't respect padding added in a Menu label.
+                            .padding(.top, controlLabelPadding)
+#endif
+                        DeleteButton()
+                        UndoButton()
+                        RedoButton()
+                    }
+                    .environment(\.controlLabelPadding, controlLabelPadding)
+                    .stackStyle()
+                    
                 case .horizontal:
-                    HStack { controls }
-                        .stackStyle()
+                    HStack {
+                        ToolPicker()
+#if targetEnvironment(macCatalyst)
+                        // Needed because Mac Catalyst doesn't respect padding added in a Menu label.
+                            .padding(.leading, controlLabelPadding)
+#endif
+                        DeleteButton()
+                        UndoButton()
+                        RedoButton()
+                    }
+                    .environment(\.controlLabelPadding, controlLabelPadding)
+                    .stackStyle()
+                    
                 case nil:
-                    controls
+                    ToolPicker()
+                    DeleteButton()
+                    UndoButton()
+                    RedoButton()
                 }
             }
         }
@@ -59,15 +87,6 @@ public struct GeometryEditorToolbar: View {
         .onChange(of: ObjectIdentifier(geometryEditor)) {
             model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
         }
-    }
-    
-    /// The control views for the toolbar.
-    @ViewBuilder
-    private var controls: some View {
-        ToolPicker()
-        DeleteButton()
-        UndoButton()
-        RedoButton()
     }
 }
 
@@ -122,7 +141,7 @@ private struct DeleteButton: View {
     var body: some View {
         Button(action: model.geometryEditor.deleteSelectedElement) {
             Label("Delete Selected Element", systemImage: "circle.badge.minus")
-                .geometryEditorToolbarControlPadding()
+                .controlLabelPadding()
         }
         .disabled(!canDeleteSelectedElement)
         .task(id: ObjectIdentifier(model)) {
@@ -144,7 +163,7 @@ private struct RedoButton: View {
     var body: some View {
         Button(action: model.geometryEditor.redo) {
             Label("Redo", systemImage: "arrow.uturn.forward")
-                .geometryEditorToolbarControlPadding()
+                .controlLabelPadding()
         }
         .disabled(!canRedo)
         .task(id: ObjectIdentifier(model)) {
@@ -166,7 +185,7 @@ private struct UndoButton: View {
     var body: some View {
         Button(action: model.geometryEditor.undo) {
             Label("Undo", systemImage: "arrow.uturn.backward")
-                .geometryEditorToolbarControlPadding()
+                .controlLabelPadding()
         }
         .disabled(!canUndo)
         .task(id: ObjectIdentifier(model)) {
@@ -177,14 +196,36 @@ private struct UndoButton: View {
     }
 }
 
-// MARK: - Extensions
+// MARK: - Control Label Padding
+
+/// A view modifier that applies padding from the `controlLabelPadding` environment value.
+private struct ControlLabelPadding: ViewModifier {
+    /// The padding to add to the content.
+    @Environment(\.controlLabelPadding) private var labelPadding
+    
+    func body(content: Content) -> some View {
+        if let labelPadding {
+            content.padding(labelPadding)
+        } else {
+            content
+        }
+    }
+}
+
+private extension EnvironmentValues {
+    /// The amount of padding to add to a `GeometryEditorToolbar`  control's label to increase its hit box size.
+    @Entry var controlLabelPadding: CGFloat?
+}
+
 
 extension View {
     /// Adds padding used to increase a `GeometryEditorToolbar` control's hit box size.
-    func geometryEditorToolbarControlPadding() -> some View {
-        padding(8.5)
+    func controlLabelPadding() -> some View {
+        modifier(ControlLabelPadding())
     }
 }
+
+// MARK: - Helper
 
 private extension View {
     /// A view modifier that applies styles to the vertical and horizontal stacks in `GeometryEditorToolbar`.
@@ -195,6 +236,7 @@ private extension View {
         self.fixedSize()
             .labelStyle(.iconOnly)
             .font(.title2)
+            .buttonStyle(.borderless)
             .background(.regularMaterial)
             .clipShape(.capsule)
             .shadow(radius: 1)
