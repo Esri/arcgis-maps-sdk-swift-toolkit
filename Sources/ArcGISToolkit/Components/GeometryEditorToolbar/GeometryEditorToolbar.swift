@@ -140,8 +140,16 @@ private struct DeleteButton: View {
     
     var body: some View {
         Button(action: model.geometryEditor.deleteSelectedElement) {
-            Label("Delete Selected Element", systemImage: "circle.badge.minus")
-                .controlLabelPadding()
+            Label {
+                Text(
+                    "Delete Selected Element",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to delete the selected geometry editor element."
+                )
+            } icon: {
+                Image(systemName: "circle.badge.minus")
+            }
+            .controlLabelPadding()
         }
         .disabled(!canDeleteSelectedElement)
         .task(id: ObjectIdentifier(model)) {
@@ -162,8 +170,16 @@ private struct RedoButton: View {
     
     var body: some View {
         Button(action: model.geometryEditor.redo) {
-            Label("Redo", systemImage: "arrow.uturn.forward")
-                .controlLabelPadding()
+            Label {
+                Text(
+                    "Redo",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to redo the last undone geometry editor action."
+                )
+            } icon: {
+                Image(systemName: "arrow.uturn.forward")
+            }
+            .controlLabelPadding()
         }
         .disabled(!canRedo)
         .task(id: ObjectIdentifier(model)) {
@@ -184,8 +200,16 @@ private struct UndoButton: View {
     
     var body: some View {
         Button(action: model.geometryEditor.undo) {
-            Label("Undo", systemImage: "arrow.uturn.backward")
-                .controlLabelPadding()
+            Label {
+                Text(
+                    "Undo",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to undo the last geometry editor action."
+                )
+            } icon: {
+                Image(systemName: "arrow.uturn.backward")
+            }
+            .controlLabelPadding()
         }
         .disabled(!canUndo)
         .task(id: ObjectIdentifier(model)) {

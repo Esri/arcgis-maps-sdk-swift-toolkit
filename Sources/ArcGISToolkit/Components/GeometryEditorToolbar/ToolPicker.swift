@@ -27,15 +27,25 @@ struct ToolPicker: View {
     
     var body: some View {
         Menu {
-            Picker("Tool", selection: $selectedTool) {
+            Picker(selection: $selectedTool) {
                 ForEach(Tool.allCases, id: \.self) { tool in
-                    Label(tool.label, systemImage: tool.systemImage)
-                        .selectionDisabled(!selectableTools.contains(tool))
+                    Label {
+                        tool.label
+                    } icon: {
+                        Image(systemName: tool.systemImage)
+                    }
+                    .selectionDisabled(!selectableTools.contains(tool))
                 }
+            } label: {
+                Text.tool
             }
         } label: {
-            Label("Tool", systemImage: selectedTool.systemImage)
-                .controlLabelPadding()
+            Label {
+                Text.tool
+            } icon: {
+                Image(systemName: selectedTool.systemImage)
+            }
+            .controlLabelPadding()
         }
         .animation(.default, value: selectedTool)
         .onChange(of: selectableTools, initial: true) {
@@ -100,13 +110,29 @@ private enum Tool: Hashable {
         }
     }
     
-    /// A user-friendly label for the tool.
-    var label: String {
+    /// A localized, user-friendly label for the tool.
+    var label: Text {
         switch self {
-        case .freehand: "Freehand"
-        case .shape(let shape): shape.label
-        case .vertex: "Vertex"
-        case .vertexReticle: "Reticle"
+        case .freehand:
+            Text(
+                "Freehand",
+                bundle: .toolkitModule,
+                comment: "A label for a geometry editor tool that allows the user to edit using freehand gestures."
+            )
+        case .shape(let shape):
+            shape.label
+        case .vertex:
+            Text(
+                "Vertex",
+                bundle: .toolkitModule,
+                comment: "A label for a geometry editor tool that allows the user to edit by interacting with individual vertices."
+            )
+        case .vertexReticle:
+            Text(
+                "Reticle",
+                bundle: .toolkitModule,
+                comment: "A label for a geometry editor tool that allows the user to edit using a reticle."
+            )
         }
     }
     
@@ -148,14 +174,35 @@ extension Tool: CaseIterable {
 // MARK: - Extensions
 
 private extension ShapeTool.Kind {
-    /// A user-friendly label for the shape tool kind.
-    var label: String {
+    /// A localized, user-friendly label for the shape tool kind.
+    var label: Text {
         switch self {
-        case .arrow: "Arrow"
-        case .ellipse: "Ellipse"
-        case .rectangle: "Rectangle"
-        case .triangle: "Triangle"
-        @unknown default: "Unknown"
+        case .arrow:
+            Text(
+                "Arrow",
+                bundle: .toolkitModule,
+                comment: "A label for a geometry editor shape tool that creates an arrow."
+            )
+        case .ellipse:
+            Text(
+                "Ellipse",
+                bundle: .toolkitModule,
+                comment: "A label for a geometry editor shape tool that creates an ellipse."
+            )
+        case .rectangle:
+            Text(
+                "Rectangle",
+                bundle: .toolkitModule,
+                comment: "A label for a geometry editor shape tool that creates a rectangle."
+            )
+        case .triangle:
+            Text(
+                "Triangle",
+                bundle: .toolkitModule,
+                comment: "A label for a geometry editor shape tool that creates a triangle."
+            )
+        @unknown default:
+            fatalError("Unknown shape tool kind: \(self)")
         }
     }
     
@@ -166,7 +213,19 @@ private extension ShapeTool.Kind {
         case .ellipse: "circle"
         case .rectangle: "rectangle"
         case .triangle: "triangle"
-        @unknown default: "questionmark"
+        @unknown default:
+            fatalError("Unknown shape tool kind: \(self)")
         }
+    }
+}
+
+private extension Text {
+    /// Localized text for the word "Tool".
+    static var tool: Self {
+        .init(
+            "Tool",
+            bundle: .toolkitModule,
+            comment: "A label for a control to pick a geometry editor tool."
+        )
     }
 }
