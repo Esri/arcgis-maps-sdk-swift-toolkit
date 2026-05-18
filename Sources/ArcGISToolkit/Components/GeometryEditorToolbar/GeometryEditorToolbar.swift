@@ -213,10 +213,9 @@ private struct ControlLabelPadding: ViewModifier {
 }
 
 private extension EnvironmentValues {
-    /// The amount of padding to add to a `GeometryEditorToolbar`  control's label to increase its hit box size.
+    /// The amount of padding to add to a `GeometryEditorToolbar` control's label to increase its hit box size.
     @Entry var controlLabelPadding: CGFloat?
 }
-
 
 extension View {
     /// Adds padding used to increase a `GeometryEditorToolbar` control's hit box size.

@@ -91,7 +91,7 @@ private enum Tool: Hashable {
             return FreehandTool()
         case .shape(let kind):
             let shapeTool = ShapeTool(kind: kind)
-            // Allows the shape tool to be used when there is an exiting geometry.
+            // Allows the shape tool to be used when there is an existing geometry.
             shapeTool.configuration.allowsPartCreation = true
             return shapeTool
         case .vertex:
