@@ -266,3 +266,30 @@ private extension View {
             .shadow(radius: 1)
     }
 }
+
+#Preview {
+    let geometryEditor = GeometryEditor()
+    
+    NavigationStack {
+        MapView(map: Map(spatialReference: .wgs84))
+            .attributionBarHidden(true)
+            .geometryEditor(geometryEditor)
+            .overlay(alignment: .topTrailing) {
+                GeometryEditorToolbar(geometryEditor: geometryEditor)
+                    .padding()
+            }
+            .overlay(alignment: .topLeading) {
+                GeometryEditorToolbar(geometryEditor: geometryEditor, layout: .horizontal)
+                    .environment(\.colorScheme, .dark)
+                    .padding()
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    GeometryEditorToolbar(geometryEditor: geometryEditor, layout: nil)
+                }
+            }
+            .onAppear {
+                geometryEditor.start(withType: Polygon.self)
+            }
+    }
+}

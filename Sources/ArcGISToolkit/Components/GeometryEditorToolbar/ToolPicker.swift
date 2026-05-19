@@ -229,3 +229,13 @@ private extension Text {
         )
     }
 }
+
+#Preview {
+    let geometryEditor = GeometryEditor()
+    
+    ToolPicker()
+        .environment(GeometryEditorToolbarModel(geometryEditor: geometryEditor))
+        .onAppear {
+            geometryEditor.start(withType: Point.self)
+        }
+}
