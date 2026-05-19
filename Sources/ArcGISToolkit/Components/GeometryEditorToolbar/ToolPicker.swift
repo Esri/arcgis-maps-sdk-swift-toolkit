@@ -45,7 +45,6 @@ struct ToolPicker: View {
             } icon: {
                 Image(systemName: selectedTool.systemImage)
             }
-            .controlLabelPadding()
         }
         .animation(.default, value: selectedTool)
         .onChange(of: selectableTools, initial: true) {
