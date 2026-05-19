@@ -106,7 +106,7 @@ final class GeometryEditorToolbarModel {
     init(geometryEditor: GeometryEditor) {
         self.geometryEditor = geometryEditor
         
-        isStartedTask = Task { @MainActor [weak self] in
+        isStartedTask = Task { [weak self] in
             for await isStarted in geometryEditor.$isStarted {
                 self?.isStarted = isStarted
             }
@@ -114,7 +114,9 @@ final class GeometryEditorToolbarModel {
     }
     
     deinit {
-        isStartedTask?.cancel()
+        if let task = isStartedTask.take() {
+            task.cancel()
+        }
     }
 }
 
