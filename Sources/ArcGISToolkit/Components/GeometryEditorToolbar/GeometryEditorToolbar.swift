@@ -15,8 +15,31 @@
 import ArcGIS
 import SwiftUI
 
-/// A group of controls for interacting with a geometry editor.
-/// - Note: The view will be displayed when the geometry editor is started.
+/// The `GeometryEditorToolbar` component allows users to perform common actions on a
+/// `GeometryEditor`.
+///
+/// **Features**
+///
+/// - Displays controls for performing common geometry editor actions:
+///     - Changing the tool.
+///     - Deleting the selected element.
+///     - Undoing the last action on the geometry.
+///     - Redoing the last undone action.
+/// - Can display the controls vertically, horizontally, or without built-in layout or styling.
+///
+/// **Behavior**
+///
+/// The toolbar is shown only while the geometry editor is started.
+///
+/// By default, the toolbar display the controls in a vertical stack. Pass `nil` for the layout to
+/// display the controls without built-in layout or styling, so that you can add your own or show
+/// the view in a system toolbar.
+///
+/// **Associated Types**
+///
+/// - ``Layout``
+///
+/// - Since: 300.1
 public struct GeometryEditorToolbar: View {
     /// The geometry editor that this toolbar controls.
     private let geometryEditor: GeometryEditor
@@ -112,6 +135,7 @@ final class GeometryEditorToolbarModel {
 
 public extension GeometryEditorToolbar {
     /// The layout of the geometry editor toolbar's controls.
+    /// - Since: 300.1
     enum Layout {
         /// The controls arranged in a vertical stack.
         case vertical
