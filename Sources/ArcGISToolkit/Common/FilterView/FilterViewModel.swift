@@ -17,7 +17,7 @@ import Foundation
 import SwiftUI
 
 @MainActor @Observable
-@_spi(Experimental)
+@_spi(PrototypeFilterView)
 public final class FilterViewModel {
     /// Creates a filter view model.
     public init() {}

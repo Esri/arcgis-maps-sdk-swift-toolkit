@@ -16,7 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// A view allowing the user to assemble a list of `FieldFilter` objects used to filter a list of features.
-@_spi(Experimental)
+@_spi(PrototypeFilterView)
 public struct FilterView: View {
     /// The model used by the view.
     @Bindable var model: FilterViewModel

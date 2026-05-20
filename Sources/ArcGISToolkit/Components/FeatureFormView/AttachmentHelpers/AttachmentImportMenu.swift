@@ -157,14 +157,16 @@ struct AttachmentImportMenu: View {
             }
             
             let fileName: String
-            if let presetFileName = newAttachmentImportData.fileName {
-                fileName = presetFileName
-            } else {
-                do {
-                    fileName = try await element.makeDefaultName(contentType: newAttachmentImportData.contentType)
-                } catch {
-                    fileName = "Unnamed Attachment"
+            do {
+                if element.useOriginalFilename,
+                   let originalName = newAttachmentImportData.fileName,
+                   !originalName.isEmpty {
+                    fileName = originalName
+                } else {
+                    fileName = try await element.generateFilenameAsync()
                 }
+            } catch {
+                fileName = newAttachmentImportData.fileName ?? "Unnamed Attachment"
             }
             
             var newAttachment: FeatureAttachment? = nil
@@ -344,36 +346,6 @@ private extension AttachmentImportMenu {
             bundle: .toolkitModule,
             comment: "An error message indicating the selected attachment exceeds the megabyte limit."
         )
-    }
-}
-
-private extension AttachmentsFormElement {
-    /// Creates a unique name for a new attachments with a file extension.
-    /// - Parameter contentType: The kind of attachment to generate a name for.
-    /// - Returns: A unique name for an attachment.
-    func makeDefaultName(contentType: UTType) async throws -> String {
-        let currentAttachments = try await attachments
-        let root = (contentType.preferredMIMEType?.components(separatedBy: "/").first ?? "Attachment").capitalized
-        var count = currentAttachments.filter { $0.contentType == contentType }.count
-        var baseName: String
-        repeat {
-            count += 1
-            baseName = "\(root)\(count)"
-        } while( currentAttachments.filter { $0.name.deletingPathExtension == baseName }.count > 0 )
-        if let fileExtension = contentType.preferredFilenameExtension {
-            return "\(baseName).\(fileExtension)"
-        } else {
-            return baseName
-        }
-    }
-}
-
-private extension String {
-    /// A filename with the extension removed.
-    ///
-    /// For example, "Photo.png" is returned as "Photo"
-    var deletingPathExtension: String {
-        (self as NSString).deletingPathExtension
     }
 }
 
