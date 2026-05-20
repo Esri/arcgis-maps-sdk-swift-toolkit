@@ -45,7 +45,6 @@ struct ToolPicker: View {
             } icon: {
                 Image(systemName: selectedTool.systemImage)
             }
-            .controlLabelPadding()
         }
         .animation(.default, value: selectedTool)
         .onChange(of: selectableTools, initial: true) {
@@ -228,4 +227,14 @@ private extension Text {
             comment: "A label for a control to pick a geometry editor tool."
         )
     }
+}
+
+#Preview {
+    let geometryEditor = GeometryEditor()
+    
+    ToolPicker()
+        .environment(GeometryEditorToolbarModel(geometryEditor: geometryEditor))
+        .onAppear {
+            geometryEditor.start(withType: Point.self)
+        }
 }
