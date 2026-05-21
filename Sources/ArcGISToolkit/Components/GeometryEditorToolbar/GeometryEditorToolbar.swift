@@ -46,6 +46,13 @@ public struct GeometryEditorToolbar: View {
     /// The layout to apply to the controls.
     private let layout: Layout?
     
+    /// The padding to apply around the controls.
+    /// This is hardcoded to match the system styling for toolbar groups on iOS.
+    private let controlPadding = 10.5
+    /// The padding to apply to the long edges of the stacks containing the controls.
+    /// This is hardcoded to match the system styling for toolbar groups on iOS.
+    private let stackEdgePadding = 5.0
+    
     /// The view model for the view.
     @State private var model: GeometryEditorToolbarModel
     
@@ -63,25 +70,23 @@ public struct GeometryEditorToolbar: View {
     }
     
     public var body: some View {
-        // This view uses hardcoded padding and spacing values to match the
-        // system styling of a toolbar group on iOS.
         Group {
             if model.isStarted {
                 switch layout {
                 case .vertical:
                     VStack {
                         controls
-                            .padding(10.5)
+                            .padding(controlPadding)
                     }
-                    .padding(.vertical, 5)
+                    .padding(.vertical, stackEdgePadding)
                     .toolbarStackStyle()
                     
                 case .horizontal:
                     HStack {
                         controls
-                            .padding(10.5)
+                            .padding(controlPadding)
                     }
-                    .padding(.horizontal, 5)
+                    .padding(.horizontal, stackEdgePadding)
                     .toolbarStackStyle()
                     
                 case nil:
