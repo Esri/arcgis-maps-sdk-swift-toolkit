@@ -33,10 +33,6 @@ import SwiftUI
 ///
 /// The toolbar is shown only while the geometry editor is started.
 ///
-/// By default, the toolbar display the controls in a vertical stack. Pass `nil` for the layout to
-/// display the controls without built-in layout or styling, so that you can add your own or show
-/// the view in a system toolbar.
-///
 /// **Associated Types**
 ///
 /// - ``Layout``
@@ -45,8 +41,8 @@ import SwiftUI
 public struct GeometryEditorToolbar: View {
     /// The geometry editor that this toolbar controls.
     private let geometryEditor: GeometryEditor
-    /// The layout to apply to the controls.
-    private let layout: Layout?
+    /// The style to apply to the toolbar's controls.
+    private let style: Style
     
     /// The spacing to apply between the controls in the stacks.
     /// This is hardcoded to match the system styling for toolbar groups on iOS.
@@ -58,14 +54,13 @@ public struct GeometryEditorToolbar: View {
     /// The view model for the view.
     @State private var model: GeometryEditorToolbarModel
     
-    /// Creates a geometry editor toolbar view.
+    /// Creates a geometry editor toolbar.
     /// - Parameters:
     ///   - geometryEditor: The geometry editor that this toolbar controls.
-    ///   - layout: The layout to apply to the controls. A `nil` value renders
-    ///   the controls without built-in layout or styling.
-    public init(geometryEditor: GeometryEditor, layout: Layout? = .vertical) {
+    ///   - style: The style that determines the toolbar’s appearance and layout.
+    public init(geometryEditor: GeometryEditor, style: Style = .vertical) {
         self.geometryEditor = geometryEditor
-        self.layout = layout
+        self.style = style
         
         let model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
         self._model = .init(wrappedValue: model)
@@ -74,7 +69,7 @@ public struct GeometryEditorToolbar: View {
     public var body: some View {
         Group {
             if model.isStarted {
-                switch layout {
+                switch style {
                 case .vertical:
                     VStack(spacing: stackSpacing) {
                         controls
@@ -87,7 +82,7 @@ public struct GeometryEditorToolbar: View {
                     }
                     .padding(.horizontal, stackEdgePadding)
                     .toolbarStackStyle()
-                case nil:
+                case .plain:
                     controls
                 }
             }
@@ -140,13 +135,18 @@ final class GeometryEditorToolbarModel {
 }
 
 public extension GeometryEditorToolbar {
-    /// The layout of the geometry editor toolbar's controls.
+    /// A style that determines the appearance and layout of a geometry editor toolbar.
     /// - Since: 300.1
-    enum Layout {
-        /// The controls arranged in a vertical stack.
-        case vertical
-        /// The controls arranged in a horizontal stack.
+    enum Style {
+        /// Displays the toolbar in a styled horizontal layout.
         case horizontal
+        /// Displays the toolbar without built-in layout or styling.
+        ///
+        /// Use this style to show the view in a system toolbar or to apply
+        /// your own layout and styling to the controls.
+        case plain
+        /// Displays the toolbar in a styled vertical layout.
+        case vertical
     }
 }
 
@@ -242,7 +242,8 @@ private struct UndoButton: View {
 // MARK: - Helper
 
 private extension View {
-    /// A view modifier that applies styles to the vertical and horizontal stacks in `GeometryEditorToolbar`.
+    /// A view modifier that applies the style for the vertical and horizontal
+    /// stacks in a `GeometryEditorToolbar`.
     @ViewBuilder
     func toolbarStackStyle() -> some View {
         // glassEffect is not used because it bases its background color on the content behind it,
@@ -272,13 +273,13 @@ private extension View {
                     .padding()
             }
             .overlay(alignment: .topLeading) {
-                GeometryEditorToolbar(geometryEditor: geometryEditor, layout: .horizontal)
+                GeometryEditorToolbar(geometryEditor: geometryEditor, style: .horizontal)
                     .environment(\.colorScheme, .dark)
                     .padding()
             }
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    GeometryEditorToolbar(geometryEditor: geometryEditor, layout: nil)
+                    GeometryEditorToolbar(geometryEditor: geometryEditor, style: .plain)
                 }
             }
             .onAppear {
