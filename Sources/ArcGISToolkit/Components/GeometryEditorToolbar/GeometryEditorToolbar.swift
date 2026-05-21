@@ -74,7 +74,7 @@ public struct GeometryEditorToolbar: View {
                             .padding(10.5)
                     }
                     .padding(.vertical, 5)
-                    .stackStyle()
+                    .toolbarStackStyle()
                     
                 case .horizontal:
                     HStack {
@@ -82,7 +82,7 @@ public struct GeometryEditorToolbar: View {
                             .padding(10.5)
                     }
                     .padding(.horizontal, 5)
-                    .stackStyle()
+                    .toolbarStackStyle()
                     
                 case nil:
                     controls
@@ -240,7 +240,7 @@ private struct UndoButton: View {
 private extension View {
     /// A view modifier that applies styles to the vertical and horizontal stacks in `GeometryEditorToolbar`.
     @ViewBuilder
-    func stackStyle() -> some View {
+    func toolbarStackStyle() -> some View {
         // glassEffect is not used because it bases its background color on the content behind it,
         // but the ToolPicker does not, causing the color to jump when the picker menu closes.
         self.fixedSize()
