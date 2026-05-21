@@ -128,7 +128,8 @@ final class GeometryEditorToolbarModel {
         
         isStartedTask = Task { [weak self] in
             for await isStarted in geometryEditor.$isStarted {
-                self?.isStarted = isStarted
+                guard let self else { break }
+                self.isStarted = isStarted
             }
         }
     }
