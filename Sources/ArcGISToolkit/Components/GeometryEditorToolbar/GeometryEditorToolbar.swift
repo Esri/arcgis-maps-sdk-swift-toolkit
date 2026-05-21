@@ -18,6 +18,8 @@ import SwiftUI
 /// The `GeometryEditorToolbar` component allows users to perform common actions on a
 /// `GeometryEditor`.
 ///
+/// ![An image of the GeometryEditorToolbar component](GeometryEditorToolbar)
+///
 /// **Features**
 ///
 /// - Displays controls for performing common geometry editor actions:
