@@ -28,13 +28,12 @@ struct ToolPicker: View {
     var body: some View {
         Menu {
             Picker(selection: $selectedTool) {
-                ForEach(Tool.allCases, id: \.self) { tool in
+                ForEach(selectableTools, id: \.self) { tool in
                     Label {
                         tool.label
                     } icon: {
                         Image(systemName: tool.systemImage)
                     }
-                    .selectionDisabled(!selectableTools.contains(tool))
                 }
             } label: {
                 Text.tool
