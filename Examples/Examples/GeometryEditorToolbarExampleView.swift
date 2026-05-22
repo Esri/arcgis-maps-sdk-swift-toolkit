@@ -18,32 +18,34 @@ import SwiftUI
 
 struct GeometryEditorToolbarExampleView: View {
     /// The feature whose geometry is currently being edited.
-    @State private var editFeature: Feature?
+    @State private var featureBeingEdited: Feature?
     /// A description of an error that has occurred.
-    @State private var error: String?
-    /// The point on the screen where the user tapped.
+    @State private var errorDescription: String?
+    /// The geometry editor used to edit geometries on the map.
+    @State private var geometryEditor = GeometryEditor()
+    /// The point on the screen that is being identified.
     @State private var identifyPoint: CGPoint?
-    /// A Boolean value indicating whether the geometry editor edits are being saved.
+    /// A Boolean value indicating whether the geometry edits are being saved.
     @State private var isSavingEdits = false
     /// A map containing example point, line, and polygon features to edit.
     @State private var map: Map = {
-        let url = URL(string: "https://arcgis.com/home/item.html?id=2ffa0c3601144e8bbd2c49cf3a7c0559")!
+        let url = URL(
+            string: "https://arcgis.com/home/item.html?id=2ffa0c3601144e8bbd2c49cf3a7c0559"
+        )!
         let map = Map(url: url)!
         
-        let envelope = Envelope(xRange: -13059996 ... -13021110, yRange: 4005439 ... 4068056)
+        let envelope = Envelope(xRange: -13059996 ... -13021110, yRange: 4005439...4068056)
         map.initialViewpoint = Viewpoint(boundingGeometry: envelope)
         
         return map
     }()
-    /// The geometry editor used to edit geometries on the map.
-    @State private var geometryEditor = GeometryEditor()
     
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
                 .geometryEditor(geometryEditor)
                 .onSingleTapGesture { screenPoint, _ in
-                    guard identifyPoint == nil else { return }
+                    guard identifyPoint == nil, featureBeingEdited == nil else { return }
                     identifyPoint = screenPoint
                 }
                 .task(id: identifyPoint) {
@@ -53,7 +55,7 @@ struct GeometryEditorToolbarExampleView: View {
                     do {
                         try await editFeature(at: identifyPoint, mapViewProxy: mapViewProxy)
                     } catch {
-                        self.error = "\(error)"
+                        errorDescription = "\(error)"
                     }
                 }
         }
@@ -63,45 +65,53 @@ struct GeometryEditorToolbarExampleView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .bottomBar) {
-                Button("Cancel", systemImage: "xmark", role: .cancel) {
-                    geometryEditor.stop()
-                    editFeature?.setVisible(true)
-                }
-                .disabled(editFeature == nil || isSavingEdits)
-                
-                Button("Save", systemImage: "checkmark") {
-                    isSavingEdits = true
-                }
-                .disabled(editFeature == nil || isSavingEdits)
-                .task(id: isSavingEdits) {
-                    guard isSavingEdits else { return }
-                    defer { isSavingEdits = false }
-                    
-                    do {
-                        try await saveEdits()
-                    } catch {
-                        self.error = "\(error)"
-                    }
-                }
+                finishEditingButtons
             }
         }
         .alert(
             "Error",
             isPresented: Binding(
-                get: { error != nil },
-                set: { _ in error = nil }
+                get: { errorDescription != nil },
+                set: { _ in errorDescription = nil }
             ),
             actions: {},
             message: {
-                Text(error ?? "An unknown error occurred")
+                Text(errorDescription ?? "An unknown error occurred")
             }
         )
     }
     
-    /// Identifies features at a given screen point and starts editing its geometry.
+    /// Buttons for ending a geometry editing session.
+    @ViewBuilder private var finishEditingButtons: some View {
+        let canFinishEditing = featureBeingEdited != nil && !isSavingEdits
+        
+        Button("Cancel", systemImage: "xmark", role: .cancel) {
+            geometryEditor.stop()
+            featureBeingEdited?.setVisible(true)
+            featureBeingEdited = nil
+        }
+        .disabled(!canFinishEditing)
+        
+        Button("Save", systemImage: "checkmark") {
+            isSavingEdits = true
+        }
+        .disabled(!canFinishEditing)
+        .task(id: isSavingEdits) {
+            guard isSavingEdits else { return }
+            defer { isSavingEdits = false }
+            
+            do {
+                try await saveEdits()
+            } catch {
+                self.errorDescription = "\(error)"
+            }
+        }
+    }
+    
+    /// Identifies a feature at a given screen point and starts editing its geometry.
     /// - Parameters:
     ///   - screenPoint: The point on the screen to identify.
-    ///   - mapViewProxy: A map view proxy used to perform the identify operation
+    ///   - mapViewProxy: A map view proxy used to perform the identify operation.
     private func editFeature(at screenPoint: CGPoint, mapViewProxy: MapViewProxy) async throws {
         let identifyLayerResults = try await mapViewProxy.identifyLayers(
             screenPoint: screenPoint,
@@ -116,19 +126,20 @@ struct GeometryEditorToolbarExampleView: View {
         
         geometryEditor.start(withInitial: geometry)
         feature.setVisible(false)
-        editFeature = feature
+        featureBeingEdited = feature
     }
     
     /// Saves the geometry editor edits to the feature being edited.
     private func saveEdits() async throws {
         let geometry = geometryEditor.stop()
         
-        guard let editFeature, let table = editFeature.table else { return }
+        guard let featureBeingEdited else { return }
         
-        editFeature.geometry = geometry
-        try await table.update(editFeature)
+        featureBeingEdited.geometry = geometry
+        featureBeingEdited.setVisible(true)
+        self.featureBeingEdited = nil
         
-        editFeature.setVisible(true)
+        try await featureBeingEdited.table?.update(featureBeingEdited)
     }
 }
 
