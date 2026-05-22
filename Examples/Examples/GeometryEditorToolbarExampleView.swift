@@ -55,7 +55,7 @@ struct GeometryEditorToolbarExampleView: View {
                         .padding()
                 }
                 .overlay(alignment: .bottomTrailing) {
-                    GeometryEditorToolbar(geometryEditor: geometryEditor, layout: .horizontal)
+                    GeometryEditorToolbar(geometryEditor: geometryEditor, style: .horizontal)
                         .padding()
                         .padding(.bottom, 25)
                 }
@@ -66,7 +66,7 @@ struct GeometryEditorToolbarExampleView: View {
                 }
                 .toolbar {
                     ToolbarItemGroup(placement: .bottomBar) {
-                        GeometryEditorToolbar(geometryEditor: geometryEditor, layout: nil)
+                        GeometryEditorToolbar(geometryEditor: geometryEditor, style: .plain)
                     }
                 }
         }
