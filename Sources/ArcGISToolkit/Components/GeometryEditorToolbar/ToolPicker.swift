@@ -68,7 +68,7 @@ struct ToolPicker: View {
         }
     }
     
-    /// Returns the tools that should be enabled for a given geometry.
+    /// Returns the tools that should be displayed for a given geometry.
     /// - Parameter geometry: The geometry to return tools for.
     private func selectableTools(for geometry: Geometry?) -> [Tool] {
         if let geometry {
