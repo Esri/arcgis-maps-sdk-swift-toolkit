@@ -141,6 +141,8 @@ final class GeometryEditorToolbarModel {
 
 public extension GeometryEditorToolbar {
     /// A style that determines the appearance and layout of a geometry editor toolbar.
+    ///
+    /// This is commonly applied when displaying the toolbar overlaid on a `GeoView`.
     /// - Since: 300.1
     enum Style {
         /// Displays the toolbar in a styled horizontal layout.
