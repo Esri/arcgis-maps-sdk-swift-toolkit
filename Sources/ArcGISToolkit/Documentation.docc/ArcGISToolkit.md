@@ -19,6 +19,7 @@ Learn how to use ArcGISToolkit with <doc:ToolkitTutorials>
 - ``FeatureFormView``
 - <doc:FloatingPanel>
 - ``FloorFilter``
+- ``GeometryEditorToolbar``
 - ``JobManager``
 - <doc:OfflineMapAreas>
 - ``OverviewMap``
