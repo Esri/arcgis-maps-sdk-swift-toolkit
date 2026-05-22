@@ -27,22 +27,26 @@ import SwiftUI
 ///     - Deleting the selected element.
 ///     - Undoing the last action on the geometry.
 ///     - Redoing the last undone action.
-/// - Can display the controls vertically, horizontally, or without built-in layout or styling.
+/// - Supports styled vertical and horizontal layouts, or no built-in layout or styling.
 ///
 /// **Behavior**
 ///
 /// The toolbar is shown only while the geometry editor is started.
 ///
+/// By default, the toolbar is displayed in a vertical layout. Pass `nil` for `style` to display
+/// the toolbar without built-in layout or styling, so you can show it in a system toolbar or apply
+/// your own layout and styling to the controls.
+///
 /// **Associated Types**
 ///
-/// - ``Layout``
+/// - ``Style``
 ///
 /// - Since: 300.1
 public struct GeometryEditorToolbar: View {
     /// The geometry editor that this toolbar controls.
     private let geometryEditor: GeometryEditor
     /// The style to apply to the toolbar's controls.
-    private let style: Style
+    private let style: Style?
     
     /// The spacing to apply between the controls in the stacks.
     /// This is hardcoded to match the system styling for toolbar groups on iOS.
@@ -57,8 +61,9 @@ public struct GeometryEditorToolbar: View {
     /// Creates a geometry editor toolbar.
     /// - Parameters:
     ///   - geometryEditor: The geometry editor that this toolbar controls.
-    ///   - style: The style that determines the toolbar’s appearance and layout.
-    public init(geometryEditor: GeometryEditor, style: Style = .vertical) {
+    ///   - style: The style that determines the toolbar’s appearance and layout.  A `nil` value
+    ///   displays the toolbar's controls without built-in layout or styling.
+    public init(geometryEditor: GeometryEditor, style: Style? = .vertical) {
         self.geometryEditor = geometryEditor
         self.style = style
         
@@ -82,7 +87,7 @@ public struct GeometryEditorToolbar: View {
                     }
                     .padding(.horizontal, stackEdgePadding)
                     .toolbarStackStyle()
-                case .plain:
+                case nil:
                     controls
                 }
             }
@@ -136,15 +141,12 @@ final class GeometryEditorToolbarModel {
 
 public extension GeometryEditorToolbar {
     /// A style that determines the appearance and layout of a geometry editor toolbar.
+    ///
+    /// This is commonly applied when displaying the toolbar overlaid on a `GeoView`.
     /// - Since: 300.1
     enum Style {
         /// Displays the toolbar in a styled horizontal layout.
         case horizontal
-        /// Displays the toolbar without built-in layout or styling.
-        ///
-        /// Use this style to show the view in a system toolbar or to apply
-        /// your own layout and styling to the controls.
-        case plain
         /// Displays the toolbar in a styled vertical layout.
         case vertical
     }
@@ -242,8 +244,8 @@ private struct UndoButton: View {
 // MARK: - Helper
 
 private extension View {
-    /// A view modifier that applies the style for the vertical and horizontal
-    /// stacks in a `GeometryEditorToolbar`.
+    /// Applies the shared styling used by the vertical and horizontal stacks
+    /// in a `GeometryEditorToolbar`.
     @ViewBuilder
     func toolbarStackStyle() -> some View {
         // glassEffect is not used because it bases its background color on the content behind it,
@@ -279,7 +281,7 @@ private extension View {
             }
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    GeometryEditorToolbar(geometryEditor: geometryEditor, style: .plain)
+                    GeometryEditorToolbar(geometryEditor: geometryEditor, style: nil)
                 }
             }
             .onAppear {
