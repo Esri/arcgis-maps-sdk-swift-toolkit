@@ -39,7 +39,7 @@ struct GeometryEditorToolbarTests {
         }
         #expect(model.isStarted)
         
-        _ = geometryEditor.stop()
+        geometryEditor.stop()
         try await Task.yield(timeout: 0.1) { @MainActor in
             !model.isStarted
         }
