@@ -25,14 +25,14 @@ struct GeometryEditorToolbarTests {
         let model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
         
         #expect(model.geometryEditor === geometryEditor)
-        #expect(model.isStarted == false)
+        #expect(!model.isStarted)
     }
     
     @Test
     func modelIsStartedStateChanges() async throws {
         let geometryEditor = GeometryEditor()
         let model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
-        
+        #expect(!model.isStarted)
         geometryEditor.start(withType: Point.self)
         try await Task.yield(timeout: 0.1) { @MainActor in
             model.isStarted
@@ -43,6 +43,6 @@ struct GeometryEditorToolbarTests {
         try await Task.yield(timeout: 0.1) { @MainActor in
             !model.isStarted
         }
-        #expect(model.isStarted == false)
+        #expect(!model.isStarted)
     }
 }
