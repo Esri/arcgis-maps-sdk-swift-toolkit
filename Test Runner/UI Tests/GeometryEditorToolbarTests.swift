@@ -48,8 +48,7 @@ final class GeometryEditorToolbarTests: XCTestCase {
         app.buttons["Point"].assertExistenceAndTap()
 
         let toolButton = app.buttons["Tool"]
-        toolButton.assertExistence(timeout: 1)
-        toolButton.tap()
+        toolButton.assertExistenceAndTap(timeout: 1)
 
         [
             "Vertex",
@@ -71,8 +70,7 @@ final class GeometryEditorToolbarTests: XCTestCase {
         app.buttons["Polyline"].assertExistenceAndTap()
 
         let toolButton = app.buttons["Tool"]
-        toolButton.assertExistence(timeout: 1)
-        toolButton.tap()
+        toolButton.assertExistenceAndTap(timeout: 1)
 
         [
             "Freehand",
@@ -99,8 +97,7 @@ final class GeometryEditorToolbarTests: XCTestCase {
         app.buttons["Polygon"].assertExistenceAndTap()
         
         let toolButton = app.buttons["Tool"]
-        toolButton.assertExistence(timeout: 1)
-        toolButton.tap()
+        toolButton.assertExistenceAndTap(timeout: 1)
         
         [
             "Freehand",
