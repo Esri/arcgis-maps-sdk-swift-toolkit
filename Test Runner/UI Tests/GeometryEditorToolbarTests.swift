@@ -39,7 +39,10 @@ final class GeometryEditorToolbarTests: XCTestCase {
         let toolMidY = toolButton.frame.midY
         let deleteMidY = deleteButton.frame.midY
         
-        XCTAssertLessThan(toolMidY, deleteMidY, "Expected the tool button to be above the delete button when the toolbar is vertical")
+        XCTAssertLessThan(
+            toolMidY, deleteMidY,
+            "Expected the tool button to be above the delete button when the toolbar is vertical"
+        )
     }
     
     /// Tests the geometry editor toolbar appears when a geometry editor
