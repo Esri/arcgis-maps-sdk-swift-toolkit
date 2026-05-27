@@ -36,10 +36,10 @@ final class GeometryEditorToolbarTests: XCTestCase {
         toolButton.assertExistence(timeout: 1)
         deleteButton.assertExistence(timeout: 1)
         
-        let toolMinY = toolButton.frame.midY
-        let deleteMinY = deleteButton.frame.midY
+        let toolMidY = toolButton.frame.midY
+        let deleteMidY = deleteButton.frame.midY
         
-        XCTAssertLessThan(toolMinY, deleteMinY, "Expected the tool button to be above the delete button when the toolbar is vertical")
+        XCTAssertLessThan(toolMidY, deleteMidY, "Expected the tool button to be above the delete button when the toolbar is vertical")
     }
     
     /// Tests the geometry editor toolbar appears when a geometry editor
