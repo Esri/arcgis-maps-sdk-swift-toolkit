@@ -108,6 +108,4 @@ final class GeometryEditorToolbarTests: XCTestCase {
         
         app.buttons["Stop"].assertExistenceAndTap()
     }
-    
-    
 }
