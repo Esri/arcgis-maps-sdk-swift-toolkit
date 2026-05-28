@@ -101,7 +101,8 @@ struct FeatureFormToolbar: ViewModifier {
                         }
                     }
                 }
-                if hasEdits, editingButtonsVisibility != .hidden {
+                if (hasEdits && editingButtonsVisibility == .automatic)
+                    || (editingButtonsVisibility == .visible) {
                     ToolbarItem(placement: .bottomBar) {
                         FormFooter(
                             featureForm: featureForm,
