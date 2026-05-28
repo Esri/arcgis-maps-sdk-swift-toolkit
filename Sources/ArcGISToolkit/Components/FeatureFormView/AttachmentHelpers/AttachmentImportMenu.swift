@@ -24,9 +24,15 @@ struct AttachmentImportMenu: View {
     
     /// Creates an `AttachmentImportMenu`
     /// - Parameter element: The attachment form element displaying the menu.
+    /// - Parameter prototypeOptions: Shared prototype options used by preview and import.
     /// - Parameter onAdd: The action to perform when an attachment is added.
-    init(element: AttachmentsFormElement, onAdd: (@MainActor (FeatureAttachment) -> Void)? = nil) {
+    init(
+        element: AttachmentsFormElement,
+        prototypeOptions: AttachmentPrototypeOptions = .init(),
+        onAdd: (@MainActor (FeatureAttachment) -> Void)? = nil
+    ) {
         self.element = element
+        self.prototypeOptions = prototypeOptions
         self.onAdd = onAdd
     }
     
@@ -53,6 +59,9 @@ Prototype only. Do not merge to main.
 This will eventually be available on `element`.
 """)
     @State private var imageInput: _ImageAttachmentsFormInput?
+
+#warning("For testing only. Do not merge to main.")
+    @ObservedObject private var prototypeOptions: AttachmentPrototypeOptions
     
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
@@ -72,6 +81,26 @@ This will eventually be available on `element`.
                 importState = .none
             }
         }
+    }
+
+    private var effectiveAllowUserRename: Bool {
+        prototypeOptions.isEnabled ? prototypeOptions.allowUserRename : element.allowUserRename
+    }
+
+    private var effectiveUseOriginalFilename: Bool {
+        prototypeOptions.isEnabled ? prototypeOptions.useOriginalFilename : element.useOriginalFilename
+    }
+
+    private var effectiveMaxAttachmentCount: UInt32 {
+        prototypeOptions.isEnabled ? prototypeOptions.maxAttachmentCount : element.maxAttachmentCount
+    }
+
+    private var shouldEnforceAttachmentCountLimits: Bool {
+        prototypeOptions.isEnabled ? prototypeOptions.enforceAttachmentCountLimits : true
+    }
+
+    private var attachmentLimitReached: Bool {
+        shouldEnforceAttachmentCountLimits && prototypeOptions.sessionAttachmentCount >= effectiveMaxAttachmentCount
     }
     
     private func takePhotoOrVideoButton() -> Button<some View> {
@@ -104,7 +133,7 @@ This will eventually be available on `element`.
             Image(systemName: "folder")
         }
     }
-    
+
     var body: some View {
         if importState.importInProgress {
             ProgressView()
@@ -116,11 +145,13 @@ This will eventually be available on `element`.
 #if os(visionOS)
                 .modify { $0.disabled(true) }
 #endif
+                .disabled(attachmentLimitReached)
             
             let existingFileOptions = Group {
                 chooseFromLibraryButton()
                 chooseFromFilesButton()
             }
+            .disabled(attachmentLimitReached)
             
             switch imageInput?.inputMethod {
             case .some(.any), .none:
@@ -132,7 +163,6 @@ This will eventually be available on `element`.
                 existingFileOptions
             }
             
-#warning("For testing only. Do not merge to main.")
             Section("Prototype Features") {
                 Toggle(
                     "Use _ImageAttachmentsFormInput",
@@ -158,7 +188,6 @@ This will eventually be available on `element`.
                     }
                 }
             }
-            .menuActionDismissBehavior(.disabled)
         } label: {
             Text(
                 "Add Attachment",
@@ -183,6 +212,13 @@ This will eventually be available on `element`.
 #endif
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
+
+            if shouldEnforceAttachmentCountLimits {
+                guard prototypeOptions.sessionAttachmentCount < effectiveMaxAttachmentCount else {
+                    importState = .errored(.system("Attachment count limit reached."))
+                    return
+                }
+            }
             
             if let data = newAttachmentImportData.data {
                 let attachmentSize = Measurement(
@@ -200,16 +236,26 @@ This will eventually be available on `element`.
             }
             
             let fileName: String
-            do {
-                if element.useOriginalFilename,
-                   let originalName = newAttachmentImportData.fileName,
-                   !originalName.isEmpty {
-                    fileName = originalName
-                } else {
+            let customName = prototypeOptions.customFilename.trimmingCharacters(in: .whitespacesAndNewlines)
+            if effectiveAllowUserRename && !customName.isEmpty {
+                fileName = customName
+            } else if effectiveUseOriginalFilename,
+                      let originalName = newAttachmentImportData.fileName,
+                      !originalName.isEmpty {
+                fileName = originalName
+            } else {
+                do {
                     fileName = try await element.generateFilenameAsync()
+                } catch {
+                    // Keep "Use Original Filename" meaningful even when generation fails.
+                    if effectiveUseOriginalFilename,
+                       let originalName = newAttachmentImportData.fileName,
+                       !originalName.isEmpty {
+                        fileName = originalName
+                    } else {
+                        fileName = "Attachment-\(UUID().uuidString.prefix(8))"
+                    }
                 }
-            } catch {
-                fileName = newAttachmentImportData.fileName ?? "Unnamed Attachment"
             }
             
             var newAttachment: FeatureAttachment? = nil
@@ -233,6 +279,7 @@ This will eventually be available on `element`.
                 importState = .errored(.creationFailed)
                 return
             }
+            prototypeOptions.sessionAttachmentCount += 1
             onAdd?(newAttachment)
             importState = .none
         }

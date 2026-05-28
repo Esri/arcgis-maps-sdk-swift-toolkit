@@ -15,6 +15,16 @@
 import ArcGIS
 import Foundation
 
+/// Defines how existing attachments are associated with an attachments form element.
+enum AttachmentAssociationType: Sendable {
+    /// Associate all existing attachments with the element.
+    case any
+    /// Associate only attachments that exactly match the element keyword.
+    case exact
+    /// Associate attachments that exactly match the keyword and attachments without a keyword.
+    case exactOrNone
+}
+
 extension AttachmentsFormElement: AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
     ///
@@ -59,6 +69,14 @@ extension AttachmentsFormElement {
         keyword
     }
 
+    /// Defines how existing attachments are associated with this element.
+    ///
+    /// This value is currently derived from the design default until runtime
+    /// support for this property is available.
+    var attachmentAssociationType: AttachmentAssociationType {
+        .exact
+    }
+
     /// True if attachment file names should be displayed.
     ///
     /// This value is currently derived from the design default until runtime
@@ -84,12 +102,28 @@ extension AttachmentsFormElement {
         .zero
     }
 
+    /// The input user interface to use for the element.
+    ///
+    /// This value is currently derived from the design default until runtime
+    /// support for this property is available.
+    var input: Any? {
+        nil
+    }
+
     /// True if uploaded attachments preserve their original file name.
     ///
     /// This value is currently derived from the design default until runtime
     /// support for this property is available.
     var useOriginalFilename: Bool {
         true
+    }
+
+    /// An array of validation errors for this element.
+    ///
+    /// This value is currently derived from the design default until runtime
+    /// support for this property is available.
+    var validationErrors: [Error] {
+        []
     }
 
     /// Generates the attachment filename using the filename expression.

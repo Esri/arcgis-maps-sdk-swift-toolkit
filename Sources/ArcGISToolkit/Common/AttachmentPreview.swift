@@ -31,6 +31,12 @@ struct AttachmentPreview: View {
     
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
+
+    /// The latest generated filename from the prototype test action.
+    @State private var generatedName: String?
+
+    /// The latest generation error from the prototype test action.
+    @State private var generationError: String?
     
     /// The maximum attachment download size limit.
     private let attachmentDownloadSizeLimit = Measurement(
@@ -52,6 +58,15 @@ struct AttachmentPreview: View {
 
     /// A Boolean value indicating whether attachment filenames are displayed.
     private let displaysFilename: Bool
+
+    /// Shared prototype options that can override preview and import behavior.
+    @ObservedObject private var prototypeAttachmentOptions: AttachmentPrototypeOptions
+
+    /// Defaults used when enabling prototype options.
+    private let prototypeAttachmentOptionDefaults: AttachmentPrototypeOptions.Defaults?
+
+    /// The form element used for prototype actions that require form APIs.
+    private let prototypeOptionsFormElement: AttachmentsFormElement?
     
     /// The last locally added attachment.
     private let lastAttachmentAdded: AttachmentModel?
@@ -71,6 +86,9 @@ struct AttachmentPreview: View {
         allowUserRename: Bool = true,
         allowDeleteAttachments: Bool = true,
         displaysFilename: Bool = true,
+        prototypeAttachmentOptions: AttachmentPrototypeOptions = .init(),
+        prototypeAttachmentOptionDefaults: AttachmentPrototypeOptions.Defaults? = nil,
+        prototypeOptionsFormElement: AttachmentsFormElement? = nil,
         lastAttachmentAdded: AttachmentModel? = nil,
         onRename: (@MainActor (AttachmentModel, String) -> Void)? = nil,
         onDelete: (@MainActor (AttachmentModel) -> Void)? = nil,
@@ -82,9 +100,20 @@ struct AttachmentPreview: View {
         self.allowUserRename = allowUserRename
         self.allowDeleteAttachments = allowDeleteAttachments
         self.displaysFilename = displaysFilename
+        self.prototypeAttachmentOptions = prototypeAttachmentOptions
+        self.prototypeAttachmentOptionDefaults = prototypeAttachmentOptionDefaults
+        self.prototypeOptionsFormElement = prototypeOptionsFormElement
         self.lastAttachmentAdded = lastAttachmentAdded
         self.onRename = onRename
         self.onDelete = onDelete
+    }
+
+    private var effectiveAllowUserRename: Bool {
+        prototypeAttachmentOptions.isEnabled ? prototypeAttachmentOptions.allowUserRename : allowUserRename
+    }
+
+    private var effectiveDisplaysFilename: Bool {
+        prototypeAttachmentOptions.isEnabled ? prototypeAttachmentOptions.displayFilename : displaysFilename
     }
     
     var body: some View {
@@ -95,7 +124,7 @@ struct AttachmentPreview: View {
         .cellBaseWidth(proposedCellSize.width)
         .leftScrollTrigger(lastAttachmentAdded?.id)
     }
-    
+
     /// - Note: Contextual actions are disabled for empty attachments as deletion and rename
     /// operations cannot be applied successfully to the ServiceGeodatabase or ServiceFeatureTable.
     ///
@@ -107,11 +136,11 @@ struct AttachmentPreview: View {
                 attachmentModel: attachmentModel,
                 attachmentDownloadSizeLimit: attachmentDownloadSizeLimit,
                 cellSize: size,
-                displaysFilename: displaysFilename
+                displaysFilename: effectiveDisplaysFilename
             )
                 .contextMenu {
                     if !editControlsDisabled && !attachmentModel.attachment.measuredSize.value.isZero {
-                        if allowUserRename,
+                        if effectiveAllowUserRename,
                            attachmentModel.attachment.measuredSize <= attachmentDownloadSizeLimit {
                             Button {
                                 renamedAttachmentModel = attachmentModel
@@ -134,6 +163,10 @@ struct AttachmentPreview: View {
                                 deletedAttachmentModel = attachmentModel
                             }
                         }
+                    }
+
+                    if prototypeOptionsFormElement != nil {
+                        prototypeAttachmentOptionsMenu
                     }
                 }
         }
@@ -167,6 +200,113 @@ struct AttachmentPreview: View {
             onDelete?(deletedAttachmentModel)
             self.deletedAttachmentModel = nil
         }
+    }
+
+    @ViewBuilder
+    private var prototypeAttachmentOptionsMenu: some View {
+        Section("Prototype Attachment Options") {
+            Toggle(
+                "Allow User Rename",
+                isOn: Binding(
+                    get: { prototypeAttachmentOptions.allowUserRename },
+                    set: { isEnabled in
+                        enablePrototypeOptionsIfNeeded()
+                        prototypeAttachmentOptions.allowUserRename = isEnabled
+                        if !isEnabled {
+                            prototypeAttachmentOptions.customFilename = ""
+                        }
+                    }
+                )
+            )
+
+            Toggle(
+                "Display Filename",
+                isOn: Binding(
+                    get: { prototypeAttachmentOptions.displayFilename },
+                    set: { newValue in
+                        enablePrototypeOptionsIfNeeded()
+                        prototypeAttachmentOptions.displayFilename = newValue
+                    }
+                )
+            )
+            Toggle(
+                "Use Original Filename",
+                isOn: Binding(
+                    get: { prototypeAttachmentOptions.useOriginalFilename },
+                    set: { newValue in
+                        enablePrototypeOptionsIfNeeded()
+                        prototypeAttachmentOptions.useOriginalFilename = newValue
+                    }
+                )
+            )
+            Toggle(
+                "Enforce Attachment Count Limits",
+                isOn: Binding(
+                    get: { prototypeAttachmentOptions.enforceAttachmentCountLimits },
+                    set: { newValue in
+                        enablePrototypeOptionsIfNeeded()
+                        prototypeAttachmentOptions.enforceAttachmentCountLimits = newValue
+                    }
+                )
+            )
+
+            if prototypeAttachmentOptions.enforceAttachmentCountLimits {
+                Button("Min Attachment Count: \(prototypeAttachmentOptions.minAttachmentCount)") {
+                    enablePrototypeOptionsIfNeeded()
+                    prototypeAttachmentOptions.minAttachmentCount += 1
+                }
+                Button("Decrease Min Attachment Count") {
+                    enablePrototypeOptionsIfNeeded()
+                    if prototypeAttachmentOptions.minAttachmentCount > 0 {
+                        prototypeAttachmentOptions.minAttachmentCount -= 1
+                    }
+                }
+                .disabled(prototypeAttachmentOptions.minAttachmentCount == 0)
+
+                Button("Max Attachment Count: \(prototypeAttachmentOptions.maxAttachmentCount)") {
+                    enablePrototypeOptionsIfNeeded()
+                    prototypeAttachmentOptions.maxAttachmentCount += 1
+                }
+                Button("Decrease Max Attachment Count") {
+                    enablePrototypeOptionsIfNeeded()
+                    if prototypeAttachmentOptions.maxAttachmentCount > 1 {
+                        prototypeAttachmentOptions.maxAttachmentCount -= 1
+                    }
+                }
+                .disabled(prototypeAttachmentOptions.maxAttachmentCount <= 1)
+            }
+
+            if let prototypeOptionsFormElement {
+                Button("Test generateFilenameAsync()") {
+                    Task {
+                        do {
+                            let name = try await prototypeOptionsFormElement.generateFilenameAsync()
+                            generatedName = name
+                            generationError = nil
+                        } catch {
+                            generatedName = nil
+                            generationError = error.localizedDescription
+                        }
+                    }
+                }
+
+                if let generatedName {
+                    Text("Generated: \(generatedName)")
+                }
+                if let generationError {
+                    Text("Error: \(generationError)")
+                }
+            }
+        }
+        .menuActionDismissBehavior(.enabled)
+    }
+
+    private func enablePrototypeOptionsIfNeeded() {
+        guard !prototypeAttachmentOptions.isEnabled else { return }
+        if let prototypeAttachmentOptionDefaults {
+            prototypeAttachmentOptions.apply(defaults: prototypeAttachmentOptionDefaults)
+        }
+        prototypeAttachmentOptions.isEnabled = true
     }
     
     /// A view representing a single cell in an `AttachmentPreview`.
@@ -279,22 +419,26 @@ struct ThumbnailViewFooter: View {
     /// The size of the media's frame.
     let size: CGSize
     
+    private var shouldShowFooter: Bool {
+        displaysFilename && !attachmentModel.name.isEmpty
+    }
+
     var body: some View {
-        ZStack {
-            let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
-            Rectangle()
-                .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
-                .frame(height: size.height * 0.25)
-            HStack {
-                if displaysFilename, !attachmentModel.name.isEmpty {
+        if shouldShowFooter {
+            ZStack {
+                let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
+                Rectangle()
+                    .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
+                    .frame(height: size.height * 0.25)
+                HStack {
                     Text(attachmentModel.name)
                         .foregroundStyle(.white)
                         .font(.caption)
                         .lineLimit(1)
+                    Spacer()
                 }
-                Spacer()
+                .padding([.leading, .trailing], 6)
             }
-            .padding([.leading, .trailing], 6)
         }
     }
 }
