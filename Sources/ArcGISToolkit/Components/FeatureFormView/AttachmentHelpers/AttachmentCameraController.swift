@@ -23,11 +23,20 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
     
     @Binding var isPresented: Bool
     
+    /// The available capture modes.
+    enum Mode {
+        case photo
+        case video
+    }
+    
+    /// The capture mode.
+    let mode: Mode
+    
     /// The image picker controller represented within the view.
     private let controller = AttachmentUIImagePickerController()
     
     func makeUIViewController(context: Context) -> some UIViewController {
-        controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
+        controller.mediaTypes = mode == .photo ? [UTType.image.identifier] : [UTType.movie.identifier]
         controller.sourceType = .camera
         controller.delegate = context.coordinator
         return controller
