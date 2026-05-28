@@ -291,6 +291,14 @@ private extension AttachmentImportMenu {
     
     /// A label for a button to capture a new photo or video.
     var cameraButtonLabel: String {
+    /// A label for a button to capture new audio.
+    var takeAudioLabel: String {
+        .init(
+            localized: "Record Audio",
+            bundle: .toolkitModule,
+            comment: "A label for a button to capture new audio."
+        )
+    }
         .init(
             localized: "Take Photo or Video",
             bundle: .toolkitModule,
