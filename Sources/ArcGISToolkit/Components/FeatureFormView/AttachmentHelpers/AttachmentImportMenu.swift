@@ -112,25 +112,67 @@ This will eventually be available on `element`.
                 .catalystPadding(5)
         }
         Menu {
-            let newFileOption = takePhotoOrVideoButton()
-#if os(visionOS)
-                .modify { $0.disabled(true) }
-#endif
-            
-            let existingFileOptions = Group {
-                chooseFromLibraryButton()
-                chooseFromFilesButton()
+            Group {
+                if inputs.count >= 2 {
+                    ForEach(inputs) { input in
+                        switch input {
+                        case let audioFormInput as _AudioFormInput:
+                            takeAudioButton(input: audioFormInput)
+                        case let imageFormInput as _ImageFormInput:
+                            takePhotoButton(input: imageFormInput)
+                        case let videoFormInput as _VideoFormInput:
+                            takeVideoButton(input: videoFormInput)
+                        default: EmptyView()
+                        }
+                    }
+                    if inputs.contains(where: {$0 is _ImageFormInput || $0 is _VideoFormInput}) {
+                        chooseFromLibraryButton()
+                    }
+                    chooseFromFilesButton()
+                } else if let onlyInput = inputs.first {
+                    switch onlyInput {
+                    case let audioFormInput as _AudioFormInput:
+                        switch audioFormInput.inputMethod {
+                        case .any:
+                            takeAudioButton(input: audioFormInput)
+                            chooseFromFilesButton()
+                        case .capture:
+                            takeAudioButton(input: audioFormInput)
+                        case .upload:
+                            chooseFromFilesButton()
+                        }
+                    case is _DocumentFormInput:
+                        chooseFromFilesButton()
+                    case let imageFormInput as _ImageFormInput:
+                        switch imageFormInput.inputMethod {
+                        case .any:
+                            takePhotoButton(input: imageFormInput)
+                            chooseFromLibraryButton()
+                            chooseFromFilesButton()
+                        case .capture:
+                            takePhotoButton(input: imageFormInput)
+                        case .upload:
+                            chooseFromLibraryButton()
+                            chooseFromFilesButton()
+                        }
+                    case let videoFormInput as _VideoFormInput:
+                        switch videoFormInput.inputMethod {
+                        case .any:
+                            takeVideoButton(input: videoFormInput)
+                            chooseFromLibraryButton()
+                            chooseFromFilesButton()
+                        case .capture:
+                            takeVideoButton(input: videoFormInput)
+                        case .upload:
+                            chooseFromLibraryButton()
+                            chooseFromFilesButton()
+                        }
+                    default:
+                        EmptyView()
+                    }
+                }
             }
-            
-            switch imageInput?.inputMethod {
-            case .some(.any), .none:
-                newFileOption
-                existingFileOptions
-            case .some(.capture):
-                newFileOption
-            case .some(.upload):
-                existingFileOptions
-            }
+            .id(id)
             
 #warning("For testing only. Do not merge to main.")
             Section("Prototype Features") {
