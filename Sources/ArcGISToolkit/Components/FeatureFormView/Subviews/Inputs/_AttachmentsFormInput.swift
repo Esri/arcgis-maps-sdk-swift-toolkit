@@ -13,4 +13,4 @@
 // limitations under the License.
 
 #warning("Prototype only. Do not merge to main.")
-class _AttachmentsFormInput {}
+class _AttachmentsFormInput: Identifiable {}
