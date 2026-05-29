@@ -26,15 +26,26 @@ struct AttachmentPhotoPicker: ViewModifier {
     /// A Boolean value indicating whether the photos picker is presented.
     @Binding var photoPickerIsPresented: Bool
     
+    let inputs: [_AttachmentsFormInput]
+    
+    var filter: PHPickerFilter? {
+        var filter = [PHPickerFilter]()
+        if inputs.contains(where: { $0 is _ImageFormInput }) {
+            filter.append(.images)
+        }
+        if inputs.contains(where: { $0 is _VideoFormInput }) {
+            filter.append(.videos)
+        }
+        guard !filter.isEmpty else { return nil }
+        return .any(of: filter)
+    }
+    
     func body(content: Content) -> some View {
         content
             .photosPicker(
                 isPresented: $photoPickerIsPresented,
                 selection: $item,
-                matching: .any(of: [
-                    .images,
-                    .videos
-                ])
+                matching: filter
             )
             .task(id: item) {
                 guard let item else { return }
