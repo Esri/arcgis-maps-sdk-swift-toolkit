@@ -309,10 +309,12 @@ private extension AttachmentImportMenu {
         )
     }
     
+    /// A label for a button to capture a new video.
+    var takeVideoLabel: String {
         .init(
-            localized: "Take Photo or Video",
+            localized: "Take Video",
             bundle: .toolkitModule,
-            comment: "A label for a button to capture a new photo or video."
+            comment: "A label for a button to capture a new video."
         )
     }
     
