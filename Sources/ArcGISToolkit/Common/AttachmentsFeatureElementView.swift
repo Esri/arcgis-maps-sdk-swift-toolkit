@@ -130,9 +130,9 @@ struct AttachmentsFeatureElementView: View {
             AttachmentPreview(
                 attachmentModels: attachmentModels,
                 editControlsDisabled: !isEditable,
-                allowUserRename: effectiveAllowUserRename,
+                allowUserRename: allowUserRename,
                 allowDeleteAttachments: canDeleteAttachments(attachmentModels.count),
-                displaysFilename: effectiveDisplaysFilename,
+                displaysFilename: displaysFilename,
                 lastAttachmentAdded: lastAttachmentAdded,
                 onRename: onRename,
                 onDelete: onDelete,
@@ -143,9 +143,9 @@ struct AttachmentsFeatureElementView: View {
                 AttachmentPreview(
                     attachmentModels: attachmentModels,
                     editControlsDisabled: !isEditable,
-                    allowUserRename: effectiveAllowUserRename,
+                    allowUserRename: allowUserRename,
                     allowDeleteAttachments: canDeleteAttachments(attachmentModels.count),
-                    displaysFilename: effectiveDisplaysFilename,
+                    displaysFilename: displaysFilename,
                     lastAttachmentAdded: lastAttachmentAdded,
                     onRename: onRename,
                     onDelete: onDelete,
@@ -208,7 +208,7 @@ struct AttachmentsFeatureElementView: View {
     ///   - attachmentModel: The model for the attachment to rename.
     ///   - newAttachmentName: The new attachment name.
     func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
-        if !effectiveAllowUserRename {
+        if !allowUserRename {
             return
         }
         if let attachment = attachmentModel.attachment as? FormAttachment {
@@ -314,16 +314,6 @@ extension AttachmentsFeatureElementView {
     /// A Boolean value indicating whether users can rename attachments.
     private var allowUserRename: Bool {
         formElement?.allowUserRename ?? true
-    }
-
-    /// Effective filename-display behavior.
-    private var effectiveDisplaysFilename: Bool {
-        displaysFilename
-    }
-
-    /// Effective rename behavior.
-    private var effectiveAllowUserRename: Bool {
-        allowUserRename
     }
 
     /// Effective minimum attachment count for preview and validation behavior.
