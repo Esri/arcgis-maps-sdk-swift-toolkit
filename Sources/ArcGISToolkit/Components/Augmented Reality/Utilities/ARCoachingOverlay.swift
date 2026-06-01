@@ -31,9 +31,12 @@ struct ARCoachingOverlay {
     var goal: ARCoachingOverlayView.Goal
     /// A Boolean value that indicates if coaching is in progress.
     var active: Bool = false
-    
+}
+
+extension ARCoachingOverlay {
     /// Controls whether the coaching is in progress.
-    /// - Parameter active: A Boolean value indicating if coaching is in progress.
+    /// - Parameter active: A Boolean value indicating if coaching is in
+    /// progress.
     /// - Returns: The `ARCoachingOverlay`.
     func active(_ active: Bool) -> Self {
         var view = self
@@ -50,7 +53,8 @@ struct ARCoachingOverlay {
         return view
     }
     
-    /// Sets the closure to call when the coaching experience is completely deactivated.
+    /// Sets the closure to call when the coaching experience is completely
+    /// deactivated.
     func onCoachingOverlayDeactivate(
         perform action: @escaping (ARCoachingOverlayView) -> Void
     ) -> Self {
@@ -59,8 +63,8 @@ struct ARCoachingOverlay {
         return view
     }
     
-    /// Sets the closure to call when the user taps the coaching overlay view's Start Over button
-    /// while the session is relocalizing.
+    /// Sets the closure to call when the user taps the coaching overlay view's
+    /// Start Over button while the session is relocalizing.
     func onCoachingOverlayRequestSessionReset(
         perform action: @escaping (ARCoachingOverlayView) -> Void
     ) -> Self {
@@ -88,36 +92,33 @@ extension ARCoachingOverlay: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: ARCoachingOverlayView, context: Context) {
+        context.coordinator.coachingOverlay = self
         uiView.sessionProvider = sessionProvider
         uiView.goal = goal
-        uiView.setActive(active, animated: true)
-        context.coordinator.onCoachingOverlayActivateAction = onCoachingOverlayActivateAction
-        context.coordinator.onCoachingOverlayDeactivateAction = onCoachingOverlayDeactivateAction
-        context.coordinator.onCoachingOverlayRequestSessionResetAction = onCoachingOverlayRequestSessionResetAction
     }
     
-    func makeCoordinator() -> Coordinator {
-        Coordinator()
-    }
-}
-
-extension ARCoachingOverlay {
     class Coordinator: NSObject, ARCoachingOverlayViewDelegate {
-        var onCoachingOverlayActivateAction: ((ARCoachingOverlayView) -> Void)?
-        var onCoachingOverlayDeactivateAction: ((ARCoachingOverlayView) -> Void)?
-        var onCoachingOverlayRequestSessionResetAction: ((ARCoachingOverlayView) -> Void)?
+        var coachingOverlay: ARCoachingOverlay
+        
+        init(coachingOverlay: ARCoachingOverlay) {
+            self.coachingOverlay = coachingOverlay
+        }
         
         func coachingOverlayViewWillActivate(_ coachingOverlayView: ARCoachingOverlayView) {
-            onCoachingOverlayActivateAction?(coachingOverlayView)
+            coachingOverlay.onCoachingOverlayActivateAction?(coachingOverlayView)
         }
         
         func coachingOverlayViewDidDeactivate(_ coachingOverlayView: ARCoachingOverlayView) {
-            onCoachingOverlayDeactivateAction?(coachingOverlayView)
+            coachingOverlay.onCoachingOverlayDeactivateAction?(coachingOverlayView)
         }
         
         func coachingOverlayViewDidRequestSessionReset(_ coachingOverlayView: ARCoachingOverlayView) {
-            onCoachingOverlayRequestSessionResetAction?(coachingOverlayView)
+            coachingOverlay.onCoachingOverlayRequestSessionResetAction?(coachingOverlayView)
         }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        return .init(coachingOverlay: self)
     }
 }
 #endif
