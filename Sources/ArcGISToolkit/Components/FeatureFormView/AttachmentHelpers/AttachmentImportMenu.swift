@@ -301,7 +301,6 @@ This will eventually be available on `element`.
             .onChange(of: inputs.count) { newValue in
                 logInputs()
             }
-            
         } label: {
             Text(
                 "Add Attachment",
