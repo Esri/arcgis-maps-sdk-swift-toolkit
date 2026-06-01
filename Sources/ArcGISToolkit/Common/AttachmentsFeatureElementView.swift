@@ -40,8 +40,6 @@ struct AttachmentsFeatureElementView: View {
     @State private var isExpanded = true
     /// The last locally added attachment.
     @State private var lastAttachmentAdded: AttachmentModel?
-    /// Shared prototype attachment options for preview and import controls.
-    @StateObject private var prototypeAttachmentOptions = AttachmentPrototypeOptions()
     
     /// Creates a new `AttachmentsFeatureElementView` for a Feature Form.
     /// - Parameter formElement: The `AttachmentsFeatureElement`.
@@ -92,14 +90,10 @@ struct AttachmentsFeatureElementView: View {
                         } else {
                             AttachmentImportMenu(
                                 element: formElement,
-                                prototypeOptions: prototypeAttachmentOptions,
                                 onAdd: onAdd
                             )
                         }
                     }
-                }
-                .onAppear {
-                    initializePrototypeOptionsIfNeeded(from: formElement)
                 }
                 .onAttachmentIsEditableChange(of: formElement) { newIsEditable in
                     isEditable = newIsEditable
@@ -139,9 +133,6 @@ struct AttachmentsFeatureElementView: View {
                 allowUserRename: effectiveAllowUserRename,
                 allowDeleteAttachments: canDeleteAttachments(attachmentModels.count),
                 displaysFilename: effectiveDisplaysFilename,
-                prototypeAttachmentOptions: prototypeAttachmentOptions,
-                prototypeAttachmentOptionDefaults: prototypeAttachmentOptionDefaults,
-                prototypeOptionsFormElement: formElement,
                 lastAttachmentAdded: lastAttachmentAdded,
                 onRename: onRename,
                 onDelete: onDelete,
@@ -155,9 +146,6 @@ struct AttachmentsFeatureElementView: View {
                     allowUserRename: effectiveAllowUserRename,
                     allowDeleteAttachments: canDeleteAttachments(attachmentModels.count),
                     displaysFilename: effectiveDisplaysFilename,
-                    prototypeAttachmentOptions: prototypeAttachmentOptions,
-                    prototypeAttachmentOptionDefaults: prototypeAttachmentOptionDefaults,
-                    prototypeOptionsFormElement: formElement,
                     lastAttachmentAdded: lastAttachmentAdded,
                     onRename: onRename,
                     onDelete: onDelete,
@@ -328,61 +316,28 @@ extension AttachmentsFeatureElementView {
         formElement?.allowUserRename ?? true
     }
 
-    /// Effective defaults for prototype options, sourced from the form element.
-    private var prototypeAttachmentOptionDefaults: AttachmentPrototypeOptions.Defaults? {
-        guard let formElement else { return nil }
-        return .init(
-            allowUserRename: formElement.allowUserRename,
-            displayFilename: formElement.displayFilename,
-            useOriginalFilename: formElement.useOriginalFilename,
-            minAttachmentCount: formElement.minAttachmentCount,
-            maxAttachmentCount: formElement.maxAttachmentCount
-        )
-    }
-
-    /// Effective filename-display behavior with prototype override support.
+    /// Effective filename-display behavior.
     private var effectiveDisplaysFilename: Bool {
-        prototypeAttachmentOptions.isEnabled ? prototypeAttachmentOptions.displayFilename : displaysFilename
+        displaysFilename
     }
 
-    /// Effective rename behavior with prototype override support.
+    /// Effective rename behavior.
     private var effectiveAllowUserRename: Bool {
-        prototypeAttachmentOptions.isEnabled ? prototypeAttachmentOptions.allowUserRename : allowUserRename
+        allowUserRename
     }
 
     /// Effective minimum attachment count for preview and validation behavior.
     private var effectiveMinAttachmentCount: UInt32 {
-        if prototypeAttachmentOptions.isEnabled, prototypeAttachmentOptions.enforceAttachmentCountLimits {
-            return prototypeAttachmentOptions.minAttachmentCount
-        }
         return formElement?.minAttachmentCount ?? 0
     }
 
     /// Effective maximum attachment count for preview and validation behavior.
     private var effectiveMaxAttachmentCount: UInt32 {
-        if prototypeAttachmentOptions.isEnabled, prototypeAttachmentOptions.enforceAttachmentCountLimits {
-            return prototypeAttachmentOptions.maxAttachmentCount
-        }
         return formElement?.maxAttachmentCount ?? .max
     }
     
     /// A Boolean value denoting if the view should be shown as regular width.
     private var isRegularWidth: Bool { !isPortraitOrientation }
-
-    /// Initializes shared prototype options from form defaults the first time the form element is shown.
-    private func initializePrototypeOptionsIfNeeded(from formElement: AttachmentsFormElement) {
-        guard !prototypeAttachmentOptions.isEnabled else { return }
-        prototypeAttachmentOptions.apply(
-            defaults: .init(
-                allowUserRename: formElement.allowUserRename,
-                displayFilename: formElement.displayFilename,
-                useOriginalFilename: formElement.useOriginalFilename,
-                minAttachmentCount: formElement.minAttachmentCount,
-                maxAttachmentCount: formElement.maxAttachmentCount
-            )
-        )
-        prototypeAttachmentOptions.isEnabled = true
-    }
 }
 
 extension View {

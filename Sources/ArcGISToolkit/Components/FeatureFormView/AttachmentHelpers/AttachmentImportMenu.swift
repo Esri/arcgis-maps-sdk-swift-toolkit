@@ -24,15 +24,12 @@ struct AttachmentImportMenu: View {
     
     /// Creates an `AttachmentImportMenu`
     /// - Parameter element: The attachment form element displaying the menu.
-    /// - Parameter prototypeOptions: Shared prototype options used by preview and import.
     /// - Parameter onAdd: The action to perform when an attachment is added.
     init(
         element: AttachmentsFormElement,
-        prototypeOptions: AttachmentPrototypeOptions = .init(),
         onAdd: (@MainActor (FeatureAttachment) -> Void)? = nil
     ) {
         self.element = element
-        self.prototypeOptions = prototypeOptions
         self.onAdd = onAdd
     }
     
@@ -53,16 +50,7 @@ struct AttachmentImportMenu: View {
     
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
-    
-#warning("""
-Prototype only. Do not merge to main. 
-This will eventually be available on `element`.
-""")
-    @State private var imageInput: _ImageAttachmentsFormInput?
 
-#warning("For testing only. Do not merge to main.")
-    @ObservedObject private var prototypeOptions: AttachmentPrototypeOptions
-    
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
         value: 999,
@@ -83,24 +71,8 @@ This will eventually be available on `element`.
         }
     }
 
-    private var effectiveAllowUserRename: Bool {
-        prototypeOptions.isEnabled ? prototypeOptions.allowUserRename : element.allowUserRename
-    }
-
     private var effectiveUseOriginalFilename: Bool {
-        prototypeOptions.isEnabled ? prototypeOptions.useOriginalFilename : element.useOriginalFilename
-    }
-
-    private var effectiveMaxAttachmentCount: UInt32 {
-        prototypeOptions.isEnabled ? prototypeOptions.maxAttachmentCount : element.maxAttachmentCount
-    }
-
-    private var shouldEnforceAttachmentCountLimits: Bool {
-        prototypeOptions.isEnabled ? prototypeOptions.enforceAttachmentCountLimits : true
-    }
-
-    private var attachmentLimitReached: Bool {
-        shouldEnforceAttachmentCountLimits && prototypeOptions.sessionAttachmentCount >= effectiveMaxAttachmentCount
+        element.useOriginalFilename
     }
     
     private func takePhotoOrVideoButton() -> Button<some View> {
@@ -124,7 +96,7 @@ This will eventually be available on `element`.
             Image(systemName: "photo")
         }
     }
-    
+
     private func chooseFromFilesButton() -> Button<some View> {
         Button {
             fileImporterIsPresented = true
@@ -145,49 +117,15 @@ This will eventually be available on `element`.
 #if os(visionOS)
                 .modify { $0.disabled(true) }
 #endif
-                .disabled(attachmentLimitReached)
             
             let existingFileOptions = Group {
                 chooseFromLibraryButton()
                 chooseFromFilesButton()
             }
-            .disabled(attachmentLimitReached)
+
+            newFileOption
+            existingFileOptions
             
-            switch imageInput?.inputMethod {
-            case .some(.any), .none:
-                newFileOption
-                existingFileOptions
-            case .some(.capture):
-                newFileOption
-            case .some(.upload):
-                existingFileOptions
-            }
-            
-            Section("Prototype Features") {
-                Toggle(
-                    "Use _ImageAttachmentsFormInput",
-                    isOn: Binding(get: {
-                        imageInput != nil
-                    }, set: { newValue in
-                        if newValue {
-                            imageInput = _ImageAttachmentsFormInput(inputMethod: .any)
-                        } else {
-                            imageInput = nil
-                        }
-                    })
-                )
-                if let imageInput {
-                    @Bindable var imageInput = imageInput
-                    Picker("Input Type", selection: $imageInput.inputMethod) {
-                        Text("Any")
-                            .tag(_ImageAttachmentsFormInput.InputMethod.any)
-                        Text("Capture")
-                            .tag(_ImageAttachmentsFormInput.InputMethod.capture)
-                        Text("Upload")
-                            .tag(_ImageAttachmentsFormInput.InputMethod.upload)
-                    }
-                }
-            }
         } label: {
             Text(
                 "Add Attachment",
@@ -213,8 +151,16 @@ This will eventually be available on `element`.
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
 
-            if shouldEnforceAttachmentCountLimits {
-                guard prototypeOptions.sessionAttachmentCount < effectiveMaxAttachmentCount else {
+            if element.maxAttachmentCount != .max {
+                let attachmentsCount: Int
+                do {
+                    let attachments = try await element.attachments
+                    attachmentsCount = attachments.count
+                } catch {
+                    importState = .errored(.system(error.localizedDescription))
+                    return
+                }
+                guard attachmentsCount < Int(element.maxAttachmentCount) else {
                     importState = .errored(.system("Attachment count limit reached."))
                     return
                 }
@@ -236,12 +182,9 @@ This will eventually be available on `element`.
             }
             
             let fileName: String
-            let customName = prototypeOptions.customFilename.trimmingCharacters(in: .whitespacesAndNewlines)
-            if effectiveAllowUserRename && !customName.isEmpty {
-                fileName = customName
-            } else if effectiveUseOriginalFilename,
-                      let originalName = newAttachmentImportData.fileName,
-                      !originalName.isEmpty {
+            if effectiveUseOriginalFilename,
+               let originalName = newAttachmentImportData.fileName,
+               !originalName.isEmpty {
                 fileName = originalName
             } else {
                 do {
@@ -279,7 +222,6 @@ This will eventually be available on `element`.
                 importState = .errored(.creationFailed)
                 return
             }
-            prototypeOptions.sessionAttachmentCount += 1
             onAdd?(newAttachment)
             importState = .none
         }
