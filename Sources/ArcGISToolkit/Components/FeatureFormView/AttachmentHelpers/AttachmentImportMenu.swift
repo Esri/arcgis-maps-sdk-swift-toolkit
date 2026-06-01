@@ -409,7 +409,7 @@ This will eventually be available on `element`.
 #endif
                 .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsPresented) {
                     appSettingsButton
-                    Button(role: .cancel) { } label: {
+                    Button(role: .cancel) {} label: {
                         Text(recordVideoOnlyButtonLabel)
                     }
                 }
