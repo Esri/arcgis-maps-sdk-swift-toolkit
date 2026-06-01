@@ -71,10 +71,6 @@ struct AttachmentImportMenu: View {
         }
     }
 
-    private var effectiveUseOriginalFilename: Bool {
-        element.useOriginalFilename
-    }
-    
     private func takePhotoOrVideoButton() -> Button<some View> {
         Button {
             if cameraRequester.authorizationStatus == .authorized {
@@ -182,7 +178,7 @@ struct AttachmentImportMenu: View {
             }
             
             let fileName: String
-            if effectiveUseOriginalFilename,
+            if element.useOriginalFilename,
                let originalName = newAttachmentImportData.fileName,
                !originalName.isEmpty {
                 fileName = originalName
@@ -191,7 +187,7 @@ struct AttachmentImportMenu: View {
                     fileName = try await element.generateFilenameAsync()
                 } catch {
                     // Keep "Use Original Filename" meaningful even when generation fails.
-                    if effectiveUseOriginalFilename,
+                    if element.useOriginalFilename,
                        let originalName = newAttachmentImportData.fileName,
                        !originalName.isEmpty {
                         fileName = originalName
