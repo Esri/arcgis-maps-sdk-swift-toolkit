@@ -51,6 +51,12 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
 
+#warning("""
+Prototype only. Do not merge to main.
+This will eventually be available on `element`.
+""")
+    @State private var imageInput: _ImageAttachmentsFormInput?
+
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
         value: 999,
@@ -119,8 +125,41 @@ struct AttachmentImportMenu: View {
                 chooseFromFilesButton()
             }
 
-            newFileOption
-            existingFileOptions
+            switch imageInput?.inputMethod {
+            case .some(.any), .none:
+                newFileOption
+                existingFileOptions
+            case .some(.capture):
+                newFileOption
+            case .some(.upload):
+                existingFileOptions
+            }
+
+            Section("Prototype Features") {
+                Toggle(
+                    "Use _ImageAttachmentsFormInput",
+                    isOn: Binding(get: {
+                        imageInput != nil
+                    }, set: { newValue in
+                        if newValue {
+                            imageInput = _ImageAttachmentsFormInput(inputMethod: .any)
+                        } else {
+                            imageInput = nil
+                        }
+                    })
+                )
+                if let imageInput {
+                    @Bindable var imageInput = imageInput
+                    Picker("Input Type", selection: $imageInput.inputMethod) {
+                        Text("Any")
+                            .tag(_ImageAttachmentsFormInput.InputMethod.any)
+                        Text("Capture")
+                            .tag(_ImageAttachmentsFormInput.InputMethod.capture)
+                        Text("Upload")
+                            .tag(_ImageAttachmentsFormInput.InputMethod.upload)
+                    }
+                }
+            }
             
         } label: {
             Text(
