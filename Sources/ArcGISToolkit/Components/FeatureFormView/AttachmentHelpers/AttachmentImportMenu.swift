@@ -108,6 +108,14 @@ This will eventually be available on `element`.
         }
     }
 
+    private func setPrototypeInputMethod(_ method: _ImageAttachmentsFormInput.InputMethod) {
+        if imageInput == nil {
+            imageInput = _ImageAttachmentsFormInput(inputMethod: method)
+        } else {
+            imageInput?.inputMethod = method
+        }
+    }
+
     var body: some View {
         if importState.importInProgress {
             ProgressView()
@@ -136,27 +144,48 @@ This will eventually be available on `element`.
             }
 
             Section("Prototype Features") {
-                Toggle(
-                    "Use _ImageAttachmentsFormInput",
-                    isOn: Binding(get: {
-                        imageInput != nil
-                    }, set: { newValue in
-                        if newValue {
-                            imageInput = _ImageAttachmentsFormInput(inputMethod: .any)
-                        } else {
-                            imageInput = nil
-                        }
-                    })
-                )
+                Button {
+                    if imageInput == nil {
+                        imageInput = _ImageAttachmentsFormInput(inputMethod: .any)
+                    } else {
+                        imageInput = nil
+                    }
+                } label: {
+                    Label {
+                        Text("Use _ImageAttachmentsFormInput")
+                    } icon: {
+                        Image(systemName: imageInput == nil ? "circle" : "checkmark.circle.fill")
+                    }
+                }
+
                 if let imageInput {
-                    @Bindable var imageInput = imageInput
-                    Picker("Input Type", selection: $imageInput.inputMethod) {
-                        Text("Any")
-                            .tag(_ImageAttachmentsFormInput.InputMethod.any)
-                        Text("Capture")
-                            .tag(_ImageAttachmentsFormInput.InputMethod.capture)
-                        Text("Upload")
-                            .tag(_ImageAttachmentsFormInput.InputMethod.upload)
+                    let inputMethod = imageInput.inputMethod
+                    Button {
+                        setPrototypeInputMethod(.any)
+                    } label: {
+                        Label {
+                            Text("Any")
+                        } icon: {
+                            Image(systemName: inputMethod == .any ? "checkmark" : "circle")
+                        }
+                    }
+                    Button {
+                        setPrototypeInputMethod(.capture)
+                    } label: {
+                        Label {
+                            Text("Capture")
+                        } icon: {
+                            Image(systemName: inputMethod == .capture ? "checkmark" : "circle")
+                        }
+                    }
+                    Button {
+                        setPrototypeInputMethod(.upload)
+                    } label: {
+                        Label {
+                            Text("Upload")
+                        } icon: {
+                            Image(systemName: inputMethod == .upload ? "checkmark" : "circle")
+                        }
                     }
                 }
             }
@@ -183,6 +212,7 @@ This will eventually be available on `element`.
 #if targetEnvironment(macCatalyst)
         .menuStyle(.borderlessButton)
 #endif
+    .menuActionDismissBehavior(.disabled)
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
 
