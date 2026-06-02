@@ -198,7 +198,8 @@ private struct SnapSourceSettingsToggle: View {
     
     /// A human-readable label for the settings' source.
     private var sourceLabel: String {
-        let name: String? = switch model.settings.source {
+        let source = model.settings.source
+        let name: String? = switch source {
         case let layer as LayerContent:
             layer.name
         case let overlay as GraphicsOverlay:
@@ -210,7 +211,7 @@ private struct SnapSourceSettingsToggle: View {
         if let name, !name.isEmpty {
             return name
         } else {
-            return "\(type(of: self))"
+            return "\(type(of: source))"
         }
     }
 }
