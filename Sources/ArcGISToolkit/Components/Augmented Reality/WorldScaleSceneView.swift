@@ -34,7 +34,7 @@ public struct WorldScaleSceneView: View {
     var calibrationViewIsHidden = false
 #if os(iOS)
     /// The proxy for the ARSwiftUIView.
-    @MainActor private let arViewProxy = ARSessionProvider<ARView>()
+    @State private var arViewProxy = ARSessionProvider<ARView>()
 #endif
     /// The view model for the calibration view.
     @StateObject private var calibrationViewModel = WorldScaleCalibrationViewModel()
