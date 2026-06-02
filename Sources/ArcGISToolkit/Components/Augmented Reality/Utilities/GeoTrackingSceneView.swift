@@ -15,6 +15,7 @@
 import ARKit
 import SwiftUI
 import ArcGIS
+import RealityKit
 
 /// A scene view that provides an augmented reality world scale experience using geo-tracking.
 @available(visionOS, unavailable)
@@ -35,7 +36,7 @@ public struct GeoTrackingSceneView: View {
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 #if os(iOS)
     /// The proxy for the ARSwiftUIView.
-    private let arViewProxy: ARSwiftUIViewProxy
+    private let arViewProxy: ARSessionProvider<ARView>
 #endif
     /// The camera controller that will be set on the scene view.
     private let cameraController: TransformationMatrixCameraController
@@ -66,7 +67,7 @@ public struct GeoTrackingSceneView: View {
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     init(
-        arViewProxy: ARSwiftUIViewProxy,
+        arViewProxy: ARSessionProvider<ARView>,
         cameraController: TransformationMatrixCameraController,
         calibrationViewModel: WorldScaleCalibrationViewModel,
         clippingDistance: Double?,
@@ -91,7 +92,7 @@ public struct GeoTrackingSceneView: View {
         SceneViewReader { sceneViewProxy in
             ZStack {
 #if os(iOS)
-                ARSwiftUIView(proxy: arViewProxy)
+                ARSwiftUIView(sessionProvider: arViewProxy)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation, initialCameraIsSet else { return }
                         

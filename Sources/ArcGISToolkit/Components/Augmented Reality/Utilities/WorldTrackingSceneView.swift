@@ -16,6 +16,7 @@
 import ARKit
 import SwiftUI
 import ArcGIS
+import RealityKit
 
 /// A scene view that provides an augmented reality world scale experience using world-tracking.
 struct WorldTrackingSceneView: View {
@@ -37,7 +38,7 @@ struct WorldTrackingSceneView: View {
     /// The time threshold in seconds between location updates to reset the world-tracking session.
     private let timeThreshold: Double
     /// The proxy for the ARSwiftUIView.
-    private let arViewProxy: ARSwiftUIViewProxy
+    private let arViewProxy: ARSessionProvider<ARView>
     /// The camera controller that will be set on the scene view.
     private let cameraController: TransformationMatrixCameraController
     /// A Boolean value that indicates whether the coaching overlay view is active.
@@ -68,7 +69,7 @@ struct WorldTrackingSceneView: View {
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     init(
-        arViewProxy: ARSwiftUIViewProxy,
+        arViewProxy: ARSessionProvider<ARView>,
         cameraController: TransformationMatrixCameraController,
         calibrationViewModel: WorldScaleCalibrationViewModel,
         clippingDistance: Double?,
@@ -101,7 +102,7 @@ struct WorldTrackingSceneView: View {
     var body: some View {
         SceneViewReader { sceneViewProxy in
             ZStack {
-                ARSwiftUIView(proxy: arViewProxy)
+                ARSwiftUIView(sessionProvider: arViewProxy)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation, initialCameraIsSet else { return }
                         
