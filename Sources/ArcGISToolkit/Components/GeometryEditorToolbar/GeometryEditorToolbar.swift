@@ -27,6 +27,7 @@ import SwiftUI
 ///     - Deleting the selected element.
 ///     - Undoing the last action on the geometry.
 ///     - Redoing the last undone action.
+///     - Configuring snap settings.
 /// - Supports styled vertical and horizontal layouts, or no built-in layout or styling.
 ///
 /// **Behavior**
@@ -36,6 +37,9 @@ import SwiftUI
 /// By default, the toolbar is displayed in a vertical layout. Pass `nil` for `style` to display
 /// the toolbar without built-in layout or styling, so you can show it in a system toolbar or apply
 /// your own layout and styling to the controls.
+///
+/// The settings button is only shown if the geometry editor has snap settings with source
+/// settings before the toolbar appears.
 ///
 /// **Associated Types**
 ///
@@ -105,6 +109,9 @@ public struct GeometryEditorToolbar: View {
         DeleteButton()
         UndoButton()
         RedoButton()
+        if !model.geometryEditor.snapSettings.sourceSettings.isEmpty {
+            SettingsButton()
+        }
     }
 }
 
@@ -237,6 +244,33 @@ private struct UndoButton: View {
             for await canUndo in model.geometryEditor.$canUndo {
                 self.canUndo = canUndo
             }
+        }
+    }
+}
+
+/// A button for presenting `GeometryEditorToolbar` settings.
+private struct SettingsButton: View {
+    /// A Boolean value indicating whether the settings view is presented.
+    @State private var isShowingSettings = false
+    
+    var body: some View {
+        Button {
+            isShowingSettings.toggle()
+        } label: {
+            Label {
+                Text(
+                    "Settings",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to show geometry editor toolbar settings."
+                )
+            } icon: {
+                Image(systemName: "gear")
+            }
+        }
+        .sheet(isPresented: $isShowingSettings) {
+            GeometryEditorToolbarSettings()
+            // Needed to override the font set in toolbarStackStyle.
+                .font(nil)
         }
     }
 }
