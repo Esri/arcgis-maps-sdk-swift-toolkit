@@ -18,203 +18,215 @@ import ARKit
 import RealityKit
 import SwiftUI
 
-typealias ARViewType = RealityKit.ARView
-
 /// A SwiftUI version of an AR view.
-struct ARSwiftUIView {
+public struct ARSwiftUIView {
     /// The closure to call when the session's geo-tracking state changes.
-    private(set) var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
+    private var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
     /// The closure to call when the session's camera tracking state changes.
-    private(set) var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
+    private var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
     /// The closure to call when the session's frame updates.
-    private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
+    private var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
     /// The closure to call when a new plane anchor has been added to the view.
-    private(set) var onAddAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
+    private var onAddAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
     /// The closure to call when a plane anchor has been updated.
-    private(set) var onUpdateAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
+    private var onUpdateAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
+    /// The closure to call when the session is interrupted.
+    private var onSessionWasInterruptedAction: ((ARSession) -> Void)?
+    /// The closure to call when the session interruption ends.
+    private var onSessionInterruptionEndedAction: ((ARSession) -> Void)?
+    /// The AR session provider for the AR view.
+    private let sessionProvider: ARSessionProvider<ARView>
     
-    /// The proxy.
-    private let proxy: ARSwiftUIViewProxy
-    
-    /// Creates an ARSwiftUIView.
-    /// - Parameter proxy: The provided proxy which will have it's state filled out
-    /// when available by the underlying view.
-    init(proxy: ARSwiftUIViewProxy) {
-        self.proxy = proxy
+    /// Creates an instance with the given session provider.
+    /// - Parameter sessionProvider: The session provider which will have its
+    /// view set when available.
+    public init(sessionProvider: ARSessionProvider<ARView>) {
+        self.sessionProvider = sessionProvider
     }
-    
+}
+
+public extension ARSwiftUIView {
     /// Sets the closure to call when the session's geo-tracking state changes.
     ///
     /// ARKit invokes the callback only for `ARGeoTrackingConfiguration` sessions.
     func onDidChangeGeoTrackingStatus(
         perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
     ) -> Self {
-        var view = self
-        view.onDidChangeGeoTrackingStatusAction = action
-        return view
+        var copy = self
+        copy.onDidChangeGeoTrackingStatusAction = action
+        return copy
     }
     
     /// Sets the closure to call when session's camera tracking state changes.
     func onCameraDidChangeTrackingState(
         perform action: @escaping (ARSession, ARCamera.TrackingState) -> Void
     ) -> Self {
-        var view = self
-        view.onCameraDidChangeTrackingStateAction = action
-        return view
+        var copy = self
+        copy.onCameraDidChangeTrackingStateAction = action
+        return copy
     }
     
     /// Sets the closure to call when underlying scene renders.
     func onDidUpdateFrame(
         perform action: @escaping (ARSession, ARFrame) -> Void
     ) -> Self {
-        var view = self
-        view.onDidUpdateFrameAction = action
-        return view
+        var copy = self
+        copy.onDidUpdateFrameAction = action
+        return copy
     }
     
     /// Sets the closure to call when a new plane anchor has been added to the scene.
     func onAddAnchor(
         perform action: @escaping @MainActor (ARPlaneAnchor) -> Void
     ) -> Self {
-        var view = self
-        view.onAddAnchorAction = action
-        return view
+        var copy = self
+        copy.onAddAnchorAction = action
+        return copy
     }
     
     /// Sets the closure to call when the a plane anchor is updated.
     func onUpdateAnchor(
         perform action: @escaping @MainActor (ARPlaneAnchor) -> Void
     ) -> Self {
-        var view = self
-        view.onUpdateAnchorAction = action
-        return view
+        var copy = self
+        copy.onUpdateAnchorAction = action
+        return copy
+    }
+    
+    /// Sets the closure to call when the session is interrupted.
+    func onSessionWasInterrupted(
+        perform action: @escaping (ARSession) -> Void
+    ) -> Self {
+        var copy = self
+        copy.onSessionWasInterruptedAction = action
+        return copy
+    }
+    
+    /// Sets the closure to call when the session interruption ends.
+    func onSessionInterruptionEnded(
+        perform action: @escaping (ARSession) -> Void
+    ) -> Self {
+        var copy = self
+        copy.onSessionInterruptionEndedAction = action
+        return copy
     }
 }
 
 extension ARSwiftUIView: UIViewRepresentable {
-    func makeUIView(context: Context) -> ARViewType {
-        let arView = ARViewType()
+    public func makeUIView(context: Context) -> ARView {
+        let arView = ARView()
         arView.session.delegate = context.coordinator
-        // Set the AR view on the proxy.
-        proxy.arView = arView
+        sessionProvider.arView = arView
         return arView
     }
     
-    func updateUIView(_ uiView: ARViewType, context: Context) {}
-    
-    func makeCoordinator() -> Coordinator {
-        return .init(
-            onDidChangeGeoTrackingStatusAction: onDidChangeGeoTrackingStatusAction,
-            onCameraDidChangeTrackingStateAction: onCameraDidChangeTrackingStateAction,
-            onDidUpdateFrameAction: onDidUpdateFrameAction,
-            onAddAnchorAction: onAddAnchorAction,
-            onUpdateAnchorAction: onUpdateAnchorAction
-        )
+    public func updateUIView(_: ARView, context: Context) {
+        context.coordinator.arSwiftUIView = self
     }
     
-    class Coordinator: NSObject {
-        let onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
-        let onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
-        let onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-        let onAddAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
-        let onUpdateAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
+    public class Coordinator: NSObject {
+        var arSwiftUIView: ARSwiftUIView
         
-        init(
-            onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?,
-            onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?,
-            onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?,
-            onAddAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?,
-            onUpdateAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
-        ) {
-            self.onDidChangeGeoTrackingStatusAction = onDidChangeGeoTrackingStatusAction
-            self.onCameraDidChangeTrackingStateAction = onCameraDidChangeTrackingStateAction
-            self.onDidUpdateFrameAction = onDidUpdateFrameAction
-            self.onAddAnchorAction = onAddAnchorAction
-            self.onUpdateAnchorAction = onUpdateAnchorAction
+        init(arSwiftUIView: ARSwiftUIView) {
+            self.arSwiftUIView = arSwiftUIView
         }
+    }
+    
+    public func makeCoordinator() -> Coordinator {
+        return .init(arSwiftUIView: self)
     }
 }
 
 extension ARSwiftUIView.Coordinator: ARSessionDelegate {
-    func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
+    public func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
         // Filter new plane anchors to use for horizontal plane visualization.
         let planeAnchors = anchors.compactMap { $0 as? ARPlaneAnchor }
         for anchor in planeAnchors {
-            Task { @MainActor [onAddAnchorAction] in
+            Task { @MainActor [onAddAnchorAction = arSwiftUIView.onAddAnchorAction] in
                 onAddAnchorAction?(anchor)
             }
         }
     }
     
-    func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
+    public func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
         // Filter updated plane anchors to use for horizontal plane visualization.
         let planeAnchors = anchors.compactMap { $0 as? ARPlaneAnchor }
         for anchor in planeAnchors {
-            Task { @MainActor [onUpdateAnchorAction] in
+            Task { @MainActor [onUpdateAnchorAction = arSwiftUIView.onUpdateAnchorAction] in
                 onUpdateAnchorAction?(anchor)
             }
         }
     }
     
-    func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-        onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
+    public func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+        arSwiftUIView.onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
     }
     
-    func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-        onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
+    public func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+        arSwiftUIView.onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
     }
     
-    func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        onDidUpdateFrameAction?(session, frame)
+    public func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        arSwiftUIView.onDidUpdateFrameAction?(session, frame)
+    }
+    
+    public func sessionWasInterrupted(_ session: ARSession) {
+        arSwiftUIView.onSessionWasInterruptedAction?(session)
+    }
+    
+    public func sessionInterruptionEnded(_ session: ARSession) {
+        arSwiftUIView.onSessionWasInterruptedAction?(session)
+    }
+    
+    public func sessionShouldAttemptRelocalization(_ session: ARSession) -> Bool {
+        return true
     }
 }
 
-/// A proxy for the ARSwiftUIView.
+/// A class that provides an AR session from an underlying AR view.
 @MainActor
-class ARSwiftUIViewProxy: NSObject, @preconcurrency ARSessionProviding {
+public class ARSessionProvider<ARViewType: ARView>: NSObject, @preconcurrency ARSessionProviding {
     /// The underlying AR view.
-    /// This is set by the ARSwiftUIView when it is available.
-    fileprivate var arView: ARViewType!
+    public var arView: ARViewType!
     
     /// The AR session.
-    @objc dynamic var session: ARSession {
-        arView.session
-    }
+    @objc public dynamic var session: ARSession { arView.session }
     
     /// The scene.
-    var scene: RealityKit.Scene {
-        arView.scene
-    }
+    public var scene: RealityKit.Scene { arView.scene }
 }
 
-extension ARSwiftUIViewProxy {
-    /// Performs a raycast to get the transformation matrix representing the corresponding
-    /// real-world point for `screenPoint`.
+public extension ARView {
+    /// Performs a raycast to get the transformation matrix representing the
+    /// corresponding real-world point for `screenPoint`.
     ///
-    /// The method returns `nil` when the raycast query or the raycast fails. They can fail due to
-    /// certain limitations, such as reflective or irregular surfaces, poorly lit environment that
-    /// reduces the amount of visible objects, distance between the camera and the object being
-    /// too far, camera occlusion that blocks the rays, etc.
+    /// This method returns `nil` when the raycast query or the raycast fails.
+    /// They can fail due to certain limitations, such as reflective or
+    /// irregular surfaces, poorly lit environment that reduces the amount of
+    /// visible objects, distance between the camera and the object being too
+    /// far, camera occlusion that blocks the rays, etc.
     /// - Parameters:
-    ///   - screenPoint: The screen point to determine the real world transformation matrix from.
+    ///   - screenPoint: The screen point from which to determine the real world
+    ///   transformation matrix.
     ///   - target: The type of surface the raycast can interact with.
-    /// - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
-    @MainActor func raycast(from screenPoint: CGPoint, allowing target: ARRaycastQuery.Target) -> TransformationMatrix? {
-        // Use the `raycast` method on ARView to get the location of `screenPoint`.
-        let results = arView.raycast(
-            from: screenPoint,
-            allowing: target,
-            alignment: .any
-        )
-        // Get the worldTransform from the first result; if there's no worldTransform, return nil.
+    /// - Returns: A transformation matrix representing the real-world point
+    /// corresponding to `screenPoint`.
+    @MainActor func raycast(
+        from screenPoint: CGPoint,
+        allowing target: ARRaycastQuery.Target
+    ) -> TransformationMatrix? {
+        // Use the 'raycast' method to get the location of 'screenPoint'.
+        let results = raycast(from: screenPoint, allowing: target, alignment: .any)
+        // Get the world transform from the first result or return 'nil'.
         guard let worldTransform = results.first?.worldTransform else { return nil }
         
-        // Create our raycast matrix based on the worldTransform location.
-        // Right now we ignore the orientation of the plane that was hit to find the point
-        // since we only use horizontal planes.
-        // If we start supporting vertical planes we will have to stop suppressing the
-        // quaternion rotation to a null rotation (0,0,0,1).
-        let raycastMatrix = TransformationMatrix.normalized(
+        // Create our raycast matrix based on the 'worldTransform' location.
+        // Right now we ignore the orientation of the plane that was hit to find
+        // the point since we only use horizontal planes.
+        //
+        // If we start supporting vertical planes we will have to stop
+        // suppressing the quaternion rotation to a null rotation (0,0,0,1).
+        return .normalized(
             quaternionX: 0,
             quaternionY: 0,
             quaternionZ: 0,
@@ -223,8 +235,6 @@ extension ARSwiftUIViewProxy {
             translationY: Double(worldTransform.columns.3.y),
             translationZ: Double(worldTransform.columns.3.z)
         )
-        
-        return raycastMatrix
     }
 }
 #endif
