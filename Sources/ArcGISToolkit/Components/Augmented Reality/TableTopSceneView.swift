@@ -142,6 +142,7 @@ public struct TableTopSceneView: View {
                 if !coachingOverlayIsHidden {
                     ARCoachingOverlay(goal: .horizontalPlane)
                         .sessionProvider(arSessionProvider)
+                        .activatesAutomatically(false)
                         .active(coachingOverlayIsActive)
                         .allowsHitTesting(false)
                         .ignoresSafeArea()

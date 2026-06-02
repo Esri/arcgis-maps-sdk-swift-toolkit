@@ -31,6 +31,8 @@ struct ARCoachingOverlay {
     var goal: ARCoachingOverlayView.Goal
     /// A Boolean value that indicates if coaching is in progress.
     var active: Bool = false
+    /// A Boolean value that indicates if the coaching overlay activates automatically.
+    var activatesAutomatically: Bool = true
 }
 
 extension ARCoachingOverlay {
@@ -41,6 +43,15 @@ extension ARCoachingOverlay {
     func active(_ active: Bool) -> Self {
         var view = self
         view.active = active
+        return view
+    }
+    
+    
+    /// Controls whether the coaching overlay activates automatically.
+    /// - Parameter activatesAutomatically: A Boolean value that indicates if the coaching overlay activates automatically.
+    func activatesAutomatically(_ activatesAutomatically: Bool) -> Self {
+        var view = self
+        view.activatesAutomatically = activatesAutomatically
         return view
     }
     
@@ -87,7 +98,6 @@ extension ARCoachingOverlay: UIViewRepresentable {
     func makeUIView(context: Context) -> ARCoachingOverlayView {
         let view = ARCoachingOverlayView()
         view.delegate = context.coordinator
-        view.activatesAutomatically = true
         return view
     }
     
