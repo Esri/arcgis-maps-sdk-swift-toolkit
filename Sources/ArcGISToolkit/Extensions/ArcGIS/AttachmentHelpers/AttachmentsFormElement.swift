@@ -141,11 +141,6 @@ extension AttachmentsFormElement {
         return candidate
     }
 }
-//#else
-// Native ArcGIS SDK members are available for design-state properties and
-// methods on AttachmentsFormElement; compatibility shims are intentionally
-// omitted to avoid duplicate symbol declarations.
-//#endif
 
 private extension String {
     /// A filename with the extension removed.
