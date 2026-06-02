@@ -86,7 +86,7 @@ public struct GeometryEditorToolbar: View {
                     .padding(.vertical, stackEdgePadding)
                     .toolbarStackStyle()
                 case .horizontal:
-                    HStack(spacing: 30) {
+                    HStack(spacing: stackSpacing) {
                         controls
                     }
                     .padding(.horizontal, stackEdgePadding)
