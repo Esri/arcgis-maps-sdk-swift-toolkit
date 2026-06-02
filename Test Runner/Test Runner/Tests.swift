@@ -26,6 +26,7 @@ struct Tests: View {
                 NavigationLink("Building Explorer Tests", destination: BuildingExplorerTestViews())
                 NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
                 NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
+                NavigationLink("Geometry Editor Toolbar Tests", destination: GeometryEditorToolbarTestView())
                 NavigationLink("Popup Tests", destination: PopupTestView())
                 NavigationLink("Utility Network Trace Tests", destination: UtilityNetworkTraceTestView())
             }
