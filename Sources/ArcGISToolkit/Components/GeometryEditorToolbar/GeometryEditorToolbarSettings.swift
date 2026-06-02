@@ -82,6 +82,7 @@ private struct SnapSettingsView: View {
                     positions to automatically adjust to guides or nearby geometries.
                     """
             )
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .animation(.default, value: isEnabled)
         .onChange(of: isEnabled) {
@@ -89,7 +90,7 @@ private struct SnapSettingsView: View {
         }
         .onChange(of: ObjectIdentifier(settings), initial: true) {
             // Sets up view's state properties using settings' property values.
-            featureSnappingGroupIsExpanded = settings.isEnabled
+            featureSnappingGroupIsExpanded = settings.snapsToFeatures
             hapticFeedbackIsEnabled = settings.hapticFeedbackIsEnabled
             isEnabled = settings.isEnabled
             rootSourceSettingsModels = settings.sourceSettings.map(
@@ -105,10 +106,11 @@ private struct SnapSettingsView: View {
                     "Haptic Feedback",
                     bundle: .toolkitModule,
                     comment: """
-                        A label for a toggle that enables haptics, which provides tactile feedback 
+                        A label for a toggle that enables haptics, which provides tactile feedback
                         when the geometry editor snaps.
                         """
                 )
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .onChange(of: hapticFeedbackIsEnabled) {
                 settings.hapticFeedbackIsEnabled = hapticFeedbackIsEnabled
@@ -119,10 +121,11 @@ private struct SnapSettingsView: View {
                     "Snap to Geometry Guides",
                     bundle: .toolkitModule,
                     comment: """
-                        A label for a toggle that enables snapping to geometry guides, which are 
+                        A label for a toggle that enables snapping to geometry guides, which are
                         visual aids that help align geometries during editing.
                         """
                 )
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .onChange(of: snapsToGeometryGuides) {
                 settings.snapsToGeometryGuides = snapsToGeometryGuides
@@ -144,6 +147,7 @@ private struct SnapSettingsView: View {
                                 vertices and edges of existing features to be snapped to.
                                 """
                         )
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .onChange(of: snapsToFeatures) {
                         settings.snapsToFeatures = snapsToFeatures
@@ -153,6 +157,7 @@ private struct SnapSettingsView: View {
                             featureSnappingGroupIsExpanded = snapsToFeatures
                         }
                     }
+                    .catalystPadding(4)
                 }
             }
         }
@@ -174,7 +179,7 @@ private struct SnapSourceSettingsToggle: View {
                     "Rules limit snapping.",
                     bundle: .toolkitModule,
                     comment: """
-                        A label indicating snapping is limited by snap rules, which are constraints 
+                        A label indicating snapping is limited by snap rules, which are constraints
                         that restrict where snapping can occur.
                         """
                 )
@@ -184,7 +189,7 @@ private struct SnapSourceSettingsToggle: View {
                     "Rules prevent snapping.",
                     bundle: .toolkitModule,
                     comment: """
-                        A label indicating snapping is prevented by snap rules, which are 
+                        A label indicating snapping is prevented by snap rules, which are
                         constraints that restrict where snapping can occur.
                         """
                 )
