@@ -48,7 +48,8 @@ extension ARCoachingOverlay {
     
     
     /// Controls whether the coaching overlay activates automatically.
-    /// - Parameter activatesAutomatically: A Boolean value that indicates if the coaching overlay activates automatically.
+    /// - Parameter activatesAutomatically: A Boolean value that
+    /// indicates if the coaching overlay activates automatically.
     func activatesAutomatically(_ activatesAutomatically: Bool) -> Self {
         var view = self
         view.activatesAutomatically = activatesAutomatically
