@@ -109,9 +109,7 @@ public struct GeometryEditorToolbar: View {
         DeleteButton()
         UndoButton()
         RedoButton()
-        if !model.geometryEditor.snapSettings.sourceSettings.isEmpty {
-            SettingsButton()
-        }
+        SnapSettingsButton()
     }
 }
 
@@ -248,29 +246,34 @@ private struct UndoButton: View {
     }
 }
 
-/// A button for presenting `GeometryEditorToolbar` settings.
-private struct SettingsButton: View {
+/// A button for presenting a settings view for configuring snapping.
+private struct SnapSettingsButton: View {
+    /// The model for the parent geometry editor toolbar.
+    @Environment(GeometryEditorToolbarModel.self) private var model
+    
     /// A Boolean value indicating whether the settings view is presented.
     @State private var isShowingSettings = false
     
     var body: some View {
-        Button {
-            isShowingSettings.toggle()
-        } label: {
-            Label {
-                Text(
-                    "Settings",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to show geometry editor toolbar settings."
-                )
-            } icon: {
-                Image(systemName: "gear")
+        if !model.geometryEditor.snapSettings.sourceSettings.isEmpty {
+            Button {
+                isShowingSettings.toggle()
+            } label: {
+                Label {
+                    Text(
+                        "Settings",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to show settings for configuring snapping."
+                    )
+                } icon: {
+                    Image(systemName: "gear")
+                }
             }
-        }
-        .sheet(isPresented: $isShowingSettings) {
-            GeometryEditorToolbarSettings()
-            // Needed to override the font set in toolbarStackStyle.
-                .font(nil)
+            .sheet(isPresented: $isShowingSettings) {
+                SnapSettingsView(settings: model.geometryEditor.snapSettings)
+                // Needed to override the font set in toolbarStackStyle.
+                    .font(nil)
+            }
         }
     }
 }
