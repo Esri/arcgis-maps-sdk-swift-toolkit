@@ -38,8 +38,8 @@ import SwiftUI
 /// the toolbar without built-in layout or styling, so you can show it in a system toolbar or apply
 /// your own layout and styling to the controls.
 ///
-/// The settings button is only shown if the geometry editor has snap settings with source
-/// settings before the toolbar appears.
+/// The settings button is only shown when the geometry editor has snap settings with non-empty
+/// source settings.
 ///
 /// **Associated Types**
 ///
