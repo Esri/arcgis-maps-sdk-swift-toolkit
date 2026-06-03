@@ -20,8 +20,6 @@ struct SnapSettingsView: View {
     /// The snap settings to configure.
     let settings: SnapSettings
     
-    /// A Boolean value indicating whether the settings have haptic feedback enabled.
-    @State private var hapticFeedbackIsEnabled = false
     /// A Boolean value indicating whether the settings are enabled.
     @State private var snappingIsEnabled = false
     /// A Boolean value indicating whether the settings allow snapping to geometry guides.
@@ -47,21 +45,6 @@ struct SnapSettingsView: View {
                 }
                 
                 if snappingIsEnabled {
-                    Toggle(isOn: $hapticFeedbackIsEnabled) {
-                        Text(
-                            "Haptic Feedback",
-                            bundle: .toolkitModule,
-                            comment: """
-                                A label for a toggle that enables haptics, which provides tactile
-                                feedback when the geometry editor snaps.
-                                """
-                        )
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .onChange(of: hapticFeedbackIsEnabled) {
-                        settings.hapticFeedbackIsEnabled = hapticFeedbackIsEnabled
-                    }
-                    
                     Toggle(isOn: $snapsToGeometryGuides) {
                         Text(
                             "Snap to Geometry Guides",
@@ -84,7 +67,6 @@ struct SnapSettingsView: View {
             }
             .onChange(of: ObjectIdentifier(settings), initial: true) {
                 // Sets up view's state properties using settings' property values.
-                hapticFeedbackIsEnabled = settings.hapticFeedbackIsEnabled
                 snappingIsEnabled = settings.isEnabled
                 snapsToGeometryGuides = settings.snapsToGeometryGuides
             }
