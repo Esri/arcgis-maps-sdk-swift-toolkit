@@ -257,7 +257,7 @@ extension AttachmentsFeatureElementView {
             comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
         )
     }
-
+    
     /// A message indicating the minimum number of attachments required.
     private var minimumAttachmentCountMessage: String {
         guard formElement != nil else { return "" }
@@ -267,23 +267,23 @@ extension AttachmentsFeatureElementView {
             comment: "A message indicating the minimum number of attachments required for a form element."
         )
     }
-
+    
     /// A Boolean value indicating whether users can add more attachments.
     private func hasReachedMaximumAttachmentCount(_ count: Int) -> Bool {
         guard effectiveMaxAttachmentCount != .max else { return false }
         return count >= Int(effectiveMaxAttachmentCount)
     }
-
+    
     /// A Boolean value indicating whether the element is below its minimum attachment count.
     private func isBelowMinimumAttachmentCount(_ count: Int) -> Bool {
         count < Int(effectiveMinAttachmentCount)
     }
-
+    
     /// A Boolean value indicating whether users can delete attachments.
     private func canDeleteAttachments(_ count: Int) -> Bool {
         count > Int(effectiveMinAttachmentCount)
     }
-
+    
     /// The size of thumbnail images, based on the attachment display type
     /// and the current size class of the view.
     private var thumbnailSize: CGSize {
@@ -305,22 +305,22 @@ extension AttachmentsFeatureElementView {
     private var formElement: AttachmentsFormElement? {
         featureElement as? AttachmentsFormElement
     }
-
+    
     /// A Boolean value indicating whether attachment filenames should be shown.
     private var displaysFilename: Bool {
         formElement?.displayFilename ?? true
     }
-
+    
     /// A Boolean value indicating whether users can rename attachments.
     private var allowUserRename: Bool {
         formElement?.allowUserRename ?? true
     }
-
+    
     /// Effective minimum attachment count for preview and validation behavior.
     private var effectiveMinAttachmentCount: UInt32 {
         return formElement?.minAttachmentCount ?? 0
     }
-
+    
     /// Effective maximum attachment count for preview and validation behavior.
     private var effectiveMaxAttachmentCount: UInt32 {
         return formElement?.maxAttachmentCount ?? .max

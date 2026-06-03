@@ -186,7 +186,7 @@ This will eventually be available on `element`.
 #endif
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
-
+            
             if element.maxAttachmentCount != .max {
                 let attachmentsCount: Int
                 do {

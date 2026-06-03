@@ -19,7 +19,7 @@ import SwiftUI
 struct AttachmentList: View {
     /// The attachment models displayed in the list.
     var attachmentModels: [AttachmentModel]
-
+    
     /// A Boolean value indicating whether attachment filenames are displayed.
     var displaysFilename = true
     
@@ -37,7 +37,7 @@ struct AttachmentList: View {
 struct AttachmentRow: View  {
     /// The model representing the attachment to display.
     @ObservedObject var attachmentModel: AttachmentModel
-
+    
     /// A Boolean value indicating whether attachment filenames are displayed.
     let displaysFilename: Bool
     

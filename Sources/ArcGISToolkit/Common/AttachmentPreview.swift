@@ -31,7 +31,7 @@ struct AttachmentPreview: View {
     
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
-
+    
     /// The maximum attachment download size limit.
     private let attachmentDownloadSizeLimit = Measurement(
         value: 999,
@@ -43,16 +43,16 @@ struct AttachmentPreview: View {
     
     /// A Boolean value which determines if the attachment editing controls should be disabled.
     private let editControlsDisabled: Bool
-
+    
     /// A Boolean value indicating whether users can rename attachments.
     private let allowUserRename: Bool
-
+    
     /// A Boolean value indicating whether users can delete attachments.
     private let allowDeleteAttachments: Bool
-
+    
     /// A Boolean value indicating whether attachment filenames are displayed.
     private let displaysFilename: Bool
-
+    
     /// The last locally added attachment.
     private let lastAttachmentAdded: AttachmentModel?
     
@@ -95,7 +95,7 @@ struct AttachmentPreview: View {
         .cellBaseWidth(proposedCellSize.width)
         .leftScrollTrigger(lastAttachmentAdded?.id)
     }
-
+    
     /// - Note: Contextual actions are disabled for empty attachments as deletion and rename
     /// operations cannot be applied successfully to the ServiceGeodatabase or ServiceFeatureTable.
     ///
@@ -109,34 +109,34 @@ struct AttachmentPreview: View {
                 cellSize: size,
                 displaysFilename: displaysFilename
             )
-                .contextMenu {
-                    if !editControlsDisabled && !attachmentModel.attachment.measuredSize.value.isZero {
-                        if allowUserRename,
-                           attachmentModel.attachment.measuredSize <= attachmentDownloadSizeLimit {
-                            Button {
-                                renamedAttachmentModel = attachmentModel
-                                renameDialogueIsShowing = true
-                                if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
-                                    newAttachmentName = String(attachmentModel.name[..<separatorIndex])
-                                } else {
-                                    newAttachmentName = attachmentModel.name
-                                }
-                            } label: {
-                                Label {
-                                    Text.rename
-                                } icon: {
-                                    Image(systemName: "pencil")
-                                }
+            .contextMenu {
+                if !editControlsDisabled && !attachmentModel.attachment.measuredSize.value.isZero {
+                    if allowUserRename,
+                       attachmentModel.attachment.measuredSize <= attachmentDownloadSizeLimit {
+                        Button {
+                            renamedAttachmentModel = attachmentModel
+                            renameDialogueIsShowing = true
+                            if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
+                                newAttachmentName = String(attachmentModel.name[..<separatorIndex])
+                            } else {
+                                newAttachmentName = attachmentModel.name
                             }
-                        }
-                        if allowDeleteAttachments {
-                            Button.delete {
-                                deletedAttachmentModel = attachmentModel
+                        } label: {
+                            Label {
+                                Text.rename
+                            } icon: {
+                                Image(systemName: "pencil")
                             }
                         }
                     }
-
+                    if allowDeleteAttachments {
+                        Button.delete {
+                            deletedAttachmentModel = attachmentModel
+                        }
+                    }
                 }
+                
+            }
         }
         .alert(
             Text(
@@ -192,7 +192,7 @@ struct AttachmentPreview: View {
         
         /// The size of the cell.
         let cellSize: CGSize
-
+        
         /// A Boolean value indicating whether attachment filenames are displayed.
         let displaysFilename: Bool
         
@@ -273,7 +273,7 @@ struct AttachmentPreview: View {
 struct ThumbnailViewFooter: View {
     /// The popup media to display.
     @ObservedObject var attachmentModel: AttachmentModel
-
+    
     /// A Boolean value indicating whether attachment filenames are displayed.
     let displaysFilename: Bool
     
@@ -283,7 +283,7 @@ struct ThumbnailViewFooter: View {
     private var shouldShowFooter: Bool {
         displaysFilename && !attachmentModel.name.isEmpty
     }
-
+    
     var body: some View {
         if shouldShowFooter {
             ZStack {

@@ -61,14 +61,14 @@ extension AttachmentsFormElement {
     var allowUserRename: Bool {
         true
     }
-
+    
     /// A string to identify the attachment(s).
     ///
     /// This is a compatibility alias for ``keyword``.
     var attachmentKeyword: String {
         keyword
     }
-
+    
     /// Defines how existing attachments are associated with this element.
     ///
     /// This value is currently derived from the design default until runtime
@@ -76,7 +76,7 @@ extension AttachmentsFormElement {
     var attachmentAssociationType: AttachmentAssociationType {
         .exact
     }
-
+    
     /// True if attachment file names should be displayed.
     ///
     /// This value is currently derived from the design default until runtime
@@ -84,7 +84,7 @@ extension AttachmentsFormElement {
     var displayFilename: Bool {
         false
     }
-
+    
     /// The maximum number of attachments allowed for this element.
     ///
     /// ``UInt32.max`` is treated as no maximum.
@@ -93,7 +93,7 @@ extension AttachmentsFormElement {
     var maxAttachmentCount: UInt32 {
         UInt32.max
     }
-
+    
     /// The minimum number of attachments required for this element.
     ///
     /// This value is currently derived from the design default until runtime
@@ -101,7 +101,7 @@ extension AttachmentsFormElement {
     var minAttachmentCount: UInt32 {
         .zero
     }
-
+    
     /// The input user interface to use for the element.
     ///
     /// This value is currently derived from the design default until runtime
@@ -109,7 +109,7 @@ extension AttachmentsFormElement {
     var input: Any? {
         nil
     }
-
+    
     /// True if uploaded attachments preserve their original file name.
     ///
     /// This value is currently derived from the design default until runtime
@@ -117,7 +117,7 @@ extension AttachmentsFormElement {
     var useOriginalFilename: Bool {
         true
     }
-
+    
     /// An array of validation errors for this element.
     ///
     /// This value is currently derived from the design default until runtime
@@ -125,7 +125,7 @@ extension AttachmentsFormElement {
     var validationErrors: [Error] {
         []
     }
-
+    
     /// Generates the attachment filename using the filename expression.
     ///
     /// This currently returns a toolkit-generated default name until runtime
