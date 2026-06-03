@@ -123,8 +123,7 @@ struct AttachmentsFeatureElementView: View {
         switch featureElement.attachmentsDisplayType {
         case .list:
             AttachmentList(
-                attachmentModels: attachmentModels,
-                displaysFilename: displaysFilename
+                attachmentModels: attachmentModels
             )
         case .preview:
             AttachmentPreview(
@@ -153,8 +152,7 @@ struct AttachmentsFeatureElementView: View {
                 )
             } else {
                 AttachmentList(
-                    attachmentModels: attachmentModels,
-                    displaysFilename: displaysFilename
+                    attachmentModels: attachmentModels
                 )
             }
         }

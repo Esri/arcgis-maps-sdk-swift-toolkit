@@ -15,16 +15,6 @@
 import ArcGIS
 import Foundation
 
-/// Defines how existing attachments are associated with an attachments form element.
-enum AttachmentAssociationType: Sendable {
-    /// Associate all existing attachments with the element.
-    case any
-    /// Associate only attachments that exactly match the element keyword.
-    case exact
-    /// Associate attachments that exactly match the keyword and attachments without a keyword.
-    case exactOrNone
-}
-
 extension AttachmentsFormElement: AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
     ///
@@ -52,6 +42,10 @@ extension AttachmentsFormElement: AttachmentsFeatureElement {
     }
 }
 
+#warning("""
+Prototype only. Do not merge to main.
+This will eventually be available on `element`.
+""")
 
 extension AttachmentsFormElement {
     /// True if the user can rename attachments added through this element.
@@ -67,14 +61,6 @@ extension AttachmentsFormElement {
     /// This is a compatibility alias for ``keyword``.
     var attachmentKeyword: String {
         keyword
-    }
-    
-    /// Defines how existing attachments are associated with this element.
-    ///
-    /// This value is currently derived from the design default until runtime
-    /// support for this property is available.
-    var attachmentAssociationType: AttachmentAssociationType {
-        .exact
     }
     
     /// True if attachment file names should be displayed.

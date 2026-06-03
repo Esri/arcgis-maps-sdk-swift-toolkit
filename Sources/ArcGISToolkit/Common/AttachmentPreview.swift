@@ -135,7 +135,6 @@ struct AttachmentPreview: View {
                         }
                     }
                 }
-                
             }
         }
         .alert(
