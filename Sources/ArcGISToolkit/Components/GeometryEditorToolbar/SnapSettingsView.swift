@@ -32,7 +32,7 @@ struct SnapSettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Toggle(isOn: $snappingIsEnabled) {
+                Toggle(isOn: $snappingIsEnabled.animation()) {
                     Text(
                         "Enable Snapping",
                         bundle: .toolkitModule,
@@ -64,7 +64,7 @@ struct SnapSettingsView: View {
                         settings.snapsToGeometryGuides = snapsToGeometryGuides
                     }
                     
-                    Toggle(isOn: $snapsToFeatures) {
+                    Toggle(isOn: $snapsToFeatures.animation()) {
                         Text(
                             "Snap to Features",
                             bundle: .toolkitModule,
