@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
-import ArcGISToolkit
+@testable import ArcGISToolkit
 import SwiftUI
 
 struct ExampleMapView: View {
@@ -30,7 +30,6 @@ struct ExampleMapView: View {
         
         return map
     }()
-    @State private var selectedTool = GeometryEditorToolbar.Tool.vertex
     
     private enum ViewState: Equatable {
         case loading, identifying(CGPoint)
@@ -67,8 +66,6 @@ struct ExampleMapView: View {
                 }
                 .overlay(alignment: .topTrailing) {
                     GeometryEditorToolbar(geometryEditor: featureEditorModel.geometryEditor)
-                        .orientation(.vertical)
-                        .tools(GeometryEditorToolbar.Tool.allCases, selection: $selectedTool)
                         .padding()
                 }
                 .task(id: viewState) {
