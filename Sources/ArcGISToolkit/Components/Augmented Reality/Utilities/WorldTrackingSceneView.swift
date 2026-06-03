@@ -19,11 +19,13 @@ import ArcGIS
 import RealityKit
 
 /// A scene view that provides an augmented reality world scale experience using world-tracking.
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 struct WorldTrackingSceneView: View {
     /// A Boolean value indicating if the camera was initially set.
     @Binding var initialCameraIsSet: Bool
     /// The view model for the calibration view.
-    @ObservedObject private var calibrationViewModel: WorldScaleCalibrationViewModel
+    @Bindable private var calibration: Calibration
     /// The configuration for the AR session.
     private let configuration: ARConfiguration
     /// The distance threshold in meters between camera and device location to reset the
@@ -58,7 +60,7 @@ struct WorldTrackingSceneView: View {
     /// - Parameters:
     ///   - arViewProxy: The proxy for the ARSwiftUIView.
     ///   - cameraController: The camera controller that will be set on the scene view.
-    ///   - calibrationViewModel: The view model for accessing the calibration values.
+    ///   - calibration: The view model for accessing the calibration values.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
     ///   of `nil` means that no data will be clipped.
     ///   - distanceThreshold: The distance threshold for the camera to be re-aligned with the GPS.
@@ -71,7 +73,7 @@ struct WorldTrackingSceneView: View {
     init(
         arViewProxy: ARSessionProvider<ARView>,
         cameraController: TransformationMatrixCameraController,
-        calibrationViewModel: WorldScaleCalibrationViewModel,
+        calibration: Calibration,
         clippingDistance: Double?,
         distanceThreshold: Double = 2.0,
         initialCameraIsSet: Binding<Bool>,
@@ -82,7 +84,7 @@ struct WorldTrackingSceneView: View {
     ) {
         self.arViewProxy = arViewProxy
         self.cameraController = cameraController
-        self.calibrationViewModel = calibrationViewModel
+        self.calibration = calibration
         self.cameraController.clippingDistance = clippingDistance
         self.distanceThreshold = distanceThreshold
         _initialCameraIsSet = initialCameraIsSet
@@ -196,8 +198,8 @@ struct WorldTrackingSceneView: View {
             cameraController.originCamera = Camera(
                 latitude: location.position.y,
                 longitude: location.position.x,
-                altitude: altitude + calibrationViewModel.totalElevationCorrection,
-                heading: calibrationViewModel.totalHeadingCorrection,
+                altitude: altitude + calibration.totalElevationCorrection,
+                heading: calibration.totalHeadingCorrection,
                 pitch: 90,
                 roll: 0
             )
