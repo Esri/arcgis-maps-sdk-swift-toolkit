@@ -46,8 +46,7 @@ extension ARCoachingOverlay {
         return view
     }
     
-    
-    /// Controls whether the coaching overlay activates automatically.
+    /// Sets whether the coaching overlay activates automatically.
     /// - Parameter activatesAutomatically: A Boolean value that
     /// indicates if the coaching overlay activates automatically.
     func activatesAutomatically(_ activatesAutomatically: Bool) -> Self {
@@ -108,28 +107,30 @@ extension ARCoachingOverlay: UIViewRepresentable {
         uiView.goal = goal
     }
     
-    class Coordinator: NSObject, ARCoachingOverlayViewDelegate {
+    class Coordinator: NSObject {
         var coachingOverlay: ARCoachingOverlay
         
         init(coachingOverlay: ARCoachingOverlay) {
             self.coachingOverlay = coachingOverlay
         }
-        
-        func coachingOverlayViewWillActivate(_ coachingOverlayView: ARCoachingOverlayView) {
-            coachingOverlay.onCoachingOverlayActivateAction?(coachingOverlayView)
-        }
-        
-        func coachingOverlayViewDidDeactivate(_ coachingOverlayView: ARCoachingOverlayView) {
-            coachingOverlay.onCoachingOverlayDeactivateAction?(coachingOverlayView)
-        }
-        
-        func coachingOverlayViewDidRequestSessionReset(_ coachingOverlayView: ARCoachingOverlayView) {
-            coachingOverlay.onCoachingOverlayRequestSessionResetAction?(coachingOverlayView)
-        }
     }
     
     func makeCoordinator() -> Coordinator {
         return .init(coachingOverlay: self)
+    }
+}
+
+extension ARCoachingOverlay.Coordinator: ARCoachingOverlayViewDelegate {
+    func coachingOverlayViewWillActivate(_ coachingOverlayView: ARCoachingOverlayView) {
+        coachingOverlay.onCoachingOverlayActivateAction?(coachingOverlayView)
+    }
+    
+    func coachingOverlayViewDidDeactivate(_ coachingOverlayView: ARCoachingOverlayView) {
+        coachingOverlay.onCoachingOverlayDeactivateAction?(coachingOverlayView)
+    }
+    
+    func coachingOverlayViewDidRequestSessionReset(_ coachingOverlayView: ARCoachingOverlayView) {
+        coachingOverlay.onCoachingOverlayRequestSessionResetAction?(coachingOverlayView)
     }
 }
 #endif

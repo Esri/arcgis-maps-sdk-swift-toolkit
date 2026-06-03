@@ -139,21 +139,21 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 extension ARSwiftUIView.Coordinator: ARSessionDelegate {
     public func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
-        // Filter new plane anchors to use for horizontal plane visualization.
-        let planeAnchors = anchors.compactMap { $0 as? ARPlaneAnchor }
-        for anchor in planeAnchors {
+        for anchor in anchors {
+            // Filter new plane anchors to use for horizontal plane visualization.
+            guard let planeAnchor = anchor as? ARPlaneAnchor else { continue }
             Task { @MainActor [onAddAnchorAction = arSwiftUIView.onAddAnchorAction] in
-                onAddAnchorAction?(anchor)
+                onAddAnchorAction?(planeAnchor)
             }
         }
     }
     
     public func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
-        // Filter updated plane anchors to use for horizontal plane visualization.
-        let planeAnchors = anchors.compactMap { $0 as? ARPlaneAnchor }
-        for anchor in planeAnchors {
+        for anchor in anchors {
+            // Filter updated plane anchors to use for horizontal plane visualization.
+            guard let planeAnchor = anchor as? ARPlaneAnchor else { continue }
             Task { @MainActor [onUpdateAnchorAction = arSwiftUIView.onUpdateAnchorAction] in
-                onUpdateAnchorAction?(anchor)
+                onUpdateAnchorAction?(planeAnchor)
             }
         }
     }
