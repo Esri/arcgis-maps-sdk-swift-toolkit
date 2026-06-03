@@ -23,9 +23,9 @@ class ScalebarTests: XCTestCase {
         let x: Double
         let y: Double
         let spatialReference: SpatialReference = .webMercator
-        let style: ScalebarStyle
+        let style: Scalebar.Style
         let maxWidth: Double
-        let units: ScalebarUnits
+        let units: Scalebar.Units
         let scale: Double
         let unitsPerPoint: Double
         var useGeodeticCalculations: Bool = true

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		007CF8DC2FC66BA600005B3F /* GeometryEditorToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CF8DB2FC66BA600005B3F /* GeometryEditorToolbarTests.swift */; };
+		007CF8DE2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CF8DD2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift */; };
 		75022F962A7AC9A0000ED7B7 /* FeatureFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */; };
 		75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */; };
 		7552A7542A573CBB0023DA5A /* TestRunnerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7532A573CBB0023DA5A /* TestRunnerApp.swift */; };
@@ -40,7 +42,7 @@
 		8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */; };
 		8A9845772C3F444B001CCE22 /* AttachmentCameraControllerTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */; platformFilters = (ios, maccatalyst, ); };
 		8A99A0B42F20578B0021819A /* XCTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0332232F20562600D5B463 /* XCTestCase.swift */; };
-		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; };
+		8A9F898F2B5B4F0A0027215E /* FeatureFormViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormViewTestView.swift */; };
 		8AC5AA652E428CB000F0F0E0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5AA642E428CAC00F0F0E0 /* UserDefaults.swift */; };
 		8AC5AA692E428D3E00F0F0E0 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5AA682E428D3C00F0F0E0 /* Binding.swift */; };
 		8AF7DF432F52329B00174515 /* XCUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF7DF412F52324000174515 /* XCUIElement.swift */; };
@@ -79,6 +81,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		007CF8DB2FC66BA600005B3F /* GeometryEditorToolbarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryEditorToolbarTests.swift; sourceTree = "<group>"; };
+		007CF8DD2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryEditorToolbarTestView.swift; sourceTree = "<group>"; };
 		75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFormViewTests.swift; sourceTree = "<group>"; };
 		75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase5View.swift; sourceTree = "<group>"; };
 		7552A7502A573CBB0023DA5A /* Test Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Test Runner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,7 +119,7 @@
 		8A9419632E035FED003C7D10 /* AppSecrets.swift.masque */ = {isa = PBXFileReference; lastKnownFileType = text; name = AppSecrets.swift.masque; path = ../AppSecrets.swift.masque; sourceTree = "<group>"; };
 		8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCameraControllerTests.swift; sourceTree = "<group>"; };
 		8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCameraControllerTestView.swift; sourceTree = "<group>"; };
-		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; };
+		8A9F898E2B5B4F0A0027215E /* FeatureFormViewTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormViewTestView.swift; sourceTree = "<group>"; };
 		8AC5AA642E428CAC00F0F0E0 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		8AC5AA682E428D3C00F0F0E0 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		8AF7DF412F52324000174515 /* XCUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUIElement.swift; sourceTree = "<group>"; };
@@ -205,6 +209,7 @@
 				797951832FA5404B000E537C /* BuildingExplorerTests.swift */,
 				75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */,
 				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
+				007CF8DB2FC66BA600005B3F /* GeometryEditorToolbarTests.swift */,
 				D7FDFCBB2DF208BD00ED91C1 /* PopupViewTests.swift */,
 				8A3982E32E39428500A8F1AF /* UtilityNetworkTraceTests.swift */,
 			);
@@ -228,12 +233,13 @@
 		75B236672A5CB32700AEFACE /* TestViews */ = {
 			isa = PBXGroup;
 			children = (
-				7584B7532B1A798B00772AB7 /* BookmarksTestViews */,
 				8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */,
 				75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */,
+				7584B7532B1A798B00772AB7 /* BookmarksTestViews */,
 				797951892FA5560B000E537C /* BuildingExplorerTestViews */,
-				8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */,
+				8A9F898E2B5B4F0A0027215E /* FeatureFormViewTestView.swift */,
 				75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */,
+				007CF8DD2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift */,
 				D7FDFCBD2DF2090300ED91C1 /* PopupTestView.swift */,
 				8A3982E12E39393500A8F1AF /* UtilityNetworkTraceTestView.swift */,
 			);
@@ -463,11 +469,12 @@
 				797951912FA56CAC000E537C /* BuildingExplorerTestCase4View.swift in Sources */,
 				7584B7572B1A7AF100772AB7 /* BookmarksTestCase2View.swift in Sources */,
 				797951882FA549C1000E537C /* BuildingExplorerTestCase1View.swift in Sources */,
-				8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */,
+				8A9F898F2B5B4F0A0027215E /* FeatureFormViewTestView.swift in Sources */,
 				8A1138132BC7407D007E0BFB /* BookmarksTestCase6View.swift in Sources */,
 				79A0AB152FA8F89B001C81C8 /* BuildingExplorerTestData.swift in Sources */,
 				8AC5AA652E428CB000F0F0E0 /* UserDefaults.swift in Sources */,
 				7979518F2FA566FB000E537C /* BuildingExplorerTestCase3View.swift in Sources */,
+				007CF8DE2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift in Sources */,
 				7584B75B2B1A824300772AB7 /* BookmarksTestCase4View.swift in Sources */,
 				D7FDFCBE2DF2090300ED91C1 /* PopupTestView.swift in Sources */,
 				75B236692A5CB49B00AEFACE /* BasemapGalleryTestView.swift in Sources */,
@@ -487,6 +494,7 @@
 				797951842FA54050000E537C /* BuildingExplorerTests.swift in Sources */,
 				8A3982E42E3942A100A8F1AF /* UtilityNetworkTraceTests.swift in Sources */,
 				8AF7DF432F52329B00174515 /* XCUIElement.swift in Sources */,
+				007CF8DC2FC66BA600005B3F /* GeometryEditorToolbarTests.swift in Sources */,
 				8A99A0B42F20578B0021819A /* XCTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
