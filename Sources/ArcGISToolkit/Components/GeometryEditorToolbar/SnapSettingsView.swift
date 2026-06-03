@@ -20,8 +20,12 @@ struct SnapSettingsView: View {
     /// The snap settings to configure.
     let settings: SnapSettings
     
+    /// The view models for the root `SnapSourceSettingsToggle` views in the outline group.
+    @State private var rootSourceSettingsModels: [SnapSourceSettingsToggle.Model] = []
     /// A Boolean value indicating whether the settings are enabled.
     @State private var snappingIsEnabled = false
+    /// A Boolean value indicating whether the settings allow snapping to features.
+    @State private var snapsToFeatures = false
     /// A Boolean value indicating whether the settings allow snapping to geometry guides.
     @State private var snapsToGeometryGuides = false
     
@@ -60,14 +64,46 @@ struct SnapSettingsView: View {
                         settings.snapsToGeometryGuides = snapsToGeometryGuides
                     }
                     
-                    if !settings.sourceSettings.isEmpty {
-                        FeatureSnappingGroup(settings: settings)
+                    Toggle(isOn: $snapsToFeatures) {
+                        Text(
+                            "Snap to Features",
+                            bundle: .toolkitModule,
+                            comment: """
+                                A label for a toggle that enables snapping to features, which allows
+                                vertices and edges of existing features to be snapped to.
+                                """
+                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .onChange(of: snapsToFeatures) {
+                        settings.snapsToFeatures = snapsToFeatures
+                    }
+                    
+                    if snapsToFeatures {
+                        Section {
+                            OutlineGroup(rootSourceSettingsModels, children: \.children) { model in
+                                SnapSourceSettingsToggle(model: model)
+                            }
+                        } header: {
+                            Text(
+                                "Snap Sources",
+                                bundle: .toolkitModule,
+                                comment: """
+                                    A title for a list section containing toggles for controlling
+                                    the sources that can be snapped to.
+                                    """
+                            )
+                        }
                     }
                 }
             }
             .onChange(of: ObjectIdentifier(settings), initial: true) {
                 // Sets up view's state properties using settings' property values.
+                rootSourceSettingsModels = settings.sourceSettings.map(
+                    SnapSourceSettingsToggle.Model.init(settings:)
+                )
                 snappingIsEnabled = settings.isEnabled
+                snapsToFeatures = settings.snapsToFeatures
                 snapsToGeometryGuides = settings.snapsToGeometryGuides
             }
             .navigationTitle(
@@ -86,57 +122,6 @@ struct SnapSettingsView: View {
                     DismissButton(kind: .close)
                 }
             }
-        }
-    }
-}
-
-/// A view for configuring feature snapping on `SnapSettings`.
-private struct FeatureSnappingGroup: View {
-    /// The snap settings to configure.
-    let settings: SnapSettings
-    
-    /// A Boolean value indicating whether the disclosure group is expanded.
-    @State private var groupIsExpanded = false
-    /// The view models for the root `SnapSourceSettingsToggle` views in the outline group.
-    @State private var rootSourceSettingsModels: [SnapSourceSettingsToggle.Model] = []
-    /// A Boolean value indicating whether the settings allow snapping to features.
-    @State private var snapsToFeatures = false
-    
-    var body: some View {
-        DisclosureGroup(isExpanded: $groupIsExpanded) {
-            OutlineGroup(rootSourceSettingsModels, children: \.children) { model in
-                SnapSourceSettingsToggle(model: model)
-            }
-            .disabled(!snapsToFeatures)
-        } label: {
-            Toggle(isOn: $snapsToFeatures) {
-                Text(
-                    "Snap to Features",
-                    bundle: .toolkitModule,
-                    comment: """
-                        A label for a toggle that enables snapping to features, which allows
-                        vertices and edges of existing features to be snapped to.
-                        """
-                )
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .onChange(of: snapsToFeatures) {
-                settings.snapsToFeatures = snapsToFeatures
-                
-                // Expands/collapses the disclosure group when the toggle is used.
-                withAnimation {
-                    groupIsExpanded = snapsToFeatures
-                }
-            }
-            .catalystPadding(4)
-        }
-        .onChange(of: ObjectIdentifier(settings), initial: true) {
-            // Sets up view's state properties using settings' property values.
-            groupIsExpanded = settings.snapsToFeatures
-            rootSourceSettingsModels = settings.sourceSettings.map(
-                SnapSourceSettingsToggle.Model.init(settings:)
-            )
-            snapsToFeatures = settings.snapsToFeatures
         }
     }
 }
