@@ -48,11 +48,25 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
+    /// <#Description#>
+    @State private var selectedInput: _AttachmentsFormInput?
+    
 #warning("""
 Prototype only. Do not merge to main. 
 This will eventually be available on `element`.
 """)
-    @State private var imageInput: _ImageAttachmentsFormInput?
+    @State private var inputs: [_AttachmentsFormInput] = [
+        _AudioFormInput(),
+        _DocumentFormInput(),
+        _ImageFormInput(),
+        _VideoFormInput()
+    ]
+    
+#if os(visionOS)
+    let isVision = true
+#else
+    let isVision = false
+#endif
     
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
@@ -74,17 +88,44 @@ This will eventually be available on `element`.
         }
     }
     
-    private func takePhotoOrVideoButton() -> Button<some View> {
+    private func takeAudioButton(input: _AudioFormInput) -> some View {
+        Button {
+            selectedInput = input
+        } label: {
+            Text(takeAudioLabel)
+            Image(systemName: "microphone.fill")
+        }
+        .disabled(true)
+    }
+    
+    private func takePhotoButton(input: _ImageFormInput) -> some View {
         Button {
             if cameraRequester.authorizationStatus == .authorized {
                 cameraControllerIsPresented = true
+                selectedInput = input
             } else {
                 cameraRequester.request()
             }
         } label: {
-            Text(cameraButtonLabel)
-            Image(systemName: "camera")
+            Text(takePhotoLabel)
+            Image(systemName: "camera.fill")
         }
+        .disabled(isVision)
+    }
+    
+    private func takeVideoButton(input: _VideoFormInput) -> some View {
+        Button {
+            if cameraRequester.authorizationStatus == .authorized {
+                cameraControllerIsPresented = true
+                selectedInput = input
+            } else {
+                cameraRequester.request()
+            }
+        } label: {
+            Text(takeVideoLabel)
+            Image(systemName: "video.fill")
+        }
+        .disabled(isVision)
     }
     
     private func chooseFromLibraryButton() -> Button<some View> {
@@ -105,6 +146,44 @@ This will eventually be available on `element`.
         }
     }
     
+    /// <#Description#>
+    var allowedFileImporterTypes: [UTType] {
+        var types = [UTType]()
+        if inputs.contains(where: { $0 is _AudioFormInput }) {
+            types.append(.audio)
+        }
+        if inputs.contains(where: { $0 is _DocumentFormInput }) {
+            types.append(.item)
+        }
+        if inputs.contains(where: { $0 is _ImageFormInput }) {
+            types.append(.image)
+        }
+        if inputs.contains(where: { $0 is _VideoFormInput }) {
+            types.append(.video)
+        }
+        return types
+    }
+    
+#warning("For testing only. Do not merge to main.")
+    @State private var id = UUID()
+    private func logInputs() {
+        id = UUID()
+        for input in inputs {
+            print(input)
+            switch input {
+            case let audio as _AudioFormInput:
+                print("\t", audio.inputMethod)
+            case let image as _ImageFormInput:
+                print("\t", image.inputMethod)
+            case let video as _VideoFormInput:
+                print("\t", video.inputMethod)
+            default:
+                break
+            }
+        }
+        print("\n")
+    }
+    
     var body: some View {
         if importState.importInProgress {
             ProgressView()
@@ -112,53 +191,116 @@ This will eventually be available on `element`.
                 .catalystPadding(5)
         }
         Menu {
-            let newFileOption = takePhotoOrVideoButton()
-#if os(visionOS)
-                .modify { $0.disabled(true) }
-#endif
-            
-            let existingFileOptions = Group {
-                chooseFromLibraryButton()
-                chooseFromFilesButton()
+            Group {
+                if inputs.count >= 2 {
+                    ForEach(inputs) { input in
+                        switch input {
+                        case let audioFormInput as _AudioFormInput:
+                            takeAudioButton(input: audioFormInput)
+                        case let imageFormInput as _ImageFormInput:
+                            takePhotoButton(input: imageFormInput)
+                        case let videoFormInput as _VideoFormInput:
+                            takeVideoButton(input: videoFormInput)
+                        default: EmptyView()
+                        }
+                    }
+                    if inputs.contains(where: {$0 is _ImageFormInput || $0 is _VideoFormInput}) {
+                        chooseFromLibraryButton()
+                    }
+                    chooseFromFilesButton()
+                } else if let onlyInput = inputs.first {
+                    switch onlyInput {
+                    case let audioFormInput as _AudioFormInput:
+                        switch audioFormInput.inputMethod {
+                        case .any:
+                            takeAudioButton(input: audioFormInput)
+                            chooseFromFilesButton()
+                        case .capture:
+                            takeAudioButton(input: audioFormInput)
+                        case .upload:
+                            chooseFromFilesButton()
+                        }
+                    case is _DocumentFormInput:
+                        chooseFromFilesButton()
+                    case let imageFormInput as _ImageFormInput:
+                        switch imageFormInput.inputMethod {
+                        case .any:
+                            takePhotoButton(input: imageFormInput)
+                            chooseFromLibraryButton()
+                            chooseFromFilesButton()
+                        case .capture:
+                            takePhotoButton(input: imageFormInput)
+                        case .upload:
+                            chooseFromLibraryButton()
+                            chooseFromFilesButton()
+                        }
+                    case let videoFormInput as _VideoFormInput:
+                        switch videoFormInput.inputMethod {
+                        case .any:
+                            takeVideoButton(input: videoFormInput)
+                            chooseFromLibraryButton()
+                            chooseFromFilesButton()
+                        case .capture:
+                            takeVideoButton(input: videoFormInput)
+                        case .upload:
+                            chooseFromLibraryButton()
+                            chooseFromFilesButton()
+                        }
+                    default:
+                        EmptyView()
+                    }
+                }
             }
-            
-            switch imageInput?.inputMethod {
-            case .some(.any), .none:
-                newFileOption
-                existingFileOptions
-            case .some(.capture):
-                newFileOption
-            case .some(.upload):
-                existingFileOptions
-            }
+            .id(id)
             
 #warning("For testing only. Do not merge to main.")
-            Section("Prototype Features") {
-                Toggle(
-                    "Use _ImageAttachmentsFormInput",
-                    isOn: Binding(get: {
-                        imageInput != nil
-                    }, set: { newValue in
-                        if newValue {
-                            imageInput = _ImageAttachmentsFormInput(inputMethod: .any)
-                        } else {
-                            imageInput = nil
-                        }
-                    })
-                )
-                if let imageInput {
-                    @Bindable var imageInput = imageInput
-                    Picker("Input Type", selection: $imageInput.inputMethod) {
-                        Text("Any")
-                            .tag(_ImageAttachmentsFormInput.InputMethod.any)
-                        Text("Capture")
-                            .tag(_ImageAttachmentsFormInput.InputMethod.capture)
-                        Text("Upload")
-                            .tag(_ImageAttachmentsFormInput.InputMethod.upload)
+            Section("Input Types") {
+                Button("Audio") {
+                    inputs.append(_AudioFormInput())
+                }
+                .disabled(inputs.contains(where: { $0 is _AudioFormInput }))
+                Button("Document") {
+                    inputs.append(_DocumentFormInput())
+                }
+                .disabled(inputs.contains(where: { $0 is _DocumentFormInput }))
+                Button("Image") {
+                    inputs.append(_ImageFormInput())
+                }
+                .disabled(inputs.contains(where: { $0 is _ImageFormInput }))
+                Button("Video") {
+                    inputs.append(_VideoFormInput())
+                }
+                .disabled(inputs.contains(where: { $0 is _VideoFormInput }))
+                Button("🗑️ Remove All", role: .destructive) {
+                    inputs.removeAll()
+                }
+                .disabled(inputs.isEmpty)
+            }
+            .menuActionDismissBehavior(.disabled)
+            Section("Input Method") {
+                if inputs.count == 1, let only = inputs.first {
+                    switch only {
+                    case let audioFormInput as _AudioFormInput:
+                        Button("Any") { audioFormInput.inputMethod = .any; logInputs() }
+                        Button("Capture") { audioFormInput.inputMethod = .capture; logInputs() }
+                        Button("Upload") { audioFormInput.inputMethod = .upload; logInputs() }
+                    case let imageFormInput as _ImageFormInput:
+                        Button("Any") { imageFormInput.inputMethod = .any; logInputs() }
+                        Button("Capture") { imageFormInput.inputMethod = .capture; logInputs() }
+                        Button("Upload") { imageFormInput.inputMethod = .upload; logInputs() }
+                    case let videoFormInput as _VideoFormInput:
+                        Button("Any") { videoFormInput.inputMethod = .any; logInputs() }
+                        Button("Capture") { videoFormInput.inputMethod = .capture; logInputs() }
+                        Button("Upload") { videoFormInput.inputMethod = .upload; logInputs() }
+                    default:
+                        EmptyView()
                     }
                 }
             }
             .menuActionDismissBehavior(.disabled)
+            .onChange(of: inputs.count) { newValue in
+                logInputs()
+            }
         } label: {
             Text(
                 "Add Attachment",
@@ -234,7 +376,7 @@ This will eventually be available on `element`.
             onAdd?(newAttachment)
             importState = .none
         }
-        .fileImporter(isPresented: $fileImporterIsPresented, allowedContentTypes: [.item]) { result in
+        .fileImporter(isPresented: $fileImporterIsPresented, allowedContentTypes: allowedFileImporterTypes) { result in
             importState = .importing
             switch result {
             case .success(let url):
@@ -254,20 +396,22 @@ This will eventually be available on `element`.
         }
 #if os(iOS)
         .fullScreenCover(isPresented: $cameraControllerIsPresented) {
-            AttachmentCameraController(
-                importState: $importState, isPresented: $cameraControllerIsPresented
-            )
+            if let selectedInput {
+                AttachmentCameraController(
+                    importState: $importState, isPresented: $cameraControllerIsPresented, input: selectedInput
+                )
 #if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
-            .onCameraCaptureModeChanged { captureMode in
-                if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
-                    microphoneAccessAlertIsPresented = true
+                .onCameraCaptureModeChanged { captureMode in
+                    if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
+                        microphoneAccessAlertIsPresented = true
+                    }
                 }
-            }
 #endif
-            .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsPresented) {
-                appSettingsButton
-                Button(role: .cancel) { } label: {
-                    Text(recordVideoOnlyButtonLabel)
+                .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsPresented) {
+                    appSettingsButton
+                    Button(role: .cancel) {} label: {
+                        Text(recordVideoOnlyButtonLabel)
+                    }
                 }
             }
         }
@@ -275,7 +419,8 @@ This will eventually be available on `element`.
         .modifier(
             AttachmentPhotoPicker(
                 importState: $importState,
-                photoPickerIsPresented: $photoPickerIsPresented
+                photoPickerIsPresented: $photoPickerIsPresented,
+                inputs: inputs
             )
         )
     }
@@ -289,12 +434,30 @@ private extension AttachmentImportMenu {
         }
     }
     
-    /// A label for a button to capture a new photo or video.
-    var cameraButtonLabel: String {
+    /// A label for a button to capture new audio.
+    var takeAudioLabel: String {
         .init(
-            localized: "Take Photo or Video",
+            localized: "Record Audio",
             bundle: .toolkitModule,
-            comment: "A label for a button to capture a new photo or video."
+            comment: "A label for a button to capture new audio."
+        )
+    }
+    
+    /// A label for a button to capture a new photo.
+    var takePhotoLabel: String {
+        .init(
+            localized: "Take Photo",
+            bundle: .toolkitModule,
+            comment: "A label for a button to capture a new photo."
+        )
+    }
+    
+    /// A label for a button to capture a new video.
+    var takeVideoLabel: String {
+        .init(
+            localized: "Take Video",
+            bundle: .toolkitModule,
+            comment: "A label for a button to capture a new video."
         )
     }
     

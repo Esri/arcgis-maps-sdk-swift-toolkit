@@ -23,13 +23,22 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
     
     @Binding var isPresented: Bool
     
+    let input: _AttachmentsFormInput
+    
     /// The image picker controller represented within the view.
     private let controller = AttachmentUIImagePickerController()
     
     func makeUIViewController(context: Context) -> some UIViewController {
-        controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
-        controller.sourceType = .camera
         controller.delegate = context.coordinator
+        controller.mediaTypes = switch input {
+        case is _ImageFormInput:
+            [UTType.image.identifier]
+        case is _VideoFormInput:
+            [UTType.video.identifier]
+        default:
+            []
+        }
+        controller.sourceType = .camera
         return controller
     }
     
