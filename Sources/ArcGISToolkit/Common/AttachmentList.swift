@@ -20,15 +20,9 @@ struct AttachmentList: View {
     /// The attachment models displayed in the list.
     var attachmentModels: [AttachmentModel]
     
-    /// A Boolean value indicating whether attachment filenames are displayed.
-    var displaysFilename = true
-    
     var body: some View {
         ForEach(attachmentModels) { attachmentModel in
-            AttachmentRow(
-                attachmentModel: attachmentModel,
-                displaysFilename: displaysFilename
-            )
+            AttachmentRow(attachmentModel: attachmentModel)
         }
     }
 }
@@ -37,9 +31,6 @@ struct AttachmentList: View {
 struct AttachmentRow: View  {
     /// The model representing the attachment to display.
     @ObservedObject var attachmentModel: AttachmentModel
-    
-    /// A Boolean value indicating whether attachment filenames are displayed.
-    let displaysFilename: Bool
     
     /// The url of the the attachment, used to display the attachment via `QuickLook`.
     @State private var url: URL?
@@ -50,11 +41,9 @@ struct AttachmentRow: View  {
                 ThumbnailView(attachmentModel: attachmentModel)
                     .padding(2)
                 VStack(alignment: .leading) {
-                    if displaysFilename {
-                        Text(attachmentModel.attachment.name)
-                            .lineLimit(1)
-                            .truncationMode(.middle)
-                    }
+                    Text(attachmentModel.attachment.name)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
                     Text(attachmentModel.attachment.measuredSize, format: .byteCount(style: .file))
                         .foregroundStyle(.secondary)
                 }
