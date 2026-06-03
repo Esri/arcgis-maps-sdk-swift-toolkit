@@ -51,14 +51,6 @@ struct ExampleMapView: View {
                     
                     featureEditorModel.geometryEditor.enableSnapSourceSettings()
                     hasEnabledSourceSettings = true
-                    
-                    if _DebugSettings.openFeatureEditor {
-                        _DebugSettings.openFeatureEditor = false
-                        let screenPoint = mapViewProxy.screenPoint(
-                            fromLocation: _DebugSettings.featureEditorIdentifyPoint
-                        )!
-                        viewState = .identifying(screenPoint)
-                    }
                 }
                 .onSingleTapGesture { screenPoint, _ in
                     guard viewState == nil else { return }

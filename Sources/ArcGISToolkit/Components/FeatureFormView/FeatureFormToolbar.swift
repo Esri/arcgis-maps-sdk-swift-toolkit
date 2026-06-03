@@ -45,8 +45,6 @@ struct FeatureFormToolbar: ViewModifier {
     /// The closure to perform when a ``EditingEvent`` occurs.
     @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
     
-    @Environment(\.navigationPath) private var navigationPath
-    
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasFormEdits = false
     
@@ -81,7 +79,7 @@ struct FeatureFormToolbar: ViewModifier {
                     }
                 }
                 
-                if !isRootView || navigationPath != nil {
+                if !isRootView {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
                             if alertBeforeDismissing {
