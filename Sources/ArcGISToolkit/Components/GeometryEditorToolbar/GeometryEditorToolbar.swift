@@ -18,8 +18,6 @@ import SwiftUI
 /// The `GeometryEditorToolbar` component allows users to perform common actions on a
 /// `GeometryEditor`.
 ///
-/// ![An image of the GeometryEditorToolbar component](GeometryEditorToolbar)
-///
 /// **Features**
 ///
 /// - Displays controls for performing common geometry editor actions:
@@ -40,9 +38,7 @@ import SwiftUI
 /// **Associated Types**
 ///
 /// - ``Style``
-///
-/// - Since: 300.1
-public struct GeometryEditorToolbar: View {
+struct GeometryEditorToolbar: View {
     /// The geometry editor that this toolbar controls.
     private let geometryEditor: GeometryEditor
     /// The style to apply to the toolbar's controls.
@@ -63,7 +59,7 @@ public struct GeometryEditorToolbar: View {
     ///   - geometryEditor: The geometry editor that this toolbar controls.
     ///   - style: The style that determines the toolbar’s appearance and layout.  A `nil` value
     ///   displays the toolbar's controls without built-in layout or styling.
-    public init(geometryEditor: GeometryEditor, style: Style? = .vertical) {
+    init(geometryEditor: GeometryEditor, style: Style? = .vertical) {
         self.geometryEditor = geometryEditor
         self.style = style
         
@@ -71,7 +67,7 @@ public struct GeometryEditorToolbar: View {
         self._model = .init(wrappedValue: model)
     }
     
-    public var body: some View {
+    var body: some View {
         Group {
             if model.isStarted {
                 switch style {
@@ -139,11 +135,10 @@ final class GeometryEditorToolbarModel {
     }
 }
 
-public extension GeometryEditorToolbar {
+extension GeometryEditorToolbar {
     /// A style that determines the appearance and layout of a geometry editor toolbar.
     ///
     /// This is commonly applied when displaying the toolbar overlaid on a `GeoView`.
-    /// - Since: 300.1
     enum Style {
         /// Displays the toolbar in a styled horizontal layout.
         case horizontal
