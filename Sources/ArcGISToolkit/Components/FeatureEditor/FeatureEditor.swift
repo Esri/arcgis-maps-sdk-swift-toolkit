@@ -1,4 +1,4 @@
-// Copyright 2025 Esri
+// Copyright 2026 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ public extension View {
     }
 }
 
+// TODO: Remove and replace with multiple overloads?
 /// An object that can be displayed and/or edited by the Feature Editor.
 public protocol FeatureEditorItem: AnyObject {}
 
@@ -48,13 +49,16 @@ private struct FeatureEditorModifier: ViewModifier {
     
     @State private var featureForm: FeatureForm?
     @State private var isShowingInspector = false
+    /// A binding to the inspector's currently presentation selected detent.
+    ///
+    /// This is needed to set the default detent to medium.
     @State private var selectedPresentationDetent = PresentationDetent.medium
     
     func body(content: Content) -> some View {
         content
             .inspector(
-                // Workaround for bug where inspector sometimes sets binding on init
-                // which prevents it for appear when the binding is later set.
+                // Workaround for bug where inspector sometimes sets the binding on init
+                // which prevents it from appearing when the binding is later set.
                 isPresented: isShowingInspector ? $isShowingInspector : .constant(false)
             ) {
                 VStack(spacing: 0) {
@@ -63,8 +67,7 @@ private struct FeatureEditorModifier: ViewModifier {
                             rootFeatureForm: featureForm,
                             geometryEditor: geometryEditor,
                             viewpoint: viewpoint,
-                            isPresented: Binding(optionalValue: $featureForm),
-                            presentationDetent: selectedPresentationDetent
+                            isPresented: Binding(optionalValue: $featureForm)
                         )
                         .transition(item is Popup ? .move(edge: .trailing) : .opacity)
                     } else if let popup = item as? Popup {
@@ -73,6 +76,7 @@ private struct FeatureEditorModifier: ViewModifier {
                     }
                 }
                 .onGeometryChange(for: CGFloat.self, of: \.size.height) { newHeight in
+                    // TODO: Horizontal insets needed for iPad and Mac Cat?
                     contentInsets?.wrappedValue =
                     isShowingInspector && UIDevice.current.userInterfaceIdiom == .phone
                     ? EdgeInsets(top: 0, leading: 0, bottom: newHeight, trailing: 0)
@@ -83,7 +87,7 @@ private struct FeatureEditorModifier: ViewModifier {
                     
                     if item is Popup {
                         // Stops the geometry edit if the form is closed back to a popup.
-                        // Note: This can't be done in onDisappear, due to lag.
+                        // This can't be done in onDisappear, due to lag.
                         geometryEditor.stop()
                     } else {
                         // Closes the inspector when the feature form is closed,
@@ -91,14 +95,14 @@ private struct FeatureEditorModifier: ViewModifier {
                         isShowingInspector = false
                     }
                 }
-                .inspectorColumnWidth(ideal: 320)
-                .interactiveDismissDisabled()
-                .presentationContentInteraction(.scrolls)
                 .presentationBackgroundInteraction(.enabled)
+                .presentationContentInteraction(.scrolls)
                 .presentationDetents(
-                    [.small, .medium, .large],
+                    [.bar, .medium, .large],
                     selection: $selectedPresentationDetent
                 )
+                .inspectorColumnWidth(ideal: 320)
+                .interactiveDismissDisabled()
             }
             .onChange(of: item.map(ObjectIdentifier.init), initial: true) {
                 // Displays and hides the inspector based on upstream item changes.
@@ -113,7 +117,7 @@ private struct FeatureEditorModifier: ViewModifier {
                 
                 // Stops the geometry editor. This needs to happen here because onChange won't fire
                 // after inspector is closed. This can happen due to upstream item changes.
-                // Note: This can't be done in onDisappear, due to lag.
+                // This can't be done in onDisappear, due to lag.
                 geometryEditor.stop()
             }
             .animation(.default, value: isShowingInspector)
@@ -131,6 +135,7 @@ private struct FeatureEditorModifier: ViewModifier {
             .animation(.default, value: item.map(ObjectIdentifier.init))
     }
     
+    /// The toolbar to show on the `PopupView`.
     @ViewBuilder
     private var popupToolbar: some View {
         Spacer()
@@ -140,6 +145,7 @@ private struct FeatureEditorModifier: ViewModifier {
                 return
             }
             featureForm = FeatureForm(feature: feature)
+            selectedPresentationDetent = .medium
         }
     }
 }
@@ -148,35 +154,58 @@ private struct FeatureEditorModifier: ViewModifier {
 // MARK: - FeatureEditorView
 
 private struct FeatureEditorView: View {
-    let rootFeatureForm: FeatureForm
-    let geometryEditor: GeometryEditor
-    let viewpoint: Binding<Viewpoint?>?
+    /// The root feature form to display in the `FeatureFormView`.
+    private let rootFeatureForm: FeatureForm
+    /// The geometry editor to use for geometry editing.
+    private let geometryEditor: GeometryEditor
     
-    @Binding var isPresented: Bool
-    let presentationDetent: PresentationDetent
     
-    @State private var backgroundIsIntractable = UIDevice.current.backgroundIsIntractable
-    @State private var presentedFeatureForm: FeatureForm?
-    @State private var isSaving = false
-    @State private var isStarted = false
+    private let viewpoint: Binding<Viewpoint?>?
+    @Binding private var isPresented: Bool
+    @State private var presentedFeatureForm: FeatureForm
+    
+    /// A Boolean value indicating whether the geometry editor has edits to undo.
     @State private var canUndo = false
+    /// The geometry editor's current geometry.
     @State private var geometry: Geometry?
+    /// A Boolean value indicating whether the edits are currently being saved.
+    @State private var isSaving = false
+    /// A Boolean value indicating whether the geometry editor has started.
+    @State private var isStarted = false
     
-    private var featureForm: FeatureForm { presentedFeatureForm ?? rootFeatureForm }
+    /// A hash value that changes when the geometry editor needs started.
+    private var startGeometryEditorHash: Int {
+        var hasher = Hasher()
+        hasher.combine(ObjectIdentifier(geometryEditor))
+        hasher.combine(ObjectIdentifier(presentedFeatureForm))
+        return hasher.finalize()
+    }
+    
+    init(
+        rootFeatureForm: FeatureForm,
+        geometryEditor: GeometryEditor,
+        viewpoint: Binding<Viewpoint?>?,
+        isPresented: Binding<Bool>
+    ) {
+        self.rootFeatureForm = rootFeatureForm
+        self.geometryEditor = geometryEditor
+        self.viewpoint = viewpoint
+        self._isPresented = isPresented
+        self._presentedFeatureForm = State(initialValue: rootFeatureForm)
+    }
     
     var body: some View {
         FeatureFormView(root: rootFeatureForm, isPresented: $isPresented)
             .onFeatureFormChanged { presentedFeatureForm = $0 }
             .onFormEditingEvent(perform: handleFormEditingEvent)
             .environment(\.beforeSaveAction, save)
-            .environment(\.bottomToolbarContent, toolbarContent)
             .environment(\.hasEdits, canUndo)
             .environment(\.validationErrorMessage, invalidGeometryMessage)
+            .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
+                presentedFeatureForm = rootFeatureForm
+            }
             .task(id: ObjectIdentifier(geometryEditor), monitorGeometryEditorStreams)
-            .task(
-                id: Hasher.hash(ObjectIdentifier(geometryEditor), ObjectIdentifier(featureForm)),
-                startGeometryEditor
-            )
+            .task(id: startGeometryEditorHash, startGeometryEditor)
             .task(id: geometry, updateFeatureFormGeometry)
     }
     
@@ -192,20 +221,10 @@ private struct FeatureEditorView: View {
         }
     }
     
-    @ViewBuilder
-    private var toolbarContent: some View {
-        SnapSettingsButton(settings: geometryEditor.snapSettings)
-            .disabled(!isStarted || presentationDetent == .large || !backgroundIsIntractable)
-            .onReceive(
-                NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
-            ) { _ in
-                backgroundIsIntractable = UIDevice.current.backgroundIsIntractable
-            }
-        Spacer()
-    }
-    
     /// Monitors geometry editor streams and updates the corresponding state properties.
     private func monitorGeometryEditorStreams() async {
+        log()
+        
         await withTaskGroup { group in
             group.addTask { @MainActor @Sendable in
                 for await canUndo in geometryEditor.$canUndo {
@@ -227,11 +246,13 @@ private struct FeatureEditorView: View {
     
     /// Starts the geometry editor using the feature form's feature.
     private func startGeometryEditor() async {
+        log()
+        
         geometryEditor.stop()
         
         do {
             // Load needed because canUpdateGeometry is always false otherwise.
-            let feature = featureForm.feature
+            let feature = presentedFeatureForm.feature
             try await feature.load()
             
             centerViewpoint(on: feature)
@@ -247,6 +268,16 @@ private struct FeatureEditorView: View {
                 guard let geometryType = featureTable.geometryType else { return }
                 geometryEditor.start(withType: geometryType)
             }
+            
+            // TODO: Remove?
+            if let snapRules = try await snapRules(for: feature) {
+                try geometryEditor.snapSettings.syncSourceSettings(
+                    rules: snapRules,
+                    sourceEnablingBehavior: .setFromRules
+                )
+            } else {
+                try geometryEditor.snapSettings.syncSourceSettings()
+            }
         } catch {
             print("FE error starting: \(error)")
         }
@@ -256,35 +287,40 @@ private struct FeatureEditorView: View {
     ///
     /// This is needed update any geometry dependent form elements when the geometry changes.
     private func updateFeatureFormGeometry() async {
-        guard isStarted, !isSaving, geometry != featureForm.feature.geometry else {
+        log()
+        
+        guard isStarted, !isSaving, geometry != presentedFeatureForm.feature.geometry else {
             return
         }
         
         do {
-            featureForm.feature.geometry = geometry
-            try await featureForm.evaluateExpressions()
+            presentedFeatureForm.feature.geometry = geometry
+            try await presentedFeatureForm.evaluateExpressions()
         } catch {
             print("FE error evaluating expressions: \(error)")
         }
     }
     
     private func save() {
+        log()
         guard canUndo else { return }
         
         isSaving = true
-        featureForm.feature.geometry = geometry
+        presentedFeatureForm.feature.geometry = geometry
     }
     
     private func handleFormEditingEvent(_ event: FeatureFormView.EditingEvent) {
+        log()
+        
         switch event {
-        case let .savedEdits(willNavigate):
+        case .savedEdits(let willNavigate):
             isSaving = false
             
             // Closes the inspector when the form footer save button is pressed.
             guard !willNavigate else { return }
             isPresented = false
             
-        case let .showOnMapRequested(feature):
+        case .showOnMapRequested(let feature):
             centerViewpoint(on: feature)
             
         default:
@@ -293,6 +329,8 @@ private struct FeatureEditorView: View {
     }
     
     private func centerViewpoint(on feature: Feature) {
+        log()
+        
         guard let viewpoint,
               let buffer = feature.geometry?.extent.withBuilder({ $0.expand(by: 1.2) }),
               !buffer.isEmpty else {
@@ -300,48 +338,77 @@ private struct FeatureEditorView: View {
         }
         viewpoint.wrappedValue = Viewpoint(boundingGeometry: buffer)
     }
-}
-
-/// A button that presents a view for configuring given `SnapSettings`.
-struct SnapSettingsButton: View {
-    /// The snap settings to configure.
-    let settings: SnapSettings
     
-    /// A Boolean value indicating whether the error alert is presented.
-    @State private var errorAlertIsPresented = false
-    /// A Boolean value indicating whether the snap settings view is presented.
-    @State private var snapSettingsArePresented = false
-    /// An error thrown while syncing snap settings.
-    @State private var syncingError: (any Error)?
-    
-    var body: some View {
-        Button("Snapping Settings", systemImage: "gear") {
-            do {
-                try settings.syncSourceSettings()
-                snapSettingsArePresented = true
-            } catch {
-                syncingError = error
-                errorAlertIsPresented = true
+    // TODO: Remove?
+    private func snapRules(for feature: ArcGISFeature) async throws -> SnapRules? {
+        guard let table = feature.table else { return nil }
+        
+        try await table.load()
+        
+        if let serviceFeatureTable = feature.table as? ServiceFeatureTable,
+           let serviceGeodatabase = serviceFeatureTable.serviceGeodatabase {
+            let utilityNetwork = UtilityNetwork(serviceGeodatabase: serviceGeodatabase)
+            try await utilityNetwork.load()
+            
+            if let element = utilityNetwork.makeElement(arcGISFeature: feature) {
+                print("🔹", "[serviceGeodatabase - element]", ObjectIdentifier(utilityNetwork))
+                return try await .rules(for: utilityNetwork, assetType: element.assetType)
+            } else {
+                print("🔹", "[serviceGeodatabase - table]", ObjectIdentifier(utilityNetwork))
+                return try await .rules(
+                    for: utilityNetwork,
+                    featureTable: table,
+                    attributes: feature.attributes
+                )
             }
-        }
-        .sheet(isPresented: $snapSettingsArePresented) {
-            NavigationStack {
-                SnapSettingsView(settings: settings)
-                    .navigationTitle("Snapping Settings")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            DismissButton(kind: .close)
-                        }
-                    }
+        } else if let geodatabaseFeatureTable = feature.table as? GeodatabaseFeatureTable,
+                  let geodatabase = geodatabaseFeatureTable.geodatabase {
+            try await geodatabase.load()
+            
+            let utilityNetworks = geodatabase.utilityNetworks
+            await utilityNetworks.load()
+            
+            if let utilityNetwork = geodatabase.utilityNetworks.first(
+                where: { $0.makeElement(arcGISFeature: feature) != nil }
+            ) {
+                print("🔹", "[geodatabase - element]", ObjectIdentifier(utilityNetwork))
+                let element = utilityNetwork.makeElement(arcGISFeature: feature)!
+                return try await .rules(for: utilityNetwork, assetType: element.assetType)
+            } else if let utilityNetwork = utilityNetworks.first(where: { utilityNetwork in
+                guard let definition = utilityNetwork.definition else { return false }
+                return definition.networkSources.contains(
+                    where: { $0.featureTable.tableName ==  table.tableName }
+                )
+            }) {
+                print("🔹", "[geodatabase - table]", ObjectIdentifier(utilityNetwork))
+                return try await .rules(
+                    for: utilityNetwork,
+                    featureTable: table,
+                    attributes: feature.attributes
+                )
+            } else {
+                return nil
             }
-        }
-        .alert("Error Syncing Snap Settings", isPresented: $errorAlertIsPresented, actions: {}) {
-            if let syncingError {
-                Text(syncingError.localizedDescription)
-            }
+        } else {
+            return nil
         }
     }
+}
+
+// MARK: - Bar Detent
+
+/// A custom presentation detent that sizes to the approximate height of a top system toolbar.
+private struct BarDetent: CustomPresentationDetent {
+    static func height(in context: Context) -> CGFloat? {
+        // Implementation was copied from:
+        // https://developer.apple.com/documentation/swiftui/custompresentationdetent#overview
+        return max(44, context.maxDetentValue * 0.1)
+    }
+}
+
+private extension PresentationDetent {
+    /// A custom presentation detent that sizes to the approximate height of a top system toolbar.
+    static let bar = Self.custom(BarDetent.self)
 }
 
 // MARK: - Extensions
@@ -358,27 +425,6 @@ extension EnvironmentValues {
     
     /// Text describing a validation error.
     @Entry var validationErrorMessage: Text?
-}
-
-private extension PresentationDetent {
-    // TODO: set based on navigation title?
-    static let small = Self.fraction(0.14)
-}
-
-private extension UIDevice {
-    var backgroundIsIntractable: Bool {
-        userInterfaceIdiom == .phone ? orientation == .portrait : !orientation.isPortrait
-    }
-}
-
-private extension Hasher {
-    static func hash(_ values: AnyHashable...) -> Int {
-        var hasher = Hasher()
-        for value in values {
-            hasher.combine(value)
-        }
-        return hasher.finalize()
-    }
 }
 
 private extension Binding where Value == Bool {
@@ -398,13 +444,12 @@ private extension Binding where Value == Bool {
 
 // MARK: - Debug
 
-func logging(
-    _ tag: String,
+// TODO: Remove
+func log(
+    _ tag: String = "",
     file: NSString = #filePath,
     line: UInt = #line,
-    function: StaticString = #function,
-    action: @escaping () -> Void
+    function: StaticString = #function
 ) {
     print("\(tag) - \(file.lastPathComponent):\(line) \(function)")
-    action()
 }
