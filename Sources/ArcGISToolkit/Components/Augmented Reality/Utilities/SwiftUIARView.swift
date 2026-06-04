@@ -121,25 +121,25 @@ extension SwiftUIARView: UIViewRepresentable {
     }
     
     public func updateUIView(_: ARView, context: Context) {
-        context.coordinator.swiftUIARView = self
+        context.coordinator.view = self
     }
     
     public class Coordinator: NSObject {
-        var swiftUIARView: SwiftUIARView
+        var view: SwiftUIARView
         
-        init(swiftUIARView: SwiftUIARView) {
-            self.swiftUIARView = swiftUIARView
+        init(view: SwiftUIARView) {
+            self.view = view
         }
     }
     
     public func makeCoordinator() -> Coordinator {
-        return .init(swiftUIARView: self)
+        return .init(view: self)
     }
 }
 
 extension SwiftUIARView.Coordinator: ARSessionDelegate {
     public func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
-        let onAnchorsAddedAction = swiftUIARView.onAnchorsAddedAction
+        let onAnchorsAddedAction = view.onAnchorsAddedAction
         
         Task { @MainActor in
             // Filter new plane anchors to use for horizontal plane visualization.
@@ -149,7 +149,7 @@ extension SwiftUIARView.Coordinator: ARSessionDelegate {
     }
     
     public func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
-        let onAnchorsUpdatedAction = swiftUIARView.onAnchorsUpdatedAction
+        let onAnchorsUpdatedAction = view.onAnchorsUpdatedAction
         
         Task { @MainActor in
             // Filter updated plane anchors to use for horizontal plane visualization.
@@ -159,23 +159,23 @@ extension SwiftUIARView.Coordinator: ARSessionDelegate {
     }
     
     public func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-        swiftUIARView.onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
+        view.onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
     }
     
     public func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-        swiftUIARView.onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
+        view.onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
     }
     
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        swiftUIARView.onDidUpdateFrameAction?(session, frame)
+        view.onDidUpdateFrameAction?(session, frame)
     }
     
     public func sessionWasInterrupted(_ session: ARSession) {
-        swiftUIARView.onSessionWasInterruptedAction?(session)
+        view.onSessionWasInterruptedAction?(session)
     }
     
     public func sessionInterruptionEnded(_ session: ARSession) {
-        swiftUIARView.onSessionWasInterruptedAction?(session)
+        view.onSessionWasInterruptedAction?(session)
     }
     
     public func sessionShouldAttemptRelocalization(_ session: ARSession) -> Bool {
