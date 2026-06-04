@@ -13,4 +13,6 @@
 // limitations under the License.
 
 #warning("Prototype only. Do not merge to main.")
-class _DocumentFormInput: _AttachmentsFormInput {}
+class _DocumentFormInput: _AttachmentsFormInput {
+    var maxFileSize: UInt64 = .max
+}
