@@ -100,6 +100,20 @@ public struct WorldScaleSceneView: View {
             }
 #endif
         }
+        .onChange(of: calibration.headingCorrection) { _, newHeadingCorrection in
+            // Update camera controller.
+            let originCamera = cameraController.originCamera
+            cameraController.originCamera = originCamera.rotatedTo(
+                heading: originCamera.heading + newHeadingCorrection,
+                pitch: originCamera.pitch,
+                roll: originCamera.roll
+            )
+        }
+        .onChange(of: calibration.elevationCorrection) { _, newElevationCorrection in
+            // Update camera controller.
+            cameraController.originCamera = cameraController.originCamera
+                .elevated(by: newElevationCorrection)
+        }
         .onChange(of: clippingDistance, initial: true) {
             cameraController.clippingDistance = clippingDistance
         }
