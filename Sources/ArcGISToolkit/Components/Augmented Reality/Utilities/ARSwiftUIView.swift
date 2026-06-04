@@ -26,10 +26,10 @@ public struct ARSwiftUIView {
     private var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
     /// The closure to call when the session's frame updates.
     private var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-    /// The closure to call when a new plane anchor has been added to the view.
-    private var onAddAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
-    /// The closure to call when a plane anchor has been updated.
-    private var onUpdateAnchorAction: (@MainActor (ARPlaneAnchor) -> Void)?
+    /// The closure to call when new plane anchors have been added to the view.
+    private var onAnchorsAddedAction: (@MainActor ([ARPlaneAnchor]) -> Void)?
+    /// The closure to call when plane anchors have been updated.
+    private var onAnchorsUpdatedAction: (@MainActor ([ARPlaneAnchor]) -> Void)?
     /// The closure to call when the session is interrupted.
     private var onSessionWasInterruptedAction: ((ARSession) -> Void)?
     /// The closure to call when the session interruption ends.
@@ -75,21 +75,21 @@ public extension ARSwiftUIView {
         return copy
     }
     
-    /// Sets the closure to call when a new plane anchor has been added to the scene.
-    func onAddAnchor(
-        perform action: @escaping @MainActor (ARPlaneAnchor) -> Void
+    /// Sets the closure to call when new plane anchors have been added to the scene.
+    func onAnchorsAdded(
+        perform action: @escaping @MainActor ([ARPlaneAnchor]) -> Void
     ) -> Self {
         var copy = self
-        copy.onAddAnchorAction = action
+        copy.onAnchorsAddedAction = action
         return copy
     }
     
-    /// Sets the closure to call when the a plane anchor is updated.
-    func onUpdateAnchor(
-        perform action: @escaping @MainActor (ARPlaneAnchor) -> Void
+    /// Sets the closure to call when plane anchors are updated.
+    func onAnchorsUpdated(
+        perform action: @escaping @MainActor ([ARPlaneAnchor]) -> Void
     ) -> Self {
         var copy = self
-        copy.onUpdateAnchorAction = action
+        copy.onAnchorsUpdatedAction = action
         return copy
     }
     
@@ -139,22 +139,22 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 extension ARSwiftUIView.Coordinator: ARSessionDelegate {
     public func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
-        for anchor in anchors {
+        let onAnchorsAddedAction = arSwiftUIView.onAnchorsAddedAction
+        
+        Task { @MainActor in
             // Filter new plane anchors to use for horizontal plane visualization.
-            guard let planeAnchor = anchor as? ARPlaneAnchor else { continue }
-            Task { @MainActor [onAddAnchorAction = arSwiftUIView.onAddAnchorAction] in
-                onAddAnchorAction?(planeAnchor)
-            }
+            let planeAnchors = anchors.compactMap { $0 as? ARPlaneAnchor }
+            onAnchorsAddedAction?(planeAnchors)
         }
     }
     
     public func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
-        for anchor in anchors {
+        let onAnchorsUpdatedAction = arSwiftUIView.onAnchorsUpdatedAction
+        
+        Task { @MainActor in
             // Filter updated plane anchors to use for horizontal plane visualization.
-            guard let planeAnchor = anchor as? ARPlaneAnchor else { continue }
-            Task { @MainActor [onUpdateAnchorAction = arSwiftUIView.onUpdateAnchorAction] in
-                onUpdateAnchorAction?(planeAnchor)
-            }
+            let planeAnchors = anchors.compactMap { $0 as? ARPlaneAnchor }
+            onAnchorsUpdatedAction?(planeAnchors)
         }
     }
     

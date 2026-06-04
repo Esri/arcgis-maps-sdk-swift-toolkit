@@ -113,11 +113,15 @@ public struct TableTopSceneView: View {
                             orientation: interfaceOrientation
                         )
                     }
-                    .onAddAnchor { planeAnchor in
-                        addPlane(for: planeAnchor)
+                    .onAnchorsAdded { planeAnchors in
+                        for anchor in planeAnchors {
+                            addPlane(for: anchor)
+                        }
                     }
-                    .onUpdateAnchor { planeAnchor in
-                        updatePlane(for: planeAnchor)
+                    .onAnchorsUpdated { planeAnchors in
+                        for anchor in planeAnchors {
+                            updatePlane(for: anchor)
+                        }
                     }
                     .onTapGesture { screenPoint in
                         guard !initialTransformationIsSet else { return }
