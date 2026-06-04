@@ -44,6 +44,15 @@ struct AttachmentPreview: View {
     /// A Boolean value which determines if the attachment editing controls should be disabled.
     private let editControlsDisabled: Bool
     
+    /// A Boolean value indicating whether users can rename attachments.
+    private let allowUserRename: Bool
+    
+    /// A Boolean value indicating whether users can delete attachments.
+    private let allowDeleteAttachments: Bool
+    
+    /// A Boolean value indicating whether attachment filenames are displayed.
+    private let displaysFilename: Bool
+    
     /// The last locally added attachment.
     private let lastAttachmentAdded: AttachmentModel?
     
@@ -59,6 +68,9 @@ struct AttachmentPreview: View {
     init(
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
+        allowUserRename: Bool = true,
+        allowDeleteAttachments: Bool = true,
+        displaysFilename: Bool = true,
         lastAttachmentAdded: AttachmentModel? = nil,
         onRename: (@MainActor (AttachmentModel, String) -> Void)? = nil,
         onDelete: (@MainActor (AttachmentModel) -> Void)? = nil,
@@ -67,6 +79,9 @@ struct AttachmentPreview: View {
         self.attachmentModels = attachmentModels
         self.proposedCellSize = proposedCellSize
         self.editControlsDisabled = editControlsDisabled
+        self.allowUserRename = allowUserRename
+        self.allowDeleteAttachments = allowDeleteAttachments
+        self.displaysFilename = displaysFilename
         self.lastAttachmentAdded = lastAttachmentAdded
         self.onRename = onRename
         self.onDelete = onDelete
@@ -88,31 +103,39 @@ struct AttachmentPreview: View {
     /// size limit as rename operations trigger a download which currently has adverse memory implications.
     func makeCarouselContent(for size: CGSize) -> some View {
         ForEach(attachmentModels) { attachmentModel in
-            AttachmentCell(attachmentModel: attachmentModel, attachmentDownloadSizeLimit: attachmentDownloadSizeLimit, cellSize: size)
-                .contextMenu {
-                    if !editControlsDisabled && !attachmentModel.attachment.measuredSize.value.isZero {
-                        if attachmentModel.attachment.measuredSize <= attachmentDownloadSizeLimit {
-                            Button {
-                                renamedAttachmentModel = attachmentModel
-                                renameDialogueIsShowing = true
-                                if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
-                                    newAttachmentName = String(attachmentModel.name[..<separatorIndex])
-                                } else {
-                                    newAttachmentName = attachmentModel.name
-                                }
-                            } label: {
-                                Label {
-                                    Text.rename
-                                } icon: {
-                                    Image(systemName: "pencil")
-                                }
+            AttachmentCell(
+                attachmentModel: attachmentModel,
+                attachmentDownloadSizeLimit: attachmentDownloadSizeLimit,
+                cellSize: size,
+                displaysFilename: displaysFilename
+            )
+            .contextMenu {
+                if !editControlsDisabled && !attachmentModel.attachment.measuredSize.value.isZero {
+                    if allowUserRename,
+                       attachmentModel.attachment.measuredSize <= attachmentDownloadSizeLimit {
+                        Button {
+                            renamedAttachmentModel = attachmentModel
+                            renameDialogueIsShowing = true
+                            if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
+                                newAttachmentName = String(attachmentModel.name[..<separatorIndex])
+                            } else {
+                                newAttachmentName = attachmentModel.name
+                            }
+                        } label: {
+                            Label {
+                                Text.rename
+                            } icon: {
+                                Image(systemName: "pencil")
                             }
                         }
+                    }
+                    if allowDeleteAttachments {
                         Button.delete {
                             deletedAttachmentModel = attachmentModel
                         }
                     }
                 }
+            }
         }
         .alert(
             Text(
@@ -169,6 +192,9 @@ struct AttachmentPreview: View {
         /// The size of the cell.
         let cellSize: CGSize
         
+        /// A Boolean value indicating whether attachment filenames are displayed.
+        let displaysFilename: Bool
+        
         var body: some View {
             VStack(alignment: .center) {
                 ZStack {
@@ -182,6 +208,7 @@ struct AttachmentPreview: View {
                                 Spacer()
                                 ThumbnailViewFooter(
                                     attachmentModel: attachmentModel,
+                                    displaysFilename: displaysFilename,
                                     size: attachmentModel.thumbnailSize
                                 )
                             }
@@ -192,10 +219,12 @@ struct AttachmentPreview: View {
                     }
                 }
                 if attachmentModel.loadStatus != .loaded {
-                    Text(attachmentModel.name)
-                        .lineLimit(1)
-                        .truncationMode(.middle)
-                        .padding([.leading, .trailing], 4)
+                    if displaysFilename {
+                        Text(attachmentModel.name)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                            .padding([.leading, .trailing], 4)
+                    }
                     HStack(alignment: .bottom) {
                         Spacer()
                         Text(attachmentModel.attachment.measuredSize, format: .byteCount(style: .file))
@@ -244,25 +273,32 @@ struct ThumbnailViewFooter: View {
     /// The popup media to display.
     @ObservedObject var attachmentModel: AttachmentModel
     
+    /// A Boolean value indicating whether attachment filenames are displayed.
+    let displaysFilename: Bool
+    
     /// The size of the media's frame.
     let size: CGSize
     
+    private var shouldShowFooter: Bool {
+        displaysFilename && !attachmentModel.name.isEmpty
+    }
+    
     var body: some View {
-        ZStack {
-            let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
-            Rectangle()
-                .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
-                .frame(height: size.height * 0.25)
-            HStack {
-                if !attachmentModel.name.isEmpty {
+        if shouldShowFooter {
+            ZStack {
+                let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
+                Rectangle()
+                    .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
+                    .frame(height: size.height * 0.25)
+                HStack {
                     Text(attachmentModel.name)
                         .foregroundStyle(.white)
                         .font(.caption)
                         .lineLimit(1)
+                    Spacer()
                 }
-                Spacer()
+                .padding([.leading, .trailing], 6)
             }
-            .padding([.leading, .trailing], 6)
         }
     }
 }
