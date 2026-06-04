@@ -36,8 +36,7 @@ public struct WorldScaleSceneView: View {
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSessionProvider<ARView>()
 #endif
-    /// A Boolean value that indicates whether the coaching overlay view is
-    /// active.
+    /// The view model for the calibration view.
     @State private var calibration = Calibration()
     /// A Boolean value that indicates whether the geo-tracking configuration is available.
     @State private var geoTrackingIsAvailable = true
