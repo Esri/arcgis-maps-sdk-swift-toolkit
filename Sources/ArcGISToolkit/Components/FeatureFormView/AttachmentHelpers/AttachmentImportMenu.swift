@@ -25,7 +25,10 @@ struct AttachmentImportMenu: View {
     /// Creates an `AttachmentImportMenu`
     /// - Parameter element: The attachment form element displaying the menu.
     /// - Parameter onAdd: The action to perform when an attachment is added.
-    init(element: AttachmentsFormElement, onAdd: (@MainActor (FeatureAttachment) -> Void)? = nil) {
+    init(
+        element: AttachmentsFormElement,
+        onAdd: (@MainActor (FeatureAttachment) -> Void)? = nil
+    ) {
         self.element = element
         self.onAdd = onAdd
     }
@@ -52,7 +55,7 @@ struct AttachmentImportMenu: View {
     @State private var selectedInput: _AttachmentsFormInput?
     
 #warning("""
-Prototype only. Do not merge to main. 
+Prototype only. Do not merge to main.
 This will eventually be available on `element`.
 """)
     @State private var inputs: [_AttachmentsFormInput] = [
@@ -326,6 +329,21 @@ This will eventually be available on `element`.
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
             
+            if element.maxAttachmentCount != .max {
+                let attachmentsCount: Int
+                do {
+                    let attachments = try await element.attachments
+                    attachmentsCount = attachments.count
+                } catch {
+                    importState = .errored(.system(error.localizedDescription))
+                    return
+                }
+                guard attachmentsCount < Int(element.maxAttachmentCount) else {
+                    importState = .errored(.system("Attachment count limit reached."))
+                    return
+                }
+            }
+            
             if let data = newAttachmentImportData.data {
                 let attachmentSize = Measurement(
                     value: Double(data.count),
@@ -342,13 +360,22 @@ This will eventually be available on `element`.
             }
             
             let fileName: String
-            if let presetFileName = newAttachmentImportData.fileName {
-                fileName = presetFileName
+            if element.useOriginalFilename,
+               let originalName = newAttachmentImportData.fileName,
+               !originalName.isEmpty {
+                fileName = originalName
             } else {
                 do {
-                    fileName = try await element.makeDefaultName(contentType: newAttachmentImportData.contentType)
+                    fileName = try await element.generateFilenameAsync()
                 } catch {
-                    fileName = "Unnamed Attachment"
+                    // Keep "Use Original Filename" meaningful even when generation fails.
+                    if element.useOriginalFilename,
+                       let originalName = newAttachmentImportData.fileName,
+                       !originalName.isEmpty {
+                        fileName = originalName
+                    } else {
+                        fileName = "Attachment-\(UUID().uuidString.prefix(8))"
+                    }
                 }
             }
             
@@ -550,36 +577,6 @@ private extension AttachmentImportMenu {
             bundle: .toolkitModule,
             comment: "An error message indicating the selected attachment exceeds the megabyte limit."
         )
-    }
-}
-
-private extension AttachmentsFormElement {
-    /// Creates a unique name for a new attachments with a file extension.
-    /// - Parameter contentType: The kind of attachment to generate a name for.
-    /// - Returns: A unique name for an attachment.
-    func makeDefaultName(contentType: UTType) async throws -> String {
-        let currentAttachments = try await attachments
-        let root = (contentType.preferredMIMEType?.components(separatedBy: "/").first ?? "Attachment").capitalized
-        var count = currentAttachments.filter { $0.contentType == contentType }.count
-        var baseName: String
-        repeat {
-            count += 1
-            baseName = "\(root)\(count)"
-        } while( currentAttachments.filter { $0.name.deletingPathExtension == baseName }.count > 0 )
-        if let fileExtension = contentType.preferredFilenameExtension {
-            return "\(baseName).\(fileExtension)"
-        } else {
-            return baseName
-        }
-    }
-}
-
-private extension String {
-    /// A filename with the extension removed.
-    ///
-    /// For example, "Photo.png" is returned as "Photo"
-    var deletingPathExtension: String {
-        (self as NSString).deletingPathExtension
     }
 }
 
