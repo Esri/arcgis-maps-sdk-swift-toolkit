@@ -22,7 +22,7 @@ import RealityKit
 @available(visionOS, unavailable)
 public struct TableTopSceneView: View {
 #if os(iOS)
-    /// The AR session provider for the ARSwiftUIView.
+    /// The AR session provider for the SwiftUIARView.
     @State private var arSessionProvider = ARSessionProvider<ARView>()
 #endif
     /// The initial transformation for the scene's camera controller.
@@ -99,7 +99,7 @@ public struct TableTopSceneView: View {
         SceneViewReader { sceneViewProxy in
             ZStack {
 #if os(iOS)
-                ARSwiftUIView(sessionProvider: arSessionProvider)
+                SwiftUIARView(sessionProvider: arSessionProvider)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation else { return }
                         sceneViewProxy.updateCamera(

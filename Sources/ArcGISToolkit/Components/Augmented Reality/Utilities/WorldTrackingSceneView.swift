@@ -37,7 +37,7 @@ struct WorldTrackingSceneView: View {
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The time threshold in seconds between location updates to reset the world-tracking session.
     private let timeThreshold: Double
-    /// The proxy for the ARSwiftUIView.
+    /// The proxy for the SwiftUIARView.
     private let arViewProxy: ARSessionProvider<ARView>
     /// The camera controller that will be set on the scene view.
     private let cameraController: TransformationMatrixCameraController
@@ -56,7 +56,7 @@ struct WorldTrackingSceneView: View {
     
     /// Creates a world scale world-tracking scene view.
     /// - Parameters:
-    ///   - arViewProxy: The proxy for the ARSwiftUIView.
+    ///   - arViewProxy: The proxy for the SwiftUIARView.
     ///   - cameraController: The camera controller that will be set on the scene view.
     ///   - calibrationViewModel: The view model for accessing the calibration values.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
@@ -102,7 +102,7 @@ struct WorldTrackingSceneView: View {
     var body: some View {
         SceneViewReader { sceneViewProxy in
             ZStack {
-                ARSwiftUIView(sessionProvider: arViewProxy)
+                SwiftUIARView(sessionProvider: arViewProxy)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation, initialCameraIsSet else { return }
                         

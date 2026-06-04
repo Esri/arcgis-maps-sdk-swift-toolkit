@@ -19,7 +19,7 @@ import RealityKit
 import SwiftUI
 
 /// A SwiftUI version of an AR view.
-public struct ARSwiftUIView {
+public struct SwiftUIARView {
     /// The closure to call when the session's geo-tracking state changes.
     private var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
     /// The closure to call when the session's camera tracking state changes.
@@ -45,7 +45,7 @@ public struct ARSwiftUIView {
     }
 }
 
-public extension ARSwiftUIView {
+public extension SwiftUIARView {
     /// Sets the closure to call when the session's geo-tracking state changes.
     ///
     /// ARKit invokes the callback only for `ARGeoTrackingConfiguration` sessions.
@@ -112,7 +112,7 @@ public extension ARSwiftUIView {
     }
 }
 
-extension ARSwiftUIView: UIViewRepresentable {
+extension SwiftUIARView: UIViewRepresentable {
     public func makeUIView(context: Context) -> ARView {
         let arView = ARView()
         arView.session.delegate = context.coordinator
@@ -121,25 +121,25 @@ extension ARSwiftUIView: UIViewRepresentable {
     }
     
     public func updateUIView(_: ARView, context: Context) {
-        context.coordinator.arSwiftUIView = self
+        context.coordinator.swiftUIARView = self
     }
     
     public class Coordinator: NSObject {
-        var arSwiftUIView: ARSwiftUIView
+        var swiftUIARView: SwiftUIARView
         
-        init(arSwiftUIView: ARSwiftUIView) {
-            self.arSwiftUIView = arSwiftUIView
+        init(swiftUIARView: SwiftUIARView) {
+            self.swiftUIARView = swiftUIARView
         }
     }
     
     public func makeCoordinator() -> Coordinator {
-        return .init(arSwiftUIView: self)
+        return .init(swiftUIARView: self)
     }
 }
 
-extension ARSwiftUIView.Coordinator: ARSessionDelegate {
+extension SwiftUIARView.Coordinator: ARSessionDelegate {
     public func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
-        let onAnchorsAddedAction = arSwiftUIView.onAnchorsAddedAction
+        let onAnchorsAddedAction = swiftUIARView.onAnchorsAddedAction
         
         Task { @MainActor in
             // Filter new plane anchors to use for horizontal plane visualization.
@@ -149,7 +149,7 @@ extension ARSwiftUIView.Coordinator: ARSessionDelegate {
     }
     
     public func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
-        let onAnchorsUpdatedAction = arSwiftUIView.onAnchorsUpdatedAction
+        let onAnchorsUpdatedAction = swiftUIARView.onAnchorsUpdatedAction
         
         Task { @MainActor in
             // Filter updated plane anchors to use for horizontal plane visualization.
@@ -159,23 +159,23 @@ extension ARSwiftUIView.Coordinator: ARSessionDelegate {
     }
     
     public func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-        arSwiftUIView.onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
+        swiftUIARView.onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
     }
     
     public func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-        arSwiftUIView.onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
+        swiftUIARView.onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
     }
     
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        arSwiftUIView.onDidUpdateFrameAction?(session, frame)
+        swiftUIARView.onDidUpdateFrameAction?(session, frame)
     }
     
     public func sessionWasInterrupted(_ session: ARSession) {
-        arSwiftUIView.onSessionWasInterruptedAction?(session)
+        swiftUIARView.onSessionWasInterruptedAction?(session)
     }
     
     public func sessionInterruptionEnded(_ session: ARSession) {
-        arSwiftUIView.onSessionWasInterruptedAction?(session)
+        swiftUIARView.onSessionWasInterruptedAction?(session)
     }
     
     public func sessionShouldAttemptRelocalization(_ session: ARSession) -> Bool {

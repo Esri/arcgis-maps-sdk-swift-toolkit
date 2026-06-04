@@ -35,7 +35,7 @@ public struct GeoTrackingSceneView: View {
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 #if os(iOS)
-    /// The proxy for the ARSwiftUIView.
+    /// The proxy for the SwiftUIARView.
     private let arViewProxy: ARSessionProvider<ARView>
 #endif
     /// The camera controller that will be set on the scene view.
@@ -56,7 +56,7 @@ public struct GeoTrackingSceneView: View {
     
     /// Creates a world scale geo-tracking scene view.
     /// - Parameters:
-    ///   - arViewProxy: The proxy for the ARSwiftUIView.
+    ///   - arViewProxy: The proxy for the SwiftUIARView.
     ///   - cameraController: The camera controller that will be set on the scene view.
     ///   - calibrationViewModel: The view model for accessing the calibration values.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
@@ -92,7 +92,7 @@ public struct GeoTrackingSceneView: View {
         SceneViewReader { sceneViewProxy in
             ZStack {
 #if os(iOS)
-                ARSwiftUIView(sessionProvider: arViewProxy)
+                SwiftUIARView(sessionProvider: arViewProxy)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation, initialCameraIsSet else { return }
                         

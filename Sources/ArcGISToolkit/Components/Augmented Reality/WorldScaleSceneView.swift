@@ -33,7 +33,7 @@ public struct WorldScaleSceneView: View {
     /// A Boolean value that indicates whether the calibration view is hidden.
     var calibrationViewIsHidden = false
 #if os(iOS)
-    /// The proxy for the ARSwiftUIView.
+    /// The proxy for the SwiftUIARView.
     @State private var arViewProxy = ARSessionProvider<ARView>()
 #endif
     /// The view model for the calibration view.
