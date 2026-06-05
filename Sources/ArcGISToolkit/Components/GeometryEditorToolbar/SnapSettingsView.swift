@@ -30,77 +30,60 @@ struct SnapSettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Toggle(isOn: $snappingIsEnabled.animation()) {
+                Toggle(isOn: $snapsToGeometryGuides) {
                     Text(
-                        "Enable Snapping",
+                        "Snap to Geometry Guides",
                         bundle: .toolkitModule,
                         comment: """
-                            A label for a toggle that enables geometry editor snapping, which allows
-                            edit positions to automatically adjust to guides or nearby geometries.
-                            """
-                    )
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .animation(.default, value: snappingIsEnabled)
-                .onChange(of: snappingIsEnabled) {
-                    settings.isEnabled = snappingIsEnabled
-                }
-                
-                if snappingIsEnabled {
-                    Toggle(isOn: $snapsToGeometryGuides) {
-                        Text(
-                            "Snap to Geometry Guides",
-                            bundle: .toolkitModule,
-                            comment: """
                                 A label for a toggle that enables snapping to geometry guides, which
                                 are visual aids that help align geometries during editing.
                                 """
-                        )
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .onChange(of: snapsToGeometryGuides) {
-                        settings.snapsToGeometryGuides = snapsToGeometryGuides
-                    }
-                    
-                    Toggle(isOn: $snapsToFeatures.animation()) {
+                    )
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .onChange(of: snapsToGeometryGuides) {
+                    settings.snapsToGeometryGuides = snapsToGeometryGuides
+                }
+                
+                Toggle(isOn: $snapsToFeatures.animation()) {
+                    Text(
+                        "Snap to Features and Graphics",
+                        bundle: .toolkitModule,
+                        comment: """
+                                A label for a toggle that enables snapping to features and graphics,
+                                which allows vertices and edges of existing features to be snapped to.
+                                """
+                    )
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .onChange(of: snapsToFeatures) {
+                    settings.snapsToFeatures = snapsToFeatures
+                }
+                
+                if snapsToFeatures {
+                    Section {
+                        OutlineGroup(rootSourceSettingsModels, children: \.children) { model in
+                            SnapSourceSettingsToggle(model: model)
+                        }
+                    } header: {
                         Text(
-                            "Snap to Features",
+                            "Snap Sources",
                             bundle: .toolkitModule,
                             comment: """
-                                A label for a toggle that enables snapping to features, which allows
-                                vertices and edges of existing features to be snapped to.
-                                """
-                        )
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .onChange(of: snapsToFeatures) {
-                        settings.snapsToFeatures = snapsToFeatures
-                    }
-                    
-                    if snapsToFeatures {
-                        Section {
-                            OutlineGroup(rootSourceSettingsModels, children: \.children) { model in
-                                SnapSourceSettingsToggle(model: model)
-                            }
-                        } header: {
-                            Text(
-                                "Snap Sources",
-                                bundle: .toolkitModule,
-                                comment: """
                                     A title for a list section containing toggles for controlling
                                     the sources that can be snapped to.
                                     """
-                            )
-                        }
+                        )
                     }
                 }
             }
             .onChange(of: ObjectIdentifier(settings), initial: true) {
+                // Snapping is enabled by default to simplify the UI.
+                settings.isEnabled = true
                 // Sets up view's state properties using settings' property values.
                 rootSourceSettingsModels = settings.sourceSettings.map(
                     SnapSourceSettingsToggle.Model.init(settings:)
                 )
-                snappingIsEnabled = settings.isEnabled
                 snapsToFeatures = settings.snapsToFeatures
                 snapsToGeometryGuides = settings.snapsToGeometryGuides
             }
