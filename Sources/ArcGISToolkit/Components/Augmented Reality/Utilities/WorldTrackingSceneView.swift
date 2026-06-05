@@ -16,6 +16,7 @@
 import ARKit
 import SwiftUI
 import ArcGIS
+import RealityKit
 
 /// A scene view that provides an augmented reality world scale experience using world-tracking.
 struct WorldTrackingSceneView: View {
@@ -36,8 +37,8 @@ struct WorldTrackingSceneView: View {
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The time threshold in seconds between location updates to reset the world-tracking session.
     private let timeThreshold: Double
-    /// The proxy for the ARSwiftUIView.
-    private let arViewProxy: ARSwiftUIViewProxy
+    /// The proxy for the SwiftUIARView.
+    private let arViewProxy: ARSessionProvider<ARView>
     /// The camera controller that will be set on the scene view.
     private let cameraController: TransformationMatrixCameraController
     /// A Boolean value that indicates whether the coaching overlay view is active.
@@ -55,7 +56,7 @@ struct WorldTrackingSceneView: View {
     
     /// Creates a world scale world-tracking scene view.
     /// - Parameters:
-    ///   - arViewProxy: The proxy for the ARSwiftUIView.
+    ///   - arViewProxy: The proxy for the SwiftUIARView.
     ///   - cameraController: The camera controller that will be set on the scene view.
     ///   - calibrationViewModel: The view model for accessing the calibration values.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
@@ -68,7 +69,7 @@ struct WorldTrackingSceneView: View {
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     init(
-        arViewProxy: ARSwiftUIViewProxy,
+        arViewProxy: ARSessionProvider<ARView>,
         cameraController: TransformationMatrixCameraController,
         calibrationViewModel: WorldScaleCalibrationViewModel,
         clippingDistance: Double?,
@@ -101,7 +102,7 @@ struct WorldTrackingSceneView: View {
     var body: some View {
         SceneViewReader { sceneViewProxy in
             ZStack {
-                ARSwiftUIView(proxy: arViewProxy)
+                SwiftUIARView(sessionProvider: arViewProxy)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation, initialCameraIsSet else { return }
                         

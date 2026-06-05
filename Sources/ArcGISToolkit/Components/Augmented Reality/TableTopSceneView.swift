@@ -22,8 +22,8 @@ import RealityKit
 @available(visionOS, unavailable)
 public struct TableTopSceneView: View {
 #if os(iOS)
-    /// The proxy for the ARSwiftUIView.
-    @State private var arViewProxy = ARSwiftUIViewProxy()
+    /// The AR session provider for the SwiftUIARView.
+    @State private var arSessionProvider = ARSessionProvider<ARView>()
 #endif
     /// The initial transformation for the scene's camera controller.
     @State private var initialTransformation: TransformationMatrix? = nil
@@ -99,7 +99,7 @@ public struct TableTopSceneView: View {
         SceneViewReader { sceneViewProxy in
             ZStack {
 #if os(iOS)
-                ARSwiftUIView(proxy: arViewProxy)
+                SwiftUIARView(sessionProvider: arSessionProvider)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation else { return }
                         sceneViewProxy.updateCamera(
@@ -113,17 +113,21 @@ public struct TableTopSceneView: View {
                             orientation: interfaceOrientation
                         )
                     }
-                    .onAddAnchor { planeAnchor in
-                        addPlane(for: planeAnchor)
+                    .onAnchorsAdded { planeAnchors in
+                        for anchor in planeAnchors {
+                            addPlane(for: anchor)
+                        }
                     }
-                    .onUpdateAnchor { planeAnchor in
-                        updatePlane(for: planeAnchor)
+                    .onAnchorsUpdated { planeAnchors in
+                        for anchor in planeAnchors {
+                            updatePlane(for: anchor)
+                        }
                     }
                     .onTapGesture { screenPoint in
                         guard !initialTransformationIsSet else { return }
                         
                         if let transformation = sceneViewProxy.initialTransformation(
-                            for: arViewProxy,
+                            for: arSessionProvider,
                             using: screenPoint
                         ) {
                             initialTransformation = transformation
@@ -133,15 +137,16 @@ public struct TableTopSceneView: View {
                         }
                     }
                     .onAppear {
-                        arViewProxy.session.run(configuration, options: .removeExistingAnchors)
+                        arSessionProvider.session.run(configuration, options: .removeExistingAnchors)
                     }
                     .onDisappear {
-                        arViewProxy.session.pause()
+                        arSessionProvider.session.pause()
                     }
                 
                 if !coachingOverlayIsHidden {
                     ARCoachingOverlay(goal: .horizontalPlane)
-                        .sessionProvider(arViewProxy)
+                        .sessionProvider(arSessionProvider)
+                        .activatesAutomatically(false)
                         .active(coachingOverlayIsActive)
                         .allowsHitTesting(false)
                         .ignoresSafeArea()
@@ -197,7 +202,7 @@ public struct TableTopSceneView: View {
         let planeEntity = ModelEntity(mesh: mesh, materials: [material])
         
         anchorEntity.addChild(planeEntity)
-        arViewProxy.scene.addAnchor(anchorEntity)
+        arSessionProvider.scene.addAnchor(anchorEntity)
         
         planeEntities[planeAnchor.identifier] = planeEntity
         
@@ -260,16 +265,16 @@ private extension SceneViewProxy {
     /// Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined
     /// via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
     /// - Parameters:
-    ///   - arViewProxy: The AR view proxy.
+    ///   - sessionProvider: The AR session provider.
     ///   - screenPoint: The screen point to determine the `initialTransformation` from.
     /// - Returns: The `initialTransformation`.
     @MainActor
     func initialTransformation(
-        for arViewProxy: ARSwiftUIViewProxy,
+        for sessionProvider: ARSessionProvider<ARView>,
         using screenPoint: CGPoint
     ) -> TransformationMatrix? {
         // Use the `raycast` method to get the matrix of `screenPoint`.
-        guard let matrix = arViewProxy.raycast(from: screenPoint, allowing: .existingPlaneGeometry) else { return nil }
+        guard let matrix = sessionProvider.arView.raycast(from: screenPoint, allowing: .existingPlaneGeometry) else { return nil }
         
         // Set the `initialTransformation` as the TransformationMatrix.identity - raycast matrix.
         let initialTransformation = TransformationMatrix.identity.subtracting(matrix)

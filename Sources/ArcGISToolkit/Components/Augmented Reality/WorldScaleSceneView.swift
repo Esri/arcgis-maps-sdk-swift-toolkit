@@ -16,6 +16,7 @@ import ARKit
 import SwiftUI
 import ArcGIS
 import CoreLocation
+import RealityKit
 
 /// A scene view that provides an augmented reality world scale experience.
 @available(macCatalyst, unavailable)
@@ -32,8 +33,8 @@ public struct WorldScaleSceneView: View {
     /// A Boolean value that indicates whether the calibration view is hidden.
     var calibrationViewIsHidden = false
 #if os(iOS)
-    /// The proxy for the ARSwiftUIView.
-    @State private var arViewProxy = ARSwiftUIViewProxy()
+    /// The proxy for the SwiftUIARView.
+    @State private var arViewProxy = ARSessionProvider<ARView>()
 #endif
     /// The view model for the calibration view.
     @StateObject private var calibrationViewModel = WorldScaleCalibrationViewModel()
@@ -358,7 +359,7 @@ public extension WorldScaleSceneView {
     /// - Returns: The scene point corresponding to screen point.
     private func arScreenToLocation(screenPoint: CGPoint) -> Point? {
         // Use the `raycast` method to get the matrix of `screenPoint`.
-        guard let localOffsetMatrix = arViewProxy.raycast(from: screenPoint, allowing: .estimatedPlane) else { return nil }
+        guard let localOffsetMatrix = arViewProxy.arView.raycast(from: screenPoint, allowing: .estimatedPlane) else { return nil }
         let originTransformationMatrix = calibrationViewModel.cameraController.originCamera.transformationMatrix
         let scenePointMatrix = originTransformationMatrix.adding(localOffsetMatrix)
         // Create a camera from transformationMatrix and return its location.
