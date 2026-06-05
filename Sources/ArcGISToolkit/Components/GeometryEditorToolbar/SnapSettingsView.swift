@@ -22,9 +22,7 @@ struct SnapSettingsView: View {
     
     /// The view models for the root `SnapSourceSettingsToggle` views in the outline group.
     @State private var rootSourceSettingsModels: [SnapSourceSettingsToggle.Model] = []
-    /// A Boolean value indicating whether the settings are enabled.
-    @State private var snappingIsEnabled = false
-    /// A Boolean value indicating whether the settings allow snapping to features.
+    /// A Boolean value indicating whether the settings allow snapping to features and graphics.
     @State private var snapsToFeatures = false
     /// A Boolean value indicating whether the settings allow snapping to geometry guides.
     @State private var snapsToGeometryGuides = false
