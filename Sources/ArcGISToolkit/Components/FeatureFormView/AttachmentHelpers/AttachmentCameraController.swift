@@ -16,7 +16,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// A UIImagePickerController wrapper to provide a native photo capture experience.
+/// A UIImagePickerController wrapper to provide a native photo or video capture experience.
 struct AttachmentCameraController: UIViewControllerRepresentable {
     /// The current import state.
     @Binding var importState: AttachmentImportState
@@ -37,6 +37,10 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
             [UTType.video.identifier]
         default:
             []
+        }
+        if let videoFormInput = input.self as? _VideoFormInput,
+           let maxDuration = videoFormInput.maxDuration {
+            controller.videoMaximumDuration = maxDuration
         }
         controller.sourceType = .camera
         return controller
