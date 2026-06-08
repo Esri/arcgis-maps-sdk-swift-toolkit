@@ -68,6 +68,8 @@ public struct GeometryEditorToolbar: View {
     ///   - style: The style that determines the toolbar’s appearance and layout.  A `nil` value
     ///   displays the toolbar's controls without built-in layout or styling.
     public init(geometryEditor: GeometryEditor, style: Style? = .vertical) {
+        // Snapping is enabled by default to simplify the UI.
+        geometryEditor.snapSettings.isEnabled = true
         self.geometryEditor = geometryEditor
         self.style = style
         
@@ -100,6 +102,8 @@ public struct GeometryEditorToolbar: View {
         .animation(.default, value: model.isStarted)
         .onChange(of: ObjectIdentifier(geometryEditor)) {
             model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
+            // Snapping is enabled by default to simplify the UI.
+            geometryEditor.snapSettings.isEnabled = true
         }
     }
     

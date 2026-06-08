@@ -78,8 +78,6 @@ struct SnapSettingsView: View {
                 }
             }
             .onChange(of: ObjectIdentifier(settings), initial: true) {
-                // Snapping is enabled by default to simplify the UI.
-                settings.isEnabled = true
                 // Sets up view's state properties using settings' property values.
                 rootSourceSettingsModels = settings.sourceSettings.map(
                     SnapSourceSettingsToggle.Model.init(settings:)
