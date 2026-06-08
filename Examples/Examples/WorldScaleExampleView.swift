@@ -48,6 +48,7 @@ struct WorldScaleExampleView: View {
     /// The location datasource that is used to access the device location.
     @State private var locationDataSource = SystemLocationDataSource()
     
+    @available(*, deprecated)
     var body: some View {
         WorldScaleSceneView { proxy in
             SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
