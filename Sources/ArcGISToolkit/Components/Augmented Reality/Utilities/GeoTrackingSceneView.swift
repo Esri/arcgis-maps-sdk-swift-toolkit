@@ -18,12 +18,13 @@ import ArcGIS
 import RealityKit
 
 /// A scene view that provides an augmented reality world scale experience using geo-tracking.
+@available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public struct GeoTrackingSceneView: View {
     /// A Boolean value indicating if the camera was initially set.
     @Binding var initialCameraIsSet: Bool
     /// The view model for the calibration view.
-    @ObservedObject private var calibrationViewModel: WorldScaleCalibrationViewModel
+    @Bindable private var calibration: Calibration
 #if os(iOS)
     /// The geo-tracking configuration for the AR session.
     private let configuration = ARGeoTrackingConfiguration()
@@ -58,7 +59,7 @@ public struct GeoTrackingSceneView: View {
     /// - Parameters:
     ///   - arViewProxy: The proxy for the SwiftUIARView.
     ///   - cameraController: The camera controller that will be set on the scene view.
-    ///   - calibrationViewModel: The view model for accessing the calibration values.
+    ///   - calibration: The view model for accessing the calibration values.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
     ///   of `nil` means that no data will be clipped.
     ///   - initialCameraIsSet: A Boolean value that indicates whether the initial camera is set for the scene view.
@@ -69,7 +70,7 @@ public struct GeoTrackingSceneView: View {
     init(
         arViewProxy: ARSessionProvider<ARView>,
         cameraController: TransformationMatrixCameraController,
-        calibrationViewModel: WorldScaleCalibrationViewModel,
+        calibration: Calibration,
         clippingDistance: Double?,
         initialCameraIsSet: Binding<Bool>,
         calibrationViewIsPresented: Bool,
@@ -78,7 +79,7 @@ public struct GeoTrackingSceneView: View {
     ) {
         self.arViewProxy = arViewProxy
         self.cameraController = cameraController
-        self.calibrationViewModel = calibrationViewModel
+        self.calibration = calibration
         self.cameraController.clippingDistance = clippingDistance
         _initialCameraIsSet = initialCameraIsSet
         self.calibrationViewIsPresented = calibrationViewIsPresented
@@ -165,11 +166,14 @@ public struct GeoTrackingSceneView: View {
     ///   - heading: The heading for the camera.
     ///   - altitude: The altitude for the camera.
     private func updateCameraController(location: Location, heading: Double, altitude: Double) {
+        let correctedAltitude = altitude + calibration.totalElevationCorrection
+        let correctedHeading = heading + calibration.totalHeadingCorrection
+        
         cameraController.originCamera = Camera(
             latitude: location.position.y,
             longitude: location.position.x,
-            altitude: altitude,
-            heading: heading,
+            altitude: correctedAltitude,
+            heading: correctedHeading,
             pitch: 90,
             roll: 0
         )

@@ -37,7 +37,7 @@ public struct WorldScaleSceneView: View {
     @State private var arViewProxy = ARSessionProvider<ARView>()
 #endif
     /// The view model for the calibration view.
-    @StateObject private var calibrationViewModel = WorldScaleCalibrationViewModel()
+    @State private var calibration = Calibration()
     /// A Boolean value that indicates whether the geo-tracking configuration is available.
     @State private var geoTrackingIsAvailable = true
     /// A Boolean value that indicates whether the initial camera is set for the scene view.
@@ -48,6 +48,8 @@ public struct WorldScaleSceneView: View {
     @State private var locationDataSource = SystemLocationDataSource()
     /// The error from the view.
     @State private var error: Error?
+    /// The camera controller for this scene view.
+    @State private var cameraController = TransformationMatrixCameraController()
     /// The closure to call upon a single tap.
     private var onSingleTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
     /// The closure to perform when the `isCalibrating` property has changed.
@@ -97,11 +99,22 @@ public struct WorldScaleSceneView: View {
             }
 #endif
         }
-        .onAppear {
-            calibrationViewModel.cameraController.clippingDistance = clippingDistance
+        .onChange(of: calibration.headingCorrection) { _, newHeadingCorrection in
+            // Update camera controller.
+            let originCamera = cameraController.originCamera
+            cameraController.originCamera = originCamera.rotatedTo(
+                heading: originCamera.heading + newHeadingCorrection,
+                pitch: originCamera.pitch,
+                roll: originCamera.roll
+            )
         }
-        .onChange(of: clippingDistance) {
-            calibrationViewModel.cameraController.clippingDistance = clippingDistance
+        .onChange(of: calibration.elevationCorrection) { _, newElevationCorrection in
+            // Update camera controller.
+            cameraController.originCamera = cameraController.originCamera
+                .elevated(by: newElevationCorrection)
+        }
+        .onChange(of: clippingDistance, initial: true) {
+            cameraController.clippingDistance = clippingDistance
         }
         .onDisappear {
             Task { await locationDataSource.stop() }
@@ -153,7 +166,7 @@ public struct WorldScaleSceneView: View {
         }
         .overlay(alignment: .bottom) {
             if isCalibrating {
-                CalibrationView(viewModel: calibrationViewModel, isPresented: $isCalibrating)
+                CalibrationView(calibration: calibration, isPresented: $isCalibrating)
                     .padding(.bottom)
             }
         }
@@ -168,8 +181,8 @@ public struct WorldScaleSceneView: View {
     @ViewBuilder private var geoTrackingSceneView: some View {
         GeoTrackingSceneView(
             arViewProxy: arViewProxy,
-            cameraController: calibrationViewModel.cameraController,
-            calibrationViewModel: calibrationViewModel,
+            cameraController: cameraController,
+            calibration: calibration,
             clippingDistance: clippingDistance,
             initialCameraIsSet: $initialCameraIsSet,
             calibrationViewIsPresented: isCalibrating,
@@ -192,8 +205,8 @@ public struct WorldScaleSceneView: View {
     @ViewBuilder private var worldTrackingSceneView : some View {
         WorldTrackingSceneView(
             arViewProxy: arViewProxy,
-            cameraController: calibrationViewModel.cameraController,
-            calibrationViewModel: calibrationViewModel,
+            cameraController: cameraController,
+            calibration: calibration,
             clippingDistance: clippingDistance,
             initialCameraIsSet: $initialCameraIsSet,
             calibrationViewIsPresented: isCalibrating,
@@ -360,7 +373,7 @@ public extension WorldScaleSceneView {
     private func arScreenToLocation(screenPoint: CGPoint) -> Point? {
         // Use the `raycast` method to get the matrix of `screenPoint`.
         guard let localOffsetMatrix = arViewProxy.arView.raycast(from: screenPoint, allowing: .estimatedPlane) else { return nil }
-        let originTransformationMatrix = calibrationViewModel.cameraController.originCamera.transformationMatrix
+        let originTransformationMatrix = cameraController.originCamera.transformationMatrix
         let scenePointMatrix = originTransformationMatrix.adding(localOffsetMatrix)
         // Create a camera from transformationMatrix and return its location.
         return Camera(transformationMatrix: scenePointMatrix).location
