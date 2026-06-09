@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import Foundation
+
 #warning("Prototype only. Do not merge to main.")
 class _VideoFormInput: _AttachmentsFormInput {
     var inputMethod: _AttachmentInputMethod = .any
+    var maxDuration: TimeInterval?
 }
