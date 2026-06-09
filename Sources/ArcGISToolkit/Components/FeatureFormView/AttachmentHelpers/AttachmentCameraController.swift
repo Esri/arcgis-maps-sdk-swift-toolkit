@@ -58,7 +58,6 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
     var parent: AttachmentCameraController
     
     init(parent: AttachmentCameraController) {
-        print("DTF", #file, #function)
         self.parent = parent
     }
     
