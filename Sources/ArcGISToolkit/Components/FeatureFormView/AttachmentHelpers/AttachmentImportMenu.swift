@@ -54,10 +54,7 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
-#warning("""
-Prototype only. Do not merge to main.
-This will eventually be available on `element`.
-""")
+#warning("Prototype only. Do not merge to main. This will eventually be available on `element`.")
     @State private var inputs: [_AttachmentsFormInput] = [
         _AudioFormInput(),
         _DocumentFormInput(),
