@@ -91,16 +91,6 @@ This will eventually be available on `element`.
         }
     }
     
-    private func takeAudioButton(input: _AudioFormInput) -> some View {
-        Button {
-            selectedInput = input
-        } label: {
-            Text(takeAudioLabel)
-            Image(systemName: "microphone.fill")
-        }
-        .disabled(true)
-    }
-    
     private func takePhotoButton(input: _ImageFormInput) -> some View {
         Button {
             if cameraRequester.authorizationStatus == .authorized {
@@ -119,8 +109,8 @@ This will eventually be available on `element`.
     private func takeVideoButton(input: _VideoFormInput) -> some View {
         Button {
             if cameraRequester.authorizationStatus == .authorized {
-                cameraControllerIsPresented = true
                 selectedInput = input
+                cameraControllerIsPresented = true
             } else {
                 cameraRequester.request()
             }
@@ -198,8 +188,6 @@ This will eventually be available on `element`.
                 if inputs.count >= 2 {
                     ForEach(inputs) { input in
                         switch input {
-                        case let audioFormInput as _AudioFormInput:
-                            takeAudioButton(input: audioFormInput)
                         case let imageFormInput as _ImageFormInput:
                             takePhotoButton(input: imageFormInput)
                         case let videoFormInput as _VideoFormInput:
@@ -215,12 +203,9 @@ This will eventually be available on `element`.
                     switch onlyInput {
                     case let audioFormInput as _AudioFormInput:
                         switch audioFormInput.inputMethod {
-                        case .any:
-                            takeAudioButton(input: audioFormInput)
-                            chooseFromFilesButton()
                         case .capture:
-                            takeAudioButton(input: audioFormInput)
-                        case .upload:
+                            EmptyView()
+                        default:
                             chooseFromFilesButton()
                         }
                     case is _DocumentFormInput:
@@ -301,8 +286,30 @@ This will eventually be available on `element`.
                 }
             }
             .menuActionDismissBehavior(.disabled)
-            .onChange(of: inputs.count) { newValue in
-                logInputs()
+            if let videoInput = inputs.first(where: { $0 is _VideoFormInput }) as? _VideoFormInput {
+                Section("Video Duration") {
+                    if let maxDuration = videoInput.maxDuration {
+                        Stepper(
+                            "\(maxDuration.formatted(.number)) seconds",
+                            value: Binding<TimeInterval>(
+                                get: { videoInput.maxDuration ?? TimeInterval.infinity },
+                                set: { videoInput.maxDuration = $0; logInputs() }
+                            ),
+                            in: 1...TimeInterval.infinity,
+                            step: 1
+                        )
+                        Button("Remove Limit") {
+                            videoInput.maxDuration = nil
+                            logInputs()
+                        }
+                    } else {
+                        Button("Add Limit (sec)") {
+                            videoInput.maxDuration = 30
+                            logInputs()
+                        }
+                    }
+                }
+                .menuActionDismissBehavior(.disabled)
             }
         } label: {
             Text(
@@ -459,15 +466,6 @@ private extension AttachmentImportMenu {
         Button(String.settings) {
             Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
         }
-    }
-    
-    /// A label for a button to capture new audio.
-    var takeAudioLabel: String {
-        .init(
-            localized: "Record Audio",
-            bundle: .toolkitModule,
-            comment: "A label for a button to capture new audio."
-        )
     }
     
     /// A label for a button to capture a new photo.
