@@ -94,9 +94,6 @@ struct WorldScaleExampleView: View {
             // Put a circle graphic around the initial location.
             let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
             graphicsOverlay.addGraphic(Graphic(geometry: circle, symbol: SimpleLineSymbol(color: .red, width: 3)))
-            
-            // Stop the location data source after the initial location is retrieved.
-            await provider.dataSource.stop()
         }
         .onDisappear {
             graphicsOverlay.removeAllGraphics()
