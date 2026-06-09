@@ -25,6 +25,7 @@ import SwiftUI
 ///     - Deleting the selected element.
 ///     - Undoing the last action on the geometry.
 ///     - Redoing the last undone action.
+///     - Configuring snap settings.
 /// - Supports styled vertical and horizontal layouts, or no built-in layout or styling.
 ///
 /// **Behavior**
@@ -34,6 +35,9 @@ import SwiftUI
 /// By default, the toolbar is displayed in a vertical layout. Pass `nil` for `style` to display
 /// the toolbar without built-in layout or styling, so you can show it in a system toolbar or apply
 /// your own layout and styling to the controls.
+///
+/// The settings button is only shown when the geometry editor has snap settings with non-empty
+/// source settings.
 ///
 /// **Associated Types**
 ///
@@ -60,6 +64,8 @@ struct GeometryEditorToolbar: View {
     ///   - style: The style that determines the toolbar’s appearance and layout.  A `nil` value
     ///   displays the toolbar's controls without built-in layout or styling.
     init(geometryEditor: GeometryEditor, style: Style? = .vertical) {
+        // Snapping is enabled by default to simplify the UI.
+        geometryEditor.snapSettings.isEnabled = true
         self.geometryEditor = geometryEditor
         self.style = style
         
@@ -78,7 +84,7 @@ struct GeometryEditorToolbar: View {
                     .padding(.vertical, stackEdgePadding)
                     .toolbarStackStyle()
                 case .horizontal:
-                    HStack(spacing: 30) {
+                    HStack(spacing: stackSpacing) {
                         controls
                     }
                     .padding(.horizontal, stackEdgePadding)
@@ -92,6 +98,8 @@ struct GeometryEditorToolbar: View {
         .animation(.default, value: model.isStarted)
         .onChange(of: ObjectIdentifier(geometryEditor)) {
             model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
+            // Snapping is enabled by default to simplify the UI.
+            geometryEditor.snapSettings.isEnabled = true
         }
     }
     
@@ -101,6 +109,7 @@ struct GeometryEditorToolbar: View {
         DeleteButton()
         UndoButton()
         RedoButton()
+        SnapSettingsButton()
     }
 }
 
@@ -231,6 +240,38 @@ private struct UndoButton: View {
         .task(id: ObjectIdentifier(model)) {
             for await canUndo in model.geometryEditor.$canUndo {
                 self.canUndo = canUndo
+            }
+        }
+    }
+}
+
+/// A button for presenting a settings view for configuring snapping.
+private struct SnapSettingsButton: View {
+    /// The model for the parent geometry editor toolbar.
+    @Environment(GeometryEditorToolbarModel.self) private var model
+    
+    /// A Boolean value indicating whether the settings view is presented.
+    @State private var isShowingSettings = false
+    
+    var body: some View {
+        if !model.geometryEditor.snapSettings.sourceSettings.isEmpty {
+            Button {
+                isShowingSettings.toggle()
+            } label: {
+                Label {
+                    Text(
+                        "Settings",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to show settings for configuring snapping."
+                    )
+                } icon: {
+                    Image(systemName: "gear")
+                }
+            }
+            .sheet(isPresented: $isShowingSettings) {
+                SnapSettingsView(settings: model.geometryEditor.snapSettings)
+                // Needed to override the font set in toolbarStackStyle.
+                    .font(nil)
             }
         }
     }
