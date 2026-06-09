@@ -94,8 +94,8 @@ This will eventually be available on `element`.
     private func takePhotoButton(input: _ImageFormInput) -> some View {
         Button {
             if cameraRequester.authorizationStatus == .authorized {
-                cameraControllerIsPresented = true
                 selectedInput = input
+                cameraControllerIsPresented = true
             } else {
                 cameraRequester.request()
             }
