@@ -18,28 +18,42 @@ import UniformTypeIdentifiers
 
 /// A UIImagePickerController wrapper to provide a native photo or video capture experience.
 struct AttachmentCameraController: UIViewControllerRepresentable {
+    /// Specifies whether, images, movies or both, can be captured and an optional maximum duration for movies.
+    struct Configuration: Identifiable {
+        let allowedFormats: AllowedFormats
+        let movieMaxDuration: TimeInterval?
+        let id = UUID()
+    }
+    
+    /// Specifies whether, images, movies or both, can be captured.
+    enum AllowedFormats {
+        case image
+        case imageAndMovie
+        case movie
+    }
+    
     /// The current import state.
     @Binding var importState: AttachmentImportState
     
-    @Binding var isPresented: Bool
-    
-    let input: _AttachmentsFormInput
+    /// The configuration for the camera controller.
+    @Binding var configuration: Configuration?
     
     /// The image picker controller represented within the view.
     private let controller = AttachmentUIImagePickerController()
     
     func makeUIViewController(context: Context) -> some UIViewController {
-        controller.mediaTypes = switch input {
-        case is _ImageFormInput:
+        controller.mediaTypes = switch configuration?.allowedFormats {
+        case .image:
             ["public.image"]
-        case is _VideoFormInput:
+        case .imageAndMovie:
+            UIImagePickerController.availableMediaTypes(for: .camera) ?? []
+        case .movie:
             ["public.movie"]
-        default:
+        case .none:
             []
         }
-        if let videoFormInput = input.self as? _VideoFormInput,
-           let maxDuration = videoFormInput.maxDuration {
-            controller.videoMaximumDuration = maxDuration
+        if let movieMaxDuration = configuration?.movieMaxDuration {
+            controller.videoMaximumDuration = movieMaxDuration
         }
         controller.sourceType = .camera
         controller.delegate = context.coordinator
@@ -76,11 +90,11 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
                 parent.importState = .finalizing(AttachmentImportData(contentType: contentType, data: videoData))
             }
         }
-        parent.isPresented = false
+        parent.configuration = nil
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        parent.isPresented = false
+        parent.configuration = nil
     }
 }
 

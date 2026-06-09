@@ -33,11 +33,11 @@ struct AttachmentImportMenu: View {
         self.onAdd = onAdd
     }
     
-    /// A Boolean value indicating whether the attachment camera controller is presented.
-    @State private var cameraControllerIsPresented = false
-    
     /// Performs camera authorization request handling.
     @State private var cameraRequester = CameraRequester()
+    
+    /// The capture configuration to use with the attachments camera controller.
+    @State private var captureConfiguration: AttachmentCameraController.Configuration?
     
     /// A Boolean value indicating whether the attachment file importer is presented.
     @State private var fileImporterIsPresented = false
@@ -48,11 +48,11 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the microphone access alert is visible.
     @State private var microphoneAccessAlertIsPresented = false
     
+    /// The capture configuration to use once camera permission has been authorized.
+    @State private var pendingCaptureConfiguration: AttachmentCameraController.Configuration?
+    
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
-    
-    /// <#Description#>
-    @State private var selectedInput: _AttachmentsFormInput?
     
 #warning("""
 Prototype only. Do not merge to main.
@@ -93,9 +93,9 @@ This will eventually be available on `element`.
     
     private func takePhotoButton(input: _ImageFormInput) -> some View {
         Button {
+            pendingCaptureConfiguration = .init(allowedFormats: .image, movieMaxDuration: nil)
             if cameraRequester.authorizationStatus == .authorized {
-                selectedInput = input
-                cameraControllerIsPresented = true
+                captureConfiguration = pendingCaptureConfiguration.take()
             } else {
                 cameraRequester.request()
             }
@@ -106,11 +106,29 @@ This will eventually be available on `element`.
         .disabled(isVision)
     }
     
+    @available(visionOS, unavailable)
+    private func takePhotoOrVideoButton(videoFormInput: _VideoFormInput) -> Button<some View> {
+        Button {
+            pendingCaptureConfiguration = .init(
+                allowedFormats: .imageAndMovie,
+                movieMaxDuration: videoFormInput.maxDuration
+            )
+            if cameraRequester.authorizationStatus == .authorized {
+                captureConfiguration = pendingCaptureConfiguration.take()
+            } else {
+                cameraRequester.request()
+            }
+        } label: {
+            Text(takePhotoOrVideoLabel)
+            Image(systemName: "camera")
+        }
+    }
+    
     private func takeVideoButton(input: _VideoFormInput) -> some View {
         Button {
+            pendingCaptureConfiguration = .init(allowedFormats: .movie, movieMaxDuration: input.maxDuration)
             if cameraRequester.authorizationStatus == .authorized {
-                selectedInput = input
-                cameraControllerIsPresented = true
+                captureConfiguration = pendingCaptureConfiguration.take()
             } else {
                 cameraRequester.request()
             }
@@ -186,14 +204,13 @@ This will eventually be available on `element`.
         Menu {
             Group {
                 if inputs.count >= 2 {
-                    ForEach(inputs) { input in
-                        switch input {
-                        case let imageFormInput as _ImageFormInput:
-                            takePhotoButton(input: imageFormInput)
-                        case let videoFormInput as _VideoFormInput:
-                            takeVideoButton(input: videoFormInput)
-                        default: EmptyView()
-                        }
+                    if let imageFormInput = inputs.first(where: { $0 is _ImageFormInput }) as? _ImageFormInput,
+                        let videoFormInput = inputs.first(where: { $0 is _VideoFormInput }) as? _VideoFormInput {
+                        takePhotoOrVideoButton(videoFormInput: videoFormInput)
+                    } else if let imageFormInput = inputs.first(where: { $0 is _ImageFormInput }) as? _ImageFormInput {
+                        takePhotoButton(input: imageFormInput)
+                    } else if let videoFormInput = inputs.first(where: { $0 is _VideoFormInput }) as? _VideoFormInput {
+                        takeVideoButton(input: videoFormInput)
                     }
                     if inputs.contains(where: {$0 is _ImageFormInput || $0 is _VideoFormInput}) {
                         chooseFromLibraryButton()
@@ -327,7 +344,7 @@ This will eventually be available on `element`.
         }
         .onChange(of: cameraRequester.authorizationStatus) { _, status in
             if status == .authorized {
-                cameraControllerIsPresented = true
+                captureConfiguration = pendingCaptureConfiguration.take()
             }
         }
 #if targetEnvironment(macCatalyst)
@@ -429,27 +446,26 @@ This will eventually be available on `element`.
             }
         }
 #if os(iOS)
-        .fullScreenCover(isPresented: $cameraControllerIsPresented) {
-            if let selectedInput {
-                AttachmentCameraController(
-                    importState: $importState, isPresented: $cameraControllerIsPresented, input: selectedInput
-                )
+        .fullScreenCover(item: $captureConfiguration) { _ in
+            AttachmentCameraController(
+                importState: $importState,
+                configuration: $captureConfiguration
+            )
 #if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
-                .onCameraCaptureModeChanged { captureMode in
-                    if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
-                        microphoneAccessAlertIsPresented = true
-                    }
+            .onCameraCaptureModeChanged { captureMode in
+                if captureMode == .video && AVCaptureDevice.authorizationStatus(for: .audio) == .denied {
+                    microphoneAccessAlertIsPresented = true
                 }
-#endif
-                .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsPresented) {
-                    appSettingsButton
-                    Button(role: .cancel) {} label: {
-                        Text(recordVideoOnlyButtonLabel)
-                    }
+            }
+#endif // !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
+            .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsPresented) {
+                appSettingsButton
+                Button(role: .cancel) {} label: {
+                    Text(recordVideoOnlyButtonLabel)
                 }
             }
         }
-#endif
+#endif // os(iOS)
         .modifier(
             AttachmentPhotoPicker(
                 importState: $importState,
@@ -474,6 +490,15 @@ private extension AttachmentImportMenu {
             localized: "Take Photo",
             bundle: .toolkitModule,
             comment: "A label for a button to capture a new photo."
+        )
+    }
+    
+    /// A label for a button to capture a new photo or video.
+    var takePhotoOrVideoLabel: String {
+        .init(
+            localized: "Take Photo or Video",
+            bundle: .toolkitModule,
+            comment: "A label for a button to capture a new photo or video."
         )
     }
     
