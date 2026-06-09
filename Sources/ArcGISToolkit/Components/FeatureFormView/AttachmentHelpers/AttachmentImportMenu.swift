@@ -303,7 +303,7 @@ This will eventually be available on `element`.
                             logInputs()
                         }
                     } else {
-                        Button("Add Limit (sec)") {
+                        Button("Add Limit") {
                             videoInput.maxDuration = 30
                             logInputs()
                         }
