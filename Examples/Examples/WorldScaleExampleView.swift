@@ -17,10 +17,15 @@ import ArcGISToolkit
 import CoreLocation
 import SwiftUI
 
-/// An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
-/// of your current location. Because this is an example that can be run from anywhere,
-/// it places a red circle around your initial location which can be explored.
+#if os(iOS)
+/// An example that utilizes the `WorldScaleSceneView` to show an augmented
+/// reality view of your current location. Because this is an example that can
+/// be run from anywhere, it places a red circle around your initial location
+/// which can be explored.
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 struct WorldScaleExampleView: View {
+    /// A scene configured with imagery basemap and elevation.
     @State private var scene: ArcGIS.Scene = {
         // Creates an elevation source from Terrain3D REST service.
         let elevationServiceURL = URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
@@ -34,7 +39,8 @@ struct WorldScaleExampleView: View {
         scene.baseSurface.opacity = 0
         return scene
     }()
-    /// The graphics overlay which shows a graphic around your initial location and marker symbols.
+    /// The graphics overlay which shows a graphic around your initial location
+    /// and marker symbols.
     @State private var graphicsOverlay: GraphicsOverlay = {
         let graphicsOverlay = GraphicsOverlay()
         let markerImage = UIImage(named: "RedMarker")!
@@ -45,17 +51,21 @@ struct WorldScaleExampleView: View {
         graphicsOverlay.sceneProperties.surfacePlacement = .absolute
         return graphicsOverlay
     }()
-    /// The location datasource that is used to access the device location.
-    @State private var locationDataSource = SystemLocationDataSource()
+    /// The world-tracking provider used by this example.
+    @State private var provider = AppleWorldTracking(mode: .worldTracking)
     
-    @available(*, deprecated)
     var body: some View {
-        WorldScaleSceneView { proxy in
+        WorldScaleSceneView(provider: provider) { context in
+            AppleWorldTrackingCameraFeedView(context: context)
+                .onCameraTrackingStateChanged { cameraTrackingState in
+                    print("cameraTrackingState: \(cameraTrackingState)")
+                }
+        } sceneView: { sceneView in
             SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
                 .onSingleTapGesture { screen, _ in
                     print("Identifying...")
                     Task {
-                        let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
+                        let results = try await sceneView.identifyLayers(screenPoint: screen, tolerance: 20)
                         print("\(results.count) identify result(s).")
                     }
                 }
@@ -76,17 +86,21 @@ struct WorldScaleExampleView: View {
                 locationManager.requestWhenInUseAuthorization()
             }
             
-            try? await locationDataSource.start()
+            try? await provider.dataSource.start()
             
             // Retrieve initial location.
-            guard let initialLocation = await locationDataSource.locations.first(where: { @Sendable _ in true }) else { return }
+            guard let initialLocation = await provider.dataSource.locations.first(where: { @Sendable _ in true }) else { return }
             
             // Put a circle graphic around the initial location.
             let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
             graphicsOverlay.addGraphic(Graphic(geometry: circle, symbol: SimpleLineSymbol(color: .red, width: 3)))
             
             // Stop the location data source after the initial location is retrieved.
-            await locationDataSource.stop()
+            await provider.dataSource.stop()
+        }
+        .onDisappear {
+            graphicsOverlay.removeAllGraphics()
         }
     }
 }
+#endif
