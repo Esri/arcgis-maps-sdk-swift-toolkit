@@ -28,30 +28,19 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
     /// The image picker controller represented within the view.
     private let controller = AttachmentUIImagePickerController()
     
-//    func makeUIViewController(context: Context) -> some UIViewController {
-//        controller.delegate = context.coordinator
-//        print("DTF", input)
-//        controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
-//        print(UIImagePickerController.availableMediaTypes(for: .camera))
-////        controller.mediaTypes = [] switch input {
-////        case is _ImageFormInput:
-////            [UTType.image.identifier]
-////        case is _VideoFormInput:
-////            [UTType.video.identifier]
-////        default:
-////            []
-////        }
-////        if let videoFormInput = input.self as? _VideoFormInput,
-////           let maxDuration = videoFormInput.maxDuration {
-////            controller.videoMaximumDuration = maxDuration
-////        }
-//        controller.sourceType = .camera
-//        controller.delegate = context.coordinator
-//        return controller
-//    }
-    
     func makeUIViewController(context: Context) -> some UIViewController {
-        controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
+        controller.mediaTypes = switch input {
+        case is _ImageFormInput:
+            ["public.image"]
+        case is _VideoFormInput:
+            ["public.movie"]
+        default:
+            []
+        }
+        if let videoFormInput = input.self as? _VideoFormInput,
+           let maxDuration = videoFormInput.maxDuration {
+            controller.videoMaximumDuration = maxDuration
+        }
         controller.sourceType = .camera
         controller.delegate = context.coordinator
         return controller
