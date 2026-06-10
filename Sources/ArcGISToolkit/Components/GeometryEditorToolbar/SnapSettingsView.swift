@@ -83,6 +83,11 @@ struct SnapSettingsView: View {
                 rootSourceSettingsModels = settings.sourceSettings
                     .filter { $0.source is LayerContent }
                     .map(SnapSourceSettingsToggle.Model.init(settings:))
+                // Disable snapping on other snap sources that aren't exposed
+                // in the UI to avoid confusion.
+                settings.sourceSettings
+                    .filter { !($0.source is LayerContent) }
+                    .forEach { $0.isEnabled = false }
                 snapsToFeatures = settings.snapsToFeatures
                 snapsToGeometryGuides = settings.snapsToGeometryGuides
             }
