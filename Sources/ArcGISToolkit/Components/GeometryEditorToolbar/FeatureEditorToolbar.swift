@@ -18,7 +18,7 @@ import SwiftUI
 /// The `FeatureEditorToolbar` component allows users to edit geometries in the
 /// feature editor.
 ///
-/// This is a thin wrapper over ``GeometryEditorToolbar`` that reads
+/// This is a thin wrapper over `GeometryEditorToolbar` that reads
 /// the geometry editor from ``FeatureEditorModel`` in the environment.
 public struct FeatureEditorToolbar: View {
     /// The style to apply to the toolbar's controls.
