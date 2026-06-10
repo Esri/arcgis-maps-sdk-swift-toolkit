@@ -22,7 +22,7 @@ struct SnapSettingsView: View {
     
     /// The view models for the root `SnapSourceSettingsToggle` views in the outline group.
     @State private var rootSourceSettingsModels: [SnapSourceSettingsToggle.Model] = []
-    /// A Boolean value indicating whether the settings allow snapping to features and graphics.
+    /// A Boolean value indicating whether the settings allow snapping to features.
     @State private var snapsToFeatures = false
     /// A Boolean value indicating whether the settings allow snapping to geometry guides.
     @State private var snapsToGeometryGuides = false
@@ -47,10 +47,10 @@ struct SnapSettingsView: View {
                 
                 Toggle(isOn: $snapsToFeatures.animation()) {
                     Text(
-                        "Snap to Features and Graphics",
+                        "Snap to Features",
                         bundle: .toolkitModule,
                         comment: """
-                                A label for a toggle that enables snapping to features and graphics,
+                                A label for a toggle that enables snapping to features,
                                 which allows vertices and edges of existing features to be snapped to.
                                 """
                     )
@@ -79,9 +79,10 @@ struct SnapSettingsView: View {
             }
             .onChange(of: ObjectIdentifier(settings), initial: true) {
                 // Sets up view's state properties using settings' property values.
-                rootSourceSettingsModels = settings.sourceSettings.map(
-                    SnapSourceSettingsToggle.Model.init(settings:)
-                )
+                // Only allows layers to be snap sources.
+                rootSourceSettingsModels = settings.sourceSettings
+                    .filter { $0.source is LayerContent }
+                    .map(SnapSourceSettingsToggle.Model.init(settings:))
                 snapsToFeatures = settings.snapsToFeatures
                 snapsToGeometryGuides = settings.snapsToGeometryGuides
             }
@@ -148,8 +149,6 @@ private struct SnapSourceSettingsToggle: View {
         let name: String? = switch source {
         case let layer as LayerContent:
             layer.name
-        case let overlay as GraphicsOverlay:
-            overlay.id
         default:
             nil
         }
