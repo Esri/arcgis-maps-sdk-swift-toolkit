@@ -42,11 +42,14 @@ import SwiftUI
 /// **Associated Types**
 ///
 /// - ``Style``
+/// - ``SnapSourceTypes``
 struct GeometryEditorToolbar: View {
     /// The geometry editor that this toolbar controls.
     private let geometryEditor: GeometryEditor
     /// The style to apply to the toolbar's controls.
     private let style: Style?
+    /// The allowed snap source types for snap settings UI.
+    private var snapSourceTypes: SnapSourceTypes
     
     /// The spacing to apply between the controls in the stacks.
     /// This is hardcoded to match the system styling for toolbar groups on iOS.
@@ -68,6 +71,7 @@ struct GeometryEditorToolbar: View {
         geometryEditor.snapSettings.isEnabled = true
         self.geometryEditor = geometryEditor
         self.style = style
+        self.snapSourceTypes = .all
         
         let model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
         self._model = .init(wrappedValue: model)
@@ -109,7 +113,18 @@ struct GeometryEditorToolbar: View {
         DeleteButton()
         UndoButton()
         RedoButton()
-        SnapSettingsButton()
+        SnapSettingsButton(snapSourceTypes: snapSourceTypes)
+    }
+}
+
+extension GeometryEditorToolbar {
+    /// Limits the snap source types shown in snap settings.
+    /// - Parameter types: The allowed snap source types.
+    /// - Returns: A toolbar with snap settings filtered to `types`.
+    func snapSourceTypes(types: SnapSourceTypes) -> Self {
+        var copy = self
+        copy.snapSourceTypes = types
+        return copy
     }
 }
 
@@ -153,6 +168,57 @@ extension GeometryEditorToolbar {
         case horizontal
         /// Displays the toolbar in a styled vertical layout.
         case vertical
+    }
+    
+    /// A set of `SnapSource` types allowed in the snap settings UI.
+    struct SnapSourceTypes: OptionSet {
+        let rawValue: Int
+        
+        init(rawValue: Int) {
+            self.rawValue = rawValue
+        }
+        
+        /// Allows `FeatureLayer` snap sources.
+        static let featureLayer = SnapSourceTypes(rawValue: 1 << 0)
+        /// Allows `GraphicsOverlay` snap sources.
+        static let graphicsOverlay = SnapSourceTypes(rawValue: 1 << 1)
+        /// Allows `SubtypeFeatureLayer` snap sources.
+        static let subtypeFeatureLayer = SnapSourceTypes(rawValue: 1 << 2)
+        /// Allows `SubtypeSublayer` snap sources.
+        static let subtypeSublayer = SnapSourceTypes(rawValue: 1 << 3)
+        
+        /// Allows all supported `SnapSource` types.
+        static let all: SnapSourceTypes = [
+            .featureLayer,
+            .graphicsOverlay,
+            .subtypeFeatureLayer,
+            .subtypeSublayer
+        ]
+        /// Allows `SnapSource` types that are layers.
+        static let layers: SnapSourceTypes = [
+            .featureLayer,
+            .subtypeFeatureLayer,
+            .subtypeSublayer
+        ]
+        
+        /// Returns a Boolean value indicating whether a snap source type is
+        /// allowed by the set.
+        /// - Parameter source: A snap source to check for allowance by the set.
+        /// - Returns: `true` if the snap source type is in the set, otherwise `false`.
+        func contains(source: some SnapSource) -> Bool {
+            switch source {
+            case is FeatureLayer:
+                contains(.featureLayer)
+            case is GraphicsOverlay:
+                contains(.graphicsOverlay)
+            case is SubtypeFeatureLayer:
+                contains(.subtypeFeatureLayer)
+            case is SubtypeSublayer:
+                contains(.subtypeSublayer)
+            default:
+                false
+            }
+        }
     }
 }
 
@@ -249,6 +315,8 @@ private struct UndoButton: View {
 private struct SnapSettingsButton: View {
     /// The model for the parent geometry editor toolbar.
     @Environment(GeometryEditorToolbarModel.self) private var model
+    /// The allowed snap source types shown in settings.
+    let snapSourceTypes: GeometryEditorToolbar.SnapSourceTypes
     
     /// A Boolean value indicating whether the settings view is presented.
     @State private var isShowingSettings = false
@@ -269,9 +337,12 @@ private struct SnapSettingsButton: View {
                 }
             }
             .sheet(isPresented: $isShowingSettings) {
-                SnapSettingsView(settings: model.geometryEditor.snapSettings)
+                SnapSettingsView(
+                    settings: model.geometryEditor.snapSettings,
+                    snapSourceTypes: snapSourceTypes
+                )
                 // Needed to override the font set in toolbarStackStyle.
-                    .font(nil)
+                .font(nil)
             }
         }
     }

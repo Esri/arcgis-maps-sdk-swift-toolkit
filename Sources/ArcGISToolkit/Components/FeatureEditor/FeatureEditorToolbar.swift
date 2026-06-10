@@ -38,6 +38,8 @@ public struct FeatureEditorToolbar: View {
             geometryEditor: featureEditorModel.geometryEditor,
             style: style?.geometryEditorToolbarStyle
         )
+        // Only show snap settings for features in layers.
+        .snapSourceTypes(types: .layers)
     }
 }
 
