@@ -62,7 +62,7 @@ struct SnapSettingsView: View {
                     settings.snapsToFeatures = snapsToFeatures
                 }
                 
-                if snapsToFeatures {
+                if snapsToFeatures, !rootSourceSettingsModels.isEmpty {
                     Section {
                         OutlineGroup(rootSourceSettingsModels, children: \.children) { model in
                             SnapSourceSettingsToggle(model: model)
