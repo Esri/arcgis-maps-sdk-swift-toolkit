@@ -47,7 +47,7 @@ struct SnapSettingsView: View {
                 
                 Toggle(isOn: $snapsToFeatures.animation()) {
                     Text(
-                        "Snap to Features and Graphics",
+                        "Snap to Features",
                         bundle: .toolkitModule,
                         comment: """
                                 A label for a toggle that enables snapping to features and graphics,
