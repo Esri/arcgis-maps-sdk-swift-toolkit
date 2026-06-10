@@ -18,7 +18,7 @@ import Observation
 /// The data model for the feature editor.
 @MainActor
 @Observable
-public class FeatureEditorModel {
+class FeatureEditorModel {
     let feature: ArcGISFeature
     let geometryEditor: GeometryEditor
     
