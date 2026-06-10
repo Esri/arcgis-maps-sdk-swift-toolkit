@@ -68,6 +68,9 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Associations";
 
+/* A message indicating the minimum number of attachments required for a form element. */
+"At least %u attachment(s) required." = "At least %u attachment(s) required.";
+
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Attachment";
 
@@ -573,6 +576,9 @@ through auto-pan modes. */
 /* Text indicating a field's maximum number of allowed characters is exceeded. */
 "Maximum character length exceeded" = "Maximum character length exceeded";
 
+/* A message indicating that no more attachments can be added because the maximum count has been reached. */
+"Maximum of %u attachments reached." = "Maximum of %u attachments reached.";
+
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
 
@@ -749,9 +755,6 @@ The variable provides additional data. */
 /* The status text when a map area is ready to download. */
 "Ready to download" = "Ready to download";
 
-/* A label for a button to capture new audio. */
-"Record Audio" = "Record Audio";
-
 /* A button allowing users to proceed to record a video while acknowledging audio will not be captured. */
 "Record video only" = "Record video only";
 
@@ -896,6 +899,9 @@ network trace operation. */
 
 /* A label for a button to capture a new photo. */
 "Take Photo" = "Take Photo";
+
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "Take Photo or Video";
 
 /* A label for a button to capture a new video. */
 "Take Video" = "Take Video";
