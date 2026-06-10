@@ -22,20 +22,21 @@ import SwiftUI
 /// the geometry editor from ``FeatureEditorModel`` in the environment.
 public struct FeatureEditorToolbar: View {
     /// The style to apply to the toolbar's controls.
-    private let style: Style
+    private let style: Style?
     /// The model for the parent feature editor.
     @Environment(FeatureEditorModel.self) private var featureEditorModel
     
     /// Creates a feature editor toolbar.
-    /// - Parameter style: The style that determines the toolbar's layout.
-    public init(style: Style = .vertical) {
+    /// - Parameter style: The style that determines the toolbar's appearance and layout.
+    /// A `nil` value displays the toolbar's controls without built-in layout or styling.
+    public init(style: Style? = .vertical) {
         self.style = style
     }
     
     public var body: some View {
         GeometryEditorToolbar(
             geometryEditor: featureEditorModel.geometryEditor,
-            style: style.geometryEditorToolbarStyle
+            style: style?.geometryEditorToolbarStyle
         )
     }
 }
