@@ -92,9 +92,10 @@ struct GeometryEditorToolbar: View {
 }
 
 extension GeometryEditorToolbar {
-    /// Limits the snap source types shown in snap settings.
+    /// Limits the snap source types available in the snap settings UI.
+    /// Disallowed snap sources are hidden in the UI and disabled in the underlying `SnapSettings`.
     /// - Parameter snapSources: The allowed snap source types.
-    /// - Returns: A toolbar with snap settings filtered to `types`.
+    /// - Returns: A toolbar with snap settings restricted to `snapSources`.
     func snapSourceTypes(_ snapSources: SnapSources) -> Self {
         var copy = self
         copy.snapSources = snapSources
