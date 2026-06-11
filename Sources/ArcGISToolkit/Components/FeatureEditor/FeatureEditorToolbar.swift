@@ -35,7 +35,7 @@ public struct FeatureEditorToolbar: View {
             style: style?.geometryEditorToolbarStyle
         )
         // Only show snap settings for features in layers.
-        .snapSourceTypes(types: .layers)
+        .snapSourceTypes(.layers)
     }
 }
 
