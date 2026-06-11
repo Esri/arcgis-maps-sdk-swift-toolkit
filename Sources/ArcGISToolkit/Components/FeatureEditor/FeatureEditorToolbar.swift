@@ -79,8 +79,7 @@ private extension GeometryEditorToolbar.Style {
         switch featureEditorToolbarStyle {
         case .horizontal: self = .horizontal
         case .vertical: self = .vertical
-        default: break
+        default: return nil
         }
-        return nil
     }
 }
