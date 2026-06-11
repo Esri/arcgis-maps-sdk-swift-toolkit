@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if os(iOS)
 import SwiftUI
 
 @available(macCatalyst, unavailable)
@@ -153,10 +154,11 @@ private extension WorldScaleSceneView.CalibrationView {
     }
 }
 
-#if os(iOS) && !targetEnvironment(macCatalyst)
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 #Preview {
     @Previewable @State var isPresented = true
-    WorldScaleSceneView.CalibrationView(
+    WorldScaleSceneView<AppleWorldTracking>.CalibrationView(
         calibration: Calibration(),
         isPresented: $isPresented
     )
