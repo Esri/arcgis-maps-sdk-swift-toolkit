@@ -32,7 +32,7 @@ public struct FeatureEditorToolbar: View {
     public var body: some View {
         GeometryEditorToolbar(
             geometryEditor: featureEditorModel.geometryEditor,
-            style: style?.geometryEditorToolbarStyle
+            style: GeometryEditorToolbar.Style(featureEditorToolbarStyle: style)
         )
         // Only show snap settings for features in layers.
         .snapSourceTypes(.layers)
@@ -49,11 +49,13 @@ extension FeatureEditorToolbar {
     }
 }
 
-private extension FeatureEditorToolbar.Style {
-    init(featureEditorToolbar: FeatureEditorToolbar.Style) {
-        self = switch featureEditorToolbar {
-        case .horizontal: .horizontal
-        case .vertical: .vertical
+private extension GeometryEditorToolbar.Style {
+    init?(featureEditorToolbarStyle: FeatureEditorToolbar.Style?) {
+        switch featureEditorToolbarStyle {
+        case .horizontal: self = .horizontal
+        case .vertical: self = .vertical
+        default: break
         }
+        return nil
     }
 }
