@@ -53,12 +53,10 @@ extension FeatureEditorToolbar {
 }
 
 private extension FeatureEditorToolbar.Style {
-    var geometryEditorToolbarStyle: GeometryEditorToolbar.Style {
-        switch self {
-        case .horizontal:
-            return .horizontal
-        case .vertical:
-            return .vertical
+    init(featureEditorToolbar: FeatureEditorToolbar.Style) {
+        self = switch featureEditorToolbar {
+        case .horizontal: .horizontal
+        case .vertical: .vertical
         }
     }
 }
