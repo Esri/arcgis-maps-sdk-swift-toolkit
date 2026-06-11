@@ -171,7 +171,7 @@ extension GeometryEditorToolbar {
     }
     
     /// A set of `SnapSource` types allowed in the snap settings UI.
-    struct SnapSourceTypes: OptionSet {
+    struct SnapSources: OptionSet {
         let rawValue: Int
         
         init(rawValue: Int) {
@@ -316,7 +316,7 @@ private struct SnapSettingsButton: View {
     /// The model for the parent geometry editor toolbar.
     @Environment(GeometryEditorToolbarModel.self) private var model
     /// The allowed snap source types shown in settings.
-    let snapSourceTypes: GeometryEditorToolbar.SnapSourceTypes
+    let snapSources: GeometryEditorToolbar.SnapSources
     
     /// A Boolean value indicating whether the settings view is presented.
     @State private var isShowingSettings = false
