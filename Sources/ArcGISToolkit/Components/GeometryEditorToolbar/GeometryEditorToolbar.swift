@@ -49,7 +49,7 @@ struct GeometryEditorToolbar: View {
     /// The style to apply to the toolbar's controls.
     private let style: Style?
     /// The allowed snap source types for snap settings UI.
-    private var snapSourceTypes: SnapSourceTypes
+    private var snapSources: SnapSources
     
     /// The spacing to apply between the controls in the stacks.
     /// This is hardcoded to match the system styling for toolbar groups on iOS.
@@ -71,7 +71,7 @@ struct GeometryEditorToolbar: View {
         geometryEditor.snapSettings.isEnabled = true
         self.geometryEditor = geometryEditor
         self.style = style
-        self.snapSourceTypes = .all
+        self.snapSources = .all
         
         let model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
         self._model = .init(wrappedValue: model)
@@ -113,17 +113,17 @@ struct GeometryEditorToolbar: View {
         DeleteButton()
         UndoButton()
         RedoButton()
-        SnapSettingsButton(snapSourceTypes: snapSourceTypes)
+        SnapSettingsButton(snapSources: snapSources)
     }
 }
 
 extension GeometryEditorToolbar {
     /// Limits the snap source types shown in snap settings.
-    /// - Parameter types: The allowed snap source types.
+    /// - Parameter snapSources: The allowed snap source types.
     /// - Returns: A toolbar with snap settings filtered to `types`.
-    func snapSourceTypes(types: SnapSourceTypes) -> Self {
+    func snapSourceTypes(_ snapSources: SnapSources) -> Self {
         var copy = self
-        copy.snapSourceTypes = types
+        copy.snapSources = snapSources
         return copy
     }
 }
@@ -179,23 +179,23 @@ extension GeometryEditorToolbar {
         }
         
         /// Allows `FeatureLayer` snap sources.
-        static let featureLayer = SnapSourceTypes(rawValue: 1 << 0)
+        static let featureLayer = SnapSources(rawValue: 1 << 0)
         /// Allows `GraphicsOverlay` snap sources.
-        static let graphicsOverlay = SnapSourceTypes(rawValue: 1 << 1)
+        static let graphicsOverlay = SnapSources(rawValue: 1 << 1)
         /// Allows `SubtypeFeatureLayer` snap sources.
-        static let subtypeFeatureLayer = SnapSourceTypes(rawValue: 1 << 2)
+        static let subtypeFeatureLayer = SnapSources(rawValue: 1 << 2)
         /// Allows `SubtypeSublayer` snap sources.
-        static let subtypeSublayer = SnapSourceTypes(rawValue: 1 << 3)
+        static let subtypeSublayer = SnapSources(rawValue: 1 << 3)
         
         /// Allows all supported `SnapSource` types.
-        static let all: SnapSourceTypes = [
+        static let all: SnapSources = [
             .featureLayer,
             .graphicsOverlay,
             .subtypeFeatureLayer,
             .subtypeSublayer
         ]
         /// Allows `SnapSource` types that are layers.
-        static let layers: SnapSourceTypes = [
+        static let layers: SnapSources = [
             .featureLayer,
             .subtypeFeatureLayer,
             .subtypeSublayer
@@ -339,7 +339,7 @@ private struct SnapSettingsButton: View {
             .sheet(isPresented: $isShowingSettings) {
                 SnapSettingsView(
                     settings: model.geometryEditor.snapSettings,
-                    snapSourceTypes: snapSourceTypes
+                    snapSources: snapSources
                 )
                 // Needed to override the font set in toolbarStackStyle.
                 .font(nil)

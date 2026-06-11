@@ -20,7 +20,7 @@ struct SnapSettingsView: View {
     /// The snap settings to configure.
     let settings: SnapSettings
     /// The allowed snap source types shown in the source settings list.
-    let snapSourceTypes: GeometryEditorToolbar.SnapSourceTypes
+    let snapSources: GeometryEditorToolbar.SnapSources
     
     /// The view models for the root `SnapSourceSettingsToggle` views in the outline group.
     @State private var rootSourceSettingsModels: [SnapSourceSettingsToggle.Model] = []
@@ -82,14 +82,18 @@ struct SnapSettingsView: View {
             .onChange(of: ObjectIdentifier(settings), initial: true) {
                 // Only allows certain snap sources.
                 rootSourceSettingsModels = settings.sourceSettings
-                    .filter { snapSourceTypes.contains(source: $0.source) }
-                    .map(SnapSourceSettingsToggle.Model.init(settings:))
+                    .compactMap { settings in
+                        guard snapSources.contains(source: settings.source) else { return nil }
+                        return SnapSourceSettingsToggle.Model(settings: settings)
+                    }
                 
                 // Disable snapping on other snap sources that aren't exposed
                 // in the UI to avoid confusion.
-                settings.sourceSettings
-                    .filter { !snapSourceTypes.contains(source: $0.source) }
-                    .forEach { $0.isEnabled = false }
+                for sourceSettings in settings.sourceSettings {
+                    if !snapSources.contains(source: sourceSettings.source) {
+                        sourceSettings.isEnabled = false
+                    }
+                }
                 
                 // Sets up view's state properties using settings' property values.
                 snapsToFeatures = settings.snapsToFeatures
@@ -222,5 +226,5 @@ private extension SnapSourceSettingsToggle {
 }
 
 #Preview {
-    SnapSettingsView(settings: SnapSettings(), snapSourceTypes: .all)
+    SnapSettingsView(settings: SnapSettings(), snapSources: .all)
 }
