@@ -23,8 +23,6 @@ import SwiftUI
 
 /// Displays the AR camera feed and updates world-scale camera state using
 /// Google geospatial tracking.
-@available(macCatalyst, unavailable)
-@available(visionOS, unavailable)
 struct CustomWorldTrackingCameraFeedView: View {
     /// Shared world-scale context used to read provider state and update the
     /// scene.

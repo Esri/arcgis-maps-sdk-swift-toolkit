@@ -20,8 +20,6 @@ import ARKit
 import RealityKit
 
 /// A world-tracking provider backed by the Google ARCore SDK.
-@available(macCatalyst, unavailable)
-@available(visionOS, unavailable)
 final class CustomWorldTracking {
 #if os(iOS)
     @MainActor let arSessionProvider = ARSessionProvider<ARView>()
