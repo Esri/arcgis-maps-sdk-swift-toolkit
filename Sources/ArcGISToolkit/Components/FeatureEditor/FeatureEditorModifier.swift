@@ -34,15 +34,23 @@ private struct FeatureEditorModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .inspector(isPresented: isPresented) {
-                Text("Placeholder")
-                    .presentationBackgroundInteraction(.enabled)
-                    .presentationContentInteraction(.scrolls)
-                    .presentationDetents(
-                        [.bar, .medium, .large],
-                        selection: $selectedPresentationDetent
-                    )
-                    .inspectorColumnWidth(ideal: 320)
-                    .interactiveDismissDisabled()
+                // VStack is needed for presentation modifiers to be applied.
+                VStack(spacing: 0) {
+                    if let feature {
+                        FeatureFormView(
+                            root: FeatureForm(feature: feature),
+                            isPresented: isPresented
+                        )
+                    }
+                }
+                .presentationBackgroundInteraction(.enabled)
+                .presentationContentInteraction(.scrolls)
+                .presentationDetents(
+                    [.bar, .medium, .large],
+                    selection: $selectedPresentationDetent
+                )
+                .inspectorColumnWidth(ideal: 320)
+                .interactiveDismissDisabled()
             }
     }
 }
