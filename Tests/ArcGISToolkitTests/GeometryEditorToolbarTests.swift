@@ -49,13 +49,12 @@ struct GeometryEditorToolbarTests {
     @Test
     func snapSourcesAllContainsAllSupportedTypes() {
         let all = GeometryEditorToolbar.SnapSources.all
-        
-#expect(all == [.featureLayer, .graphicsOverlay, .subtypeFeatureLayer, .subtypeSublayer])
+        #expect(all == [.featureLayer, .graphicsOverlay, .subtypeFeatureLayer, .subtypeSublayer])
     }
     
     @Test
-    func snapSourcesLayersExcludesGraphicsOverlay() {
+    func snapSourcesLayersOnlyContainLayers() {
         let layers = GeometryEditorToolbar.SnapSources.layers
-        
-#expect(layers == [.featureLayer, .subtypeFeatureLayer, .subtypeSublayer])
+        #expect(layers == [.featureLayer, .subtypeFeatureLayer, .subtypeSublayer])
+    }
 }
