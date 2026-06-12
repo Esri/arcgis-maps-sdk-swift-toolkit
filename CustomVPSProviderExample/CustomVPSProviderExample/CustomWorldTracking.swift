@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if os(iOS)
 import ArcGIS
 import ArcGISToolkit
 import ARCore
@@ -21,9 +22,7 @@ import RealityKit
 
 /// A world-tracking provider backed by the Google ARCore SDK.
 final class CustomWorldTracking {
-#if os(iOS)
     @MainActor let arSessionProvider = ARSessionProvider<ARView>()
-#endif
     /// The ARCore session that produces geospatial and streetscape updates.
     let garSession: GARSession
     /// The root world origin anchor for all generated streetscape content.
@@ -48,7 +47,6 @@ final class CustomWorldTracking {
 extension CustomWorldTracking: WorldTrackingProvider {
     typealias CameraFeedView = CustomWorldTrackingCameraFeedView
     
-#if os(iOS)
     var arConfiguration: ARConfiguration {
         let configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravity
@@ -82,7 +80,6 @@ extension CustomWorldTracking: WorldTrackingProvider {
     func stop() {
         pauseARSession()
     }
-#endif
 }
 
 extension CustomWorldTracking {
@@ -192,3 +189,4 @@ extension CustomWorldTracking {
         streetscapeGeometryModels.removeAll()
     }
 }
+#endif

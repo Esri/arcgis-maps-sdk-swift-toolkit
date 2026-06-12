@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if os(iOS)
 import ArcGIS
 import ArcGISToolkit
 import ARCore
@@ -34,10 +35,8 @@ struct CustomWorldTrackingCameraFeedView: View {
         self.context = context
     }
     
-#if os(iOS)
     /// The closure to perform when the camera tracking state changes.
     private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
-#endif
     
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
@@ -46,30 +45,30 @@ struct CustomWorldTrackingCameraFeedView: View {
     private var streetscapeGeometryEnabled = false
     
     var body: some View {
-#if os(iOS)
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
                 guard let interfaceOrientation,
                       let garFrame = try? context.provider.garSession.update(frame),
-                      let earth = garFrame.earth else { return }
-                
-                if !context.isLocalized {
-                    updateLocalizationState(for: earth.trackingState)
+                      let earth = garFrame.earth else {
                     return
                 }
                 
-                updateCameraController(
-                    camera: frame.camera,
-                    geospatialTransform: earth.cameraGeospatialTransform
-                )
-                
-                context.sceneView.setFieldOfView(
-                    for: frame,
-                    orientation: interfaceOrientation
-                )
-                
-                if streetscapeGeometryEnabled {
-                    updateStreetscapeGeometry(using: garFrame.streetscapeGeometries ?? [])
+                if context.isLocalized {
+                    updateCameraController(
+                        camera: frame.camera,
+                        geospatialTransform: earth.cameraGeospatialTransform
+                    )
+                    
+                    context.sceneView.setFieldOfView(
+                        for: frame,
+                        orientation: interfaceOrientation
+                    )
+                    
+                    if streetscapeGeometryEnabled {
+                        updateStreetscapeGeometry(using: garFrame.streetscapeGeometries ?? [])
+                    }
+                } else {
+                    updateLocalizationState(for: earth.trackingState)
                 }
             }
             .onCameraDidChangeTrackingState { _, trackingState in
@@ -77,25 +76,19 @@ struct CustomWorldTrackingCameraFeedView: View {
             }
             .observingInterfaceOrientation($interfaceOrientation)
             .onChange(of: streetscapeGeometryEnabled) { _, newEnabled in
-                if !newEnabled {
-                    context.provider.removeStreetscapeGeometry()
-                }
+                guard !newEnabled else { return }
+                context.provider.removeStreetscapeGeometry()
             }
-#endif
     }
     
     /// Updates the localization based on the given tracking state.
     /// - Parameter trackingState: The ARCore frame tracking state.
     func updateLocalizationState(for trackingState: GARTrackingState?) {
-        guard !context.isLocalized else { return }
-        
         guard trackingState == .tracking else { return }
-        
         context.isLocalized = true
     }
 }
 
-#if os(iOS)
 extension CustomWorldTrackingCameraFeedView {
     /// Sets a closure to perform when the camera tracking state changes.
     /// - Parameter action: The closure to perform when the camera tracking
@@ -118,12 +111,10 @@ extension CustomWorldTrackingCameraFeedView {
         return copy
     }
 }
-#endif
 
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 private extension CustomWorldTrackingCameraFeedView {
-#if os(iOS)
     /// Updates the scene's camera controller based on the given AR camera and
     /// ARCore frame geospatial transform.
     /// - Parameters:
@@ -131,7 +122,9 @@ private extension CustomWorldTrackingCameraFeedView {
     ///   - geospatialTransform: The ARCore frame geospatial transform data.
     func updateCameraController(camera: ARCamera, geospatialTransform: GARGeospatialTransform?) {
         guard let interfaceOrientation,
-              let geospatialTransform else { return }
+              let geospatialTransform else {
+            return
+        }
         
         let orientation = geospatialTransform.eastUpSouthQTarget
         let transform = camera.transform(for: interfaceOrientation)
@@ -211,7 +204,6 @@ private extension CustomWorldTrackingCameraFeedView {
             context.provider.removeStreetscapeGeometry()
         }
     }
-#endif
 }
 
 private extension ARCamera {
@@ -274,3 +266,4 @@ private extension CLLocation {
         return normalized < 0 ? normalized + 360 : normalized
     }
 }
+#endif
