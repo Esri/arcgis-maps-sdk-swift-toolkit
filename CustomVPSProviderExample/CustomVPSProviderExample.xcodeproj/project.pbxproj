@@ -7,36 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1C0FDE702FD8EAD7009EB851 /* GoogleWorldTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0FDE6E2FD8EAD7009EB851 /* GoogleWorldTracking.swift */; };
-		1C0FDE712FD8EAD7009EB851 /* GoogleWorldTrackingCameraFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0FDE6F2FD8EAD7009EB851 /* GoogleWorldTrackingCameraFeedView.swift */; };
-		1C0FDE722FD8EAD7009EB851 /* CustomVPSProviderExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0FDE6C2FD8EAD7009EB851 /* CustomVPSProviderExampleApp.swift */; };
-		1C0FDE732FD8EAD7009EB851 /* CustomVPSProviderExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C0FDE6D2FD8EAD7009EB851 /* CustomVPSProviderExampleView.swift */; };
 		1C0FDEC02FD8EC0D009EB851 /* ARCoreAugmentedFaces in Frameworks */ = {isa = PBXBuildFile; productRef = 1C0FDEBF2FD8EC0D009EB851 /* ARCoreAugmentedFaces */; };
 		1C0FDEC22FD8EC0D009EB851 /* ARCoreCloudAnchors in Frameworks */ = {isa = PBXBuildFile; productRef = 1C0FDEC12FD8EC0D009EB851 /* ARCoreCloudAnchors */; };
 		1C0FDEC42FD8EC0D009EB851 /* ARCoreGARSession in Frameworks */ = {isa = PBXBuildFile; productRef = 1C0FDEC32FD8EC0D009EB851 /* ARCoreGARSession */; };
 		1C0FDEC62FD8EC0D009EB851 /* ARCoreGeospatial in Frameworks */ = {isa = PBXBuildFile; productRef = 1C0FDEC52FD8EC0D009EB851 /* ARCoreGeospatial */; };
 		1C0FDEC82FD8EC0D009EB851 /* ARCoreSemantics in Frameworks */ = {isa = PBXBuildFile; productRef = 1C0FDEC72FD8EC0D009EB851 /* ARCoreSemantics */; };
-		88140D612A8BD941003F55D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88140D602A8BD941003F55D4 /* Assets.xcassets */; };
-		88140D642A8BD941003F55D4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88140D632A8BD941003F55D4 /* Preview Assets.xcassets */; };
 		88140D6D2A8BDCBE003F55D4 /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = 88140D6C2A8BDCBE003F55D4 /* ArcGISToolkit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1C0FDE6C2FD8EAD7009EB851 /* CustomVPSProviderExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVPSProviderExampleApp.swift; sourceTree = "<group>"; };
-		1C0FDE6D2FD8EAD7009EB851 /* CustomVPSProviderExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVPSProviderExampleView.swift; sourceTree = "<group>"; };
-		1C0FDE6E2FD8EAD7009EB851 /* GoogleWorldTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleWorldTracking.swift; sourceTree = "<group>"; };
-		1C0FDE6F2FD8EAD7009EB851 /* GoogleWorldTrackingCameraFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleWorldTrackingCameraFeedView.swift; sourceTree = "<group>"; };
 		88140D592A8BD940003F55D4 /* CustomVPSProviderExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomVPSProviderExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		88140D602A8BD941003F55D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		88140D632A8BD941003F55D4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		88140D6A2A8BDC75003F55D4 /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "arcgis-maps-sdk-swift-toolkit"; path = ..; sourceTree = "<group>"; };
-		88140D6E2A8C1312003F55D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1CF4F1BF2FDCA6CD00FD76A5 /* Exceptions for "CustomVPSProviderExample" folder in "CustomVPSProviderExample" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 88140D582A8BD940003F55D4 /* CustomVPSProviderExample */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		1C0FDF172FDA0800009EB851 /* pedata */ = {
+		1CF4F1B62FDCA6CC00FD76A5 /* CustomVPSProviderExample */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = pedata;
+			exceptions = (
+				1CF4F1BF2FDCA6CD00FD76A5 /* Exceptions for "CustomVPSProviderExample" folder in "CustomVPSProviderExample" target */,
+			);
+			path = CustomVPSProviderExample;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -62,7 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				88140D6A2A8BDC75003F55D4 /* arcgis-maps-sdk-swift-toolkit */,
-				88140D5B2A8BD940003F55D4 /* CustomVPSProviderExample */,
+				1CF4F1B62FDCA6CC00FD76A5 /* CustomVPSProviderExample */,
 				88140D5A2A8BD940003F55D4 /* Products */,
 				88140D6B2A8BDCBE003F55D4 /* Frameworks */,
 			);
@@ -74,29 +74,6 @@
 				88140D592A8BD940003F55D4 /* CustomVPSProviderExample.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		88140D5B2A8BD940003F55D4 /* CustomVPSProviderExample */ = {
-			isa = PBXGroup;
-			children = (
-				1C0FDF172FDA0800009EB851 /* pedata */,
-				88140D602A8BD941003F55D4 /* Assets.xcassets */,
-				1C0FDE6C2FD8EAD7009EB851 /* CustomVPSProviderExampleApp.swift */,
-				1C0FDE6D2FD8EAD7009EB851 /* CustomVPSProviderExampleView.swift */,
-				1C0FDE6E2FD8EAD7009EB851 /* GoogleWorldTracking.swift */,
-				1C0FDE6F2FD8EAD7009EB851 /* GoogleWorldTrackingCameraFeedView.swift */,
-				88140D6E2A8C1312003F55D4 /* Info.plist */,
-				88140D622A8BD941003F55D4 /* Preview Content */,
-			);
-			path = CustomVPSProviderExample;
-			sourceTree = "<group>";
-		};
-		88140D622A8BD941003F55D4 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				88140D632A8BD941003F55D4 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		88140D6B2A8BDCBE003F55D4 /* Frameworks */ = {
@@ -123,7 +100,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				1C0FDF172FDA0800009EB851 /* pedata */,
+				1CF4F1B62FDCA6CC00FD76A5 /* CustomVPSProviderExample */,
 			);
 			name = CustomVPSProviderExample;
 			packageProductDependencies = (
@@ -179,8 +156,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88140D642A8BD941003F55D4 /* Preview Assets.xcassets in Resources */,
-				88140D612A8BD941003F55D4 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,10 +188,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1C0FDE702FD8EAD7009EB851 /* GoogleWorldTracking.swift in Sources */,
-				1C0FDE712FD8EAD7009EB851 /* GoogleWorldTrackingCameraFeedView.swift in Sources */,
-				1C0FDE722FD8EAD7009EB851 /* CustomVPSProviderExampleApp.swift in Sources */,
-				1C0FDE732FD8EAD7009EB851 /* CustomVPSProviderExampleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,7 +316,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CustomVPSProviderExample/Preview Content\"";
-				DEVELOPMENT_TEAM = P8HGHS7JQ8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -364,7 +335,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.CustomVPSProviderExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -384,7 +355,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CustomVPSProviderExample/Preview Content\"";
-				DEVELOPMENT_TEAM = P8HGHS7JQ8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -403,7 +374,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.CustomVPSProviderExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
