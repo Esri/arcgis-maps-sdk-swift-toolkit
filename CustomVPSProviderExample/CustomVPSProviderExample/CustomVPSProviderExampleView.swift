@@ -17,6 +17,9 @@ import ArcGISToolkit
 import CoreLocation
 import SwiftUI
 
+/// The custom VPS provider Google API key.
+private let apiKey = "<#Google API Key#>"
+
 /// An example view that demonstrates how to implement a custom VPS provider
 /// for the `WorldScaleSceneView`.
 struct CustomVPSProviderExampleView: View {
@@ -42,8 +45,6 @@ struct CustomVPSProviderExampleView: View {
     /// A Boolean value indicating whether to show streetscape geometry, which
     /// includes buildings and other structures.
     @State private var streetscapeGeometryEnabled = true
-    /// The custom VPS provider Google API key.
-    private let apiKey = "<#Google API Key#>"
     
     var body: some View {
         NavigationStack {
