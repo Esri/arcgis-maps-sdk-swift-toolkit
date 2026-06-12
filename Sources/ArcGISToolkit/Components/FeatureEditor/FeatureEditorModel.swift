@@ -19,11 +19,9 @@ import Observation
 @MainActor
 @Observable
 final class FeatureEditorModel {
-    let feature: ArcGISFeature
-    let geometryEditor: GeometryEditor
+    var geometryEditor: GeometryEditor
     
-    init(feature: ArcGISFeature, geometryEditor: GeometryEditor) {
-        self.feature = feature
+    init(geometryEditor: GeometryEditor) {
         self.geometryEditor = geometryEditor
     }
 }

@@ -16,14 +16,19 @@ import ArcGIS
 import SwiftUI
 
 public extension View {
-    func featureEditor(_ feature: Binding<ArcGISFeature?>) -> some View {
-        modifier(FeatureEditorModifier(feature: feature))
+    func featureEditor(
+        _ feature: Binding<ArcGISFeature?>,
+        geometryEditor: GeometryEditor
+    ) -> some View {
+        modifier(FeatureEditorModifier(feature, geometryEditor: geometryEditor))
     }
 }
 
 private struct FeatureEditorModifier: ViewModifier {
-    @Binding var feature: ArcGISFeature?
+    @Binding private var feature: ArcGISFeature?
+    private let geometryEditor: GeometryEditor
     
+    @State private var model: FeatureEditorModel
     /// The inspector's currently presentation selected detent. This is needed to set the default detent to medium.
     @State private var selectedPresentationDetent = PresentationDetent.medium
     
@@ -31,14 +36,20 @@ private struct FeatureEditorModifier: ViewModifier {
         Binding(get: { feature != nil }, set: { _ in feature = nil })
     }
     
+    init(_ feature: Binding<ArcGISFeature?>, geometryEditor: GeometryEditor) {
+        self._feature = feature
+        self.geometryEditor = geometryEditor
+        self._model = State(initialValue: FeatureEditorModel(geometryEditor: geometryEditor))
+    }
+    
     func body(content: Content) -> some View {
         content
             .inspector(isPresented: isPresented) {
-                // VStack is needed for presentation modifiers to be applied.
+                // VStack needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
                     if let feature {
-                        FeatureFormView(
-                            root: FeatureForm(feature: feature),
+                        FeatureEditorView(
+                            rootFeatureForm: FeatureForm(feature: feature),
                             isPresented: isPresented
                         )
                     }
@@ -52,6 +63,61 @@ private struct FeatureEditorModifier: ViewModifier {
                 .inspectorColumnWidth(ideal: 320)
                 .interactiveDismissDisabled()
             }
+            .environment(model)
+            .onChange(of: ObjectIdentifier(geometryEditor)) {
+                model.geometryEditor = geometryEditor
+            }
+    }
+}
+
+private struct FeatureEditorView: View {
+    /// The root feature form to display in the `FeatureFormView`.
+    let rootFeatureForm: FeatureForm
+    @Binding var isPresented: Bool
+    
+    @Environment(FeatureEditorModel.self) private var model
+    
+    /// A value that changes when the geometry editor needs started.
+    private var startGeometryEditorID: Int {
+        var hasher = Hasher()
+        hasher.combine(ObjectIdentifier(model.geometryEditor))
+        hasher.combine(ObjectIdentifier(rootFeatureForm))
+        return hasher.finalize()
+    }
+    
+    var body: some View {
+        FeatureFormView(root: rootFeatureForm, isPresented: $isPresented)
+            .task(id: startGeometryEditorID, startGeometryEditor)
+            .onDisappear {
+                // Stops the geometry editor when the feature form is dismissed.
+                model.geometryEditor.stop()
+            }
+    }
+    
+    /// Starts the geometry editor using the feature form's feature.
+    private func startGeometryEditor() async {
+        log()
+        await loggingError {
+            // Stops the geometry editor so it will not continue running if
+            // the new feature cannot be edited.
+            model.geometryEditor.stop()
+            
+            // Load needed because canUpdateGeometry is always false otherwise.
+            let feature = rootFeatureForm.feature
+            try await feature.load()
+            
+            guard feature.canUpdateGeometry else { return }
+            
+            if let geometry = feature.geometry {
+                model.geometryEditor.start(withInitial: geometry)
+            } else if let featureTable = feature.table {
+                // Load needed because geometryType is always nil otherwise.
+                try await featureTable.load()
+                
+                guard let geometryType = featureTable.geometryType else { return }
+                model.geometryEditor.start(withType: geometryType)
+            }
+        }
     }
 }
 
