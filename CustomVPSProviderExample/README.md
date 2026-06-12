@@ -1,8 +1,8 @@
 # Custom VPS Provider Example App
 
-This is an application that shows how to use the WorldScaleSceneView toolkit component with a custom VPS provider.
+This is an application that shows how to use the `WorldScaleSceneView` toolkit component with a custom VPS provider.
 
-Documentation for the WorldScaleSceneView toolkit component is [here](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/worldscalesceneview).
+Documentation for the `WorldScaleSceneView` toolkit component is [here](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/worldscalesceneview).
 
 ## Instructions
 
