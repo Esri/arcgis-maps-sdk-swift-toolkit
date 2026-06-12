@@ -149,14 +149,39 @@ This will eventually be available on `element`.
         }
     }
     
-    /// <#Description#>
+    /// The list of allowed UTTypes based on the list of available inputs.
     var allowedFileImporterTypes: [UTType] {
         var types = [UTType]()
         if inputs.contains(where: { $0 is _AudioFormInput }) {
             types.append(.audio)
         }
         if inputs.contains(where: { $0 is _DocumentFormInput }) {
-            types.append(.item)
+            types.append(UTType(filenameExtension: "doc")!)
+            types.append(UTType(filenameExtension: "docx")!)
+            types.append(UTType(filenameExtension: "xls")!)
+            types.append(UTType(filenameExtension: "xlsx")!)
+            types.append(UTType(filenameExtension: "ppt")!)
+            types.append(UTType(filenameExtension: "pptx")!)
+            types.append(.pdf)
+            types.append(.zip)
+            types.append(.text)
+            //    The .text UTType includes (is a supertype of) the following common types:
+            //    |UTType Property UTI | String                             | Description               | Example Extensions |
+            //    |------------------- |------------------------------------|---------------------------|--------------------|
+            //    |.plainText          | public.plain-text                  | Plain text                | .txt               |
+            //    |.utf8PlainText      | public.utf8-plain-text             | UTF-8 encoded plain text  | .txt               |
+            //    |.utf16PlainText     | public.utf16-plain-text            | UTF-16 encoded plain text | .txt               |
+            //    |.rtf                | public.rtf                         | Rich Text Format          | .rtf               |
+            //    |.html               | public.html                        | HTML document             | .html, .htm        |
+            //    |.xml                | public.xml                         | XML document              | .xml               |
+            //    |.markdown           | net.daringfireball.markdown        | Markdown text             | .md                |
+            //    |.commaSeparatedText | public.comma-separated-values-text | CSV text                  | .csv               |
+            //    |.tabSeparatedText   | public.tab-separated-values-text   | TSV text                  | .tsv               |
+            //    |.sourceCode         | public.source-code                 | Source code (supertype)   | .swift, .py, .js   |
+            //
+            //    Note: .text is a supertype—it matches any file type that is considered text,
+            //    including the above and any custom types that declare public.text as their parent.
+            //    It does not include binary formats (like Word .docx, PDF, images, etc.).
         }
         if inputs.contains(where: { $0 is _ImageFormInput }) {
             types.append(.image)
