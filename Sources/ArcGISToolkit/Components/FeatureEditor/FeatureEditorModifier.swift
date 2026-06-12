@@ -72,21 +72,34 @@ private struct FeatureEditorModifier: ViewModifier {
 
 private struct FeatureEditorView: View {
     /// The root feature form to display in the `FeatureFormView`.
-    let rootFeatureForm: FeatureForm
-    @Binding var isPresented: Bool
+    private let rootFeatureForm: FeatureForm
+    @Binding private var isPresented: Bool
     
     @Environment(FeatureEditorModel.self) private var model
+    
+    /// The form currently being presented in the `FeatureFormView`.
+    @State private var presentedFeatureForm: FeatureForm
     
     /// A value that changes when the geometry editor needs started.
     private var startGeometryEditorID: Int {
         var hasher = Hasher()
         hasher.combine(ObjectIdentifier(model.geometryEditor))
-        hasher.combine(ObjectIdentifier(rootFeatureForm))
+        hasher.combine(ObjectIdentifier(presentedFeatureForm))
         return hasher.finalize()
+    }
+    
+    init(rootFeatureForm: FeatureForm, isPresented: Binding<Bool>) {
+        self.rootFeatureForm = rootFeatureForm
+        self._isPresented = isPresented
+        self._presentedFeatureForm = State(initialValue: rootFeatureForm)
     }
     
     var body: some View {
         FeatureFormView(root: rootFeatureForm, isPresented: $isPresented)
+            .onFeatureFormChanged { presentedFeatureForm = $0 }
+            .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
+                presentedFeatureForm = rootFeatureForm
+            }
             .task(id: startGeometryEditorID, startGeometryEditor)
             .onDisappear {
                 // Stops the geometry editor when the feature form is dismissed.
@@ -103,7 +116,7 @@ private struct FeatureEditorView: View {
             model.geometryEditor.stop()
             
             // Load needed because canUpdateGeometry is always false otherwise.
-            let feature = rootFeatureForm.feature
+            let feature = presentedFeatureForm.feature
             try await feature.load()
             
             guard feature.canUpdateGeometry else { return }
@@ -126,7 +139,7 @@ private struct FeatureEditorView: View {
 /// A custom presentation detent that sizes to the approximate height of a top system toolbar.
 private struct BarDetent: CustomPresentationDetent {
     static func height(in context: Context) -> CGFloat? {
-        // Implementation was copied from:
+        // Implementation copied from:
         // https://developer.apple.com/documentation/swiftui/custompresentationdetent#overview
         return max(44, context.maxDetentValue * 0.1)
     }
