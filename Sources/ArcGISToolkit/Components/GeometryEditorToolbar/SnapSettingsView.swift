@@ -19,6 +19,8 @@ import SwiftUI
 struct SnapSettingsView: View {
     /// The snap settings to configure.
     let settings: SnapSettings
+    /// The allowed snap source types shown in the source settings list.
+    let snapSources: GeometryEditorToolbar.SnapSources
     
     /// The view models for the root `SnapSourceSettingsToggle` views in the outline group.
     @State private var rootSourceSettingsModels: [SnapSourceSettingsToggle.Model] = []
@@ -47,7 +49,7 @@ struct SnapSettingsView: View {
                 
                 Toggle(isOn: $snapsToFeatures.animation()) {
                     Text(
-                        "Snap to Features and Graphics",
+                        "Snap to Features",
                         bundle: .toolkitModule,
                         comment: """
                                 A label for a toggle that enables snapping to features and graphics,
@@ -60,7 +62,7 @@ struct SnapSettingsView: View {
                     settings.snapsToFeatures = snapsToFeatures
                 }
                 
-                if snapsToFeatures {
+                if snapsToFeatures, !rootSourceSettingsModels.isEmpty {
                     Section {
                         OutlineGroup(rootSourceSettingsModels, children: \.children) { model in
                             SnapSourceSettingsToggle(model: model)
@@ -78,10 +80,22 @@ struct SnapSettingsView: View {
                 }
             }
             .onChange(of: ObjectIdentifier(settings), initial: true) {
+                // Only allows certain snap sources.
+                rootSourceSettingsModels = settings.sourceSettings
+                    .compactMap { settings in
+                        guard snapSources.contains(source: settings.source) else { return nil }
+                        return SnapSourceSettingsToggle.Model(settings: settings)
+                    }
+                
+                // Disable snapping on other snap sources that aren't exposed
+                // in the UI to avoid confusion.
+                for sourceSettings in settings.sourceSettings {
+                    if !snapSources.contains(source: sourceSettings.source) {
+                        sourceSettings.isEnabled = false
+                    }
+                }
+                
                 // Sets up view's state properties using settings' property values.
-                rootSourceSettingsModels = settings.sourceSettings.map(
-                    SnapSourceSettingsToggle.Model.init(settings:)
-                )
                 snapsToFeatures = settings.snapsToFeatures
                 snapsToGeometryGuides = settings.snapsToGeometryGuides
             }
@@ -212,5 +226,5 @@ private extension SnapSourceSettingsToggle {
 }
 
 #Preview {
-    SnapSettingsView(settings: SnapSettings())
+    SnapSettingsView(settings: SnapSettings(), snapSources: .all)
 }
