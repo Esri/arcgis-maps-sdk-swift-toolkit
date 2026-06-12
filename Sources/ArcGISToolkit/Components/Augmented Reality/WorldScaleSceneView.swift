@@ -45,10 +45,6 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         @Binding public var isLocalized: Bool
     }
     
-    /// The type of tracking configuration used by the view.
-    @available(*, deprecated, renamed: "AppleWorldTracking.Mode", message: "Use 'AppleWorldTracking.Mode' instead.")
-    public typealias TrackingMode = AppleWorldTracking.Mode
-    
     /// The various ways that a world-tracking provider and camera feed can be
     /// supplied.
     private enum ProviderSource {
@@ -58,13 +54,6 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         /// A caller-supplied world-tracking provider and camera feed view
         /// builder.
         case custom(Provider, cameraFeedView: (Context) -> Provider.CameraFeedView)
-        
-        /// The tracking mode of this source or `nil` if this is a custom
-        /// source.
-        var trackingMode: AppleWorldTracking.Mode? {
-            guard case let .default(mode) = self else { return nil }
-            return mode
-        }
     }
     
     /// The source that determines which world-tracking provider is used.
@@ -94,6 +83,12 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         } else {
             defaultProviderStore.provider as! Provider
         }
+    }
+    
+    /// The tracking mode for this view or `nil` if using a custom provider.
+    var trackingMode: AppleWorldTracking.Mode? {
+        guard case let .default(mode) = providerSource else { return nil }
+        return mode
     }
     
     /// Builds the camera feed view for the provider of this view.
@@ -132,12 +127,12 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
     }
     
     /// The alignment of the calibration button.
-    var calibrationButtonAlignment: Alignment = .bottom
+    private(set) var calibrationButtonAlignment: Alignment = .bottom
     /// A Boolean value that indicates whether the calibration view is hidden.
-    var calibrationViewIsHidden = false
-    
+    private(set) var calibrationViewIsHidden = false
     /// The clipping distance of the scene view.
-    private var clippingDistance: Double?
+    private(set) var clippingDistance: Double?
+    
     /// The closure to call upon a single tap.
     private var onSingleTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
     /// The closure to perform when the `isCalibrating` property has changed.
@@ -160,28 +155,6 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
     @State private var currentCamera: Camera?
     /// The camera controller for this scene view.
     @State private var cameraController = TransformationMatrixCameraController()
-    
-    /// Creates a world scale scene view.
-    /// - Parameters:
-    ///   - clippingDistance: Determines the clipping distance in meters around
-    ///   the camera. A value of `nil` means that no data will be clipped.
-    ///   - trackingMode: The type of tracking configuration used by the AR
-    ///   view.
-    ///   - sceneViewBuilder: A closure that builds the scene view to be
-    ///   overlayed on top of the augmented reality video feed.
-    /// - Note: The provided scene view will have certain properties
-    /// overridden in order to be effectively viewed in augmented reality.
-    /// Properties such as the camera controller, and view drawing mode.
-    @available(*, deprecated, message: "Use 'init(provider:cameraFeedView:sceneView:)' instead.")
-    public init(
-        clippingDistance: Double? = nil,
-        trackingMode: TrackingMode = .worldTracking,
-        sceneViewBuilder: @escaping (SceneViewProxy) -> SceneView
-    ) where Provider == AppleWorldTracking {
-        self.providerSource = .default(mode: trackingMode)
-        self.clippingDistance = clippingDistance
-        self.sceneViewBuilder = sceneViewBuilder
-    }
     
     /// Creates an instance with the given world tracking provider and scene
     /// view builder.
@@ -237,7 +210,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         .onDisappear {
             provider.stop()
         }
-        .onChange(of: providerSource.trackingMode, initial: true) { _, newMode in
+        .onChange(of: trackingMode, initial: true) { _, newMode in
             guard let newMode else { return }
             defaultProviderStore.provider.mode = newMode
         }
@@ -352,6 +325,32 @@ public extension WorldScaleSceneView {
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public extension WorldScaleSceneView<AppleWorldTracking> /* Deprecated */ {
+    /// The type of tracking configuration used by the view.
+    @available(*, deprecated, renamed: "AppleWorldTracking.Mode", message: "Use 'AppleWorldTracking.Mode' instead.")
+    typealias TrackingMode = AppleWorldTracking.Mode
+    
+    /// Creates a world scale scene view.
+    /// - Parameters:
+    ///   - clippingDistance: Determines the clipping distance in meters around
+    ///   the camera. A value of `nil` means that no data will be clipped.
+    ///   - trackingMode: The type of tracking configuration used by the AR
+    ///   view.
+    ///   - sceneViewBuilder: A closure that builds the scene view to be
+    ///   overlayed on top of the augmented reality video feed.
+    /// - Note: The provided scene view will have certain properties
+    /// overridden in order to be effectively viewed in augmented reality.
+    /// Properties such as the camera controller, and view drawing mode.
+    @available(*, deprecated, message: "Use 'init(provider:cameraFeedView:sceneView:)' instead.")
+    init(
+        clippingDistance: Double? = nil,
+        trackingMode: TrackingMode = .worldTracking,
+        sceneViewBuilder: @escaping (SceneViewProxy) -> SceneView
+    ) where Provider == AppleWorldTracking {
+        self.providerSource = .default(mode: trackingMode)
+        self.clippingDistance = clippingDistance
+        self.sceneViewBuilder = sceneViewBuilder
+    }
+    
     /// Sets a closure to perform when the camera tracking state changes.
     /// - Parameter action: The closure to call when the camera tracking state
     /// has changed.
