@@ -156,15 +156,9 @@ This will eventually be available on `element`.
             types.append(.audio)
         }
         if inputs.contains(where: { $0 is _DocumentFormInput }) {
-            types.append(UTType(filenameExtension: "doc")!)
-            types.append(UTType(filenameExtension: "docx")!)
-            types.append(UTType(filenameExtension: "xls")!)
-            types.append(UTType(filenameExtension: "xlsx")!)
-            types.append(UTType(filenameExtension: "ppt")!)
-            types.append(UTType(filenameExtension: "pptx")!)
-            types.append(.pdf)
-            types.append(.zip)
-            types.append(.text)
+            types.append(contentsOf: [
+                .pdf, .zip, .text, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .`7z`
+            ])
             //    The .text UTType includes (is a supertype of) the following common types:
             //    |UTType Property UTI | String                             | Description               | Example Extensions |
             //    |------------------- |------------------------------------|---------------------------|--------------------|
