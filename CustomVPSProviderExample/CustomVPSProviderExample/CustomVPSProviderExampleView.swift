@@ -43,7 +43,7 @@ struct CustomVPSProviderExampleView: View {
     /// includes buildings and other structures.
     @State private var streetscapeGeometryEnabled = true
     /// The custom VPS provider Google API key.
-    private let apiKey = "API_KEY" // Replace with your Google VPS API key.
+    private let apiKey = "<#Google API Key#>"
     
     var body: some View {
         NavigationStack {

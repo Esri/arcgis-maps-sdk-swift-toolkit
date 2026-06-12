@@ -18,7 +18,7 @@ import SwiftUI
 @main
 struct CustomVPSProviderExampleApp: App {
     init() {
-        ArcGISEnvironment.apiKey = .init("API_KEY")
+        ArcGISEnvironment.apiKey = APIKey("<#API Key#>")!
     }
     
     var body: some SwiftUI.Scene {
