@@ -25,7 +25,7 @@ import ARKit
 @available(visionOS, unavailable)
 @Observable public final class AppleWorldTracking {
     /// The type of tracking configuration used by the view.
-    public enum Mode {
+    public enum Mode: CaseIterable, Equatable, Sendable {
         /// If geo-tracking is unavailable, fall back to world-tracking.
         case preferGeoTracking
         /// Geo-tracking.
