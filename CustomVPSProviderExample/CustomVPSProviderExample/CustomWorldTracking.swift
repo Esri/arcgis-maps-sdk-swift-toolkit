@@ -22,7 +22,7 @@ import RealityKit
 /// A world-tracking provider backed by the Google ARCore SDK.
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
-final class GoogleWorldTracking {
+final class CustomWorldTracking {
 #if os(iOS)
     @MainActor let arSessionProvider = ARSessionProvider<ARView>()
 #endif
@@ -47,8 +47,8 @@ final class GoogleWorldTracking {
 
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
-extension GoogleWorldTracking: WorldTrackingProvider {
-    typealias CameraFeedView = GoogleWorldTrackingCameraFeedView
+extension CustomWorldTracking: WorldTrackingProvider {
+    typealias CameraFeedView = CustomWorldTrackingCameraFeedView
     
 #if os(iOS)
     var arConfiguration: ARConfiguration {
@@ -87,7 +87,7 @@ extension GoogleWorldTracking: WorldTrackingProvider {
 #endif
 }
 
-extension GoogleWorldTracking {
+extension CustomWorldTracking {
     /// Configures the ARCore session.
     private func setupGARSession() {
         guard garSession.isGeospatialModeSupported(.enabled) else { return }
@@ -100,7 +100,7 @@ extension GoogleWorldTracking {
     }
 }
 
-private extension GoogleWorldTracking {
+private extension CustomWorldTracking {
     /// Sets the ArcGIS projection engine directory from bundled projection data
     /// when available.
     func setProjectionEngineDirectoryURL() {
@@ -124,7 +124,7 @@ private extension GoogleWorldTracking {
     }
 }
 
-extension GoogleWorldTracking {
+extension CustomWorldTracking {
     /// Builds a `ModelEntity` representation of ARCore streetscape geometry.
     /// - Parameter geometry: The ARCore streetscape geometry mesh and type
     /// data.

@@ -25,14 +25,14 @@ import SwiftUI
 /// Google geospatial tracking.
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
-struct GoogleWorldTrackingCameraFeedView: View {
+struct CustomWorldTrackingCameraFeedView: View {
     /// Shared world-scale context used to read provider state and update the
     /// scene.
-    let context: WorldScaleSceneView<GoogleWorldTracking>.Context
+    let context: WorldScaleSceneView<CustomWorldTracking>.Context
     
     /// Creates an instance using the provided world-scale scene context.
     /// - Parameter context: The world-scale scene context backing this view.
-    init(context: WorldScaleSceneView<GoogleWorldTracking>.Context) {
+    init(context: WorldScaleSceneView<CustomWorldTracking>.Context) {
         self.context = context
     }
     
@@ -98,7 +98,7 @@ struct GoogleWorldTrackingCameraFeedView: View {
 }
 
 #if os(iOS)
-extension GoogleWorldTrackingCameraFeedView {
+extension CustomWorldTrackingCameraFeedView {
     /// Sets a closure to perform when the camera tracking state changes.
     /// - Parameter action: The closure to perform when the camera tracking
     /// state has changed.
@@ -124,7 +124,7 @@ extension GoogleWorldTrackingCameraFeedView {
 
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
-private extension GoogleWorldTrackingCameraFeedView {
+private extension CustomWorldTrackingCameraFeedView {
 #if os(iOS)
     /// Updates the scene's camera controller based on the given AR camera and
     /// ARCore frame geospatial transform.
@@ -190,7 +190,7 @@ private extension GoogleWorldTrackingCameraFeedView {
                 var model: ModelEntity
                 if let existingModel = context.provider.streetscapeGeometryModels[geometry.identifier] {
                     model = existingModel
-                } else if let newModel = GoogleWorldTracking.makeStreetscapeGeometryModel(geometry: geometry) {
+                } else if let newModel = CustomWorldTracking.makeStreetscapeGeometryModel(geometry: geometry) {
                     context.provider.streetscapeGeometryModels[geometry.identifier] = newModel
                     newModel.setParent(context.provider.worldOrigin)
                     model = newModel

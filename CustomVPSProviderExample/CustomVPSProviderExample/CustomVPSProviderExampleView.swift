@@ -35,7 +35,7 @@ struct CustomVPSProviderExampleView: View {
         return scene
     }()
     /// The world-tracking provider used by this example.
-    @State private var provider: GoogleWorldTracking?
+    @State private var provider: CustomWorldTracking?
     /// The error that occurred while creating the world-tracking provider, if
     /// any.
     @State private var providerError: Error?
@@ -50,7 +50,7 @@ struct CustomVPSProviderExampleView: View {
             Group {
                 if let provider {
                     WorldScaleSceneView(provider: provider) { context in
-                        GoogleWorldTrackingCameraFeedView(context: context)
+                        CustomWorldTrackingCameraFeedView(context: context)
                             .streetscapeGeometryEnabled(streetscapeGeometryEnabled)
                     } sceneView: { _ in
                         SceneView(scene: scene)
@@ -71,7 +71,7 @@ struct CustomVPSProviderExampleView: View {
                     ProgressView()
                         .onAppear {
                             do {
-                                provider = try GoogleWorldTracking(apiKey: apiKey)
+                                provider = try CustomWorldTracking(apiKey: apiKey)
                             } catch {
                                 providerError = error
                             }
