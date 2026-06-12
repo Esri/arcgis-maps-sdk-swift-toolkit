@@ -149,10 +149,6 @@ extension GeometryEditorToolbar {
     struct SnapSources: OptionSet {
         let rawValue: Int
         
-        init(rawValue: Int) {
-            self.rawValue = rawValue
-        }
-        
         /// Allows `FeatureLayer` snap sources.
         static let featureLayer = SnapSources(rawValue: 1 << 0)
         /// Allows `GraphicsOverlay` snap sources.

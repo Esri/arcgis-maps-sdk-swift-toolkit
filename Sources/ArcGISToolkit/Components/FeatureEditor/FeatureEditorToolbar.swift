@@ -19,7 +19,7 @@ import SwiftUI
 ///
 /// **Features**
 ///
-/// - Displays controls for performing common geometry editor actions:
+/// - Displays controls for performing common geometry editing actions:
 ///     - Changing the tool.
 ///     - Deleting the selected element.
 ///     - Undoing the last action on the geometry.
@@ -29,7 +29,7 @@ import SwiftUI
 ///
 /// **Behavior**
 ///
-/// The toolbar is shown only while the feature editor is started.
+/// The toolbar is shown only while the feature editor is editing a geometry.
 ///
 /// By default, the toolbar is displayed in a vertical layout. Pass `nil` for `style` to display
 /// the toolbar without built-in layout or styling, so you can show it in a system toolbar or apply
