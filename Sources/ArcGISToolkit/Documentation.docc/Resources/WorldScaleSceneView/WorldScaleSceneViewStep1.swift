@@ -4,8 +4,10 @@ import SwiftUI
 
 struct WorldScaleExampleView: View {
     var body: some View {
-        WorldScaleSceneView(
-            clippingDistance: 400
-        )
+        WorldScaleSceneView(provider: Provider) { _ in
+
+        } sceneView: { _ in
+
+        }
     }
 }

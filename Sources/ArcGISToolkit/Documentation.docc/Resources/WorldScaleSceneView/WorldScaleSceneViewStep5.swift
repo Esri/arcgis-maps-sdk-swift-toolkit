@@ -1,6 +1,5 @@
 import ArcGIS
 import ArcGISToolkit
-import CoreLocation
 import SwiftUI
 
 struct WorldScaleExampleView: View {
@@ -20,25 +19,14 @@ struct WorldScaleExampleView: View {
         return scene
     }()
     
-    /// The location datasource that is used to access the device location.
-    @State private var locationDataSource = SystemLocationDataSource()
+    /// The world-tracking provider used by this example.
+    @State private var provider = AppleWorldTracking(mode: .worldTracking)
     
     var body: some View {
-        WorldScaleSceneView(
-            clippingDistance: 400
-        ) { _ in
+        WorldScaleSceneView(provider: provider) { context in
+            AppleWorldTrackingCameraFeedView(context: context)
+        } sceneView: { _ in
             SceneView(scene: scene)
-        }
-        .task {
-            let locationManager = CLLocationManager()
-            if locationManager.authorizationStatus == .notDetermined {
-                locationManager.requestWhenInUseAuthorization()
-            }
-            
-            try? await locationDataSource.start()
-            
-            // Retrieve initial location.
-            guard let initialLocation = await locationDataSource.locations.first(where: { _ in true }) else { return }
         }
     }
 }
