@@ -57,7 +57,7 @@ final class BuildingExplorerTests: XCTestCase {
         app.buttons["Building Explorer Tests"].assertExistenceAndTap()
         
         // Tap test case two button.
-        app.buttons["Test Case 2"].assertExistenceAndTap()
+        app.buttons["Test Case"].assertExistenceAndTap()
                 
         let fullModelToggle = app.switches["Show Full Model"].switches.firstMatch
         
