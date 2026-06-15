@@ -42,8 +42,6 @@ final class CustomWorldTracking {
     }
 }
 
-@available(macCatalyst, unavailable)
-@available(visionOS, unavailable)
 extension CustomWorldTracking: WorldTrackingProvider {
     typealias CameraFeedView = CustomWorldTrackingCameraFeedView
     

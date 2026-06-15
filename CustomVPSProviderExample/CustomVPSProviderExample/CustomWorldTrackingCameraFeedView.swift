@@ -112,8 +112,6 @@ extension CustomWorldTrackingCameraFeedView {
     }
 }
 
-@available(macCatalyst, unavailable)
-@available(visionOS, unavailable)
 private extension CustomWorldTrackingCameraFeedView {
     /// Updates the scene's camera controller based on the given AR camera and
     /// ARCore frame geospatial transform.
