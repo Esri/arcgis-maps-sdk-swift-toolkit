@@ -17,6 +17,12 @@ import OSLog
 import SwiftUI
 
 public extension View {
+    /// Presents a Feature Editor view that edits a given feature.
+    /// - Parameters:
+    ///   - feature: A binding to the feature to edit.
+    ///   The Feature Editor is displayed when the value is non-`nil`.
+    ///   - geometryEditor: A geometry editor used to edit the feature's
+    ///   geometry on an associated `MapView`.
     func featureEditor(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor
@@ -25,14 +31,21 @@ public extension View {
     }
 }
 
+/// A view modifier that presents a `FeatureEditorView` in an inspector when a feature is non-`nil`.
 private struct FeatureEditorModifier: ViewModifier {
+    /// A binding to the feature to edit. This presents `FeatureEditorView`  when non-`nil`.
     @Binding private var feature: ArcGISFeature?
+    /// The geometry editor used to edit the feature's geometry.
     private let geometryEditor: GeometryEditor
     
+    /// The model for the feature editor.
     @State private var model: FeatureEditorModel
-    /// The inspector's currently presentation selected detent. This is needed to set the default detent to medium.
+    /// The inspector's currently selected presentation detent.
+    /// This is needed to set the default detent to medium.
     @State private var selectedPresentationDetent = PresentationDetent.medium
     
+    /// A binding to a Boolean value that indicates whether the inspector should be presented.
+    /// This maps the `feature` binding to a Boolean value.
     private var isPresented: Binding<Bool> {
         Binding(get: { feature != nil }, set: { _ in feature = nil })
     }
@@ -46,7 +59,7 @@ private struct FeatureEditorModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .inspector(isPresented: isPresented) {
-                // VStack needed for presentation modifiers to be applied.
+                // VStack is needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
                     if let feature {
                         FeatureEditorView(
@@ -71,21 +84,24 @@ private struct FeatureEditorModifier: ViewModifier {
     }
 }
 
+/// A view that displays a `FeatureFormView` and manages a geometry editor for editing a feature.
 private struct FeatureEditorView: View {
     /// The root feature form to display in the `FeatureFormView`.
     private let rootFeatureForm: FeatureForm
+    /// A Boolean value indicating whether the view is presented.
     @Binding private var isPresented: Bool
     
+    /// The model for the feature editor.
     @Environment(FeatureEditorModel.self) private var model
     
     /// A Boolean value indicating whether the geometry editor has edits to undo.
     @State private var canUndo = false
     /// The geometry editor's current geometry.
     @State private var geometry: Geometry?
-    /// The form currently being presented in the `FeatureFormView`.
+    /// The form currently presented in the `FeatureFormView`.
     @State private var presentedFeatureForm: FeatureForm
     
-    /// A value that changes when the geometry editor needs started.
+    /// A value that changes when the geometry editor needs to be started.
     private var startGeometryEditorID: Int {
         var hasher = Hasher()
         hasher.combine(ObjectIdentifier(model.geometryEditor))
@@ -135,12 +151,12 @@ private struct FeatureEditorView: View {
                 }
             }
             .onDisappear {
-                // Stops the geometry editor when the feature form is dismissed.
+                // Stops the geometry editor when the feature form dismiss button is pressed.
                 model.geometryEditor.stop()
             }
     }
     
-    /// Handles events from the `FeatureFormView.onFormEditingEvent(perform:)`.
+    /// Handles events from the `FeatureFormView.onFormEditingEvent(perform:)` modifier.
     /// - Parameter event: The form editing event to handle.
     private func handleFormEditingEvent(_ event: FeatureFormView.EditingEvent) {
         switch event {
@@ -159,13 +175,12 @@ private struct FeatureEditorView: View {
     
     /// Loads the form's feature and its properties needed to start the geometry editor.
     private func loadFeature() async throws {
-        // Loads the feature so that canUpdateGeometry can be accessed.
-        // It is false otherwise.
+        // Loads the feature so that canUpdateGeometry can be accessed. It is false otherwise.
         let feature = presentedFeatureForm.feature
         try await feature.load()
         
-        // Loads the feature's table if the geometry is nil so that
-        // geometryType can be accessed. It is nil otherwise.
+        // Loads the feature's table if the geometry is nil so that geometryType can be accessed.
+        // It is nil otherwise.
         guard feature.canUpdateGeometry, feature.geometry == nil, let table = feature.table else {
             return
         }

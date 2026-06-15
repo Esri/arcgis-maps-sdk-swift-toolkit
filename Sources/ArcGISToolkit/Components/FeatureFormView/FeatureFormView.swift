@@ -267,12 +267,12 @@ public struct FeatureFormView: View {
                 actions: {},
                 message: {
                     if let error = featureFormViewModel.finishEditingError {
-                        let errorDescritpion = (error as? LocalizedError)?.errorDescription
+                        let errorDescription = (error as? LocalizedError)?.errorDescription
                         ?? String(describing: error)
                         Text(
                             """
                             Finish editing failed.
-                            \(errorDescritpion)
+                            \(errorDescription)
                             """,
                             bundle: .toolkitModule,
                             comment:
