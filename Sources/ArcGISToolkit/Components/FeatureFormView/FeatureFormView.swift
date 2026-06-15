@@ -75,6 +75,9 @@ internal import os
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
+    /// A closure that saves external edits. This will throw when saving should be blocked.
+    @Environment(\.externalSaveAction) private var externalSaveAction
+    
     /// The model for the feature form view.
     @State private var featureFormViewModel = FeatureFormViewModel()
     
@@ -208,6 +211,7 @@ public struct FeatureFormView: View {
                             Button {
                                 Task {
                                     do {
+                                        try externalSaveAction?()
                                         try await featureFormViewModel.presentedForm?.finishEditing()
                                         onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                         continuation()
@@ -263,10 +267,12 @@ public struct FeatureFormView: View {
                 actions: {},
                 message: {
                     if let error = featureFormViewModel.finishEditingError {
+                        let errorDescritpion = (error as? LocalizedError)?.errorDescription
+                        ?? String(describing: error)
                         Text(
                             """
                             Finish editing failed.
-                            \(String(describing: error))
+                            \(errorDescritpion)
                             """,
                             bundle: .toolkitModule,
                             comment:

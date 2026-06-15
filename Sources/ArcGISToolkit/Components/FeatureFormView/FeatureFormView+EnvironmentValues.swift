@@ -19,6 +19,14 @@ extension EnvironmentValues /* FeatureFormView */ {
     /// The visibility of the "save" and "discard" buttons.
     @Entry var editingButtonVisibility: Visibility = .automatic
     
+    /// A closure that saves edits external to a `FeatureFormView`. This is non-`nil` when
+    /// there are external edits.
+    ///
+    /// This is needed to allow the `FeatureEditorModifier` to use the `FeatureFormView`
+    /// for saving. The closure will throw if the Feature Editor needs to block saving, so this
+    /// should be called before performing any other save actions.
+    @Entry var externalSaveAction: (() throws -> Void)?
+    
     /// The environment value which declares whether navigation to forms for features associated via utility association form
     /// elements is disabled.
     @Entry var navigationIsDisabled = false

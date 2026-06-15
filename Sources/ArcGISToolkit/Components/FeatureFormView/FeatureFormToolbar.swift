@@ -27,6 +27,9 @@ struct FeatureFormToolbar: ViewModifier {
     /// The visibility of the "save" and "discard" buttons.
     @Environment(\.editingButtonVisibility) var editingButtonsVisibility
     
+    /// A closure that saves external edits. This is non-`nil` when there are external edits.
+    @Environment(\.externalSaveAction) private var externalSaveAction
+    
     /// The model for the FeatureFormView containing the view.
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
@@ -40,7 +43,7 @@ struct FeatureFormToolbar: ViewModifier {
     @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
     
     /// A Boolean value indicating whether the presented feature form has edits.
-    @State private var hasEdits = false
+    @State private var hasFormEdits = false
     
     /// The currently presented feature form.
     let featureForm: FeatureForm
@@ -53,12 +56,17 @@ struct FeatureFormToolbar: ViewModifier {
     /// A closure to perform when back navigation completes.
     let onBackNavigation: (() -> Void)?
     
+    /// A Boolean value indicating whether there are form or external edits.
+    private var hasEdits: Bool {
+        hasFormEdits || externalSaveAction != nil
+    }
+    
     func body(content: Content) -> some View {
         content
             .navigationBarBackButtonHidden()
             .task(id: featureForm.feature.globalID) {
                 for await hasEdits in featureForm.$hasEdits {
-                    withAnimation { self.hasEdits = hasEdits }
+                    withAnimation { self.hasFormEdits = hasEdits }
                 }
             }
             .toolbar {
