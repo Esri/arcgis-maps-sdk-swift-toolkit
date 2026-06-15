@@ -23,6 +23,7 @@ public extension View {
     ///   The Feature Editor is displayed when the value is non-`nil`.
     ///   - geometryEditor: A geometry editor used to edit the feature's
     ///   geometry on an associated `MapView`.
+    @available(visionOS, unavailable)
     func featureEditor(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor
@@ -32,6 +33,7 @@ public extension View {
 }
 
 /// A view modifier that presents a `FeatureEditorView` in an inspector when a feature is non-`nil`.
+@available(visionOS, unavailable)
 private struct FeatureEditorModifier: ViewModifier {
     /// A binding to the feature to edit. This presents `FeatureEditorView`  when non-`nil`.
     @Binding private var feature: ArcGISFeature?
