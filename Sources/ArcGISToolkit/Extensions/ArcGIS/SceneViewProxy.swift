@@ -18,7 +18,7 @@ import ARKit
 import SwiftUI
 
 #if os(iOS)
-extension SceneViewProxy {
+public extension SceneViewProxy {
     /// Updates the scene view's camera for a given augmented reality frame.
     /// - Parameters:
     ///   - frame: The current AR frame.
