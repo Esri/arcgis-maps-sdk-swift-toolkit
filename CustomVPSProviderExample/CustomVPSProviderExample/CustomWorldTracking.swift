@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if os(iOS)
 import ArcGIS
 import ArcGISToolkit
 import ARCore
@@ -187,4 +186,3 @@ extension CustomWorldTracking {
         streetscapeGeometryModels.removeAll()
     }
 }
-#endif
