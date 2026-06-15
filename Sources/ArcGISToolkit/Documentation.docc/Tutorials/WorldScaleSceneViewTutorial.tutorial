@@ -28,7 +28,7 @@
                 
                 If you are implementing a custom provider, you will also need to implement a custom camera feed view that uses the session provider `context`. See the `CustomVPSProviderExample` project for an example of how to implement a custom camera feed view.
                 @Code(name: "WorldScaleExampleView.swift", file: WorldScaleSceneViewStep3.swift)
-                }
+            }
             
             @Step {
                 Add a `SceneView` to the `WorldScaleSceneView` closure. The closure builds and overlays 
@@ -36,7 +36,7 @@
                 variable.
                 @Code(name: "WorldScaleExampleView.swift", file: WorldScaleSceneViewStep4.swift)
             }
-        
+            
             @Step {
                 Set the `scene.baseSurface.opacity` to zero to make the basemap transparent.
                 @Code(name: "WorldScaleExampleView.swift", file: WorldScaleSceneViewStep5.swift)
