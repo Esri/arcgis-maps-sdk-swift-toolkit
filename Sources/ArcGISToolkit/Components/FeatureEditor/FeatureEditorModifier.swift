@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import OSLog
 import SwiftUI
 
 public extension View {
@@ -97,7 +98,6 @@ private struct FeatureEditorView: View {
     private var saveGeometryEditsAction: (() throws -> Void)? {
         guard canUndo else { return nil }
         return {
-            log()
             guard let geometry, geometry.sketchIsValid else {
                 throw InvalidGeometryError()
             }
@@ -121,13 +121,17 @@ private struct FeatureEditorView: View {
             }
             .task(id: ObjectIdentifier(model.geometryEditor), monitorGeometryEditorStreams)
             .task(id: startGeometryEditorID) {
-                await loggingError {
+                do {
                     // Stops the geometry editor so it will not continue running if
                     // the new feature cannot be edited.
                     model.geometryEditor.stop()
                     
                     try await loadFeature()
                     startGeometryEditor()
+                } catch {
+                    Logger.featureEditor.error(
+                        "Error starting geometry editor: \(String(describing: error))"
+                    )
                 }
             }
             .onDisappear {
@@ -139,7 +143,6 @@ private struct FeatureEditorView: View {
     /// Handles events from the `FeatureFormView.onFormEditingEvent(perform:)`.
     /// - Parameter event: The form editing event to handle.
     private func handleFormEditingEvent(_ event: FeatureFormView.EditingEvent) {
-        log()
         switch event {
         case .savedEdits(let willNavigate):
             // Closes the inspector when the form footer save button is pressed.
@@ -156,7 +159,6 @@ private struct FeatureEditorView: View {
     
     /// Loads the form's feature and its properties needed to start the geometry editor.
     private func loadFeature() async throws {
-        log()
         // Loads the feature so that canUpdateGeometry can be accessed.
         // It is false otherwise.
         let feature = presentedFeatureForm.feature
@@ -172,7 +174,6 @@ private struct FeatureEditorView: View {
     
     /// Monitors geometry editor streams and updates the corresponding state properties.
     private func monitorGeometryEditorStreams() async {
-        log()
         let geometryEditor = model.geometryEditor
         await withTaskGroup { group in
             group.addTask { @MainActor @Sendable in
@@ -190,7 +191,6 @@ private struct FeatureEditorView: View {
     
     /// Starts the geometry editor using the form's feature.
     private func startGeometryEditor() {
-        log()
         let feature = presentedFeatureForm.feature
         guard feature.canUpdateGeometry else { return }
         
@@ -199,6 +199,17 @@ private struct FeatureEditorView: View {
         } else if let geometryType = feature.table?.geometryType {
             model.geometryEditor.start(withType: geometryType)
         }
+    }
+}
+
+// MARK: - Helper Types
+
+/// A custom presentation detent that sizes to the approximate height of a top system toolbar.
+private struct BarDetent: CustomPresentationDetent {
+    static func height(in context: Context) -> CGFloat? {
+        // Implementation copied from:
+        // https://developer.apple.com/documentation/swiftui/custompresentationdetent#overview
+        return max(44, context.maxDetentValue * 0.1)
     }
 }
 
@@ -211,14 +222,12 @@ private struct InvalidGeometryError: LocalizedError {
     )
 }
 
-// MARK: - Bar Detent
+// MARK: - Extensions
 
-/// A custom presentation detent that sizes to the approximate height of a top system toolbar.
-private struct BarDetent: CustomPresentationDetent {
-    static func height(in context: Context) -> CGFloat? {
-        // Implementation copied from:
-        // https://developer.apple.com/documentation/swiftui/custompresentationdetent#overview
-        return max(44, context.maxDetentValue * 0.1)
+private extension Logger {
+    /// A logger for the Feature Editor.
+    static var featureEditor: Logger {
+        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureEditor")
     }
 }
 
