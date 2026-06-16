@@ -40,6 +40,9 @@ private struct FeatureEditorModifier: ViewModifier {
     /// The geometry editor used to edit the feature's geometry.
     private let geometryEditor: GeometryEditor
     
+    /// The feature form for the `feature`. This is needed to move the feature form creation
+    /// outside of the view evaluation so the form object identity is stable.
+    @State private var featureForm: FeatureForm?
     /// The model for the feature editor.
     @State private var model: FeatureEditorModel
     /// The inspector's currently selected presentation detent.
@@ -63,11 +66,8 @@ private struct FeatureEditorModifier: ViewModifier {
             .inspector(isPresented: isPresented) {
                 // VStack is needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
-                    if let feature {
-                        FeatureEditorView(
-                            rootFeatureForm: FeatureForm(feature: feature),
-                            isPresented: isPresented
-                        )
+                    if let featureForm {
+                        FeatureEditorView(featureForm: featureForm, isPresented: isPresented)
                     }
                 }
                 .presentationBackgroundInteraction(.enabled)
@@ -80,7 +80,10 @@ private struct FeatureEditorModifier: ViewModifier {
                 .interactiveDismissDisabled()
             }
             .environment(model)
-            .onChange(of: ObjectIdentifier(geometryEditor)) {
+            .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
+                featureForm = feature.map(FeatureForm.init)
+            }
+            .onChange(of: ObjectIdentifier(geometryEditor), initial: true) {
                 model.geometryEditor = geometryEditor
             }
     }
@@ -123,8 +126,8 @@ private struct FeatureEditorView: View {
         }
     }
     
-    init(rootFeatureForm: FeatureForm, isPresented: Binding<Bool>) {
-        self.rootFeatureForm = rootFeatureForm
+    init(featureForm: FeatureForm, isPresented: Binding<Bool>) {
+        self.rootFeatureForm = featureForm
         self._isPresented = isPresented
         self._presentedFeatureForm = State(initialValue: rootFeatureForm)
     }
