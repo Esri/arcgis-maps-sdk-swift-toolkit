@@ -28,23 +28,21 @@ public extension View {
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor
     ) -> some View {
-        modifier(FeatureEditorModifier(feature, geometryEditor: geometryEditor))
+        modifier(FeatureEditorModifier(feature: feature, geometryEditor: geometryEditor))
     }
 }
 
 /// A view modifier that presents a `FeatureEditorView` in an inspector when a feature is non-`nil`.
 @available(visionOS, unavailable)
 private struct FeatureEditorModifier: ViewModifier {
-    /// A binding to the feature to edit. This presents `FeatureEditorView`  when non-`nil`.
-    @Binding private var feature: ArcGISFeature?
+    /// A binding to the feature to edit. This presents `FeatureEditorView` when non-`nil`.
+    @Binding var feature: ArcGISFeature?
     /// The geometry editor used to edit the feature's geometry.
-    private let geometryEditor: GeometryEditor
+    let geometryEditor: GeometryEditor
     
     /// The feature form for the `feature`. This is needed to move the feature form creation
     /// outside of the view evaluation so the form object identity is stable.
     @State private var featureForm: FeatureForm?
-    /// The model for the feature editor.
-    @State private var model: FeatureEditorModel
     /// The inspector's currently selected presentation detent.
     /// This is needed to set the default detent to medium.
     @State private var selectedPresentationDetent = PresentationDetent.medium
@@ -53,12 +51,6 @@ private struct FeatureEditorModifier: ViewModifier {
     /// This maps the `feature` binding to a Boolean value.
     private var isPresented: Binding<Bool> {
         Binding { feature != nil } set: { _ in feature = nil }
-    }
-    
-    init(_ feature: Binding<ArcGISFeature?>, geometryEditor: GeometryEditor) {
-        self._feature = feature
-        self.geometryEditor = geometryEditor
-        self._model = State(initialValue: FeatureEditorModel(geometryEditor: geometryEditor))
     }
     
     func body(content: Content) -> some View {
@@ -79,12 +71,9 @@ private struct FeatureEditorModifier: ViewModifier {
                 .inspectorColumnWidth(ideal: 320)
                 .interactiveDismissDisabled()
             }
-            .environment(model)
+            .environment(\.geometryEditor, geometryEditor)
             .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
                 featureForm = feature.map(FeatureForm.init)
-            }
-            .onChange(of: ObjectIdentifier(geometryEditor), initial: true) {
-                model.geometryEditor = geometryEditor
             }
     }
 }
@@ -96,8 +85,8 @@ private struct FeatureEditorView: View {
     /// A Boolean value indicating whether the view is presented.
     @Binding private var isPresented: Bool
     
-    /// The model for the feature editor.
-    @Environment(FeatureEditorModel.self) private var model
+    /// The geometry editor used to edit the feature's geometry.
+    @Environment(\.geometryEditor) private var geometryEditor
     
     /// A Boolean value indicating whether the geometry editor has edits to undo.
     @State private var canUndo = false
@@ -109,7 +98,7 @@ private struct FeatureEditorView: View {
     /// A value that changes when the geometry editor needs to be started.
     private var startGeometryEditorID: Int {
         var hasher = Hasher()
-        hasher.combine(ObjectIdentifier(model.geometryEditor))
+        hasher.combine(ObjectIdentifier(geometryEditor))
         hasher.combine(ObjectIdentifier(presentedFeatureForm))
         return hasher.finalize()
     }
@@ -140,12 +129,12 @@ private struct FeatureEditorView: View {
             .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
                 presentedFeatureForm = rootFeatureForm
             }
-            .task(id: ObjectIdentifier(model.geometryEditor), monitorGeometryEditorStreams)
+            .task(id: ObjectIdentifier(geometryEditor), monitorGeometryEditorStreams)
             .task(id: startGeometryEditorID) {
                 do {
                     // Stops the geometry editor so it will not continue running if
                     // the new feature cannot be edited.
-                    model.geometryEditor.stop()
+                    geometryEditor.stop()
                     
                     try await loadFeature()
                     startGeometryEditor()
@@ -157,7 +146,7 @@ private struct FeatureEditorView: View {
             }
             .onDisappear {
                 // Stops the geometry editor when the feature form dismiss button is pressed.
-                model.geometryEditor.stop()
+                geometryEditor.stop()
             }
     }
     
@@ -194,7 +183,6 @@ private struct FeatureEditorView: View {
     
     /// Monitors geometry editor streams and updates the corresponding state properties.
     private func monitorGeometryEditorStreams() async {
-        let geometryEditor = model.geometryEditor
         await withTaskGroup { group in
             group.addTask { @MainActor @Sendable in
                 for await canUndo in geometryEditor.$canUndo {
@@ -215,9 +203,9 @@ private struct FeatureEditorView: View {
         guard feature.canUpdateGeometry else { return }
         
         if let geometry = feature.geometry {
-            model.geometryEditor.start(withInitial: geometry)
+            geometryEditor.start(withInitial: geometry)
         } else if let geometryType = feature.table?.geometryType {
-            model.geometryEditor.start(withType: geometryType)
+            geometryEditor.start(withType: geometryType)
         }
     }
 }

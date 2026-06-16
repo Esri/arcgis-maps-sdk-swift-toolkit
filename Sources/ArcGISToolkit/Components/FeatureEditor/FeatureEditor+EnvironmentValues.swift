@@ -13,15 +13,10 @@
 // limitations under the License.
 
 import ArcGIS
-import Observation
+import SwiftUI
 
-/// The data model for the feature editor.
-@MainActor
-@Observable
-final class FeatureEditorModel {
-    var geometryEditor: GeometryEditor
-    
-    init(geometryEditor: GeometryEditor) {
-        self.geometryEditor = geometryEditor
-    }
+extension EnvironmentValues /* FeatureEditor */ {
+    /// The geometry editor used to edit the Feature Editor's feature geometry.
+    /// This is shared between `FeatureEditorModifier` and `FeatureEditorToolbar`.
+    @Entry var geometryEditor = GeometryEditor()
 }
