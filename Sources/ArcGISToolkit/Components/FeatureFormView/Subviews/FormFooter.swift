@@ -29,7 +29,7 @@ struct FormFooter: View {
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
     /// A closure that saves external edits. This will throw when saving should be blocked.
-    @Environment(\.externalSaveAction) private var externalEditsHandler
+    @Environment(\.externalSaveAction) private var externalSaveAction
     
     var body: some View {
         HStack {
@@ -60,7 +60,7 @@ struct FormFooter: View {
             if featureForm.validationErrors.isEmpty {
                 Task {
                     do {
-                        try externalEditsHandler?()
+                        try externalSaveAction?()
                         try await featureForm.finishEditing()
                         formHandlingEventAction?(.savedEdits(willNavigate: false))
                     } catch {

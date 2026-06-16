@@ -52,7 +52,7 @@ private struct FeatureEditorModifier: ViewModifier {
     /// A binding to a Boolean value that indicates whether the inspector should be presented.
     /// This maps the `feature` binding to a Boolean value.
     private var isPresented: Binding<Bool> {
-        Binding(get: { feature != nil }, set: { _ in feature = nil })
+        Binding { feature != nil } set: { _ in feature = nil }
     }
     
     init(_ feature: Binding<ArcGISFeature?>, geometryEditor: GeometryEditor) {
