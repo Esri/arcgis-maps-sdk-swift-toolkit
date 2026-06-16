@@ -150,6 +150,9 @@ This will eventually be available on `element`.
     }
     
     /// The list of allowed UTTypes based on the list of available inputs.
+    ///
+    /// - Note: `UTType.text` represents all text-encoded data, including text with markup and
+    /// source code such as: .txt, .rtf, .html, .xml, .md, .csv, .tsv, .swift, or .js.
     var allowedFileImporterTypes: [UTType] {
         var types = [UTType]()
         if inputs.contains(where: { $0 is _AudioFormInput }) {
@@ -159,23 +162,6 @@ This will eventually be available on `element`.
             types.append(contentsOf: [
                 .pdf, .zip, .text, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .`7z`
             ])
-            //    The .text UTType includes (is a supertype of) the following common types:
-            //    |UTType Property UTI | String                             | Description               | Example Extensions |
-            //    |------------------- |------------------------------------|---------------------------|--------------------|
-            //    |.plainText          | public.plain-text                  | Plain text                | .txt               |
-            //    |.utf8PlainText      | public.utf8-plain-text             | UTF-8 encoded plain text  | .txt               |
-            //    |.utf16PlainText     | public.utf16-plain-text            | UTF-16 encoded plain text | .txt               |
-            //    |.rtf                | public.rtf                         | Rich Text Format          | .rtf               |
-            //    |.html               | public.html                        | HTML document             | .html, .htm        |
-            //    |.xml                | public.xml                         | XML document              | .xml               |
-            //    |.markdown           | net.daringfireball.markdown        | Markdown text             | .md                |
-            //    |.commaSeparatedText | public.comma-separated-values-text | CSV text                  | .csv               |
-            //    |.tabSeparatedText   | public.tab-separated-values-text   | TSV text                  | .tsv               |
-            //    |.sourceCode         | public.source-code                 | Source code (supertype)   | .swift, .py, .js   |
-            //
-            //    Note: .text is a supertype—it matches any file type that is considered text,
-            //    including the above and any custom types that declare public.text as their parent.
-            //    It does not include binary formats (like Word .docx, PDF, images, etc.).
         }
         if inputs.contains(where: { $0 is _ImageFormInput }) {
             types.append(.image)
@@ -604,4 +590,14 @@ private extension URL {
     var contentType: UTType? {
         UTType(filenameExtension: self.pathExtension)
     }
+}
+
+private extension UTType {
+    static var doc: Self { .init(filenameExtension: "doc")! }
+    static var docx: Self { .init(filenameExtension: "docx")! }
+    static var ppt: Self { .init(filenameExtension: "ppt")! }
+    static var pptx: Self { .init(filenameExtension: "pptx")! }
+    static var xls: Self { .init(filenameExtension: "xls")! }
+    static var xlsx: Self { .init(filenameExtension: "xlsx")! }
+    static var `7z`: Self { .init(filenameExtension: "7z")! }
 }
