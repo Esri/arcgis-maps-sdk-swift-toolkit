@@ -22,6 +22,10 @@ is anchored to a physical surface. To learn more about using the ``TableTopScene
 `WorldScaleSceneView` provides an augmented reality world scale experience where ArcGIS Scene content
 is integrated with the real world. To learn more about using the ``WorldScaleSceneView`` see the <doc:WorldScaleSceneViewTutorial>.
 
+To improve the alignment and positional accuracy of AR content, the `WorldScaleSceneView` can be configured
+with a custom VPS provider that relies on visual positioning data from either public imagery or private scans.
+To learn how to implement a custom VPS provider, see the `CustomVPSProviderExample` project.
+
 ###### Requirements
 * Set the following properties in the app's **info.plist**:
     * [`Privacy - Camera Usage Description`](https://developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription) to request camera permissions.
