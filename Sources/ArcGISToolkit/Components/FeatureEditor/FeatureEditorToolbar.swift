@@ -41,6 +41,7 @@ import SwiftUI
 /// **Associated Types**
 ///
 /// - ``Style``
+///
 /// - Since: 300.1
 public struct FeatureEditorToolbar: View {
     /// The style to apply to the toolbar's controls.
