@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
 import SwiftUI
 
 /// The `FeatureEditorToolbar` component allows users to edit geometries in the
@@ -46,8 +47,8 @@ import SwiftUI
 public struct FeatureEditorToolbar: View {
     /// The style to apply to the toolbar's controls.
     private let style: Style?
-    /// The model for the parent feature editor.
-    @Environment(FeatureEditorModel.self) private var featureEditorModel
+    /// The geometry editor from the parent feature editor modifier.
+    @Environment(\.geometryEditor) private var geometryEditor
     
     /// Creates a feature editor toolbar.
     /// - Parameter style: The style that determines the toolbar's appearance and layout.
@@ -59,7 +60,7 @@ public struct FeatureEditorToolbar: View {
     
     public var body: some View {
         GeometryEditorToolbar(
-            geometryEditor: featureEditorModel.geometryEditor,
+            geometryEditor: geometryEditor,
             style: GeometryEditorToolbar.Style(featureEditorToolbarStyle: style)
         )
         // Only shows snap settings for features in layers.
