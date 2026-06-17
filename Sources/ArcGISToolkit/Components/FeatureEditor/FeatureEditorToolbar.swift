@@ -41,6 +41,8 @@ import SwiftUI
 /// **Associated Types**
 ///
 /// - ``Style``
+///
+/// - Since: 300.1
 public struct FeatureEditorToolbar: View {
     /// The style to apply to the toolbar's controls.
     private let style: Style?
@@ -50,6 +52,7 @@ public struct FeatureEditorToolbar: View {
     /// Creates a feature editor toolbar.
     /// - Parameter style: The style that determines the toolbar's appearance and layout.
     /// A `nil` value displays the toolbar's controls without built-in layout or styling.
+    /// - Since: 300.1
     public init(style: Style? = .vertical) {
         self.style = style
     }
@@ -66,6 +69,7 @@ public struct FeatureEditorToolbar: View {
 
 extension FeatureEditorToolbar {
     /// A style that determines the appearance and layout of a feature editor toolbar.
+    /// - Since: 300.1
     public enum Style {
         /// Displays the toolbar in a styled horizontal layout.
         case horizontal
