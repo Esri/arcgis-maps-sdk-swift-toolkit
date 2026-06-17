@@ -16,21 +16,27 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
+/// The top-level view for the example app.
 struct ContentView: View {
+    /// The view model containing objects needed for the feature editor.
     @State private var featureEditorModel = FeatureEditorModel()
-    @State private var isShowingMapView = true
     
     var body: some View {
+        // This NavigationStack is used to simulate the structure of a real-world application.
         NavigationStack {
-            Button("Open Example") {
-                isShowingMapView = true
-            }
-            .navigationDestination(isPresented: $isShowingMapView) {
+            NavigationLink("Open Map View") {
                 ExampleMapView()
-                    .navigationTitle("Feature Editor Example")
+                    .navigationTitle("Map View")
+                    .navigationBarTitleDisplayMode(.inline)
             }
+            .buttonStyle(.borderedProminent)
+            .navigationTitle("Feature Editor Example")
+            .navigationBarTitleDisplayMode(.inline)
         }
         .environment(featureEditorModel)
+        // The modifier that presents the feature editor.
+        // Note that because the feature editor uses a NavigationStack for internal
+        // navigation, the modifier must be placed outside of the app's NavigationStack.
         .featureEditor(
             $featureEditorModel.feature,
             geometryEditor: featureEditorModel.geometryEditor
@@ -38,8 +44,14 @@ struct ContentView: View {
     }
 }
 
+// MARK: - FeatureEditorModel
+
+/// A view model containing objects needed for the feature editor.
+@MainActor
 @Observable
 final class FeatureEditorModel {
+    /// The feature to edit with the feature editor.
     var feature: ArcGISFeature?
+    /// The geometry editor that the feature editor will use to edit geometries on the `MapView`.
     let geometryEditor = GeometryEditor()
 }

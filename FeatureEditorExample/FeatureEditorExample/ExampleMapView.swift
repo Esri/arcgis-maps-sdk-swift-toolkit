@@ -16,104 +16,115 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
+/// A view for identifying a feature to edit on a map.
 struct ExampleMapView: View {
+    /// The view model containing objects needed for the feature editor.
     @Environment(FeatureEditorModel.self) private var featureEditorModel
     
-    @State private var hasEnabledSourceSettings = false
+    /// A Boolean value indicating whether the snap settings have been set up.
+    @State private var hasEnabledSnapSettings = false
+    /// The map with the features to edit, created from a Naperville Electric web map portal item.
     @State private var map: Map = {
         let url = URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
         let map = Map(url: url)!
+        
+        // Enables full resolution feature tiling to improve snapping accuracy.
         map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
         
-        let envelope = Envelope(xRange: -9814090 ... -9812210, yRange: 5129650 ... 5130750)
-        map.initialViewpoint = Viewpoint(boundingGeometry: envelope)
+        let initialExtent = Envelope(xRange: -9815340 ... -9815040, yRange: 5129550 ... 5130070)
+        map.initialViewpoint = Viewpoint(boundingGeometry: initialExtent)
         
         return map
     }()
     
+    /// The state of the view.
     private enum ViewState: Equatable {
-        case loading, identifying(CGPoint)
+        /// The map is being loaded.
+        case loadingMap
+        /// A feature is being identified at the given screen point.
+        case identifyingFeature(screenPoint: CGPoint)
     }
-    @State private var viewState: ViewState? = .loading
+    /// The current state of the view, used to trigger asynchronous actions.
+    @State private var viewState: ViewState? = .loadingMap
     
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
                 .geometryEditor(featureEditorModel.geometryEditor)
                 .onDrawStatusChanged { drawStatus in
-                    // Enables all the snap source settings when the map first completes drawing.
-                    guard !hasEnabledSourceSettings,
-                          viewState == nil,
-                          drawStatus == .completed else {
+                    // Enables the snap settings when the map view first completes drawing.
+                    guard !hasEnabledSnapSettings, viewState == nil, drawStatus == .completed else {
                         return
                     }
-                    
-                    featureEditorModel.geometryEditor.enableSnapSourceSettings()
-                    hasEnabledSourceSettings = true
+                    enableSnapSettings(featureEditorModel.geometryEditor.snapSettings)
+                    hasEnabledSnapSettings = true
                 }
                 .onSingleTapGesture { screenPoint, _ in
                     guard viewState == nil else { return }
-                    viewState = .identifying(screenPoint)
+                    viewState = .identifyingFeature(screenPoint: screenPoint)
                 }
                 .task(id: viewState) {
+                    // Performs an action associated with the current view state.
                     guard let viewState else { return }
                     defer { self.viewState = nil }
                     
                     do {
                         switch viewState {
-                        case .loading:
-                            try await setUpMap()
-                        case .identifying(let screenPoint):
-                            try await identifyFeature(at: screenPoint, using: mapViewProxy)
+                        case .loadingMap:
+                            try await loadMap()
+                        case .identifyingFeature(let screenPoint):
+                            try await editFeature(at: screenPoint, using: mapViewProxy)
                         }
                     } catch {
-                        print("Error: \(error)")
+                        print("Error:", error)
                     }
                 }
-                .overlay(alignment: .topTrailing) {
-                    FeatureEditorToolbar()
-                        .padding()
-                }
-                .onDisappear {
-                    featureEditorModel.feature = nil
-                }
+        }
+        .overlay(alignment: .topTrailing) {
+            // The toolbar for the feature editor. This needs to be placed
+            // below the feature editor modifier in the view hierarchy.
+            FeatureEditorToolbar()
+                .padding()
+        }
+        .onDisappear {
+            // Dismisses the feature editor when the view disappears.
+            featureEditorModel.feature = nil
         }
     }
     
-    private func setUpMap() async throws {
+    /// Opens the feature editor with a feature identified at a given screen point.
+    /// - Parameters:
+    ///   - screenPoint: The point on the screen at which to identify a feature.
+    ///   - proxy: The proxy used to identify the feature on the map view.
+    private func editFeature(at screenPoint: CGPoint, using proxy: MapViewProxy) async throws {
+        let results = try await proxy.identifyLayers(screenPoint: screenPoint, tolerance: 10)
+        let firstFeature = results.first?.geoElements.first as? ArcGISFeature
+        featureEditorModel.feature = firstFeature
+    }
+    
+    /// Syncs and enables properties on snap settings.
+    /// - Parameter snapSettings: The snap settings to enable.
+    private func enableSnapSettings(_ snapSettings: SnapSettings) {
+        snapSettings.isEnabled = true
+        snapSettings.snapsToGeometryGuides = true
+        
+        try? snapSettings.syncSourceSettings()
+        for sourceSetting in snapSettings.sourceSettings {
+            sourceSetting.isEnabled = true
+        }
+    }
+    
+    /// Loads the map using the required credentials.
+    private func loadMap() async throws {
+        // Note: Never hardcode login information in a production application.
+        // This is done solely for the sake of the example.
         let credential = try await TokenCredential.credential(
             for: map.url!,
             username: "viewer01",
             password: "I68VGU^nMurF"
         )
         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
-        try await map.retryLoad()
-    }
-    
-    private func identifyFeature(at point: CGPoint, using proxy: MapViewProxy) async throws {
-        let identifyLayerResults = try await proxy.identifyLayers(
-            screenPoint: point,
-            tolerance: 10
-        )
-        let result = identifyLayerResults.first
-        featureEditorModel.feature = result?.geoElements.first as? ArcGISFeature
-    }
-}
-
-// MARK: - Extensions
-
-private extension GeometryEditor {
-    func enableSnapSourceSettings() {
-        try? snapSettings.syncSourceSettings()
-        snapSettings.isEnabled = true
         
-        enableAllSnapSourceSettings(snapSettings.sourceSettings)
-    }
-    
-    private func enableAllSnapSourceSettings(_ sourceSettings: [SnapSourceSettings]) {
-        for sourceSetting in sourceSettings {
-            sourceSetting.isEnabled = true
-            enableAllSnapSourceSettings(sourceSetting.childSourceSettings)
-        }
+        try await map.retryLoad()
     }
 }

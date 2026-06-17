@@ -17,6 +17,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D74A94212E60B2F20087BB8A"
                BuildableName = "FeatureEditorExample.app"
+               BlueprintName = "FeatureEditorExample"
                ReferencedContainer = "container:FeatureEditorExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,6 +47,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D74A94212E60B2F20087BB8A"
             BuildableName = "FeatureEditorExample.app"
+            BlueprintName = "FeatureEditorExample"
             ReferencedContainer = "container:FeatureEditorExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -62,6 +64,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D74A94212E60B2F20087BB8A"
             BuildableName = "FeatureEditorExample.app"
+            BlueprintName = "FeatureEditorExample"
             ReferencedContainer = "container:FeatureEditorExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
