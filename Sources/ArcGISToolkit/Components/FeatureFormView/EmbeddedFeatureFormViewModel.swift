@@ -47,7 +47,7 @@ final class EmbeddedFeatureFormViewModel {
     var previouslyFocusedElements = [FormElement]()
     
     /// The title of the feature form view.
-    var title = ""
+    var title: String
     
     /// The list of visible form elements.
     var visibleElements: [FormElement] {
@@ -86,6 +86,10 @@ final class EmbeddedFeatureFormViewModel {
     /// - Parameter featureForm: The feature form defining the editing experience.
     public init(featureForm: FeatureForm) {
         self.featureForm = featureForm
+        // Prevents a bug where the view's navigation title won't always appear
+        // when the view is shown in an inspector.
+        self.title = featureForm.title
+        
         evaluateExpressions()
         monitorEdits()
         monitorVisibility()
