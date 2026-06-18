@@ -89,14 +89,17 @@ extension AppleWorldTracking: WorldTrackingProvider {
         if let geoTrackingIsAvailable = try? await ARGeoTrackingConfiguration.isGeoTrackingAvailable {
             self.geoTrackingIsAvailable = geoTrackingIsAvailable
         }
+        
+        let locationManager = CLLocationManager()
+        if locationManager.authorizationStatus == .notDetermined {
+            locationManager.requestWhenInUseAuthorization()
+        }
+        
+        guard locationManager.authorizationStatus == .authorizedWhenInUse else {
+            return
+        }
+        
         do {
-            let session = CLServiceSession(authorization: .whenInUse)
-            for try await diagnostic in session.diagnostics {
-                if !diagnostic.authorizationRequestInProgress {
-                    // A denial occurred.
-                    break
-                }
-            }
             try await dataSource.start()
         } catch {
             // Do nothing.
