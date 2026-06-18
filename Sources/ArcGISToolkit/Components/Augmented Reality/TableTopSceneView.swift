@@ -102,14 +102,17 @@ public struct TableTopSceneView: View {
                 SwiftUIARView(sessionProvider: arSessionProvider)
                     .onDidUpdateFrame { _, frame in
                         guard let interfaceOrientation else { return }
+                        
+                        let camera = frame.camera
+                        
                         sceneViewProxy.updateCamera(
-                            frame: frame,
+                            camera: camera,
                             cameraController: cameraController,
                             orientation: interfaceOrientation,
                             initialTransformation: initialTransformation
                         )
                         sceneViewProxy.setFieldOfView(
-                            for: frame,
+                            for: camera,
                             orientation: interfaceOrientation
                         )
                     }

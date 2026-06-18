@@ -57,14 +57,16 @@ public struct AppleWorldTrackingCameraFeedView: View {
             .onDidUpdateFrame { _, frame in
                 guard let interfaceOrientation, context.isLocalized else { return }
                 
+                let camera = frame.camera
+                
                 context.sceneView.updateCamera(
-                    frame: frame,
+                    camera: camera,
                     cameraController: context.cameraController,
                     orientation: interfaceOrientation,
                     initialTransformation: .identity
                 )
                 context.sceneView.setFieldOfView(
-                    for: frame,
+                    for: camera,
                     orientation: interfaceOrientation
                 )
             }
