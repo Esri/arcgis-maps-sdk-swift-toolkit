@@ -106,11 +106,10 @@ struct ExampleMapView: View {
         
         // Enables the geometry editor's snap settings and sources.
         let snapSettings = featureEditorModel.geometryEditor.snapSettings
-        snapSettings.isEnabled = true
         snapSettings.snapsToGeometryGuides = true
         
         await map.operationalLayers.load()
-        try? snapSettings.syncSourceSettings()
+        try snapSettings.syncSourceSettings()
         
         for sourceSetting in snapSettings.sourceSettings {
             sourceSetting.isEnabled = true
