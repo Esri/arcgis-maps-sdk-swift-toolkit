@@ -52,14 +52,16 @@ struct CustomWorldTrackingCameraFeedView: View {
                     return
                 }
                 
+                let camera = frame.camera
+                
                 if context.isLocalized {
                     updateCameraController(
-                        camera: frame.camera,
+                        camera: camera,
                         geospatialTransform: earth.cameraGeospatialTransform
                     )
                     
                     context.sceneView.setFieldOfView(
-                        for: frame,
+                        for: camera,
                         orientation: interfaceOrientation
                     )
                     
