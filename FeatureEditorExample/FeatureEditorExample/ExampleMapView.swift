@@ -34,39 +34,35 @@ struct ExampleMapView: View {
         
         return map
     }()
-    
-    /// The state of the view.
-    private enum ViewState: Equatable {
-        /// The view is being set up.
-        case settingUp
-        /// A feature is being identified at the given screen point.
-        case identifyingFeature(screenPoint: CGPoint)
-    }
-    /// The current state of the view, used to trigger asynchronous actions.
-    @State private var viewState: ViewState? = .settingUp
+    /// The point on the screen where the user tapped.
+    @State private var tapPoint: CGPoint?
     
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
                 .geometryEditor(featureEditorModel.geometryEditor)
                 .onSingleTapGesture { screenPoint, _ in
-                    guard viewState == nil else { return }
-                    viewState = .identifyingFeature(screenPoint: screenPoint)
+                    guard tapPoint == nil else { return }
+                    tapPoint = screenPoint
                 }
-                .task(id: viewState) {
-                    // Performs an action associated with the current view state.
-                    guard let viewState else { return }
-                    defer { self.viewState = nil }
+                .task(id: tapPoint) {
+                    // Identifies the feature at the tapped screen point and
+                    // uses it to display the feature editor.
+                    guard let tapPoint else { return }
+                    defer { self.tapPoint = nil }
                     
                     do {
-                        switch viewState {
-                        case .settingUp:
-                            try await setUp()
-                        case .identifyingFeature(let screenPoint):
-                            try await editFeature(at: screenPoint, using: mapViewProxy)
-                        }
+                        let results = try await mapViewProxy.identifyLayers(
+                            screenPoint: tapPoint,
+                            tolerance: 10
+                        )
+                        let firstFeature = results.first?.geoElements.first as? ArcGISFeature
+                        
+                        // Passes the identified feature up the view hierarchy
+                        // to display the feature editor.
+                        featureEditorModel.feature = firstFeature
                     } catch {
-                        print("Error:", error)
+                        print("Identify error:", error)
                     }
                 }
         }
@@ -76,20 +72,17 @@ struct ExampleMapView: View {
             FeatureEditorToolbar()
                 .padding()
         }
+        .task {
+            do {
+                try await setUp()
+            } catch {
+                print("Setup error:", error)
+            }
+        }
         .onDisappear {
             // Dismisses the feature editor when the view disappears.
             featureEditorModel.feature = nil
         }
-    }
-    
-    /// Opens the feature editor with a feature identified at a given screen point.
-    /// - Parameters:
-    ///   - screenPoint: The point on the screen at which to identify a feature.
-    ///   - proxy: The proxy used to identify the feature on the map view.
-    private func editFeature(at screenPoint: CGPoint, using proxy: MapViewProxy) async throws {
-        let results = try await proxy.identifyLayers(screenPoint: screenPoint, tolerance: 10)
-        let firstFeature = results.first?.geoElements.first as? ArcGISFeature
-        featureEditorModel.feature = firstFeature
     }
     
     /// Sets up the map and snap settings.
