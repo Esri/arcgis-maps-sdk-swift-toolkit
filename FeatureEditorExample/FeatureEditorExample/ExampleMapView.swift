@@ -21,8 +21,6 @@ struct ExampleMapView: View {
     /// The view model containing objects needed for the feature editor.
     @Environment(FeatureEditorModel.self) private var featureEditorModel
     
-    /// A Boolean value indicating whether the snap settings have been set up.
-    @State private var hasEnabledSnapSettings = false
     /// The map with the features to edit, created from a Naperville Electric web map portal item.
     @State private var map: Map = {
         let url = URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
@@ -39,26 +37,18 @@ struct ExampleMapView: View {
     
     /// The state of the view.
     private enum ViewState: Equatable {
-        /// The map is being loaded.
-        case loadingMap
+        /// The view is being set up.
+        case settingUp
         /// A feature is being identified at the given screen point.
         case identifyingFeature(screenPoint: CGPoint)
     }
     /// The current state of the view, used to trigger asynchronous actions.
-    @State private var viewState: ViewState? = .loadingMap
+    @State private var viewState: ViewState? = .settingUp
     
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
                 .geometryEditor(featureEditorModel.geometryEditor)
-                .onDrawStatusChanged { drawStatus in
-                    // Enables the snap settings when the map view first completes drawing.
-                    guard !hasEnabledSnapSettings, viewState == nil, drawStatus == .completed else {
-                        return
-                    }
-                    enableSnapSettings(featureEditorModel.geometryEditor.snapSettings)
-                    hasEnabledSnapSettings = true
-                }
                 .onSingleTapGesture { screenPoint, _ in
                     guard viewState == nil else { return }
                     viewState = .identifyingFeature(screenPoint: screenPoint)
@@ -70,8 +60,8 @@ struct ExampleMapView: View {
                     
                     do {
                         switch viewState {
-                        case .loadingMap:
-                            try await loadMap()
+                        case .settingUp:
+                            try await setUp()
                         case .identifyingFeature(let screenPoint):
                             try await editFeature(at: screenPoint, using: mapViewProxy)
                         }
@@ -102,20 +92,8 @@ struct ExampleMapView: View {
         featureEditorModel.feature = firstFeature
     }
     
-    /// Syncs and enables properties on snap settings.
-    /// - Parameter snapSettings: The snap settings to enable.
-    private func enableSnapSettings(_ snapSettings: SnapSettings) {
-        snapSettings.isEnabled = true
-        snapSettings.snapsToGeometryGuides = true
-        
-        try? snapSettings.syncSourceSettings()
-        for sourceSetting in snapSettings.sourceSettings {
-            sourceSetting.isEnabled = true
-        }
-    }
-    
-    /// Loads the map using the required credentials.
-    private func loadMap() async throws {
+    /// Sets up the map and snap settings.
+    private func setUp() async throws {
         // Note: Never hardcode login information in a production application.
         // This is done solely for the sake of the example.
         let credential = try await TokenCredential.credential(
@@ -124,7 +102,18 @@ struct ExampleMapView: View {
             password: "I68VGU^nMurF"
         )
         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
-        
         try await map.retryLoad()
+        
+        // Enables the geometry editor's snap settings and sources.
+        let snapSettings = featureEditorModel.geometryEditor.snapSettings
+        snapSettings.isEnabled = true
+        snapSettings.snapsToGeometryGuides = true
+        
+        await map.operationalLayers.load()
+        try? snapSettings.syncSourceSettings()
+        
+        for sourceSetting in snapSettings.sourceSettings {
+            sourceSetting.isEnabled = true
+        }
     }
 }
