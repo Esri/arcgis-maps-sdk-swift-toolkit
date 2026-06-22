@@ -98,7 +98,7 @@ struct AttachmentImportMenu: View {
             }
         } label: {
             Text(takePhotoLabel)
-            Image(systemName: "camera.fill")
+            Image(systemName: "camera")
         }
         .disabled(isVision)
     }
@@ -131,7 +131,7 @@ struct AttachmentImportMenu: View {
             }
         } label: {
             Text(takeVideoLabel)
-            Image(systemName: "video.fill")
+            Image(systemName: "video")
         }
         .disabled(isVision)
     }
