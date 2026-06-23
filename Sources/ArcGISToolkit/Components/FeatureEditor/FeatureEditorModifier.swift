@@ -256,7 +256,7 @@ private extension PresentationDetent {
 private extension View {
     /// Presents content in a sheet on iPhone and in an inspector on all other devices.
     ///
-    /// This need because the `View.presentationDetents(_:selection:)`
+    /// This is needed because the `View.presentationDetents(_:selection:)`
     /// selection value does not update with inspectors.
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating whether the inspector is presented.
