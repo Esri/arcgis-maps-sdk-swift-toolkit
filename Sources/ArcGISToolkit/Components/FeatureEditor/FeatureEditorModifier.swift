@@ -56,11 +56,15 @@ private struct FeatureEditorModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .inspector(isPresented: isPresented) {
+            .safeInspector(isPresented: isPresented) {
                 // VStack is needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
                     if let featureForm {
-                        FeatureEditorView(featureForm: featureForm, isPresented: isPresented)
+                        FeatureEditorView(
+                            featureForm: featureForm,
+                            isPresented: isPresented,
+                            isMinimized: selectedPresentationDetent == .bar
+                        )
                     }
                 }
                 .presentationBackgroundInteraction(.enabled)
@@ -85,6 +89,8 @@ private struct FeatureEditorView: View {
     private let rootFeatureForm: FeatureForm
     /// A Boolean value indicating whether the view is presented.
     @Binding private var isPresented: Bool
+    /// A Boolean value indicating whether the parent presentation is minimized.
+    private let isMinimized: Bool
     
     /// The geometry editor used to edit the feature's geometry.
     @Environment(\.geometryEditor) private var geometryEditor
@@ -116,14 +122,16 @@ private struct FeatureEditorView: View {
         }
     }
     
-    init(featureForm: FeatureForm, isPresented: Binding<Bool>) {
+    init(featureForm: FeatureForm, isPresented: Binding<Bool>, isMinimized: Bool) {
         self.rootFeatureForm = featureForm
         self._isPresented = isPresented
         self._presentedFeatureForm = State(initialValue: rootFeatureForm)
+        self.isMinimized = isMinimized
     }
     
     var body: some View {
         FeatureFormView(root: rootFeatureForm, isPresented: $isPresented)
+            .editingButtons(isMinimized ? .hidden : .automatic)
             .onFeatureFormChanged { presentedFeatureForm = $0 }
             .onFormEditingEvent(perform: handleFormEditingEvent)
             .environment(\.externalSaveAction, saveGeometryEditsAction)
@@ -243,4 +251,25 @@ private extension Logger {
 private extension PresentationDetent {
     /// A custom presentation detent that sizes to the approximate height of a top system toolbar.
     static let bar = Self.custom(BarDetent.self)
+}
+
+private extension View {
+    /// Presents content in a sheet on iPhone and in an inspector on all other devices.
+    ///
+    /// This need because the `View.presentationDetents(_:selection:)`
+    /// selection value does not update with inspectors.
+    /// - Parameters:
+    ///   - isPresented: A Boolean value indicating whether the inspector is presented.
+    ///   - content: The content to display in the inspector.
+    @ViewBuilder
+    func safeInspector<Content>(
+        isPresented: Binding<Bool>,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View where Content: View {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            sheet(isPresented: isPresented, content: content)
+        } else {
+            inspector(isPresented: isPresented, content: content)
+        }
+    }
 }
