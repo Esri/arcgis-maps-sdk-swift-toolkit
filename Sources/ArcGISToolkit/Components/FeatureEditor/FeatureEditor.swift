@@ -23,7 +23,7 @@ import SwiftUI
 ///
 /// `FeatureEditor` provides a toolbar for common geometry editing operations,
 /// including:
-/// 
+///
 /// - Changing the tool.
 /// - Deleting the selected element.
 /// - Undoing the last action on the geometry.
@@ -59,7 +59,7 @@ public struct FeatureEditor: View {
     /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
     private let geometryEditor: GeometryEditor
     /// The shared feature editor model from the environment.
-    @Environment(\.featureEditorModel) private var featureEditorModel
+    @Environment(\.featureEditorModel) private var model
     
     /// Creates a feature editor toolbar.
     /// - Since: 300.1
@@ -84,19 +84,19 @@ public struct FeatureEditor: View {
     
     public var body: some View {
         GeometryEditorToolbar(
-            geometryEditor: featureEditorModel.geometryEditor,
+            geometryEditor: model.geometryEditor,
             style: GeometryEditorToolbar.Style(featureEditorToolbarStyle: style)
         )
         // Only shows snap settings for features in layers.
         .snapSources(.layers)
         .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
-            featureEditorModel.feature = feature
+            model.feature = feature
         }
         .onChange(of: ObjectIdentifier(geometryEditor), initial: true) {
-            featureEditorModel.geometryEditor = geometryEditor
+            model.geometryEditor = geometryEditor
         }
-        .onChange(of: featureEditorModel.feature.map(ObjectIdentifier.init)) {
-            feature = featureEditorModel.feature
+        .onChange(of: model.feature.map(ObjectIdentifier.init)) {
+            feature = model.feature
         }
     }
 }
