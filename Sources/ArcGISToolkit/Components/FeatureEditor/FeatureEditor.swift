@@ -112,23 +112,6 @@ extension FeatureEditor {
     }
 }
 
-/// A data model that contains various properties that are needed for the
-/// feature editor and shared between the form and the toolbar.
-@Observable
-final class FeatureEditorModel {
-    /// The feature to edit with the feature editor.
-    var feature: ArcGISFeature?
-    ///
-    /// The geometry editor that the feature editor will use to edit geometries
-    /// The geometry editor that the feature editor will use to edit geometries on the `MapView`.
-    var geometryEditor: GeometryEditor
-    
-    init(feature: ArcGISFeature? = nil, geometryEditor: GeometryEditor = GeometryEditor()) {
-        self.feature = feature
-        self.geometryEditor = geometryEditor
-    }
-}
-
 private extension GeometryEditorToolbar.Style {
     init?(featureEditorToolbarStyle: FeatureEditor.Style?) {
         switch featureEditorToolbarStyle {
