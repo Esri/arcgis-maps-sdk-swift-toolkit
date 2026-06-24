@@ -67,8 +67,8 @@ struct ExampleMapView: View {
                 }
         }
         .overlay(alignment: .topTrailing) {
-            // The toolbar for the feature editor. This needs to be placed
-            // below the `featureEditorInspector` modifier in the view hierarchy.
+            // The feature editor needs to be placed below the
+            // `featureEditorInspector` modifier in the view hierarchy.
             FeatureEditor(
                 $featureToEdit,
                 geometryEditor: geometryEditor
