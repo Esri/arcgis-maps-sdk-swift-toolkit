@@ -83,7 +83,7 @@ public struct FeatureEditor: View {
     
     public var body: some View {
         GeometryEditorToolbar(
-            geometryEditor: model.geometryEditor,
+            geometryEditor: geometryEditor,
             style: GeometryEditorToolbar.Style(featureEditorToolbarStyle: style)
         )
         // Only shows snap settings for features in layers.
