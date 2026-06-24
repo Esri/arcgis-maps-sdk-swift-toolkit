@@ -84,7 +84,7 @@ public struct FeatureEditor: View {
     public var body: some View {
         GeometryEditorToolbar(
             geometryEditor: geometryEditor,
-            style: GeometryEditorToolbar.Style(featureEditorToolbarStyle: toolbarStyle)
+            style: toolbarStyle
         )
         // Only shows snap settings for features in layers.
         .snapSources(.layers)
@@ -108,15 +108,5 @@ extension FeatureEditor {
         case horizontal
         /// Displays the toolbar in a styled vertical layout.
         case vertical
-    }
-}
-
-private extension GeometryEditorToolbar.Style {
-    init?(featureEditorToolbarStyle: FeatureEditor.ToolbarStyle?) {
-        switch featureEditorToolbarStyle {
-        case .horizontal: self = .horizontal
-        case .vertical: self = .vertical
-        default: return nil
-        }
     }
 }

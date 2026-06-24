@@ -21,7 +21,7 @@ struct GeometryEditorToolbar: View {
     /// The geometry editor that this toolbar controls.
     private let geometryEditor: GeometryEditor
     /// The style to apply to the toolbar's controls.
-    private let style: Style?
+    private let style: FeatureEditor.ToolbarStyle?
     /// The allowed snap source types for snap settings UI.
     private var snapSources: SnapSources
     
@@ -40,7 +40,7 @@ struct GeometryEditorToolbar: View {
     ///   - geometryEditor: The geometry editor that this toolbar controls.
     ///   - style: The style that determines the toolbar’s appearance and layout.  A `nil` value
     ///   displays the toolbar's controls without built-in layout or styling.
-    init(geometryEditor: GeometryEditor, style: Style? = .vertical) {
+    init(geometryEditor: GeometryEditor, style: FeatureEditor.ToolbarStyle? = .vertical) {
         // Snapping is enabled by default to simplify the UI.
         geometryEditor.snapSettings.isEnabled = true
         self.geometryEditor = geometryEditor
@@ -135,16 +135,6 @@ final class GeometryEditorToolbarModel {
 }
 
 extension GeometryEditorToolbar {
-    /// A style that determines the appearance and layout of a geometry editor toolbar.
-    ///
-    /// This is commonly applied when displaying the toolbar overlaid on a `GeoView`.
-    enum Style {
-        /// Displays the toolbar in a styled horizontal layout.
-        case horizontal
-        /// Displays the toolbar in a styled vertical layout.
-        case vertical
-    }
-    
     /// A set of `SnapSource` types allowed in the snap settings UI.
     struct SnapSources: OptionSet {
         let rawValue: Int
