@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-/// The `FeatureEditorToolbar` component allows users to edit geometries in the
+/// The `FeatureEditor` component allows users to edit geometries in the
 /// feature editor.
 ///
 /// **Features**
@@ -44,7 +44,7 @@ import SwiftUI
 /// - ``Style``
 ///
 /// - Since: 300.1
-public struct FeatureEditorToolbar: View {
+public struct FeatureEditor: View {
     /// The style to apply to the toolbar's controls.
     private let style: Style?
     /// The geometry editor from the parent feature editor modifier.
@@ -68,7 +68,7 @@ public struct FeatureEditorToolbar: View {
     }
 }
 
-extension FeatureEditorToolbar {
+extension FeatureEditor {
     /// A style that determines the appearance and layout of a feature editor toolbar.
     /// - Since: 300.1
     public enum Style {
@@ -80,7 +80,7 @@ extension FeatureEditorToolbar {
 }
 
 private extension GeometryEditorToolbar.Style {
-    init?(featureEditorToolbarStyle: FeatureEditorToolbar.Style?) {
+    init?(featureEditorToolbarStyle: FeatureEditor.Style?) {
         switch featureEditorToolbarStyle {
         case .horizontal: self = .horizontal
         case .vertical: self = .vertical

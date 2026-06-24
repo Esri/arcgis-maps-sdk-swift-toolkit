@@ -16,7 +16,8 @@ import ArcGIS
 import SwiftUI
 
 extension EnvironmentValues /* FeatureEditor */ {
-    /// The geometry editor used to edit the Feature Editor's feature geometry.
-    /// This is shared between `FeatureEditorModifier` and `FeatureEditorToolbar`.
-    @Entry var geometryEditor = GeometryEditor()
+    /// The feature editor data model to store the various properties to support
+    /// editing features.
+    /// This is shared between `FeatureEditorModifier` and `FeatureEditor`.
+    @Entry var featureEditorModel = FeatureEditorModel()
 }
