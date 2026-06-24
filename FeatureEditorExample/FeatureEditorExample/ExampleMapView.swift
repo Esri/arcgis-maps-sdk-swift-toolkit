@@ -18,8 +18,11 @@ import SwiftUI
 
 /// A view for identifying a feature to edit on a map.
 struct ExampleMapView: View {
-    /// The view model containing objects needed for the feature editor.
-    @State private var featureEditorModel = FeatureEditorModel()
+    /// The feature to edit with the feature editor.
+    @State private var featureToEdit: ArcGISFeature?
+    /// The geometry editor that the feature editor will use to edit geometries
+    /// on the `MapView`.
+    @State private var geometryEditor = GeometryEditor()
     /// The map with the features to edit, created from a Naperville Electric web map portal item.
     @State private var map: Map = {
         let url = URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
@@ -39,7 +42,7 @@ struct ExampleMapView: View {
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
-                .geometryEditor(featureEditorModel.geometryEditor)
+                .geometryEditor(geometryEditor)
                 .onSingleTapGesture { screenPoint, _ in
                     guard tapPoint == nil else { return }
                     tapPoint = screenPoint
@@ -56,10 +59,8 @@ struct ExampleMapView: View {
                             tolerance: 10
                         )
                         let firstFeature = results.first?.geoElements.first as? ArcGISFeature
-                        
-                        // Passes the identified feature up the view hierarchy
-                        // to display the feature editor.
-                        featureEditorModel.feature = firstFeature
+                        // The identified feature is passed to the feature editor.
+                        featureToEdit = firstFeature
                     } catch {
                         print("Identify error:", error)
                     }
@@ -67,10 +68,10 @@ struct ExampleMapView: View {
         }
         .overlay(alignment: .topTrailing) {
             // The toolbar for the feature editor. This needs to be placed
-            // below the feature editor modifier in the view hierarchy.
+            // below the `featureEditorInspector` modifier in the view hierarchy.
             FeatureEditor(
-                $featureEditorModel.feature,
-                geometryEditor: featureEditorModel.geometryEditor
+                $featureToEdit,
+                geometryEditor: geometryEditor
             )
             .padding()
         }
@@ -83,7 +84,7 @@ struct ExampleMapView: View {
         }
         .onDisappear {
             // Dismisses the feature editor when the view disappears.
-            featureEditorModel.feature = nil
+            featureToEdit = nil
         }
     }
     
@@ -100,7 +101,7 @@ struct ExampleMapView: View {
         try await map.retryLoad()
         
         // Enables the geometry editor's snap settings and sources.
-        let snapSettings = featureEditorModel.geometryEditor.snapSettings
+        let snapSettings = geometryEditor.snapSettings
         snapSettings.snapsToGeometryGuides = true
         
         await map.operationalLayers.load()
@@ -110,16 +111,4 @@ struct ExampleMapView: View {
             sourceSetting.isEnabled = true
         }
     }
-}
-
-// MARK: - FeatureEditorModel
-
-/// A view model containing objects needed for the feature editor.
-@MainActor
-@Observable
-final class FeatureEditorModel {
-    /// The feature to edit with the feature editor.
-    var feature: ArcGISFeature?
-    /// The geometry editor that the feature editor will use to edit geometries on the `MapView`.
-    let geometryEditor = GeometryEditor()
 }
