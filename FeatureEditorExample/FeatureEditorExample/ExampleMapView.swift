@@ -19,8 +19,7 @@ import SwiftUI
 /// A view for identifying a feature to edit on a map.
 struct ExampleMapView: View {
     /// The view model containing objects needed for the feature editor.
-    @Environment(FeatureEditorModel.self) private var featureEditorModel
-    
+    @State private var featureEditorModel = FeatureEditorModel()
     /// The map with the features to edit, created from a Naperville Electric web map portal item.
     @State private var map: Map = {
         let url = URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
@@ -69,8 +68,11 @@ struct ExampleMapView: View {
         .overlay(alignment: .topTrailing) {
             // The toolbar for the feature editor. This needs to be placed
             // below the feature editor modifier in the view hierarchy.
-            FeatureEditorToolbar()
-                .padding()
+            FeatureEditor(
+                $featureEditorModel.feature,
+                geometryEditor: featureEditorModel.geometryEditor
+            )
+            .padding()
         }
         .task {
             do {
@@ -108,4 +110,16 @@ struct ExampleMapView: View {
             sourceSetting.isEnabled = true
         }
     }
+}
+
+// MARK: - FeatureEditorModel
+
+/// A view model containing objects needed for the feature editor.
+@MainActor
+@Observable
+final class FeatureEditorModel {
+    /// The feature to edit with the feature editor.
+    var feature: ArcGISFeature?
+    /// The geometry editor that the feature editor will use to edit geometries on the `MapView`.
+    let geometryEditor = GeometryEditor()
 }
