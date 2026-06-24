@@ -17,9 +17,9 @@ import SwiftUI
 
 /// The `FeatureEditor` component allows users to edit geometries in the
 /// feature editor.
-///
+/// 
 /// **Features**
-///
+/// 
 /// - Displays controls for performing common geometry editing actions:
 ///     - Changing the tool.
 ///     - Deleting the selected element.
@@ -27,44 +27,69 @@ import SwiftUI
 ///     - Redoing the last undone action.
 ///     - Configuring snap settings.
 /// - Supports styled vertical and horizontal layouts, or no built-in layout or styling.
-///
+/// 
 /// **Behavior**
-///
+/// 
 /// The toolbar is shown only while the feature editor is editing a geometry.
-///
+/// 
 /// By default, the toolbar is displayed in a vertical layout. Pass `nil` for `style` to display
 /// the toolbar without built-in layout or styling, so you can show it in a system toolbar or apply
 /// your own layout and styling to the controls.
-///
+/// 
 /// The settings button is only shown when the geometry editor has snap settings with non-empty
 /// source settings.
-///
+/// 
 /// **Associated Types**
-///
+/// 
 /// - ``Style``
-///
+/// 
 /// - Since: 300.1
 public struct FeatureEditor: View {
     /// The style to apply to the toolbar's controls.
     private let style: Style?
-    /// The geometry editor from the parent feature editor modifier.
-    @Environment(\.geometryEditor) private var geometryEditor
+    /// A binding to the feature to edit.
+    @Binding private var feature: ArcGISFeature?
+    /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
+    private let geometryEditor: GeometryEditor
+    /// The shared feature editor model from the environment.
+    @Environment(\.featureEditorModel) private var featureEditorModel
     
     /// Creates a feature editor toolbar.
-    /// - Parameter style: The style that determines the toolbar's appearance and layout.
-    /// A `nil` value displays the toolbar's controls without built-in layout or styling.
     /// - Since: 300.1
-    public init(style: Style? = .vertical) {
+    /// - Parameters:
+    ///   - feature: A binding to the feature to edit.
+    ///   The Feature Editor is displayed when the value is non-`nil`.
+    ///   - geometryEditor: A geometry editor used to edit the feature's
+    ///   geometry on an associated `MapView`.
+    ///   - style: The style that determines the toolbar's appearance and
+    ///   layout. A `nil` value displays the toolbar's controls without
+    ///   built-in layout or styling.
+    public init(
+        _ feature: Binding<ArcGISFeature?>,
+        geometryEditor: GeometryEditor,
+        style: Style? = .vertical
+    ) {
+        self._feature = feature
+        self.geometryEditor = geometryEditor
         self.style = style
     }
     
     public var body: some View {
         GeometryEditorToolbar(
-            geometryEditor: geometryEditor,
+            geometryEditor: featureEditorModel.geometryEditor,
             style: GeometryEditorToolbar.Style(featureEditorToolbarStyle: style)
         )
         // Only shows snap settings for features in layers.
         .snapSources(.layers)
+        .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
+            featureEditorModel.feature = feature
+        }
+        .onChange(of: ObjectIdentifier(geometryEditor), initial: true) {
+            featureEditorModel.geometryEditor = geometryEditor
+        }
+        .onChange(of: featureEditorModel.feature.map(ObjectIdentifier.init)) {
+            feature = featureEditorModel.feature
+        }
     }
 }
 
@@ -76,6 +101,22 @@ extension FeatureEditor {
         case horizontal
         /// Displays the toolbar in a styled vertical layout.
         case vertical
+    }
+}
+
+/// A data model that contains various properties that are needed for the
+/// feature editor and shared between the form and the toolbar.
+@Observable
+final class FeatureEditorModel {
+    /// The feature to edit with the feature editor.
+    var feature: ArcGISFeature?
+    /// The geometry editor that the feature editor will use to edit geometries
+    /// on the `MapView`.
+    var geometryEditor: GeometryEditor
+    
+    init(feature: ArcGISFeature? = nil, geometryEditor: GeometryEditor = GeometryEditor()) {
+        self.feature = feature
+        self.geometryEditor = geometryEditor
     }
 }
 
