@@ -48,12 +48,12 @@ import SwiftUI
 ///
 /// **Associated Types**
 ///
-/// - ``Style``
+/// - ``ToolbarStyle``
 ///
 /// - Since: 300.1
 public struct FeatureEditor: View {
     /// The style to apply to the toolbar's controls.
-    private let style: Style?
+    private let style: ToolbarStyle?
     /// A binding to the feature to edit.
     @Binding private var feature: ArcGISFeature?
     /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
@@ -74,7 +74,7 @@ public struct FeatureEditor: View {
     public init(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
-        style: Style? = .vertical
+        style: ToolbarStyle? = .vertical
     ) {
         self._feature = feature
         self.geometryEditor = geometryEditor
@@ -103,7 +103,7 @@ public struct FeatureEditor: View {
 extension FeatureEditor {
     /// A style that determines the appearance and layout of a feature editor toolbar.
     /// - Since: 300.1
-    public enum Style {
+    public enum ToolbarStyle {
         /// Displays the toolbar in a styled horizontal layout.
         case horizontal
         /// Displays the toolbar in a styled vertical layout.
@@ -112,7 +112,7 @@ extension FeatureEditor {
 }
 
 private extension GeometryEditorToolbar.Style {
-    init?(featureEditorToolbarStyle: FeatureEditor.Style?) {
+    init?(featureEditorToolbarStyle: FeatureEditor.ToolbarStyle?) {
         switch featureEditorToolbarStyle {
         case .horizontal: self = .horizontal
         case .vertical: self = .vertical
