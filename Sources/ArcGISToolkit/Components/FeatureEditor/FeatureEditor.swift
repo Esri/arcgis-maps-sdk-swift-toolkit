@@ -61,8 +61,7 @@ public struct FeatureEditor: View {
     /// The shared feature editor model from the environment.
     @Environment(\.featureEditorModel) private var model
     
-    /// Creates a feature editor toolbar.
-    /// - Since: 300.1
+    /// Creates a feature editor.
     /// - Parameters:
     ///   - feature: A binding to the feature to edit.
     ///   The Feature Editor is displayed when the value is non-`nil`.
@@ -71,6 +70,7 @@ public struct FeatureEditor: View {
     ///   - style: The style that determines the toolbar's appearance and
     ///   layout. A `nil` value displays the toolbar's controls without
     ///   built-in layout or styling.
+    /// - Since: 300.1
     public init(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
