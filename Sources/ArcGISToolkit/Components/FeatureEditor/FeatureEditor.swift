@@ -86,8 +86,6 @@ public struct FeatureEditor: View {
             geometryEditor: geometryEditor,
             style: toolbarStyle
         )
-        // Only shows snap settings for features in layers.
-        .snapSources(.layers)
         .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
             model.feature = feature
         }
