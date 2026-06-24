@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 @testable import ArcGISToolkit
+import SwiftUI
 import Testing
 
 @Suite("FeatureEditorModel Tests")
