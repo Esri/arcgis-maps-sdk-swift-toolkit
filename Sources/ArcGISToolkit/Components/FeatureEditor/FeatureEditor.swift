@@ -15,34 +15,41 @@
 import ArcGIS
 import SwiftUI
 
-/// The `FeatureEditor` component allows users to edit geometries in the
-/// feature editor.
+/// A feature editing component that provides both the geometry editing via a
+/// toolbar and the feature form used to edit attributes and save/discard edits
+/// via the `featureEditorInspector()` modifier.
+///
+/// **Toolbar**
+///
+/// `FeatureEditor` provides a toolbar for common geometry editing operations,
+/// including:
 /// 
-/// **Features**
-/// 
-/// - Displays controls for performing common geometry editing actions:
-///     - Changing the tool.
-///     - Deleting the selected element.
-///     - Undoing the last action on the geometry.
-///     - Redoing the last undone action.
-///     - Configuring snap settings.
-/// - Supports styled vertical and horizontal layouts, or no built-in layout or styling.
-/// 
+/// - Changing the tool.
+/// - Deleting the selected element.
+/// - Undoing the last action on the geometry.
+/// - Redoing the last undone action.
+/// - Configuring snap settings.
+///
+/// The toolbar can be shown with a built-in vertical or horizontal style, or
+/// without built-in layout when `style` is `nil`.
+///
+/// **Feature Form Presentation**
+///
+/// The inspector form UI is presented by applying `featureEditorInspector()` to
+/// an ancestor view. `FeatureEditor` and the inspector share state through a
+/// common environment model, so updates to the bound feature and geometry
+/// editor are reflected in both the toolbar and the feature form.
+///
 /// **Behavior**
-/// 
-/// The toolbar is shown only while the feature editor is editing a geometry.
-/// 
-/// By default, the toolbar is displayed in a vertical layout. Pass `nil` for `style` to display
-/// the toolbar without built-in layout or styling, so you can show it in a system toolbar or apply
-/// your own layout and styling to the controls.
-/// 
-/// The settings button is only shown when the geometry editor has snap settings with non-empty
+///
+/// The toolbar is visible only while a feature is being edited. The snap
+/// settings button is shown only when the geometry editor has non-empty snap
 /// source settings.
-/// 
+///
 /// **Associated Types**
-/// 
+///
 /// - ``Style``
-/// 
+///
 /// - Since: 300.1
 public struct FeatureEditor: View {
     /// The style to apply to the toolbar's controls.
@@ -71,6 +78,7 @@ public struct FeatureEditor: View {
     ) {
         self._feature = feature
         self.geometryEditor = geometryEditor
+        
         self.style = style
     }
     
@@ -110,8 +118,9 @@ extension FeatureEditor {
 final class FeatureEditorModel {
     /// The feature to edit with the feature editor.
     var feature: ArcGISFeature?
+    ///
     /// The geometry editor that the feature editor will use to edit geometries
-    /// on the `MapView`.
+    /// The geometry editor that the feature editor will use to edit geometries on the `MapView`.
     var geometryEditor: GeometryEditor
     
     init(feature: ArcGISFeature? = nil, geometryEditor: GeometryEditor = GeometryEditor()) {
