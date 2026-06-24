@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
@@ -30,7 +29,7 @@ struct ContentView: View {
             .navigationTitle("Feature Editor Example")
             .navigationBarTitleDisplayMode(.inline)
         }
-        // The modifier that presents the feature editor.
+        // The modifier that presents the feature editor inspector.
         // Note that because the feature editor uses a NavigationStack for internal
         // navigation, the modifier must be placed outside of the app's NavigationStack.
         .featureEditorInspector()
