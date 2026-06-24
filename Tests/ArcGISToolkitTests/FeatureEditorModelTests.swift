@@ -17,7 +17,6 @@ import SwiftUI
 import Testing
 
 @Suite("FeatureEditorModel Tests")
-@MainActor
 struct FeatureEditorModelTests {
     @Test
     func environmentValuesFeatureEditorModel() {
