@@ -78,7 +78,6 @@ public struct FeatureEditor: View {
     ) {
         self._feature = feature
         self.geometryEditor = geometryEditor
-        
         self.style = style
     }
     
