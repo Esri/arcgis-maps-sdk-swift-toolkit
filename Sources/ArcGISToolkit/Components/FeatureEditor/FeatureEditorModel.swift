@@ -23,4 +23,6 @@ final class FeatureEditorModel {
     var feature: ArcGISFeature?
     /// The geometry editor that the feature editor will use to edit geometries on the `MapView`.
     var geometryEditor = GeometryEditor()
+    /// A Boolean value indicating whether the geometry editor has started.
+    var isEditingGeometry = false
 }

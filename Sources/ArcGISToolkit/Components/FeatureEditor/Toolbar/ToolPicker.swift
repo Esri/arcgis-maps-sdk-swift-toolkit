@@ -17,8 +17,8 @@ import SwiftUI
 
 /// A control for picking a geometry editing tool.
 struct ToolPicker: View {
-    /// The model for the parent geometry editor toolbar.
-    @Environment(GeometryEditorToolbarModel.self) private var model
+    /// The model for the parent feature editor containing the geometry editor.
+    @Environment(FeatureEditorModel.self) private var featureEditorModel
     
     /// The tools that are currently able to be selected.
     @State private var selectableTools: [Tool] = []
@@ -56,13 +56,13 @@ struct ToolPicker: View {
         }
         .onChange(of: selectedTool) {
             // Sets the geometry editor tool when the selectedTool changes.
-            model.geometryEditor.tool = selectedTool.geometryEditorTool
+            featureEditorModel.geometryEditor.tool = selectedTool.geometryEditorTool
         }
-        .task(id: ObjectIdentifier(model)) {
+        .task(id: ObjectIdentifier(featureEditorModel.geometryEditor)) {
             // Overwrites the initial geometry editor tool when the editor changes.
-            model.geometryEditor.tool = selectedTool.geometryEditorTool
+            featureEditorModel.geometryEditor.tool = selectedTool.geometryEditorTool
             
-            for await geometry in model.geometryEditor.$geometry {
+            for await geometry in featureEditorModel.geometryEditor.$geometry {
                 selectableTools = selectableTools(for: geometry)
             }
         }
@@ -229,11 +229,11 @@ private extension Text {
 }
 
 #Preview {
-    let geometryEditor = GeometryEditor()
+    @Previewable @State var featureEditorModel = FeatureEditorModel()
     
     ToolPicker()
-        .environment(GeometryEditorToolbarModel(geometryEditor: geometryEditor))
+        .environment(featureEditorModel)
         .onAppear {
-            geometryEditor.start(withType: Point.self)
+            featureEditorModel.geometryEditor.start(withType: Polyline.self)
         }
 }

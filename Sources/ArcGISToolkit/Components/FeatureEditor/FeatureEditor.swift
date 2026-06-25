@@ -89,11 +89,14 @@ public struct FeatureEditor: View {
         .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
             model.feature = feature
         }
-        .onChange(of: ObjectIdentifier(geometryEditor), initial: true) {
-            model.geometryEditor = geometryEditor
-        }
         .onChange(of: model.feature.map(ObjectIdentifier.init)) {
             feature = model.feature
+        }
+        .task(id: ObjectIdentifier(geometryEditor)) {
+            model.geometryEditor = geometryEditor
+            for await isStarted in geometryEditor.$isStarted {
+                model.isEditingGeometry = isStarted
+            }
         }
     }
 }

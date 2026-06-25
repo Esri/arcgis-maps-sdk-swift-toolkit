@@ -30,8 +30,8 @@ struct GeometryEditorToolbar: View {
     /// This is hardcoded to match the system styling for toolbar groups on iOS.
     private let stackEdgePadding = 5.0
     
-    /// The view model for the view.
-    @State private var model: GeometryEditorToolbarModel
+    /// The model for the feature editor.
+    @Environment(FeatureEditorModel.self) private var model
     
     /// Creates a geometry editor toolbar.
     /// - Parameters:
@@ -41,14 +41,11 @@ struct GeometryEditorToolbar: View {
     init(geometryEditor: GeometryEditor, style: FeatureEditor.ToolbarStyle? = .vertical) {
         self.geometryEditor = geometryEditor
         self.style = style
-        
-        let model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
-        self._model = .init(wrappedValue: model)
     }
     
     var body: some View {
         Group {
-            if model.isStarted {
+            if model.isEditingGeometry {
                 switch style {
                 case .vertical:
                     VStack(spacing: stackSpacing) {
@@ -67,11 +64,7 @@ struct GeometryEditorToolbar: View {
                 }
             }
         }
-        .environment(model)
-        .animation(.default, value: model.isStarted)
-        .onChange(of: ObjectIdentifier(geometryEditor)) {
-            model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
-        }
+        .animation(.default, value: model.isEditingGeometry)
     }
     
     /// The control views for the toolbar.
@@ -84,49 +77,18 @@ struct GeometryEditorToolbar: View {
     }
 }
 
-/// The view model for the geometry editor toolbar.
-@MainActor
-@Observable
-final class GeometryEditorToolbarModel {
-    /// The geometry editor that the toolbar controls.
-    let geometryEditor: GeometryEditor
-    
-    /// A Boolean value indicating whether the geometry editor has started.
-    private(set) var isStarted = false
-    
-    /// A task that observes the geometry editor's `isStarted` stream.
-    @ObservationIgnored private var isStartedTask: Task<Void, Never>?
-    
-    init(geometryEditor: GeometryEditor) {
-        self.geometryEditor = geometryEditor
-        
-        isStartedTask = Task { [weak self] in
-            for await isStarted in geometryEditor.$isStarted {
-                guard let self else { break }
-                self.isStarted = isStarted
-            }
-        }
-    }
-    
-    deinit {
-        if let task = isStartedTask.take() {
-            task.cancel()
-        }
-    }
-}
-
 // MARK: - Controls
 
 /// A button for deleting the geometry editor's currently selected element.
 private struct DeleteButton: View {
-    /// The model for the parent geometry editor toolbar.
-    @Environment(GeometryEditorToolbarModel.self) private var model
+    /// The model for the parent feature editor containing the geometry editor.
+    @Environment(FeatureEditorModel.self) private var featureEditorModel
     
     /// A Boolean value indicating whether the selected element can be deleted.
     @State private var canDeleteSelectedElement = false
     
     var body: some View {
-        Button(action: model.geometryEditor.deleteSelectedElement) {
+        Button(action: featureEditorModel.geometryEditor.deleteSelectedElement) {
             Label {
                 Text(
                     "Delete Selected Element",
@@ -138,8 +100,8 @@ private struct DeleteButton: View {
             }
         }
         .disabled(!canDeleteSelectedElement)
-        .task(id: ObjectIdentifier(model)) {
-            for await selectedElement in model.geometryEditor.$selectedElement {
+        .task(id: ObjectIdentifier(featureEditorModel.geometryEditor)) {
+            for await selectedElement in featureEditorModel.geometryEditor.$selectedElement {
                 canDeleteSelectedElement = selectedElement?.canBeDeleted ?? false
             }
         }
@@ -148,14 +110,14 @@ private struct DeleteButton: View {
 
 /// A button for redoing the geometry editor's last undone action.
 private struct RedoButton: View {
-    /// The model for the parent geometry editor toolbar.
-    @Environment(GeometryEditorToolbarModel.self) private var model
+    /// The model for the parent feature editor containing the geometry editor.
+    @Environment(FeatureEditorModel.self) private var featureEditorModel
     
     /// A Boolean value indicating whether the geometry editor can redo an action.
     @State private var canRedo = false
     
     var body: some View {
-        Button(action: model.geometryEditor.redo) {
+        Button(action: featureEditorModel.geometryEditor.redo) {
             Label {
                 Text(
                     "Redo",
@@ -167,8 +129,8 @@ private struct RedoButton: View {
             }
         }
         .disabled(!canRedo)
-        .task(id: ObjectIdentifier(model)) {
-            for await canRedo in model.geometryEditor.$canRedo {
+        .task(id: ObjectIdentifier(featureEditorModel.geometryEditor)) {
+            for await canRedo in featureEditorModel.geometryEditor.$canRedo {
                 self.canRedo = canRedo
             }
         }
@@ -177,14 +139,14 @@ private struct RedoButton: View {
 
 /// A button for undoing the geometry editor's last action.
 private struct UndoButton: View {
-    /// The model for the parent geometry editor toolbar.
-    @Environment(GeometryEditorToolbarModel.self) private var model
+    /// The model for the parent feature editor containing the geometry editor.
+    @Environment(FeatureEditorModel.self) private var featureEditorModel
     
     /// A Boolean value indicating whether the geometry editor can undo an action.
     @State private var canUndo = false
     
     var body: some View {
-        Button(action: model.geometryEditor.undo) {
+        Button(action: featureEditorModel.geometryEditor.undo) {
             Label {
                 Text(
                     "Undo",
@@ -196,8 +158,8 @@ private struct UndoButton: View {
             }
         }
         .disabled(!canUndo)
-        .task(id: ObjectIdentifier(model)) {
-            for await canUndo in model.geometryEditor.$canUndo {
+        .task(id: ObjectIdentifier(featureEditorModel.geometryEditor)) {
+            for await canUndo in featureEditorModel.geometryEditor.$canUndo {
                 self.canUndo = canUndo
             }
         }
@@ -206,14 +168,14 @@ private struct UndoButton: View {
 
 /// A button for presenting a settings view for configuring snapping.
 private struct SnapSettingsButton: View {
-    /// The model for the parent geometry editor toolbar.
-    @Environment(GeometryEditorToolbarModel.self) private var model
+    /// The model for the parent feature editor containing the geometry editor.
+    @Environment(FeatureEditorModel.self) private var featureEditorModel
     
     /// A Boolean value indicating whether the settings view is presented.
     @State private var isShowingSettings = false
     
     var body: some View {
-        if !model.geometryEditor.snapSettings.sourceSettings.isEmpty {
+        if !featureEditorModel.geometryEditor.snapSettings.sourceSettings.isEmpty {
             Button {
                 isShowingSettings.toggle()
             } label: {
@@ -229,7 +191,7 @@ private struct SnapSettingsButton: View {
             }
             .sheet(isPresented: $isShowingSettings) {
                 SnapSettingsView(
-                    settings: model.geometryEditor.snapSettings
+                    settings: featureEditorModel.geometryEditor.snapSettings
                 )
                 // Needed to override the font set in toolbarStackStyle.
                 .font(nil)

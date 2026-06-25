@@ -21,5 +21,6 @@ struct FeatureEditorModelTests {
     func testInit() {
         let model = FeatureEditorModel()
         #expect(model.feature == nil)
+        #expect(!model.isEditingGeometry)
     }
 }
