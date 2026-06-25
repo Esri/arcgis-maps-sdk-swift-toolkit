@@ -101,7 +101,7 @@ public struct FeatureEditor: View {
 }
 
 extension FeatureEditor {
-    /// A style that determines the appearance and layout of a feature editor toolbar.
+    /// A style that determines the appearance and layout of a feature editor's toolbar.
     /// - Since: 300.1
     public enum ToolbarStyle {
         /// Displays the toolbar in a styled horizontal layout.
