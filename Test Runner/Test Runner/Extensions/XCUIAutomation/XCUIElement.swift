@@ -106,7 +106,7 @@ extension XCUIElement {
             line: line
         )
     }
-
+    
     /// Asserts that a toggle-like element's string value is "1" (on).
     @MainActor func assertToggleIsOn(
         file: StaticString = #filePath,
@@ -120,7 +120,7 @@ extension XCUIElement {
             line: line
         )
     }
-
+    
     /// Asserts that a toggle-like element's string value is "0" (off).
     @MainActor func assertToggleIsOff(
         file: StaticString = #filePath,
