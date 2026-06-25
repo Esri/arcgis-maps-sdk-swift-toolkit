@@ -36,9 +36,9 @@ import SwiftUI
 /// **Feature Form Presentation**
 ///
 /// The inspector form UI is presented by applying `featureEditorInspector()` to
-/// an ancestor view. `FeatureEditor` and the inspector share state through a
-/// common environment model, so updates to the bound feature and geometry
-/// editor are reflected in both the toolbar and the feature form.
+/// an ancestor view. `FeatureEditor` and the inspector share states internally,
+/// so updates to the bound feature and geometry editor are reflected in both
+/// the toolbar and the feature form.
 ///
 /// **Behavior**
 ///
