@@ -96,7 +96,7 @@ struct Examples: View {
 
 #if os(iOS) && !targetEnvironment(macCatalyst)
 extension Examples.ListItem {
-    static var augmentedRealityCategory: Self {
+    @MainActor static var augmentedRealityCategory: Self {
         .category(
             "Augmented Reality",
             examples: [

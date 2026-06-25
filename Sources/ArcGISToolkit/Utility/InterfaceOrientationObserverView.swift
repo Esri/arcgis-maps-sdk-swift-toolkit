@@ -14,7 +14,7 @@
 
 import SwiftUI
 
-extension View {
+public extension View {
     /// Observes interface orientation changes for a given view.
     /// - Parameters:
     ///   - interfaceOrientation: A binding to an interface orientation that will be updated

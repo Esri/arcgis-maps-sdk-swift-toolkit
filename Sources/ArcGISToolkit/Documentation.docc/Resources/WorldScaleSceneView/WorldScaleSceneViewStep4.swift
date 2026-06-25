@@ -1,6 +1,5 @@
 import ArcGIS
 import ArcGISToolkit
-import CoreLocation
 import SwiftUI
 
 struct WorldScaleExampleView: View {
@@ -16,21 +15,17 @@ struct WorldScaleExampleView: View {
         surface.navigationConstraint = .unconstrained
         let scene = Scene(basemapStyle: .arcGISImagery)
         scene.baseSurface = surface
-        scene.baseSurface.opacity = 0
         return scene
     }()
     
+    /// The world-tracking provider used by this example.
+    @State private var provider = AppleWorldTracking(mode: .worldTracking)
+    
     var body: some View {
-        WorldScaleSceneView(
-            clippingDistance: 400
-        ) { _ in
+        WorldScaleSceneView(provider: provider) { context in
+            AppleWorldTrackingCameraFeedView(context: context)
+        } sceneView: { _ in
             SceneView(scene: scene)
-        }
-        .task {
-            let locationManager = CLLocationManager()
-            if locationManager.authorizationStatus == .notDetermined {
-                locationManager.requestWhenInUseAuthorization()
-            }
         }
     }
 }
