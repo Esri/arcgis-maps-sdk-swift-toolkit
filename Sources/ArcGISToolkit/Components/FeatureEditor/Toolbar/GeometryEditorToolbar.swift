@@ -156,14 +156,17 @@ private struct UndoButton: View {
 
 /// A button for presenting a settings view for configuring snapping.
 private struct SnapSettingsButton: View {
-    /// The model for the parent feature editor containing the geometry editor.
+    /// The model for the parent feature editor containing the snap settings.
     @Environment(FeatureEditorModel.self) private var featureEditorModel
     
     /// A Boolean value indicating whether the settings view is presented.
     @State private var isShowingSettings = false
     
+    /// The snap settings for the feature editor model's geometry editor.
+    private var snapSettings: SnapSettings { featureEditorModel.geometryEditor.snapSettings }
+    
     var body: some View {
-        if !featureEditorModel.geometryEditor.snapSettings.sourceSettings.isEmpty {
+        if !snapSettings.sourceSettings.isEmpty {
             Button {
                 isShowingSettings.toggle()
             } label: {
@@ -178,11 +181,13 @@ private struct SnapSettingsButton: View {
                 }
             }
             .sheet(isPresented: $isShowingSettings) {
-                SnapSettingsView(
-                    settings: featureEditorModel.geometryEditor.snapSettings
-                )
+                SnapSettingsView(settings: snapSettings)
                 // Needed to override the font set in toolbarStackStyle.
-                .font(nil)
+                    .font(nil)
+            }
+            .onChange(of: ObjectIdentifier(snapSettings), initial: true) {
+                // Snapping is enabled by default to simplify the SnapSettingsView UI.
+                snapSettings.isEnabled = true
             }
         }
     }

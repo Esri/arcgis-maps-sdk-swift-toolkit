@@ -78,9 +78,6 @@ struct SnapSettingsView: View {
                 }
             }
             .onChange(of: ObjectIdentifier(settings), initial: true) {
-                // Snapping is enabled by default to simplify the UI.
-                settings.isEnabled = true
-                
                 // Only allows certain snap sources.
                 rootSourceSettingsModels = settings.sourceSettings
                     .compactMap { settings in
