@@ -19,8 +19,8 @@ import Observation
 /// feature editor and shared between the modifier and the view.
 @Observable
 final class FeatureEditorModel {
-    /// The feature to edit with the feature editor.
-    var feature: ArcGISFeature?
+    /// The feature form to edit with the feature editor.
+    var featureForm: FeatureForm?
     /// The geometry editor that the feature editor will use to edit geometries on the `MapView`.
     var geometryEditor = GeometryEditor()
     /// A Boolean value indicating whether the geometry editor has started.

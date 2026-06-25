@@ -84,10 +84,10 @@ public struct FeatureEditor: View {
     public var body: some View {
         GeometryEditorToolbar(style: toolbarStyle)
             .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
-                model.feature = feature
+                model.featureForm = feature.map(FeatureForm.init)
             }
-            .onChange(of: model.feature.map(ObjectIdentifier.init)) {
-                feature = model.feature
+            .onChange(of: model.featureForm.map(ObjectIdentifier.init)) {
+                feature = model.featureForm?.feature
             }
             .task(id: ObjectIdentifier(geometryEditor)) {
                 model.geometryEditor = geometryEditor
@@ -97,7 +97,7 @@ public struct FeatureEditor: View {
             }
             .onDisappear {
                 // Hides the inspector when this view disappears.
-                model.feature = nil
+                model.featureForm = nil
             }
     }
 }

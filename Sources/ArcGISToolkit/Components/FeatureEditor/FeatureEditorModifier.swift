@@ -32,17 +32,14 @@ public extension View {
 private struct FeatureEditorModifier: ViewModifier {
     /// The feature editor model shared by the toolbar and inspector.
     @State private var model = FeatureEditorModel()
-    /// The feature form for the `feature`. This is needed to move the feature form creation
-    /// outside of the view evaluation so the form object identity is stable.
-    @State private var featureForm: FeatureForm?
     /// The inspector's currently selected presentation detent.
     /// This is needed to set the default detent to medium.
     @State private var selectedPresentationDetent = PresentationDetent.medium
     
     /// A binding to a Boolean value that indicates whether the inspector should be presented.
-    /// This maps the `feature` binding to a Boolean value.
+    /// This maps `model.featureForm` to a Boolean value.
     private var isPresented: Binding<Bool> {
-        Binding { model.feature != nil } set: { _ in model.feature = nil }
+        Binding { model.featureForm != nil } set: { _ in model.featureForm = nil }
     }
     
     func body(content: Content) -> some View {
@@ -50,7 +47,7 @@ private struct FeatureEditorModifier: ViewModifier {
             .safeInspector(isPresented: isPresented) {
                 // VStack is needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
-                    if let featureForm {
+                    if let featureForm = model.featureForm {
                         FeatureEditorView(
                             featureForm: featureForm,
                             isPresented: isPresented,
@@ -68,9 +65,6 @@ private struct FeatureEditorModifier: ViewModifier {
                 .interactiveDismissDisabled()
             }
             .environment(model)
-            .onChange(of: model.feature.map(ObjectIdentifier.init), initial: true) {
-                featureForm = model.feature.map(FeatureForm.init)
-            }
     }
 }
 
