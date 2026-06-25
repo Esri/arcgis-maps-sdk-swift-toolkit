@@ -31,7 +31,7 @@ import SwiftUI
 /// - Configuring snap settings.
 ///
 /// The toolbar can be shown with a built-in vertical or horizontal style, or
-/// without built-in layout when `style` is `nil`.
+/// without built-in layout when `toolbarStyle` is `nil`.
 ///
 /// **Feature Form Presentation**
 ///
@@ -53,7 +53,7 @@ import SwiftUI
 /// - Since: 300.1
 public struct FeatureEditor: View {
     /// The style to apply to the toolbar's controls.
-    private let style: ToolbarStyle?
+    private let toolbarStyle: ToolbarStyle?
     /// A binding to the feature to edit.
     @Binding private var feature: ArcGISFeature?
     /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
@@ -67,24 +67,24 @@ public struct FeatureEditor: View {
     ///   The Feature Editor is displayed when the value is non-`nil`.
     ///   - geometryEditor: A geometry editor used to edit the feature's
     ///   geometry on an associated `MapView`.
-    ///   - style: The style that determines the toolbar's appearance and
+    ///   - toolbarStyle: The style that determines the toolbar's appearance and
     ///   layout. A `nil` value displays the toolbar's controls without
     ///   built-in layout or styling.
     /// - Since: 300.1
     public init(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
-        style: ToolbarStyle? = .vertical
+        toolbarStyle: ToolbarStyle? = .vertical
     ) {
         self._feature = feature
         self.geometryEditor = geometryEditor
-        self.style = style
+        self.toolbarStyle = toolbarStyle
     }
     
     public var body: some View {
         GeometryEditorToolbar(
             geometryEditor: geometryEditor,
-            style: GeometryEditorToolbar.Style(featureEditorToolbarStyle: style)
+            style: GeometryEditorToolbar.Style(featureEditorToolbarStyle: toolbarStyle)
         )
         // Only shows snap settings for features in layers.
         .snapSources(.layers)
