@@ -42,9 +42,9 @@ import SwiftUI
 ///
 /// **Behavior**
 ///
-/// The toolbar is visible only while a feature is being edited. The snap
-/// settings button is shown only when the geometry editor has non-empty snap
-/// source settings.
+/// The toolbar is visible only while a feature's geometry is being edited. The
+/// snap settings button is shown only when the geometry editor has non-empty
+/// snap source settings.
 ///
 /// **Associated Types**
 ///

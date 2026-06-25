@@ -16,7 +16,7 @@ import ArcGIS
 import Observation
 
 /// A data model that contains various properties that are needed for the
-/// feature editor and shared between the form and the toolbar.
+/// feature editor and shared between the modifier and the view.
 @Observable
 final class FeatureEditorModel {
     /// The feature to edit with the feature editor.
