@@ -144,8 +144,10 @@ private struct FeatureEditorView: View {
                     )
                 }
             }
-            .onDisappear {
-                // Stops the geometry editor when the feature form dismiss button is pressed.
+            .onChange(of: isPresented) {
+                // Stops the geometry editor when the inspector is dismissed.
+                // This is done in an onChange modifier to sync the stop with
+                // the inspector disappear (onDisappear is too slow).
                 model.geometryEditor.stop()
             }
     }

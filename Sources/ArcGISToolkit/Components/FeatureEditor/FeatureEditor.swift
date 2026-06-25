@@ -95,6 +95,10 @@ public struct FeatureEditor: View {
                     model.isEditingGeometry = isStarted
                 }
             }
+            .onDisappear {
+                // Hides the inspector when this view disappears.
+                model.feature = nil
+            }
     }
 }
 

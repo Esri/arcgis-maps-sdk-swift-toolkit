@@ -82,10 +82,6 @@ struct ExampleMapView: View {
                 print("Setup error:", error)
             }
         }
-        .onDisappear {
-            // Dismisses the feature editor when the view disappears.
-            featureToEdit = nil
-        }
     }
     
     /// Sets up the map and snap settings.
