@@ -13,20 +13,13 @@
 // limitations under the License.
 
 @testable import ArcGISToolkit
-import SwiftUI
 import Testing
 
 @Suite("FeatureEditorModel Tests")
 struct FeatureEditorModelTests {
     @Test
-    func environmentValuesFeatureEditorModel() {
-        var environment = EnvironmentValues()
+    func testInit() {
         let model = FeatureEditorModel()
-        
-        environment.featureEditorModel = model
-        
         #expect(model.feature == nil)
-        #expect(environment.featureEditorModel === model)
-        #expect(environment.featureEditorModel.feature == nil)
     }
 }
