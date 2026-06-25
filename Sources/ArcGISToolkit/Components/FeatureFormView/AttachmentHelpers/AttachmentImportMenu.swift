@@ -88,7 +88,7 @@ struct AttachmentImportMenu: View {
         }
     }
     
-    private func takePhotoButton(input: _ImageFormInput) -> some View {
+    private func takePhotoButton(input: ImageFormInput) -> some View {
         Button {
             pendingCaptureConfiguration = .init(allowedFormats: .image, movieMaxDuration: nil)
             if cameraRequester.authorizationStatus == .authorized {
@@ -104,7 +104,7 @@ struct AttachmentImportMenu: View {
     }
     
     @available(visionOS, unavailable)
-    private func takePhotoOrVideoButton(videoFormInput: _VideoFormInput) -> Button<some View> {
+    private func takePhotoOrVideoButton(videoFormInput: VideoFormInput) -> Button<some View> {
         Button {
             pendingCaptureConfiguration = .init(
                 allowedFormats: .imageAndMovie,
@@ -121,7 +121,7 @@ struct AttachmentImportMenu: View {
         }
     }
     
-    private func takeVideoButton(input: _VideoFormInput) -> some View {
+    private func takeVideoButton(input: VideoFormInput) -> some View {
         Button {
             pendingCaptureConfiguration = .init(allowedFormats: .movie, movieMaxDuration: input.maxDuration)
             if cameraRequester.authorizationStatus == .authorized {
