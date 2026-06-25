@@ -82,22 +82,19 @@ public struct FeatureEditor: View {
     }
     
     public var body: some View {
-        GeometryEditorToolbar(
-            geometryEditor: geometryEditor,
-            style: toolbarStyle
-        )
-        .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
-            model.feature = feature
-        }
-        .onChange(of: model.feature.map(ObjectIdentifier.init)) {
-            feature = model.feature
-        }
-        .task(id: ObjectIdentifier(geometryEditor)) {
-            model.geometryEditor = geometryEditor
-            for await isStarted in geometryEditor.$isStarted {
-                model.isEditingGeometry = isStarted
+        GeometryEditorToolbar(style: toolbarStyle)
+            .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
+                model.feature = feature
             }
-        }
+            .onChange(of: model.feature.map(ObjectIdentifier.init)) {
+                feature = model.feature
+            }
+            .task(id: ObjectIdentifier(geometryEditor)) {
+                model.geometryEditor = geometryEditor
+                for await isStarted in geometryEditor.$isStarted {
+                    model.isEditingGeometry = isStarted
+                }
+            }
     }
 }
 

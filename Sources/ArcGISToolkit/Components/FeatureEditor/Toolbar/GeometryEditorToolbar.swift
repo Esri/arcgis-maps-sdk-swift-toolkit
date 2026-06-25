@@ -18,10 +18,8 @@ import SwiftUI
 /// The `GeometryEditorToolbar` component allows users to perform common actions on a
 /// `GeometryEditor`.
 struct GeometryEditorToolbar: View {
-    /// The geometry editor that this toolbar controls.
-    private let geometryEditor: GeometryEditor
     /// The style to apply to the toolbar's controls.
-    private let style: FeatureEditor.ToolbarStyle?
+    let style: FeatureEditor.ToolbarStyle?
     
     /// The spacing to apply between the controls in the stacks.
     /// This is hardcoded to match the system styling for toolbar groups on iOS.
@@ -32,16 +30,6 @@ struct GeometryEditorToolbar: View {
     
     /// The model for the feature editor.
     @Environment(FeatureEditorModel.self) private var model
-    
-    /// Creates a geometry editor toolbar.
-    /// - Parameters:
-    ///   - geometryEditor: The geometry editor that this toolbar controls.
-    ///   - style: The style that determines the toolbar’s appearance and layout.  A `nil` value
-    ///   displays the toolbar's controls without built-in layout or styling.
-    init(geometryEditor: GeometryEditor, style: FeatureEditor.ToolbarStyle? = .vertical) {
-        self.geometryEditor = geometryEditor
-        self.style = style
-    }
     
     var body: some View {
         Group {
@@ -223,28 +211,29 @@ private extension View {
 }
 
 #Preview {
-    let geometryEditor = GeometryEditor()
+    @Previewable @State var model = FeatureEditorModel()
     
     NavigationStack {
         MapView(map: Map(spatialReference: .wgs84))
-            .attributionBarHidden(true)
-            .geometryEditor(geometryEditor)
+            .geometryEditor(model.geometryEditor)
             .overlay(alignment: .topTrailing) {
-                GeometryEditorToolbar(geometryEditor: geometryEditor)
+                GeometryEditorToolbar(style: .vertical)
                     .padding()
             }
             .overlay(alignment: .topLeading) {
-                GeometryEditorToolbar(geometryEditor: geometryEditor, style: .horizontal)
+                GeometryEditorToolbar(style: .horizontal)
                     .environment(\.colorScheme, .dark)
                     .padding()
             }
             .toolbar {
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    GeometryEditorToolbar(geometryEditor: geometryEditor, style: nil)
+                ToolbarItemGroup(placement: .bottomBar) {
+                    GeometryEditorToolbar(style: nil)
                 }
             }
+            .environment(model)
             .onAppear {
-                geometryEditor.start(withType: Polygon.self)
+                model.geometryEditor.start(withType: Polygon.self)
+                model.isEditingGeometry = true
             }
     }
 }
