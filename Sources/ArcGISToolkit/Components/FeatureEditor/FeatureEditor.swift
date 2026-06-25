@@ -59,7 +59,7 @@ public struct FeatureEditor: View {
     /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
     private let geometryEditor: GeometryEditor
     /// The shared feature editor model from the environment.
-    @Environment(\.featureEditorModel) private var model
+    @Environment(FeatureEditorModel.self) private var model
     
     /// Creates a feature editor.
     /// - Parameters:

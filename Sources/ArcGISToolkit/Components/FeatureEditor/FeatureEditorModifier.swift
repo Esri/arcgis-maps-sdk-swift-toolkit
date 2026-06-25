@@ -67,7 +67,7 @@ private struct FeatureEditorModifier: ViewModifier {
                 .inspectorColumnWidth(ideal: 320)
                 .interactiveDismissDisabled()
             }
-            .environment(\.featureEditorModel, model)
+            .environment(model)
             .onChange(of: model.feature.map(ObjectIdentifier.init), initial: true) {
                 featureForm = model.feature.map(FeatureForm.init)
             }
@@ -82,7 +82,7 @@ private struct FeatureEditorView: View {
     @Binding private var isPresented: Bool
     /// The feature editor model from the environment. This is needed to access
     /// the geometry editor.
-    @Environment(\.featureEditorModel) private var model
+    @Environment(FeatureEditorModel.self) private var model
     /// A Boolean value indicating whether the parent presentation is minimized.
     private let isMinimized: Bool
     
