@@ -15,9 +15,9 @@
 import ArcGIS
 import SwiftUI
 
-/// The `GeometryEditorToolbar` component allows users to perform common actions on a
-/// `GeometryEditor`.
-struct GeometryEditorToolbar: View {
+/// A toolbar for the feature editor containing controls for performing common
+/// geometry editor actions.
+struct FeatureEditorToolbar: View {
     /// The style to apply to the toolbar's controls.
     let style: FeatureEditor.ToolbarStyle?
     
@@ -197,7 +197,7 @@ private struct SnapSettingsButton: View {
 
 private extension View {
     /// Applies the shared styling used by the vertical and horizontal stacks
-    /// in a `GeometryEditorToolbar`.
+    /// in a `FeatureEditorToolbar`.
     @ViewBuilder
     func toolbarStackStyle() -> some View {
         // glassEffect is not used because it bases its background color on the content behind it,
@@ -222,17 +222,17 @@ private extension View {
         MapView(map: Map(spatialReference: .wgs84))
             .geometryEditor(model.geometryEditor)
             .overlay(alignment: .topTrailing) {
-                GeometryEditorToolbar(style: .vertical)
+                FeatureEditorToolbar(style: .vertical)
                     .padding()
             }
             .overlay(alignment: .topLeading) {
-                GeometryEditorToolbar(style: .horizontal)
+                FeatureEditorToolbar(style: .horizontal)
                     .environment(\.colorScheme, .dark)
                     .padding()
             }
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
-                    GeometryEditorToolbar(style: nil)
+                    FeatureEditorToolbar(style: nil)
                 }
             }
             .environment(model)

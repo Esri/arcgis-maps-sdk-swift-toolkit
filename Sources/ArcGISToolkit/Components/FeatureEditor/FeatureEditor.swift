@@ -82,7 +82,7 @@ public struct FeatureEditor: View {
     }
     
     public var body: some View {
-        GeometryEditorToolbar(style: toolbarStyle)
+        FeatureEditorToolbar(style: toolbarStyle)
             .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
                 model.featureForm = feature.map(FeatureForm.init)
             }
