@@ -31,7 +31,6 @@ final class SnapSettingsViewTests: XCTestCase {
         
         let geometryGuidesToggle = snapToggle(named: "Snap to Geometry Guides", in: app)
         let featuresToggle = snapToggle(named: "Snap to Features", in: app)
-        
         geometryGuidesToggle.assertExistence()
         featuresToggle.assertExistence()
         
@@ -39,6 +38,12 @@ final class SnapSettingsViewTests: XCTestCase {
         // snap to features toggle should be on.
         geometryGuidesToggle.assertToggleIsOff()
         featuresToggle.assertToggleIsOn()
+        
+        // Use one snap source toggle to verify that the snap sources are
+        // disabled by default.
+        let electricDistributionLineToggle = snapToggle(named: "Electric Distribution Line", in: app)
+        electricDistributionLineToggle.assertExistence()
+        electricDistributionLineToggle.assertToggleIsOff()
     }
 }
 
