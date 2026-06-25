@@ -14,7 +14,7 @@
 
 import ArcGIS
 
-extension UtilityTraceFunction.FunctionType {
+extension UtilityTraceFunction.Kind {
     var title: String {
         switch self {
         case .add: return "Add"
