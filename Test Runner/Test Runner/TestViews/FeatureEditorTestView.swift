@@ -16,22 +16,26 @@ import ArcGIS
 @testable import ArcGISToolkit
 import SwiftUI
 
-struct FeatureEditorToolbarTestView: View {
+struct FeatureEditorTestView: View {
     /// A message describing an error thrown during test view setup.
     @State private var errorDescription: String?
-    /// The geometry editor used by the feature editor toolbar.
+    /// The feature being edited by the feature editor.
+    @State private var featureToEdit: ArcGISFeature?
+    /// The geometry editor used by the feature editor.
     @State private var geometryEditor = GeometryEditor()
-    /// The map displayed in the map view.
+    /// The map with a utility network displayed in the map view.
     @State private var map = makeMap()
     
     var body: some View {
         MapView(map: map)
             .geometryEditor(geometryEditor)
             .overlay(alignment: .topTrailing) {
-                FeatureEditorToolbar()
-                    .padding()
+                FeatureEditor(
+                    $featureToEdit,
+                    geometryEditor: geometryEditor
+                )
+                .padding()
             }
-            .environment(\.geometryEditor, geometryEditor)
             .task(setUpTest)
             .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {
                 Text(errorDescription ?? "Unknown")
@@ -39,9 +43,9 @@ struct FeatureEditorToolbarTestView: View {
     }
 }
 
-private extension FeatureEditorToolbarTestView {
+private extension FeatureEditorTestView {
     /// Identifies a feature with a given object ID and start the
-    /// feature editor toolbar with that feature's geometry.
+    /// feature editor with that feature's geometry.
     /// - Parameters:
     ///   - objectID: The object ID of the feature to use as a starting point.
     ///   - featureLayer: The feature layer containing the feature.
@@ -52,26 +56,19 @@ private extension FeatureEditorToolbarTestView {
             errorDescription = "No table to query on layer \"\(featureLayer.name)\"."
             return
         }
-        
         try await featureTable.load()
         
         // Queries the table using the object ID.
         let parameters = QueryParameters()
         parameters.addObjectID(objectID)
-        
         let result = try await featureTable.queryFeatures(using: parameters)
         guard let feature = result.features().makeIterator().next() as? ArcGISFeature else {
             errorDescription = "No feature \"\(objectID)\" in feature table \"\(featureTable.tableName)\"."
             return
         }
         
-        try await feature.load()
-        guard let geometry = feature.geometry else {
-            errorDescription = "The identified feature has no geometry."
-            return
-        }
         try geometryEditor.snapSettings.syncSourceSettings()
-        geometryEditor.start(withInitial: geometry)
+        featureToEdit = feature
     }
     
     /// Sets up the test.
@@ -93,15 +90,15 @@ private extension FeatureEditorToolbarTestView {
     }
 }
 
-private extension FeatureEditorToolbarTestView {
+private extension FeatureEditorTestView {
     /// Makes a map from a portal item.
     static func makeMap() -> Map {
-        let portalItem = PortalItem(
+        let nappervilleElectricUtilityNetwork = PortalItem(
             portal: .arcGISOnline(connection: .anonymous),
-            id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
+            id: PortalItem.ID("471eb0bf37074b1fbb972b1da70fb310")!
         )
-        let map = Map(item: portalItem)
-        // Enables full resolution feature tiling to improve snapping accuracy.
+        let map = Map(item: nappervilleElectricUtilityNetwork)
+        // Enables full resolution to allow snapping on all layers.
         map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
         return map
     }

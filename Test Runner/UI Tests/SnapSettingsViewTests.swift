@@ -26,7 +26,7 @@ final class SnapSettingsViewTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         
-        app.buttons["Feature Editor Toolbar Tests"].tap()
+        app.buttons["Feature Editor Tests"].tap()
         app.buttons["Settings"].assertExistenceAndTap(timeout: 5)
         
         let geometryGuidesToggle = snapToggle(named: "Snap to Geometry Guides", in: app)
@@ -35,16 +35,10 @@ final class SnapSettingsViewTests: XCTestCase {
         geometryGuidesToggle.assertExistence()
         featuresToggle.assertExistence()
         
-        XCTAssertEqual(
-            geometryGuidesToggle.value as? String,
-            "0",
-            "Expected 'Snap to Geometry Guides' to be off."
-        )
-        XCTAssertEqual(
-            featuresToggle.value as? String,
-            "1",
-            "Expected 'Snap to Features' to be on."
-        )
+        // By default, the geometry guides toggle should be off, and the
+        // snap to features toggle should be on.
+        geometryGuidesToggle.assertToggleIsOff()
+        featuresToggle.assertToggleIsOn()
     }
 }
 

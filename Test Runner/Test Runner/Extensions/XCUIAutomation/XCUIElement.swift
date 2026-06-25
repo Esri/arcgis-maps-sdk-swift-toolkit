@@ -106,6 +106,34 @@ extension XCUIElement {
             line: line
         )
     }
+
+    /// Asserts that a toggle-like element's string value is "1" (on).
+    @MainActor func assertToggleIsOn(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        XCTAssertEqual(
+            value as? String,
+            "1",
+            "Expected \(description) to be on (\"1\").",
+            file: file,
+            line: line
+        )
+    }
+
+    /// Asserts that a toggle-like element's string value is "0" (off).
+    @MainActor func assertToggleIsOff(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        XCTAssertEqual(
+            value as? String,
+            "0",
+            "Expected \(description) to be off (\"0\").",
+            file: file,
+            line: line
+        )
+    }
 }
 
 private extension TimeInterval {

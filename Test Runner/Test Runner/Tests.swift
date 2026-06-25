@@ -24,7 +24,7 @@ struct Tests: View {
                 NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
                 NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
                 NavigationLink("Building Explorer Tests", destination: BuildingExplorerTestViews())
-                NavigationLink("Feature Editor Toolbar Tests", destination: FeatureEditorToolbarTestView())
+                NavigationLink("Feature Editor Tests", destination: FeatureEditorTestView())
                 NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
                 NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
                 NavigationLink("Geometry Editor Toolbar Tests", destination: GeometryEditorToolbarTestView())
@@ -32,5 +32,6 @@ struct Tests: View {
                 NavigationLink("Utility Network Trace Tests", destination: UtilityNetworkTraceTestView())
             }
         }
+        .featureEditorInspector()  // For FeatureEditorTestView.
     }
 }
