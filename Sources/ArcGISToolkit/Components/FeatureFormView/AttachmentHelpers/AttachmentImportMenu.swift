@@ -178,7 +178,7 @@ struct AttachmentImportMenu: View {
         Menu {
             Group {
                 if element.inputs.count >= 2 {
-                    if let imageFormInput = element.inputs.first(where: { $0 is ImageFormInput }) as? ImageFormInput,
+                    if let _ = element.inputs.first(where: { $0 is ImageFormInput }),
                        let videoFormInput = element.inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput {
                         takePhotoOrVideoButton(videoFormInput: videoFormInput)
                     } else if let imageFormInput = element.inputs.first(where: { $0 is ImageFormInput }) as? ImageFormInput {
@@ -309,16 +309,16 @@ struct AttachmentImportMenu: View {
             if let url = newAttachmentImportData.filePath,
                url.startAccessingSecurityScopedResource() {
                 newAttachment = try? await element.addAttachment(
-                    named: fileName,
                     contentType: newAttachmentImportData.contentType,
-                    fileURL: url
+                    fileURL: url,
+                    named: fileName
                 )
                 url.stopAccessingSecurityScopedResource()
             } else if let data = newAttachmentImportData.data {
-                newAttachment = element.addAttachment(
-                    name: fileName,
+                newAttachment = try? await element.addAttachment(
                     contentType: newAttachmentImportData.contentType,
-                    data: data
+                    data: data,
+                    named: fileName
                 )
             }
             

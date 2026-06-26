@@ -315,12 +315,12 @@ extension AttachmentsFeatureElementView {
     }
     
     /// Effective minimum attachment count for preview and validation behavior.
-    private var effectiveMinAttachmentCount: UInt32 {
+    private var effectiveMinAttachmentCount: Int {
         return formElement?.minAttachmentCount ?? 0
     }
     
     /// Effective maximum attachment count for preview and validation behavior.
-    private var effectiveMaxAttachmentCount: UInt32 {
+    private var effectiveMaxAttachmentCount: Int {
         return formElement?.maxAttachmentCount ?? .max
     }
     
