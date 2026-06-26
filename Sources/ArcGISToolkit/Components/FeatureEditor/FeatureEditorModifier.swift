@@ -99,8 +99,9 @@ private struct FeatureEditorView: View {
         return hasher.finalize()
     }
     
-    /// A closure that saves geometry edits to the form's feature. This is non-`nil` only when
-    /// `canUndo` is `true` to indicate to the `FeatureFormView` when there are edits.
+    /// A closure that saves geometry edits to the form's feature. This is
+    /// non-`nil` only when there are edits, so the `FeatureFormView`
+    /// knows when to show the editing buttons and block navigation.
     private var saveGeometryEditsAction: (() throws -> Void)? {
         guard model.geometryEditorCanUndo else { return nil }
         return {
