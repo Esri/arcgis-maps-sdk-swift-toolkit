@@ -38,14 +38,14 @@ final class SnapSettingsViewTests: XCTestCase {
         
         // By default, the geometry guides toggle should be off, and the
         // snap to features toggle should be on.
-        geometryGuidesToggle.assertToggleIsOff()
-        featuresToggle.assertToggleIsOn()
+        XCTAssertEqual(geometryGuidesToggle.boolValue, false)
+        XCTAssertEqual(featuresToggle.boolValue, true)
         
         // Use one snap source toggle to verify that snapping to snap sources
         // are disabled by default.
         let structureLineToggle = snapToggle(named: "Structure Line", in: app)
         structureLineToggle.assertExistence()
-        structureLineToggle.assertToggleIsOff()
+        XCTAssertEqual(structureLineToggle.boolValue, false)
         
         // Turn on some toggles and verify their states are preserved when the
         // settings view is reopened.
@@ -55,8 +55,8 @@ final class SnapSettingsViewTests: XCTestCase {
         app.buttons["Close"].assertExistenceAndTap()
         // Reopen the settings view and verify the toggles states are preserved.
         app.buttons["Settings"].assertExistenceAndTap()
-        geometryGuidesToggle.assertToggleIsOn()
-        structureLineToggle.assertToggleIsOn()
+        XCTAssertEqual(geometryGuidesToggle.boolValue, true)
+        XCTAssertEqual(structureLineToggle.boolValue, true)
     }
 }
 

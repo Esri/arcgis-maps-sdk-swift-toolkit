@@ -107,32 +107,17 @@ extension XCUIElement {
         )
     }
     
-    /// Asserts that a toggle-like element's string value is "1" (on).
-    @MainActor func assertToggleIsOn(
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) {
-        XCTAssertEqual(
-            value as? String,
-            "1",
-            "Expected \(description) to be on (\"1\").",
-            file: file,
-            line: line
-        )
-    }
-    
-    /// Asserts that a toggle-like element's string value is "0" (off).
-    @MainActor func assertToggleIsOff(
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) {
-        XCTAssertEqual(
-            value as? String,
-            "0",
-            "Expected \(description) to be off (\"0\").",
-            file: file,
-            line: line
-        )
+    /// A Boolean value indicating whether the element's string value is
+    /// "1" (on) or "0" (off).
+    var boolValue: Bool? {
+        switch value as? String {
+        case "1":
+            true
+        case "0":
+            false
+        default:
+            nil
+        }
     }
 }
 
