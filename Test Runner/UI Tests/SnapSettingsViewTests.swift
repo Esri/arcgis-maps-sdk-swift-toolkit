@@ -41,22 +41,22 @@ final class SnapSettingsViewTests: XCTestCase {
         geometryGuidesToggle.assertToggleIsOff()
         featuresToggle.assertToggleIsOn()
         
-        // Use one snap source toggle to verify that snapping to snap sources are
-        // disabled by default.
-        let electricDistributionLineToggle = snapToggle(named: "Electric Distribution Line", in: app)
-        electricDistributionLineToggle.assertExistence()
-        electricDistributionLineToggle.assertToggleIsOff()
+        // Use one snap source toggle to verify that snapping to snap sources
+        // are disabled by default.
+        let structureLineToggle = snapToggle(named: "Structure Line", in: app)
+        structureLineToggle.assertExistence()
+        structureLineToggle.assertToggleIsOff()
         
         // Turn on some toggles and verify their states are preserved when the
         // settings view is reopened.
-        geometryGuidesToggle.switches.firstMatch.tap()
-        electricDistributionLineToggle.switches.firstMatch.tap()
+        geometryGuidesToggle.tapResolvedToggleControl()
+        structureLineToggle.tapResolvedToggleControl()
         // Close the settings view.
         app.buttons["Close"].assertExistenceAndTap()
         // Reopen the settings view and verify the toggles states are preserved.
         app.buttons["Settings"].assertExistenceAndTap()
         geometryGuidesToggle.assertToggleIsOn()
-        electricDistributionLineToggle.assertToggleIsOn()
+        structureLineToggle.assertToggleIsOn()
     }
 }
 
@@ -66,6 +66,16 @@ private extension SnapSettingsViewTests {
         app.checkBoxes[name]
 #else
         app.switches[name]
+#endif
+    }
+}
+
+private extension XCUIElement {
+    func tapResolvedToggleControl() {
+#if targetEnvironment(macCatalyst)
+        self.tap()
+#else
+        self.switches.firstMatch.tap()
 #endif
     }
 }
