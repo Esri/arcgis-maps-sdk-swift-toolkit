@@ -480,7 +480,7 @@ public struct UtilityNetworkTrace: View {
                                     Text(item.function.networkAttribute.name)
                                     Spacer()
                                     VStack(alignment: .trailing) {
-                                        Text(item.function.functionType.title)
+                                        Text(item.function.kind.title)
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
                                         if let result = item.result as? Double {
