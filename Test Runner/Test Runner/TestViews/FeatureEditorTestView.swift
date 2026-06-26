@@ -44,7 +44,7 @@ struct FeatureEditorTestView: View {
 }
 
 private extension FeatureEditorTestView {
-    /// Identifies a feature with a given object ID and start the
+    /// Identifies a feature with a given object ID and starts the
     /// feature editor with that feature's geometry.
     /// - Parameters:
     ///   - objectID: The object ID of the feature to use as a starting point.
@@ -79,7 +79,7 @@ private extension FeatureEditorTestView {
             guard let groupLayer = map.operationalLayers.first as? GroupLayer,
                   let layer = groupLayer.layers.first(where: { $0.name == "Electric Distribution Device" }),
                   let featureLayer = layer as? FeatureLayer else {
-                errorDescription = "Missing or invalid launch arguments."
+                errorDescription = "Electric Distribution Device layer not found."
                 return
             }
             
@@ -93,11 +93,11 @@ private extension FeatureEditorTestView {
 private extension FeatureEditorTestView {
     /// Makes a map from a portal item.
     static func makeMap() -> Map {
-        let nappervilleElectricUtilityNetwork = PortalItem(
-            portal: .arcGISOnline(connection: .anonymous),
+        let napervilleElectricUtilityNetwork = PortalItem(
+            portal: .arcGISOnline(connection: .authenticated),
             id: PortalItem.ID("471eb0bf37074b1fbb972b1da70fb310")!
         )
-        let map = Map(item: nappervilleElectricUtilityNetwork)
+        let map = Map(item: napervilleElectricUtilityNetwork)
         // Enables full resolution to allow snapping on all layers.
         map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
         return map
