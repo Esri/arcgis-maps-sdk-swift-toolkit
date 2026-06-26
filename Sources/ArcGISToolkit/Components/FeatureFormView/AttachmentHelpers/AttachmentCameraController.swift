@@ -21,7 +21,7 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
     /// Specifies whether, images, movies or both, can be captured and an optional maximum duration for movies.
     struct Configuration: Identifiable {
         let allowedFormats: AllowedFormats
-        let movieMaxDuration: TimeInterval?
+        let movieMaxDuration: Duration?
         let id = UUID()
     }
     
@@ -53,7 +53,7 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
             []
         }
         if let movieMaxDuration = configuration?.movieMaxDuration {
-            controller.videoMaximumDuration = movieMaxDuration
+            controller.videoMaximumDuration = Double(movieMaxDuration.components.seconds)
         }
         controller.sourceType = .camera
         controller.delegate = context.coordinator

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
 import PhotosUI
 import SwiftUI
 
@@ -26,14 +27,14 @@ struct AttachmentPhotoPicker: ViewModifier {
     /// A Boolean value indicating whether the photos picker is presented.
     @Binding var photoPickerIsPresented: Bool
     
-    let inputs: [_AttachmentsFormInput]
+    let inputs: [AttachmentsFormInput]
     
     var filter: PHPickerFilter? {
         var filter = [PHPickerFilter]()
-        if inputs.contains(where: { $0 is _ImageFormInput }) {
+        if inputs.contains(where: { $0 is ImageFormInput }) {
             filter.append(.images)
         }
-        if inputs.contains(where: { $0 is _VideoFormInput }) {
+        if inputs.contains(where: { $0 is VideoFormInput }) {
             filter.append(.videos)
         }
         guard !filter.isEmpty else { return nil }

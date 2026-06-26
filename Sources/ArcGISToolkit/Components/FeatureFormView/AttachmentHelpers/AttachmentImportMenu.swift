@@ -54,14 +54,6 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
-#warning("Prototype only. Do not merge to main. This will eventually be available on `element`.")
-    @State private var inputs: [_AttachmentsFormInput] = [
-        _AudioFormInput(),
-        _DocumentFormInput(),
-        _ImageFormInput(),
-        _VideoFormInput()
-    ]
-    
 #if os(visionOS)
     let isVision = true
 #else
@@ -160,41 +152,21 @@ struct AttachmentImportMenu: View {
     /// source code such as: .txt, .rtf, .html, .xml, .md, .csv, .tsv, .swift, or .js.
     var allowedFileImporterTypes: [UTType] {
         var types = [UTType]()
-        if inputs.contains(where: { $0 is _AudioFormInput }) {
+        if element.inputs.contains(where: { $0 is AudioFormInput }) {
             types.append(.audio)
         }
-        if inputs.contains(where: { $0 is _DocumentFormInput }) {
+        if element.inputs.contains(where: { $0 is DocumentFormInput }) {
             types.append(contentsOf: [
                 .pdf, .zip, .text, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .`7z`
             ])
         }
-        if inputs.contains(where: { $0 is _ImageFormInput }) {
+        if element.inputs.contains(where: { $0 is ImageFormInput }) {
             types.append(.image)
         }
-        if inputs.contains(where: { $0 is _VideoFormInput }) {
+        if element.inputs.contains(where: { $0 is VideoFormInput }) {
             types.append(.video)
         }
         return types
-    }
-    
-#warning("For testing only. Do not merge to main.")
-    @State private var id = UUID()
-    private func logInputs() {
-        id = UUID()
-        for input in inputs {
-            print(input)
-            switch input {
-            case let audio as _AudioFormInput:
-                print("\t", audio.inputMethod)
-            case let image as _ImageFormInput:
-                print("\t", image.inputMethod)
-            case let video as _VideoFormInput:
-                print("\t", video.inputMethod)
-            default:
-                break
-            }
-        }
-        print("\n")
     }
     
     var body: some View {
@@ -205,31 +177,31 @@ struct AttachmentImportMenu: View {
         }
         Menu {
             Group {
-                if inputs.count >= 2 {
-                    if let imageFormInput = inputs.first(where: { $0 is _ImageFormInput }) as? _ImageFormInput,
-                        let videoFormInput = inputs.first(where: { $0 is _VideoFormInput }) as? _VideoFormInput {
+                if element.inputs.count >= 2 {
+                    if let imageFormInput = element.inputs.first(where: { $0 is ImageFormInput }) as? ImageFormInput,
+                       let videoFormInput = element.inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput {
                         takePhotoOrVideoButton(videoFormInput: videoFormInput)
-                    } else if let imageFormInput = inputs.first(where: { $0 is _ImageFormInput }) as? _ImageFormInput {
+                    } else if let imageFormInput = element.inputs.first(where: { $0 is ImageFormInput }) as? ImageFormInput {
                         takePhotoButton(input: imageFormInput)
-                    } else if let videoFormInput = inputs.first(where: { $0 is _VideoFormInput }) as? _VideoFormInput {
+                    } else if let videoFormInput = element.inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput {
                         takeVideoButton(input: videoFormInput)
                     }
-                    if inputs.contains(where: {$0 is _ImageFormInput || $0 is _VideoFormInput}) {
+                    if element.inputs.contains(where: {$0 is ImageFormInput || $0 is VideoFormInput}) {
                         chooseFromLibraryButton()
                     }
                     chooseFromFilesButton()
-                } else if let onlyInput = inputs.first {
+                } else if let onlyInput = element.inputs.first {
                     switch onlyInput {
-                    case let audioFormInput as _AudioFormInput:
+                    case let audioFormInput as AudioFormInput:
                         switch audioFormInput.inputMethod {
                         case .capture:
                             EmptyView()
                         default:
                             chooseFromFilesButton()
                         }
-                    case is _DocumentFormInput:
+                    case is DocumentFormInput:
                         chooseFromFilesButton()
-                    case let imageFormInput as _ImageFormInput:
+                    case let imageFormInput as ImageFormInput:
                         switch imageFormInput.inputMethod {
                         case .any:
                             takePhotoButton(input: imageFormInput)
@@ -241,7 +213,7 @@ struct AttachmentImportMenu: View {
                             chooseFromLibraryButton()
                             chooseFromFilesButton()
                         }
-                    case let videoFormInput as _VideoFormInput:
+                    case let videoFormInput as VideoFormInput:
                         switch videoFormInput.inputMethod {
                         case .any:
                             takeVideoButton(input: videoFormInput)
@@ -257,78 +229,6 @@ struct AttachmentImportMenu: View {
                         EmptyView()
                     }
                 }
-            }
-            .id(id)
-            
-#warning("For testing only. Do not merge to main.")
-            Section("Input Types") {
-                Button("Audio") {
-                    inputs.append(_AudioFormInput())
-                }
-                .disabled(inputs.contains(where: { $0 is _AudioFormInput }))
-                Button("Document") {
-                    inputs.append(_DocumentFormInput())
-                }
-                .disabled(inputs.contains(where: { $0 is _DocumentFormInput }))
-                Button("Image") {
-                    inputs.append(_ImageFormInput())
-                }
-                .disabled(inputs.contains(where: { $0 is _ImageFormInput }))
-                Button("Video") {
-                    inputs.append(_VideoFormInput())
-                }
-                .disabled(inputs.contains(where: { $0 is _VideoFormInput }))
-                Button("🗑️ Remove All", role: .destructive) {
-                    inputs.removeAll()
-                }
-                .disabled(inputs.isEmpty)
-            }
-            .menuActionDismissBehavior(.disabled)
-            Section("Input Method") {
-                if inputs.count == 1, let only = inputs.first {
-                    switch only {
-                    case let audioFormInput as _AudioFormInput:
-                        Button("Any") { audioFormInput.inputMethod = .any; logInputs() }
-                        Button("Capture") { audioFormInput.inputMethod = .capture; logInputs() }
-                        Button("Upload") { audioFormInput.inputMethod = .upload; logInputs() }
-                    case let imageFormInput as _ImageFormInput:
-                        Button("Any") { imageFormInput.inputMethod = .any; logInputs() }
-                        Button("Capture") { imageFormInput.inputMethod = .capture; logInputs() }
-                        Button("Upload") { imageFormInput.inputMethod = .upload; logInputs() }
-                    case let videoFormInput as _VideoFormInput:
-                        Button("Any") { videoFormInput.inputMethod = .any; logInputs() }
-                        Button("Capture") { videoFormInput.inputMethod = .capture; logInputs() }
-                        Button("Upload") { videoFormInput.inputMethod = .upload; logInputs() }
-                    default:
-                        EmptyView()
-                    }
-                }
-            }
-            .menuActionDismissBehavior(.disabled)
-            if let videoInput = inputs.first(where: { $0 is _VideoFormInput }) as? _VideoFormInput {
-                Section("Video Duration") {
-                    if let maxDuration = videoInput.maxDuration {
-                        Stepper(
-                            "\(maxDuration.formatted(.number)) seconds",
-                            value: Binding<TimeInterval>(
-                                get: { videoInput.maxDuration ?? TimeInterval.infinity },
-                                set: { videoInput.maxDuration = $0; logInputs() }
-                            ),
-                            in: 1...TimeInterval.infinity,
-                            step: 1
-                        )
-                        Button("Remove Limit") {
-                            videoInput.maxDuration = nil
-                            logInputs()
-                        }
-                    } else {
-                        Button("Add Limit") {
-                            videoInput.maxDuration = 30
-                            logInputs()
-                        }
-                    }
-                }
-                .menuActionDismissBehavior(.disabled)
             }
         } label: {
             Text(
@@ -472,7 +372,7 @@ struct AttachmentImportMenu: View {
             AttachmentPhotoPicker(
                 importState: $importState,
                 photoPickerIsPresented: $photoPickerIsPresented,
-                inputs: inputs
+                inputs: element.inputs
             )
         )
     }
