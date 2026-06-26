@@ -343,14 +343,14 @@ struct AttachmentImportMenu: View {
                 newAttachment = try? await element.addAttachment(
                     contentType: newAttachmentImportData.contentType,
                     fileURL: url,
-                    named: fileName
+                    name: fileName
                 )
                 url.stopAccessingSecurityScopedResource()
             } else if let data = newAttachmentImportData.data {
                 newAttachment = try? await element.addAttachment(
                     contentType: newAttachmentImportData.contentType,
                     data: data,
-                    named: fileName
+                    name: fileName
                 )
             }
             
