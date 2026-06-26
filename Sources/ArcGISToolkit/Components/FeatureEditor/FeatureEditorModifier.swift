@@ -80,10 +80,6 @@ private struct FeatureEditorView: View {
     /// A Boolean value indicating whether the parent presentation is minimized.
     private let isMinimized: Bool
     
-    /// A Boolean value indicating whether the geometry editor has edits to undo.
-    @State private var canUndo = false
-    /// The geometry editor's current geometry.
-    @State private var geometry: Geometry?
     /// The form currently presented in the `FeatureFormView`.
     @State private var presentedFeatureForm: FeatureForm
     
@@ -98,9 +94,9 @@ private struct FeatureEditorView: View {
     /// A closure that saves geometry edits to the form's feature. This is non-`nil` only when
     /// `canUndo` is `true` to indicate to the `FeatureFormView` when there are edits.
     private var saveGeometryEditsAction: (() throws -> Void)? {
-        guard canUndo else { return nil }
+        guard model.geometryEditorCanUndo else { return nil }
         return {
-            guard let geometry, geometry.sketchIsValid else {
+            guard let geometry = model.geometryEditorGeometry, geometry.sketchIsValid else {
                 throw InvalidGeometryError()
             }
             presentedFeatureForm.feature.geometry = geometry
@@ -123,7 +119,6 @@ private struct FeatureEditorView: View {
             .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
                 presentedFeatureForm = rootFeatureForm
             }
-            .task(id: ObjectIdentifier(model.geometryEditor), monitorGeometryEditorStreams)
             .task(id: startGeometryEditorID) {
                 do {
                     // Stops the geometry editor so it will not continue running if
@@ -175,22 +170,6 @@ private struct FeatureEditorView: View {
             return
         }
         try await table.load()
-    }
-    
-    /// Monitors geometry editor streams and updates the corresponding state properties.
-    private func monitorGeometryEditorStreams() async {
-        await withTaskGroup { group in
-            group.addTask { @MainActor @Sendable in
-                for await canUndo in model.geometryEditor.$canUndo {
-                    self.canUndo = canUndo
-                }
-            }
-            group.addTask { @MainActor @Sendable in
-                for await geometry in model.geometryEditor.$geometry {
-                    self.geometry = geometry
-                }
-            }
-        }
     }
     
     /// Starts the geometry editor using the form's feature.

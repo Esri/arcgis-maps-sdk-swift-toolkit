@@ -51,6 +51,7 @@ import SwiftUI
 /// - ``ToolbarStyle``
 ///
 /// - Since: 300.1
+@available(visionOS, unavailable)
 public struct FeatureEditor: View {
     /// The style to apply to the toolbar's controls.
     private let toolbarStyle: ToolbarStyle?
@@ -91,9 +92,7 @@ public struct FeatureEditor: View {
             }
             .task(id: ObjectIdentifier(geometryEditor)) {
                 model.geometryEditor = geometryEditor
-                for await isStarted in geometryEditor.$isStarted {
-                    model.isEditingGeometry = isStarted
-                }
+                await model.monitorGeometryEditorStreams()
             }
             .onDisappear {
                 // Hides the inspector when this view disappears.

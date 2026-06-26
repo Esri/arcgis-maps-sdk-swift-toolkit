@@ -46,7 +46,9 @@ struct ToolPicker: View {
             }
         }
         .animation(.default, value: selectedTool)
-        .onChange(of: selectableTools, initial: true) {
+        .onChange(of: featureEditorModel.geometryEditorGeometry, initial: true) {
+            selectableTools = selectableTools(for: featureEditorModel.geometryEditorGeometry)
+            
             // Sets the selection to the first valid tool if the current value is invalid.
             guard !selectableTools.contains(selectedTool),
                   let firstValidTool = selectableTools.first else {
@@ -58,13 +60,9 @@ struct ToolPicker: View {
             // Sets the geometry editor tool when the selectedTool changes.
             featureEditorModel.geometryEditor.tool = selectedTool.geometryEditorTool
         }
-        .task(id: ObjectIdentifier(featureEditorModel.geometryEditor)) {
+        .onChange(of: ObjectIdentifier(featureEditorModel.geometryEditor), initial: true) {
             // Overwrites the initial geometry editor tool when the editor changes.
             featureEditorModel.geometryEditor.tool = selectedTool.geometryEditorTool
-            
-            for await geometry in featureEditorModel.geometryEditor.$geometry {
-                selectableTools = selectableTools(for: geometry)
-            }
         }
     }
     
@@ -233,7 +231,8 @@ private extension Text {
     
     ToolPicker()
         .environment(featureEditorModel)
-        .onAppear {
-            featureEditorModel.geometryEditor.start(withType: Polyline.self)
+        .task {
+            featureEditorModel.geometryEditor.start(withType: Polygon.self)
+            await featureEditorModel.monitorGeometryEditorStreams()
         }
 }

@@ -33,7 +33,7 @@ struct FeatureEditorToolbar: View {
     
     var body: some View {
         Group {
-            if model.isEditingGeometry {
+            if model.geometryEditorIsStarted {
                 switch style {
                 case .vertical:
                     VStack(spacing: stackSpacing) {
@@ -52,7 +52,7 @@ struct FeatureEditorToolbar: View {
                 }
             }
         }
-        .animation(.default, value: model.isEditingGeometry)
+        .animation(.default, value: model.geometryEditorIsStarted)
     }
     
     /// The control views for the toolbar.
@@ -130,9 +130,6 @@ private struct UndoButton: View {
     /// The model for the parent feature editor containing the geometry editor.
     @Environment(FeatureEditorModel.self) private var featureEditorModel
     
-    /// A Boolean value indicating whether the geometry editor can undo an action.
-    @State private var canUndo = false
-    
     var body: some View {
         Button(action: featureEditorModel.geometryEditor.undo) {
             Label {
@@ -145,12 +142,7 @@ private struct UndoButton: View {
                 Image(systemName: "arrow.uturn.backward")
             }
         }
-        .disabled(!canUndo)
-        .task(id: ObjectIdentifier(featureEditorModel.geometryEditor)) {
-            for await canUndo in featureEditorModel.geometryEditor.$canUndo {
-                self.canUndo = canUndo
-            }
-        }
+        .disabled(!featureEditorModel.geometryEditorCanUndo)
     }
 }
 
@@ -236,9 +228,9 @@ private extension View {
                 }
             }
             .environment(model)
-            .onAppear {
+            .task {
                 model.geometryEditor.start(withType: Polygon.self)
-                model.isEditingGeometry = true
+                await model.monitorGeometryEditorStreams()
             }
     }
 }
