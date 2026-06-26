@@ -59,6 +59,9 @@ public struct FeatureEditor: View {
     @Binding private var feature: ArcGISFeature?
     /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
     private let geometryEditor: GeometryEditor
+    /// A proxy for performing map view operations.
+    private let mapViewProxy: MapViewProxy?
+    
     /// The shared feature editor model from the environment.
     @Environment(FeatureEditorModel.self) private var model
     
@@ -68,6 +71,8 @@ public struct FeatureEditor: View {
     ///   The Feature Editor is displayed when the value is non-`nil`.
     ///   - geometryEditor: A geometry editor used to edit the feature's
     ///   geometry on an associated `MapView`.
+    ///   - mapViewProxy: A proxy used to set the viewpoint on an associated
+    ///   `MapView`.
     ///   - toolbarStyle: The style that determines the toolbar's appearance and
     ///   layout. A `nil` value displays the toolbar's controls without
     ///   built-in layout or styling.
@@ -75,10 +80,12 @@ public struct FeatureEditor: View {
     public init(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
+        mapViewProxy: MapViewProxy? = nil,
         toolbarStyle: ToolbarStyle? = .vertical
     ) {
         self._feature = feature
         self.geometryEditor = geometryEditor
+        self.mapViewProxy = mapViewProxy
         self.toolbarStyle = toolbarStyle
     }
     
@@ -94,10 +101,21 @@ public struct FeatureEditor: View {
                 model.geometryEditor = geometryEditor
                 await model.monitorGeometryEditorStreams()
             }
+            .task(id: model.viewpointGeometry, setViewpoint)
             .onDisappear {
                 // Hides the inspector when this view disappears.
                 model.featureForm = nil
             }
+    }
+    
+    /// Sets the viewpoint using `model.viewpointGeometry` and the `mapViewProxy`.
+    private func setViewpoint() async {
+        guard let mapViewProxy, let viewpointGeometry = model.viewpointGeometry else { return }
+        defer { model.viewpointGeometry = nil }
+        
+        let expandedGeometry = viewpointGeometry.extent.withBuilder { $0.expand(by: 2) }
+        let viewpoint = Viewpoint(boundingGeometry: expandedGeometry)
+        await mapViewProxy.setViewpoint(viewpoint, duration: 0.5)
     }
 }
 

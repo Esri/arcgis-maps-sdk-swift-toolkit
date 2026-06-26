@@ -39,9 +39,20 @@ struct ExampleMapView: View {
     /// The point on the screen where the user tapped.
     @State private var tapPoint: CGPoint?
     
+    /// Insets that indicate the area obscured by the feature editor's UI to the map view.
+    private var contentInsets: EdgeInsets {
+        if UIDevice.current.userInterfaceIdiom == .phone, featureToEdit != nil {
+            // Accounts for the feature editor inspector and view on iPhone.
+            EdgeInsets(top: 0, leading: 0, bottom: 400, trailing: 75)
+        } else {
+            EdgeInsets()
+        }
+    }
+    
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
+                .contentInsets(contentInsets)
                 .geometryEditor(geometryEditor)
                 .onSingleTapGesture { screenPoint, _ in
                     guard tapPoint == nil else { return }
@@ -65,15 +76,16 @@ struct ExampleMapView: View {
                         print("Identify error:", error)
                     }
                 }
-        }
-        .overlay(alignment: .topTrailing) {
-            // The feature editor needs to be placed below the
-            // `featureEditorInspector` modifier in the view hierarchy.
-            FeatureEditor(
-                $featureToEdit,
-                geometryEditor: geometryEditor
-            )
-            .padding()
+                .overlay(alignment: .topTrailing) {
+                    // The feature editor needs to be placed below the
+                    // `featureEditorInspector` modifier in the view hierarchy.
+                    FeatureEditor(
+                        $featureToEdit,
+                        geometryEditor: geometryEditor,
+                        mapViewProxy: mapViewProxy
+                    )
+                    .padding()
+                }
         }
         .task {
             do {

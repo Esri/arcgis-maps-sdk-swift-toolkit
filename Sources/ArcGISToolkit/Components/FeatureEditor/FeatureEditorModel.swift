@@ -22,6 +22,8 @@ import Observation
 final class FeatureEditorModel {
     /// The feature form to edit with the feature editor.
     var featureForm: FeatureForm?
+    /// The geometry used to set the viewpoint.
+    var viewpointGeometry: Geometry?
     
     // MARK: Geometry Editor
     

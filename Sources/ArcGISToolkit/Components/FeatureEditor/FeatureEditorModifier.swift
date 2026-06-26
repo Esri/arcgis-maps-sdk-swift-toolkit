@@ -135,6 +135,7 @@ private struct FeatureEditorView: View {
                     model.geometryEditor.stop()
                     
                     try await loadFeature()
+                    model.viewpointGeometry = presentedFeatureForm.feature.geometry
                     startGeometryEditor()
                 } catch {
                     Logger.featureEditor.error(
@@ -156,6 +157,8 @@ private struct FeatureEditorView: View {
             // Restarts the geometry editor when the form footer discard button is pressed.
             guard !willNavigate else { break }
             startGeometryEditor()
+        case .showOnMapRequested(let feature):
+            model.viewpointGeometry = feature.geometry
         default:
             break
         }
