@@ -77,22 +77,12 @@ struct AttachmentsFeatureElementView: View {
                     } else {
                         attachmentBody(attachmentModels: models)
                     }
-                    if isBelowMinimumAttachmentCount(models.count) {
-                        Text(minimumAttachmentCountMessage)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
                     if isEditable {
-                        if hasReachedMaximumAttachmentCount(models.count) {
-                            Text(maximumAttachmentCountReachedMessage)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        } else {
-                            AttachmentImportMenu(
-                                element: formElement,
-                                onAdd: onAdd
-                            )
-                        }
+                        AttachmentImportMenu(
+                            currentAttachmentCount: models.count,
+                            element: formElement,
+                            onAdd: onAdd
+                        )
                     }
                 }
                 .onAttachmentIsEditableChange(of: formElement) { newIsEditable in
@@ -130,7 +120,6 @@ struct AttachmentsFeatureElementView: View {
                 attachmentModels: attachmentModels,
                 editControlsDisabled: !isEditable,
                 allowUserRename: allowUserRename,
-                allowDeleteAttachments: canDeleteAttachments(attachmentModels.count),
                 displaysFilename: displaysFilename,
                 lastAttachmentAdded: lastAttachmentAdded,
                 onRename: onRename,
@@ -143,7 +132,6 @@ struct AttachmentsFeatureElementView: View {
                     attachmentModels: attachmentModels,
                     editControlsDisabled: !isEditable,
                     allowUserRename: allowUserRename,
-                    allowDeleteAttachments: canDeleteAttachments(attachmentModels.count),
                     displaysFilename: displaysFilename,
                     lastAttachmentAdded: lastAttachmentAdded,
                     onRename: onRename,
@@ -220,10 +208,6 @@ struct AttachmentsFeatureElementView: View {
     /// - Parameters:
     ///   - attachmentModel: The model for the attachment to delete.
     func onDelete(attachmentModel: AttachmentModel) -> Void {
-        guard case .success(let existingModels) = attachmentModels else { return }
-        if !canDeleteAttachments(existingModels.count) {
-            return
-        }
         if let formElement, let attachment = attachmentModel.attachment as? FormAttachment {
             formElement.delete(attachment)
             guard case .success(var models) = attachmentModels else { return }
@@ -246,42 +230,6 @@ private extension AttachmentsFeatureElement {
 }
 
 extension AttachmentsFeatureElementView {
-    /// A message indicating the maximum number of attachments has been reached.
-    private var maximumAttachmentCountReachedMessage: String {
-        guard formElement != nil else { return "" }
-        return .init(
-            localized: "Maximum of \(effectiveMaxAttachmentCount) attachments reached.",
-            bundle: .toolkitModule,
-            comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
-        )
-    }
-    
-    /// A message indicating the minimum number of attachments required.
-    private var minimumAttachmentCountMessage: String {
-        guard formElement != nil else { return "" }
-        return .init(
-            localized: "At least \(effectiveMinAttachmentCount) attachment(s) required.",
-            bundle: .toolkitModule,
-            comment: "A message indicating the minimum number of attachments required for a form element."
-        )
-    }
-    
-    /// A Boolean value indicating whether users can add more attachments.
-    private func hasReachedMaximumAttachmentCount(_ count: Int) -> Bool {
-        guard effectiveMaxAttachmentCount != .max else { return false }
-        return count >= Int(effectiveMaxAttachmentCount)
-    }
-    
-    /// A Boolean value indicating whether the element is below its minimum attachment count.
-    private func isBelowMinimumAttachmentCount(_ count: Int) -> Bool {
-        count < Int(effectiveMinAttachmentCount)
-    }
-    
-    /// A Boolean value indicating whether users can delete attachments.
-    private func canDeleteAttachments(_ count: Int) -> Bool {
-        count > Int(effectiveMinAttachmentCount)
-    }
-    
     /// The size of thumbnail images, based on the attachment display type
     /// and the current size class of the view.
     private var thumbnailSize: CGSize {
@@ -312,16 +260,6 @@ extension AttachmentsFeatureElementView {
     /// A Boolean value indicating whether users can rename attachments.
     private var allowUserRename: Bool {
         formElement?.allowUserRename ?? true
-    }
-    
-    /// Effective minimum attachment count for preview and validation behavior.
-    private var effectiveMinAttachmentCount: Int {
-        return formElement?.minAttachmentCount ?? 0
-    }
-    
-    /// Effective maximum attachment count for preview and validation behavior.
-    private var effectiveMaxAttachmentCount: Int {
-        return formElement?.maxAttachmentCount ?? .max
     }
     
     /// A Boolean value denoting if the view should be shown as regular width.

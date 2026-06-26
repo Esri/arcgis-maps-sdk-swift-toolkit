@@ -47,9 +47,6 @@ struct AttachmentPreview: View {
     /// A Boolean value indicating whether users can rename attachments.
     private let allowUserRename: Bool
     
-    /// A Boolean value indicating whether users can delete attachments.
-    private let allowDeleteAttachments: Bool
-    
     /// A Boolean value indicating whether attachment filenames are displayed.
     private let displaysFilename: Bool
     
@@ -69,7 +66,6 @@ struct AttachmentPreview: View {
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
         allowUserRename: Bool = true,
-        allowDeleteAttachments: Bool = true,
         displaysFilename: Bool = true,
         lastAttachmentAdded: AttachmentModel? = nil,
         onRename: (@MainActor (AttachmentModel, String) -> Void)? = nil,
@@ -80,7 +76,6 @@ struct AttachmentPreview: View {
         self.proposedCellSize = proposedCellSize
         self.editControlsDisabled = editControlsDisabled
         self.allowUserRename = allowUserRename
-        self.allowDeleteAttachments = allowDeleteAttachments
         self.displaysFilename = displaysFilename
         self.lastAttachmentAdded = lastAttachmentAdded
         self.onRename = onRename
@@ -127,11 +122,6 @@ struct AttachmentPreview: View {
                             } icon: {
                                 Image(systemName: "pencil")
                             }
-                        }
-                    }
-                    if allowDeleteAttachments {
-                        Button.delete {
-                            deletedAttachmentModel = attachmentModel
                         }
                     }
                 }

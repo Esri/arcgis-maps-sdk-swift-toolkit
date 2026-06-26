@@ -19,16 +19,21 @@ import UniformTypeIdentifiers
 
 /// The context menu shown when the new attachment button is pressed.
 struct AttachmentImportMenu: View {
+    /// The current number of attachments the element has.
+    private let currentAttachmentCount: Int
     /// The attachment form element displaying the menu.
     private let element: AttachmentsFormElement
     
     /// Creates an `AttachmentImportMenu`
+    /// - Parameter currentAttachmentCount: The number of attachments the element currently has.
     /// - Parameter element: The attachment form element displaying the menu.
     /// - Parameter onAdd: The action to perform when an attachment is added.
     init(
+        currentAttachmentCount: Int,
         element: AttachmentsFormElement,
         onAdd: (@MainActor (FeatureAttachment) -> Void)? = nil
     ) {
+        self.currentAttachmentCount = currentAttachmentCount
         self.element = element
         self.onAdd = onAdd
     }
@@ -150,7 +155,7 @@ struct AttachmentImportMenu: View {
     ///
     /// - Note: `UTType.text` represents all text-encoded data, including text with markup and
     /// source code such as: .txt, .rtf, .html, .xml, .md, .csv, .tsv, .swift, or .js.
-    var allowedFileImporterTypes: [UTType] {
+    private var allowedFileImporterTypes: [UTType] {
         var types = [UTType]()
         if element.inputs.contains(where: { $0 is AudioFormInput }) {
             types.append(.audio)
@@ -169,12 +174,39 @@ struct AttachmentImportMenu: View {
         return types
     }
     
+    /// A Boolean value indicating whether users can add more attachments.
+    private var hasReachedMaximumAttachmentCount: Bool {
+        guard let max = element.maxAttachmentCount else { return false }
+        return currentAttachmentCount >= max
+    }
+    
+    /// A Boolean value indicating whether the element is below its minimum attachment count.
+    private var isBelowMinimumAttachmentCount: Bool {
+        guard let min = element.minAttachmentCount else { return false }
+        return currentAttachmentCount < min
+    }
+    
     var body: some View {
         if importState.importInProgress {
             ProgressView()
                 .progressViewStyle(.circular)
                 .catalystPadding(5)
         }
+        if isBelowMinimumAttachmentCount {
+            Text(minimumAttachmentCountMessage)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        if hasReachedMaximumAttachmentCount {
+            Text(maximumAttachmentCountReachedMessage)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        } else {
+            menu
+        }
+    }
+    
+    var menu: some View {
         Menu {
             Group {
                 if element.inputs.count >= 2 {
@@ -255,7 +287,7 @@ struct AttachmentImportMenu: View {
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
             
-            if element.maxAttachmentCount != .max {
+            if let maxAttachmentCount = element.maxAttachmentCount {
                 let attachmentsCount: Int
                 do {
                     let attachments = try await element.attachments
@@ -264,7 +296,7 @@ struct AttachmentImportMenu: View {
                     importState = .errored(.system(error.localizedDescription))
                     return
                 }
-                guard attachmentsCount < Int(element.maxAttachmentCount) else {
+                guard attachmentsCount < maxAttachmentCount else {
                     importState = .errored(.system("Attachment count limit reached."))
                     return
                 }
@@ -384,6 +416,24 @@ private extension AttachmentImportMenu {
         Button(String.settings) {
             Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
         }
+    }
+    
+    /// A message indicating the maximum number of attachments has been reached.
+    var maximumAttachmentCountReachedMessage: String {
+        .init(
+            localized: "Maximum of \(element.maxAttachmentCount) attachments reached.",
+            bundle: .toolkitModule,
+            comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
+        )
+    }
+    
+    /// A message indicating the minimum number of attachments required.
+    var minimumAttachmentCountMessage: String {
+        .init(
+            localized: "At least \(element.minAttachmentCount) attachment(s) required.",
+            bundle: .toolkitModule,
+            comment: "A message indicating the minimum number of attachments required for a form element."
+        )
     }
     
     /// A label for a button to capture a new photo.
