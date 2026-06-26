@@ -75,6 +75,7 @@ private extension FeatureEditorTestView {
     func setUpTest() async {
         do {
             try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(.publicSample)
+            try await map.retryLoad()
             
             guard let groupLayer = map.operationalLayers.first as? GroupLayer,
                   let layer = groupLayer.layers.first(where: { $0.name == "Electric Distribution Device" }),
