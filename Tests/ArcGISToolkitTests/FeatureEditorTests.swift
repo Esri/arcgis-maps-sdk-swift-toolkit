@@ -21,29 +21,53 @@ import Testing
 struct FeatureEditorTests {
     @Test
     func modelInitializer() {
-        let geometryEditor = GeometryEditor()
-        let feature = ArcGISFeature()
-        let model = FeatureEditor(, geometryEditor: geometryEditor)
-        
-        #expect(model.geometryEditor === geometryEditor)
-        #expect(!model.isStarted)
+        let model = FeatureEditorModel()
+        #expect(model.featureForm == nil)
+        #expect(model.geometryEditorGeometry == nil)
+        #expect(!model.geometryEditorCanUndo)
+        #expect(!model.geometryEditorIsStarted)
     }
     
     @Test
-    func modelIsStartedStateChanges() async throws {
-        let geometryEditor = GeometryEditor()
-        let model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
-        #expect(!model.isStarted)
-        geometryEditor.start(withType: Point.self)
-        try await Task.yield(timeout: 0.1) { @MainActor in
-            model.isStarted
-        }
-        #expect(model.isStarted)
+    func geometryEditorIsStartedStateChanges() async throws {
+        // Loads a map with a feature layer and queries a feature to create a
+        // feature form.
+        let map = Map(item: PortalItem(
+            portal: .arcGISOnline(connection: .anonymous),
+            id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+        ))
+        try await map.load()
+        let layer = try #require(map.operationalLayers.first { $0.name == "Main" } as? FeatureLayer)
+        let parameters = QueryParameters()
+        parameters.addObjectID(3651)
+        let result = try await #require(layer.featureTable?.queryFeatures(using: parameters))
+        let features = result.features().compactMap { $0 }
+        let feature = try #require(features.first as? ArcGISFeature)
+        let featureForm = FeatureForm(feature: feature)
+        let geometry = try #require(feature.geometry)
         
-        geometryEditor.stop()
-        try await Task.yield(timeout: 0.1) { @MainActor in
-            !model.isStarted
+        // Creates a model and starts the geometry editor with the feature form
+        // and geometry.
+        let model = FeatureEditorModel()
+        #expect(!model.geometryEditorIsStarted)
+        Task {
+            // Monitors the geometry editor streams in a separate task to avoid
+            // blocking the main thread.
+            await model.monitorGeometryEditorStreams()
         }
-        #expect(!model.isStarted)
+        model.featureForm = featureForm
+        // Starts the geometry editor with the feature's geometry and waits for
+        // the geometry editor to start.
+        model.geometryEditor.start(withInitial: geometry)
+        try await Task.yield(timeout: 0.1) { @MainActor in
+            model.geometryEditorIsStarted
+        }
+        #expect(model.geometryEditorIsStarted)
+        
+        model.geometryEditor.stop()
+        try await Task.yield(timeout: 0.1) { @MainActor in
+            !model.geometryEditorIsStarted
+        }
+        #expect(!model.geometryEditorIsStarted)
     }
 }
