@@ -16,7 +16,7 @@ import ArcGIS
 @testable import ArcGISToolkit
 import Testing
 
-@Suite("GeometryEditorToolbar Tests")
+@Suite("FeatureEditor Tests")
 @MainActor
 struct FeatureEditorTests {
     @Test
