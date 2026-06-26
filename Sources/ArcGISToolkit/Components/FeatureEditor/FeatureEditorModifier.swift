@@ -65,6 +65,14 @@ private struct FeatureEditorModifier: ViewModifier {
                 .interactiveDismissDisabled()
             }
             .environment(model)
+            .onChange(of: isPresented.wrappedValue) {
+                // Stops the geometry editor when the inspector is dismissed.
+                // This is done in an onChange modifier to sync the stop with
+                // the inspector's disappearance (onDisappear is too slow).
+                // It needs to happen outside of the inspector since onChange
+                // doesn't fire before it is dismissed on some platforms.
+                model.geometryEditor.stop()
+            }
     }
 }
 
@@ -132,12 +140,6 @@ private struct FeatureEditorView: View {
                         "Error starting geometry editor: \(String(describing: error))"
                     )
                 }
-            }
-            .onChange(of: isPresented) {
-                // Stops the geometry editor when the inspector is dismissed.
-                // This is done in an onChange modifier to sync the stop with
-                // the inspector disappear (onDisappear is too slow).
-                model.geometryEditor.stop()
             }
     }
     
