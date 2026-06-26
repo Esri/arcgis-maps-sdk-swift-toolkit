@@ -56,15 +56,16 @@ struct FeatureEditorTests {
             await model.monitorGeometryEditorStreams()
         }
         model.featureForm = featureForm
-        // Starts the geometry editor with the feature's geometry and waits for
-        // the geometry editor to start.
+        
+        // Starts the geometry editor with the feature's geometry.
         model.geometryEditor.start(withInitial: geometry)
         try await Task.yield(timeout: 0.1) { @MainActor in
             model.geometryEditorIsStarted
         }
         #expect(model.geometryEditorIsStarted)
-        #expect(model.geometryEditorGeometry != nil)
+        #expect(model.geometryEditorGeometry == geometry)
         
+        // Stops the geometry editor.
         model.geometryEditor.stop()
         try await Task.yield(timeout: 0.1) { @MainActor in
             !model.geometryEditorIsStarted
