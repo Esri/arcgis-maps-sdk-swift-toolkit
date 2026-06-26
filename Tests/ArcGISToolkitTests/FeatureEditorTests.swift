@@ -18,11 +18,12 @@ import Testing
 
 @Suite("GeometryEditorToolbar Tests")
 @MainActor
-struct GeometryEditorToolbarTests {
+struct FeatureEditorTests {
     @Test
     func modelInitializer() {
         let geometryEditor = GeometryEditor()
-        let model = GeometryEditorToolbarModel(geometryEditor: geometryEditor)
+        let feature = ArcGISFeature()
+        let model = FeatureEditor(, geometryEditor: geometryEditor)
         
         #expect(model.geometryEditor === geometryEditor)
         #expect(!model.isStarted)
