@@ -111,6 +111,4 @@ final class GeometryEditorToolbarTests: XCTestCase {
         
         app.buttons["Stop"].assertExistenceAndTap()
     }
-    
-    // TODO: Test only layer snap sources are shown?
 }

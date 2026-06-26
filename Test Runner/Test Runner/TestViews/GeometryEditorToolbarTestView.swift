@@ -26,7 +26,7 @@ struct GeometryEditorToolbarTestView: View {
         MapView(map: map)
             .geometryEditor(geometryEditor)
             .overlay(alignment: .topTrailing) {
-                FeatureEditorToolbar(geometryEditor: geometryEditor)
+                GeometryEditorToolbar(geometryEditor: geometryEditor)
                     .padding()
             }
             .toolbar {
