@@ -72,5 +72,8 @@ struct FeatureEditorTests {
         }
         #expect(!model.geometryEditorIsStarted)
         #expect(model.geometryEditorGeometry == nil)
+        
+        // The feature form remains the same after stopping the geometry editor.
+        #expect(model.featureForm === featureForm)
     }
 }
