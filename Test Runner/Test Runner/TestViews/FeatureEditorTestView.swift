@@ -49,7 +49,10 @@ private extension FeatureEditorTestView {
     /// - Parameters:
     ///   - objectID: The object ID of the feature to use as a starting point.
     ///   - featureLayer: The feature layer containing the feature.
-    func startEditingFeature(_ objectID: Int, on featureLayer: FeatureLayer) async throws {
+    func startEditingFeature(
+        withIdentifier objectID: Int,
+        on featureLayer: FeatureLayer
+    ) async throws {
         // Gets the feature table from the layer.
         try await featureLayer.load()
         guard let featureTable = featureLayer.featureTable else {
@@ -84,7 +87,7 @@ private extension FeatureEditorTestView {
                 return
             }
             
-            try await startEditingFeature(3321, on: featureLayer)
+            try await startEditingFeature(withIdentifier: 3321, on: featureLayer)
         } catch {
             errorDescription = error.localizedDescription
         }
