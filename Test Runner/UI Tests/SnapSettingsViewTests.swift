@@ -31,8 +31,8 @@ final class SnapSettingsViewTests: XCTestCase {
         app.buttons["Feature Editor Tests"].tap()
         app.buttons["Settings"].assertExistenceAndTap()
         
-        let geometryGuidesToggle = snapToggle(named: "Snap to Geometry Guides", in: app)
-        let featuresToggle = snapToggle(named: "Snap to Features", in: app)
+        let geometryGuidesToggle = app.snapToggle(named: "Snap to Geometry Guides")
+        let featuresToggle = app.snapToggle(named: "Snap to Features")
         geometryGuidesToggle.assertExistence()
         featuresToggle.assertExistence()
         
@@ -43,7 +43,7 @@ final class SnapSettingsViewTests: XCTestCase {
         
         // Use one snap source toggle to verify that snapping to snap sources
         // are disabled by default.
-        let structureLineToggle = snapToggle(named: "Structure Line", in: app)
+        let structureLineToggle = app.snapToggle(named: "Structure Line")
         structureLineToggle.assertExistence()
         XCTAssertEqual(structureLineToggle.boolValue, false)
         
@@ -60,22 +60,20 @@ final class SnapSettingsViewTests: XCTestCase {
     }
 }
 
-private extension SnapSettingsViewTests {
-    func snapToggle(named name: String, in app: XCUIApplication) -> XCUIElement {
+private extension XCUIElement {
+    func snapToggle(named name: String) -> XCUIElement {
 #if targetEnvironment(macCatalyst)
-        app.checkBoxes[name]
+        checkBoxes[name]
 #else
-        app.switches[name]
+        switches[name]
 #endif
     }
-}
-
-private extension XCUIElement {
+    
     func tapResolvedToggleControl() {
 #if targetEnvironment(macCatalyst)
-        self.tap()
+        tap()
 #else
-        self.switches.firstMatch.tap()
+        switches.firstMatch.tap()
 #endif
     }
 }
