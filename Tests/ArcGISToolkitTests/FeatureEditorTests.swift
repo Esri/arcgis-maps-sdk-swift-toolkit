@@ -30,8 +30,8 @@ struct FeatureEditorTests {
     
     @Test
     func geometryEditorIsStartedStateChanges() async throws {
-        // Loads a map with a feature layer and queries a feature to create a
-        // feature form.
+        // Loads a Naperville water network web map with a feature layer and
+        // queries a feature to create a feature form.
         let map = Map(item: PortalItem(
             portal: .arcGISOnline(connection: .anonymous),
             id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
@@ -41,8 +41,7 @@ struct FeatureEditorTests {
         let parameters = QueryParameters()
         parameters.addObjectID(3651)
         let result = try await #require(layer.featureTable?.queryFeatures(using: parameters))
-        let features = result.features().compactMap { $0 }
-        let feature = try #require(features.first as? ArcGISFeature)
+        let feature = try #require(result.features().compactMap { $0 }.first as? ArcGISFeature)
         let featureForm = FeatureForm(feature: feature)
         let geometry = try #require(feature.geometry)
         
@@ -50,6 +49,7 @@ struct FeatureEditorTests {
         // and geometry.
         let model = FeatureEditorModel()
         #expect(!model.geometryEditorIsStarted)
+        #expect(model.geometryEditorGeometry == nil)
         Task {
             // Monitors the geometry editor streams in a separate task to avoid
             // blocking the main thread.
@@ -63,11 +63,13 @@ struct FeatureEditorTests {
             model.geometryEditorIsStarted
         }
         #expect(model.geometryEditorIsStarted)
+        #expect(model.geometryEditorGeometry != nil)
         
         model.geometryEditor.stop()
         try await Task.yield(timeout: 0.1) { @MainActor in
             !model.geometryEditorIsStarted
         }
         #expect(!model.geometryEditorIsStarted)
+        #expect(model.geometryEditorGeometry == nil)
     }
 }
