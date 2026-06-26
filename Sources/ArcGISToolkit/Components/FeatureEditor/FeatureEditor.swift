@@ -53,14 +53,14 @@ import SwiftUI
 /// - Since: 300.1
 @available(visionOS, unavailable)
 public struct FeatureEditor: View {
-    /// The style to apply to the toolbar's controls.
-    private let toolbarStyle: ToolbarStyle?
     /// A binding to the feature to edit.
     @Binding private var feature: ArcGISFeature?
     /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
     private let geometryEditor: GeometryEditor
     /// A proxy for performing map view operations.
     private let mapViewProxy: MapViewProxy?
+    /// The style to apply to the toolbar's controls.
+    private let toolbarStyle: ToolbarStyle?
     
     /// The shared feature editor model from the environment.
     @Environment(FeatureEditorModel.self) private var model
