@@ -22,12 +22,14 @@ final class SnapSettingsViewTests: XCTestCase {
     
     /// Verifies the snap settings toggles states when a feature is selected
     /// for editing.
-    func testDefaultToggleStates() {
+    /// visionOS does not support inspector, so mark it unavailable on visionOS.
+    @available(visionOS, unavailable)
+    func testDefaultToggleStatesAndPreservation() {
         let app = XCUIApplication()
         app.launch()
         
         app.buttons["Feature Editor Tests"].tap()
-        app.buttons["Settings"].assertExistenceAndTap(timeout: 5)
+        app.buttons["Settings"].assertExistenceAndTap()
         
         let geometryGuidesToggle = snapToggle(named: "Snap to Geometry Guides", in: app)
         let featuresToggle = snapToggle(named: "Snap to Features", in: app)
@@ -44,6 +46,17 @@ final class SnapSettingsViewTests: XCTestCase {
         let electricDistributionLineToggle = snapToggle(named: "Electric Distribution Line", in: app)
         electricDistributionLineToggle.assertExistence()
         electricDistributionLineToggle.assertToggleIsOff()
+        
+        // Turn on some toggles and verify their states are preserved when the
+        // settings view is reopened.
+        geometryGuidesToggle.switches.firstMatch.tap()
+        electricDistributionLineToggle.switches.firstMatch.tap()
+        // Close the settings view.
+        app.buttons["Close"].assertExistenceAndTap()
+        // Reopen the settings view and verify the toggles states are preserved.
+        app.buttons["Settings"].assertExistenceAndTap()
+        geometryGuidesToggle.assertToggleIsOn()
+        electricDistributionLineToggle.assertToggleIsOn()
     }
 }
 
