@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		007CF8DC2FC66BA600005B3F /* GeometryEditorToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CF8DB2FC66BA600005B3F /* GeometryEditorToolbarTests.swift */; };
 		007CF8DE2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CF8DD2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift */; };
+		00A1B2C32FD9000100ABCDEF /* SnapSettingsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A1B2C22FD9000100ABCDEF /* SnapSettingsViewTests.swift */; };
+		00A1B2C52FD9000200ABCDEF /* FeatureEditorTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A1B2C42FD9000200ABCDEF /* FeatureEditorTestView.swift */; };
 		75022F962A7AC9A0000ED7B7 /* FeatureFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */; };
 		75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */; };
 		7552A7542A573CBB0023DA5A /* TestRunnerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7532A573CBB0023DA5A /* TestRunnerApp.swift */; };
@@ -83,6 +85,8 @@
 /* Begin PBXFileReference section */
 		007CF8DB2FC66BA600005B3F /* GeometryEditorToolbarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryEditorToolbarTests.swift; sourceTree = "<group>"; };
 		007CF8DD2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryEditorToolbarTestView.swift; sourceTree = "<group>"; };
+		00A1B2C22FD9000100ABCDEF /* SnapSettingsViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapSettingsViewTests.swift; sourceTree = "<group>"; };
+		00A1B2C42FD9000200ABCDEF /* FeatureEditorTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureEditorTestView.swift; sourceTree = "<group>"; };
 		75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFormViewTests.swift; sourceTree = "<group>"; };
 		75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase5View.swift; sourceTree = "<group>"; };
 		7552A7502A573CBB0023DA5A /* Test Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Test Runner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -211,6 +215,7 @@
 				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
 				007CF8DB2FC66BA600005B3F /* GeometryEditorToolbarTests.swift */,
 				D7FDFCBB2DF208BD00ED91C1 /* PopupViewTests.swift */,
+				00A1B2C22FD9000100ABCDEF /* SnapSettingsViewTests.swift */,
 				8A3982E32E39428500A8F1AF /* UtilityNetworkTraceTests.swift */,
 			);
 			path = "UI Tests";
@@ -237,6 +242,7 @@
 				75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */,
 				7584B7532B1A798B00772AB7 /* BookmarksTestViews */,
 				797951892FA5560B000E537C /* BuildingExplorerTestViews */,
+				00A1B2C42FD9000200ABCDEF /* FeatureEditorTestView.swift */,
 				8A9F898E2B5B4F0A0027215E /* FeatureFormViewTestView.swift */,
 				75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */,
 				007CF8DD2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift */,
@@ -469,6 +475,7 @@
 				797951912FA56CAC000E537C /* BuildingExplorerTestCase4View.swift in Sources */,
 				7584B7572B1A7AF100772AB7 /* BookmarksTestCase2View.swift in Sources */,
 				797951882FA549C1000E537C /* BuildingExplorerTestCase1View.swift in Sources */,
+				00A1B2C52FD9000200ABCDEF /* FeatureEditorTestView.swift in Sources */,
 				8A9F898F2B5B4F0A0027215E /* FeatureFormViewTestView.swift in Sources */,
 				8A1138132BC7407D007E0BFB /* BookmarksTestCase6View.swift in Sources */,
 				79A0AB152FA8F89B001C81C8 /* BuildingExplorerTestData.swift in Sources */,
@@ -492,6 +499,7 @@
 				75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */,
 				D7FDFCBC2DF208BD00ED91C1 /* PopupViewTests.swift in Sources */,
 				797951842FA54050000E537C /* BuildingExplorerTests.swift in Sources */,
+				00A1B2C32FD9000100ABCDEF /* SnapSettingsViewTests.swift in Sources */,
 				8A3982E42E3942A100A8F1AF /* UtilityNetworkTraceTests.swift in Sources */,
 				8AF7DF432F52329B00174515 /* XCUIElement.swift in Sources */,
 				007CF8DC2FC66BA600005B3F /* GeometryEditorToolbarTests.swift in Sources */,

@@ -106,6 +106,19 @@ extension XCUIElement {
             line: line
         )
     }
+    
+    /// A Boolean value indicating whether the element's string value is
+    /// "1" (on) or "0" (off).
+    var boolValue: Bool? {
+        switch value as? String {
+        case "1":
+            true
+        case "0":
+            false
+        default:
+            nil
+        }
+    }
 }
 
 private extension TimeInterval {
