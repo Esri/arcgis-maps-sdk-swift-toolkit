@@ -17,8 +17,8 @@ import SwiftUI
 
 /// A control for picking a geometry editing tool.
 struct ToolPicker: View {
-    /// The model for the parent geometry editor toolbar.
-    @Environment(GeometryEditorToolbarModel.self) private var model
+    /// The model for the parent feature editor containing the geometry editor.
+    @Environment(FeatureEditorModel.self) private var featureEditorModel
     
     /// The tools that are currently able to be selected.
     @State private var selectableTools: [Tool] = []
@@ -46,7 +46,9 @@ struct ToolPicker: View {
             }
         }
         .animation(.default, value: selectedTool)
-        .onChange(of: selectableTools, initial: true) {
+        .onChange(of: featureEditorModel.geometryEditorGeometry, initial: true) {
+            selectableTools = selectableTools(for: featureEditorModel.geometryEditorGeometry)
+            
             // Sets the selection to the first valid tool if the current value is invalid.
             guard !selectableTools.contains(selectedTool),
                   let firstValidTool = selectableTools.first else {
@@ -56,15 +58,11 @@ struct ToolPicker: View {
         }
         .onChange(of: selectedTool) {
             // Sets the geometry editor tool when the selectedTool changes.
-            model.geometryEditor.tool = selectedTool.geometryEditorTool
+            featureEditorModel.geometryEditor.tool = selectedTool.geometryEditorTool
         }
-        .task(id: ObjectIdentifier(model)) {
+        .onChange(of: ObjectIdentifier(featureEditorModel.geometryEditor), initial: true) {
             // Overwrites the initial geometry editor tool when the editor changes.
-            model.geometryEditor.tool = selectedTool.geometryEditorTool
-            
-            for await geometry in model.geometryEditor.$geometry {
-                selectableTools = selectableTools(for: geometry)
-            }
+            featureEditorModel.geometryEditor.tool = selectedTool.geometryEditorTool
         }
     }
     
@@ -229,11 +227,12 @@ private extension Text {
 }
 
 #Preview {
-    let geometryEditor = GeometryEditor()
+    @Previewable @State var featureEditorModel = FeatureEditorModel()
     
     ToolPicker()
-        .environment(GeometryEditorToolbarModel(geometryEditor: geometryEditor))
-        .onAppear {
-            geometryEditor.start(withType: Point.self)
+        .environment(featureEditorModel)
+        .task {
+            featureEditorModel.geometryEditor.start(withType: Polygon.self)
+            await featureEditorModel.monitorGeometryEditorStreams()
         }
 }

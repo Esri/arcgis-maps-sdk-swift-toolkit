@@ -19,8 +19,6 @@ import SwiftUI
 struct SnapSettingsView: View {
     /// The snap settings to configure.
     let settings: SnapSettings
-    /// The allowed snap source types shown in the source settings list.
-    let snapSources: GeometryEditorToolbar.SnapSources
     
     /// The view models for the root `SnapSourceSettingsToggle` views in the outline group.
     @State private var rootSourceSettingsModels: [SnapSourceSettingsToggle.Model] = []
@@ -83,14 +81,14 @@ struct SnapSettingsView: View {
                 // Only allows certain snap sources.
                 rootSourceSettingsModels = settings.sourceSettings
                     .compactMap { settings in
-                        guard snapSources.contains(source: settings.source) else { return nil }
+                        guard settings.source is LayerContent else { return nil }
                         return SnapSourceSettingsToggle.Model(settings: settings)
                     }
                 
                 // Disable snapping on other snap sources that aren't exposed
                 // in the UI to avoid confusion.
                 for sourceSettings in settings.sourceSettings {
-                    if !snapSources.contains(source: sourceSettings.source) {
+                    if !(sourceSettings.source is LayerContent) {
                         sourceSettings.isEnabled = false
                     }
                 }
@@ -159,19 +157,10 @@ private struct SnapSourceSettingsToggle: View {
     /// A human-readable label for the settings' source.
     private var sourceLabel: String {
         let source = model.settings.source
-        let name: String? = switch source {
-        case let layer as LayerContent:
+        return if let layer = source as? LayerContent, !layer.name.isEmpty {
             layer.name
-        case let overlay as GraphicsOverlay:
-            overlay.id
-        default:
-            nil
-        }
-        
-        if let name, !name.isEmpty {
-            return name
         } else {
-            return "\(type(of: source))"
+            "\(type(of: source))"
         }
     }
 }
@@ -226,5 +215,5 @@ private extension SnapSourceSettingsToggle {
 }
 
 #Preview {
-    SnapSettingsView(settings: SnapSettings(), snapSources: .all)
+    SnapSettingsView(settings: SnapSettings())
 }

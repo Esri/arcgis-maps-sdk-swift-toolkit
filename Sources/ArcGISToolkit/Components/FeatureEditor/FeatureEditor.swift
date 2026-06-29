@@ -51,6 +51,7 @@ import SwiftUI
 /// - ``ToolbarStyle``
 ///
 /// - Since: 300.1
+@available(visionOS, unavailable)
 public struct FeatureEditor: View {
     /// The style to apply to the toolbar's controls.
     private let toolbarStyle: ToolbarStyle?
@@ -82,21 +83,21 @@ public struct FeatureEditor: View {
     }
     
     public var body: some View {
-        GeometryEditorToolbar(
-            geometryEditor: geometryEditor,
-            style: GeometryEditorToolbar.Style(featureEditorToolbarStyle: toolbarStyle)
-        )
-        // Only shows snap settings for features in layers.
-        .snapSources(.layers)
-        .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
-            model.feature = feature
-        }
-        .onChange(of: ObjectIdentifier(geometryEditor), initial: true) {
-            model.geometryEditor = geometryEditor
-        }
-        .onChange(of: model.feature.map(ObjectIdentifier.init)) {
-            feature = model.feature
-        }
+        FeatureEditorToolbar(style: toolbarStyle)
+            .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
+                model.featureForm = feature.map(FeatureForm.init)
+            }
+            .onChange(of: model.featureForm.map(ObjectIdentifier.init)) {
+                feature = model.featureForm?.feature
+            }
+            .task(id: ObjectIdentifier(geometryEditor)) {
+                model.geometryEditor = geometryEditor
+                await model.monitorGeometryEditorStreams()
+            }
+            .onDisappear {
+                // Hides the inspector when this view disappears.
+                model.featureForm = nil
+            }
     }
 }
 
@@ -108,15 +109,5 @@ extension FeatureEditor {
         case horizontal
         /// Displays the toolbar in a styled vertical layout.
         case vertical
-    }
-}
-
-private extension GeometryEditorToolbar.Style {
-    init?(featureEditorToolbarStyle: FeatureEditor.ToolbarStyle?) {
-        switch featureEditorToolbarStyle {
-        case .horizontal: self = .horizontal
-        case .vertical: self = .vertical
-        default: return nil
-        }
     }
 }
