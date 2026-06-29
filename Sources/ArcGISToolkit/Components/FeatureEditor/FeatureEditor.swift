@@ -102,10 +102,7 @@ public struct FeatureEditor: View {
                 await model.monitorGeometryEditorStreams()
             }
             .task(id: model.viewpointGeometry, setViewpoint)
-            .onDisappear {
-                // Hides the inspector when this view disappears.
-                model.featureForm = nil
-            }
+            .onDisappear(perform: model.reset)
     }
     
     /// Sets the viewpoint using `model.viewpointGeometry` and the `mapViewProxy`.

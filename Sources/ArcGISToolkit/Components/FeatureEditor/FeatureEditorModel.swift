@@ -56,4 +56,16 @@ final class FeatureEditorModel {
             }
         }
     }
+    
+    /// Resets the model's properties to their initial values.
+    ///
+    /// This is needed to prevent the current state from interfering with
+    /// future uses of the `FeatureEditor` view.
+    func reset() {
+        featureForm = nil
+        viewpointGeometry = nil
+        geometryEditorCanUndo = false
+        geometryEditorGeometry = nil
+        geometryEditorIsStarted = false
+    }
 }
