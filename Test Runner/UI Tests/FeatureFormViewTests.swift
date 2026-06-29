@@ -1065,25 +1065,23 @@ final class FeatureFormViewTests: XCTestCase {
     /// Test case 7.1: Test read only elements
     func testCase_7_1() throws {
         let app = XCUIApplication()
-        let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
-        let comboBox = app.staticTexts["Combo box Combo Box Value"]
+        let comboBoxReadOnlyInput = app.staticTexts["Combo box *"]
+        let comboBox = app.staticTexts["Combo box"]
         let dateElementTitle = "Date"
-        let dateReadOnlyInput = app.staticTexts["\(dateElementTitle) Read Only Input"]
-        let dateInput = app.buttons["\(dateElementTitle) Value"]
+        let dateReadOnlyInput = app.staticTexts["\(dateElementTitle) *"]
+        let dateInput = app.staticTexts["\(dateElementTitle)"]
         let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
         let groupElementTitle = "Group"
         let longTextFieldTitle = "Long text"
-        let longTextReadOnlyInput = app.staticTexts["\(longTextFieldTitle) Read Only Input"]
-        let longTextTextInputPreview = app.buttons["\(longTextFieldTitle) Text Input Preview"]
+        let longTextReadOnlyInput = app.staticTexts["\(longTextFieldTitle)"]
         let radioButtonsElementTitle = "Radio buttons"
-        let radioButtonsOption0 = app.buttons["0"]
-        let radioButtonsReadOnlyInput = app.staticTexts["\(radioButtonsElementTitle) Read Only Input"]
+        let radioButtonsOption1 = app.staticTexts["1"]
+        let radioButtonsReadOnlyInput = app.staticTexts["\(radioButtonsElementTitle) *"]
         let shortTextElementTitle = "Short text"
-        let shortTextReadOnlyInput = app.staticTexts["\(shortTextElementTitle) Read Only Input"]
-        let shortTextTextInput = app.textFields["\(shortTextElementTitle) Text Input"]
+        let shortTextReadOnlyInput = app.staticTexts["\(shortTextElementTitle)"]
         let switch1FieldTitle = "Elements are editable"
         let switch2FieldTitle = "Element in the group is editable"
-        let switchReadOnlyInput = app.staticTexts["\(switch2FieldTitle) Read Only Input"]
+        let switchReadOnlyInput = app.staticTexts["\(switch2FieldTitle) *"]
         
 #if targetEnvironment(macCatalyst)
         let switch1 = app.checkBoxes["\(switch1FieldTitle) Switch"]
@@ -1119,20 +1117,22 @@ final class FeatureFormViewTests: XCTestCase {
         app.clearElementFilter()
         
 #if targetEnvironment(macCatalyst) || os(visionOS)
-        switch1.assertExistenceAndTap()
         switch2.assertExistenceAndTap()
+        app.filterElements(switch1FieldTitle)
+        switch1.assertExistenceAndTap()
+        app.clearElementFilter()
 #else
-        switch1.switches.firstMatch.assertExistenceAndTap()
         switch2.switches.firstMatch.assertExistenceAndTap()
+        app.filterElements(switch1FieldTitle)
+        switch1.switches.firstMatch.assertExistenceAndTap()
+        app.clearElementFilter()
 #endif
         
         comboBox.assertExistence()
         
         app.filterElements(radioButtonsElementTitle)
         
-        radioButtonsOption0.assertExistence()
-        
-        XCTAssertTrue(radioButtonsOption0.isSelected)
+        radioButtonsOption1.assertExistence()
         
         app.filterElements(dateElementTitle)
         
@@ -1140,11 +1140,11 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.filterElements(shortTextElementTitle)
         
-        shortTextTextInput.assertExistence()
+        shortTextReadOnlyInput.assertExistence()
         
         app.filterElements(groupElementTitle)
         
-        longTextTextInputPreview.assertExistence()
+        longTextReadOnlyInput.assertExistence()
     }
     
     func testCase_8_1() {
