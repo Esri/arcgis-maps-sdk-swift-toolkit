@@ -107,8 +107,9 @@ public struct FeatureEditor: View {
     
     /// Sets the viewpoint using `model.viewpointGeometry` and the `mapViewProxy`.
     private func setViewpoint() async {
-        guard let mapViewProxy, let viewpointGeometry = model.viewpointGeometry else { return }
+        guard let viewpointGeometry = model.viewpointGeometry else { return }
         defer { model.viewpointGeometry = nil }
+        guard let mapViewProxy else { return }
         
         let expandedGeometry = viewpointGeometry.extent.withBuilder { $0.expand(by: 2) }
         let viewpoint = Viewpoint(boundingGeometry: expandedGeometry)
