@@ -119,7 +119,7 @@ struct AttachmentsFeatureElementView: View {
             AttachmentPreview(
                 attachmentModels: attachmentModels,
                 editControlsDisabled: !isEditable,
-                allowUserRename: allowUserRename,
+                allowUserRename: allowsUserRename,
                 displaysFilename: displaysFilename,
                 lastAttachmentAdded: lastAttachmentAdded,
                 onRename: onRename,
@@ -131,7 +131,7 @@ struct AttachmentsFeatureElementView: View {
                 AttachmentPreview(
                     attachmentModels: attachmentModels,
                     editControlsDisabled: !isEditable,
-                    allowUserRename: allowUserRename,
+                    allowUserRename: allowsUserRename,
                     displaysFilename: displaysFilename,
                     lastAttachmentAdded: lastAttachmentAdded,
                     onRename: onRename,
@@ -194,7 +194,7 @@ struct AttachmentsFeatureElementView: View {
     ///   - attachmentModel: The model for the attachment to rename.
     ///   - newAttachmentName: The new attachment name.
     func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
-        if !allowUserRename {
+        if !allowsUserRename {
             return
         }
         if let attachment = attachmentModel.attachment as? FormAttachment {
@@ -254,12 +254,12 @@ extension AttachmentsFeatureElementView {
     
     /// A Boolean value indicating whether attachment filenames should be shown.
     private var displaysFilename: Bool {
-        formElement?.displayFilename ?? true
+        formElement?.displaysFilename ?? true
     }
     
     /// A Boolean value indicating whether users can rename attachments.
-    private var allowUserRename: Bool {
-        formElement?.allowUserRename ?? true
+    private var allowsUserRename: Bool {
+        formElement?.allowsUserRename ?? true
     }
     
     /// A Boolean value denoting if the view should be shown as regular width.
