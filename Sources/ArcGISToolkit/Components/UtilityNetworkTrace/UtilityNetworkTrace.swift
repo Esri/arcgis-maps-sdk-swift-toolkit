@@ -477,12 +477,18 @@ public struct UtilityNetworkTrace: View {
                         if let selectedTrace = viewModel.selectedTrace {
                             ForEach(selectedTrace.functionOutputs, id: \.objectID) { item in
                                 HStack {
-                                    Text(item.function.networkAttribute.name)
+                                    if !item.function.name.isEmpty {
+                                        Text(item.function.name)
+                                    } else {
+                                        Text(item.function.networkAttribute.name)
+                                    }
                                     Spacer()
                                     VStack(alignment: .trailing) {
-                                        Text(item.function.kind.title)
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
+                                        if item.function.name.isEmpty {
+                                            Text(item.function.kind.title)
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
                                         if let result = item.result as? Double {
                                             Text(result, format: .number)
                                         } else {
