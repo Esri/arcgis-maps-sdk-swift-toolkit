@@ -50,11 +50,8 @@ struct FeatureEditorTests {
         let model = FeatureEditorModel()
         #expect(!model.geometryEditorIsStarted)
         #expect(model.geometryEditorGeometry == nil)
-        Task {
-            // Monitors the geometry editor streams in a separate task to avoid
-            // blocking the main thread.
-            await model.monitorGeometryEditorStreams()
-        }
+        let monitorTask = Task { await model.monitorGeometryEditorStreams() }
+        defer { monitorTask.cancel() }
         model.featureForm = featureForm
         
         // Starts the geometry editor with the feature's geometry.
