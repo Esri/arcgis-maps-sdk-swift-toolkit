@@ -31,6 +31,8 @@ struct FormElementFooter: View {
     @ViewBuilder
     var footerTextForElement: some View {
         switch element {
+        case let element as AttachmentsFormElement:
+            AttachmentsFormElementFooter(element: element)
         case let element as FieldFormElement:
             FieldFormElementFooter(element: element)
         case let element as UtilityAssociationsFormElement:
@@ -44,6 +46,19 @@ struct FormElementFooter: View {
 }
 
 extension FormElementFooter {
+    struct AttachmentsFormElementFooter: View {
+        let element: AttachmentsFormElement
+        
+        var body: some View {
+            if let firstError = element.validationErrors.first as? FeatureFormError {
+                Text(firstError.localizedDescription)
+                    .foregroundStyle(.red)
+            } else if !element.description.isEmpty {
+                Text(element.description)
+            }
+        }
+    }
+    
     struct FieldFormElementFooter: View {
         /// The view model for the form.
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
