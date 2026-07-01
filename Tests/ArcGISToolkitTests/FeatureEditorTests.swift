@@ -23,8 +23,8 @@ struct FeatureEditorTests {
     func modelInitializer() {
         let model = FeatureEditorModel()
         #expect(model.featureForm == nil)
-        #expect(model.geometryEditorGeometry == nil)
         #expect(!model.geometryEditorCanUndo)
+        #expect(model.geometryEditorGeometry == nil)
         #expect(!model.geometryEditorIsStarted)
     }
     
@@ -41,7 +41,7 @@ struct FeatureEditorTests {
         let parameters = QueryParameters()
         parameters.addObjectID(3651)
         let result = try await #require(layer.featureTable?.queryFeatures(using: parameters))
-        let feature = try #require(result.features().compactMap { $0 }.first as? ArcGISFeature)
+        let feature = try #require(result.features().makeIterator().next() as? ArcGISFeature)
         let featureForm = FeatureForm(feature: feature)
         let geometry = try #require(feature.geometry)
         
