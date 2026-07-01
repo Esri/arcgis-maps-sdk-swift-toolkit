@@ -192,15 +192,23 @@ struct AttachmentImportMenu: View {
                 .progressViewStyle(.circular)
                 .catalystPadding(5)
         }
-        if isBelowMinimumAttachmentCount {
-            Text(minimumAttachmentCountMessage)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+        if isBelowMinimumAttachmentCount, let minimum = element.minAttachmentCount {
+            Text(
+                "At least ^[\(minimum) attachments](inflect: true) required.",
+                bundle: .toolkitModule,
+                comment: "A message indicating the minimum number of attachments required for a form element."
+            )
+            .font(.caption)
+            .foregroundStyle(.secondary)
         }
-        if hasReachedMaximumAttachmentCount {
-            Text(maximumAttachmentCountReachedMessage)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+        if hasReachedMaximumAttachmentCount, let maximum = element.maxAttachmentCount {
+            Text(
+                "Maximum of ^[\(maximum) attachments](inflect: true) reached.",
+                bundle: .toolkitModule,
+                comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
+            )
+            .font(.caption)
+            .foregroundStyle(.secondary)
         } else {
             menu
         }
@@ -416,24 +424,6 @@ private extension AttachmentImportMenu {
         Button(String.settings) {
             Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
         }
-    }
-    
-    /// A message indicating the maximum number of attachments has been reached.
-    var maximumAttachmentCountReachedMessage: String {
-        .init(
-            localized: "Maximum of \(element.maxAttachmentCount) attachments reached.",
-            bundle: .toolkitModule,
-            comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
-        )
-    }
-    
-    /// A message indicating the minimum number of attachments required.
-    var minimumAttachmentCountMessage: String {
-        .init(
-            localized: "At least \(element.minAttachmentCount) attachment(s) required.",
-            bundle: .toolkitModule,
-            comment: "A message indicating the minimum number of attachments required for a form element."
-        )
     }
     
     /// A label for a button to capture a new photo.
