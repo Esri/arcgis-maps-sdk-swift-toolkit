@@ -47,15 +47,35 @@ struct FormElementFooter: View {
 
 extension FormElementFooter {
     struct AttachmentsFormElementFooter: View {
+        /// The view model for the form.
+        @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+        /// The model for the FeatureFormView containing the view.
+        @Environment(FeatureFormViewModel.self) private var featureFormViewModel
+        /// The developer configurable validation error visibility.
+        @Environment(\.validationErrorVisibilityExternal) private var validationErrorVisibilityExternal
+        
         let element: AttachmentsFormElement
         
         var body: some View {
-            if let firstError = element.validationErrors.first as? FeatureFormError {
+            if isShowingError,
+               let firstError = element.validationErrors.first as? FeatureFormError {
                 Text(firstError.localizedDescription)
                     .foregroundStyle(.red)
             } else if !element.description.isEmpty {
                 Text(element.description)
             }
+        }
+        
+        /// A Boolean value which indicates whether or not an error is showing in the footer.
+        var isShowingError: Bool {
+            element.isEditable
+            && !element.validationErrors.isEmpty
+            &&
+            (
+                embeddedFeatureFormViewModel.previouslyFocusedElements.contains(element)
+                || validationErrorVisibilityExternal == .visible
+                || featureFormViewModel.validationErrorVisibilityInternal == .visible
+            )
         }
     }
     
