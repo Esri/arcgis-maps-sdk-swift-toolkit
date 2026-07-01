@@ -12,12 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#warning("Prototype only - revise this for proper handling.")
+import ArcGIS
+
 /// The state of importing a new attachment.
 enum AttachmentImportState: Equatable {
     case none
     case importing
     case finalizing(AttachmentImportData)
     case errored(AttachmentImportError)
+
+#warning("Prototype only - revise this for proper handling.")
+    case fferror(FeatureFormError)
     
     /// A Boolean value indicating if a new attachment is being imported.
     var importInProgress: Bool {

@@ -295,36 +295,6 @@ struct AttachmentImportMenu: View {
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
             
-            if let maxAttachmentCount = element.maxAttachmentCount {
-                let attachmentsCount: Int
-                do {
-                    let attachments = try await element.attachments
-                    attachmentsCount = attachments.count
-                } catch {
-                    importState = .errored(.system(error.localizedDescription))
-                    return
-                }
-                guard attachmentsCount < maxAttachmentCount else {
-                    importState = .errored(.system("Attachment count limit reached."))
-                    return
-                }
-            }
-            
-            if let data = newAttachmentImportData.data {
-                let attachmentSize = Measurement(
-                    value: Double(data.count),
-                    unit: UnitInformationStorage.bytes
-                )
-                guard attachmentSize <= attachmentUploadSizeLimit else {
-                    importState = .errored(.sizeLimitExceeded)
-                    return
-                }
-                guard attachmentSize.value > .zero else {
-                    importState = .errored(.emptyFilesNotSupported)
-                    return
-                }
-            }
-            
             let fileName: String
             if element.usesOriginalFilename,
                let originalName = newAttachmentImportData.fileName,
@@ -345,29 +315,42 @@ struct AttachmentImportMenu: View {
                 }
             }
             
-            var newAttachment: FeatureAttachment? = nil
+            let uploadResult: Result<FormAttachment, Error>
             if let url = newAttachmentImportData.filePath,
                url.startAccessingSecurityScopedResource() {
-                newAttachment = try? await element.addAttachment(
-                    contentType: newAttachmentImportData.contentType,
-                    fileURL: url,
-                    name: fileName
-                )
+                uploadResult = await Result {
+                    try await element.addAttachment(
+                        contentType: newAttachmentImportData.contentType,
+                        fileURL: url,
+                        name: fileName
+                    )
+                }
                 url.stopAccessingSecurityScopedResource()
             } else if let data = newAttachmentImportData.data {
-                newAttachment = try? await element.addAttachment(
-                    contentType: newAttachmentImportData.contentType,
-                    data: data,
-                    name: fileName
-                )
+                uploadResult = await Result {
+                    try await element.addAttachment(
+                        contentType: newAttachmentImportData.contentType,
+                        data: data,
+                        name: fileName
+                    )
+                }
+            } else {
+                uploadResult = .failure(AttachmentImportError.creationFailed)
             }
             
-            guard let newAttachment else {
-                importState = .errored(.creationFailed)
+            switch uploadResult {
+            case let .success(newAttachment):
+                onAdd?(newAttachment)
+                importState = .none
+            case let .failure(error):
+                if let ffe = error as? FeatureFormError {
+                    importState = .fferror(ffe)
+                } else {
+                    importState = .errored(.creationFailed)
+                }
+                
                 return
             }
-            onAdd?(newAttachment)
-            importState = .none
         }
         .fileImporter(isPresented: $fileImporterIsPresented, allowedContentTypes: allowedFileImporterTypes) { result in
             importState = .importing
