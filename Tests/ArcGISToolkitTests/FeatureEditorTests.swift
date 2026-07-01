@@ -29,7 +29,7 @@ struct FeatureEditorTests {
     }
     
     @Test
-    func geometryEditorIsStartedStateChanges() async throws {
+    func monitorGeometryEditorStreams() async throws {
         // Loads a Naperville water network web map with a feature layer and
         // queries a feature to create a feature form.
         let map = Map(item: PortalItem(
