@@ -185,6 +185,7 @@ struct AttachmentsFeatureElementView: View {
         )
         models.insert(newModel, at: 0)
         withAnimation { attachmentModels = .success(models) }
+        embeddedFeatureFormViewModel?.focusedElement = formElement
         embeddedFeatureFormViewModel?.evaluateExpressions()
         lastAttachmentAdded = newModel
     }
@@ -200,6 +201,7 @@ struct AttachmentsFeatureElementView: View {
         if let attachment = attachmentModel.attachment as? FormAttachment {
             attachment.name = newAttachmentName
             withAnimation { attachmentModel.sync() }
+            embeddedFeatureFormViewModel?.focusedElement = formElement
             embeddedFeatureFormViewModel?.evaluateExpressions()
         }
     }
@@ -213,6 +215,7 @@ struct AttachmentsFeatureElementView: View {
             guard case .success(var models) = attachmentModels else { return }
             models.removeAll { $0 === attachmentModel }
             withAnimation { attachmentModels = .success(models) }
+            embeddedFeatureFormViewModel?.focusedElement = formElement
             embeddedFeatureFormViewModel?.evaluateExpressions()
         }
     }
