@@ -45,7 +45,7 @@ struct AttachmentPreview: View {
     private let editControlsDisabled: Bool
     
     /// A Boolean value indicating whether users can rename attachments.
-    private let allowUserRename: Bool
+    private let allowsUserRename: Bool
     
     /// A Boolean value indicating whether attachment filenames are displayed.
     private let displaysFilename: Bool
@@ -65,7 +65,7 @@ struct AttachmentPreview: View {
     init(
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
-        allowUserRename: Bool = true,
+        allowsUserRename: Bool = true,
         displaysFilename: Bool = true,
         lastAttachmentAdded: AttachmentModel? = nil,
         onRename: (@MainActor (AttachmentModel, String) -> Void)? = nil,
@@ -75,7 +75,7 @@ struct AttachmentPreview: View {
         self.attachmentModels = attachmentModels
         self.proposedCellSize = proposedCellSize
         self.editControlsDisabled = editControlsDisabled
-        self.allowUserRename = allowUserRename
+        self.allowsUserRename = allowsUserRename
         self.displaysFilename = displaysFilename
         self.lastAttachmentAdded = lastAttachmentAdded
         self.onRename = onRename
@@ -106,7 +106,7 @@ struct AttachmentPreview: View {
             )
             .contextMenu {
                 if !editControlsDisabled && !attachmentModel.attachment.measuredSize.value.isZero {
-                    if allowUserRename,
+                    if allowsUserRename,
                        attachmentModel.attachment.measuredSize <= attachmentDownloadSizeLimit {
                         Button {
                             renamedAttachmentModel = attachmentModel

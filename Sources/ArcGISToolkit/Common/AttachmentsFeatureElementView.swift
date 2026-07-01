@@ -119,7 +119,7 @@ struct AttachmentsFeatureElementView: View {
             AttachmentPreview(
                 attachmentModels: attachmentModels,
                 editControlsDisabled: !isEditable,
-                allowUserRename: allowsUserRename,
+                allowsUserRename: allowsUserRename,
                 displaysFilename: displaysFilename,
                 lastAttachmentAdded: lastAttachmentAdded,
                 onRename: onRename,
@@ -131,7 +131,7 @@ struct AttachmentsFeatureElementView: View {
                 AttachmentPreview(
                     attachmentModels: attachmentModels,
                     editControlsDisabled: !isEditable,
-                    allowUserRename: allowsUserRename,
+                    allowsUserRename: allowsUserRename,
                     displaysFilename: displaysFilename,
                     lastAttachmentAdded: lastAttachmentAdded,
                     onRename: onRename,
