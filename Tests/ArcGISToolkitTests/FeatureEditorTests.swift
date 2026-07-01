@@ -48,8 +48,9 @@ struct FeatureEditorTests {
         // Creates a model and starts the geometry editor with the feature form
         // and geometry.
         let model = FeatureEditorModel()
-        #expect(!model.geometryEditorIsStarted)
+        #expect(model.featureForm == nil)
         #expect(model.geometryEditorGeometry == nil)
+        #expect(!model.geometryEditorIsStarted)
         let monitorTask = Task { await model.monitorGeometryEditorStreams() }
         defer { monitorTask.cancel() }
         model.featureForm = featureForm
@@ -72,5 +73,11 @@ struct FeatureEditorTests {
         
         // The feature form remains the same after stopping the geometry editor.
         #expect(model.featureForm === featureForm)
+        
+        // Resets the model.
+        model.reset()
+        #expect(model.featureForm == nil)
+        #expect(model.geometryEditorGeometry == nil)
+        #expect(!model.geometryEditorIsStarted)
     }
 }
