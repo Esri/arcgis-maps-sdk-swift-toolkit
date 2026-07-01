@@ -124,6 +124,9 @@ struct AttachmentPreview: View {
                             }
                         }
                     }
+                    Button.delete {
+                        deletedAttachmentModel = attachmentModel
+                    }
                 }
             }
         }
