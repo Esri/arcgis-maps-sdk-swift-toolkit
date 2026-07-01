@@ -476,21 +476,15 @@ public struct UtilityNetworkTrace: View {
                     ) {
                         if let selectedTrace = viewModel.selectedTrace {
                             ForEach(selectedTrace.functionOutputs, id: \.objectID) { item in
-                                HStack {
-                                    if !item.function.name.isEmpty {
-                                        Text(item.function.name)
-                                    } else {
-                                        Text(item.function.networkAttribute.name)
-                                    }
-                                    Spacer()
+                                LabeledContent {
                                     VStack(alignment: .trailing) {
                                         if item.function.name.isEmpty {
                                             Text(item.function.kind.title)
                                                 .font(.caption)
-                                                .foregroundStyle(.secondary)
                                         }
                                         if let result = item.result as? Double {
                                             Text(result, format: .number)
+                                                .foregroundStyle(.primary)
                                         } else {
                                             Text(
                                                 "Not Available",
@@ -498,6 +492,12 @@ public struct UtilityNetworkTrace: View {
                                                 comment: "A trace function output result was not provided."
                                             )
                                         }
+                                    }
+                                } label: {
+                                    if !item.function.name.isEmpty {
+                                        Text(item.function.name)
+                                    } else {
+                                        Text(item.function.networkAttribute.name)
                                     }
                                 }
                             }
