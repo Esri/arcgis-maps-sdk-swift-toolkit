@@ -15,9 +15,26 @@
 import XCTest
 
 @MainActor
-final class GeometryEditorToolbarTests: XCTestCase {
+final class FeatureEditorToolbarTests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
+    }
+    
+    /// Adds launch arguments specifying the feature to use and opens the feature editor test view.
+    /// - Parameters:
+    ///   - objectID: The object ID of the feature that will be used by the test setup.
+    ///   - layerName: The name of the `FeatureLayer` containing the feature.
+    func openFeatureEditorToolbarTestsWithStartingFeature(_ objectID: Int, on layerName: String) {
+        let app = XCUIApplication()
+        let geometryEditorToolbarTestsButton = app.buttons["Feature Editor Tests"]
+        
+        // Adds the launch arguments that will be read in the test view.
+        let arguments = ["-objectID", "\(objectID)", "-layerName", "\(layerName)"]
+        app.launchArguments.append(contentsOf: arguments)
+        
+        // Opens the geometry editor toolbar test view.
+        app.launch()
+        geometryEditorToolbarTestsButton.assertExistenceAndTap()
     }
     
     /// Tests the default style for the geometry editor toolbar is vertical.
@@ -25,10 +42,7 @@ final class GeometryEditorToolbarTests: XCTestCase {
     /// by comparing their midY values.
     func testGeometryEditorToolbarDefaultStyleIsVertical() {
         let app = XCUIApplication()
-        app.launch()
-        
-        app.buttons["Geometry Editor Toolbar Tests"].assertExistenceAndTap()
-        app.buttons["Point"].assertExistenceAndTap()
+        openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
         let toolButton = app.buttons["Tool"]
         let deleteButton = app.buttons["Delete Selected Element"]
@@ -49,14 +63,9 @@ final class GeometryEditorToolbarTests: XCTestCase {
     /// is started, and disappears when it is stopped.
     func testGeometryEditorToolbarAppearsWhenEditorStarts() {
         let app = XCUIApplication()
-        app.launch()
-        
-        app.buttons["Geometry Editor Toolbar Tests"].assertExistenceAndTap()
+        openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
         let toolButton = app.buttons["Tool"]
-        toolButton.assertNonExistence(timeout: 1)
-        
-        app.buttons["Point"].assertExistenceAndTap()
         toolButton.assertExistence(timeout: 1)
         
         app.buttons["Stop"].assertExistenceAndTap()
@@ -67,10 +76,7 @@ final class GeometryEditorToolbarTests: XCTestCase {
     /// tools when the geometry editor is started with point type.
     func testPointToolPickerButtons() {
         let app = XCUIApplication()
-        app.launch()
-        
-        app.buttons["Geometry Editor Toolbar Tests"].assertExistenceAndTap()
-        app.buttons["Point"].assertExistenceAndTap()
+        openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
         let toolButton = app.buttons["Tool"]
         toolButton.assertExistenceAndTap(timeout: 1)
@@ -89,10 +95,7 @@ final class GeometryEditorToolbarTests: XCTestCase {
     /// when the geometry editor is started with polyline type.
     func testPolylineToolPickerButtons() {
         let app = XCUIApplication()
-        app.launch()
-        
-        app.buttons["Geometry Editor Toolbar Tests"].assertExistenceAndTap()
-        app.buttons["Polyline"].assertExistenceAndTap()
+        openFeatureEditorToolbarTestsWithStartingFeature(2525, on: .electricDistributionLine)
         
         let toolButton = app.buttons["Tool"]
         toolButton.assertExistenceAndTap(timeout: 1)
@@ -111,4 +114,33 @@ final class GeometryEditorToolbarTests: XCTestCase {
         
         app.buttons["Stop"].assertExistenceAndTap()
     }
+    
+    func testPolygonToolPickerButtons() {
+        let app = XCUIApplication()
+        openFeatureEditorToolbarTestsWithStartingFeature(1, on: .structureBoundary)
+        
+        let toolButton = app.buttons["Tool"]
+        toolButton.assertExistenceAndTap(timeout: 1)
+        
+        [
+            "Freehand",
+            "Vertex",
+            "Reticle",
+            "Arrow",
+            "Ellipse",
+            "Rectangle",
+            "Triangle"
+        ].forEach { label in
+            app.buttons[label].assertExistence(timeout: 1)
+        }
+        
+        app.buttons["Stop"].assertExistenceAndTap()
+    }
+}
+
+
+private extension String {
+    static let electricDistributionDevice = "Electric Distribution Device"
+    static let electricDistributionLine = "Electric Distribution Line"
+    static let structureBoundary = "Structure Boundary"
 }

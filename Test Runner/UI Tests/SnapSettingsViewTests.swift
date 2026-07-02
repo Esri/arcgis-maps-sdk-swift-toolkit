@@ -20,15 +20,31 @@ final class SnapSettingsViewTests: XCTestCase {
         continueAfterFailure = false
     }
     
+    /// Adds launch arguments specifying the feature to edit and opens the feature editor test view.
+    /// - Parameters:
+    ///   - objectID: The object ID of the feature that will be edited.
+    ///   - layerName: The name of the `FeatureLayer` containing the feature.
+    func openFeatureEditorWithStartingPoint(_ objectID: Int, on layerName: String) {
+        let app = XCUIApplication()
+        let featureEditorTestsButton = app.buttons["Feature Editor Tests"]
+        
+        // Adds the launch arguments that will be read in the test view.
+        let arguments = ["-objectID", "\(objectID)", "-layerName", "\(layerName)"]
+        app.launchArguments.append(contentsOf: arguments)
+        
+        // Opens the feature editor test view.
+        app.launch()
+        featureEditorTestsButton.tap()
+    }
+    
     /// Verifies the snap settings toggles states when a feature is selected
     /// for editing.
     /// visionOS does not support inspector, so mark it unavailable on visionOS.
     @available(visionOS, unavailable)
     func testDefaultToggleStatesAndPreservation() {
         let app = XCUIApplication()
-        app.launch()
         
-        app.buttons["Feature Editor Tests"].tap()
+        openFeatureEditorWithStartingPoint(3321, on: .electricDistributionDevice)
         app.buttons["Settings"].assertExistenceAndTap()
         
         let geometryGuidesToggle = app.snapToggle(named: "Snap to Geometry Guides")
@@ -76,4 +92,8 @@ private extension XCUIElement {
         switches.firstMatch.tap()
 #endif
     }
+}
+
+private extension String {
+    static let electricDistributionDevice = "Electric Distribution Device"
 }
