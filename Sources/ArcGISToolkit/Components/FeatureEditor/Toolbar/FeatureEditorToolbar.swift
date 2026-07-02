@@ -154,11 +154,9 @@ private struct SnapSettingsButton: View {
     /// A Boolean value indicating whether the settings view is presented.
     @State private var isShowingSettings = false
     
-    /// The snap settings for the feature editor model's geometry editor.
-    private var snapSettings: SnapSettings { featureEditorModel.geometryEditor.snapSettings }
-    
     var body: some View {
         Button {
+            featureEditorModel.syncSnapSourceSettings()
             isShowingSettings.toggle()
         } label: {
             Label {
@@ -172,13 +170,9 @@ private struct SnapSettingsButton: View {
             }
         }
         .sheet(isPresented: $isShowingSettings) {
-            SnapSettingsView(settings: snapSettings)
+            SnapSettingsView(settings: featureEditorModel.geometryEditor.snapSettings)
             // Needed to override the font set in toolbarStackStyle.
                 .font(nil)
-        }
-        .onChange(of: ObjectIdentifier(snapSettings), initial: true) {
-            // Snapping is enabled by default to simplify the SnapSettingsView UI.
-            snapSettings.isEnabled = true
         }
     }
 }

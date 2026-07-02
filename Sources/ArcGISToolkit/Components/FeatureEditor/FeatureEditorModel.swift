@@ -14,18 +14,37 @@
 
 import ArcGIS
 import Observation
+import OSLog
 
 /// A data model that contains various properties that are needed for the
 /// feature editor and shared between the modifier and the view.
 @MainActor
 @Observable
 final class FeatureEditorModel {
-    /// The feature form to edit with the feature editor.
-    var featureForm: FeatureForm?
+    // MARK: Properties
+    
+    /// The feature currently being edited by the feature editor.
+    var feature: ArcGISFeature? {
+        presentedFeatureForm?.feature ?? rootFeatureForm?.feature
+    }
+    /// A Boolean value that indicates whether the Feature Editor inspector is presented.
+    /// This maps `rootFeatureForm` to a Boolean value.
+    var isPresented: Bool {
+        get { rootFeatureForm != nil }
+        set {
+            guard !newValue else { return }
+            stopEditing()
+        }
+    }
+    /// The form currently presented in the feature editor's `FeatureFormView`.
+    /// This is non-`nil` after navigating to an association feature.
+    private var presentedFeatureForm: FeatureForm?
+    /// The root feature form to edit with the feature editor.
+    private(set) var rootFeatureForm: FeatureForm?
     /// The geometry used to set the viewpoint.
     var viewpointGeometry: Geometry?
     
-    // MARK: Geometry Editor
+    // MARK: Geometry Editor Properties
     
     /// The geometry editor that the feature editor will use to edit geometries on the `MapView`.
     var geometryEditor = GeometryEditor()
@@ -35,6 +54,15 @@ final class FeatureEditorModel {
     private(set) var geometryEditorGeometry: Geometry?
     /// A Boolean value indicating whether the geometry editor has started.
     private(set) var geometryEditorIsStarted = false
+    
+    // MARK: Snapping Properties
+    
+    /// The snap rules for the `feature`, if applicable, used to sync snap source settings.
+    private var snapRules: SnapRules?
+    /// The `feature`'s utility network, if applicable, used to create snap rules.
+    private var utilityNetwork: UtilityNetwork?
+    
+    // MARK: Methods
     
     /// Monitors geometry editor streams and updates the corresponding properties.
     func monitorGeometryEditorStreams() async {
@@ -57,15 +85,117 @@ final class FeatureEditorModel {
         }
     }
     
-    /// Resets the model's properties to their initial values.
+    /// Restarts the `geometryEditor` if it is started.
+    /// This can be used to discard geometry edits or set up a new geometry editor.
+    func restartGeometryEditor() {
+        guard geometryEditorIsStarted else { return }
+        startGeometryEditor()
+    }
+    
+    /// Starts editing a new `FeatureForm` that is shown in the feature editor's `FeatureFormView`.
+    /// - Parameter featureForm: The new feature form to edit.
+    func startEditing(newFeatureForm featureForm: FeatureForm) async throws {
+        geometryEditor.stop()
+        presentedFeatureForm = featureForm
+        
+        try await setUpGeometryEditing()
+    }
+    
+    /// Starts an editing session for the given `feature`.
+    /// - Parameters:
+    ///   - feature: The root feature to edit.
+    ///   - map: The map that `feature` is part of, used to set up rule-based snapping.
+    func startEditing(rootFeature feature: ArcGISFeature, on map: Map?) async throws {
+        stopEditing()
+        rootFeatureForm = FeatureForm(feature: feature)
+        
+        // Sets up the utility network so snap rules can be created.
+        if let map {
+            try? await map.load()
+            await map.utilityNetworks.load()
+            utilityNetwork = map.utilityNetworks.first { utilityNetwork in
+                utilityNetwork.makeElement(arcGISFeature: feature) != nil
+            }
+        }
+        
+        try await setUpGeometryEditing()
+    }
+    
+    /// Stops the feature editor and resets the model's properties.
     ///
     /// This is needed to prevent the current state from interfering with
     /// future uses of the `FeatureEditor` view.
-    func reset() {
-        featureForm = nil
+    func stopEditing() {
+        rootFeatureForm = nil
+        presentedFeatureForm = nil
         viewpointGeometry = nil
+        
+        geometryEditor.stop()
         geometryEditorCanUndo = false
         geometryEditorGeometry = nil
         geometryEditorIsStarted = false
+        
+        snapRules = nil
+        utilityNetwork = nil
+    }
+    
+    /// Syncs the `geometryEditor.snapSettings`' source settings.
+    func syncSnapSourceSettings() {
+        do {
+            let snapSettings = geometryEditor.snapSettings
+            
+            if let snapRules {
+                try snapSettings.syncSourceSettings(
+                    rules: snapRules,
+                    sourceEnablingBehavior: .setFromRules
+                )
+            } else {
+                try snapSettings.syncSourceSettings()
+            }
+            
+            // Snapping is enabled by default to simplify the `SnapSettingsView` UI.
+            snapSettings.isEnabled = true
+        } catch {
+            Logger.featureEditor.error(
+                "Error syncing snap source settings: \(String(describing: error))"
+            )
+        }
+    }
+    
+    /// Performs setup needed for geometry editing and starts the geometry editor if applicable.
+    private func setUpGeometryEditing() async throws {
+        guard let feature else { return }
+        
+        // Loads the feature so canUpdateGeometry can be accessed. It is always false otherwise.
+        try await feature.load()
+        guard feature.canUpdateGeometry else { return }
+        
+        // Loads the feature's table if the geometry is nil so geometryType can be accessed.
+        // It is always nil otherwise.
+        if feature.geometry == nil, let table = feature.table {
+            try await table.load()
+        }
+        
+        // Sets up the snap rules and syncs the snap source settings.
+        if let utilityNetwork, let element = utilityNetwork.makeElement(arcGISFeature: feature) {
+            snapRules = try? await .rules(for: utilityNetwork, assetType: element.assetType)
+        } else {
+            snapRules = nil
+        }
+        syncSnapSourceSettings()
+        
+        startGeometryEditor()
+    }
+    
+    /// Starts the geometry editor using the `feature`.
+    private func startGeometryEditor() {
+        guard let feature else { return }
+        
+        if let geometry = feature.geometry {
+            geometryEditor.start(withInitial: geometry)
+            viewpointGeometry = geometry
+        } else if let geometryType = feature.table?.geometryType {
+            geometryEditor.start(withType: geometryType)
+        }
     }
 }
