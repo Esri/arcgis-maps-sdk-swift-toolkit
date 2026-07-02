@@ -144,11 +144,8 @@ final class FeatureEditorModel {
         do {
             let snapSettings = geometryEditor.snapSettings
             
-            if let snapRules {
-                try snapSettings.syncSourceSettings(
-                    rules: snapRules,
-                    sourceEnablingBehavior: .setFromRules
-                )
+            if let rules = snapRules {
+                try snapSettings.syncSourceSettings(rules: rules, sourceEnablingBehavior: .preserve)
             } else {
                 try snapSettings.syncSourceSettings()
             }

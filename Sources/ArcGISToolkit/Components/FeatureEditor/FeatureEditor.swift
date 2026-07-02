@@ -104,14 +104,16 @@ public struct FeatureEditor: View {
                 await model.monitorGeometryEditorStreams()
             }
             .task(id: EquatableBox(objects: [feature, map])) {
-                guard let feature else { return }
-                
-                do {
-                    try await model.startEditing(rootFeature: feature, on: map)
-                } catch {
-                    Logger.featureEditor.error(
-                        "Error starting geometry editor: \(String(describing: error))"
-                    )
+                if let feature {
+                    do {
+                        try await model.startEditing(rootFeature: feature, on: map)
+                    } catch {
+                        Logger.featureEditor.error(
+                            "Error starting feature editor: \(String(describing: error))"
+                        )
+                    }
+                } else {
+                    model.stopEditing()
                 }
             }
             .onChange(of: model.isPresented) {

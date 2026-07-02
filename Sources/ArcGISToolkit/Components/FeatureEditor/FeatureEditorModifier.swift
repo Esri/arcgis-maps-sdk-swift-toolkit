@@ -26,8 +26,7 @@ public extension View {
     }
 }
 
-/// A view modifier that presents a `FeatureEditorView` in an inspector when
-/// a feature is non-`nil`.
+/// A view modifier that presents a `FeatureEditorFormView` in an inspector.
 @available(visionOS, unavailable)
 private struct FeatureEditorModifier: ViewModifier {
     /// The feature editor model shared by the toolbar and inspector.

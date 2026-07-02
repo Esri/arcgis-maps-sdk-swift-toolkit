@@ -82,7 +82,7 @@ struct ExampleMapView: View {
                     FeatureEditor(
                         $featureToEdit,
                         geometryEditor: geometryEditor,
-                        map: map, 
+                        map: map,
                         mapViewProxy: mapViewProxy
                     )
                     .padding()
@@ -97,7 +97,7 @@ struct ExampleMapView: View {
         }
     }
     
-    /// Sets up the map and snap settings.
+    /// Sets up the map.
     private func setUp() async throws {
         // Note: Never hardcode login information in a production application.
         // This is done solely for the sake of the example.
