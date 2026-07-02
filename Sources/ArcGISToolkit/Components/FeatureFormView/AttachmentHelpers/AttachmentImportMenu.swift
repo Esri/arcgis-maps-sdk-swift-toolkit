@@ -271,13 +271,15 @@ struct AttachmentImportMenu: View {
                 }
             }
         } label: {
-            Text(
-                "Add Attachment",
-                bundle: .toolkitModule,
-                comment: "A label for a button to add a new file attachment."
-            )
-            .frame(maxWidth: .infinity)
-            .contentShape(.rect)
+            Label {
+                Text(
+                    "Add Attachment",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to add a new file attachment."
+                )
+            } icon: {
+                Image(systemName: "plus.circle.fill")
+            }
         }
         .disabled(importState.importInProgress)
         .cameraRequester(cameraRequester)
