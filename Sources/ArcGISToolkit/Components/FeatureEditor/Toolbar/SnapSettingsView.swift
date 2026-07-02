@@ -56,6 +56,7 @@ struct SnapSettingsView: View {
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .disabled(rootSourceSettingsModels.isEmpty)
                 .onChange(of: snapsToFeatures) {
                     settings.snapsToFeatures = snapsToFeatures
                 }
@@ -94,7 +95,9 @@ struct SnapSettingsView: View {
                 }
                 
                 // Sets up view's state properties using settings' property values.
-                snapsToFeatures = settings.snapsToFeatures
+                snapsToFeatures = !rootSourceSettingsModels.isEmpty
+                ? settings.snapsToFeatures
+                : false
                 snapsToGeometryGuides = settings.snapsToGeometryGuides
             }
             .navigationTitle(

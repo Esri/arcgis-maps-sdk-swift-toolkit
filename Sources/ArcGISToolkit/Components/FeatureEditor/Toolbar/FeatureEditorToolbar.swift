@@ -158,29 +158,27 @@ private struct SnapSettingsButton: View {
     private var snapSettings: SnapSettings { featureEditorModel.geometryEditor.snapSettings }
     
     var body: some View {
-        if !snapSettings.sourceSettings.isEmpty {
-            Button {
-                isShowingSettings.toggle()
-            } label: {
-                Label {
-                    Text(
-                        "Settings",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to show settings for configuring snapping."
-                    )
-                } icon: {
-                    Image(systemName: "gear")
-                }
+        Button {
+            isShowingSettings.toggle()
+        } label: {
+            Label {
+                Text(
+                    "Settings",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to show settings for configuring snapping."
+                )
+            } icon: {
+                Image(systemName: "gear")
             }
-            .sheet(isPresented: $isShowingSettings) {
-                SnapSettingsView(settings: snapSettings)
-                // Needed to override the font set in toolbarStackStyle.
-                    .font(nil)
-            }
-            .onChange(of: ObjectIdentifier(snapSettings), initial: true) {
-                // Snapping is enabled by default to simplify the SnapSettingsView UI.
-                snapSettings.isEnabled = true
-            }
+        }
+        .sheet(isPresented: $isShowingSettings) {
+            SnapSettingsView(settings: snapSettings)
+            // Needed to override the font set in toolbarStackStyle.
+                .font(nil)
+        }
+        .onChange(of: ObjectIdentifier(snapSettings), initial: true) {
+            // Snapping is enabled by default to simplify the SnapSettingsView UI.
+            snapSettings.isEnabled = true
         }
     }
 }
