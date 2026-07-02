@@ -37,7 +37,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         geometryEditorToolbarTestsButton.assertExistenceAndTap()
     }
     
-    /// Tests the default style for the geometry editor toolbar is vertical.
+    /// Tests the default style for the feature editor toolbar is vertical.
     /// Verifies that the tool button is positioned above the delete button
     /// by comparing their midY values.
     func testGeometryEditorToolbarDefaultStyleIsVertical() {
@@ -59,9 +59,9 @@ final class FeatureEditorToolbarTests: XCTestCase {
         )
     }
     
-    /// Tests the geometry editor toolbar appears when a geometry editor
+    /// Tests the feature editor toolbar appears when the feature editor
     /// is started, and disappears when it is stopped.
-    func testGeometryEditorToolbarAppearsWhenEditorStarts() {
+    func testFeatureEditorToolbarAppearsWhenEditorStarts() {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
@@ -72,8 +72,8 @@ final class FeatureEditorToolbarTests: XCTestCase {
         toolButton.assertNonExistence(timeout: 1)
     }
     
-    /// Tests the geometry editor tool picker shows only vertex-based
-    /// tools when the geometry editor is started with point type.
+    /// Tests the feature editor tool picker shows only vertex-based
+    /// tools when the feature editor is started with a point feature.
     func testPointToolPickerButtons() {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
@@ -92,7 +92,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     }
     
     /// Tests all geometry editing tools are available in the tool picker
-    /// when the geometry editor is started with polyline type.
+    /// when the feature editor is started with a polyline feature.
     func testPolylineToolPickerButtons() {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(2525, on: .electricDistributionLine)
@@ -115,6 +115,8 @@ final class FeatureEditorToolbarTests: XCTestCase {
         app.buttons["Stop"].assertExistenceAndTap()
     }
     
+    /// Tests all geometry editing tools are available in the tool picker
+    /// when the feature editor is started with a polygon feature.
     func testPolygonToolPickerButtons() {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(1, on: .structureBoundary)
