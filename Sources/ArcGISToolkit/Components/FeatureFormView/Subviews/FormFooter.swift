@@ -29,13 +29,13 @@ struct FormFooter: View {
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
     var body: some View {
-        HStack {
-            discardButton
-                .inspectorTint(.red)
-            Spacer()
+//        HStack {
+//            discardButton
+//                .inspectorTint(.red)
+//            Spacer()
             saveButton
                 .inspectorTint(.blue)
-        }
+//        }
     }
     
     var discardButton: some View {
