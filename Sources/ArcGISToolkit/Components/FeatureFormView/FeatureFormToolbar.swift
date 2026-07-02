@@ -89,7 +89,7 @@ struct FeatureFormToolbar: ViewModifier {
                     }
                 }
                 if let isPresented {
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .topBarLeading) {
                         DismissButton(kind: .cancel) {
                             if hasEdits {
                                 featureFormViewModel.navigationAlertInfo = (false, {
