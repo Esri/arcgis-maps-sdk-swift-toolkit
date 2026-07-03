@@ -95,9 +95,7 @@ struct SnapSettingsView: View {
                 }
                 
                 // Sets up view's state properties using settings' property values.
-                snapsToFeatures = !rootSourceSettingsModels.isEmpty
-                ? settings.snapsToFeatures
-                : false
+                snapsToFeatures = settings.snapsToFeatures
                 snapsToGeometryGuides = settings.snapsToGeometryGuides
             }
             .navigationTitle(
