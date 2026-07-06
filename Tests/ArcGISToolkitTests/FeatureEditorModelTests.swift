@@ -16,11 +16,11 @@ import ArcGIS
 @testable import ArcGISToolkit
 import Testing
 
-@Suite("FeatureEditor Tests")
+@Suite("FeatureEditorModel Tests")
 @MainActor
-struct FeatureEditorTests {
+struct FeatureEditorModelTests {
     @Test
-    func modelInitializer() {
+    func initializer() {
         let model = FeatureEditorModel()
         #expect(model.featureForm == nil)
         #expect(!model.geometryEditorCanUndo)
