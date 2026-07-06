@@ -47,7 +47,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         let toolButton = app.toolButton
         let deleteButton = app.buttons["Delete Selected Element"]
         
-        toolButton.assertExistence(timeout: 5)
+        toolButton.assertExistence(timeout: 3)
         deleteButton.assertExistence()
         
         let toolMidY = toolButton.frame.midY
@@ -66,7 +66,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
         let toolButton = app.toolButton
-        toolButton.assertExistence(timeout: 5)
+        toolButton.assertExistence(timeout: 3)
         
         app.buttons["Cancel"].assertExistenceAndTap()
         toolButton.assertNonExistence(timeout: 1)
@@ -83,13 +83,13 @@ final class FeatureEditorToolbarTests: XCTestCase {
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
         let toolButton = app.toolButton
-        toolButton.assertExistenceAndTap(timeout: 5)
+        toolButton.assertExistenceAndTap(timeout: 3)
         
         [
             "Vertex",
             "Reticle"
         ].forEach { label in
-            app.buttons[label].assertExistence(timeout: 1)
+            app.buttons[label].assertExistence()
         }
         
         app.buttons["Cancel"].assertExistenceAndTap()
@@ -106,7 +106,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         openFeatureEditorToolbarTestsWithStartingFeature(2525, on: .electricDistributionLine)
         
         let toolButton = app.toolButton
-        toolButton.assertExistenceAndTap(timeout: 5)
+        toolButton.assertExistenceAndTap(timeout: 3)
         
         [
             "Freehand",
@@ -117,7 +117,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
             "Rectangle",
             "Triangle"
         ].forEach { label in
-            app.buttons[label].assertExistence(timeout: 1)
+            app.buttons[label].assertExistence()
         }
         
         app.buttons["Cancel"].assertExistenceAndTap()
@@ -134,7 +134,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         openFeatureEditorToolbarTestsWithStartingFeature(1, on: .structureBoundary)
         
         let toolButton = app.toolButton
-        toolButton.assertExistenceAndTap(timeout: 5)
+        toolButton.assertExistenceAndTap(timeout: 3)
         
         [
             "Freehand",
@@ -145,7 +145,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
             "Rectangle",
             "Triangle"
         ].forEach { label in
-            app.buttons[label].assertExistence(timeout: 1)
+            app.buttons[label].assertExistence()
         }
         
         app.buttons["Cancel"].assertExistenceAndTap()
