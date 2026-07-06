@@ -97,7 +97,7 @@ private struct FeatureEditorFormView: View {
                         try await model.startEditing(newFeatureForm: presentedFeatureForm)
                     } catch {
                         Logger.featureEditor.error(
-                            "Error starting feature editor: \(String(describing: error))"
+                            "Error starting feature editor: \(error.localizedDescription)"
                         )
                     }
                 }

@@ -109,7 +109,7 @@ public struct FeatureEditor: View {
                         try await model.startEditing(rootFeature: feature, on: map)
                     } catch {
                         Logger.featureEditor.error(
-                            "Error starting feature editor: \(String(describing: error))"
+                            "Error starting feature editor: \(error.localizedDescription)"
                         )
                     }
                 } else {

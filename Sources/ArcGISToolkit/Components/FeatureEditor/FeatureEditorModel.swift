@@ -154,7 +154,7 @@ final class FeatureEditorModel {
             snapSettings.isEnabled = true
         } catch {
             Logger.featureEditor.error(
-                "Error syncing snap source settings: \(String(describing: error))"
+                "Error syncing snap source settings: \(error.localizedDescription)"
             )
         }
     }
