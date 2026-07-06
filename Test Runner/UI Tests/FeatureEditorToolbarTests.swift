@@ -26,21 +26,21 @@ final class FeatureEditorToolbarTests: XCTestCase {
     ///   - layerName: The name of the `FeatureLayer` containing the feature.
     func openFeatureEditorToolbarTestsWithStartingFeature(_ objectID: Int, on layerName: String) {
         let app = XCUIApplication()
-        let geometryEditorToolbarTestsButton = app.buttons["Feature Editor Tests"]
+        let featureEditorTestsButton = app.buttons["Feature Editor Tests"]
         
         // Adds the launch arguments that will be read in the test view.
         let arguments = ["-objectID", "\(objectID)", "-layerName", "\(layerName)"]
         app.launchArguments.append(contentsOf: arguments)
         
-        // Opens the geometry editor toolbar test view.
+        // Opens the feature editor test view.
         app.launch()
-        geometryEditorToolbarTestsButton.assertExistenceAndTap()
+        featureEditorTestsButton.assertExistenceAndTap()
     }
     
     /// Tests the default style for the feature editor toolbar is vertical.
     /// Verifies that the tool button is positioned above the delete button
     /// by comparing their midY values.
-    func testGeometryEditorToolbarDefaultStyleIsVertical() {
+    func testFeatureEditorToolbarDefaultStyleIsVertical() {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
