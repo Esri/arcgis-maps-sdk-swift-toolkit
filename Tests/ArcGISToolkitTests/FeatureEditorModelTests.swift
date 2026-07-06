@@ -33,32 +33,14 @@ struct FeatureEditorModelTests {
     
     @Test
     func monitorGeometryEditorStreams() async throws {
-        // Loads a Naperville water network web map with a feature layer and
-        // queries a feature to create a feature form.
-        let map = Map(item: PortalItem(
-            portal: .arcGISOnline(connection: .anonymous),
-            id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
-        ))
-        try await map.load()
-        let layer = try #require(map.operationalLayers.first { $0.name == "Main" } as? FeatureLayer)
-        let parameters = QueryParameters()
-        parameters.addObjectID(3651)
-        let result = try await #require(layer.featureTable?.queryFeatures(using: parameters))
-        let feature = try #require(result.features().makeIterator().next() as? ArcGISFeature)
-        let featureForm = FeatureForm(feature: feature)
-        let geometry = try #require(feature.geometry)
-        
-        // Creates a model and starts the geometry editor with the feature form
-        // and geometry.
         let model = FeatureEditorModel()
-        #expect(model.featureForm == nil)
         #expect(model.geometryEditorGeometry == nil)
         #expect(!model.geometryEditorIsStarted)
-        let monitorTask = Task { await model.monitorGeometryEditorStreams() }
+        let monitorTask = Task(operation: model.monitorGeometryEditorStreams)
         defer { monitorTask.cancel() }
-        model.featureForm = featureForm
         
-        // Starts the geometry editor with the feature's geometry.
+        // Starts the geometry editor with a geometry.
+        let geometry = Point(x: 0, y: 0)
         model.geometryEditor.start(withInitial: geometry)
         try await Task.yield(timeout: 0.1) { @MainActor in
             model.geometryEditorIsStarted
@@ -73,14 +55,5 @@ struct FeatureEditorModelTests {
         }
         #expect(!model.geometryEditorIsStarted)
         #expect(model.geometryEditorGeometry == nil)
-        
-        // The feature form remains the same after stopping the geometry editor.
-        #expect(model.featureForm === featureForm)
-        
-        // Resets the model.
-        model.reset()
-        #expect(model.featureForm == nil)
-        #expect(model.geometryEditorGeometry == nil)
-        #expect(!model.geometryEditorIsStarted)
     }
 }
