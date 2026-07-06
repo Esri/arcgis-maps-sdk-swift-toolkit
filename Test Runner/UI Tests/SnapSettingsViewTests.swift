@@ -40,9 +40,6 @@ final class SnapSettingsViewTests: XCTestCase {
     /// Verifies the snap settings toggles states when a feature is selected
     /// for editing.
     func testDefaultToggleStatesAndPreservation() throws {
-        // visionOS does not support inspector, so this test is skipped on visionOS.
-        try skipIf(visionOS: true)
-        
         let app = XCUIApplication()
         
         openFeatureEditorWithStartingPoint(3321, on: .electricDistributionDevice)

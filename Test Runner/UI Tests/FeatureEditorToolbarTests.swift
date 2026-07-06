@@ -75,10 +75,6 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// Tests the feature editor tool picker shows only vertex-based
     /// tools when the feature editor is started with a point feature.
     func testPointToolPickerButtons() throws {
-        // Mac Catalyst cannot find the menu items in UI tests, so this test is
-        // skipped on Mac Catalyst.
-        try skipIf(macCatalyst: true)
-        
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
@@ -98,10 +94,6 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// Tests all geometry editing tools are available in the tool picker
     /// when the feature editor is started with a polyline feature.
     func testPolylineToolPickerButtons() throws {
-        // Mac Catalyst cannot find the menu items in UI tests, so this test is
-        // skipped on Mac Catalyst.
-        try skipIf(macCatalyst: true)
-        
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(2525, on: .electricDistributionLine)
         
@@ -126,10 +118,6 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// Tests all geometry editing tools are available in the tool picker
     /// when the feature editor is started with a polygon feature.
     func testPolygonToolPickerButtons() throws {
-        // Mac Catalyst cannot find the menu items in UI tests, so this test is
-        // skipped on Mac Catalyst.
-        try skipIf(macCatalyst: true)
-        
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(1, on: .structureBoundary)
         
