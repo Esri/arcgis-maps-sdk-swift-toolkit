@@ -17,6 +17,7 @@ import SwiftUI
 
 /// A toolbar for the feature editor containing controls for performing common
 /// geometry editor actions.
+@available(visionOS, unavailable)
 struct FeatureEditorToolbar: View {
     /// The style to apply to the toolbar's controls.
     let style: FeatureEditor.ToolbarStyle?
@@ -207,6 +208,7 @@ private extension View {
     }
 }
 
+@available(visionOS, unavailable)
 #Preview {
     @Previewable @State var model = FeatureEditorModel()
     
