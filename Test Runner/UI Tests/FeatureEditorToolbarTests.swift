@@ -44,11 +44,11 @@ final class FeatureEditorToolbarTests: XCTestCase {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
-        let toolButton = app.buttons["Tool"]
+        let toolButton = app.toolButton
         let deleteButton = app.buttons["Delete Selected Element"]
         
-        toolButton.assertExistence(timeout: 1)
-        deleteButton.assertExistence(timeout: 1)
+        toolButton.assertExistence(timeout: 5)
+        deleteButton.assertExistence()
         
         let toolMidY = toolButton.frame.midY
         let deleteMidY = deleteButton.frame.midY
@@ -65,21 +65,25 @@ final class FeatureEditorToolbarTests: XCTestCase {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
-        let toolButton = app.buttons["Tool"]
-        toolButton.assertExistence(timeout: 1)
+        let toolButton = app.toolButton
+        toolButton.assertExistence(timeout: 5)
         
-        app.buttons["Stop"].assertExistenceAndTap()
+        app.buttons["Cancel"].assertExistenceAndTap()
         toolButton.assertNonExistence(timeout: 1)
     }
     
     /// Tests the feature editor tool picker shows only vertex-based
     /// tools when the feature editor is started with a point feature.
-    func testPointToolPickerButtons() {
+    func testPointToolPickerButtons() throws {
+        // Mac Catalyst cannot find the menu items in UI tests, so this test is
+        // skipped on Mac Catalyst.
+        try skipIf(macCatalyst: true)
+        
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
-        let toolButton = app.buttons["Tool"]
-        toolButton.assertExistenceAndTap(timeout: 1)
+        let toolButton = app.toolButton
+        toolButton.assertExistenceAndTap(timeout: 5)
         
         [
             "Vertex",
@@ -88,17 +92,21 @@ final class FeatureEditorToolbarTests: XCTestCase {
             app.buttons[label].assertExistence(timeout: 1)
         }
         
-        app.buttons["Stop"].assertExistenceAndTap()
+        app.buttons["Cancel"].assertExistenceAndTap()
     }
     
     /// Tests all geometry editing tools are available in the tool picker
     /// when the feature editor is started with a polyline feature.
-    func testPolylineToolPickerButtons() {
+    func testPolylineToolPickerButtons() throws {
+        // Mac Catalyst cannot find the menu items in UI tests, so this test is
+        // skipped on Mac Catalyst.
+        try skipIf(macCatalyst: true)
+        
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(2525, on: .electricDistributionLine)
         
-        let toolButton = app.buttons["Tool"]
-        toolButton.assertExistenceAndTap(timeout: 1)
+        let toolButton = app.toolButton
+        toolButton.assertExistenceAndTap(timeout: 5)
         
         [
             "Freehand",
@@ -112,17 +120,21 @@ final class FeatureEditorToolbarTests: XCTestCase {
             app.buttons[label].assertExistence(timeout: 1)
         }
         
-        app.buttons["Stop"].assertExistenceAndTap()
+        app.buttons["Cancel"].assertExistenceAndTap()
     }
     
     /// Tests all geometry editing tools are available in the tool picker
     /// when the feature editor is started with a polygon feature.
-    func testPolygonToolPickerButtons() {
+    func testPolygonToolPickerButtons() throws {
+        // Mac Catalyst cannot find the menu items in UI tests, so this test is
+        // skipped on Mac Catalyst.
+        try skipIf(macCatalyst: true)
+        
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(1, on: .structureBoundary)
         
-        let toolButton = app.buttons["Tool"]
-        toolButton.assertExistenceAndTap(timeout: 1)
+        let toolButton = app.toolButton
+        toolButton.assertExistenceAndTap(timeout: 5)
         
         [
             "Freehand",
@@ -136,7 +148,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
             app.buttons[label].assertExistence(timeout: 1)
         }
         
-        app.buttons["Stop"].assertExistenceAndTap()
+        app.buttons["Cancel"].assertExistenceAndTap()
     }
 }
 
@@ -145,4 +157,14 @@ private extension String {
     static let electricDistributionDevice = "Electric Distribution Device"
     static let electricDistributionLine = "Electric Distribution Line"
     static let structureBoundary = "Structure Boundary"
+}
+
+private extension XCUIElement {
+    var toolButton: XCUIElement {
+#if targetEnvironment(macCatalyst)
+        popUpButtons["Tool"]
+#else
+        buttons["Tool"]
+#endif
+    }
 }

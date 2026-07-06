@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0080506E2FF71D1400CB86A2 /* FeatureEditorToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080506D2FF71D1400CB86A2 /* FeatureEditorToolbarTests.swift */; };
-		00A1B2C32FD9000100ABCDEF /* SnapSettingsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A1B2C22FD9000100ABCDEF /* SnapSettingsViewTests.swift */; };
+		0080506E2FF71D1400CB86A2 /* FeatureEditorToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080506D2FF71D1400CB86A2 /* FeatureEditorToolbarTests.swift */; platformFilters = (ios, maccatalyst, ); };
+		00A1B2C32FD9000100ABCDEF /* SnapSettingsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A1B2C22FD9000100ABCDEF /* SnapSettingsViewTests.swift */; platformFilters = (ios, maccatalyst, ); };
 		00A1B2C52FD9000200ABCDEF /* FeatureEditorTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A1B2C42FD9000200ABCDEF /* FeatureEditorTestView.swift */; };
 		75022F962A7AC9A0000ED7B7 /* FeatureFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */; };
 		75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */; };
