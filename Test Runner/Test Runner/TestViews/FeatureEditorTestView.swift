@@ -16,6 +16,7 @@ import ArcGIS
 @testable import ArcGISToolkit
 import SwiftUI
 
+@available(visionOS, unavailable)
 struct FeatureEditorTestView: View {
     /// A message describing an error thrown during test view setup.
     @State private var errorDescription: String?
@@ -43,6 +44,7 @@ struct FeatureEditorTestView: View {
     }
 }
 
+@available(visionOS, unavailable)
 private extension FeatureEditorTestView {
     /// Identifies a feature with a given object ID and starts the
     /// feature editor with that feature's geometry.
@@ -94,9 +96,7 @@ private extension FeatureEditorTestView {
             errorDescription = error.localizedDescription
         }
     }
-}
-
-private extension FeatureEditorTestView {
+    
     /// Makes a map from a portal item.
     static func makeMap() -> Map {
         let napervilleElectricUtilityNetwork = PortalItem(
