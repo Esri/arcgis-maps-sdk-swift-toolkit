@@ -117,6 +117,7 @@ public struct FeatureEditor: View {
     }
 }
 
+@available(visionOS, unavailable)
 extension FeatureEditor {
     /// A style that determines the appearance and layout of a feature editor's toolbar.
     /// - Since: 300.1

@@ -233,6 +233,7 @@ private extension View {
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating whether the inspector is presented.
     ///   - content: The content to display in the inspector.
+    @available(visionOS, unavailable)
     @ViewBuilder
     func safeInspector<Content>(
         isPresented: Binding<Bool>,
