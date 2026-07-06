@@ -22,7 +22,10 @@ struct FeatureEditorModelTests {
     @Test
     func initializer() {
         let model = FeatureEditorModel()
-        #expect(model.featureForm == nil)
+        #expect(model.feature == nil)
+        #expect(!model.isPresented)
+        #expect(model.rootFeatureForm == nil)
+        #expect(model.viewpointGeometry == nil)
         #expect(!model.geometryEditorCanUndo)
         #expect(model.geometryEditorGeometry == nil)
         #expect(!model.geometryEditorIsStarted)
