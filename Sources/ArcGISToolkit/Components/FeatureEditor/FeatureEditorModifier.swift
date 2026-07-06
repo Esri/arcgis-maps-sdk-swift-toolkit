@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
-import OSLog
+internal import os
 import SwiftUI
 
 public extension View {

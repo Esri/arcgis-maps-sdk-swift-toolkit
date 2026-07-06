@@ -14,7 +14,7 @@
 
 import ArcGIS
 import Observation
-import OSLog
+internal import os
 
 /// A data model that contains various properties that are needed for the
 /// feature editor and shared between the modifier and the view.
