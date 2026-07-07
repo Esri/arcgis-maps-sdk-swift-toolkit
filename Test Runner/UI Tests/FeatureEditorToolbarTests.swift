@@ -88,7 +88,10 @@ final class FeatureEditorToolbarTests: XCTestCase {
             app.menuButton(named: label).assertExistence()
         }
         
+        // Dismiss the tool picker and close the feature editor.
+        toolButton.tap()
         app.buttons["Cancel"].assertExistenceAndTap()
+        toolButton.assertNonExistence(timeout: 1)
     }
     
     /// Tests all geometry editing tools are available in the tool picker
@@ -112,7 +115,10 @@ final class FeatureEditorToolbarTests: XCTestCase {
             app.menuButton(named: label).assertExistence()
         }
         
+        // Dismiss the tool picker and close the feature editor.
+        toolButton.tap()
         app.buttons["Cancel"].assertExistenceAndTap()
+        toolButton.assertNonExistence(timeout: 1)
     }
     
     /// Tests all geometry editing tools are available in the tool picker
@@ -136,7 +142,10 @@ final class FeatureEditorToolbarTests: XCTestCase {
             app.menuButton(named: label).assertExistence()
         }
         
+        // Dismiss the tool picker and close the feature editor.
+        toolButton.tap()
         app.buttons["Cancel"].assertExistenceAndTap()
+        toolButton.assertNonExistence(timeout: 1)
     }
 }
 
