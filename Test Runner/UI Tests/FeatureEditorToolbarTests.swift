@@ -29,7 +29,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         let featureEditorTestsButton = app.buttons["Feature Editor Tests"]
         
         // Adds the launch arguments that will be read in the test view.
-        let arguments = ["-objectID", "\(objectID)", "-layerName", "\(layerName)"]
+        let arguments = ["-objectID", "\(objectID)", "-layerName", layerName]
         app.launchArguments.append(contentsOf: arguments)
         
         // Opens the feature editor test view.
