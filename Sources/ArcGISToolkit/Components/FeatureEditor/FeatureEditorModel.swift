@@ -175,6 +175,8 @@ final class FeatureEditorModel {
         
         // Sets up the snap rules and syncs the snap source settings.
         if let utilityNetwork, let element = utilityNetwork.makeElement(arcGISFeature: feature) {
+            // Errors are ignored to set snapRules to nil if creation fails, so
+            // the old rules don't get used in future syncing.
             snapRules = try? await .rules(for: utilityNetwork, assetType: element.assetType)
         } else {
             snapRules = nil
