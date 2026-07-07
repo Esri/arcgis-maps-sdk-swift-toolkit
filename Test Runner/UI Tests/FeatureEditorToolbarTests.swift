@@ -75,10 +75,6 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// Tests the feature editor tool picker shows only vertex-based
     /// tools when the feature editor is started with a point feature.
     func testPointToolPickerButtons() throws {
-        // Mac Catalyst cannot find the menu items in UI tests, so this test is
-        // skipped on Mac Catalyst.
-        try skipIf(macCatalyst: true)
-        
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
@@ -89,7 +85,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
             "Vertex",
             "Reticle"
         ].forEach { label in
-            app.buttons[label].assertExistence()
+            app.menuButton(named: label).assertExistence()
         }
         
         app.buttons["Cancel"].assertExistenceAndTap()
@@ -98,10 +94,6 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// Tests all geometry editing tools are available in the tool picker
     /// when the feature editor is started with a polyline feature.
     func testPolylineToolPickerButtons() throws {
-        // Mac Catalyst cannot find the menu items in UI tests, so this test is
-        // skipped on Mac Catalyst.
-        try skipIf(macCatalyst: true)
-        
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(2525, on: .electricDistributionLine)
         
@@ -117,7 +109,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
             "Rectangle",
             "Triangle"
         ].forEach { label in
-            app.buttons[label].assertExistence()
+            app.menuButton(named: label).assertExistence()
         }
         
         app.buttons["Cancel"].assertExistenceAndTap()
@@ -126,10 +118,6 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// Tests all geometry editing tools are available in the tool picker
     /// when the feature editor is started with a polygon feature.
     func testPolygonToolPickerButtons() throws {
-        // Mac Catalyst cannot find the menu items in UI tests, so this test is
-        // skipped on Mac Catalyst.
-        try skipIf(macCatalyst: true)
-        
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(1, on: .structureBoundary)
         
@@ -145,7 +133,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
             "Rectangle",
             "Triangle"
         ].forEach { label in
-            app.buttons[label].assertExistence()
+            app.menuButton(named: label).assertExistence()
         }
         
         app.buttons["Cancel"].assertExistenceAndTap()
@@ -160,11 +148,21 @@ private extension String {
 }
 
 private extension XCUIElement {
+    /// The tool button in the feature editor toolbar.
     var toolButton: XCUIElement {
 #if targetEnvironment(macCatalyst)
         popUpButtons["Tool"]
 #else
         buttons["Tool"]
+#endif
+    }
+    
+    /// The menu button with the given name in the feature editor tool picker.
+    func menuButton(named name: String) -> XCUIElement {
+#if targetEnvironment(macCatalyst)
+        menuItems[name]
+#else
+        buttons[name]
 #endif
     }
 }
