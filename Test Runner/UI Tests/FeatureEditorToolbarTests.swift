@@ -74,7 +74,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     
     /// Tests the feature editor tool picker shows only vertex-based
     /// tools when the feature editor is started with a point feature.
-    func testPointToolPickerButtons() throws {
+    func testPointToolPickerButtons() {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
@@ -93,7 +93,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     
     /// Tests all geometry editing tools are available in the tool picker
     /// when the feature editor is started with a polyline feature.
-    func testPolylineToolPickerButtons() throws {
+    func testPolylineToolPickerButtons() {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(2525, on: .electricDistributionLine)
         
@@ -117,7 +117,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     
     /// Tests all geometry editing tools are available in the tool picker
     /// when the feature editor is started with a polygon feature.
-    func testPolygonToolPickerButtons() throws {
+    func testPolygonToolPickerButtons() {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(1, on: .structureBoundary)
         

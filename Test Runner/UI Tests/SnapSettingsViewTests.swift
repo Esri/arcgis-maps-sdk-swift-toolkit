@@ -39,7 +39,7 @@ final class SnapSettingsViewTests: XCTestCase {
     
     /// Verifies the snap settings toggles states when a feature is selected
     /// for editing.
-    func testDefaultToggleStatesAndPreservation() throws {
+    func testDefaultToggleStatesAndPreservation() {
         let app = XCUIApplication()
         
         openFeatureEditorWithStartingPoint(3321, on: .electricDistributionDevice)
