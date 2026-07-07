@@ -40,7 +40,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// Tests the default style for the feature editor toolbar is vertical.
     /// Verifies that the tool button is positioned above the delete button
     /// by comparing their midY values.
-    func testFeatureEditorToolbarDefaultStyleIsVertical() {
+    func testToolbarDefaultStyleIsVertical() {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
@@ -61,7 +61,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     
     /// Tests the feature editor toolbar appears when the feature editor
     /// is started, and disappears when it is stopped.
-    func testFeatureEditorToolbarAppearsWhenEditorStarts() {
+    func testToolbarAppearsWhenEditorStarts() {
         let app = XCUIApplication()
         openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
         
