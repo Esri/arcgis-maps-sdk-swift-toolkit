@@ -24,7 +24,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// - Parameters:
     ///   - objectID: The object ID of the feature that will be used by the test setup.
     ///   - layerName: The name of the `FeatureLayer` containing the feature.
-    func openFeatureEditorToolbarTestsWithStartingFeature(_ objectID: Int, on layerName: String) {
+    func openFeatureEditorTestViewWithStartingFeature(_ objectID: Int, on layerName: String) {
         let app = XCUIApplication()
         let featureEditorTestsButton = app.buttons["Feature Editor Tests"]
         
@@ -42,7 +42,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// by comparing their midY values.
     func testToolbarDefaultStyleIsVertical() {
         let app = XCUIApplication()
-        openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
+        openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
         
         let toolButton = app.toolButton
         let deleteButton = app.buttons["Delete Selected Element"]
@@ -63,7 +63,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// is started, and disappears when it is stopped.
     func testToolbarAppearsWhenEditorStarts() {
         let app = XCUIApplication()
-        openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
+        openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
         
         let toolButton = app.toolButton
         toolButton.assertExistence(timeout: 3)
@@ -76,7 +76,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// tools when the feature editor is started with a point feature.
     func testPointToolPickerButtons() {
         let app = XCUIApplication()
-        openFeatureEditorToolbarTestsWithStartingFeature(3321, on: .electricDistributionDevice)
+        openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
         
         let toolButton = app.toolButton
         toolButton.assertExistenceAndTap(timeout: 3)
@@ -95,7 +95,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// when the feature editor is started with a polyline feature.
     func testPolylineToolPickerButtons() {
         let app = XCUIApplication()
-        openFeatureEditorToolbarTestsWithStartingFeature(2525, on: .electricDistributionLine)
+        openFeatureEditorTestViewWithStartingFeature(2525, on: .electricDistributionLine)
         
         let toolButton = app.toolButton
         toolButton.assertExistenceAndTap(timeout: 3)
@@ -119,7 +119,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// when the feature editor is started with a polygon feature.
     func testPolygonToolPickerButtons() {
         let app = XCUIApplication()
-        openFeatureEditorToolbarTestsWithStartingFeature(1, on: .structureBoundary)
+        openFeatureEditorTestViewWithStartingFeature(1, on: .structureBoundary)
         
         let toolButton = app.toolButton
         toolButton.assertExistenceAndTap(timeout: 3)
