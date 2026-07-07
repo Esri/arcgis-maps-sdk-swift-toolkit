@@ -85,7 +85,7 @@ public struct FeatureEditor: View {
     public init(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
-        map: Map? = nil,
+        map: Map?,
         mapViewProxy: MapViewProxy? = nil,
         toolbarStyle: ToolbarStyle? = .vertical
     ) {
