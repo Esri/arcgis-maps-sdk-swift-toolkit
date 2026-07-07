@@ -111,7 +111,7 @@ final class FeatureEditorModel {
         
         // Sets up the utility network so snap rules can be created.
         if let map {
-            try? await map.load()
+            try await map.load()
             await map.utilityNetworks.load()
             utilityNetwork = map.utilityNetworks.first { utilityNetwork in
                 utilityNetwork.makeElement(arcGISFeature: feature) != nil
