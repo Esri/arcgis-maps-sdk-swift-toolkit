@@ -193,22 +193,14 @@ struct AttachmentImportMenu: View {
                 .catalystPadding(5)
         }
         if isBelowMinimumAttachmentCount, let minimum = element.minAttachmentCount {
-            Text(
-                "At least ^[\(minimum) attachments](inflect: true) required.",
-                bundle: .toolkitModule,
-                comment: "A message indicating the minimum number of attachments required for a form element."
-            )
-            .font(.caption)
-            .foregroundStyle(.secondary)
+            element.minAttachmentCountMessage
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
-        if hasReachedMaximumAttachmentCount, let maximum = element.maxAttachmentCount {
-            Text(
-                "Maximum of ^[\(maximum) attachments](inflect: true) reached.",
-                bundle: .toolkitModule,
-                comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
-            )
-            .font(.caption)
-            .foregroundStyle(.secondary)
+        if hasReachedMaximumAttachmentCount, element.maxAttachmentCount != nil {
+            element.maxAttachmentCountMessage
+                .font(.caption)
+                .foregroundStyle(.secondary)
         } else {
             menu
         }
@@ -283,8 +275,8 @@ struct AttachmentImportMenu: View {
         }
         .disabled(importState.importInProgress)
         .cameraRequester(cameraRequester)
-        .alert(importFailureAlertTitle, isPresented: errorIsPresented) { } message: {
-            Text(importFailureAlertMessage)
+        .alert(importFailureAlertTitle, isPresented: errorIsPresented) {} message: {
+            importFailureAlertMessage
         }
         .onChange(of: cameraRequester.authorizationStatus) { _, status in
             if status == .authorized {
@@ -345,8 +337,8 @@ struct AttachmentImportMenu: View {
                 onAdd?(newAttachment)
                 importState = .none
             case let .failure(error):
-                if let ffe = error as? FeatureFormError {
-                    importState = .fferror(ffe)
+                if let featureFormError = error as? FeatureFormError {
+                    importState = .errored(.featureFormError(featureFormError))
                 } else {
                     importState = .errored(.creationFailed)
                 }
@@ -439,9 +431,9 @@ private extension AttachmentImportMenu {
     }
     
     /// An error message indicating the selected attachment is an empty file and not supported.
-    var emptyFilesNotSupportedAlertMessage: String {
+    var emptyFilesNotSupportedAlertMessage: Text {
         .init(
-            localized: "Empty files are not supported.",
+            "Empty files are not supported.",
             bundle: .toolkitModule,
             comment: "An error message indicating the selected attachment is an empty file and not supported."
         )
@@ -457,9 +449,9 @@ private extension AttachmentImportMenu {
     }
     
     /// A generic message for an alert that the selected file was not able to be imported as an attachment.
-    var genericImportFailureAlertMessage: String {
+    var genericImportFailureAlertMessage: Text {
         .init(
-            localized: "The selected attachment could not be imported.",
+            "The selected attachment could not be imported.",
             bundle: .toolkitModule,
             comment: """
             A generic message for an alert that the selected file was not able
@@ -469,11 +461,24 @@ private extension AttachmentImportMenu {
     }
     
     /// Returns a user facing error message for the present attachment import error.
-    var importFailureAlertMessage: String {
-        guard case .errored(let attachmentImportError) = importState else { return "" }
+    var importFailureAlertMessage: Text {
+        guard case .errored(let attachmentImportError) = importState else { return Text("") }
         return switch attachmentImportError {
         case .emptyFilesNotSupported:
             emptyFilesNotSupportedAlertMessage
+        case .featureFormError(let featureFormError):
+            switch featureFormError {
+            case .exceedsMaximumAttachmentCount:
+                element.maxAttachmentCountMessage ?? genericImportFailureAlertMessage
+            case .exceedsMaximumAttachmentSize:
+                element.maxFileSizeMessage ?? genericImportFailureAlertMessage
+            case .incorrectAttachmentType:
+                element.incorrectAttachmentTypeMessage
+            case .exceedsMaximumAttachmentDuration:
+                element.exceedsMaximumAttachmentDurationMessage ?? genericImportFailureAlertMessage
+            @unknown default:
+                genericImportFailureAlertMessage
+            }
         case .sizeLimitExceeded:
             sizeLimitExceededImportFailureAlertMessage
         default:
@@ -521,9 +526,9 @@ private extension AttachmentImportMenu {
     }
     
     /// An error message indicating the selected attachment exceeds the megabyte limit.
-    var sizeLimitExceededImportFailureAlertMessage: String {
+    var sizeLimitExceededImportFailureAlertMessage: Text {
         .init(
-            localized: "The selected attachment exceeds the \(attachmentUploadSizeLimit.formatted()) limit.",
+            "The selected attachment exceeds the \(attachmentUploadSizeLimit.formatted()) limit.",
             bundle: .toolkitModule,
             comment: "An error message indicating the selected attachment exceeds the megabyte limit."
         )
