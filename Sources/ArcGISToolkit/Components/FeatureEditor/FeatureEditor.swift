@@ -96,6 +96,13 @@ public struct FeatureEditor: View {
         self.toolbarStyle = toolbarStyle
     }
     
+    /// A collection of object ids used to determine when to start editing.
+    /// This updates when the `feature` or `map` instances change.
+    private var startEditingIDs: [ObjectIdentifier] {
+        let objects: [AnyObject?] = [feature, map]
+        return objects.compactMap { $0.map(ObjectIdentifier.init) }
+    }
+    
     public var body: some View {
         FeatureEditorToolbar(style: toolbarStyle)
             .task(id: ObjectIdentifier(geometryEditor)) {
@@ -103,7 +110,7 @@ public struct FeatureEditor: View {
                 model.restartGeometryEditor()
                 await model.monitorGeometryEditorStreams()
             }
-            .task(id: EquatableBox(objects: [feature, map])) {
+            .task(id: startEditingIDs) {
                 if let feature {
                     do {
                         try await model.startEditing(rootFeature: feature, on: map)
@@ -136,15 +143,6 @@ public struct FeatureEditor: View {
         let expandedGeometry = viewpointGeometry.extent.withBuilder { $0.expand(by: 2) }
         let viewpoint = Viewpoint(boundingGeometry: expandedGeometry)
         await mapViewProxy.setViewpoint(viewpoint, duration: 0.5)
-    }
-    
-    /// A box that provides `Equatable` conformance for an array of objects using their identifiers.
-    private struct EquatableBox: Equatable {
-        private let objectIdentifiers: [ObjectIdentifier]
-        
-        init(objects: [AnyObject?]) {
-            objectIdentifiers = objects.compactMap { $0.map(ObjectIdentifier.init) }
-        }
     }
 }
 
