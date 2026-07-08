@@ -23,7 +23,7 @@ struct AttachmentCameraControllerTestView: View {
     var body: some View {
         Color.clear
             .fullScreenCover(isPresented: .constant(true)) {
-                AttachmentCameraController(importState: .constant(.none), isPresented: .constant(true))
+                AttachmentCameraController(importState: .constant(.none), configuration: .constant(nil))
 #if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
                     .onCameraCaptureModeChanged { captureMode in
                         self.captureMode = captureMode
