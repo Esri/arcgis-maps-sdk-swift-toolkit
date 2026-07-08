@@ -2077,6 +2077,26 @@ final class FeatureFormViewTests: XCTestCase {
         
         electricDistributionDevice2Button.assertExistence()
     }
+    
+    func testCase_14_1() throws {
+        
+    }
+    
+    func testCase_14_2() throws {
+        
+    }
+    
+    func testCase_14_3() throws {
+        
+    }
+    
+    func testCase_14_4() throws {
+        
+    }
+    
+    func testCase_14_5() throws {
+        
+    }
 }
 
 private extension String {
