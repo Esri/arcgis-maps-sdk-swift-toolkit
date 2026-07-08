@@ -25,9 +25,10 @@ struct AttachmentImportMenu: View {
     private let element: AttachmentsFormElement
     
     /// Creates an `AttachmentImportMenu`
-    /// - Parameter currentAttachmentCount: The number of attachments the element currently has.
-    /// - Parameter element: The attachment form element displaying the menu.
-    /// - Parameter onAdd: The action to perform when an attachment is added.
+    /// - Parameters:
+    ///   - currentAttachmentCount: The number of attachments the element currently has.
+    ///   - element: The attachment form element displaying the menu.
+    ///   - onAdd: The action to perform when an attachment is added.
     init(
         currentAttachmentCount: Int,
         element: AttachmentsFormElement,
@@ -461,8 +462,8 @@ private extension AttachmentImportMenu {
     }
     
     /// Returns a user facing error message for the present attachment import error.
-    var importFailureAlertMessage: Text {
-        guard case .errored(let attachmentImportError) = importState else { return Text("") }
+    var importFailureAlertMessage: Text? {
+        guard case .errored(let attachmentImportError) = importState else { return nil }
         return switch attachmentImportError {
         case .emptyFilesNotSupported:
             emptyFilesNotSupportedAlertMessage
