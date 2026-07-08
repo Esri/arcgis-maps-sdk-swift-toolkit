@@ -42,8 +42,13 @@ struct AttachmentImportMenu: View {
     /// Performs camera authorization request handling.
     @State private var cameraRequester = CameraRequester()
     
+#if os(iOS)
     /// The capture configuration to use with the attachments camera controller.
     @State private var captureConfiguration: AttachmentCameraController.Configuration?
+    
+    /// The capture configuration to use once camera permission has been authorized.
+    @State private var pendingCaptureConfiguration: AttachmentCameraController.Configuration?
+#endif // os(iOS)
     
     /// A Boolean value indicating whether the attachment file importer is presented.
     @State private var fileImporterIsPresented = false
@@ -54,17 +59,8 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the microphone access alert is visible.
     @State private var microphoneAccessAlertIsPresented = false
     
-    /// The capture configuration to use once camera permission has been authorized.
-    @State private var pendingCaptureConfiguration: AttachmentCameraController.Configuration?
-    
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
-    
-#if os(visionOS)
-    let isVision = true
-#else
-    let isVision = false
-#endif
     
     /// The maximum attachment size limit.
     let attachmentUploadSizeLimit = Measurement(
@@ -86,6 +82,7 @@ struct AttachmentImportMenu: View {
         }
     }
     
+#if os(iOS)
     private func takePhotoButton(input: ImageFormInput) -> some View {
         Button {
             pendingCaptureConfiguration = .init(allowedFormats: .image, movieMaxDuration: nil)
@@ -98,7 +95,6 @@ struct AttachmentImportMenu: View {
             Text(takePhotoLabel)
             Image(systemName: "camera")
         }
-        .disabled(isVision)
     }
     
     @available(visionOS, unavailable)
@@ -131,8 +127,8 @@ struct AttachmentImportMenu: View {
             Text(takeVideoLabel)
             Image(systemName: "video")
         }
-        .disabled(isVision)
     }
+#endif // os(iOS)
     
     private func chooseFromLibraryButton() -> Button<some View> {
         Button {
@@ -211,6 +207,7 @@ struct AttachmentImportMenu: View {
         Menu {
             Group {
                 if element.inputs.count >= 2 {
+#if os(iOS)
                     if let _ = element.inputs.first(where: { $0 is ImageFormInput }),
                        let videoFormInput = element.inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput {
                         takePhotoOrVideoButton(videoFormInput: videoFormInput)
@@ -219,6 +216,7 @@ struct AttachmentImportMenu: View {
                     } else if let videoFormInput = element.inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput {
                         takeVideoButton(input: videoFormInput)
                     }
+#endif // os(iOS)
                     if element.inputs.contains(where: {$0 is ImageFormInput || $0 is VideoFormInput}) {
                         chooseFromLibraryButton()
                     }
@@ -237,26 +235,38 @@ struct AttachmentImportMenu: View {
                     case let imageFormInput as ImageFormInput:
                         switch imageFormInput.inputMethod {
                         case .any:
+#if os(iOS)
                             takePhotoButton(input: imageFormInput)
+#endif // os(iOS)
                             chooseFromLibraryButton()
                             chooseFromFilesButton()
                         case .capture:
+#if os(iOS)
                             takePhotoButton(input: imageFormInput)
+#endif // os(iOS)
                         case .upload:
                             chooseFromLibraryButton()
                             chooseFromFilesButton()
+                        default:
+                            EmptyView()
                         }
                     case let videoFormInput as VideoFormInput:
                         switch videoFormInput.inputMethod {
                         case .any:
+#if os(iOS)
                             takeVideoButton(input: videoFormInput)
+#endif // os(iOS)
                             chooseFromLibraryButton()
                             chooseFromFilesButton()
                         case .capture:
+#if os(iOS)
                             takeVideoButton(input: videoFormInput)
+#endif // os(iOS)
                         case .upload:
                             chooseFromLibraryButton()
                             chooseFromFilesButton()
+                        default:
+                            EmptyView()
                         }
                     default:
                         EmptyView()
@@ -279,11 +289,13 @@ struct AttachmentImportMenu: View {
         .alert(importFailureAlertTitle, isPresented: errorIsPresented) {} message: {
             importFailureAlertMessage
         }
+#if os(iOS)
         .onChange(of: cameraRequester.authorizationStatus) { _, status in
             if status == .authorized {
                 captureConfiguration = pendingCaptureConfiguration.take()
             }
         }
+#endif // os(iOS)
 #if targetEnvironment(macCatalyst)
         .menuStyle(.borderlessButton)
 #endif
