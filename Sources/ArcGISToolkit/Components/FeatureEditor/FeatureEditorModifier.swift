@@ -50,6 +50,9 @@ private struct FeatureEditorModifier: ViewModifier {
                 )
                 .inspectorColumnWidth(ideal: 320)
                 .interactiveDismissDisabled()
+                .sheet(isPresented: $model.snapSettingsSheetIsPresented) {
+                    SnapSettingsView(settings: model.geometryEditor.snapSettings)
+                }
             }
             .environment(model)
     }

@@ -41,6 +41,10 @@ final class FeatureEditorModel {
     private var presentedFeatureForm: FeatureForm?
     /// The root feature form to edit with the feature editor.
     private(set) var rootFeatureForm: FeatureForm?
+    /// A Boolean value indicating whether the snap settings sheet is presented.
+    /// This is needed to prevent the sheet from dismissing the feature editor
+    /// when the horizontal size class is compact.
+    var snapSettingsSheetIsPresented = false
     /// The geometry used to set the viewpoint.
     var viewpointGeometry: Geometry?
     
@@ -130,6 +134,7 @@ final class FeatureEditorModel {
     func stopEditing() {
         rootFeatureForm = nil
         presentedFeatureForm = nil
+        snapSettingsSheetIsPresented = false
         viewpointGeometry = nil
         
         geometryEditor.stop()

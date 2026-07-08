@@ -152,13 +152,10 @@ private struct SnapSettingsButton: View {
     /// The model for the parent feature editor containing the snap settings.
     @Environment(FeatureEditorModel.self) private var featureEditorModel
     
-    /// A Boolean value indicating whether the settings view is presented.
-    @State private var isShowingSettings = false
-    
     var body: some View {
         Button {
             featureEditorModel.syncSnapSourceSettings()
-            isShowingSettings.toggle()
+            featureEditorModel.snapSettingsSheetIsPresented.toggle()
         } label: {
             Label {
                 Text(
@@ -169,11 +166,6 @@ private struct SnapSettingsButton: View {
             } icon: {
                 Image(systemName: "gear")
             }
-        }
-        .sheet(isPresented: $isShowingSettings) {
-            SnapSettingsView(settings: featureEditorModel.geometryEditor.snapSettings)
-            // Needed to override the font set in toolbarStackStyle.
-                .font(nil)
         }
     }
 }
