@@ -2079,23 +2079,43 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     func testCase_14_1() throws {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
     }
     
     func testCase_14_2() throws {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
     }
     
     func testCase_14_3() throws {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
     }
     
     func testCase_14_4() throws {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
     }
     
     func testCase_14_5() throws {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
     }
 }
 

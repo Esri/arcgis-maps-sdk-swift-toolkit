@@ -301,11 +301,11 @@ private extension FeatureFormTestView {
         .init("testCase_13_4", objectID: 311, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_13_5", objectID: 311, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_13_6", objectID: 194, layerName: "Structure Junction", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
-        .init("testCase_14_1", objectID: 1, layerName: "AttachmentsFormElement", portalID: .napervilleElectricUtilityNetwork),
-        .init("testCase_14_2", objectID: 1, layerName: "AttachmentsFormElement", portalID: .napervilleElectricUtilityNetwork),
-        .init("testCase_14_3", objectID: 1, layerName: "AttachmentsFormElement", portalID: .napervilleElectricUtilityNetwork),
-        .init("testCase_14_4", objectID: 1, layerName: "AttachmentsFormElement", portalID: .napervilleElectricUtilityNetwork),
-        .init("testCase_14_5", objectID: 1, layerName: "AttachmentsFormElement", portalID: .napervilleElectricUtilityNetwork)
+        .init("testCase_14_1", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_2", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_3", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_4", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_5", objectID: 1, portalID: .testCase14)
     ]}
 }
 
