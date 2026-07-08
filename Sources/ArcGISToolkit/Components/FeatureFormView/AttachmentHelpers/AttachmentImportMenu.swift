@@ -193,7 +193,7 @@ struct AttachmentImportMenu: View {
                 .progressViewStyle(.circular)
                 .catalystPadding(5)
         }
-        if isBelowMinimumAttachmentCount, let minimum = element.minAttachmentCount {
+        if isBelowMinimumAttachmentCount, element.minAttachmentCount != nil {
             element.minAttachmentCountMessage
                 .font(.caption)
                 .foregroundStyle(.secondary)
