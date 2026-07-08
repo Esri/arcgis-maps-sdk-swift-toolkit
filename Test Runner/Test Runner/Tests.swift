@@ -19,8 +19,10 @@ struct Tests: View {
         NavigationStack {
             List {
 #if !os(visionOS)
-                NavigationLink("AttachmentCameraController Tests", destination: AttachmentCameraControllerTestView())
-                NavigationLink("Feature Editor Tests", destination: FeatureEditorTestView())
+                Section("iOS and Catalyst only") {
+                    NavigationLink("AttachmentCameraController Tests", destination: AttachmentCameraControllerTestView())
+                    NavigationLink("Feature Editor Tests", destination: FeatureEditorTestView())
+                }
 #endif
                 NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
                 NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
