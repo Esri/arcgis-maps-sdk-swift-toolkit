@@ -24,7 +24,7 @@ struct FeatureEditorModelTests {
     @Test
     func initializer() async {
         let model = FeatureEditorModel()
-        await model.expectHasDefaultPropertyValues()
+        await model.expectDefaultPropertyValues()
     }
     
     /// Verifies `isPresented` is `true` when editing and resets the model's properties when set
@@ -35,7 +35,7 @@ struct FeatureEditorModelTests {
         let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
-        let geodatabaseFile = try await GeodatabaseFile()
+        let geodatabaseFile = try await TemporaryGeodatabaseFile()
         let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
         let geometry = Point(latitude: 0, longitude: 0)
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
@@ -50,7 +50,7 @@ struct FeatureEditorModelTests {
         
         // Verifies setting isPresented to false resets the model's properties.
         model.isPresented = false
-        await model.expectHasDefaultPropertyValues()
+        await model.expectDefaultPropertyValues()
     }
     
     /// Verifies `monitorGeometryEditorStreams()` updates model properties
@@ -73,7 +73,7 @@ struct FeatureEditorModelTests {
         await Task.expect(model.geometryEditorGeometry == nil)
         
         // Verifies no other properties have been modified.
-        await model.expectHasDefaultPropertyValues()
+        await model.expectDefaultPropertyValues()
     }
     
     /// Verifies `restartGeometryEditor()` restarts the geometry editor if it is started.
@@ -85,10 +85,10 @@ struct FeatureEditorModelTests {
         
         // Verifies restartGeometryEditor does nothing if the geometry editor has not started.
         model.restartGeometryEditor()
-        await model.expectHasDefaultPropertyValues()
+        await model.expectDefaultPropertyValues()
         
         // Starts the feature editor.
-        let geodatabaseFile = try await GeodatabaseFile()
+        let geodatabaseFile = try await TemporaryGeodatabaseFile()
         let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
         let geometry = Point(latitude: 0, longitude: 0)
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
@@ -114,7 +114,7 @@ struct FeatureEditorModelTests {
         let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
-        let geodatabaseFile = try await GeodatabaseFile()
+        let geodatabaseFile = try await TemporaryGeodatabaseFile()
         let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
         
         // Verifies startEditing(rootFeature:on:) starts the feature editor and geometry editor.
@@ -163,7 +163,7 @@ struct FeatureEditorModelTests {
         let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
-        let geodatabaseFile = try await GeodatabaseFile()
+        let geodatabaseFile = try await TemporaryGeodatabaseFile()
         let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
         let feature = try #require(table.makeFeature() as? ArcGISFeature)
         #expect(feature.geometry == nil)
@@ -175,7 +175,7 @@ struct FeatureEditorModelTests {
         
         // Verifies geometry editor is using the table's geometry type.
         let modelGeometry = try #require(model.geometryEditorGeometry)
-        #expect(type(of: modelGeometry) == Point.self)
+        #expect(modelGeometry is Point)
         #expect(modelGeometry.isEmpty)
         #expect(model.viewpointGeometry == nil)
     }
@@ -187,7 +187,7 @@ struct FeatureEditorModelTests {
         let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
-        let geodatabaseFile = try await GeodatabaseFile()
+        let geodatabaseFile = try await TemporaryGeodatabaseFile()
         let tableDescription = TableDescription(name: "NonSpatial")
         let table = try await geodatabaseFile.geodatabase.makeTable(description: tableDescription)
         
@@ -214,7 +214,7 @@ struct FeatureEditorModelTests {
         let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
-        let geodatabaseFile = try await GeodatabaseFile()
+        let geodatabaseFile = try await TemporaryGeodatabaseFile()
         let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
         let geometry = Point(latitude: 0, longitude: 0)
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
@@ -227,7 +227,7 @@ struct FeatureEditorModelTests {
         
         // Verifies stopEditing resets the model's properties.
         model.stopEditing()
-        await model.expectHasDefaultPropertyValues()
+        await model.expectDefaultPropertyValues()
     }
 }
 
@@ -235,7 +235,7 @@ struct FeatureEditorModelTests {
 
 private extension FeatureEditorModel {
     /// Verifies the model's properties have their default values.
-    func expectHasDefaultPropertyValues(sourceLocation: SourceLocation = #_sourceLocation) async {
+    func expectDefaultPropertyValues(sourceLocation: SourceLocation = #_sourceLocation) async {
         #expect(feature == nil, sourceLocation: sourceLocation)
         #expect(!isPresented, sourceLocation: sourceLocation)
         #expect(rootFeatureForm == nil, sourceLocation: sourceLocation)
@@ -283,8 +283,28 @@ private extension FeatureEditorModel {
     }
 }
 
+private extension TableDescription {
+    /// A description for a table containing WGS84 points.
+    static var points: TableDescription {
+        TableDescription(name: "Points", spatialReference: .wgs84, geometryType: Point.self)
+    }
+}
+
+private extension Task where Failure == Never, Success == Never {
+    /// Verifies a condition eventually becomes true.
+    @MainActor
+    static func expect(
+        _ condition: @autoclosure @escaping @MainActor () -> Bool,
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) async {
+        // Timeout error is ignored since the condition is already verified in the expect below.
+        try? await yield(timeout: 0.1, until: condition)
+        #expect(condition(), sourceLocation: sourceLocation)
+    }
+}
+
 /// A file containing a temporary mobile geodatabase.
-private final class GeodatabaseFile {
+private final class TemporaryGeodatabaseFile {
     /// The geodatabase contained in the file.
     let geodatabase: Geodatabase
     
@@ -303,25 +323,5 @@ private final class GeodatabaseFile {
         geodatabase.close()
         let temporaryDirectoryURL = geodatabase.fileURL.deletingLastPathComponent()
         try? FileManager.default.removeItem(at: temporaryDirectoryURL)
-    }
-}
-
-private extension TableDescription {
-    /// A description for table containing WGS84 points.
-    static var points: TableDescription {
-        TableDescription(name: "Points", spatialReference: .wgs84, geometryType: Point.self)
-    }
-}
-
-private extension Task where Failure == Never, Success == Never {
-    /// Verifies a given condition is true after yielding if needed.
-    @MainActor
-    static func expect(
-        _ condition: @autoclosure @escaping @MainActor () -> Bool,
-        sourceLocation: SourceLocation = #_sourceLocation
-    ) async {
-        // The timeout error is ignored since the condition is already verified in the expect below.
-        try? await yield(timeout: 0.1, until: condition)
-        #expect(condition(), sourceLocation: sourceLocation)
     }
 }
