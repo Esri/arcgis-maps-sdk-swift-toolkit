@@ -22,9 +22,9 @@ import Testing
 struct FeatureEditorModelTests {
     /// Verifies the model properties' default values.
     @Test
-    func initializer() {
+    func initializer() async {
         let model = FeatureEditorModel()
-        model.expectHasDefaultPropertyValues()
+        await model.expectHasDefaultPropertyValues()
     }
     
     /// Verifies `isPresented` is `true` when editing and resets the model's properties when set
@@ -45,18 +45,18 @@ struct FeatureEditorModelTests {
         model.expectIsEditing(rootFeature: feature)
         #expect(model.isPresented == (model.rootFeatureForm != nil))
         
-        try await model.expectIsGeometryEditing()
-        model.expectIsEditing(geometry: geometry)
+        await model.expectIsGeometryEditing()
+        await model.expectIsEditing(geometry: geometry)
         
         // Verifies setting isPresented to false resets the model's properties.
         model.isPresented = false
-        model.expectHasDefaultPropertyValues()
+        await model.expectHasDefaultPropertyValues()
     }
     
     /// Verifies `monitorGeometryEditorStreams()` updates model properties
     /// when the geometry editor starts and stops.
     @Test
-    func monitorGeometryEditorStreams() async throws {
+    func monitorGeometryEditorStreams() async {
         let model = FeatureEditorModel()
         let monitorTask = Task(operation: model.monitorGeometryEditorStreams)
         defer { monitorTask.cancel() }
@@ -64,22 +64,16 @@ struct FeatureEditorModelTests {
         // Starts the geometry editor with a geometry.
         let geometry = Point(x: 0, y: 0)
         model.geometryEditor.start(withInitial: geometry)
-        try await Task.yield(timeout: 0.1) { @MainActor in
-            model.geometryEditorIsStarted
-        }
-        #expect(model.geometryEditorIsStarted)
-        #expect(model.geometryEditorGeometry == geometry)
+        await Task.expect(model.geometryEditorIsStarted)
+        await Task.expect(model.geometryEditorGeometry == geometry)
         
         // Stops the geometry editor.
         model.geometryEditor.stop()
-        try await Task.yield(timeout: 0.1) { @MainActor in
-            !model.geometryEditorIsStarted
-        }
-        #expect(!model.geometryEditorIsStarted)
-        #expect(model.geometryEditorGeometry == nil)
+        await Task.expect(!model.geometryEditorIsStarted)
+        await Task.expect(model.geometryEditorGeometry == nil)
         
         // Verifies no other properties have been modified.
-        model.expectHasDefaultPropertyValues()
+        await model.expectHasDefaultPropertyValues()
     }
     
     /// Verifies `restartGeometryEditor()` restarts the geometry editor if it is started.
@@ -91,8 +85,7 @@ struct FeatureEditorModelTests {
         
         // Verifies restartGeometryEditor does nothing if the geometry editor has not started.
         model.restartGeometryEditor()
-        await Task.yield()
-        model.expectHasDefaultPropertyValues()
+        await model.expectHasDefaultPropertyValues()
         
         // Starts the feature editor.
         let geodatabaseFile = try await GeodatabaseFile()
@@ -101,16 +94,16 @@ struct FeatureEditorModelTests {
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
         
         try await model.startEditing(rootFeature: feature, on: nil)
-        try await model.expectIsGeometryEditing()
-        model.expectIsEditing(geometry: geometry)
+        await model.expectIsGeometryEditing()
+        await model.expectIsEditing(geometry: geometry)
         
         // Verifies restartGeometryEditor restarts the geometry editor when it is started.
         let newGeometry = Point(latitude: 1, longitude: 1)
         feature.geometry = newGeometry
         
         model.restartGeometryEditor()
-        try await model.expectIsGeometryEditing()
-        model.expectIsEditing(geometry: newGeometry)
+        await model.expectIsGeometryEditing()
+        await model.expectIsEditing(geometry: newGeometry)
     }
     
     /// Verifies `startEditing(rootFeature:on:)` and `startEditing(newFeatureForm:)` using
@@ -135,8 +128,8 @@ struct FeatureEditorModelTests {
             model.expectIsEditing(rootFeature: feature)
             
             // Verifies geometry editor is started using the feature's geometry.
-            try await model.expectIsGeometryEditing()
-            model.expectIsEditing(geometry: geometry)
+            await model.expectIsGeometryEditing()
+            await model.expectIsEditing(geometry: geometry)
             
             // Verifies map is loaded when starting.
             #expect(map.loadStatus == .loaded)
@@ -158,8 +151,8 @@ struct FeatureEditorModelTests {
             #expect(model.isPresented)
             
             // Verifies geometry editor uses the new geometry.
-            try await model.expectIsGeometryEditing()
-            model.expectIsEditing(geometry: geometry)
+            await model.expectIsGeometryEditing()
+            await model.expectIsEditing(geometry: geometry)
         }
     }
     
@@ -178,7 +171,7 @@ struct FeatureEditorModelTests {
         // Verifies feature editor and geometry editor are started.
         try await model.startEditing(rootFeature: feature, on: nil)
         model.expectIsEditing(rootFeature: feature)
-        try await model.expectIsGeometryEditing()
+        await model.expectIsGeometryEditing()
         
         // Verifies geometry editor is using the table's geometry type.
         let modelGeometry = try #require(model.geometryEditorGeometry)
@@ -207,10 +200,9 @@ struct FeatureEditorModelTests {
         model.expectIsEditing(rootFeature: feature)
         
         // Geometry editor is not started.
-        await Task.yield()
-        #expect(!model.geometryEditorIsStarted)
-        #expect(model.geometryEditorGeometry == nil)
-        #expect(!model.geometryEditorCanUndo)
+        await Task.expect(!model.geometryEditorIsStarted)
+        await Task.expect(model.geometryEditorGeometry == nil)
+        await Task.expect(!model.geometryEditorCanUndo)
         #expect(model.viewpointGeometry == nil)
         #expect(!model.geometryEditor.snapSettings.isEnabled)
     }
@@ -230,12 +222,12 @@ struct FeatureEditorModelTests {
         // Verifies feature editor and geometry editor are started.
         try await model.startEditing(rootFeature: feature, on: nil)
         model.expectIsEditing(rootFeature: feature)
-        try await model.expectIsGeometryEditing()
-        model.expectIsEditing(geometry: geometry)
+        await model.expectIsGeometryEditing()
+        await model.expectIsEditing(geometry: geometry)
         
         // Verifies stopEditing resets the model's properties.
         model.stopEditing()
-        model.expectHasDefaultPropertyValues()
+        await model.expectHasDefaultPropertyValues()
     }
 }
 
@@ -243,14 +235,16 @@ struct FeatureEditorModelTests {
 
 private extension FeatureEditorModel {
     /// Verifies the model's properties have their default values.
-    func expectHasDefaultPropertyValues(sourceLocation: SourceLocation = #_sourceLocation) {
+    func expectHasDefaultPropertyValues(sourceLocation: SourceLocation = #_sourceLocation) async {
         #expect(feature == nil, sourceLocation: sourceLocation)
         #expect(!isPresented, sourceLocation: sourceLocation)
         #expect(rootFeatureForm == nil, sourceLocation: sourceLocation)
         #expect(viewpointGeometry == nil, sourceLocation: sourceLocation)
-        #expect(!geometryEditorCanUndo, sourceLocation: sourceLocation)
-        #expect(geometryEditorGeometry == nil, sourceLocation: sourceLocation)
-        #expect(!geometryEditorIsStarted, sourceLocation: sourceLocation)
+        
+        // Yields to ensure geometry editor properties are updated by monitorGeometryEditorStreams().
+        await Task.expect(!self.geometryEditorCanUndo, sourceLocation: sourceLocation)
+        await Task.expect(self.geometryEditorGeometry == nil, sourceLocation: sourceLocation)
+        await Task.expect(!self.geometryEditorIsStarted, sourceLocation: sourceLocation)
     }
     
     /// Verifies the model has started editing a given feature instance as the root feature.
@@ -267,22 +261,22 @@ private extension FeatureEditorModel {
     }
     
     /// Verifies the model is editing a given geometry.
-    func expectIsEditing(geometry: Geometry, sourceLocation: SourceLocation = #_sourceLocation) {
-        #expect(geometryEditorGeometry == geometry, sourceLocation: sourceLocation)
+    func expectIsEditing(
+        geometry: Geometry,
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) async {
+        await Task.expect(self.geometryEditorGeometry == geometry, sourceLocation: sourceLocation)
         
         // The geometry is used to set the viewpoint.
         #expect(viewpointGeometry == geometry, sourceLocation: sourceLocation)
     }
     
     /// Verifies the model's geometry editor has started.
-    func expectIsGeometryEditing(sourceLocation: SourceLocation = #_sourceLocation) async throws {
-        try await Task.yield(timeout: 0.1) { @MainActor in
-            self.geometryEditorIsStarted
-        }
-        #expect(geometryEditorIsStarted, sourceLocation: sourceLocation)
+    func expectIsGeometryEditing(sourceLocation: SourceLocation = #_sourceLocation) async {
+        await Task.expect(self.geometryEditorIsStarted, sourceLocation: sourceLocation)
         
         // Verifies it started without any edits.
-        #expect(!geometryEditorCanUndo, sourceLocation: sourceLocation)
+        await Task.expect(!self.geometryEditorCanUndo, sourceLocation: sourceLocation)
         
         // Verifies snap settings are enabled by default.
         #expect(geometryEditor.snapSettings.isEnabled, sourceLocation: sourceLocation)
@@ -316,5 +310,18 @@ private extension TableDescription {
     /// A description for table containing WGS84 points.
     static var points: TableDescription {
         TableDescription(name: "Points", spatialReference: .wgs84, geometryType: Point.self)
+    }
+}
+
+private extension Task where Failure == Never, Success == Never {
+    /// Verifies a given condition is true after yielding if needed.
+    @MainActor
+    static func expect(
+        _ condition: @autoclosure @escaping @MainActor () -> Bool,
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) async {
+        // The timeout error is ignored since the condition is already verified in the expect below.
+        try? await yield(timeout: 0.1, until: condition)
+        #expect(condition(), sourceLocation: sourceLocation)
     }
 }
