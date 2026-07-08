@@ -37,7 +37,7 @@ final class FeatureEditorModel {
         }
     }
     /// The form currently presented in the feature editor's `FeatureFormView`.
-    /// This is non-`nil` after navigating to an association feature.
+    /// This is non-`nil` after a new feature form is shown in the view.
     private var presentedFeatureForm: FeatureForm?
     /// The root feature form to edit with the feature editor.
     private(set) var rootFeatureForm: FeatureForm?
@@ -57,9 +57,11 @@ final class FeatureEditorModel {
     
     // MARK: Snapping Properties
     
-    /// The snap rules for the `feature`, if applicable, used to sync snap source settings.
+    /// The snap rules for the `feature`, used to sync snap source settings.
+    /// This is non-`nil` when snap rules were successfully created using the `utilityNetwork`.
     private var snapRules: SnapRules?
-    /// The `feature`'s utility network, if applicable, used to create snap rules.
+    /// The `feature`'s utility network used to create snap rules.
+    /// This is non-`nil` when a map containing the feature's UN is used to start editing.
     private var utilityNetwork: UtilityNetwork?
     
     // MARK: Methods
