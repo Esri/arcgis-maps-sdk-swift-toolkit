@@ -32,7 +32,8 @@ struct FeatureEditorTestView: View {
             .overlay(alignment: .topTrailing) {
                 FeatureEditor(
                     $featureToEdit,
-                    geometryEditor: geometryEditor
+                    geometryEditor: geometryEditor,
+                    map: map
                 )
                 .padding()
             }
