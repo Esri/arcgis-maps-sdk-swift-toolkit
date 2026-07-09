@@ -147,8 +147,43 @@ final class FeatureEditorToolbarTests: XCTestCase {
         app.buttons["Cancel"].assertExistenceAndTap()
         toolButton.assertNonExistence(timeout: 1)
     }
+    
+    /// Verifies the snap settings toggles states when a feature is selected
+    /// for editing.
+    func testDefaultToggleStatesAndPreservation() {
+        let app = XCUIApplication()
+        
+        openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
+        app.buttons["Settings"].assertExistenceAndTap()
+        
+        let geometryGuidesToggle = app.snapToggle(named: "Snap to Geometry Guides")
+        let featuresToggle = app.snapToggle(named: "Snap to Features")
+        geometryGuidesToggle.assertExistence()
+        featuresToggle.assertExistence()
+        
+        // By default, the geometry guides toggle should be off, and the
+        // snap to features toggle should be on.
+        XCTAssertEqual(geometryGuidesToggle.boolValue, false)
+        XCTAssertEqual(featuresToggle.boolValue, true)
+        
+        // Use one snap source toggle to verify that snapping to snap sources
+        // are disabled by default.
+        let structureLineToggle = app.snapToggle(named: "Structure Line")
+        structureLineToggle.assertExistence()
+        XCTAssertEqual(structureLineToggle.boolValue, false)
+        
+        // Turn on some toggles and verify their states are preserved when the
+        // settings view is reopened.
+        geometryGuidesToggle.tapResolvedToggleControl()
+        structureLineToggle.tapResolvedToggleControl()
+        // Close the settings view.
+        app.buttons["Close"].assertExistenceAndTap()
+        // Reopen the settings view and verify the toggles states are preserved.
+        app.buttons["Settings"].assertExistenceAndTap()
+        XCTAssertEqual(geometryGuidesToggle.boolValue, true)
+        XCTAssertEqual(structureLineToggle.boolValue, true)
+    }
 }
-
 
 private extension String {
     static let electricDistributionDevice = "Electric Distribution Device"
@@ -172,6 +207,24 @@ private extension XCUIElement {
         menuItems[name]
 #else
         buttons[name]
+#endif
+    }
+    
+    /// The snap toggle with the given name in the snap settings view.
+    func snapToggle(named name: String) -> XCUIElement {
+#if targetEnvironment(macCatalyst)
+        checkBoxes[name]
+#else
+        switches[name]
+#endif
+    }
+    
+    /// Taps the snap toggle with the correct tapping behavior based on the platform.
+    func tapResolvedToggleControl() {
+#if targetEnvironment(macCatalyst)
+        tap()
+#else
+        switches.firstMatch.tap()
 #endif
     }
 }
