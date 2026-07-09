@@ -2081,20 +2081,26 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_14_1() throws {
         let app = XCUIApplication()
         let addAttachmentButton = app.buttons["Add Attachment"]
+        let attachment1Label = app.staticTexts["Attachment1"]
         let chooseFromFilesButton = app.buttons["Choose From Files"]
         let chooseFromLibraryButton = app.buttons["Choose From Library"]
-        let elementTitle = "General - All Inputs"
+        let element1Title = "General - All Inputs"
+        let element2Title = "General - Photo Only"
+        let elementFooterValidationError = app.staticTexts["At least 1 attachment is required."]
         let formTitle = app.staticTexts["AttachmentsFormElement"]
         let maximumReachedMessage = app.staticTexts["The maximum number of attachments allowed is 2."]
         let photosPickerApp = XCUIApplication(bundleIdentifier: "com.apple.mobileslideshow.photospicker")
         let photoPickerPhoto1 = photosPickerApp.images["Photo, March 30, 2018, 12:14"]
         let photoPickerPhoto2 = photosPickerApp.images["Photo, August 08, 2012, 14:55"]
+        let saveButton = app.buttons["Save"]
         let takePhotoOrVideoButton = app.buttons["Take Photo or Video"]
+        let validationErrorsAlert = app.alerts["Validation Errors"]
+        let validationErrorsAlertContinueButton = validationErrorsAlert.buttons["Continue Editing"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        app.filterElements(elementTitle)
+        app.filterElements(element1Title)
         addAttachmentButton.assertExistenceAndTap()
         takePhotoOrVideoButton.assertExistence()
         chooseFromFilesButton.assertExistence()
@@ -2104,6 +2110,18 @@ final class FeatureFormViewTests: XCTestCase {
         chooseFromLibraryButton.assertExistenceAndTap()
         photoPickerPhoto2.assertExistenceAndTap()
         maximumReachedMessage.assertExistence()
+        attachment1Label.assertNonExistence()
+        app.filterElements(element2Title)
+        saveButton.assertExistenceAndTap()
+        validationErrorsAlert.assertExistence()
+        validationErrorsAlertContinueButton.assertExistenceAndTap()
+        elementFooterValidationError.assertExistence()
+        addAttachmentButton.assertExistenceAndTap()
+        chooseFromLibraryButton.assertExistenceAndTap()
+        XCTExpectFailure("The photo picker is unresponsive to programatic taps after being presented a second time.")
+        photoPickerPhoto1.assertExistenceAndTap()
+        elementFooterValidationError.assertNonExistence()
+        attachment1Label.assertExistence()
     }
     
     func testCase_14_2() throws {
