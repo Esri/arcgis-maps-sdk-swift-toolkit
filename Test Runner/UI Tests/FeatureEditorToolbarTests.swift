@@ -166,6 +166,12 @@ final class FeatureEditorToolbarTests: XCTestCase {
         XCTAssertEqual(geometryGuidesToggle.boolValue, false)
         XCTAssertEqual(featuresToggle.boolValue, true)
         
+        // Snap sources should have been synced with snap rules and source
+        // toggles with "Rules prevent snapping" should be disabled.
+        let structureLineToggle = app.snapToggle(named: "Structure Line, Rules prevent snapping.")
+        structureLineToggle.assertExistence()
+        XCTAssertFalse(structureLineToggle.isEnabled)
+        
         // Use one snap source toggle to verify that snapping to snap sources
         // are disabled by default.
         let dirtyAreasToggle = app.snapToggle(named: "NapervilleElectricV5 - Dirty Areas")
