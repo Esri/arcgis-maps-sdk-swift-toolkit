@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
-import OSLog
+internal import os
 import SwiftUI
 
 public extension View {
@@ -26,8 +26,7 @@ public extension View {
     }
 }
 
-/// A view modifier that presents a `FeatureEditorView` in an inspector when
-/// a feature is non-`nil`.
+/// A view modifier that presents a `FeatureEditorFormView` in an inspector.
 @available(visionOS, unavailable)
 private struct FeatureEditorModifier: ViewModifier {
     /// The feature editor model shared by the toolbar and inspector.
@@ -36,24 +35,12 @@ private struct FeatureEditorModifier: ViewModifier {
     /// This is needed to set the default detent to medium.
     @State private var selectedPresentationDetent = PresentationDetent.medium
     
-    /// A binding to a Boolean value that indicates whether the inspector should be presented.
-    /// This maps `model.featureForm` to a Boolean value.
-    private var isPresented: Binding<Bool> {
-        Binding { model.featureForm != nil } set: { _ in model.featureForm = nil }
-    }
-    
     func body(content: Content) -> some View {
         content
-            .safeInspector(isPresented: isPresented) {
+            .safeInspector(isPresented: $model.isPresented) {
                 // VStack is needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
-                    if let featureForm = model.featureForm {
-                        FeatureEditorView(
-                            featureForm: featureForm,
-                            isPresented: isPresented,
-                            isMinimized: selectedPresentationDetent == .bar
-                        )
-                    }
+                    FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
                 }
                 .presentationBackgroundInteraction(.enabled)
                 .presentationContentInteraction(.scrolls)
@@ -65,39 +52,20 @@ private struct FeatureEditorModifier: ViewModifier {
                 .interactiveDismissDisabled()
             }
             .environment(model)
-            .onChange(of: isPresented.wrappedValue) {
-                // Stops the geometry editor when the inspector is dismissed.
-                // This is done in an onChange modifier to sync the stop with
-                // the inspector's disappearance (onDisappear is too slow).
-                // It needs to happen outside of the inspector since onChange
-                // doesn't fire before it is dismissed on some platforms.
-                model.geometryEditor.stop()
-            }
     }
 }
 
-/// A view that displays a `FeatureFormView` and manages a geometry editor for editing a feature.
-private struct FeatureEditorView: View {
-    /// The root feature form to display in the `FeatureFormView`.
-    private let rootFeatureForm: FeatureForm
-    /// A Boolean value indicating whether the view is presented.
-    @Binding private var isPresented: Bool
+/// A view that contains the `FeatureFormView` for the feature editor.
+private struct FeatureEditorFormView: View {
+    /// A Boolean value indicating whether the parent presentation is minimized.
+    let isMinimized: Bool
+    
     /// The feature editor model from the environment. This is needed to access
     /// the geometry editor.
     @Environment(FeatureEditorModel.self) private var model
-    /// A Boolean value indicating whether the parent presentation is minimized.
-    private let isMinimized: Bool
     
     /// The form currently presented in the `FeatureFormView`.
-    @State private var presentedFeatureForm: FeatureForm
-    
-    /// A value that changes when the geometry editor needs to be started.
-    private var startGeometryEditorID: Int {
-        var hasher = Hasher()
-        hasher.combine(ObjectIdentifier(model.geometryEditor))
-        hasher.combine(ObjectIdentifier(presentedFeatureForm))
-        return hasher.finalize()
-    }
+    @State private var presentedFeatureForm: FeatureForm?
     
     /// A closure that saves geometry edits to the form's feature. This is
     /// non-`nil` only when there are edits, so the `FeatureFormView`
@@ -108,41 +76,32 @@ private struct FeatureEditorView: View {
             guard let geometry = model.geometryEditorGeometry, geometry.sketchIsValid else {
                 throw InvalidGeometryError()
             }
-            presentedFeatureForm.feature.geometry = geometry
+            model.feature?.geometry = geometry
         }
     }
     
-    init(featureForm: FeatureForm, isPresented: Binding<Bool>, isMinimized: Bool) {
-        self.rootFeatureForm = featureForm
-        self._isPresented = isPresented
-        self._presentedFeatureForm = State(initialValue: rootFeatureForm)
-        self.isMinimized = isMinimized
-    }
-    
     var body: some View {
-        FeatureFormView(root: rootFeatureForm, isPresented: $isPresented)
-            .editingButtons(isMinimized ? .hidden : .automatic)
-            .onFeatureFormChanged { presentedFeatureForm = $0 }
-            .onFormEditingEvent(perform: handleFormEditingEvent)
-            .environment(\.externalSaveAction, saveGeometryEditsAction)
-            .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
-                presentedFeatureForm = rootFeatureForm
-            }
-            .task(id: startGeometryEditorID) {
-                do {
-                    // Stops the geometry editor so it will not continue running if
-                    // the new feature cannot be edited.
-                    model.geometryEditor.stop()
+        if let rootFeatureForm = model.rootFeatureForm {
+            @Bindable var model = model
+            
+            FeatureFormView(root: rootFeatureForm, isPresented: $model.isPresented)
+                .editingButtons(isMinimized ? .hidden : .automatic)
+                .onFeatureFormChanged { presentedFeatureForm = $0 }
+                .onFormEditingEvent(perform: handleFormEditingEvent)
+                .environment(\.externalSaveAction, saveGeometryEditsAction)
+                .task(id: presentedFeatureForm.map(ObjectIdentifier.init)) {
+                    guard let presentedFeatureForm else { return }
+                    defer { self.presentedFeatureForm = nil }
                     
-                    try await loadFeature()
-                    model.viewpointGeometry = presentedFeatureForm.feature.geometry
-                    startGeometryEditor()
-                } catch {
-                    Logger.featureEditor.error(
-                        "Error starting geometry editor: \(String(describing: error))"
-                    )
+                    do {
+                        try await model.startEditing(newFeatureForm: presentedFeatureForm)
+                    } catch {
+                        Logger.featureEditor.error(
+                            "Error starting feature editor: \(error.localizedDescription)"
+                        )
+                    }
                 }
-            }
+        }
     }
     
     /// Handles events from the `FeatureFormView.onFormEditingEvent(perform:)` modifier.
@@ -152,41 +111,15 @@ private struct FeatureEditorView: View {
         case .discardedEdits(let willNavigate):
             // Restarts the geometry editor when the form footer discard button is pressed.
             guard !willNavigate else { break }
-            startGeometryEditor()
+            model.restartGeometryEditor()
         case .savedEdits(let willNavigate):
             // Closes the inspector when the form footer save button is pressed.
             guard !willNavigate else { break }
-            isPresented = false
+            model.isPresented = false
         case .showOnMapRequested(let feature):
             model.viewpointGeometry = feature.geometry
         default:
             break
-        }
-    }
-    
-    /// Loads the form's feature and its properties needed to start the geometry editor.
-    private func loadFeature() async throws {
-        // Loads the feature so that canUpdateGeometry can be accessed. It is false otherwise.
-        let feature = presentedFeatureForm.feature
-        try await feature.load()
-        
-        // Loads the feature's table if the geometry is nil so that geometryType can be accessed.
-        // It is nil otherwise.
-        guard feature.canUpdateGeometry, feature.geometry == nil, let table = feature.table else {
-            return
-        }
-        try await table.load()
-    }
-    
-    /// Starts the geometry editor using the form's feature.
-    private func startGeometryEditor() {
-        let feature = presentedFeatureForm.feature
-        guard feature.canUpdateGeometry else { return }
-        
-        if let geometry = feature.geometry {
-            model.geometryEditor.start(withInitial: geometry)
-        } else if let geometryType = feature.table?.geometryType {
-            model.geometryEditor.start(withType: geometryType)
         }
     }
 }
@@ -212,13 +145,6 @@ private struct InvalidGeometryError: LocalizedError {
 }
 
 // MARK: - Extensions
-
-private extension Logger {
-    /// A logger for the Feature Editor.
-    static var featureEditor: Logger {
-        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureEditor")
-    }
-}
 
 private extension PresentationDetent {
     /// A custom presentation detent that sizes to the approximate height of a top system toolbar.

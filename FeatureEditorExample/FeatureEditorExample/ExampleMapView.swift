@@ -82,6 +82,7 @@ struct ExampleMapView: View {
                     FeatureEditor(
                         $featureToEdit,
                         geometryEditor: geometryEditor,
+                        map: map,
                         mapViewProxy: mapViewProxy
                     )
                     .padding()
@@ -96,7 +97,7 @@ struct ExampleMapView: View {
         }
     }
     
-    /// Sets up the map and snap settings.
+    /// Sets up the map.
     private func setUp() async throws {
         // Note: Never hardcode login information in a production application.
         // This is done solely for the sake of the example.
@@ -107,16 +108,5 @@ struct ExampleMapView: View {
         )
         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
         try await map.retryLoad()
-        
-        // Enables the geometry editor's snap settings and sources.
-        let snapSettings = geometryEditor.snapSettings
-        snapSettings.snapsToGeometryGuides = true
-        
-        await map.operationalLayers.load()
-        try snapSettings.syncSourceSettings()
-        
-        for sourceSetting in snapSettings.sourceSettings {
-            sourceSetting.isEnabled = true
-        }
     }
 }

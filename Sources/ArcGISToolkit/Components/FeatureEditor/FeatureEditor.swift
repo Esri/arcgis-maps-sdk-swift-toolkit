@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+internal import os
 import SwiftUI
 
 /// A feature editing component that provides both the geometry editing via a
@@ -42,9 +43,7 @@ import SwiftUI
 ///
 /// **Behavior**
 ///
-/// The toolbar is visible only while a feature's geometry is being edited. The
-/// snap settings button is shown only when the geometry editor has non-empty
-/// snap source settings.
+/// The toolbar is visible only while a feature's geometry is being edited.
 ///
 /// **Associated Types**
 ///
@@ -57,6 +56,8 @@ public struct FeatureEditor: View {
     @Binding private var feature: ArcGISFeature?
     /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
     private let geometryEditor: GeometryEditor
+    /// The map that `feature` is part of, used to set up rule-based snapping.
+    private let map: Map?
     /// A proxy for performing map view operations.
     private let mapViewProxy: MapViewProxy?
     /// The style to apply to the toolbar's controls.
@@ -71,6 +72,10 @@ public struct FeatureEditor: View {
     ///   The Feature Editor is displayed when the value is non-`nil`.
     ///   - geometryEditor: A geometry editor used to edit the feature's
     ///   geometry on an associated `MapView`.
+    ///   - map: The map that `feature` is part of, used to set up rule-based
+    ///   snapping for the geometry editor. If `nil` is passed, or the feature
+    ///   is not part of a utility network contained in the map, snapping is
+    ///   set up without snap rules.
     ///   - mapViewProxy: A proxy used to set the viewpoint on an associated
     ///   `MapView`.
     ///   - toolbarStyle: The style that determines the toolbar's appearance and
@@ -80,29 +85,53 @@ public struct FeatureEditor: View {
     public init(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
+        map: Map?,
         mapViewProxy: MapViewProxy? = nil,
         toolbarStyle: ToolbarStyle? = .vertical
     ) {
         self._feature = feature
         self.geometryEditor = geometryEditor
+        self.map = map
         self.mapViewProxy = mapViewProxy
         self.toolbarStyle = toolbarStyle
     }
     
+    /// A collection of object ids used to determine when to start editing.
+    /// This updates when the `feature` or `map` instances change.
+    private var startEditingIDs: [ObjectIdentifier] {
+        let objects: [AnyObject?] = [feature, map]
+        return objects.compactMap { $0.map(ObjectIdentifier.init) }
+    }
+    
     public var body: some View {
         FeatureEditorToolbar(style: toolbarStyle)
-            .onChange(of: feature.map(ObjectIdentifier.init), initial: true) {
-                model.featureForm = feature.map(FeatureForm.init)
-            }
-            .onChange(of: model.featureForm.map(ObjectIdentifier.init)) {
-                feature = model.featureForm?.feature
-            }
             .task(id: ObjectIdentifier(geometryEditor)) {
                 model.geometryEditor = geometryEditor
+                model.restartGeometryEditor()
                 await model.monitorGeometryEditorStreams()
             }
+            .task(id: startEditingIDs) {
+                if let feature {
+                    do {
+                        try await model.startEditing(rootFeature: feature, on: map)
+                    } catch {
+                        Logger.featureEditor.error(
+                            "Error starting feature editor: \(error.localizedDescription)"
+                        )
+                    }
+                } else {
+                    model.stopEditing()
+                }
+            }
+            .onChange(of: model.isPresented) {
+                guard !model.isPresented else { return }
+                feature = nil
+            }
+            .onChange(of: ObjectIdentifier(model.geometryEditor.snapSettings)) {
+                model.syncSnapSourceSettings()
+            }
             .task(id: model.viewpointGeometry, setViewpoint)
-            .onDisappear(perform: model.reset)
+            .onDisappear(perform: model.stopEditing)
     }
     
     /// Sets the viewpoint using `model.viewpointGeometry` and the `mapViewProxy`.
@@ -126,5 +155,12 @@ extension FeatureEditor {
         case horizontal
         /// Displays the toolbar in a styled vertical layout.
         case vertical
+    }
+}
+
+extension Logger {
+    /// A logger for the feature editor component.
+    static var featureEditor: Logger {
+        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureEditor")
     }
 }

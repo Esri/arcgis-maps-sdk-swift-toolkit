@@ -56,6 +56,7 @@ struct SnapSettingsView: View {
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .disabled(rootSourceSettingsModels.isEmpty)
                 .onChange(of: snapsToFeatures) {
                     settings.snapsToFeatures = snapsToFeatures
                 }
