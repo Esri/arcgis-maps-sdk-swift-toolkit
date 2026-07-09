@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		007CF8DC2FC66BA600005B3F /* GeometryEditorToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CF8DB2FC66BA600005B3F /* GeometryEditorToolbarTests.swift */; };
-		007CF8DE2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CF8DD2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift */; };
-		00A1B2C32FD9000100ABCDEF /* SnapSettingsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A1B2C22FD9000100ABCDEF /* SnapSettingsViewTests.swift */; };
-		00A1B2C52FD9000200ABCDEF /* FeatureEditorTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A1B2C42FD9000200ABCDEF /* FeatureEditorTestView.swift */; };
+		0080506E2FF71D1400CB86A2 /* FeatureEditorToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0080506D2FF71D1400CB86A2 /* FeatureEditorToolbarTests.swift */; platformFilters = (ios, maccatalyst, ); };
+		00A1B2C52FD9000200ABCDEF /* FeatureEditorTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A1B2C42FD9000200ABCDEF /* FeatureEditorTestView.swift */; platformFilters = (ios, maccatalyst, ); };
 		75022F962A7AC9A0000ED7B7 /* FeatureFormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */; };
 		75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */; };
 		7552A7542A573CBB0023DA5A /* TestRunnerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7532A573CBB0023DA5A /* TestRunnerApp.swift */; };
@@ -83,9 +81,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		007CF8DB2FC66BA600005B3F /* GeometryEditorToolbarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryEditorToolbarTests.swift; sourceTree = "<group>"; };
-		007CF8DD2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryEditorToolbarTestView.swift; sourceTree = "<group>"; };
-		00A1B2C22FD9000100ABCDEF /* SnapSettingsViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapSettingsViewTests.swift; sourceTree = "<group>"; };
+		0080506D2FF71D1400CB86A2 /* FeatureEditorToolbarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureEditorToolbarTests.swift; sourceTree = "<group>"; };
 		00A1B2C42FD9000200ABCDEF /* FeatureEditorTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureEditorTestView.swift; sourceTree = "<group>"; };
 		75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFormViewTests.swift; sourceTree = "<group>"; };
 		75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase5View.swift; sourceTree = "<group>"; };
@@ -211,11 +207,10 @@
 				75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */,
 				7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */,
 				797951832FA5404B000E537C /* BuildingExplorerTests.swift */,
+				0080506D2FF71D1400CB86A2 /* FeatureEditorToolbarTests.swift */,
 				75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */,
 				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
-				007CF8DB2FC66BA600005B3F /* GeometryEditorToolbarTests.swift */,
 				D7FDFCBB2DF208BD00ED91C1 /* PopupViewTests.swift */,
-				00A1B2C22FD9000100ABCDEF /* SnapSettingsViewTests.swift */,
 				8A3982E32E39428500A8F1AF /* UtilityNetworkTraceTests.swift */,
 			);
 			path = "UI Tests";
@@ -245,7 +240,6 @@
 				00A1B2C42FD9000200ABCDEF /* FeatureEditorTestView.swift */,
 				8A9F898E2B5B4F0A0027215E /* FeatureFormViewTestView.swift */,
 				75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */,
-				007CF8DD2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift */,
 				D7FDFCBD2DF2090300ED91C1 /* PopupTestView.swift */,
 				8A3982E12E39393500A8F1AF /* UtilityNetworkTraceTestView.swift */,
 			);
@@ -481,7 +475,6 @@
 				79A0AB152FA8F89B001C81C8 /* BuildingExplorerTestData.swift in Sources */,
 				8AC5AA652E428CB000F0F0E0 /* UserDefaults.swift in Sources */,
 				7979518F2FA566FB000E537C /* BuildingExplorerTestCase3View.swift in Sources */,
-				007CF8DE2FC66BC500005B3F /* GeometryEditorToolbarTestView.swift in Sources */,
 				7584B75B2B1A824300772AB7 /* BookmarksTestCase4View.swift in Sources */,
 				D7FDFCBE2DF2090300ED91C1 /* PopupTestView.swift in Sources */,
 				75B236692A5CB49B00AEFACE /* BasemapGalleryTestView.swift in Sources */,
@@ -499,11 +492,10 @@
 				75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */,
 				D7FDFCBC2DF208BD00ED91C1 /* PopupViewTests.swift in Sources */,
 				797951842FA54050000E537C /* BuildingExplorerTests.swift in Sources */,
-				00A1B2C32FD9000100ABCDEF /* SnapSettingsViewTests.swift in Sources */,
 				8A3982E42E3942A100A8F1AF /* UtilityNetworkTraceTests.swift in Sources */,
 				8AF7DF432F52329B00174515 /* XCUIElement.swift in Sources */,
-				007CF8DC2FC66BA600005B3F /* GeometryEditorToolbarTests.swift in Sources */,
 				8A99A0B42F20578B0021819A /* XCTestCase.swift in Sources */,
+				0080506E2FF71D1400CB86A2 /* FeatureEditorToolbarTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -80,25 +80,25 @@ private extension FeatureEditorTestView {
             try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(.publicSample)
             try await map.retryLoad()
             
-            guard let groupLayer = map.operationalLayers.first as? GroupLayer,
-                  let layer = groupLayer.layers.first(where: { $0.name == "Electric Distribution Device" }),
+            guard let objectID = UserDefaults.standard.objectID,
+                  let layerName = UserDefaults.standard.layerName,
+                  let groupLayer = map.operationalLayers.first as? GroupLayer,
+                  let layer = groupLayer.layers.first(where: { $0.name == layerName }),
                   let featureLayer = layer as? FeatureLayer else {
-                errorDescription = "Electric Distribution Device layer not found."
+                errorDescription = "Missing or invalid launch arguments."
                 return
             }
             
-            try await startEditingFeature(withIdentifier: 3321, on: featureLayer)
+            try await startEditingFeature(withIdentifier: objectID, on: featureLayer)
         } catch {
             errorDescription = error.localizedDescription
         }
     }
-}
-
-private extension FeatureEditorTestView {
+    
     /// Makes a map from a portal item.
     static func makeMap() -> Map {
         let napervilleElectricUtilityNetwork = PortalItem(
-            portal: .arcGISOnline(connection: .authenticated),
+            portal: .arcGISOnline(connection: .anonymous),
             id: PortalItem.ID("471eb0bf37074b1fbb972b1da70fb310")!
         )
         let map = Map(item: napervilleElectricUtilityNetwork)
