@@ -2079,6 +2079,10 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     func testCase_14_1() throws {
+        // Catalyst doesn't have the same sample photos as iOS that make this
+        // test possible.
+        try skipIf(macCatalyst: true)
+        
         let app = XCUIApplication()
         let addAttachmentButton = app.buttons["Add Attachment"]
         let attachment1Label = app.staticTexts["Attachment1"]
