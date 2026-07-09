@@ -2158,13 +2158,12 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     func testCase_14_3() throws {
-        let app = XCUIApplication()
+        // visionOS doesn't provide a way of dismissing the attachment import
+        // menu which the test design calls for in two spots.
+        try skipIf(visionOS: true)
         
-#if os(visionOS)
-        let addAttachmentButton = app.collectionViews.buttons.staticTexts["Add Attachment"]
-#else
+        let app = XCUIApplication()
         let addAttachmentButton = app.buttons["Add Attachment"]
-#endif
         
 #if targetEnvironment(macCatalyst)
         let chooseFromFilesButton = app.menuItems["choose_from_files"]
@@ -2176,7 +2175,8 @@ final class FeatureFormViewTests: XCTestCase {
         let takePhotoButton = app.buttons["Take Photo"]
 #endif
         
-        let dismissPopover = app.buttons["PopoverDismissRegion"].firstMatch
+        let dismissPopover = app.windows.containing(.other, identifier: "SystemInputAssistantView").firstMatch
+        
         let element1Title = "Media - Photo - Any"
         let element2Title = "Media - Photo - Capture"
         let element3Title = "Media - Photo - Upload"
@@ -2187,25 +2187,27 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.filterElements(element1Title)
         addAttachmentButton.assertExistenceAndTap()
-#if os(visionOS)
-        takePhotoButton.assertNonExistence()
-#else
         takePhotoButton.assertExistence()
-#endif
         chooseFromLibraryButton.assertExistence()
         chooseFromFilesButton.assertExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
         dismissPopover.assertExistenceAndTap()
+#endif
         
         app.filterElements(element2Title)
         addAttachmentButton.assertExistenceAndTap()
-#if os(visionOS)
-        takePhotoButton.assertNonExistence()
-#else
         takePhotoButton.assertExistence()
-#endif
         chooseFromFilesButton.assertNonExistence()
         chooseFromLibraryButton.assertNonExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
         dismissPopover.assertExistenceAndTap()
+#endif
         
         app.filterElements(element3Title)
         addAttachmentButton.assertExistenceAndTap()
