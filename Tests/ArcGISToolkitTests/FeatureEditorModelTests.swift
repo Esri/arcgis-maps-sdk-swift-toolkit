@@ -66,12 +66,10 @@ struct FeatureEditorModelTests {
         model.geometryEditor.start(withInitial: geometry)
         await Task.expect(model.geometryEditorIsStarted)
         await Task.expect(model.geometryEditorGeometry == geometry)
+        await Task.expect(!model.geometryEditorCanUndo)
         
         // Stops the geometry editor.
         model.geometryEditor.stop()
-        await Task.expect(!model.geometryEditorIsStarted)
-        await Task.expect(model.geometryEditorGeometry == nil)
-        
         // Verifies no other properties have been modified.
         await model.expectDefaultPropertyValues()
     }
