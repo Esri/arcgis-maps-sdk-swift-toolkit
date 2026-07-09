@@ -283,6 +283,7 @@ struct AttachmentImportMenu: View {
             } icon: {
                 Image(systemName: "plus.circle.fill")
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .disabled(importState.importInProgress)
         .cameraRequester(cameraRequester)

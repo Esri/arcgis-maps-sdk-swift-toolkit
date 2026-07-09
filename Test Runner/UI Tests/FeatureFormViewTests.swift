@@ -2080,42 +2080,86 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_14_1() throws {
         let app = XCUIApplication()
+        let addAttachmentButton = app.buttons["Add Attachment"]
+        let chooseFromFilesButton = app.buttons["Choose From Files"]
+        let chooseFromLibraryButton = app.buttons["Choose From Library"]
+        let elementTitle = "General - All Inputs"
         let formTitle = app.staticTexts["AttachmentsFormElement"]
+        let maximumReachedMessage = app.staticTexts["The maximum number of attachments allowed is 2."]
+        let photosPickerApp = XCUIApplication(bundleIdentifier: "com.apple.mobileslideshow.photospicker")
+        let photoPickerPhoto1 = photosPickerApp.images["Photo, March 30, 2018, 12:14"]
+        let photoPickerPhoto2 = photosPickerApp.images["Photo, August 08, 2012, 14:55"]
+        let takePhotoOrVideoButton = app.buttons["Take Photo or Video"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        addAttachmentButton.assertExistenceAndTap()
+        takePhotoOrVideoButton.assertExistence()
+        chooseFromFilesButton.assertExistence()
+        chooseFromLibraryButton.assertExistenceAndTap()
+        photoPickerPhoto1.assertExistenceAndTap()
+        addAttachmentButton.assertExistenceAndTap()
+        chooseFromLibraryButton.assertExistenceAndTap()
+        photoPickerPhoto2.assertExistenceAndTap()
+        maximumReachedMessage.assertExistence()
     }
     
     func testCase_14_2() throws {
         let app = XCUIApplication()
+        let elementTitle = "Document"
         let formTitle = app.staticTexts["AttachmentsFormElement"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
     }
     
     func testCase_14_3() throws {
         let app = XCUIApplication()
+        let element1Title = "Media - Photo - Any"
+        let element2Title = "Media - Photo - Capture"
+        let element3Title = "Media - Photo - Upload"
         let formTitle = app.staticTexts["AttachmentsFormElement"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(element1Title)
+        app.filterElements(element2Title)
+        app.filterElements(element3Title)
     }
     
     func testCase_14_4() throws {
         let app = XCUIApplication()
+        let element1Title = "Media - Video - Any"
+        let element2Title = "Media - Video - Capture"
+        let element3Title = "Media - Video - Upload"
         let formTitle = app.staticTexts["AttachmentsFormElement"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(element1Title)
+        app.filterElements(element2Title)
+        app.filterElements(element3Title)
     }
     
     func testCase_14_5() throws {
         let app = XCUIApplication()
+        let element1Title = "Media - Audio - Any"
+        let element2Title = "Media - Audio - Capture"
+        let element3Title = "Media - Audio - Upload"
         let formTitle = app.staticTexts["AttachmentsFormElement"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(element1Title)
+        app.filterElements(element2Title)
+        app.filterElements(element3Title)
     }
 }
 
