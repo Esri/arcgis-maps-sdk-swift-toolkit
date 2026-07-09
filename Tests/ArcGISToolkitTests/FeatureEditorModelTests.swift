@@ -70,7 +70,8 @@ struct FeatureEditorModelTests {
         
         // Stops the geometry editor.
         model.geometryEditor.stop()
-        // Verifies no other properties have been modified.
+        // Verifies the geometry editor properties have been reset and no other
+        // properties have been modified.
         await model.expectDefaultPropertyValues()
     }
     
