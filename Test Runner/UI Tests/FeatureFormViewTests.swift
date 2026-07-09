@@ -2159,6 +2159,24 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_14_3() throws {
         let app = XCUIApplication()
+        
+#if os(visionOS)
+        let addAttachmentButton = app.collectionViews.buttons.staticTexts["Add Attachment"]
+#else
+        let addAttachmentButton = app.buttons["Add Attachment"]
+#endif
+        
+#if targetEnvironment(macCatalyst)
+        let chooseFromFilesButton = app.menuItems["choose_from_files"]
+        let chooseFromLibraryButton = app.menuItems["choose_from_library"]
+        let takePhotoButton = app.menuItems["take_photo"]
+#else
+        let chooseFromFilesButton = app.buttons["Choose From Files"]
+        let chooseFromLibraryButton = app.buttons["Choose From Library"]
+        let takePhotoButton = app.buttons["Take Photo"]
+#endif
+        
+        let dismissPopover = app.buttons["PopoverDismissRegion"].firstMatch
         let element1Title = "Media - Photo - Any"
         let element2Title = "Media - Photo - Capture"
         let element3Title = "Media - Photo - Upload"
@@ -2168,8 +2186,32 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         app.filterElements(element1Title)
+        addAttachmentButton.assertExistenceAndTap()
+#if os(visionOS)
+        takePhotoButton.assertNonExistence()
+#else
+        takePhotoButton.assertExistence()
+#endif
+        chooseFromLibraryButton.assertExistence()
+        chooseFromFilesButton.assertExistence()
+        dismissPopover.assertExistenceAndTap()
+        
         app.filterElements(element2Title)
+        addAttachmentButton.assertExistenceAndTap()
+#if os(visionOS)
+        takePhotoButton.assertNonExistence()
+#else
+        takePhotoButton.assertExistence()
+#endif
+        chooseFromFilesButton.assertNonExistence()
+        chooseFromLibraryButton.assertNonExistence()
+        dismissPopover.assertExistenceAndTap()
+        
         app.filterElements(element3Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takePhotoButton.assertNonExistence()
+        chooseFromFilesButton.assertExistence()
+        chooseFromLibraryButton.assertExistence()
     }
     
     func testCase_14_4() throws {
