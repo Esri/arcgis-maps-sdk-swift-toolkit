@@ -168,7 +168,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         
         // Use one snap source toggle to verify that snapping to snap sources
         // are disabled by default.
-        let structureLineToggle = app.snapToggle(named: "Structure Line")
+        let structureLineToggle = app.snapToggle(named: "NapervilleElectricV5 - Dirty Areas")
         structureLineToggle.assertExistence()
         XCTAssertEqual(structureLineToggle.boolValue, false)
         
