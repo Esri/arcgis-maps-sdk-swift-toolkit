@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
+
 /// The possible errors when importing an attachment.
 enum AttachmentImportError: Error, Equatable {
     /// The SDK failed to create a ``ArcGIS/FormAttachment``.
@@ -20,6 +22,8 @@ enum AttachmentImportError: Error, Equatable {
     case dataInaccessible
     /// The provided file is empty (0 bytes).
     case emptyFilesNotSupported
+    /// A feature form error was thrown.
+    case featureFormError(FeatureFormError)
     /// The provided file exceeds the toolkit imposed size limit.
     case sizeLimitExceeded
     /// The file import failed with a system error.

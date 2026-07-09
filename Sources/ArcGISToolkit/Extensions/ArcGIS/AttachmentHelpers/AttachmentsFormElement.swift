@@ -14,6 +14,7 @@
 
 import ArcGIS
 import Foundation
+import SwiftUI
 
 extension AttachmentsFormElement: AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
@@ -34,6 +35,19 @@ extension AttachmentsFormElement: AttachmentsFeatureElement {
         }
     }
     
+    /// The max duration configured on the either the element's audio or video form input.
+    ///
+    /// If the element has both an audio and video form input, there will be no max duration configured.
+    var maxDuration: Duration? {
+        if let maxDuration = (inputs.first(where: { $0 is AudioFormInput }) as? AudioFormInput)?.maxDuration {
+            return maxDuration
+        } else if let maxDuration = (inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput)?.maxDuration {
+            return maxDuration
+        } else {
+            return nil
+        }
+    }
+    
     /// A descriptive label that appears with the element. Can be an empty string.
     var title: String {
         get {
@@ -42,76 +56,74 @@ extension AttachmentsFormElement: AttachmentsFeatureElement {
     }
 }
 
-#warning("""
-Prototype only. Do not merge to main.
-This will eventually be available on `element`.
-""")
+extension AttachmentsFormElement /* Validation error messages */ {
+    var exceedsMaximumAttachmentDurationMessage: Text? {
+        return if let maxDuration  {
+            Text(
+                "The media is too long. Maximum allowed duration is \(maxDuration.components.seconds) seconds.",
+                bundle: .toolkitModule,
+                comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
+            )
+        } else {
+            nil
+        }
+    }
+    
+    var incorrectAttachmentTypeMessage: Text {
+        Text(
+            "This file type is not supported.",
+            bundle: .toolkitModule,
+            comment: "A message indicating the type of the supplied attachment is not supported.."
+        )
+    }
+    
+    var maxFileSizeMessage: Text? {
+        return if let maxFileSize = (inputs.first(where: { $0 is DocumentFormInput }) as? DocumentFormInput)?.maxFileSize {
+            Text(
+                "The file is too large. Maximum allowed file size is \(maxFileSize) MB.",
+                bundle: .toolkitModule,
+                comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
+            )
+        } else {
+            nil
+        }
+    }
+    
+    var maxAttachmentCountMessage: Text? {
+        return if let maxAttachmentCount {
+            Text(
+                "The maximum number of attachments allowed is \(maxAttachmentCount).",
+                bundle: .toolkitModule,
+                comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
+            )
+        } else {
+            nil
+        }
+    }
+    
+    var minAttachmentCountMessage: Text? {
+        return if let minAttachmentCount {
+            if minAttachmentCount == 1 {
+                Text(
+                    "At least \(minAttachmentCount) attachment is required.",
+                    bundle: .toolkitModule,
+                    comment: "A message indicating the element requires at least one attachment."
+                )
+            } else {
+                Text(
+                    "At least \(minAttachmentCount) attachments are required.",
+                    bundle: .toolkitModule,
+                    comment: "A message indicating the element requires multiple attachments."
+                )
+            }
+            
+        } else {
+            nil
+        }
+    }
+}
 
 extension AttachmentsFormElement {
-    /// True if the user can rename attachments added through this element.
-    ///
-    /// This value is currently derived from the design default until runtime
-    /// support for this property is available.
-    var allowUserRename: Bool {
-        true
-    }
-    
-    /// A string to identify the attachment(s).
-    ///
-    /// This is a compatibility alias for ``keyword``.
-    var attachmentKeyword: String {
-        keyword
-    }
-    
-    /// True if attachment file names should be displayed.
-    ///
-    /// This value is currently derived from the design default until runtime
-    /// support for this property is available.
-    var displayFilename: Bool {
-        false
-    }
-    
-    /// The maximum number of attachments allowed for this element.
-    ///
-    /// ``UInt32.max`` is treated as no maximum.
-    /// This value is currently derived from the design default until runtime
-    /// support for this property is available.
-    var maxAttachmentCount: UInt32 {
-        UInt32.max
-    }
-    
-    /// The minimum number of attachments required for this element.
-    ///
-    /// This value is currently derived from the design default until runtime
-    /// support for this property is available.
-    var minAttachmentCount: UInt32 {
-        .zero
-    }
-    
-    /// The input user interface to use for the element.
-    ///
-    /// This value is currently derived from the design default until runtime
-    /// support for this property is available.
-    var input: Any? {
-        nil
-    }
-    
-    /// True if uploaded attachments preserve their original file name.
-    ///
-    /// This value is currently derived from the design default until runtime
-    /// support for this property is available.
-    var useOriginalFilename: Bool {
-        true
-    }
-    
-    /// An array of validation errors for this element.
-    ///
-    /// This value is currently derived from the design default until runtime
-    /// support for this property is available.
-    var validationErrors: [Error] {
-        []
-    }
-    
     /// Generates the attachment filename using the filename expression.
     ///
     /// This currently returns a toolkit-generated default name until runtime
