@@ -2079,9 +2079,9 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     func testCase_14_1() throws {
-        // Catalyst doesn't have the same sample photos as iOS that make this
-        // test possible.
-        try skipIf(macCatalyst: true)
+        // Catalyst and visionOS don't have the same sample photos as iOS that
+        // make this test possible.
+        try skipIf(macCatalyst: true, visionOS: true)
         
         let app = XCUIApplication()
         let addAttachmentButton = app.buttons["Add Attachment"]
@@ -2130,6 +2130,21 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_14_2() throws {
         let app = XCUIApplication()
+        
+#if os(visionOS)
+        let addAttachmentButton = app.collectionViews.buttons.staticTexts["Add Attachment"]
+#else
+        let addAttachmentButton = app.buttons["Add Attachment"]
+#endif
+        
+#if targetEnvironment(macCatalyst)
+        let chooseFromFilesButton = app.menuItems["choose_from_files"]
+        let chooseFromLibraryButton = app.menuItems["choose_from_library"]
+#else
+        let chooseFromFilesButton = app.buttons["Choose From Files"]
+        let chooseFromLibraryButton = app.buttons["Choose From Library"]
+#endif
+        
         let elementTitle = "Document"
         let formTitle = app.staticTexts["AttachmentsFormElement"]
         
@@ -2137,6 +2152,9 @@ final class FeatureFormViewTests: XCTestCase {
         assertFormOpened(titleElement: formTitle)
         
         app.filterElements(elementTitle)
+        addAttachmentButton.assertExistenceAndTap()
+        chooseFromFilesButton.assertExistence()
+        chooseFromLibraryButton.assertNonExistence()
     }
     
     func testCase_14_3() throws {
