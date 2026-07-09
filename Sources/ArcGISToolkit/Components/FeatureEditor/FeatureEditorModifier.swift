@@ -171,7 +171,10 @@ private extension View {
         if UIDevice.current.userInterfaceIdiom == .phone {
             sheet(isPresented: isPresented, content: content)
         } else {
-            inspector(isPresented: isPresented, content: content)
+            // The inspector is given a constant to prevent it from setting isPresented to false
+            // when the window is minimized in iPad Stage Manager. Otherwise, the feature editor
+            // will stop editing and be in an invalid state when the window is re-expanded.
+            inspector(isPresented: .constant(isPresented.wrappedValue), content: content)
         }
     }
 }
