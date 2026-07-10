@@ -2077,6 +2077,252 @@ final class FeatureFormViewTests: XCTestCase {
         
         electricDistributionDevice2Button.assertExistence()
     }
+    
+    func testCase_14_1() throws {
+        // Catalyst and visionOS don't have the same sample photos as iOS that
+        // make this test possible.
+        try skipIf(macCatalyst: true, visionOS: true)
+        
+        let app = XCUIApplication()
+        let addAttachmentButton = app.buttons["Add Attachment"]
+        let attachment1Label = app.staticTexts["Attachment1"]
+        let chooseFromFilesButton = app.buttons["Choose From Files"]
+        let chooseFromLibraryButton = app.buttons["Choose From Library"]
+        let element1Title = "General - All Inputs"
+        let element2Title = "General - Photo Only"
+        let elementFooterValidationError = app.staticTexts["At least 1 attachment is required."]
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
+        let maximumReachedMessage = app.staticTexts["The maximum number of attachments allowed is 2."]
+        let photosPickerApp = XCUIApplication(bundleIdentifier: "com.apple.mobileslideshow.photospicker")
+        let photoPickerPhoto1 = photosPickerApp.images["Photo, March 30, 2018, 12:14"]
+        let photoPickerPhoto2 = photosPickerApp.images["Photo, August 08, 2012, 14:55"]
+        let saveButton = app.buttons["Save"]
+        let takePhotoOrVideoButton = app.buttons["Take Photo or Video"]
+        let validationErrorsAlert = app.alerts["Validation Errors"]
+        let validationErrorsAlertContinueButton = validationErrorsAlert.buttons["Continue Editing"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(element1Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takePhotoOrVideoButton.assertExistence()
+        chooseFromFilesButton.assertExistence()
+        chooseFromLibraryButton.assertExistenceAndTap()
+        photoPickerPhoto1.assertExistenceAndTap()
+        addAttachmentButton.assertExistenceAndTap()
+        chooseFromLibraryButton.assertExistenceAndTap()
+        photoPickerPhoto2.assertExistenceAndTap()
+        maximumReachedMessage.assertExistence()
+        attachment1Label.assertNonExistence()
+        app.filterElements(element2Title)
+        saveButton.assertExistenceAndTap()
+        validationErrorsAlert.assertExistence()
+        validationErrorsAlertContinueButton.assertExistenceAndTap()
+        elementFooterValidationError.assertExistence()
+        addAttachmentButton.assertExistenceAndTap()
+        chooseFromLibraryButton.assertExistenceAndTap()
+        XCTExpectFailure("The photo picker is unresponsive to programatic taps after being presented a second time.")
+        photoPickerPhoto1.assertExistenceAndTap()
+        elementFooterValidationError.assertNonExistence()
+        attachment1Label.assertExistence()
+    }
+    
+    func testCase_14_2() throws {
+        let app = XCUIApplication()
+        
+#if os(visionOS)
+        let addAttachmentButton = app.collectionViews.buttons.staticTexts["Add Attachment"]
+#else
+        let addAttachmentButton = app.buttons["Add Attachment"]
+#endif
+        
+#if targetEnvironment(macCatalyst)
+        let chooseFromFilesButton = app.menuItems["choose_from_files"]
+        let chooseFromLibraryButton = app.menuItems["choose_from_library"]
+#else
+        let chooseFromFilesButton = app.buttons["Choose From Files"]
+        let chooseFromLibraryButton = app.buttons["Choose From Library"]
+#endif
+        
+        let elementTitle = "Document"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        addAttachmentButton.assertExistenceAndTap()
+        chooseFromFilesButton.assertExistence()
+        chooseFromLibraryButton.assertNonExistence()
+    }
+    
+    func testCase_14_3() throws {
+        // visionOS doesn't provide a way of dismissing the attachment import
+        // menu which the test design calls for in two spots.
+        try skipIf(visionOS: true)
+        
+        let app = XCUIApplication()
+        let addAttachmentButton = app.buttons["Add Attachment"]
+        
+#if targetEnvironment(macCatalyst)
+        let chooseFromFilesButton = app.menuItems["choose_from_files"]
+        let chooseFromLibraryButton = app.menuItems["choose_from_library"]
+        let takePhotoButton = app.menuItems["take_photo"]
+#else
+        let chooseFromFilesButton = app.buttons["Choose From Files"]
+        let chooseFromLibraryButton = app.buttons["Choose From Library"]
+        let takePhotoButton = app.buttons["Take Photo"]
+#endif
+        
+        let dismissPopover = app.windows.containing(.other, identifier: "SystemInputAssistantView").firstMatch
+        
+        let element1Title = "Media - Photo - Any"
+        let element2Title = "Media - Photo - Capture"
+        let element3Title = "Media - Photo - Upload"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(element1Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takePhotoButton.assertExistence()
+        chooseFromLibraryButton.assertExistence()
+        chooseFromFilesButton.assertExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        dismissPopover.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element2Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takePhotoButton.assertExistence()
+        chooseFromFilesButton.assertNonExistence()
+        chooseFromLibraryButton.assertNonExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        dismissPopover.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element3Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takePhotoButton.assertNonExistence()
+        chooseFromFilesButton.assertExistence()
+        chooseFromLibraryButton.assertExistence()
+    }
+    
+    func testCase_14_4() throws {
+        // visionOS doesn't provide a way of dismissing the attachment import
+        // menu which the test design calls for in two spots.
+        try skipIf(visionOS: true)
+        
+        let app = XCUIApplication()
+        let addAttachmentButton = app.buttons["Add Attachment"]
+        
+#if targetEnvironment(macCatalyst)
+        let chooseFromFilesButton = app.menuItems["choose_from_files"]
+        let chooseFromLibraryButton = app.menuItems["choose_from_library"]
+        let takeVideoButton = app.menuItems["take_video"]
+#else
+        let chooseFromFilesButton = app.buttons["Choose From Files"]
+        let chooseFromLibraryButton = app.buttons["Choose From Library"]
+        let takeVideoButton = app.buttons["Take Video"]
+#endif
+        
+        let dismissPopover = app.windows.containing(.other, identifier: "SystemInputAssistantView").firstMatch
+        
+        let element1Title = "Media - Video - Any"
+        let element2Title = "Media - Video - Capture"
+        let element3Title = "Media - Video - Upload"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(element1Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takeVideoButton.assertExistence()
+        chooseFromLibraryButton.assertExistence()
+        chooseFromFilesButton.assertExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        dismissPopover.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element2Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takeVideoButton.assertExistence()
+        chooseFromFilesButton.assertNonExistence()
+        chooseFromLibraryButton.assertNonExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        dismissPopover.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element3Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takeVideoButton.assertNonExistence()
+        chooseFromFilesButton.assertExistence()
+        chooseFromLibraryButton.assertExistence()
+    }
+    
+    func testCase_14_5() throws {
+        // visionOS doesn't provide a way of dismissing the attachment import
+        // menu which the test design calls for in two spots.
+        try skipIf(visionOS: true)
+        
+        let app = XCUIApplication()
+        let addAttachmentButton = app.buttons["Add Attachment"]
+        
+#if targetEnvironment(macCatalyst)
+        let chooseFromFilesButton = app.menuItems["choose_from_files"]
+#else
+        let chooseFromFilesButton = app.buttons["Choose From Files"]
+#endif
+        
+        let dismissPopover = app.windows.containing(.other, identifier: "SystemInputAssistantView").firstMatch
+        
+        let element1Title = "Media - Audio - Any"
+        let element2Title = "Media - Audio - Capture"
+        let element3Title = "Media - Audio - Upload"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(element1Title)
+        addAttachmentButton.assertExistenceAndTap()
+        chooseFromFilesButton.assertExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        dismissPopover.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element2Title)
+        addAttachmentButton.assertExistenceAndTap()
+        chooseFromFilesButton.assertNonExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        dismissPopover.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element3Title)
+        addAttachmentButton.assertExistenceAndTap()
+        chooseFromFilesButton.assertExistence()
+    }
 }
 
 private extension String {
