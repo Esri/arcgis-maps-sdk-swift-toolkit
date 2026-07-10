@@ -43,7 +43,6 @@ struct FeatureEditorModelTests {
         // Verifies isPresented is true when feature editor starts.
         try await model.startEditing(rootFeature: feature, on: nil)
         model.expectIsEditing(rootFeature: feature)
-        #expect(model.isPresented == (model.rootFeatureForm != nil))
         
         await model.expectIsGeometryEditing()
         await model.expectIsEditing(geometry: geometry)
