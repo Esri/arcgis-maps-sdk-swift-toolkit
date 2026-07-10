@@ -63,9 +63,9 @@ struct FeatureEditorModelTests {
         // Starts the geometry editor with a geometry.
         let geometry = Point(x: 0, y: 0)
         model.geometryEditor.start(withInitial: geometry)
-        await Task.expect(model.geometryEditorIsStarted)
-        await Task.expect(model.geometryEditorGeometry == geometry)
-        await Task.expect(!model.geometryEditorCanUndo)
+        await Task.yieldExpect(model.geometryEditorIsStarted)
+        await Task.yieldExpect(model.geometryEditorGeometry == geometry)
+        await Task.yieldExpect(!model.geometryEditorCanUndo)
         
         // Stops the geometry editor.
         model.geometryEditor.stop()
@@ -198,9 +198,9 @@ struct FeatureEditorModelTests {
         model.expectIsEditing(rootFeature: feature)
         
         // Geometry editor is not started.
-        await Task.expect(!model.geometryEditorIsStarted)
-        await Task.expect(model.geometryEditorGeometry == nil)
-        await Task.expect(!model.geometryEditorCanUndo)
+        await Task.yieldExpect(!model.geometryEditorIsStarted)
+        await Task.yieldExpect(model.geometryEditorGeometry == nil)
+        await Task.yieldExpect(!model.geometryEditorCanUndo)
         #expect(model.viewpointGeometry == nil)
         #expect(!model.geometryEditor.snapSettings.isEnabled)
     }
@@ -240,9 +240,9 @@ private extension FeatureEditorModel {
         #expect(viewpointGeometry == nil, sourceLocation: sourceLocation)
         
         // Yields to ensure geometry editor properties are updated by monitorGeometryEditorStreams().
-        await Task.expect(!self.geometryEditorCanUndo, sourceLocation: sourceLocation)
-        await Task.expect(self.geometryEditorGeometry == nil, sourceLocation: sourceLocation)
-        await Task.expect(!self.geometryEditorIsStarted, sourceLocation: sourceLocation)
+        await Task.yieldExpect(!self.geometryEditorCanUndo, sourceLocation: sourceLocation)
+        await Task.yieldExpect(self.geometryEditorGeometry == nil, sourceLocation: sourceLocation)
+        await Task.yieldExpect(!self.geometryEditorIsStarted, sourceLocation: sourceLocation)
     }
     
     /// Verifies the model has started editing a given feature instance as the root feature.
@@ -263,7 +263,10 @@ private extension FeatureEditorModel {
         geometry: Geometry,
         sourceLocation: SourceLocation = #_sourceLocation
     ) async {
-        await Task.expect(self.geometryEditorGeometry == geometry, sourceLocation: sourceLocation)
+        await Task.yieldExpect(
+            self.geometryEditorGeometry == geometry,
+            sourceLocation: sourceLocation
+        )
         
         // The geometry is used to set the viewpoint.
         #expect(viewpointGeometry == geometry, sourceLocation: sourceLocation)
@@ -271,10 +274,10 @@ private extension FeatureEditorModel {
     
     /// Verifies the model's geometry editor has started.
     func expectIsGeometryEditing(sourceLocation: SourceLocation = #_sourceLocation) async {
-        await Task.expect(self.geometryEditorIsStarted, sourceLocation: sourceLocation)
+        await Task.yieldExpect(self.geometryEditorIsStarted, sourceLocation: sourceLocation)
         
         // Verifies it started without any edits.
-        await Task.expect(!self.geometryEditorCanUndo, sourceLocation: sourceLocation)
+        await Task.yieldExpect(!self.geometryEditorCanUndo, sourceLocation: sourceLocation)
         
         // Verifies snap settings are enabled by default.
         #expect(geometryEditor.snapSettings.isEnabled, sourceLocation: sourceLocation)
@@ -289,9 +292,9 @@ private extension TableDescription {
 }
 
 private extension Task where Failure == Never, Success == Never {
-    /// Verifies a condition eventually becomes true.
+    /// Yields until a condition is met or a timeout occurs and then verifies the condition is true.
     @MainActor
-    static func expect(
+    static func yieldExpect(
         _ condition: @autoclosure @escaping @MainActor () -> Bool,
         sourceLocation: SourceLocation = #_sourceLocation
     ) async {
