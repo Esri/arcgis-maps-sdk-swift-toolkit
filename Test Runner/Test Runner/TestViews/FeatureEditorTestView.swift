@@ -71,7 +71,6 @@ private extension FeatureEditorTestView {
             return
         }
         
-        try geometryEditor.snapSettings.syncSourceSettings()
         featureToEdit = feature
     }
     
