@@ -158,8 +158,7 @@ private extension PresentationDetent {
 private extension View {
     /// Presents content in a sheet on iPhone and in an inspector on all other devices.
     ///
-    /// This is needed because the `View.presentationDetents(_:selection:)`
-    /// selection value does not update with inspectors.
+    /// This is needed for the presentation modifiers to be applied on iPhone.
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating whether the inspector is presented.
     ///   - content: The content to display in the inspector.
@@ -174,7 +173,7 @@ private extension View {
         } else {
             // The inspector is given a constant to prevent it from setting isPresented to false
             // when the window is minimized in iPad Stage Manager. Otherwise, the feature editor
-            // will stop editing and be in an invalid state when the window is re-expanded.
+            // will stop editing and show an empty inspector when the window is re-expanded.
             inspector(isPresented: .constant(isPresented.wrappedValue), content: content)
         }
     }
