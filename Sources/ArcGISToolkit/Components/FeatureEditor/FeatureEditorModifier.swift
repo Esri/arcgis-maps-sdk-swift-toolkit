@@ -38,21 +38,22 @@ private struct FeatureEditorModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .safeInspector(isPresented: $model.isPresented) {
-                // VStack is needed for presentation modifiers to be applied.
-                VStack(spacing: 0) {
-                    FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
-                }
-                .presentationBackgroundInteraction(.enabled)
-                .presentationContentInteraction(.scrolls)
-                .presentationDetents(
-                    [.bar, .medium, .large],
-                    selection: $selectedPresentationDetent
-                )
-                .inspectorColumnWidth(ideal: 320)
-                .interactiveDismissDisabled()
-                .sheet(isPresented: $model.snapSettingsSheetIsPresented) {
-                    SnapSettingsView(settings: model.geometryEditor.snapSettings)
-                }
+                FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
+                    .presentationBackgroundInteraction(.enabled)
+                    .presentationContentInteraction(.scrolls)
+                    .presentationDetents(
+                        [.bar, .medium, .large],
+                        selection: $selectedPresentationDetent
+                    )
+#if !targetEnvironment(macCatalyst)
+                // Needed to ensure the inspector presents at full width on iPad.
+                // This is not done on Mac Catalyst because 320 is smaller than its default.
+                    .inspectorColumnWidth(ideal: 320)
+#endif
+                    .interactiveDismissDisabled()
+                    .sheet(isPresented: $model.snapSettingsSheetIsPresented) {
+                        SnapSettingsView(settings: model.geometryEditor.snapSettings)
+                    }
             }
             .environment(model)
     }
