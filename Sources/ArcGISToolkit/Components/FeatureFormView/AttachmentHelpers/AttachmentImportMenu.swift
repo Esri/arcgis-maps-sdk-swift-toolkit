@@ -224,7 +224,7 @@ struct AttachmentImportMenu: View {
                 } else if let onlyInput = element.inputs.first {
                     switch onlyInput {
                     case let audioFormInput as AudioFormInput:
-                        switch audioFormInput.inputMethod {
+                        switch audioFormInput.method {
                         case .capture:
                             EmptyView()
                         default:
@@ -233,7 +233,7 @@ struct AttachmentImportMenu: View {
                     case is DocumentFormInput:
                         chooseFromFilesButton()
                     case let imageFormInput as ImageFormInput:
-                        switch imageFormInput.inputMethod {
+                        switch imageFormInput.method {
                         case .any:
 #if os(iOS)
                             takePhotoButton(input: imageFormInput)
@@ -251,7 +251,7 @@ struct AttachmentImportMenu: View {
                             EmptyView()
                         }
                     case let videoFormInput as VideoFormInput:
-                        switch videoFormInput.inputMethod {
+                        switch videoFormInput.method {
                         case .any:
 #if os(iOS)
                             takeVideoButton(input: videoFormInput)
