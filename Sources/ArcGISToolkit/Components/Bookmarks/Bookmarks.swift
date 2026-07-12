@@ -54,7 +54,7 @@ public struct Bookmarks: View {
     @Binding private var isPresented: Bool
     
     /// The selected bookmark.
-    private var selection: Binding<Bookmark?>?
+    var selection: Binding<Bookmark?>?
     
     /// User defined action to be performed when a bookmark is selected.
     ///
@@ -63,7 +63,7 @@ public struct Bookmarks: View {
     var selectionChangedAction: ((Bookmark) -> Void)? = nil
     
     /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
-    private var viewpoint: Binding<Viewpoint?>?
+    var viewpoint: Binding<Viewpoint?>?
     
     public var body: some View {
         VStack {
