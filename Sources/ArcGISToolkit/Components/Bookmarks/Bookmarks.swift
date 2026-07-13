@@ -41,8 +41,17 @@ public struct Bookmarks: View {
     /// The bookmark data source.
     let bookmarkSource: BookmarkSource
     
+    /// The selected bookmark.
+    var selection: Binding<Bookmark?>?
+    
+    /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
+    var viewpoint: Binding<Viewpoint?>?
+    
     /// The proxy to provide access to geo view operations.
     private let geoViewProxy: GeoViewProxy?
+    
+    /// Determines if the bookmarks list is currently shown or not.
+    @Binding private var isPresented: Bool
     
     /// An error that occurred while loading the geo model.
     @State private var loadingError: Error?
@@ -50,20 +59,11 @@ public struct Bookmarks: View {
     /// Indicates if bookmarks have loaded and are ready for display.
     @State private var isGeoModelLoaded = false
     
-    /// Determines if the bookmarks list is currently shown or not.
-    @Binding private var isPresented: Bool
-    
-    /// The selected bookmark.
-    var selection: Binding<Bookmark?>?
-    
     /// User defined action to be performed when a bookmark is selected.
     ///
     /// Use this when you prefer to self-manage the response to a bookmark selection. Use either
     /// `onSelectionChanged(perform:)` or `viewpoint` exclusively.
     var selectionChangedAction: ((Bookmark) -> Void)? = nil
-    
-    /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
-    var viewpoint: Binding<Viewpoint?>?
     
     public var body: some View {
         VStack {
@@ -106,9 +106,9 @@ public extension Bookmarks {
     ) {
         self.init(
             bookmarkSource: .array(bookmarks),
+            selection: selection,
             geoViewProxy: geoViewProxy,
-            isPresented: isPresented,
-            selection: selection
+            isPresented: isPresented
         )
     }
     
@@ -129,9 +129,9 @@ public extension Bookmarks {
     ) {
         self.init(
             bookmarkSource: .geoModel(geoModel),
+            selection: selection,
             geoViewProxy: geoViewProxy,
-            isPresented: isPresented,
-            selection: selection
+            isPresented: isPresented
         )
     }
 }
@@ -248,9 +248,9 @@ public extension Bookmarks /* Deprecated */ {
     ) {
         self.init(
             bookmarkSource: .array(bookmarks),
+            viewpoint: viewpoint,
             geoViewProxy: nil,
-            isPresented: isPresented,
-            viewpoint: viewpoint
+            isPresented: isPresented
         )
     }
     
@@ -268,9 +268,9 @@ public extension Bookmarks /* Deprecated */ {
     ) {
         self.init(
             bookmarkSource: .geoModel(geoModel),
+            viewpoint: viewpoint,
             geoViewProxy: nil,
-            isPresented: isPresented,
-            viewpoint: viewpoint
+            isPresented: isPresented
         )
     }
     
