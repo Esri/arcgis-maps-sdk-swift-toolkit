@@ -162,7 +162,7 @@ private struct SnapSettingsButton: View {
         } label: {
             Label {
                 Text(
-                    "Settings",
+                    "Snap Settings",
                     bundle: .toolkitModule,
                     comment: "A label for a button to show settings for configuring snapping."
                 )

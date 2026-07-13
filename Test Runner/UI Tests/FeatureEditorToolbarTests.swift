@@ -154,7 +154,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         let app = XCUIApplication()
         
         openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
-        app.buttons["Settings"].assertExistenceAndTap(timeout: 30)
+        app.buttons["Snap Settings"].assertExistenceAndTap(timeout: 30)
         
         let geometryGuidesToggle = app.snapToggle(named: "Snap to Geometry Guides")
         let featuresToggle = app.snapToggle(named: "Snap to Features")
@@ -185,7 +185,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         // Close the settings view.
         app.buttons["Close"].assertExistenceAndTap()
         // Reopen the settings view and verify the toggles states are preserved.
-        app.buttons["Settings"].assertExistenceAndTap()
+        app.buttons["Snap Settings"].assertExistenceAndTap()
         XCTAssertEqual(geometryGuidesToggle.boolValue, true)
         XCTAssertEqual(dirtyAreasToggle.boolValue, true)
     }
