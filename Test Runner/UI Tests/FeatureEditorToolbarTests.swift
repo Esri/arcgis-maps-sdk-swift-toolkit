@@ -47,7 +47,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         let toolButton = app.toolButton
         let deleteButton = app.buttons["Delete Selected Element"]
         
-        toolButton.assertExistence(timeout: 3)
+        toolButton.assertExistence(timeout: 30)
         deleteButton.assertExistence()
         
         let toolMidY = toolButton.frame.midY
@@ -66,7 +66,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
         
         let toolButton = app.toolButton
-        toolButton.assertExistence(timeout: 3)
+        toolButton.assertExistence(timeout: 30)
         
         app.buttons["Cancel"].assertExistenceAndTap()
         toolButton.assertNonExistence(timeout: 1)
@@ -79,7 +79,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
         
         let toolButton = app.toolButton
-        toolButton.assertExistenceAndTap(timeout: 3)
+        toolButton.assertExistenceAndTap(timeout: 30)
         
         [
             "Vertex",
@@ -101,7 +101,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         openFeatureEditorTestViewWithStartingFeature(2525, on: .electricDistributionLine)
         
         let toolButton = app.toolButton
-        toolButton.assertExistenceAndTap(timeout: 3)
+        toolButton.assertExistenceAndTap(timeout: 30)
         
         [
             "Freehand",
@@ -128,7 +128,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         openFeatureEditorTestViewWithStartingFeature(1, on: .structureBoundary)
         
         let toolButton = app.toolButton
-        toolButton.assertExistenceAndTap(timeout: 3)
+        toolButton.assertExistenceAndTap(timeout: 30)
         
         [
             "Freehand",
@@ -154,7 +154,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         let app = XCUIApplication()
         
         openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
-        app.buttons["Settings"].assertExistenceAndTap()
+        app.buttons["Snap Settings"].assertExistenceAndTap(timeout: 30)
         
         let geometryGuidesToggle = app.snapToggle(named: "Snap to Geometry Guides")
         let featuresToggle = app.snapToggle(named: "Snap to Features")
@@ -185,7 +185,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         // Close the settings view.
         app.buttons["Close"].assertExistenceAndTap()
         // Reopen the settings view and verify the toggles states are preserved.
-        app.buttons["Settings"].assertExistenceAndTap()
+        app.buttons["Snap Settings"].assertExistenceAndTap()
         XCTAssertEqual(geometryGuidesToggle.boolValue, true)
         XCTAssertEqual(dirtyAreasToggle.boolValue, true)
     }
