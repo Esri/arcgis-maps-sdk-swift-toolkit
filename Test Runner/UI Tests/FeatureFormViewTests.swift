@@ -2079,8 +2079,7 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     func testCase_14_1() throws {
-        // Catalyst and visionOS don't have the same sample photos as iOS that
-        // make this test possible.
+        // This test is iOS only as it requires camera hardware.
         try skipIf(macCatalyst: true, visionOS: true)
         
         let app = XCUIApplication()
@@ -2093,11 +2092,11 @@ final class FeatureFormViewTests: XCTestCase {
         let elementFooterValidationError = app.staticTexts["At least 1 attachment is required."]
         let formTitle = app.staticTexts["AttachmentsFormElement"]
         let maximumReachedMessage = app.staticTexts["The maximum number of attachments allowed is 2."]
-        let photosPickerApp = XCUIApplication(bundleIdentifier: "com.apple.mobileslideshow.photospicker")
-        let photoPickerPhoto1 = photosPickerApp.images["Photo, March 30, 2018, 12:14"]
-        let photoPickerPhoto2 = photosPickerApp.images["Photo, August 08, 2012, 14:55"]
         let saveButton = app.buttons["Save"]
+        let shutterButton = app.buttons["Take Picture"]
+        let takePhotoButton = app.buttons["Take Photo"]
         let takePhotoOrVideoButton = app.buttons["Take Photo or Video"]
+        let usePhotoButton = app.buttons["Use Photo"]
         let validationErrorsAlert = app.alerts["Validation Errors"]
         let validationErrorsAlertContinueButton = validationErrorsAlert.buttons["Continue Editing"]
         
@@ -2106,13 +2105,15 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.filterElements(element1Title)
         addAttachmentButton.assertExistenceAndTap()
-        takePhotoOrVideoButton.assertExistence()
         chooseFromFilesButton.assertExistence()
-        chooseFromLibraryButton.assertExistenceAndTap()
-        photoPickerPhoto1.assertExistenceAndTap()
+        chooseFromLibraryButton.assertExistence()
+        takePhotoOrVideoButton.assertExistenceAndTap()
+        shutterButton.assertExistenceAndTap()
+        usePhotoButton.assertExistenceAndTap()
         addAttachmentButton.assertExistenceAndTap()
-        chooseFromLibraryButton.assertExistenceAndTap()
-        photoPickerPhoto2.assertExistenceAndTap()
+        takePhotoOrVideoButton.assertExistenceAndTap()
+        shutterButton.assertExistenceAndTap()
+        usePhotoButton.assertExistenceAndTap()
         maximumReachedMessage.assertExistence()
         attachment1Label.assertNonExistence()
         app.filterElements(element2Title)
@@ -2121,9 +2122,9 @@ final class FeatureFormViewTests: XCTestCase {
         validationErrorsAlertContinueButton.assertExistenceAndTap()
         elementFooterValidationError.assertExistence()
         addAttachmentButton.assertExistenceAndTap()
-        chooseFromLibraryButton.assertExistenceAndTap()
-        XCTExpectFailure("The photo picker is unresponsive to programatic taps after being presented a second time.")
-        photoPickerPhoto1.assertExistenceAndTap()
+        takePhotoButton.assertExistenceAndTap()
+        shutterButton.assertExistenceAndTap()
+        usePhotoButton.assertExistenceAndTap()
         elementFooterValidationError.assertNonExistence()
         attachment1Label.assertExistence()
     }
