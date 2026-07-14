@@ -2080,7 +2080,7 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_14_1() throws {
         // This test is iOS only as it requires camera hardware.
-        try skipIf(macCatalyst: true, visionOS: true)
+        try skipIf(macCatalyst: true, simulator: true, visionOS: true)
         
         let app = XCUIApplication()
         let addAttachmentButton = app.buttons["Add Attachment"]
