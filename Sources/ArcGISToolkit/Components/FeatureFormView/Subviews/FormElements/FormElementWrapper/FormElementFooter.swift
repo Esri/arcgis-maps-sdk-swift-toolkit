@@ -38,7 +38,6 @@ struct FormElementFooter: View {
             .id(id)
             .onChange(of: featureFormViewModel.validationErrorVisibilityInternal) { id = .init() }
             .onChange(of: validationErrorVisibilityExternal) { id = .init() }
-            .accessibilityIdentifier("\(element.label) Footer")
             .font(.footnote)
             .padding(.vertical, formElementPadding / 2)
     }
@@ -126,23 +125,26 @@ extension FormElementFooter {
         
         var body: some View {
             HStack(alignment: .top) {
-                if isShowingError {
-                    error
-                } else if !element.description.isEmpty {
-                    Text(element.description)
-                } else if embeddedFeatureFormViewModel.focusedElement == element {
-                    if element.fieldType == .text, let lengthRange {
-                        if lengthRange.lowerBound == lengthRange.upperBound {
-                            makeExactLengthMessage(lengthRange)
-                        } else if lengthRange.lowerBound > .zero {
-                            makeLengthRangeMessage(lengthRange)
-                        } else {
-                            makeMaximumLengthMessage(lengthRange)
+                Group {
+                    if isShowingError {
+                        error
+                    } else if !element.description.isEmpty {
+                        Text(element.description)
+                    } else if embeddedFeatureFormViewModel.focusedElement == element {
+                        if element.fieldType == .text, let lengthRange {
+                            if lengthRange.lowerBound == lengthRange.upperBound {
+                                makeExactLengthMessage(lengthRange)
+                            } else if lengthRange.lowerBound > .zero {
+                                makeLengthRangeMessage(lengthRange)
+                            } else {
+                                makeMaximumLengthMessage(lengthRange)
+                            }
+                        } else if element.fieldType?.isNumeric ?? false, let numericRange {
+                            makeNumericRangeMessage(numericRange)
                         }
-                    } else if element.fieldType?.isNumeric ?? false, let numericRange {
-                        makeNumericRangeMessage(numericRange)
                     }
                 }
+                .accessibilityIdentifier("\(element.label) Footer")
                 Spacer()
                 if isShowingCharacterIndicator {
                     Text(element.formattedValue.count, format: .number)
