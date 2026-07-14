@@ -2131,6 +2131,8 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_14_2() throws {
         let app = XCUIApplication()
+        let elementTitle = "Document"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
 #if os(visionOS)
         let addAttachmentButton = app.collectionViews.buttons.staticTexts["Add Attachment"]
@@ -2145,9 +2147,6 @@ final class FeatureFormViewTests: XCTestCase {
         let chooseFromFilesButton = app.buttons["Choose From Files"]
         let chooseFromLibraryButton = app.buttons["Choose From Library"]
 #endif
-        
-        let elementTitle = "Document"
-        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -2165,6 +2164,11 @@ final class FeatureFormViewTests: XCTestCase {
         
         let app = XCUIApplication()
         let addAttachmentButton = app.buttons["Add Attachment"]
+        let cancelButton = app.buttons["Cancel"].firstMatch
+        let element1Title = "Media - Photo - Any"
+        let element2Title = "Media - Photo - Capture"
+        let element3Title = "Media - Photo - Upload"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
 #if targetEnvironment(macCatalyst)
         let chooseFromFilesButton = app.menuItems["choose_from_files"]
@@ -2175,13 +2179,6 @@ final class FeatureFormViewTests: XCTestCase {
         let chooseFromLibraryButton = app.buttons["Choose From Library"]
         let takePhotoButton = app.buttons["Take Photo"]
 #endif
-        
-        let dismissPopover = app.windows.containing(.other, identifier: "SystemInputAssistantView").firstMatch
-        
-        let element1Title = "Media - Photo - Any"
-        let element2Title = "Media - Photo - Capture"
-        let element3Title = "Media - Photo - Upload"
-        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -2195,7 +2192,7 @@ final class FeatureFormViewTests: XCTestCase {
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
 #else
-        dismissPopover.assertExistenceAndTap()
+        cancelButton.assertExistenceAndTap()
 #endif
         
         app.filterElements(element2Title)
@@ -2207,7 +2204,7 @@ final class FeatureFormViewTests: XCTestCase {
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
 #else
-        dismissPopover.assertExistenceAndTap()
+        cancelButton.assertExistenceAndTap()
 #endif
         
         app.filterElements(element3Title)
@@ -2224,6 +2221,11 @@ final class FeatureFormViewTests: XCTestCase {
         
         let app = XCUIApplication()
         let addAttachmentButton = app.buttons["Add Attachment"]
+        let cancelButton = app.buttons["Cancel"].firstMatch
+        let element1Title = "Media - Video - Any"
+        let element2Title = "Media - Video - Capture"
+        let element3Title = "Media - Video - Upload"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
 #if targetEnvironment(macCatalyst)
         let chooseFromFilesButton = app.menuItems["choose_from_files"]
@@ -2234,13 +2236,6 @@ final class FeatureFormViewTests: XCTestCase {
         let chooseFromLibraryButton = app.buttons["Choose From Library"]
         let takeVideoButton = app.buttons["Take Video"]
 #endif
-        
-        let dismissPopover = app.windows.containing(.other, identifier: "SystemInputAssistantView").firstMatch
-        
-        let element1Title = "Media - Video - Any"
-        let element2Title = "Media - Video - Capture"
-        let element3Title = "Media - Video - Upload"
-        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -2254,7 +2249,7 @@ final class FeatureFormViewTests: XCTestCase {
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
 #else
-        dismissPopover.assertExistenceAndTap()
+        cancelButton.assertExistenceAndTap()
 #endif
         
         app.filterElements(element2Title)
@@ -2266,7 +2261,7 @@ final class FeatureFormViewTests: XCTestCase {
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
 #else
-        dismissPopover.assertExistenceAndTap()
+        cancelButton.assertExistenceAndTap()
 #endif
         
         app.filterElements(element3Title)
@@ -2283,19 +2278,17 @@ final class FeatureFormViewTests: XCTestCase {
         
         let app = XCUIApplication()
         let addAttachmentButton = app.buttons["Add Attachment"]
+        let cancelButton = app.buttons["Cancel"].firstMatch
+        let element1Title = "Media - Audio - Any"
+        let element2Title = "Media - Audio - Capture"
+        let element3Title = "Media - Audio - Upload"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
 #if targetEnvironment(macCatalyst)
         let chooseFromFilesButton = app.menuItems["choose_from_files"]
 #else
         let chooseFromFilesButton = app.buttons["Choose From Files"]
 #endif
-        
-        let dismissPopover = app.windows.containing(.other, identifier: "SystemInputAssistantView").firstMatch
-        
-        let element1Title = "Media - Audio - Any"
-        let element2Title = "Media - Audio - Capture"
-        let element3Title = "Media - Audio - Upload"
-        let formTitle = app.staticTexts["AttachmentsFormElement"]
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -2307,7 +2300,7 @@ final class FeatureFormViewTests: XCTestCase {
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
 #else
-        dismissPopover.assertExistenceAndTap()
+        cancelButton.assertExistenceAndTap()
 #endif
         
         app.filterElements(element2Title)
@@ -2317,7 +2310,7 @@ final class FeatureFormViewTests: XCTestCase {
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
 #else
-        dismissPopover.assertExistenceAndTap()
+        cancelButton.assertExistenceAndTap()
 #endif
         
         app.filterElements(element3Title)
