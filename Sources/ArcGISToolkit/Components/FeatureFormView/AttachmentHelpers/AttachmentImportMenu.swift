@@ -349,14 +349,8 @@ struct AttachmentImportMenu: View {
             case .success(let url):
                 if url.startAccessingSecurityScopedResource(),
                    let contentType = url.contentType {
-                    let name: String?
-                    if #available(iOS 18.2, *) {
-                        name = url.suggestedFilename ?? url.lastPathComponent
-                    } else {
-                        name = url.lastPathComponent
-                    }
                     importState = .finalizing(
-                        .init(contentType: contentType, fileName: name, filePath: url)
+                        .init(contentType: contentType, fileName: url.lastPathComponent, filePath: url)
                     )
                 } else {
                     importState = .errored(.dataInaccessible)
