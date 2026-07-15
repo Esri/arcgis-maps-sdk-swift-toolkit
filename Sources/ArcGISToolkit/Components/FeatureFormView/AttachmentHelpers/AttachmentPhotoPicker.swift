@@ -46,7 +46,8 @@ struct AttachmentPhotoPicker: ViewModifier {
             .photosPicker(
                 isPresented: $photoPickerIsPresented,
                 selection: $item,
-                matching: filter
+                matching: filter,
+                photoLibrary: .shared()
             )
             .task(id: item) {
                 guard let item else { return }
@@ -58,7 +59,7 @@ struct AttachmentPhotoPicker: ViewModifier {
                         importState = .errored(.dataInaccessible)
                         return
                     }
-                    importState = .finalizing(.init(contentType: contentType, data: data))
+                    importState = await .finalizing(.init(contentType: contentType, fileName: item.originalFilename, data: data))
                 } catch {
                     importState = .errored(.system(error.localizedDescription))
                 }
