@@ -38,22 +38,25 @@ private struct FeatureEditorModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .safeInspector(isPresented: $model.isPresented) {
-                FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
-                    .presentationBackgroundInteraction(.enabled)
-                    .presentationContentInteraction(.scrolls)
-                    .presentationDetents(
-                        [.bar, .medium, .large],
-                        selection: $selectedPresentationDetent
-                    )
+                // VStack is needed for presentation modifiers to be applied.
+                VStack(spacing: 0) {
+                    FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
+                }
+                .presentationBackgroundInteraction(.enabled)
+                .presentationContentInteraction(.scrolls)
+                .presentationDetents(
+                    [.bar, .medium, .large],
+                    selection: $selectedPresentationDetent
+                )
 #if !targetEnvironment(macCatalyst)
                 // Needed to ensure the inspector presents at full width on iPad.
                 // This is not done on Mac Catalyst because 320 is smaller than its default.
-                    .inspectorColumnWidth(ideal: 320)
+                .inspectorColumnWidth(ideal: 320)
 #endif
-                    .interactiveDismissDisabled()
-                    .sheet(isPresented: $model.snapSettingsSheetIsPresented) {
-                        SnapSettingsView(settings: model.geometryEditor.snapSettings)
-                    }
+                .interactiveDismissDisabled()
+                .sheet(isPresented: $model.snapSettingsSheetIsPresented) {
+                    SnapSettingsView(settings: model.geometryEditor.snapSettings)
+                }
             }
             .environment(model)
     }
@@ -158,7 +161,8 @@ private extension PresentationDetent {
 private extension View {
     /// Presents content in a sheet on iPhone and in an inspector on all other devices.
     ///
-    /// This is needed for the presentation modifiers to be applied on iPhone.
+    /// This is needed because the `View.presentationDetents(_:selection:)`
+    /// selection value does not update with inspectors.
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating whether the inspector is presented.
     ///   - content: The content to display in the inspector.
