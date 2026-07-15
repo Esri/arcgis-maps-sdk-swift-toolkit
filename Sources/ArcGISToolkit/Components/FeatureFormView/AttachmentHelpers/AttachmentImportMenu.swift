@@ -306,50 +306,31 @@ struct AttachmentImportMenu: View {
 #endif
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
-            
-            let fileName: String
-            if element.usesOriginalFilename,
-               let originalName = newAttachmentImportData.fileName,
-               !originalName.isEmpty {
-                fileName = originalName
-            } else {
-                do {
-                    fileName = try await element.generateFilenameAsync()
-                } catch {
-                    // Keep "Use Original Filename" meaningful even when generation fails.
-                    if element.usesOriginalFilename,
-                       let originalName = newAttachmentImportData.fileName,
-                       !originalName.isEmpty {
-                        fileName = originalName
-                    } else {
-                        fileName = "Attachment-\(UUID().uuidString.prefix(8))"
-                    }
-                }
-            }
-            
             let uploadResult: Result<FormAttachment, Error>
-            if let url = newAttachmentImportData.filePath,
-               url.startAccessingSecurityScopedResource() {
+            switch (newAttachmentImportData.fileName, newAttachmentImportData.data, newAttachmentImportData.filePath) {
+            case let (.some(name), .some(data), .none):
                 uploadResult = await Result {
-                    try await element.addAttachment(
-                        contentType: newAttachmentImportData.contentType,
-                        fileURL: url,
-                        name: fileName
-                    )
+                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, data: data, name: name)
                 }
-                url.stopAccessingSecurityScopedResource()
-            } else if let data = newAttachmentImportData.data {
+            case let (.none, .some(data), .none):
                 uploadResult = await Result {
-                    try await element.addAttachment(
-                        contentType: newAttachmentImportData.contentType,
-                        data: data,
-                        name: fileName
-                    )
+                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, data: data)
                 }
-            } else {
+            case let (.some(name), .none, .some(path)):
+                path.startAccessingSecurityScopedResource()
+                defer { path.stopAccessingSecurityScopedResource() }
+                uploadResult = await Result {
+                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: path, name: name)
+                }
+            case let (.none, .none, .some(path)):
+                path.startAccessingSecurityScopedResource()
+                defer { path.stopAccessingSecurityScopedResource() }
+                uploadResult = await Result {
+                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: path)
+                }
+            @unknown default:
                 uploadResult = .failure(AttachmentImportError.creationFailed)
             }
-            
             switch uploadResult {
             case let .success(newAttachment):
                 onAdd?(newAttachment)
@@ -360,23 +341,26 @@ struct AttachmentImportMenu: View {
                 } else {
                     importState = .errored(.creationFailed)
                 }
-                
-                return
             }
         }
         .fileImporter(isPresented: $fileImporterIsPresented, allowedContentTypes: allowedFileImporterTypes) { result in
             importState = .importing
             switch result {
             case .success(let url):
-                // gain access to the url resource.
                 if url.startAccessingSecurityScopedResource(),
                    let contentType = url.contentType {
-                    importState = .finalizing(AttachmentImportData(contentType: contentType, fileName: url.lastPathComponent, filePath: url))
+                    let name: String?
+                    if #available(iOS 18.2, *) {
+                        name = url.suggestedFilename ?? url.lastPathComponent
+                    } else {
+                        name = url.lastPathComponent
+                    }
+                    importState = .finalizing(
+                        .init(contentType: contentType, fileName: name, filePath: url)
+                    )
                 } else {
                     importState = .errored(.dataInaccessible)
                 }
-                
-                // release access
                 url.stopAccessingSecurityScopedResource()
             case .failure(let error):
                 importState = .errored(.system(error.localizedDescription))

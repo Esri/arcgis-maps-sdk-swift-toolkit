@@ -82,12 +82,11 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
         parent.importState = .importing
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             if let jpegData = image.jpegData(compressionQuality: 0.9) {
-                parent.importState = .finalizing(AttachmentImportData(contentType: .jpeg, data: jpegData))
+                parent.importState = .finalizing(.init(contentType: .jpeg, data: jpegData))
             }
         } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
-            if let contentType = UTType(filenameExtension: videoURL.pathExtension),
-               let videoData = try? Data(contentsOf: videoURL) {
-                parent.importState = .finalizing(AttachmentImportData(contentType: contentType, data: videoData))
+            if let contentType = UTType(filenameExtension: videoURL.pathExtension) {
+                parent.importState = .finalizing(.init(contentType: contentType, filePath: videoURL))
             }
         }
         parent.configuration = nil

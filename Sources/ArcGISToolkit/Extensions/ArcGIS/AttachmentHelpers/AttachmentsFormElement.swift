@@ -122,27 +122,3 @@ extension AttachmentsFormElement /* Validation error messages */ {
         }
     }
 }
-
-extension AttachmentsFormElement {
-    /// Generates the attachment filename using the filename expression.
-    ///
-    /// This currently returns a toolkit-generated default name until runtime
-    /// support for filename expression evaluation is available.
-    func generateFilenameAsync() async throws -> String {
-        let currentAttachments = try await attachments
-        var count = currentAttachments.count
-        var candidate: String
-        repeat {
-            count += 1
-            candidate = "Attachment\(count)"
-        } while currentAttachments.contains(where: { $0.name.deletingPathExtension == candidate })
-        return candidate
-    }
-}
-
-private extension String {
-    /// A filename with the extension removed.
-    var deletingPathExtension: String {
-        (self as NSString).deletingPathExtension
-    }
-}
