@@ -21,10 +21,10 @@ struct FormElementFooter: View {
     @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
     /// The model for the FeatureFormView containing the view.
     @Environment(FeatureFormViewModel.self) private var featureFormViewModel
-    /// The developer configurable validation error visibility.
-    @Environment(\.validationErrorVisibilityExternal) private var validationErrorVisibilityExternal
     /// A vertical amount of padding to use between form elements.
     @Environment(\.formElementPadding) var formElementPadding
+    /// The developer configurable validation error visibility.
+    @Environment(\.validationErrorVisibilityExternal) private var validationErrorVisibilityExternal
     
     /// An ID which changes each time the element's validation errors change, or the validation error
     /// visibility changes.

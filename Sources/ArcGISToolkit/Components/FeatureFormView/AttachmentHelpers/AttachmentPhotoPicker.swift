@@ -37,7 +37,7 @@ struct AttachmentPhotoPicker: ViewModifier {
         if inputs.contains(where: { $0 is VideoFormInput }) {
             filter.append(.videos)
         }
-        guard !filter.isEmpty else { return nil }
+        if filter.isEmpty { return nil }
         return .any(of: filter)
     }
     

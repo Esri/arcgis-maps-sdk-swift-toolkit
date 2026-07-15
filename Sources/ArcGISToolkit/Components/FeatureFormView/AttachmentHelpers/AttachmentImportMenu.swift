@@ -92,7 +92,11 @@ struct AttachmentImportMenu: View {
                 cameraRequester.request()
             }
         } label: {
-            Text(takePhotoLabel)
+            Text(
+                "Take Photo",
+                bundle: .toolkitModule,
+                comment: "A label for a button to capture a new photo."
+            )
             Image(systemName: "camera")
         }
     }
@@ -110,7 +114,11 @@ struct AttachmentImportMenu: View {
                 cameraRequester.request()
             }
         } label: {
-            Text(takePhotoOrVideoLabel)
+            Text(
+                "Take Photo or Video",
+                bundle: .toolkitModule,
+                comment: "A label for a button to capture a new photo or video."
+            )
             Image(systemName: "camera")
         }
     }
@@ -124,7 +132,11 @@ struct AttachmentImportMenu: View {
                 cameraRequester.request()
             }
         } label: {
-            Text(takeVideoLabel)
+            Text(
+                "Take Video",
+                bundle: .toolkitModule,
+                comment: "A label for a button to capture a new video."
+            )
             Image(systemName: "video")
         }
     }
@@ -134,7 +146,11 @@ struct AttachmentImportMenu: View {
         Button {
             photoPickerIsPresented = true
         } label: {
-            Text(libraryButtonLabel)
+            Text(
+                "Choose From Library",
+                bundle: .toolkitModule,
+                comment: "A label for a button to choose a photo or video from the user's photo library."
+            )
             Image(systemName: "photo")
         }
     }
@@ -143,7 +159,11 @@ struct AttachmentImportMenu: View {
         Button {
             fileImporterIsPresented = true
         } label: {
-            Text(filesButtonLabel)
+            Text(
+                "Choose From Files",
+                bundle: .toolkitModule,
+                comment: "A label for a button to choose an file from the user's files."
+            )
             Image(systemName: "folder")
         }
     }
@@ -171,30 +191,18 @@ struct AttachmentImportMenu: View {
         return types
     }
     
-    /// A Boolean value indicating whether users can add more attachments.
-    private var hasReachedMaximumAttachmentCount: Bool {
-        guard let max = element.maxAttachmentCount else { return false }
-        return currentAttachmentCount >= max
-    }
-    
-    /// A Boolean value indicating whether the element is below its minimum attachment count.
-    private var isBelowMinimumAttachmentCount: Bool {
-        guard let min = element.minAttachmentCount else { return false }
-        return currentAttachmentCount < min
-    }
-    
     var body: some View {
         if importState.importInProgress {
             ProgressView()
                 .progressViewStyle(.circular)
                 .catalystPadding(5)
         }
-        if isBelowMinimumAttachmentCount, element.minAttachmentCount != nil {
+        if let min = element.minAttachmentCount, currentAttachmentCount < min {
             element.minAttachmentCountMessage
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
-        if hasReachedMaximumAttachmentCount, element.maxAttachmentCount != nil {
+        if let max = element.maxAttachmentCount, currentAttachmentCount >= max {
             element.maxAttachmentCountMessage
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -272,10 +280,9 @@ struct AttachmentImportMenu: View {
                 }
             }
             // On iOS simulators there is no reliable way to programmatically
-            // close the menu so we provide an explicit method in the testing
-            // environment only.
+            // close the menu so we provide an explicit Cancel button when testing.
             if CommandLine.arguments.contains("-testCase") {
-                Button.cancel(action: {})
+                Button.cancel {}
             }
         } label: {
             Label {
@@ -376,7 +383,11 @@ struct AttachmentImportMenu: View {
             .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsPresented) {
                 appSettingsButton
                 Button(role: .cancel) {} label: {
-                    Text(recordVideoOnlyButtonLabel)
+                    Text(
+                        "Record video only",
+                        bundle: .toolkitModule,
+                        comment: "A button allowing users to proceed to record a video while acknowledging audio will not be captured."
+                    )
                 }
             }
         }
@@ -399,48 +410,12 @@ private extension AttachmentImportMenu {
         }
     }
     
-    /// A label for a button to capture a new photo.
-    var takePhotoLabel: String {
-        .init(
-            localized: "Take Photo",
-            bundle: .toolkitModule,
-            comment: "A label for a button to capture a new photo."
-        )
-    }
-    
-    /// A label for a button to capture a new photo or video.
-    var takePhotoOrVideoLabel: String {
-        .init(
-            localized: "Take Photo or Video",
-            bundle: .toolkitModule,
-            comment: "A label for a button to capture a new photo or video."
-        )
-    }
-    
-    /// A label for a button to capture a new video.
-    var takeVideoLabel: String {
-        .init(
-            localized: "Take Video",
-            bundle: .toolkitModule,
-            comment: "A label for a button to capture a new video."
-        )
-    }
-    
     /// An error message indicating the selected attachment is an empty file and not supported.
     var emptyFilesNotSupportedAlertMessage: Text {
         .init(
             "Empty files are not supported.",
             bundle: .toolkitModule,
             comment: "An error message indicating the selected attachment is an empty file and not supported."
-        )
-    }
-    
-    /// A label for a button to choose an file from the user's files.
-    var filesButtonLabel: String {
-        .init(
-            localized: "Choose From Files",
-            bundle: .toolkitModule,
-            comment: "A label for a button to choose an file from the user's files."
         )
     }
     
@@ -494,30 +469,12 @@ private extension AttachmentImportMenu {
         )
     }
     
-    /// A label for a button to choose a photo or video from the user's photo library.
-    var libraryButtonLabel: String {
-        .init(
-            localized: "Choose From Library",
-            bundle: .toolkitModule,
-            comment: "A label for a button to choose a photo or video from the user's photo library."
-        )
-    }
-    
     /// A warning message indicating microphone access has been disabled for the current application in the system settings.
     var microphoneAccessWarningMessage: String {
         .init(
             localized: "Microphone access has been disabled in Settings.",
             bundle: .toolkitModule,
             comment: "A warning message indicating microphone access has been disabled for the current application in the system settings."
-        )
-    }
-    
-    /// A button allowing users to proceed to record a video while acknowledging audio will not be captured.
-    var recordVideoOnlyButtonLabel: String {
-        .init(
-            localized: "Record video only",
-            bundle: .toolkitModule,
-            comment: "A button allowing users to proceed to record a video while acknowledging audio will not be captured."
         )
     }
     

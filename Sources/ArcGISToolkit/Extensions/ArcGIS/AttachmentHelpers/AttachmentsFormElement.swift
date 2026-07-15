@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Foundation
 import SwiftUI
 
 extension AttachmentsFormElement: AttachmentsFeatureElement {
