@@ -2084,7 +2084,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         let app = XCUIApplication()
         let addAttachmentButton = app.buttons["Add Attachment"]
-        let attachment1Label = app.staticTexts["Attachment1"]
+        let attachment2Label = app.staticTexts["Attachment_2.jpeg"]
         let chooseFromFilesButton = app.buttons["Choose From Files"]
         let chooseFromLibraryButton = app.buttons["Choose From Library"]
         let element1Title = "General - All Inputs"
@@ -2115,7 +2115,6 @@ final class FeatureFormViewTests: XCTestCase {
         shutterButton.assertExistenceAndTap()
         usePhotoButton.assertExistenceAndTap()
         maximumReachedMessage.assertExistence()
-        attachment1Label.assertNonExistence()
         app.filterElements(element2Title)
         saveButton.assertExistenceAndTap()
         validationErrorsAlert.assertExistence()
@@ -2126,7 +2125,8 @@ final class FeatureFormViewTests: XCTestCase {
         shutterButton.assertExistenceAndTap()
         usePhotoButton.assertExistenceAndTap()
         elementFooterValidationError.assertNonExistence()
-        attachment1Label.assertExistence()
+        XCTExpectFailure("Arcade expressions aren't counting total attachments as documented. See Apollo #1808.")
+        attachment2Label.assertExistence()
     }
     
     func testCase_14_2() throws {
