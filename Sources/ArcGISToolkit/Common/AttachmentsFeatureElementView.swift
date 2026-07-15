@@ -117,10 +117,10 @@ struct AttachmentsFeatureElementView: View {
             )
         case .preview:
             AttachmentPreview(
-                attachmentModels: attachmentModels,
-                editControlsDisabled: !isEditable,
                 allowsRenamingByUser: allowsRenamingByUser,
+                attachmentModels: attachmentModels,
                 displaysFilename: displaysFilename,
+                editControlsDisabled: !isEditable,
                 lastAttachmentAdded: lastAttachmentAdded,
                 onRename: onRename,
                 onDelete: onDelete,
@@ -129,10 +129,10 @@ struct AttachmentsFeatureElementView: View {
         case .auto:
             if isRegularWidth {
                 AttachmentPreview(
-                    attachmentModels: attachmentModels,
-                    editControlsDisabled: !isEditable,
                     allowsRenamingByUser: allowsRenamingByUser,
+                    attachmentModels: attachmentModels,
                     displaysFilename: displaysFilename,
+                    editControlsDisabled: !isEditable,
                     lastAttachmentAdded: lastAttachmentAdded,
                     onRename: onRename,
                     onDelete: onDelete,

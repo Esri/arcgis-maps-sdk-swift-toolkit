@@ -19,16 +19,12 @@ import SwiftUI
 struct AttachmentPreview: View {
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
-    
     /// The model for an attachment the user has requested be deleted.
     @State private var deletedAttachmentModel: AttachmentModel?
-    
     /// The new name the user has provided for the attachment.
     @State private var newAttachmentName = ""
-    
     /// The model for an attachment the user has requested be renamed.
     @State private var renamedAttachmentModel: AttachmentModel?
-    
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
@@ -37,49 +33,41 @@ struct AttachmentPreview: View {
         value: 999,
         unit: UnitInformationStorage.megabytes
     )
-    
-    /// The models for the attachments displayed in the list.
-    private let attachmentModels: [AttachmentModel]
-    
-    /// A Boolean value which determines if the attachment editing controls should be disabled.
-    private let editControlsDisabled: Bool
-    
     /// A Boolean value indicating whether users can rename attachments.
     private let allowsRenamingByUser: Bool
-    
+    /// The models for the attachments displayed in the list.
+    private let attachmentModels: [AttachmentModel]
     /// A Boolean value indicating whether attachment filenames are displayed.
     private let displaysFilename: Bool
-    
+    /// A Boolean value which determines if the attachment editing controls should be disabled.
+    private let editControlsDisabled: Bool
     /// The last locally added attachment.
     private let lastAttachmentAdded: AttachmentModel?
-    
     /// The action to perform when the attachment is deleted.
     private let onDelete: (@MainActor (AttachmentModel) -> Void)?
-    
     /// The action to perform when the attachment is renamed.
     private let onRename: (@MainActor (AttachmentModel, String) -> Void)?
-    
     /// The proposed size of each attachment preview cell.
     private let proposedCellSize: CGSize
     
     init(
-        attachmentModels: [AttachmentModel],
-        editControlsDisabled: Bool = true,
         allowsRenamingByUser: Bool = true,
+        attachmentModels: [AttachmentModel],
         displaysFilename: Bool = true,
+        editControlsDisabled: Bool = true,
         lastAttachmentAdded: AttachmentModel? = nil,
         onRename: (@MainActor (AttachmentModel, String) -> Void)? = nil,
         onDelete: (@MainActor (AttachmentModel) -> Void)? = nil,
         proposedCellSize: CGSize
     ) {
-        self.attachmentModels = attachmentModels
-        self.proposedCellSize = proposedCellSize
-        self.editControlsDisabled = editControlsDisabled
         self.allowsRenamingByUser = allowsRenamingByUser
+        self.attachmentModels = attachmentModels
         self.displaysFilename = displaysFilename
+        self.editControlsDisabled = editControlsDisabled
         self.lastAttachmentAdded = lastAttachmentAdded
         self.onRename = onRename
         self.onDelete = onDelete
+        self.proposedCellSize = proposedCellSize
     }
     
     var body: some View {
