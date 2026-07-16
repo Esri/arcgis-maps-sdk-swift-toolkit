@@ -74,7 +74,10 @@ struct FeatureEditorFormView: View {
                     defer { self.presentedFeatureForm = nil }
                     await model.startEditingFeatureForm(presentedFeatureForm)
                 }
-                .onDisappear(perform: clearSelectedFeature)
+                .onDisappear {
+                    clearSelectedFeature()
+                    model.geometryEditor.tool.style.opacity = 0
+                }
         }
     }
     
@@ -169,7 +172,7 @@ struct FeatureEditorFormView: View {
     }
 }
 
-// MARK: - Helper
+// MARK: - Helpers
 
 /// A wrapper for `FeatureFormView.EditingEvent` that conforms to `Equatable`.
 private struct EquatableEditingEvent: Equatable {
@@ -209,7 +212,7 @@ private protocol FeatureSelectableLayer {
     func unselectFeature(_ feature: Feature)
 }
 
-// Only 2D layers are extended since the Feature Editor is map specific.
+// Only 2D layers are extended since the Feature Editor is map-specific.
 extension AnnotationLayer: FeatureSelectableLayer {}
 extension DimensionLayer: FeatureSelectableLayer {}
 extension FeatureLayer: FeatureSelectableLayer {}
