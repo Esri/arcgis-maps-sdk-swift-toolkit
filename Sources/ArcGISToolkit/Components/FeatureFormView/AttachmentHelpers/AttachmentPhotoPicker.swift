@@ -16,64 +16,38 @@ import ArcGIS
 import PhotosUI
 import SwiftUI
 
-extension View {
-    /// Presents a Photos picker that selects a PhotosPickerItem from a given photo library after obtaining
-    /// read/write photo library authorization.
-    /// - Parameters:
-    ///   - isPresented: The binding to whether the Photos picker should be shown.
-    ///   - importState: The `AttachmentImportState` to provide the selection to.
-    ///   - inputs: The attachment form inputs present in the element the picker is on.
-    func formPhotosPicker(
-        isPresented: Binding<Bool>,
-        importState: Binding<AttachmentImportState>,
-        inputs: [AttachmentsFormInput]
-    ) -> some View {
-        modifier(
-            FormPhotosPicker(
-                importState: importState,
-                isPresented: isPresented,
-                inputs: inputs
-            )
-        )
-    }
-}
-
-/// A view that displays a Photos picker for choosing attachments from the photo library after obtaining
-/// read/write photo library authorization. The original filename for the attachment is retrieved and the
-/// selection is written to the bound `AttachmentImportState`.
-struct FormPhotosPicker: ViewModifier {
-    /// The current import state.
-    @Binding var importState: AttachmentImportState
-    /// A Boolean value indicating whether the photos picker is presented.
-    @Binding var isPresented: Bool
-    
-    let inputs: [AttachmentsFormInput]
-    
+/// A wrapper for the PhotosPicker API.
+struct AttachmentPhotoPicker: ViewModifier {
     /// The item selected in the photos picker.
     @State private var item: PhotosPickerItem?
     
+    /// The current import state.
+    @Binding var importState: AttachmentImportState
+    
+    /// A Boolean value indicating whether the photos picker is presented.
+    @Binding var photoPickerIsPresented: Bool
+    
+    let inputs: [AttachmentsFormInput]
+    
     var filter: PHPickerFilter? {
-        var inputFilters = [PHPickerFilter]()
+        var filter = [PHPickerFilter]()
         if inputs.contains(where: { $0 is ImageFormInput }) {
-            inputFilters.append(.images)
+            filter.append(.images)
         }
         if inputs.contains(where: { $0 is VideoFormInput }) {
-            inputFilters.append(.videos)
+            filter.append(.videos)
         }
-        if inputFilters.isEmpty { return nil }
-        return .any(of: inputFilters)
+        if filter.isEmpty { return nil }
+        return .any(of: filter)
     }
     
     func body(content: Content) -> some View {
         content
-            // The built-in photos picker automatically grants access to items
-            // but that authorization doesn't grant the ability to read the
-            // original filename so we use `AuthorizedPhotosPicker` to get that
-            // ability up front.
-            .authorizedPhotosPicker(
-                isPresented: $isPresented,
+            .photosPicker(
+                isPresented: $photoPickerIsPresented,
                 selection: $item,
-                matching: filter
+                matching: filter,
+                photoLibrary: .shared()
             )
             .task(id: item) {
                 guard let item else { return }
@@ -85,9 +59,7 @@ struct FormPhotosPicker: ViewModifier {
                         importState = .errored(.dataInaccessible)
                         return
                     }
-                    importState = await .finalizing(
-                        .init(contentType: contentType, fileName: item.originalFilename, data: data)
-                    )
+                    importState = await .finalizing(.init(contentType: contentType, fileName: item.originalFilename, data: data))
                 } catch {
                     importState = .errored(.system(error.localizedDescription))
                 }

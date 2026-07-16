@@ -12,21 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import PhotosUI
-import SwiftUI
+import _PhotosUI_SwiftUI
 
 extension PhotosPickerItem {
     /// The original filename of the asset resource from when it was created or imported.
     ///
     /// This property requires a `NSPhotoLibraryUsageDescription` entry in the app's Info.plist.
-    /// Read/write Photo Library authorization should be requested/granted prior to using this property.
     var originalFilename: String? {
-        guard let itemIdentifier else { return nil }
-        
-        let result = PHAsset.fetchAssets(withLocalIdentifiers: [itemIdentifier], options: nil)
-        guard let asset = result.firstObject else { return nil }
-        
-        let resources = PHAssetResource.assetResources(for: asset)
-        return resources.first?.originalFilename
+        get async {
+            let status = await PHPhotoLibrary.requestAuthorization(for: .readWrite)
+            guard status == .authorized || status == .limited else { return nil }
+            
+            guard let itemIdentifier else { return nil }
+            
+            let result = PHAsset.fetchAssets(withLocalIdentifiers: [itemIdentifier], options: nil)
+            guard let asset = result.firstObject else { return nil }
+            
+            let resources = PHAssetResource.assetResources(for: asset)
+            return resources.first?.originalFilename
+        }
     }
 }
