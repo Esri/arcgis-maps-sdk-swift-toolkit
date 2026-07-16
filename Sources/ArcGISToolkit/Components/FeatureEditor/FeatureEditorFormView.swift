@@ -74,11 +74,11 @@ struct FeatureEditorFormView: View {
     /// Clears `selectedFeature` and unselects it on its layer.
     private func clearSelectedFeature() {
         guard let selectedFeature = selectedFeature.take(),
-              let featureLayer = selectedFeature.table?.layer as? FeatureLayer else {
+              let layer = selectedFeature.table?.layer as? FeatureSelectableLayer else {
             return
         }
         
-        featureLayer.unselectFeature(selectedFeature)
+        layer.unselectFeature(selectedFeature)
     }
     
     /// Performs an action associated with a form editing event.
@@ -143,9 +143,9 @@ struct FeatureEditorFormView: View {
     /// - Parameter feature: The feature to select.
     /// - Throws: If the geometry editor does not have a valid geometry to hide.
     private func selectFeature(_ feature: ArcGISFeature) async throws {
-        guard let featureLayer = feature.table?.layer as? FeatureLayer else { return }
+        guard let layer = feature.table?.layer as? FeatureSelectableLayer else { return }
         
-        featureLayer.selectFeature(feature)
+        layer.selectFeature(feature)
         selectedFeature = feature
         
         // Briefly hides the geometry editor so the user can still locate the
@@ -193,3 +193,17 @@ private struct InvalidGeometryError: LocalizedError {
         comment: "An error message shown when trying to save an invalid geometry."
     )
 }
+
+// MARK: Feature Selectable Layer
+
+/// A layer that can select and unselect a feature.
+private protocol FeatureSelectableLayer {
+    func selectFeature(_ feature: Feature)
+    func unselectFeature(_ feature: Feature)
+}
+
+// Only 2D layers are extended since the Feature Editor is map specific.
+extension AnnotationLayer: FeatureSelectableLayer {}
+extension DimensionLayer: FeatureSelectableLayer {}
+extension FeatureLayer: FeatureSelectableLayer {}
+extension OrientedImageryLayer: FeatureSelectableLayer {}
