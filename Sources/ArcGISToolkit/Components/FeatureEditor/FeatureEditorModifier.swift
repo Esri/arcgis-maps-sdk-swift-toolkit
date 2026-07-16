@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-internal import os
 import SwiftUI
 
 public extension View {
@@ -128,68 +126,6 @@ private struct FeatureEditorModifier: ViewModifier {
     }
 }
 
-/// A view that contains the `FeatureFormView` for the feature editor.
-private struct FeatureEditorFormView: View {
-    /// A Boolean value indicating whether the parent presentation is minimized.
-    let isMinimized: Bool
-    
-    /// The feature editor model from the environment. This is needed to access
-    /// the geometry editor.
-    @Environment(FeatureEditorModel.self) private var model
-    
-    /// The form currently presented in the `FeatureFormView`.
-    @State private var presentedFeatureForm: FeatureForm?
-    
-    /// A closure that saves geometry edits to the form's feature. This is
-    /// non-`nil` only when there are edits, so the `FeatureFormView`
-    /// knows when to show the editing buttons and block navigation.
-    private var saveGeometryEditsAction: (() throws -> Void)? {
-        guard model.geometryEditorCanUndo else { return nil }
-        return {
-            guard let geometry = model.geometryEditorGeometry, geometry.sketchIsValid else {
-                throw InvalidGeometryError()
-            }
-            model.feature?.geometry = geometry
-        }
-    }
-    
-    var body: some View {
-        if let rootFeatureForm = model.rootFeatureForm {
-            @Bindable var model = model
-            
-            FeatureFormView(root: rootFeatureForm, isPresented: $model.isPresented)
-                .editingButtons(isMinimized ? .hidden : .automatic)
-                .onFeatureFormChanged { presentedFeatureForm = $0 }
-                .onFormEditingEvent(perform: handleFormEditingEvent)
-                .environment(\.externalSaveAction, saveGeometryEditsAction)
-                .task(id: presentedFeatureForm.map(ObjectIdentifier.init)) {
-                    guard let presentedFeatureForm else { return }
-                    defer { self.presentedFeatureForm = nil }
-                    await model.startEditingFeatureForm(presentedFeatureForm)
-                }
-        }
-    }
-    
-    /// Handles events from the `FeatureFormView.onFormEditingEvent(perform:)` modifier.
-    /// - Parameter event: The form editing event to handle.
-    private func handleFormEditingEvent(_ event: FeatureFormView.EditingEvent) {
-        switch event {
-        case .discardedEdits(let willNavigate):
-            // Restarts the geometry editor when the form footer discard button is pressed.
-            guard !willNavigate else { break }
-            model.restartGeometryEditor()
-        case .savedEdits(let willNavigate):
-            // Closes the inspector when the form footer save button is pressed.
-            guard !willNavigate else { break }
-            model.isPresented = false
-        case .showOnMapRequested(let feature):
-            model.viewpointGeometry = feature.geometry
-        default:
-            break
-        }
-    }
-}
-
 // MARK: - Helper Types
 
 /// A custom presentation detent that sizes to the approximate height of a top system toolbar.
@@ -199,15 +135,6 @@ private struct BarDetent: CustomPresentationDetent {
         // https://developer.apple.com/documentation/swiftui/custompresentationdetent#overview
         return max(44, context.maxDetentValue * 0.1)
     }
-}
-
-/// An error indicating that the geometry is invalid and must be corrected before saving.
-private struct InvalidGeometryError: LocalizedError {
-    let errorDescription: String? = String(
-        localized: "The geometry is invalid. It must be corrected before saving.",
-        bundle: .toolkitModule,
-        comment: "An error message shown when trying to save an invalid geometry."
-    )
 }
 
 // MARK: - Extensions
