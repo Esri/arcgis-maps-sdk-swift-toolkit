@@ -25,8 +25,14 @@ struct FeatureEditorFormView: View {
     /// the geometry editor.
     @Environment(FeatureEditorModel.self) private var model
     
+    /// The current editing event from the form view. This is non-`nil` while
+    /// the event is being processed by this view.
+    @State private var editingEvent: EquatableEditingEvent?
     /// The form currently presented in the `FeatureFormView`.
     @State private var presentedFeatureForm: FeatureForm?
+    /// The feature currently selected on the map. This is non-`nil` when
+    /// adding an association or "Show on Map" is pressed in the form view.
+    @State private var selectedFeature: ArcGISFeature?
     
     /// A closure that saves geometry edits to the form's feature. This is
     /// non-`nil` only when there are edits, so the `FeatureFormView`
@@ -48,37 +54,136 @@ struct FeatureEditorFormView: View {
             FeatureFormView(root: rootFeatureForm, isPresented: $model.isPresented)
                 .editingButtons(isMinimized ? .hidden : .automatic)
                 .onFeatureFormChanged { presentedFeatureForm = $0 }
-                .onFormEditingEvent(perform: handleFormEditingEvent)
+                .onFormEditingEvent { editingEvent = EquatableEditingEvent(event: $0) }
                 .environment(\.externalSaveAction, saveGeometryEditsAction)
+                .task(id: editingEvent) {
+                    guard let editingEvent else { return }
+                    defer { self.editingEvent = nil }
+                    
+                    await handleEditingEvent(editingEvent.event)
+                }
                 .task(id: presentedFeatureForm.map(ObjectIdentifier.init)) {
                     guard let presentedFeatureForm else { return }
                     defer { self.presentedFeatureForm = nil }
                     await model.startEditingFeatureForm(presentedFeatureForm)
                 }
+                .onDisappear(perform: clearSelectedFeature)
         }
     }
     
-    /// Handles events from the `FeatureFormView.onFormEditingEvent(perform:)` modifier.
+    /// Clears `selectedFeature` and unselects it on its layer.
+    private func clearSelectedFeature() {
+        guard let selectedFeature = selectedFeature.take(),
+              let featureLayer = selectedFeature.table?.layer as? FeatureLayer else {
+            return
+        }
+        
+        featureLayer.unselectFeature(selectedFeature)
+    }
+    
+    /// Performs an action associated with a form editing event.
     /// - Parameter event: The form editing event to handle.
-    private func handleFormEditingEvent(_ event: FeatureFormView.EditingEvent) {
+    private func handleEditingEvent(_ event: FeatureFormView.EditingEvent) async {
         switch event {
         case .discardedEdits(let willNavigate):
             // Restarts the geometry editor when the form footer discard button is pressed.
             guard !willNavigate else { break }
             model.restartGeometryEditor()
+        case .navigationChanged(let view):
+            switch view {
+            case .utilityAssociationCreationView(_, _, _, let candidate):
+                await showCandidateOnMap(candidate)
+            default:
+                clearSelectedFeature()
+            }
         case .savedEdits(let willNavigate):
             // Closes the inspector when the form footer save button is pressed.
             guard !willNavigate else { break }
             model.isPresented = false
         case .showOnMapRequested(let feature):
-            model.viewpointGeometry = feature.geometry
-        default:
-            break
+            await showFeatureOnMap(feature)
         }
+    }
+    
+    /// Zooms to and selects an association candidate feature on the map.
+    /// - Parameter candidate: The `UtilityAssociationFeatureCandidate` to show.
+    private func showCandidateOnMap(_ candidate: UtilityAssociationFeatureCandidate) async {
+        guard let candidateGeometry = candidate.feature.geometry,
+              !candidateGeometry.isEmpty,
+              let geometryEditorGeometry = model.geometryEditorGeometry else {
+            return
+        }
+        
+        // Sets viewpoint to include the candidate feature and geometry editor geometry,
+        // so the user can see what feature they are using to add an association.
+        model.viewpointGeometry = GeometryEngine.combineExtents(
+            candidateGeometry,
+            geometryEditorGeometry
+        )
+        
+        try? await selectFeature(candidate.feature)
+    }
+    
+    /// Zooms to and briefly selects a feature on the map.
+    /// - Parameter feature: The `ArcGISFeature` to show.
+    private func showFeatureOnMap(_ feature: ArcGISFeature) async {
+        model.viewpointGeometry = feature.geometry
+        
+        do {
+            try await selectFeature(feature)
+        } catch {
+            // Sleeps if the geometry editor wasn't hidden so there is still a
+            // delay before the selection is cleared.
+            try? await Task.sleep(for: .seconds(1))
+        }
+        clearSelectedFeature()
+    }
+    
+    /// Selects a feature on the map and briefly hides the geometry editor's symbology.
+    /// - Parameter feature: The feature to select.
+    /// - Throws: If the geometry editor does not have a valid geometry to hide.
+    private func selectFeature(_ feature: ArcGISFeature) async throws {
+        guard let featureLayer = feature.table?.layer as? FeatureLayer else { return }
+        
+        featureLayer.selectFeature(feature)
+        selectedFeature = feature
+        
+        // Briefly hides the geometry editor so the user can still locate the
+        // selected feature when it's covered by the geometry editor symbology.
+        guard let geometryEditorGeometry = model.geometryEditorGeometry,
+              !geometryEditorGeometry.isEmpty else {
+            throw InvalidGeometryError()
+        }
+        
+        model.geometryEditor.clearSelection()
+        model.geometryEditor.tool.style.opacity = 0.1
+        try? await Task.sleep(for: .seconds(1))
+        model.geometryEditor.tool.style.opacity = 1
     }
 }
 
 // MARK: - Helper Types
+
+/// A wrapper for `FeatureFormView.EditingEvent` that conforms to `Equatable`.
+private struct EquatableEditingEvent: Equatable {
+    /// The form editing event.
+    let event: FeatureFormView.EditingEvent
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return switch (lhs.event, rhs.event) {
+        case let (.discardedEdits(lhsWillNavigate), .discardedEdits(rhsWillNavigate)):
+            lhsWillNavigate == rhsWillNavigate
+        case let (.navigationChanged(lhsView), .navigationChanged(rhsView)):
+            lhsView == rhsView
+        case let (.savedEdits(lhsWillNavigate), .savedEdits(rhsWillNavigate)):
+            lhsWillNavigate == rhsWillNavigate
+        case let (.showOnMapRequested(lhsFeature), .showOnMapRequested(rhsFeature)):
+            lhsFeature === rhsFeature
+        default:
+            false
+        }
+    }
+}
 
 /// An error indicating that the geometry is invalid and must be corrected before saving.
 private struct InvalidGeometryError: LocalizedError {

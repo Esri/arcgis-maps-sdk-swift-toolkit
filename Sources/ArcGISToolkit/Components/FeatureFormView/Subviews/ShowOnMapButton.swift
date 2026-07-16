@@ -23,7 +23,7 @@ extension FeatureFormView {
         let feature: ArcGISFeature
         
         var body: some View {
-            if feature.geometry != nil {
+            if let geometry = feature.geometry, !geometry.isEmpty {
                 Button {
                     onFormEditingEventAction?(.showOnMapRequested(feature))
                 } label: {
