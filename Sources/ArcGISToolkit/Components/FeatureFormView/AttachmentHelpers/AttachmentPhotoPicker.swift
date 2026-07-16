@@ -40,15 +40,15 @@ extension View {
 /// A view that displays a Photos picker for choosing attachments from the photo library. The selected item is
 /// written to the bound `AttachmentImportState`.
 struct AttachmentPhotoPicker: ViewModifier {
+    /// The item selected in the photos picker.
+    @State private var item: PhotosPickerItem?
+    
     /// The current import state.
     @Binding var importState: AttachmentImportState
     /// A Boolean value indicating whether the photos picker is presented.
     @Binding var isPresented: Bool
     
     let inputs: [AttachmentsFormInput]
-    
-    /// The item selected in the photos picker.
-    @State private var item: PhotosPickerItem?
     
     var filter: PHPickerFilter? {
         var inputFilters = [PHPickerFilter]()
