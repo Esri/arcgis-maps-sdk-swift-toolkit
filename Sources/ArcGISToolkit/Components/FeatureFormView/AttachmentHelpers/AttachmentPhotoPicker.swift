@@ -48,8 +48,10 @@ struct AttachmentPhotoPicker: ViewModifier {
     /// A Boolean value indicating whether the photos picker is presented.
     @Binding var isPresented: Bool
     
+    /// The attachment inputs on the form element.
     let inputs: [AttachmentsFormInput]
     
+    /// The types of items that can be shown in the library, derived from the inputs on the form element.
     var filter: PHPickerFilter? {
         var inputFilters = [PHPickerFilter]()
         if inputs.contains(where: { $0 is ImageFormInput }) {
