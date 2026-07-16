@@ -39,6 +39,7 @@ final class EmbeddedFeatureFormViewModel {
         didSet {
             if !hasEdits {
                 previouslyFocusedElements.removeAll()
+                evaluateExpressions()
             }
         }
     }
