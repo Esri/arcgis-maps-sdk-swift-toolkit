@@ -69,8 +69,6 @@
 	<string>This app uses your location to anchor virtual objects to real-world locations in an augmented reality experience.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app uses your microphone when recording video.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app accesses the photo library in order to read file names for selected attachments.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
