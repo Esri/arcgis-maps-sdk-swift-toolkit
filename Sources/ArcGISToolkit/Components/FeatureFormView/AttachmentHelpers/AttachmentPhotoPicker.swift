@@ -16,38 +16,60 @@ import ArcGIS
 import PhotosUI
 import SwiftUI
 
-/// A wrapper for the PhotosPicker API.
+extension View {
+    /// Presents a Photos picker that selects a PhotosPickerItem from a given photo library.
+    /// - Parameters:
+    ///   - isPresented: The binding to whether the Photos picker should be shown.
+    ///   - importState: The `AttachmentImportState` to provide the selection to.
+    ///   - inputs: The attachment form inputs present in the element the picker is on.
+    func attachmentPhotoPicker(
+        isPresented: Binding<Bool>,
+        importState: Binding<AttachmentImportState>,
+        inputs: [AttachmentsFormInput]
+    ) -> some View {
+        modifier(
+            AttachmentPhotoPicker(
+                importState: importState,
+                isPresented: isPresented,
+                inputs: inputs
+            )
+        )
+    }
+}
+
+/// A view that displays a Photos picker for choosing attachments from the photo library. The selected item is
+/// written to the bound `AttachmentImportState`.
 struct AttachmentPhotoPicker: ViewModifier {
     /// The item selected in the photos picker.
     @State private var item: PhotosPickerItem?
     
     /// The current import state.
     @Binding var importState: AttachmentImportState
-    
     /// A Boolean value indicating whether the photos picker is presented.
-    @Binding var photoPickerIsPresented: Bool
+    @Binding var isPresented: Bool
     
+    /// The attachment inputs on the form element.
     let inputs: [AttachmentsFormInput]
     
+    /// The types of items that can be shown in the library, derived from the inputs on the form element.
     var filter: PHPickerFilter? {
-        var filter = [PHPickerFilter]()
+        var inputFilters = [PHPickerFilter]()
         if inputs.contains(where: { $0 is ImageFormInput }) {
-            filter.append(.images)
+            inputFilters.append(.images)
         }
         if inputs.contains(where: { $0 is VideoFormInput }) {
-            filter.append(.videos)
+            inputFilters.append(.videos)
         }
-        if filter.isEmpty { return nil }
-        return .any(of: filter)
+        if inputFilters.isEmpty { return nil }
+        return .any(of: inputFilters)
     }
     
     func body(content: Content) -> some View {
         content
             .photosPicker(
-                isPresented: $photoPickerIsPresented,
+                isPresented: $isPresented,
                 selection: $item,
-                matching: filter,
-                photoLibrary: .shared()
+                matching: filter
             )
             .task(id: item) {
                 guard let item else { return }
@@ -59,7 +81,7 @@ struct AttachmentPhotoPicker: ViewModifier {
                         importState = .errored(.dataInaccessible)
                         return
                     }
-                    importState = await .finalizing(.init(contentType: contentType, fileName: item.originalFilename, data: data))
+                    importState = await .finalizing(.init(contentType: contentType, data: data))
                 } catch {
                     importState = .errored(.system(error.localizedDescription))
                 }
