@@ -48,8 +48,15 @@ private struct FeatureEditorModifier: ViewModifier {
                     [.bar, .medium, .large],
                     selection: $selectedPresentationDetent
                 )
+#if !targetEnvironment(macCatalyst)
+                // Needed to ensure the inspector presents at full width on iPad.
+                // This is not done on Mac Catalyst because 320 is smaller than its default.
                 .inspectorColumnWidth(ideal: 320)
+#endif
                 .interactiveDismissDisabled()
+                .sheet(isPresented: $model.snapSettingsSheetIsPresented) {
+                    SnapSettingsView(settings: model.geometryEditor.snapSettings)
+                }
             }
             .environment(model)
     }
@@ -168,7 +175,10 @@ private extension View {
         if UIDevice.current.userInterfaceIdiom == .phone {
             sheet(isPresented: isPresented, content: content)
         } else {
-            inspector(isPresented: isPresented, content: content)
+            // The inspector is given a constant to prevent it from setting isPresented to false
+            // when the window is minimized in iPad Stage Manager. Otherwise, the feature editor
+            // will stop editing and show an empty inspector when the window is re-expanded.
+            inspector(isPresented: .constant(isPresented.wrappedValue), content: content)
         }
     }
 }
