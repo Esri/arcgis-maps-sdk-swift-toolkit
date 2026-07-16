@@ -17,19 +17,18 @@ import PhotosUI
 import SwiftUI
 
 extension View {
-    /// Presents a Photos picker that selects a PhotosPickerItem from a given photo library after obtaining
-    /// read/write photo library authorization.
+    /// Presents a Photos picker that selects a PhotosPickerItem from a given photo library.
     /// - Parameters:
     ///   - isPresented: The binding to whether the Photos picker should be shown.
     ///   - importState: The `AttachmentImportState` to provide the selection to.
     ///   - inputs: The attachment form inputs present in the element the picker is on.
-    func formPhotosPicker(
+    func attachmentPhotoPicker(
         isPresented: Binding<Bool>,
         importState: Binding<AttachmentImportState>,
         inputs: [AttachmentsFormInput]
     ) -> some View {
         modifier(
-            FormPhotosPicker(
+            AttachmentPhotoPicker(
                 importState: importState,
                 isPresented: isPresented,
                 inputs: inputs
@@ -38,10 +37,9 @@ extension View {
     }
 }
 
-/// A view that displays a Photos picker for choosing attachments from the photo library after obtaining
-/// read/write photo library authorization. The original filename for the attachment is retrieved and the
-/// selection is written to the bound `AttachmentImportState`.
-struct FormPhotosPicker: ViewModifier {
+/// A view that displays a Photos picker for choosing attachments from the photo library. The selected item is
+/// written to the bound `AttachmentImportState`.
+struct AttachmentPhotoPicker: ViewModifier {
     /// The current import state.
     @Binding var importState: AttachmentImportState
     /// A Boolean value indicating whether the photos picker is presented.
@@ -66,11 +64,7 @@ struct FormPhotosPicker: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            // The built-in photos picker automatically grants access to items
-            // but that authorization doesn't grant the ability to read the
-            // original filename so we use `AuthorizedPhotosPicker` to get that
-            // ability up front.
-            .authorizedPhotosPicker(
+            .photosPicker(
                 isPresented: $isPresented,
                 selection: $item,
                 matching: filter
@@ -85,9 +79,7 @@ struct FormPhotosPicker: ViewModifier {
                         importState = .errored(.dataInaccessible)
                         return
                     }
-                    importState = await .finalizing(
-                        .init(contentType: contentType, fileName: item.originalFilename, data: data)
-                    )
+                    importState = await .finalizing(.init(contentType: contentType, data: data))
                 } catch {
                     importState = .errored(.system(error.localizedDescription))
                 }

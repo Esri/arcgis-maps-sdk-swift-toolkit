@@ -392,7 +392,7 @@ struct AttachmentImportMenu: View {
             }
         }
 #endif // os(iOS)
-        .formPhotosPicker(
+        .attachmentPhotoPicker(
             isPresented: $photoPickerIsPresented,
             importState: $importState,
             inputs: element.inputs
