@@ -28,6 +28,9 @@ struct FeatureEditorFormView: View {
     /// The current editing event from the form view. This is non-`nil` while
     /// the event is being processed by this view.
     @State private var editingEvent: EquatableEditingEvent?
+    /// The opacity of the geometry editor tool's symbology. This is used to
+    /// animate changes to the geometry editor's opacity.
+    @State private var geometryEditorOpacity: Float = 1
     /// The form currently presented in the `FeatureFormView`.
     @State private var presentedFeatureForm: FeatureForm?
     /// The feature currently selected on the map. This is non-`nil` when
@@ -56,6 +59,10 @@ struct FeatureEditorFormView: View {
                 .onFeatureFormChanged { presentedFeatureForm = $0 }
                 .onFormEditingEvent { editingEvent = EquatableEditingEvent(event: $0) }
                 .environment(\.externalSaveAction, saveGeometryEditsAction)
+                .onAnimationChange(of: geometryEditorOpacity) { newOpacity in
+                    model.geometryEditor.tool.style.opacity = newOpacity
+                }
+                .animation(.default, value: geometryEditorOpacity)
                 .task(id: editingEvent) {
                     guard let editingEvent else { return }
                     defer { self.editingEvent = nil }
@@ -156,13 +163,13 @@ struct FeatureEditorFormView: View {
         }
         
         model.geometryEditor.clearSelection()
-        model.geometryEditor.tool.style.opacity = 0.1
+        geometryEditorOpacity = 0.1
         try? await Task.sleep(for: .seconds(1))
-        model.geometryEditor.tool.style.opacity = 1
+        geometryEditorOpacity = 1
     }
 }
 
-// MARK: - Helper Types
+// MARK: - Helper
 
 /// A wrapper for `FeatureFormView.EditingEvent` that conforms to `Equatable`.
 private struct EquatableEditingEvent: Equatable {
@@ -207,3 +214,37 @@ extension AnnotationLayer: FeatureSelectableLayer {}
 extension DimensionLayer: FeatureSelectableLayer {}
 extension FeatureLayer: FeatureSelectableLayer {}
 extension OrientedImageryLayer: FeatureSelectableLayer {}
+
+// MARK: On Animation Change Modifier
+
+/// A view modifier that performs an action when the animation data of a given value changes.
+private struct OnAnimationChangeModifier<Value: VectorArithmetic>: @MainActor AnimatableModifier {
+    /// The value to observe for changes in its animation data.
+    let value: Value
+    /// The action to perform when the animation data changes.
+    let action: (_ animatableData: Value) -> Void
+    
+    /// The value's animation data that is observed for changes.
+    var animatableData: Value {
+        get { value }
+        set { action(newValue) }
+    }
+    
+    func body(content: Content) -> some View {
+        content
+    }
+}
+
+private extension View {
+    /// Performs an action when the animation data of a given value changes.
+    /// - Parameters:
+    ///   - value: The value to observe for changes in its animation data.
+    ///   - action: The action to perform when the animation data changes.
+    ///   The new animation data is passed as a parameter.
+    func onAnimationChange<Value: VectorArithmetic>(
+        of value: Value,
+        perform action: @escaping (_ animatableData: Value) -> Void
+    ) -> some View {
+        modifier(OnAnimationChangeModifier(value: value, action: action))
+    }
+}
