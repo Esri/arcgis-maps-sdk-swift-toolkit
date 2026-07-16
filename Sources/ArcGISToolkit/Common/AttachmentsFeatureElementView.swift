@@ -40,6 +40,10 @@ struct AttachmentsFeatureElementView: View {
     @State private var isExpanded = true
     /// The last locally added attachment.
     @State private var lastAttachmentAdded: AttachmentModel?
+    /// If `embeddedFeatureFormViewModel` is set, this holds the last recorded value of
+    /// `FeatureForm.hasEdits`. If the value changes from `true` to `false` edits were discarded
+    /// and the attachments should be refreshed.
+    @State private var previousHasEdits = false
     
     /// Creates a new `AttachmentsFeatureElementView` for a Feature Form.
     /// - Parameter formElement: The `AttachmentsFeatureElement`.
@@ -87,6 +91,17 @@ struct AttachmentsFeatureElementView: View {
                 }
                 .onAttachmentIsEditableChange(of: formElement) { newIsEditable in
                     isEditable = newIsEditable
+                }
+                .task {
+                    if let form = embeddedFeatureFormViewModel?.featureForm {
+                        for await hasEdits in form.$hasEdits {
+                            if previousHasEdits && !hasEdits {
+                                // Edits were discarded, refresh attachments
+                                loadAttachments()
+                            }
+                            previousHasEdits = hasEdits
+                        }
+                    }
                 }
             } else if !models.isEmpty {
                 DisclosureGroup(isExpanded: $isExpanded) {
