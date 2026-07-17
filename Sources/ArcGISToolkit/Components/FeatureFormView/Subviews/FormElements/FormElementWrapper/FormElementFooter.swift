@@ -100,7 +100,7 @@ extension FormElementFooter {
                 element.incorrectAttachmentTypeMessage
             case .lessThanMinimumAttachmentCount:
                 element.minAttachmentCountMessage
-            @unknown default:
+            default:
                 Text(
                     "Unknown validation error",
                     bundle: .toolkitModule,
@@ -267,7 +267,7 @@ extension FormElementFooter {
                         comment: "Text indicating a field's value must be of the correct type."
                     )
                 }
-            @unknown default:
+            default:
                 Text(
                     "Unknown validation error",
                     bundle: .toolkitModule,
