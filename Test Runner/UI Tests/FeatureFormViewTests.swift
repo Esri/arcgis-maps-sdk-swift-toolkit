@@ -103,7 +103,7 @@ final class FeatureFormViewTests: XCTestCase {
         let discardButton = app.buttons["Discard"]
         let formTitle = app.staticTexts["Esri Location"]
 #if targetEnvironment(macCatalyst)
-        let delete = app.menuItems["Delete"]
+        let delete = app.menuItems["delete"]
 #else
         let delete = app.buttons["Delete"]
 #endif
