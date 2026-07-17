@@ -40,7 +40,29 @@ private struct FeatureEditorModifier: ViewModifier {
             .safeInspector(isPresented: $model.isPresented) {
                 // VStack is needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
-                    FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
+                    if let error = model.startEditingError {
+                        ContentUnavailableView {
+                            Label {
+                                Text(
+                                    "Failed to start editing",
+                                    bundle: .toolkitModule,
+                                    comment: "A title shown when feature editing could not start."
+                                )
+                            } icon: {
+                                Image(systemName: "exclamationmark.triangle")
+                            }
+                        } description: {
+                            Text(error.localizedDescription)
+                        } actions: {
+                            Button {
+                                Task { await model.retryStartEditing() }
+                            } label: {
+                                Text.tryAgain
+                            }
+                        }
+                    } else {
+                        FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
+                    }
                 }
                 .presentationBackgroundInteraction(.enabled)
                 .presentationContentInteraction(.scrolls)
@@ -99,14 +121,7 @@ private struct FeatureEditorFormView: View {
                 .task(id: presentedFeatureForm.map(ObjectIdentifier.init)) {
                     guard let presentedFeatureForm else { return }
                     defer { self.presentedFeatureForm = nil }
-                    
-                    do {
-                        try await model.startEditing(newFeatureForm: presentedFeatureForm)
-                    } catch {
-                        Logger.featureEditor.error(
-                            "Error starting feature editor: \(error.localizedDescription)"
-                        )
-                    }
+                    await model.startEditing(newFeatureForm: presentedFeatureForm)
                 }
         }
     }

@@ -41,6 +41,8 @@ final class FeatureEditorModel {
     private var presentedFeatureForm: FeatureForm?
     /// The root feature form to edit with the feature editor.
     private(set) var rootFeatureForm: FeatureForm?
+    /// The error when starting editing fails.
+    private(set) var startEditingError: (any Error)?
     /// A Boolean value indicating whether the snap settings sheet is presented.
     /// This is needed to display the sheet from the modifier to prevent it from
     /// dismissing the feature editor when the horizontal size class is compact.
@@ -61,12 +63,22 @@ final class FeatureEditorModel {
     
     // MARK: Snapping Properties
     
+    /// The map that contains the utility network being edited.
+    private var map: Map?
     /// The snap rules for the `feature`, used to sync snap source settings.
     /// This is non-`nil` when snap rules were successfully created using the `utilityNetwork`.
     private var snapRules: SnapRules?
     /// The `feature`'s utility network used to create snap rules.
     /// This is non-`nil` when a map containing the feature's UN is used to start editing.
-    private var utilityNetwork: UtilityNetwork?
+    private var utilityNetwork: UtilityNetwork? {
+        if let map, let feature {
+            return map.utilityNetworks.first { utilityNetwork in
+                utilityNetwork.makeElement(arcGISFeature: feature) != nil
+            }
+        } else {
+            return nil
+        }
+    }
     
     // MARK: Methods
     
@@ -100,31 +112,66 @@ final class FeatureEditorModel {
     
     /// Starts editing a new `FeatureForm` that is shown in the feature editor's `FeatureFormView`.
     /// - Parameter featureForm: The new feature form to edit.
-    func startEditing(newFeatureForm featureForm: FeatureForm) async throws {
+    func startEditing(newFeatureForm featureForm: FeatureForm) async {
         geometryEditor.stop()
         presentedFeatureForm = featureForm
         
-        try await setUpGeometryEditing()
+        do {
+            try await setUpGeometryEditing()
+        } catch {
+            startEditingError = error
+            Logger.featureEditor.error(
+                "Error starting feature editor: \(error.localizedDescription)"
+            )
+        }
     }
     
     /// Starts an editing session for the given `feature`.
     /// - Parameters:
     ///   - feature: The root feature to edit.
     ///   - map: The map that `feature` is part of, used to set up rule-based snapping.
-    func startEditing(rootFeature feature: ArcGISFeature, on map: Map?) async throws {
+    func startEditing(rootFeature feature: ArcGISFeature, on map: Map?) async {
         stopEditing()
         rootFeatureForm = FeatureForm(feature: feature)
         
-        // Sets up the utility network so snap rules can be created.
-        if let map {
-            try await map.load()
-            await map.utilityNetworks.load()
-            utilityNetwork = map.utilityNetworks.first { utilityNetwork in
-                utilityNetwork.makeElement(arcGISFeature: feature) != nil
+        do {
+            if let map {
+                self.map = map
+                // Only try to set up snap rules when a map is provided.
+                // Sets up the utility network so snap rules can be created.
+                try await map.load()
+                for utilityNetwork in map.utilityNetworks {
+                    try await utilityNetwork.load()
+                }
             }
+            try await setUpGeometryEditing()
+        } catch {
+            // Don't start editing whichever error occurs, and let user retry.
+            startEditingError = error
+            Logger.featureEditor.error(
+                "Error starting feature editor: \(error.localizedDescription)"
+            )
         }
-        
-        try await setUpGeometryEditing()
+    }
+    
+    /// Retries starting an editing session.
+    func retryStartEditing() async {
+        startEditingError = nil
+        do {
+            if let map {
+                try await map.retryLoad()
+                if let utilityNetwork {
+                    try await utilityNetwork.retryLoad()
+                }
+            }
+            try await setUpGeometryEditing()
+        } catch {
+            // Don't start editing whichever error occurs, and let user retry.
+            startEditingError = error
+            Logger.featureEditor.error(
+                "Error retry starting feature editor: \(error.localizedDescription)"
+            )
+        }
     }
     
     /// Stops the feature editor and resets the model's properties.
@@ -136,6 +183,7 @@ final class FeatureEditorModel {
         presentedFeatureForm = nil
         snapSettingsSheetIsPresented = false
         viewpointGeometry = nil
+        startEditingError = nil
         
         geometryEditor.stop()
         geometryEditorCanUndo = false
@@ -143,7 +191,7 @@ final class FeatureEditorModel {
         geometryEditorIsStarted = false
         
         snapRules = nil
-        utilityNetwork = nil
+        map = nil
     }
     
     /// Syncs the `geometryEditor.snapSettings`' source settings.
@@ -151,8 +199,8 @@ final class FeatureEditorModel {
         do {
             let snapSettings = geometryEditor.snapSettings
             
-            if let rules = snapRules {
-                try snapSettings.syncSourceSettings(rules: rules, sourceEnablingBehavior: .preserve)
+            if let snapRules {
+                try snapSettings.syncSourceSettings(rules: snapRules, sourceEnablingBehavior: .preserve)
             } else {
                 try snapSettings.syncSourceSettings()
             }
