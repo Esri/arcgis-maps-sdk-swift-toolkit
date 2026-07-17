@@ -115,7 +115,6 @@ extension AttachmentsFormElement /* Validation error messages */ {
                     comment: "A message indicating the element requires multiple attachments."
                 )
             }
-            
         } else {
             nil
         }
