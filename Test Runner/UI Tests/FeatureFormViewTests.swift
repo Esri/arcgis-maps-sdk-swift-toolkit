@@ -97,6 +97,10 @@ final class FeatureFormViewTests: XCTestCase {
         renamedAttachmentLabel.assertExistence()
     }
     
+    func testAttachmentsResetOnDiscardEdits() {
+        
+    }
+    
     func testEditingButtonsHidden() {
         let app = XCUIApplication()
         let discardButton = app.buttons["Discard"]
