@@ -61,7 +61,7 @@ extension AttachmentsFormElement /* Validation error messages */ {
             Text(
                 "The media is too long. Maximum allowed duration is ^[\(maxDuration.components.seconds) seconds](inflect: true).",
                 bundle: .toolkitModule,
-                comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
+                comment: "A message indicating that the attachment's duration exceeds the allowed maximum."
             )
         } else {
             nil
@@ -72,7 +72,7 @@ extension AttachmentsFormElement /* Validation error messages */ {
         Text(
             "This file type is not supported.",
             bundle: .toolkitModule,
-            comment: "A message indicating the type of the supplied attachment is not supported.."
+            comment: "A message indicating the type of the supplied attachment is not supported."
         )
     }
     
@@ -81,7 +81,7 @@ extension AttachmentsFormElement /* Validation error messages */ {
             Text(
                 "The file is too large. Maximum allowed file size is \(maxFileSize) MB.",
                 bundle: .toolkitModule,
-                comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
+                comment: "A message indicating that the attachment's size exceeds the allowed maximum."
             )
         } else {
             nil

@@ -937,7 +937,7 @@ match the spatial reference of the map. */
 /* A label indicating the chosen file was invalid. */
 "The certificate file was invalid." = "The certificate file was invalid.";
 
-/* A message indicating that no more attachments can be added because the maximum count has been reached. */
+/* A message indicating that the attachment's size exceeds the allowed maximum. */
 "The file is too large. Maximum allowed file size is %@ MB." = "The file is too large. Maximum allowed file size is %@ MB.";
 
 /* The title shown when the feature form failed to save. */
@@ -955,7 +955,7 @@ match the spatial reference of the map. */
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
 "The maximum number of attachments allowed is %lld." = "The maximum number of attachments allowed is %lld.";
 
-/* A message indicating that no more attachments can be added because the maximum count has been reached. */
+/* A message indicating that the attachment's duration exceeds the allowed maximum. */
 "The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
@@ -980,7 +980,7 @@ to be imported as an attachment. */
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "There are no map areas for this map. Tap the button below to get started.";
 
-/* A message indicating the type of the supplied attachment is not supported.. */
+/* A message indicating the type of the supplied attachment is not supported. */
 "This file type is not supported." = "This file type is not supported.";
 
 /* A notice communicating that a feature form has no elements. */
