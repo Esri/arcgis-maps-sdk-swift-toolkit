@@ -215,7 +215,7 @@ struct AttachmentImportMenu: View {
         Menu {
             if element.inputs.count >= 2 {
 #if os(iOS)
-                if let _ = element.inputs.first(where: { $0 is ImageFormInput }),
+                if element.inputs.contains(where: { $0 is ImageFormInput }),
                    let videoFormInput = element.inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput {
                     takePhotoOrVideoButton(videoFormInput: videoFormInput)
                 } else if let imageFormInput = element.inputs.first(where: { $0 is ImageFormInput }) as? ImageFormInput {
