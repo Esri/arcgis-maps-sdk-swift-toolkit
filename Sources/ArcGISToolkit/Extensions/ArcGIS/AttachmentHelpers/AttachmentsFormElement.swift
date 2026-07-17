@@ -59,7 +59,7 @@ extension AttachmentsFormElement /* Validation error messages */ {
     var exceedsMaximumAttachmentDurationMessage: Text? {
         return if let maxDuration  {
             Text(
-                "The media is too long. Maximum allowed duration is \(maxDuration.components.seconds) seconds.",
+                "The media is too long. Maximum allowed duration is ^[\(maxDuration.components.seconds) seconds](inflect: true).",
                 bundle: .toolkitModule,
                 comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
             )
@@ -115,7 +115,6 @@ extension AttachmentsFormElement /* Validation error messages */ {
                     comment: "A message indicating the element requires multiple attachments."
                 )
             }
-            
         } else {
             nil
         }

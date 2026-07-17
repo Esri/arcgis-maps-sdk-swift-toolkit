@@ -956,7 +956,7 @@ match the spatial reference of the map. */
 "The maximum number of attachments allowed is %lld." = "The maximum number of attachments allowed is %lld.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The media is too long. Maximum allowed duration is %lld seconds." = "The media is too long. Maximum allowed duration is %lld seconds.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "The name for the map area must be unique.";
