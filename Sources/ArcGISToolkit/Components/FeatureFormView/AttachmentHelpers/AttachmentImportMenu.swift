@@ -224,7 +224,7 @@ struct AttachmentImportMenu: View {
                     takeVideoButton(input: videoFormInput)
                 }
 #endif // os(iOS)
-                if element.inputs.contains(where: {$0 is ImageFormInput || $0 is VideoFormInput}) {
+                if element.inputs.contains(where: { $0 is ImageFormInput || $0 is VideoFormInput }) {
                     chooseFromLibraryButton()
                 }
                 chooseFromFilesButton()
