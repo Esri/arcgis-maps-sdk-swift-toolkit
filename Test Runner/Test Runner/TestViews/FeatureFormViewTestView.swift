@@ -258,7 +258,7 @@ private extension FeatureFormTestView {
     var cases: [TestCase] {[
         .init("testAttachmentLoadDurability", objectID: 1, portalID: .groupAndAttachments),
         .init("testAttachmentRenaming", objectID: 1, portalID: .attachmentMapID),
-        .init("testAttachmentsResetOnDiscardEdits", objectID: 1, portalID: .attachmentMapID),
+        .init("testAttachmentsResetOnDiscard", objectID: 1, portalID: .attachmentMapID),
         .init("testEditingButtonsHidden", objectID: 1, portalID: .placeOfInterestID, editingButtonsVisibility: .hidden),
         .init("testEditingButtonsVisible", objectID: 1, portalID: .placeOfInterestID, editingButtonsVisibility: .visible),
         .init("testCase_1_1", objectID: 1, portalID: .inputValidationMapID),

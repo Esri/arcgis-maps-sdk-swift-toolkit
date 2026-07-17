@@ -97,8 +97,30 @@ final class FeatureFormViewTests: XCTestCase {
         renamedAttachmentLabel.assertExistence()
     }
     
-    func testAttachmentsResetOnDiscardEdits() {
+    func testAttachmentsResetOnDiscard() {
+        let app = XCUIApplication()
+        let attachmentLabel = app.staticTexts["EsriHQ.jpeg"]
+        let discardButton = app.buttons["Discard"]
+        let formTitle = app.staticTexts["Esri Location"]
+#if targetEnvironment(macCatalyst)
+        let delete = app.menuItems["Delete"]
+#else
+        let delete = app.buttons["Delete"]
+#endif
         
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        attachmentLabel.assertExistence()
+#if targetEnvironment(macCatalyst)
+        attachmentLabel.rightClick()
+#else
+        attachmentLabel.press(forDuration: 1)
+#endif
+        delete.assertExistenceAndTap()
+        attachmentLabel.assertNonExistence()
+        discardButton.assertExistenceAndTap()
+        attachmentLabel.assertExistence()
     }
     
     func testEditingButtonsHidden() {
