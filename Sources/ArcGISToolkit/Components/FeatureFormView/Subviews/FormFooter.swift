@@ -23,7 +23,7 @@ struct FormFooter: View {
     ///
     /// - Note: This property is optional as the modifier providing the closure may not be applied
     /// to the ``FeatureFormView``.
-    let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
+    let formHandlingEventAction: FormEditingEventActionResponse?
     
     /// The model for the FeatureFormView containing the view.
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
@@ -41,7 +41,7 @@ struct FormFooter: View {
     var discardButton: some View {
         Button(role: .destructive) {
             featureForm.discardEdits()
-            formHandlingEventAction?(.discardedEdits(willNavigate: false))
+            formHandlingEventAction?.action(.discardedEdits(willNavigate: false))
             featureFormViewModel.validationErrorVisibilityInternal = .automatic
         } label: {
             Text(
@@ -58,7 +58,7 @@ struct FormFooter: View {
                 Task {
                     do {
                         try await featureForm.finishEditing()
-                        formHandlingEventAction?(.savedEdits(willNavigate: false))
+                        formHandlingEventAction?.action(.savedEdits(willNavigate: false))
                     } catch {
                         featureFormViewModel.finishEditingError = error
                     }

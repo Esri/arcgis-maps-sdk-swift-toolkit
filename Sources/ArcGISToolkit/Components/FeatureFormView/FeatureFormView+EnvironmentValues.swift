@@ -24,8 +24,13 @@ extension EnvironmentValues /* FeatureFormView */ {
     @Entry var navigationIsDisabled = false
     
     /// The closure to perform when a ``EditingEvent`` occurs.
-    @Entry var onFormEditingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
+    @Entry var onFormEditingEventAction: FormEditingEventActionResponse?
     
     /// The developer configurable validation error visibility.
     @Entry var validationErrorVisibilityExternal: FeatureFormView.ValidationErrorVisibility = .automatic
+}
+
+struct FormEditingEventActionResponse: Identifiable {
+    let action: (FeatureFormView.EditingEvent) -> Void
+    let id = UUID()
 }

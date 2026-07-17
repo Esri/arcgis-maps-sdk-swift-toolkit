@@ -91,7 +91,7 @@ public struct FeatureFormView: View {
     /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
     var onFeatureFormChanged: ((FeatureForm) -> Void)?
     /// The user-provided closure to perform when a ``EditingEvent`` occurs.
-    var onFormEditingEventAction: ((EditingEvent) -> Void)?
+    var onFormEditingEventAction: FormEditingEventActionResponse?
     /// The developer configurable validation error visibility.
     var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
     
@@ -193,7 +193,7 @@ public struct FeatureFormView: View {
                     if let (willNavigate, continuation) = featureFormViewModel.navigationAlertInfo {
                         Button(role: .destructive) {
                             featureFormViewModel.presentedForm?.discardEdits()
-                            onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
+                            onFormEditingEventAction?.action(.discardedEdits(willNavigate: willNavigate))
                             featureFormViewModel.validationErrorVisibilityInternal = .automatic
                             continuation()
                         } label: {
@@ -209,7 +209,7 @@ public struct FeatureFormView: View {
                                 Task {
                                     do {
                                         try await featureFormViewModel.presentedForm?.finishEditing()
-                                        onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
+                                        onFormEditingEventAction?.action(.savedEdits(willNavigate: willNavigate))
                                         continuation()
                                     } catch {
                                         featureFormViewModel.finishEditingError = error
@@ -293,7 +293,7 @@ public struct FeatureFormView: View {
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
             .onChange(of: featureFormViewModel.navigationPath) {
                 if let presentedItem = featureFormViewModel.navigationPath.last {
-                    onFormEditingEventAction?(.navigationChanged(presentedItem))
+                    onFormEditingEventAction?.action(.navigationChanged(presentedItem))
                 }
             }
             .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
@@ -363,7 +363,7 @@ public extension FeatureFormView {
     /// - Since: 200.8
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
         var copy = self
-        copy.onFormEditingEventAction = action
+        copy.onFormEditingEventAction = .init(action: action)
         return copy
     }
 }
