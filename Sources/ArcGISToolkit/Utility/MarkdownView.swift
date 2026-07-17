@@ -120,7 +120,7 @@ struct Visitor: MarkupVisitor {
         )
     }
     
-    mutating func visitDocument(_ document: Document) -> Result {
+    mutating func visitDocument(_ document: Markdown.Document) -> Result {
         visitChildren(document.children)
     }
     
