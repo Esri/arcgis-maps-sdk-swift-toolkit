@@ -104,6 +104,7 @@ struct FeatureEditorFormView: View {
             case .utilityAssociationCreationView(_, _, _, let candidate):
                 await showCandidateOnMap(candidate)
             default:
+                // Clears selection when the user navigates away from the current view.
                 clearSelectedFeature()
             }
         case .savedEdits(let willNavigate):
@@ -146,6 +147,9 @@ struct FeatureEditorFormView: View {
             // delay before the selection is cleared.
             try? await Task.sleep(for: .seconds(1))
         }
+        
+        // Prevents clearing a selection made by another task while this one was still running.
+        guard !Task.isCancelled else { return }
         clearSelectedFeature()
     }
     
@@ -153,6 +157,8 @@ struct FeatureEditorFormView: View {
     /// - Parameter feature: The feature to select.
     /// - Throws: If the geometry editor does not have a valid geometry to hide.
     private func selectFeature(_ feature: ArcGISFeature) async throws {
+        clearSelectedFeature()
+        
         guard let layer = feature.table?.layer as? FeatureSelectableLayer else { return }
         
         layer.selectFeature(feature)
