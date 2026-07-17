@@ -38,10 +38,10 @@ extension AttachmentsFormElement: AttachmentsFeatureElement {
     ///
     /// If the element has both an audio and video form input, there will be no max duration configured.
     var maxDuration: Duration? {
-        if let maxDuration = (inputs.first(where: { $0 is AudioFormInput }) as? AudioFormInput)?.maxDuration {
-            return maxDuration
-        } else if let maxDuration = (inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput)?.maxDuration {
-            return maxDuration
+        if let audioMaxDuration = (inputs.first(where: { $0 is AudioFormInput }) as? AudioFormInput)?.maxDuration {
+            return audioMaxDuration
+        } else if let videoMaxDuration = (inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput)?.maxDuration {
+            return videoMaxDuration
         } else {
             return nil
         }
