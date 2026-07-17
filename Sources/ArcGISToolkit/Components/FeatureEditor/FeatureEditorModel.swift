@@ -219,13 +219,13 @@ final class FeatureEditorModel {
         guard let feature else { return }
         
         // Loads the feature so canUpdateGeometry can be accessed. It is always false otherwise.
-        try await feature.load()
+        try await feature.retryLoad()
         guard feature.canUpdateGeometry else { return }
         
         // Loads the feature's table if the geometry is nil so geometryType can be accessed.
         // It is always nil otherwise.
         if feature.geometry == nil, let table = feature.table {
-            try await table.load()
+            try await table.retryLoad()
         }
         
         // Sets up the snap rules and syncs the snap source settings.
