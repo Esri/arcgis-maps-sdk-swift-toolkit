@@ -81,7 +81,7 @@ struct AttachmentPhotoPicker: ViewModifier {
                         importState = .errored(.dataInaccessible)
                         return
                     }
-                    importState = await .finalizing(.init(contentType: contentType, data: data))
+                    importState = .finalizing(.init(contentType: contentType, data: data))
                 } catch {
                     importState = .errored(.system(error.localizedDescription))
                 }

@@ -324,18 +324,18 @@ struct AttachmentImportMenu: View {
                     try await element.addAttachment(contentType: newAttachmentImportData.contentType, data: data)
                 }
             case let (.some(name), .none, .some(path)):
-                path.startAccessingSecurityScopedResource()
+                _ = path.startAccessingSecurityScopedResource()
                 defer { path.stopAccessingSecurityScopedResource() }
                 uploadResult = await Result {
                     try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: path, name: name)
                 }
             case let (.none, .none, .some(path)):
-                path.startAccessingSecurityScopedResource()
+                _ = path.startAccessingSecurityScopedResource()
                 defer { path.stopAccessingSecurityScopedResource() }
                 uploadResult = await Result {
                     try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: path)
                 }
-            @unknown default:
+            default:
                 uploadResult = .failure(AttachmentImportError.creationFailed)
             }
             switch uploadResult {
@@ -445,7 +445,7 @@ private extension AttachmentImportMenu {
                 element.incorrectAttachmentTypeMessage
             case .exceedsMaximumAttachmentDuration:
                 element.exceedsMaximumAttachmentDurationMessage ?? genericImportFailureAlertMessage
-            @unknown default:
+            default:
                 genericImportFailureAlertMessage
             }
         case .sizeLimitExceeded:
