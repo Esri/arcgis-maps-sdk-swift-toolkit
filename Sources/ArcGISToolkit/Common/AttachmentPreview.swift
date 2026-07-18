@@ -88,35 +88,16 @@ struct AttachmentPreview: View {
         ForEach(attachmentModels) { attachmentModel in
             AttachmentCell(
                 attachmentModel: attachmentModel,
+                deletedAttachmentModel: $deletedAttachmentModel,
+                newAttachmentName: $newAttachmentName,
+                renamedAttachmentModel: $renamedAttachmentModel,
+                renameDialogueIsShowing: $renameDialogueIsShowing,
+                allowsRenamingByUser: allowsRenamingByUser,
                 attachmentDownloadSizeLimit: attachmentDownloadSizeLimit,
                 cellSize: size,
-                displaysFilename: displaysFilename
+                displaysFilename: displaysFilename,
+                editControlsDisabled: editControlsDisabled
             )
-            .contextMenu {
-                if !editControlsDisabled && !attachmentModel.attachment.measuredSize.value.isZero {
-                    if allowsRenamingByUser,
-                       attachmentModel.attachment.measuredSize <= attachmentDownloadSizeLimit {
-                        Button {
-                            renamedAttachmentModel = attachmentModel
-                            renameDialogueIsShowing = true
-                            if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
-                                newAttachmentName = String(attachmentModel.name[..<separatorIndex])
-                            } else {
-                                newAttachmentName = attachmentModel.name
-                            }
-                        } label: {
-                            Label {
-                                Text.rename
-                            } icon: {
-                                Image(systemName: "pencil")
-                            }
-                        }
-                    }
-                    Button.delete {
-                        deletedAttachmentModel = attachmentModel
-                    }
-                }
-            }
         }
         .alert(
             Text(
@@ -157,26 +138,73 @@ struct AttachmentPreview: View {
         
         /// A Boolean value indicating whether the empty download alert is presented.
         @State private var emptyDownloadAlertIsPresented = false
-        
         /// A Boolean value indicating if the attachment is loading.
         @State private var isLoading = false
-        
         /// A Boolean value indicating whether the maximum size download alert is presented.
         @State private var maximumSizeDownloadExceededAlertIsPresented = false
-        
         /// The url of the the attachment, used to display the attachment via `QuickLook`.
         @State private var url: URL?
         
+        @Binding var deletedAttachmentModel: AttachmentModel?
+        @Binding var newAttachmentName: String
+        @Binding var renamedAttachmentModel: AttachmentModel?
+        @Binding var renameDialogueIsShowing: Bool
+        
+        /// <#Description#>
+        let allowsRenamingByUser: Bool
         /// The maximum attachment download size limit.
         let attachmentDownloadSizeLimit: Measurement<UnitInformationStorage>
-        
         /// The size of the cell.
         let cellSize: CGSize
-        
         /// A Boolean value indicating whether attachment filenames are displayed.
         let displaysFilename: Bool
+        /// <#Description#>
+        let editControlsDisabled: Bool
         
         var body: some View {
+            Menu {
+                if !editControlsDisabled && !attachmentModel.attachment.measuredSize.value.isZero {
+                    if allowsRenamingByUser,
+                       attachmentModel.attachment.measuredSize <= attachmentDownloadSizeLimit {
+                        Button {
+                            renamedAttachmentModel = attachmentModel
+                            renameDialogueIsShowing = true
+                            if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
+                                newAttachmentName = String(attachmentModel.name[..<separatorIndex])
+                            } else {
+                                newAttachmentName = attachmentModel.name
+                            }
+                        } label: {
+                            Label {
+                                Text.rename
+                            } icon: {
+                                Image(systemName: "pencil")
+                            }
+                        }
+                    }
+                    Button.delete {
+                        deletedAttachmentModel = attachmentModel
+                    }
+                }
+            } label: {
+                thumbnail
+            } primaryAction: {
+                guard !isLoading else { return }
+                if attachmentModel.loadStatus == .loaded {
+                    // Set the url to trigger `.quickLookPreview`.
+                    url = attachmentModel.attachment.fileURL
+                } else if attachmentModel.attachment.measuredSize.value.isZero {
+                    emptyDownloadAlertIsPresented = true
+                } else if attachmentModel.attachment.measuredSize > attachmentDownloadSizeLimit {
+                    maximumSizeDownloadExceededAlertIsPresented = true
+                } else if attachmentModel.loadStatus == .notLoaded {
+                    // Load the attachment model with the given size.
+                    isLoading = true
+                }
+            }
+        }
+        
+        var thumbnail: some View {
             VStack(alignment: .center) {
                 ZStack {
                     if attachmentModel.loadStatus != .loading {
@@ -219,20 +247,6 @@ struct AttachmentPreview: View {
             .frame(width: cellSize.width, height: cellSize.height)
             .background(Color.gray.opacity(0.2))
             .clipShape(.rect(cornerRadius: 8))
-            .onTapGesture {
-                guard !isLoading else { return }
-                if attachmentModel.loadStatus == .loaded {
-                    // Set the url to trigger `.quickLookPreview`.
-                    url = attachmentModel.attachment.fileURL
-                } else if attachmentModel.attachment.measuredSize.value.isZero {
-                    emptyDownloadAlertIsPresented = true
-                } else if attachmentModel.attachment.measuredSize > attachmentDownloadSizeLimit {
-                    maximumSizeDownloadExceededAlertIsPresented = true
-                } else if attachmentModel.loadStatus == .notLoaded {
-                    // Load the attachment model with the given size.
-                    isLoading = true
-                }
-            }
             // On visionOS, quick look preview will close (sometimes it comes back) a sheet presenting
             // the feature form.
             // See thread here: https://developer.apple.com/forums/thread/773599
