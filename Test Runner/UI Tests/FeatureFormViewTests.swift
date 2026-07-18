@@ -2111,8 +2111,8 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let addAttachmentButton = app.buttons["Add Attachment"]
         let attachment0Label = app.staticTexts["Attachment_0.jpeg"]
-        let chooseFromFilesButton = app.buttons["Choose From Files"]
-        let chooseFromLibraryButton = app.buttons["Choose From Library"]
+        let attachFileButton = app.buttons["Attach File"]
+        let choosePhotoOrVideoButton = app.buttons["Choose Photo or Video"]
         let element1Title = "General - All Inputs"
         let element2Title = "General - Photo Only"
         let elementFooterValidationError = app.staticTexts["At least 1 attachment is required."]
@@ -2131,8 +2131,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.filterElements(element1Title)
         addAttachmentButton.assertExistenceAndTap()
-        chooseFromFilesButton.assertExistence()
-        chooseFromLibraryButton.assertExistence()
+        attachFileButton.assertExistence()
+        choosePhotoOrVideoButton.assertExistence()
         takePhotoOrVideoButton.assertExistenceAndTap()
         shutterButton.assertExistenceAndTap()
         usePhotoButton.assertExistenceAndTap()
@@ -2166,11 +2166,15 @@ final class FeatureFormViewTests: XCTestCase {
 #endif
         
 #if targetEnvironment(macCatalyst)
-        let chooseFromFilesButton = app.menuItems["choose_from_files"]
-        let chooseFromLibraryButton = app.menuItems["choose_from_library"]
+        let attachFileButton = app.menuItems["attach_file"]
+        let choosePhotoButton = app.menuItems["choose_photo"]
+        let choosePhotoOrVideoButton = app.buttons["choose_photo_or_video"]
+        let chooseVideoButton = app.buttons["Choose_video"]
 #else
-        let chooseFromFilesButton = app.buttons["Choose From Files"]
-        let chooseFromLibraryButton = app.buttons["Choose From Library"]
+        let attachFileButton = app.buttons["Attach File"]
+        let choosePhotoButton = app.buttons["Choose Photo"]
+        let choosePhotoOrVideoButton = app.buttons["Choose Photo or Video"]
+        let chooseVideoButton = app.buttons["Choose Video"]
 #endif
         
         openTestCase()
@@ -2178,8 +2182,10 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.filterElements(elementTitle)
         addAttachmentButton.assertExistenceAndTap()
-        chooseFromFilesButton.assertExistence()
-        chooseFromLibraryButton.assertNonExistence()
+        attachFileButton.assertExistence()
+        choosePhotoButton.assertNonExistence()
+        choosePhotoOrVideoButton.assertNonExistence()
+        chooseVideoButton.assertNonExistence()
     }
     
     func testCase_14_3() throws {
@@ -2196,12 +2202,12 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["AttachmentsFormElement"]
         
 #if targetEnvironment(macCatalyst)
-        let chooseFromFilesButton = app.menuItems["choose_from_files"]
-        let chooseFromLibraryButton = app.menuItems["choose_from_library"]
+        let attachFileButton = app.menuItems["attach_file"]
+        let choosePhotoButton = app.menuItems["choose_photo"]
         let takePhotoButton = app.menuItems["take_photo"]
 #else
-        let chooseFromFilesButton = app.buttons["Choose From Files"]
-        let chooseFromLibraryButton = app.buttons["Choose From Library"]
+        let attachFileButton = app.buttons["Attach File"]
+        let choosePhotoButton = app.buttons["Choose Photo"]
         let takePhotoButton = app.buttons["Take Photo"]
 #endif
         
@@ -2211,8 +2217,8 @@ final class FeatureFormViewTests: XCTestCase {
         app.filterElements(element1Title)
         addAttachmentButton.assertExistenceAndTap()
         takePhotoButton.assertExistence()
-        chooseFromLibraryButton.assertExistence()
-        chooseFromFilesButton.assertExistence()
+        choosePhotoButton.assertExistence()
+        attachFileButton.assertExistence()
         
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
@@ -2223,8 +2229,8 @@ final class FeatureFormViewTests: XCTestCase {
         app.filterElements(element2Title)
         addAttachmentButton.assertExistenceAndTap()
         takePhotoButton.assertExistence()
-        chooseFromFilesButton.assertNonExistence()
-        chooseFromLibraryButton.assertNonExistence()
+        attachFileButton.assertNonExistence()
+        choosePhotoButton.assertNonExistence()
         
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
@@ -2235,8 +2241,8 @@ final class FeatureFormViewTests: XCTestCase {
         app.filterElements(element3Title)
         addAttachmentButton.assertExistenceAndTap()
         takePhotoButton.assertNonExistence()
-        chooseFromFilesButton.assertExistence()
-        chooseFromLibraryButton.assertExistence()
+        attachFileButton.assertExistence()
+        choosePhotoButton.assertExistence()
     }
     
     func testCase_14_4() throws {
@@ -2253,12 +2259,12 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["AttachmentsFormElement"]
         
 #if targetEnvironment(macCatalyst)
-        let chooseFromFilesButton = app.menuItems["choose_from_files"]
-        let chooseFromLibraryButton = app.menuItems["choose_from_library"]
+        let attachFileButton = app.menuItems["attach_file"]
+        let chooseVideoButton = app.menuItems["choose_video"]
         let takeVideoButton = app.menuItems["take_video"]
 #else
-        let chooseFromFilesButton = app.buttons["Choose From Files"]
-        let chooseFromLibraryButton = app.buttons["Choose From Library"]
+        let attachFileButton = app.buttons["Attach File"]
+        let chooseVideoButton = app.buttons["Choose Video"]
         let takeVideoButton = app.buttons["Take Video"]
 #endif
         
@@ -2268,8 +2274,8 @@ final class FeatureFormViewTests: XCTestCase {
         app.filterElements(element1Title)
         addAttachmentButton.assertExistenceAndTap()
         takeVideoButton.assertExistence()
-        chooseFromLibraryButton.assertExistence()
-        chooseFromFilesButton.assertExistence()
+        chooseVideoButton.assertExistence()
+        attachFileButton.assertExistence()
         
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
@@ -2280,8 +2286,8 @@ final class FeatureFormViewTests: XCTestCase {
         app.filterElements(element2Title)
         addAttachmentButton.assertExistenceAndTap()
         takeVideoButton.assertExistence()
-        chooseFromFilesButton.assertNonExistence()
-        chooseFromLibraryButton.assertNonExistence()
+        attachFileButton.assertNonExistence()
+        chooseVideoButton.assertNonExistence()
         
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
@@ -2292,8 +2298,8 @@ final class FeatureFormViewTests: XCTestCase {
         app.filterElements(element3Title)
         addAttachmentButton.assertExistenceAndTap()
         takeVideoButton.assertNonExistence()
-        chooseFromFilesButton.assertExistence()
-        chooseFromLibraryButton.assertExistence()
+        attachFileButton.assertExistence()
+        chooseVideoButton.assertExistence()
     }
     
     func testCase_14_5() throws {
@@ -2310,9 +2316,9 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["AttachmentsFormElement"]
         
 #if targetEnvironment(macCatalyst)
-        let chooseFromFilesButton = app.menuItems["choose_from_files"]
+        let attachFileButton = app.menuItems["attach_file"]
 #else
-        let chooseFromFilesButton = app.buttons["Choose From Files"]
+        let attachFileButton = app.buttons["Attach File"]
 #endif
         
         openTestCase()
@@ -2320,7 +2326,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.filterElements(element1Title)
         addAttachmentButton.assertExistenceAndTap()
-        chooseFromFilesButton.assertExistence()
+        attachFileButton.assertExistence()
         
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
@@ -2330,7 +2336,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.filterElements(element2Title)
         addAttachmentButton.assertExistenceAndTap()
-        chooseFromFilesButton.assertNonExistence()
+        attachFileButton.assertNonExistence()
         
 #if targetEnvironment(macCatalyst)
         addAttachmentButton.assertExistenceAndTap()
@@ -2340,7 +2346,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.filterElements(element3Title)
         addAttachmentButton.assertExistenceAndTap()
-        chooseFromFilesButton.assertExistence()
+        attachFileButton.assertExistence()
     }
 }
 

@@ -38,10 +38,10 @@ extension AttachmentsFormElement: AttachmentsFeatureElement {
     ///
     /// If the element has both an audio and video form input, there will be no max duration configured.
     var maxDuration: Duration? {
-        if let maxDuration = (inputs.first(where: { $0 is AudioFormInput }) as? AudioFormInput)?.maxDuration {
-            return maxDuration
-        } else if let maxDuration = (inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput)?.maxDuration {
-            return maxDuration
+        if let audioMaxDuration = (inputs.first(where: { $0 is AudioFormInput }) as? AudioFormInput)?.maxDuration {
+            return audioMaxDuration
+        } else if let videoMaxDuration = (inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput)?.maxDuration {
+            return videoMaxDuration
         } else {
             return nil
         }
@@ -61,7 +61,7 @@ extension AttachmentsFormElement /* Validation error messages */ {
             Text(
                 "The media is too long. Maximum allowed duration is ^[\(maxDuration.components.seconds) seconds](inflect: true).",
                 bundle: .toolkitModule,
-                comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
+                comment: "A message indicating that the attachment's duration exceeds the allowed maximum."
             )
         } else {
             nil
@@ -72,7 +72,7 @@ extension AttachmentsFormElement /* Validation error messages */ {
         Text(
             "This file type is not supported.",
             bundle: .toolkitModule,
-            comment: "A message indicating the type of the supplied attachment is not supported.."
+            comment: "A message indicating the type of the supplied attachment is not supported."
         )
     }
     
@@ -81,7 +81,7 @@ extension AttachmentsFormElement /* Validation error messages */ {
             Text(
                 "The file is too large. Maximum allowed file size is \(maxFileSize) MB.",
                 bundle: .toolkitModule,
-                comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
+                comment: "A message indicating that the attachment's size exceeds the allowed maximum."
             )
         } else {
             nil

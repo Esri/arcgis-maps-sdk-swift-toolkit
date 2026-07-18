@@ -82,8 +82,9 @@ struct AttachmentImportMenu: View {
         }
     }
     
-#if os(iOS)
+    @ViewBuilder
     private func takePhotoButton(input: ImageFormInput) -> some View {
+#if os(iOS)
         Button {
             pendingCaptureConfiguration = .init(allowedFormats: .image, movieMaxDuration: nil)
             if cameraRequester.authorizationStatus == .authorized {
@@ -99,10 +100,12 @@ struct AttachmentImportMenu: View {
             )
             Image(systemName: "camera")
         }
+#endif // os(iOS)
     }
     
-    @available(visionOS, unavailable)
-    private func takePhotoOrVideoButton(videoFormInput: VideoFormInput) -> Button<some View> {
+    @ViewBuilder
+    private func takePhotoOrVideoButton(videoFormInput: VideoFormInput) -> some View {
+#if os(iOS)
         Button {
             pendingCaptureConfiguration = .init(
                 allowedFormats: .imageAndMovie,
@@ -121,9 +124,12 @@ struct AttachmentImportMenu: View {
             )
             Image(systemName: "camera")
         }
+#endif // os(iOS)
     }
     
+    @ViewBuilder
     private func takeVideoButton(input: VideoFormInput) -> some View {
+#if os(iOS)
         Button {
             pendingCaptureConfiguration = .init(allowedFormats: .movie, movieMaxDuration: input.maxDuration)
             if cameraRequester.authorizationStatus == .authorized {
@@ -139,32 +145,57 @@ struct AttachmentImportMenu: View {
             )
             Image(systemName: "video")
         }
-    }
 #endif // os(iOS)
+    }
     
-    private func chooseFromLibraryButton() -> Button<some View> {
+    private func choosePhotoButton() -> Button<some View> {
         Button {
             photoPickerIsPresented = true
         } label: {
             Text(
-                "Choose From Library",
+                "Choose Photo",
                 bundle: .toolkitModule,
-                comment: "A label for a button to choose a photo or video from the user's photo library."
+                comment: "A label for a button to choose a photo from the user's photo library."
             )
-            Image(systemName: "photo")
+            Image(systemName: "photo.on.rectangle")
         }
     }
     
-    private func chooseFromFilesButton() -> Button<some View> {
+    private func choosePhotoOrVideoButton() -> Button<some View> {
+        Button {
+            photoPickerIsPresented = true
+        } label: {
+            Text(
+                "Choose Photo or Video",
+                bundle: .toolkitModule,
+                comment: "A label for a button to choose a photo or video from the user's photo library."
+            )
+            Image(systemName: "photo.on.rectangle")
+        }
+    }
+    
+    private func chooseVideoButton() -> Button<some View> {
+        Button {
+            photoPickerIsPresented = true
+        } label: {
+            Text(
+                "Choose Video",
+                bundle: .toolkitModule,
+                comment: "A label for a button to choose a video from the user's photo library."
+            )
+            Image(systemName: "photo.on.rectangle")
+        }
+    }
+    private func attachFileButton() -> Button<some View> {
         Button {
             fileImporterIsPresented = true
         } label: {
             Text(
-                "Choose From Files",
+                "Attach File",
                 bundle: .toolkitModule,
                 comment: "A label for a button to choose an file from the user's files."
             )
-            Image(systemName: "folder")
+            Image(systemName: "document")
         }
     }
     
@@ -214,20 +245,18 @@ struct AttachmentImportMenu: View {
     var menu: some View {
         Menu {
             if element.inputs.count >= 2 {
-#if os(iOS)
-                if let _ = element.inputs.first(where: { $0 is ImageFormInput }),
+                if element.inputs.contains(where: { $0 is ImageFormInput }),
                    let videoFormInput = element.inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput {
                     takePhotoOrVideoButton(videoFormInput: videoFormInput)
+                    choosePhotoOrVideoButton()
                 } else if let imageFormInput = element.inputs.first(where: { $0 is ImageFormInput }) as? ImageFormInput {
                     takePhotoButton(input: imageFormInput)
+                    choosePhotoButton()
                 } else if let videoFormInput = element.inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput {
                     takeVideoButton(input: videoFormInput)
+                    chooseVideoButton()
                 }
-#endif // os(iOS)
-                if element.inputs.contains(where: {$0 is ImageFormInput || $0 is VideoFormInput}) {
-                    chooseFromLibraryButton()
-                }
-                chooseFromFilesButton()
+                attachFileButton()
             } else if let onlyInput = element.inputs.first {
                 switch onlyInput {
                 case let audioFormInput as AudioFormInput:
@@ -235,43 +264,35 @@ struct AttachmentImportMenu: View {
                     case .capture:
                         EmptyView()
                     default:
-                        chooseFromFilesButton()
+                        attachFileButton()
                     }
                 case is DocumentFormInput:
-                    chooseFromFilesButton()
+                    attachFileButton()
                 case let imageFormInput as ImageFormInput:
                     switch imageFormInput.method {
                     case .any:
-#if os(iOS)
                         takePhotoButton(input: imageFormInput)
-#endif // os(iOS)
-                        chooseFromLibraryButton()
-                        chooseFromFilesButton()
+                        choosePhotoButton()
+                        attachFileButton()
                     case .capture:
-#if os(iOS)
                         takePhotoButton(input: imageFormInput)
-#endif // os(iOS)
                     case .upload:
-                        chooseFromLibraryButton()
-                        chooseFromFilesButton()
+                        choosePhotoButton()
+                        attachFileButton()
                     @unknown default:
                         EmptyView()
                     }
                 case let videoFormInput as VideoFormInput:
                     switch videoFormInput.method {
                     case .any:
-#if os(iOS)
                         takeVideoButton(input: videoFormInput)
-#endif // os(iOS)
-                        chooseFromLibraryButton()
-                        chooseFromFilesButton()
+                        chooseVideoButton()
+                        attachFileButton()
                     case .capture:
-#if os(iOS)
                         takeVideoButton(input: videoFormInput)
-#endif // os(iOS)
                     case .upload:
-                        chooseFromLibraryButton()
-                        chooseFromFilesButton()
+                        chooseVideoButton()
+                        attachFileButton()
                     @unknown default:
                         EmptyView()
                     }
