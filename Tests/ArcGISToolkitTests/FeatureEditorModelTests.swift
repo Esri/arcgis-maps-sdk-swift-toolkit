@@ -41,7 +41,7 @@ struct FeatureEditorModelTests {
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
         
         // Verifies isPresented is true when feature editor starts.
-        try await model.startEditing(rootFeature: feature, on: nil)
+        await model.startEditing(rootFeature: feature, on: nil)
         model.expectIsEditing(rootFeature: feature)
         
         await model.expectIsGeometryEditing()
@@ -91,7 +91,7 @@ struct FeatureEditorModelTests {
         let geometry = Point(latitude: 0, longitude: 0)
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
         
-        try await model.startEditing(rootFeature: feature, on: nil)
+        await model.startEditing(rootFeature: feature, on: nil)
         await model.expectIsGeometryEditing()
         await model.expectIsEditing(geometry: geometry)
         
@@ -122,7 +122,7 @@ struct FeatureEditorModelTests {
             let map = Map(spatialReference: .wgs84)
             
             // Verifies feature editor is started using the feature instance.
-            try await model.startEditing(rootFeature: feature, on: map)
+            await model.startEditing(rootFeature: feature, on: map)
             model.expectIsEditing(rootFeature: feature)
             
             // Verifies geometry editor is started using the feature's geometry.
@@ -140,7 +140,7 @@ struct FeatureEditorModelTests {
             let featureForm = FeatureForm(feature: feature)
             
             // Verifies feature editor uses the new feature instance.
-            try await model.startEditing(newFeatureForm: featureForm)
+            await model.startEditing(newFeatureForm: featureForm)
             #expect(model.feature === feature)
             
             // Verifies rootFeatureForm does not update.
