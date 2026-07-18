@@ -2234,7 +2234,7 @@ final class FeatureFormViewTests: XCTestCase {
         
 #if targetEnvironment(macCatalyst)
         let attachFileButton = app.menuItems["attach_file"]
-        let chooseFromLibraryButton = app.menuItems["choose_from_library"]
+        let chooseVideoButton = app.menuItems["choose_video"]
         let takeVideoButton = app.menuItems["take_video"]
 #else
         let attachFileButton = app.buttons["Attach File"]
