@@ -17,6 +17,38 @@ import SwiftUI
 /// The following extension is for translation purposes only. This file will be removed and the implementations
 /// will be moved into place as part of https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/pull/1437.
 extension Text /* Upcoming */ {
+    static var attachFile: Self {
+        .init(
+            "Attach File",
+            bundle: .toolkitModule,
+            comment: "A label for a button to choose an file from the user's files."
+        )
+    }
+    
+    static var choosePhoto: Self {
+        .init(
+            "Choose Photo",
+            bundle: .toolkitModule,
+            comment: "A label for a button to choose a photo from the user's photo library."
+        )
+    }
+    
+    static var choosePhotoOrVideo: Self {
+        .init(
+            "Choose Photo or Video",
+            bundle: .toolkitModule,
+            comment: "A label for a button to choose a photo or video from the user's photo library."
+        )
+    }
+    
+    static var chooseVideo: Self {
+        .init(
+            "Choose Video",
+            bundle: .toolkitModule,
+            comment: "A label for a button to choose a video from the user's photo library."
+        )
+    }
+    
     static var exceedsMaximumAttachmentDurationMessage: Self? {
         let maxDuration = Duration.seconds(1)
         return .init(
