@@ -155,13 +155,13 @@ final class FeatureEditorModel {
     /// Retries starting an editing session.
     func retryStartEditing() async {
         guard startEditingError != nil else { return }
-        startEditingError = nil
         do {
             if let map {
                 try await map.retryLoad()
                 await map.utilityNetworks.retryLoad()
             }
             try await setUpGeometryEditing()
+            startEditingError = nil
         } catch {
             // Don't start editing whichever error occurs, and let user retry.
             startEditingError = error
