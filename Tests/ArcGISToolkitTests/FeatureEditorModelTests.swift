@@ -167,7 +167,7 @@ struct FeatureEditorModelTests {
         #expect(feature.geometry == nil)
         
         // Verifies feature editor and geometry editor are started.
-        try await model.startEditing(rootFeature: feature, on: nil)
+        await model.startEditing(rootFeature: feature, on: nil)
         model.expectIsEditing(rootFeature: feature)
         await model.expectIsGeometryEditing()
         
@@ -194,7 +194,7 @@ struct FeatureEditorModelTests {
         #expect(!feature.canUpdateGeometry)
         
         // Verifies feature editor is started using the feature instance.
-        try await model.startEditing(rootFeature: feature, on: nil)
+        await model.startEditing(rootFeature: feature, on: nil)
         model.expectIsEditing(rootFeature: feature)
         
         // Geometry editor is not started.
@@ -218,7 +218,7 @@ struct FeatureEditorModelTests {
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
         
         // Verifies feature editor and geometry editor are started.
-        try await model.startEditing(rootFeature: feature, on: nil)
+        await model.startEditing(rootFeature: feature, on: nil)
         model.expectIsEditing(rootFeature: feature)
         await model.expectIsGeometryEditing()
         await model.expectIsEditing(geometry: geometry)
