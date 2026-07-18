@@ -154,6 +154,7 @@ final class FeatureEditorModel {
     
     /// Retries starting an editing session.
     func retryStartEditing() async {
+        guard startEditingError != nil else { return }
         startEditingError = nil
         do {
             if let map {
