@@ -140,9 +140,7 @@ final class FeatureEditorModel {
                 // Only try to set up snap rules when a map is provided.
                 // Sets up the utility network so snap rules can be created.
                 try await map.load()
-                for utilityNetwork in map.utilityNetworks {
-                    try await utilityNetwork.load()
-                }
+                await map.utilityNetworks.load()
             }
             try await setUpGeometryEditing()
         } catch {
@@ -160,9 +158,7 @@ final class FeatureEditorModel {
         do {
             if let map {
                 try await map.retryLoad()
-                if let utilityNetwork {
-                    try await utilityNetwork.retryLoad()
-                }
+                await map.utilityNetworks.retryLoad()
             }
             try await setUpGeometryEditing()
         } catch {
