@@ -74,7 +74,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A message indicating the element requires multiple attachments. */
 "At least %lld attachments are required." = "At least %lld attachments are required.";
 
-/* A label for a button to choose an file from the user's files. */
+/* A label for a button to choose a file from the user's files. */
 "Attach File" = "Attach File";
 
 /* A label for the "Attachment" utility association kind. */
@@ -158,6 +158,12 @@ Cancel your current action to close/hide a sheet or pop-up. */
 
 /* A label of a mark on a chart. */
 "chart-mark-label-value" = "Value";
+
+/* A label for a button to choose a photo from the user's photo library. */
+"Choose Photo" = "Choose Photo";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose Photo or Video" = "Choose Photo or Video";
 
 /* A label for a button to choose a photo from the user's photo library. */
 "Choose Photo" = "Choose Photo";
