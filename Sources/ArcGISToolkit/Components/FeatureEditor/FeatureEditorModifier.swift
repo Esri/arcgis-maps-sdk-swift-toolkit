@@ -59,6 +59,13 @@ private struct FeatureEditorModifier: ViewModifier {
                             } label: {
                                 Text.tryAgain
                             }
+                            
+                            Button {
+                                model.stopEditing()
+                                model.isPresented = false
+                            } label: {
+                                Text.cancel
+                            }
                         }
                     } else {
                         FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
