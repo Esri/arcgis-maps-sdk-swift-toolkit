@@ -21,7 +21,7 @@ extension Text /* Upcoming */ {
         .init(
             "Attach File",
             bundle: .toolkitModule,
-            comment: "A label for a button to choose an file from the user's files."
+            comment: "A label for a button to choose a file from the user's files."
         )
     }
     
