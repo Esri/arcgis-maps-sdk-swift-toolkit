@@ -68,6 +68,15 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Asociaciones";
 
+/* A message indicating the element requires at least one attachment. */
+"At least %lld attachment is required." = "á_At least %lld attachment is required____________________Ó.";
+
+/* A message indicating the element requires multiple attachments. */
+"At least %lld attachments are required." = "á_At least %lld attachments are required_____________________Ó.";
+
+/* A label for a button to choose a file from the user's files. */
+"Attach File" = "á_Attach File____________Ó";
+
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Adjunto";
 
@@ -150,15 +159,24 @@ Cancel your current action to close/hide a sheet or pop-up. */
 /* A label of a mark on a chart. */
 "chart-mark-label-value" = "Valor";
 
-/* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "Elegir de archivos";
+/* A label for a button to choose a photo from the user's photo library. */
+"Choose Photo" = "á_Choose Photo_____________Ó";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "Elegir de biblioteca";
+"Choose Photo or Video" = "á_Choose Photo or Video______________________Ó";
+
+/* A label for a button to choose a photo from the user's photo library. */
+"Choose Photo" = "á_Choose Photo_____________Ó";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose Photo or Video" = "á_Choose Photo or Video______________________Ó";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Elegir para agregar";
+
+/* A label for a button to choose a video from the user's photo library. */
+"Choose Video" = "á_Choose Video_____________Ó";
 
 /* Cities (Level of Detail) */
 "Cities" = "Ciudades";
@@ -891,8 +909,14 @@ network trace operation. */
 /* Streets (Level of Detail) */
 "Streets" = "Calles";
 
+/* A label for a button to capture a new photo. */
+"Take Photo" = "á_Take Photo_____________________Ó";
+
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Hacer foto o vídeo";
+
+/* A label for a button to capture a new video. */
+"Take Video" = "á_Take Video_____________________Ó";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -925,6 +949,9 @@ match the spatial reference of the map. */
 /* A label indicating the chosen file was invalid. */
 "The certificate file was invalid." = "El archivo del certificado no es válido.";
 
+/* A message indicating that the attachment's size exceeds the allowed maximum. */
+"The file is too large. Maximum allowed file size is %@." = "á_The file is too large. Maximum allowed file size is %@_____________________________Ó.";
+
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "El formulario no se ha enviado";
 
@@ -936,6 +963,12 @@ match the spatial reference of the map. */
 
 /* A message indicating that the map is not offline enabled. */
 "The map is not enabled for offline use." = "El mapa no está habilitado para el uso sin conexión.";
+
+/* A message indicating that no more attachments can be added because the maximum count has been reached. */
+"The maximum number of attachments allowed is %lld." = "á_The maximum number of attachments allowed is %lld__________________________Ó.";
+
+/* A message indicating that the attachment's duration exceeds the allowed maximum. */
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "á_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________Ó.";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "El nombre del área del mapa debe ser exclusivo.";
@@ -958,6 +991,9 @@ to be imported as an attachment. */
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "No hay áreas de mapa correspondientes a este mapa. Toque el botón siguiente para empezar.";
+
+/* A message indicating the type of the supplied attachment is not supported. */
+"This file type is not supported." = "á_This file type is not supported_________________Ó.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Este formulario está vacío.";
@@ -1047,9 +1083,6 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "El valor no debe estar vacío";
-
-/* E.g. Open a hyperlink. */
-"View" = "Ver";
 
 /* A label for the visible toggle in the Building Explorer. */
 "Visible" = "Visible";

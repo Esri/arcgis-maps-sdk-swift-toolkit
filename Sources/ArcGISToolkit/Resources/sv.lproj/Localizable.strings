@@ -68,6 +68,15 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Associationer";
 
+/* A message indicating the element requires at least one attachment. */
+"At least %lld attachment is required." = "Å_At least %lld attachment is required____________________ö.";
+
+/* A message indicating the element requires multiple attachments. */
+"At least %lld attachments are required." = "Å_At least %lld attachments are required_____________________ö.";
+
+/* A label for a button to choose a file from the user's files. */
+"Attach File" = "Å_Attach File____________ö";
+
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Bilaga";
 
@@ -150,15 +159,24 @@ Cancel your current action to close/hide a sheet or pop-up. */
 /* A label of a mark on a chart. */
 "chart-mark-label-value" = "Värde";
 
-/* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "Välj från filer";
+/* A label for a button to choose a photo from the user's photo library. */
+"Choose Photo" = "Å_Choose Photo_____________ö";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "Välj från bibliotek";
+"Choose Photo or Video" = "Å_Choose Photo or Video______________________ö";
+
+/* A label for a button to choose a photo from the user's photo library. */
+"Choose Photo" = "Å_Choose Photo_____________ö";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose Photo or Video" = "Å_Choose Photo or Video______________________ö";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Välj att lägga till";
+
+/* A label for a button to choose a video from the user's photo library. */
+"Choose Video" = "Å_Choose Video_____________ö";
 
 /* Cities (Level of Detail) */
 "Cities" = "Orter";
@@ -891,8 +909,14 @@ network trace operation. */
 /* Streets (Level of Detail) */
 "Streets" = "Gator";
 
+/* A label for a button to capture a new photo. */
+"Take Photo" = "Å_Take Photo_____________________ö";
+
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Ta bild eller video";
+
+/* A label for a button to capture a new video. */
+"Take Video" = "Å_Take Video_____________________ö";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -925,6 +949,9 @@ match the spatial reference of the map. */
 /* A label indicating the chosen file was invalid. */
 "The certificate file was invalid." = "Certifikatfilen var ogiltig.";
 
+/* A message indicating that the attachment's size exceeds the allowed maximum. */
+"The file is too large. Maximum allowed file size is %@." = "Å_The file is too large. Maximum allowed file size is %@_____________________________ö.";
+
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Formuläret skickades inte";
 
@@ -936,6 +963,12 @@ match the spatial reference of the map. */
 
 /* A message indicating that the map is not offline enabled. */
 "The map is not enabled for offline use." = "Kartan är inte aktiverad för användning offline.";
+
+/* A message indicating that no more attachments can be added because the maximum count has been reached. */
+"The maximum number of attachments allowed is %lld." = "Å_The maximum number of attachments allowed is %lld__________________________ö.";
+
+/* A message indicating that the attachment's duration exceeds the allowed maximum. */
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Å_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ö.";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Namnet på kartområdet måste vara unikt.";
@@ -958,6 +991,9 @@ to be imported as an attachment. */
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "Det finns inga kartområden för den här kartan. Klicka på knappen nedan för att komma igång.";
+
+/* A message indicating the type of the supplied attachment is not supported. */
+"This file type is not supported." = "Å_This file type is not supported_________________ö.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Det här formuläret är tomt.";
@@ -1047,9 +1083,6 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "Värdet får inte vara tomt";
-
-/* E.g. Open a hyperlink. */
-"View" = "Visa";
 
 /* A label for the visible toggle in the Building Explorer. */
 "Visible" = "Synlig";
