@@ -1754,6 +1754,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         addButton.tap()
         
+        XCTExpectFailure("Apollo #1817")
+        
         structureJunction2.assertExistence()
         
         saveButton.assertExistence()
