@@ -133,10 +133,9 @@ final class FeatureEditorModel {
     func startEditing(rootFeature feature: ArcGISFeature, on map: Map?) async {
         stopEditing()
         rootFeatureForm = FeatureForm(feature: feature)
-        
+        self.map = map
         do {
             if let map {
-                self.map = map
                 // Only try to set up snap rules when a map is provided.
                 // Sets up the utility network so snap rules can be created.
                 try await map.load()
