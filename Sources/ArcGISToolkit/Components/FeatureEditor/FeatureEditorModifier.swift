@@ -69,7 +69,8 @@ private struct FeatureEditorModifier: ViewModifier {
                             .disabled(isRetrying)
                             
                             Button {
-                                model.stopEditing()
+                                // When the inspector is dismissed, the
+                                // feature editor will also stop editing.
                                 model.isPresented = false
                             } label: {
                                 Text.cancel
