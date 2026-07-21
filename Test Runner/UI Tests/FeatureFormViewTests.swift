@@ -40,6 +40,36 @@ final class FeatureFormViewTests: XCTestCase {
         formViewTestsButton.tap()
     }
     
+    func testAttachmentDeletion() {
+        let app = XCUIApplication()
+        let elementTitle = "Attachments"
+        let formTitle = app.staticTexts["Esri Location"]
+#if targetEnvironment(macCatalyst)
+        let esriHQAttachmentCell = app.popUpButtons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+        let delete = app.menuItems["delete"]
+        let logoAttachmentCell = app.popUpButtons["AttachmentPreview-Cell-Logo.jpeg"]
+#else
+        let esriHQAttachmentCell = app.buttons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+        let delete = app.buttons["Delete"]
+        let logoAttachmentCell = app.buttons["AttachmentPreview-Cell-Logo.jpeg"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        esriHQAttachmentCell.assertExistence()
+        logoAttachmentCell.assertExistence()
+#if targetEnvironment(macCatalyst)
+        logoAttachmentCell.rightClick()
+#else
+        logoAttachmentCell.press(forDuration: 1)
+#endif
+        delete.assertExistenceAndTap()
+        esriHQAttachmentCell.assertExistence()
+        logoAttachmentCell.assertNonExistence()
+    }
+    
     /// Verify that the attachments form element load isn't cancelled early when it's pushed below the fold
     /// by a group element.
     func testAttachmentLoadDurability() {
