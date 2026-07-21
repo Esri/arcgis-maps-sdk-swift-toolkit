@@ -78,7 +78,11 @@ struct AttachmentsFeatureElementView: View {
                         attachmentBody(attachmentModels: models)
                     }
                     if isEditable {
-                        AttachmentImportMenu(element: formElement, onAdd: onAdd)
+                        AttachmentImportMenu(
+                            currentAttachmentCount: models.count,
+                            element: formElement,
+                            onAdd: onAdd
+                        )
                     }
                 }
                 .onAttachmentIsEditableChange(of: formElement) { newIsEditable in
@@ -108,10 +112,14 @@ struct AttachmentsFeatureElementView: View {
     @ViewBuilder private func attachmentBody(attachmentModels: [AttachmentModel]) -> some View {
         switch featureElement.attachmentsDisplayType {
         case .list:
-            AttachmentList(attachmentModels: attachmentModels)
+            AttachmentList(
+                attachmentModels: attachmentModels
+            )
         case .preview:
             AttachmentPreview(
+                allowsRenamingByUser: allowsRenamingByUser,
                 attachmentModels: attachmentModels,
+                displaysFilename: displaysFilename,
                 editControlsDisabled: !isEditable,
                 lastAttachmentAdded: lastAttachmentAdded,
                 onRename: onRename,
@@ -121,7 +129,9 @@ struct AttachmentsFeatureElementView: View {
         case .auto:
             if isRegularWidth {
                 AttachmentPreview(
+                    allowsRenamingByUser: allowsRenamingByUser,
                     attachmentModels: attachmentModels,
+                    displaysFilename: displaysFilename,
                     editControlsDisabled: !isEditable,
                     lastAttachmentAdded: lastAttachmentAdded,
                     onRename: onRename,
@@ -129,7 +139,9 @@ struct AttachmentsFeatureElementView: View {
                     proposedCellSize: thumbnailSize
                 )
             } else {
-                AttachmentList(attachmentModels: attachmentModels)
+                AttachmentList(
+                    attachmentModels: attachmentModels
+                )
             }
         }
     }
@@ -173,6 +185,7 @@ struct AttachmentsFeatureElementView: View {
         )
         models.insert(newModel, at: 0)
         withAnimation { attachmentModels = .success(models) }
+        embeddedFeatureFormViewModel?.focusedElement = formElement
         embeddedFeatureFormViewModel?.evaluateExpressions()
         lastAttachmentAdded = newModel
     }
@@ -182,9 +195,11 @@ struct AttachmentsFeatureElementView: View {
     ///   - attachmentModel: The model for the attachment to rename.
     ///   - newAttachmentName: The new attachment name.
     func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
+        guard allowsRenamingByUser else { return }
         if let attachment = attachmentModel.attachment as? FormAttachment {
             attachment.name = newAttachmentName
             withAnimation { attachmentModel.sync() }
+            embeddedFeatureFormViewModel?.focusedElement = formElement
             embeddedFeatureFormViewModel?.evaluateExpressions()
         }
     }
@@ -193,13 +208,13 @@ struct AttachmentsFeatureElementView: View {
     /// - Parameters:
     ///   - attachmentModel: The model for the attachment to delete.
     func onDelete(attachmentModel: AttachmentModel) -> Void {
-        if let formElement, let attachment = attachmentModel.attachment as? FormAttachment {
-            formElement.delete(attachment)
-            guard case .success(var models) = attachmentModels else { return }
-            models.removeAll { $0 === attachmentModel }
-            withAnimation { attachmentModels = .success(models) }
-            embeddedFeatureFormViewModel?.evaluateExpressions()
-        }
+        guard let formElement, let attachment = attachmentModel.attachment as? FormAttachment else { return }
+        formElement.delete(attachment)
+        guard case .success(var models) = attachmentModels else { return }
+        models.removeAll { $0 === attachmentModel }
+        withAnimation { attachmentModels = .success(models) }
+        embeddedFeatureFormViewModel?.focusedElement = formElement
+        embeddedFeatureFormViewModel?.evaluateExpressions()
     }
 }
 
@@ -215,6 +230,24 @@ private extension AttachmentsFeatureElement {
 }
 
 extension AttachmentsFeatureElementView {
+    /// A Boolean value indicating whether users can rename attachments.
+    private var allowsRenamingByUser: Bool {
+        formElement?.allowsRenamingByUser ?? true
+    }
+    
+    /// A Boolean value indicating whether attachment filenames should be shown.
+    private var displaysFilename: Bool {
+        formElement?.displaysFilename ?? true
+    }
+    
+    /// The model's element as an attachments form element.
+    private var formElement: AttachmentsFormElement? {
+        featureElement as? AttachmentsFormElement
+    }
+    
+    /// A Boolean value denoting if the view should be shown as regular width.
+    private var isRegularWidth: Bool { !isPortraitOrientation }
+    
     /// The size of thumbnail images, based on the attachment display type
     /// and the current size class of the view.
     private var thumbnailSize: CGSize {
@@ -231,14 +264,6 @@ extension AttachmentsFeatureElementView {
             }
         }
     }
-    
-    /// The model's element as an attachments form element.
-    private var formElement: AttachmentsFormElement? {
-        featureElement as? AttachmentsFormElement
-    }
-    
-    /// A Boolean value denoting if the view should be shown as regular width.
-    private var isRegularWidth: Bool { !isPortraitOrientation }
 }
 
 extension View {

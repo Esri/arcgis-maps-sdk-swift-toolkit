@@ -159,11 +159,11 @@ Cancel your current action to close/hide a sheet or pop-up. */
 /* A label of a mark on a chart. */
 "chart-mark-label-value" = "Value";
 
-/* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "Choose From Files";
+/* A label for a button to choose a photo from the user's photo library. */
+"Choose Photo" = "Choose Photo";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "Choose From Library";
+"Choose Photo or Video" = "Choose Photo or Video";
 
 /* A label for a button to choose a photo from the user's photo library. */
 "Choose Photo" = "Choose Photo";
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "The certificate file was invalid.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@ MB." = "The file is too large. Maximum allowed file size is %@ MB.";
+"The file is too large. Maximum allowed file size is %@." = "The file is too large. Maximum allowed file size is %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "The form wasn't submitted";

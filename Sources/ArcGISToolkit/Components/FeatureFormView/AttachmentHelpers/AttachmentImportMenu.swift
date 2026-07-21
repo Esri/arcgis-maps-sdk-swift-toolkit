@@ -17,26 +17,38 @@ import AVFoundation
 import SwiftUI
 import UniformTypeIdentifiers
 
-internal import os
-
 /// The context menu shown when the new attachment button is pressed.
 struct AttachmentImportMenu: View {
+    /// The current number of attachments the element has.
+    private let currentAttachmentCount: Int
     /// The attachment form element displaying the menu.
     private let element: AttachmentsFormElement
     
     /// Creates an `AttachmentImportMenu`
-    /// - Parameter element: The attachment form element displaying the menu.
-    /// - Parameter onAdd: The action to perform when an attachment is added.
-    init(element: AttachmentsFormElement, onAdd: (@MainActor (FeatureAttachment) -> Void)? = nil) {
+    /// - Parameters:
+    ///   - currentAttachmentCount: The number of attachments the element currently has.
+    ///   - element: The attachment form element displaying the menu.
+    ///   - onAdd: The action to perform when an attachment is added.
+    init(
+        currentAttachmentCount: Int,
+        element: AttachmentsFormElement,
+        onAdd: (@MainActor (FeatureAttachment) -> Void)? = nil
+    ) {
+        self.currentAttachmentCount = currentAttachmentCount
         self.element = element
         self.onAdd = onAdd
     }
     
-    /// A Boolean value indicating whether the attachment camera controller is presented.
-    @State private var cameraControllerIsPresented = false
-    
     /// Performs camera authorization request handling.
     @State private var cameraRequester = CameraRequester()
+    
+#if os(iOS)
+    /// The capture configuration to use with the attachments camera controller.
+    @State private var captureConfiguration: AttachmentCameraController.Configuration?
+    
+    /// The capture configuration to use once camera permission has been authorized.
+    @State private var pendingCaptureConfiguration: AttachmentCameraController.Configuration?
+#endif // os(iOS)
     
     /// A Boolean value indicating whether the attachment file importer is presented.
     @State private var fileImporterIsPresented = false
@@ -70,36 +82,144 @@ struct AttachmentImportMenu: View {
         }
     }
     
-    @available(visionOS, unavailable)
-    private func takePhotoOrVideoButton() -> Button<some View> {
+    @ViewBuilder
+    private func takePhotoButton(input: ImageFormInput) -> some View {
+#if os(iOS)
         Button {
+            pendingCaptureConfiguration = .init(allowedFormats: .image, movieMaxDuration: nil)
             if cameraRequester.authorizationStatus == .authorized {
-                cameraControllerIsPresented = true
+                captureConfiguration = pendingCaptureConfiguration.take()
             } else {
                 cameraRequester.request()
             }
         } label: {
-            Text(cameraButtonLabel)
+            Text(
+                "Take Photo",
+                bundle: .toolkitModule,
+                comment: "A label for a button to capture a new photo."
+            )
             Image(systemName: "camera")
         }
+#endif // os(iOS)
     }
     
-    private func chooseFromLibraryButton() -> Button<some View> {
+    @ViewBuilder
+    private func takePhotoOrVideoButton(videoFormInput: VideoFormInput) -> some View {
+#if os(iOS)
+        Button {
+            pendingCaptureConfiguration = .init(
+                allowedFormats: .imageAndMovie,
+                movieMaxDuration: videoFormInput.maxDuration
+            )
+            if cameraRequester.authorizationStatus == .authorized {
+                captureConfiguration = pendingCaptureConfiguration.take()
+            } else {
+                cameraRequester.request()
+            }
+        } label: {
+            Text(
+                "Take Photo or Video",
+                bundle: .toolkitModule,
+                comment: "A label for a button to capture a new photo or video."
+            )
+            Image(systemName: "camera")
+        }
+#endif // os(iOS)
+    }
+    
+    @ViewBuilder
+    private func takeVideoButton(input: VideoFormInput) -> some View {
+#if os(iOS)
+        Button {
+            pendingCaptureConfiguration = .init(allowedFormats: .movie, movieMaxDuration: input.maxDuration)
+            if cameraRequester.authorizationStatus == .authorized {
+                captureConfiguration = pendingCaptureConfiguration.take()
+            } else {
+                cameraRequester.request()
+            }
+        } label: {
+            Text(
+                "Take Video",
+                bundle: .toolkitModule,
+                comment: "A label for a button to capture a new video."
+            )
+            Image(systemName: "video")
+        }
+#endif // os(iOS)
+    }
+    
+    private func choosePhotoButton() -> Button<some View> {
         Button {
             photoPickerIsPresented = true
         } label: {
-            Text(libraryButtonLabel)
-            Image(systemName: "photo")
+            Text(
+                "Choose Photo",
+                bundle: .toolkitModule,
+                comment: "A label for a button to choose a photo from the user's photo library."
+            )
+            Image(systemName: "photo.on.rectangle")
         }
     }
     
-    private func chooseFromFilesButton() -> Button<some View> {
+    private func choosePhotoOrVideoButton() -> Button<some View> {
+        Button {
+            photoPickerIsPresented = true
+        } label: {
+            Text(
+                "Choose Photo or Video",
+                bundle: .toolkitModule,
+                comment: "A label for a button to choose a photo or video from the user's photo library."
+            )
+            Image(systemName: "photo.on.rectangle")
+        }
+    }
+    
+    private func chooseVideoButton() -> Button<some View> {
+        Button {
+            photoPickerIsPresented = true
+        } label: {
+            Text(
+                "Choose Video",
+                bundle: .toolkitModule,
+                comment: "A label for a button to choose a video from the user's photo library."
+            )
+            Image(systemName: "photo.on.rectangle")
+        }
+    }
+    private func attachFileButton() -> Button<some View> {
         Button {
             fileImporterIsPresented = true
         } label: {
-            Text(filesButtonLabel)
-            Image(systemName: "folder")
+            Text(
+                "Attach File",
+                bundle: .toolkitModule,
+                comment: "A label for a button to choose a file from the user's files."
+            )
+            Image(systemName: "document")
         }
+    }
+    
+    /// The list of allowed UTTypes based on the list of available inputs.
+    ///
+    /// - Note: `UTType.text` represents all text-encoded data, including text with markup and
+    /// source code such as: .txt, .rtf, .html, .xml, .md, .csv, .tsv, .swift, or .js.
+    private var allowedFileImporterTypes: [UTType] {
+        var types = [UTType]()
+        if element.inputs.contains(where: { $0 is AudioFormInput }) {
+            types.append(.audio)
+        }
+        if element.inputs.contains(where: { $0 is DocumentFormInput }) {
+            types.append(contentsOf: [
+                .pdf, .zip, .text, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .`7z`
+            ])
+        }
+        if element.inputs.contains(where: { $0 is ImageFormInput }) {
+            types.append(.image)
+        }
+        if element.inputs.contains(where: { $0 is VideoFormInput }) {
+            types.append(.video)
+        }
+        return types
     }
     
     var body: some View {
@@ -108,111 +228,171 @@ struct AttachmentImportMenu: View {
                 .progressViewStyle(.circular)
                 .catalystPadding(5)
         }
+        if let min = element.minAttachmentCount, currentAttachmentCount < min {
+            element.minAttachmentCountMessage
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        if let max = element.maxAttachmentCount, currentAttachmentCount >= max {
+            element.maxAttachmentCountMessage
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        } else {
+            menu
+        }
+    }
+    
+    var menu: some View {
         Menu {
-            // Show photo/video and library picker.
-#if !os(visionOS)
-            takePhotoOrVideoButton()
-#endif
-            chooseFromLibraryButton()
-            // Always show file picker, no matter the input type.
-            chooseFromFilesButton()
+            if element.inputs.count >= 2 {
+                if element.inputs.contains(where: { $0 is ImageFormInput }),
+                   let videoFormInput = element.inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput {
+                    takePhotoOrVideoButton(videoFormInput: videoFormInput)
+                    choosePhotoOrVideoButton()
+                } else if let imageFormInput = element.inputs.first(where: { $0 is ImageFormInput }) as? ImageFormInput {
+                    takePhotoButton(input: imageFormInput)
+                    choosePhotoButton()
+                } else if let videoFormInput = element.inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput {
+                    takeVideoButton(input: videoFormInput)
+                    chooseVideoButton()
+                }
+                attachFileButton()
+            } else if let onlyInput = element.inputs.first {
+                switch onlyInput {
+                case let audioFormInput as AudioFormInput:
+                    switch audioFormInput.method {
+                    case .capture:
+                        EmptyView()
+                    default:
+                        attachFileButton()
+                    }
+                case is DocumentFormInput:
+                    attachFileButton()
+                case let imageFormInput as ImageFormInput:
+                    switch imageFormInput.method {
+                    case .any:
+                        takePhotoButton(input: imageFormInput)
+                        choosePhotoButton()
+                        attachFileButton()
+                    case .capture:
+                        takePhotoButton(input: imageFormInput)
+                    case .upload:
+                        choosePhotoButton()
+                        attachFileButton()
+                    @unknown default:
+                        EmptyView()
+                    }
+                case let videoFormInput as VideoFormInput:
+                    switch videoFormInput.method {
+                    case .any:
+                        takeVideoButton(input: videoFormInput)
+                        chooseVideoButton()
+                        attachFileButton()
+                    case .capture:
+                        takeVideoButton(input: videoFormInput)
+                    case .upload:
+                        chooseVideoButton()
+                        attachFileButton()
+                    @unknown default:
+                        EmptyView()
+                    }
+                default:
+                    EmptyView()
+                }
+            }
+            // On iOS simulators there is no reliable way to programmatically
+            // close the menu so we provide an explicit Cancel button when testing.
+            if CommandLine.arguments.contains("-testCase") {
+                Button.cancel {}
+            }
         } label: {
-            Text(
-                "Add Attachment",
-                bundle: .toolkitModule,
-                comment: "A label for a button to add a new file attachment."
-            )
-            .frame(maxWidth: .infinity)
-            .contentShape(.rect)
+            Label {
+                Text(
+                    "Add Attachment",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to add a new file attachment."
+                )
+            } icon: {
+                Image(systemName: "plus.circle.fill")
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .disabled(importState.importInProgress)
         .cameraRequester(cameraRequester)
-        .alert(importFailureAlertTitle, isPresented: errorIsPresented) { } message: {
-            Text(importFailureAlertMessage)
+        .alert(importFailureAlertTitle, isPresented: errorIsPresented) {} message: {
+            importFailureAlertMessage
         }
+#if os(iOS)
         .onChange(of: cameraRequester.authorizationStatus) { _, status in
             if status == .authorized {
-                cameraControllerIsPresented = true
+                captureConfiguration = pendingCaptureConfiguration.take()
             }
         }
+#endif // os(iOS)
 #if targetEnvironment(macCatalyst)
         .menuStyle(.borderlessButton)
 #endif
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
-            
-            if let data = newAttachmentImportData.data {
-                let attachmentSize = Measurement(
-                    value: Double(data.count),
-                    unit: UnitInformationStorage.bytes
-                )
-                guard attachmentSize <= attachmentUploadSizeLimit else {
-                    importState = .errored(.sizeLimitExceeded)
-                    return
+            let uploadResult: Result<FormAttachment, Error>
+            switch (newAttachmentImportData.fileName, newAttachmentImportData.data, newAttachmentImportData.filePath) {
+            case let (.some(name), .some(data), .none):
+                uploadResult = await Result {
+                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, data: data, name: name)
                 }
-                guard attachmentSize.value > .zero else {
-                    importState = .errored(.emptyFilesNotSupported)
-                    return
+            case let (.none, .some(data), .none):
+                uploadResult = await Result {
+                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, data: data)
+                }
+            case let (.some(name), .none, .some(path)):
+                _ = path.startAccessingSecurityScopedResource()
+                defer { path.stopAccessingSecurityScopedResource() }
+                uploadResult = await Result {
+                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: path, name: name)
+                }
+            case let (.none, .none, .some(path)):
+                _ = path.startAccessingSecurityScopedResource()
+                defer { path.stopAccessingSecurityScopedResource() }
+                uploadResult = await Result {
+                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: path)
+                }
+            default:
+                uploadResult = .failure(AttachmentImportError.creationFailed)
+            }
+            switch uploadResult {
+            case let .success(newAttachment):
+                onAdd?(newAttachment)
+                importState = .none
+            case let .failure(error):
+                if let featureFormError = error as? FeatureFormError {
+                    importState = .errored(.featureFormError(featureFormError))
+                } else {
+                    importState = .errored(.creationFailed)
                 }
             }
-            
-            let fileName: String
-            if let presetFileName = newAttachmentImportData.fileName {
-                fileName = presetFileName
-            } else {
-                do {
-                    fileName = try await element.makeDefaultName(contentType: newAttachmentImportData.contentType)
-                } catch {
-                    fileName = "Unnamed Attachment"
-                }
-            }
-            
-            var newAttachment: FeatureAttachment? = nil
-            if let url = newAttachmentImportData.filePath,
-               url.startAccessingSecurityScopedResource() {
-                newAttachment = try? await element.addAttachment(
-                    named: fileName,
-                    contentType: newAttachmentImportData.contentType,
-                    fileURL: url
-                )
-                url.stopAccessingSecurityScopedResource()
-            } else if let data = newAttachmentImportData.data {
-                newAttachment = element.addAttachment(
-                    name: fileName,
-                    contentType: newAttachmentImportData.contentType,
-                    data: data
-                )
-            }
-            
-            guard let newAttachment else {
-                importState = .errored(.creationFailed)
-                return
-            }
-            onAdd?(newAttachment)
-            importState = .none
         }
-        .fileImporter(isPresented: $fileImporterIsPresented, allowedContentTypes: [.item]) { result in
+        .fileImporter(isPresented: $fileImporterIsPresented, allowedContentTypes: allowedFileImporterTypes) { result in
             importState = .importing
             switch result {
             case .success(let url):
-                // gain access to the url resource.
                 if url.startAccessingSecurityScopedResource(),
                    let contentType = url.contentType {
-                    importState = .finalizing(AttachmentImportData(contentType: contentType, fileName: url.lastPathComponent, filePath: url))
+                    importState = .finalizing(
+                        .init(contentType: contentType, fileName: url.lastPathComponent, filePath: url)
+                    )
                 } else {
                     importState = .errored(.dataInaccessible)
                 }
-                
-                // release access
                 url.stopAccessingSecurityScopedResource()
             case .failure(let error):
                 importState = .errored(.system(error.localizedDescription))
             }
         }
 #if os(iOS)
-        .fullScreenCover(isPresented: $cameraControllerIsPresented) {
+        .fullScreenCover(item: $captureConfiguration) { _ in
             AttachmentCameraController(
-                importState: $importState, isPresented: $cameraControllerIsPresented
+                importState: $importState,
+                configuration: $captureConfiguration
             )
 #if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
             .onCameraCaptureModeChanged { captureMode in
@@ -220,20 +400,23 @@ struct AttachmentImportMenu: View {
                     microphoneAccessAlertIsPresented = true
                 }
             }
-#endif
+#endif // !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
             .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsPresented) {
                 appSettingsButton
-                Button(role: .cancel) { } label: {
-                    Text(recordVideoOnlyButtonLabel)
+                Button(role: .cancel) {} label: {
+                    Text(
+                        "Record video only",
+                        bundle: .toolkitModule,
+                        comment: "A button allowing users to proceed to record a video while acknowledging audio will not be captured."
+                    )
                 }
             }
         }
-#endif
-        .modifier(
-            AttachmentPhotoPicker(
-                importState: $importState,
-                photoPickerIsPresented: $photoPickerIsPresented
-            )
+#endif // os(iOS)
+        .attachmentPhotoPicker(
+            isPresented: $photoPickerIsPresented,
+            importState: $importState,
+            inputs: element.inputs
         )
     }
 }
@@ -246,37 +429,19 @@ private extension AttachmentImportMenu {
         }
     }
     
-    /// A label for a button to capture a new photo or video.
-    var cameraButtonLabel: String {
-        .init(
-            localized: "Take Photo or Video",
-            bundle: .toolkitModule,
-            comment: "A label for a button to capture a new photo or video."
-        )
-    }
-    
     /// An error message indicating the selected attachment is an empty file and not supported.
-    var emptyFilesNotSupportedAlertMessage: String {
+    var emptyFilesNotSupportedAlertMessage: Text {
         .init(
-            localized: "Empty files are not supported.",
+            "Empty files are not supported.",
             bundle: .toolkitModule,
             comment: "An error message indicating the selected attachment is an empty file and not supported."
         )
     }
     
-    /// A label for a button to choose an file from the user's files.
-    var filesButtonLabel: String {
-        .init(
-            localized: "Choose From Files",
-            bundle: .toolkitModule,
-            comment: "A label for a button to choose an file from the user's files."
-        )
-    }
-    
     /// A generic message for an alert that the selected file was not able to be imported as an attachment.
-    var genericImportFailureAlertMessage: String {
+    var genericImportFailureAlertMessage: Text {
         .init(
-            localized: "The selected attachment could not be imported.",
+            "The selected attachment could not be imported.",
             bundle: .toolkitModule,
             comment: """
             A generic message for an alert that the selected file was not able
@@ -286,11 +451,24 @@ private extension AttachmentImportMenu {
     }
     
     /// Returns a user facing error message for the present attachment import error.
-    var importFailureAlertMessage: String {
-        guard case .errored(let attachmentImportError) = importState else { return "" }
+    var importFailureAlertMessage: Text? {
+        guard case .errored(let attachmentImportError) = importState else { return nil }
         return switch attachmentImportError {
         case .emptyFilesNotSupported:
             emptyFilesNotSupportedAlertMessage
+        case .featureFormError(let featureFormError):
+            switch featureFormError {
+            case .exceedsMaximumAttachmentCount:
+                element.maxAttachmentCountMessage ?? genericImportFailureAlertMessage
+            case .exceedsMaximumAttachmentSize:
+                element.maxFileSizeMessage ?? genericImportFailureAlertMessage
+            case .incorrectAttachmentType:
+                element.incorrectAttachmentTypeMessage
+            case .exceedsMaximumAttachmentDuration:
+                element.exceedsMaximumAttachmentDurationMessage ?? genericImportFailureAlertMessage
+            default:
+                genericImportFailureAlertMessage
+            }
         case .sizeLimitExceeded:
             sizeLimitExceededImportFailureAlertMessage
         default:
@@ -310,15 +488,6 @@ private extension AttachmentImportMenu {
         )
     }
     
-    /// A label for a button to choose a photo or video from the user's photo library.
-    var libraryButtonLabel: String {
-        .init(
-            localized: "Choose From Library",
-            bundle: .toolkitModule,
-            comment: "A label for a button to choose a photo or video from the user's photo library."
-        )
-    }
-    
     /// A warning message indicating microphone access has been disabled for the current application in the system settings.
     var microphoneAccessWarningMessage: String {
         .init(
@@ -328,52 +497,13 @@ private extension AttachmentImportMenu {
         )
     }
     
-    /// A button allowing users to proceed to record a video while acknowledging audio will not be captured.
-    var recordVideoOnlyButtonLabel: String {
-        .init(
-            localized: "Record video only",
-            bundle: .toolkitModule,
-            comment: "A button allowing users to proceed to record a video while acknowledging audio will not be captured."
-        )
-    }
-    
     /// An error message indicating the selected attachment exceeds the megabyte limit.
-    var sizeLimitExceededImportFailureAlertMessage: String {
+    var sizeLimitExceededImportFailureAlertMessage: Text {
         .init(
-            localized: "The selected attachment exceeds the \(attachmentUploadSizeLimit.formatted()) limit.",
+            "The selected attachment exceeds the \(attachmentUploadSizeLimit.formatted()) limit.",
             bundle: .toolkitModule,
             comment: "An error message indicating the selected attachment exceeds the megabyte limit."
         )
-    }
-}
-
-private extension AttachmentsFormElement {
-    /// Creates a unique name for a new attachments with a file extension.
-    /// - Parameter contentType: The kind of attachment to generate a name for.
-    /// - Returns: A unique name for an attachment.
-    func makeDefaultName(contentType: UTType) async throws -> String {
-        let currentAttachments = try await attachments
-        let root = (contentType.preferredMIMEType?.components(separatedBy: "/").first ?? "Attachment").capitalized
-        var count = currentAttachments.filter { $0.contentType == contentType }.count
-        var baseName: String
-        repeat {
-            count += 1
-            baseName = "\(root)\(count)"
-        } while( currentAttachments.filter { $0.name.deletingPathExtension == baseName }.count > 0 )
-        if let fileExtension = contentType.preferredFilenameExtension {
-            return "\(baseName).\(fileExtension)"
-        } else {
-            return baseName
-        }
-    }
-}
-
-private extension String {
-    /// A filename with the extension removed.
-    ///
-    /// For example, "Photo.png" is returned as "Photo"
-    var deletingPathExtension: String {
-        (self as NSString).deletingPathExtension
     }
 }
 
@@ -382,4 +512,14 @@ private extension URL {
     var contentType: UTType? {
         UTType(filenameExtension: self.pathExtension)
     }
+}
+
+private extension UTType {
+    static var doc: Self { .init(filenameExtension: "doc")! }
+    static var docx: Self { .init(filenameExtension: "docx")! }
+    static var ppt: Self { .init(filenameExtension: "ppt")! }
+    static var pptx: Self { .init(filenameExtension: "pptx")! }
+    static var xls: Self { .init(filenameExtension: "xls")! }
+    static var xlsx: Self { .init(filenameExtension: "xlsx")! }
+    static var `7z`: Self { .init(filenameExtension: "7z")! }
 }
