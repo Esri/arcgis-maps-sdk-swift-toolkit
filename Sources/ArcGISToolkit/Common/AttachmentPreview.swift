@@ -136,6 +136,8 @@ struct AttachmentPreview: View {
                     isLoading = true
                 }
             }
+            .accessibilityIdentifier("AttachmentPreview-Cell-\(attachmentModel.name)")
+            .buttonStyle(.plain)
             .alert(
                 Text(
                     "Rename attachment",
