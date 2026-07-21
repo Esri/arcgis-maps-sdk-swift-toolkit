@@ -229,7 +229,7 @@ public struct FeatureFormView: View {
                 message: {
                     if featureFormViewModel.presentedFormHasValidationErrors {
                         Text(
-                            "You have ^[\(featureFormViewModel.presentedForm?.validationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
+                            "You have ^[\(featureFormViewModel.presentedForm?.elementValidationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
                             bundle: .toolkitModule,
                             comment:
                                 """

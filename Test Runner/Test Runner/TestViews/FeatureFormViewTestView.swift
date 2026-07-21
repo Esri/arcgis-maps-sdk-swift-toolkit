@@ -301,6 +301,11 @@ private extension FeatureFormTestView {
         .init("testCase_13_4", objectID: 311, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_13_5", objectID: 311, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_13_6", objectID: 194, layerName: "Structure Junction", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_14_1", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_2", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_3", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_4", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_5", objectID: 1, portalID: .testCase14)
     ]}
 }
 
@@ -332,6 +337,7 @@ private extension String {
     static let testCase9 = "5f71b243b37e43a5ace3190241db0ac9"
     static let testCase10 = "e10c0061182c4102a109dc6b030aa9ef"
     static let testCase11 = "a14a825c22884dfe9998ac964bd1cf89"
+    static let testCase14 = "7064081d2d1a4af6b871d35954417e5e"
 }
 
 private extension FeatureFormTestView.TestCase.CredentialInfo {

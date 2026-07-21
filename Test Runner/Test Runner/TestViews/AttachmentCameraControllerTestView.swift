@@ -23,16 +23,21 @@ struct AttachmentCameraControllerTestView: View {
     var body: some View {
         Color.clear
             .fullScreenCover(isPresented: .constant(true)) {
-                AttachmentCameraController(importState: .constant(.none), isPresented: .constant(true))
+                AttachmentCameraController(
+                    importState: .constant(.none),
+                    configuration: .constant(
+                        .init(allowedFormats: .imageAndMovie, movieMaxDuration: nil)
+                    )
+                )
 #if !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
-                    .onCameraCaptureModeChanged { captureMode in
-                        self.captureMode = captureMode
-                    }
+                .onCameraCaptureModeChanged { captureMode in
+                    self.captureMode = captureMode
+                }
 #endif
-                    .overlay {
-                        Text(captureMode?.name ?? "None")
-                            .accessibilityIdentifier("Camera Capture Mode")
-                    }
+                .overlay {
+                    Text(captureMode?.name ?? "None")
+                        .accessibilityIdentifier("Camera Capture Mode")
+                }
             }
     }
 }

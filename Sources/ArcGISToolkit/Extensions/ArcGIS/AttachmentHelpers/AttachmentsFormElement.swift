@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import SwiftUI
 
 extension AttachmentsFormElement: AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
@@ -33,10 +34,89 @@ extension AttachmentsFormElement: AttachmentsFeatureElement {
         }
     }
     
+    /// The max duration configured on the either the element's audio or video form input.
+    ///
+    /// If the element has both an audio and video form input, there will be no max duration configured.
+    var maxDuration: Duration? {
+        if let audioMaxDuration = (inputs.first(where: { $0 is AudioFormInput }) as? AudioFormInput)?.maxDuration {
+            return audioMaxDuration
+        } else if let videoMaxDuration = (inputs.first(where: { $0 is VideoFormInput }) as? VideoFormInput)?.maxDuration {
+            return videoMaxDuration
+        } else {
+            return nil
+        }
+    }
+    
     /// A descriptive label that appears with the element. Can be an empty string.
     var title: String {
         get {
             label
+        }
+    }
+}
+
+extension AttachmentsFormElement /* Validation error messages */ {
+    var exceedsMaximumAttachmentDurationMessage: Text? {
+        return if let maxDuration  {
+            Text(
+                "The media is too long. Maximum allowed duration is ^[\(maxDuration.components.seconds) seconds](inflect: true).",
+                bundle: .toolkitModule,
+                comment: "A message indicating that the attachment's duration exceeds the allowed maximum."
+            )
+        } else {
+            nil
+        }
+    }
+    
+    var incorrectAttachmentTypeMessage: Text {
+        Text(
+            "This file type is not supported.",
+            bundle: .toolkitModule,
+            comment: "A message indicating the type of the supplied attachment is not supported."
+        )
+    }
+    
+    var maxFileSizeMessage: Text? {
+        return if let maxFileSize = (inputs.first(where: { $0 is DocumentFormInput }) as? DocumentFormInput)?.maxFileSize {
+            Text(
+                "The file is too large. Maximum allowed file size is \(maxFileSize, format: .byteCount(style: .file)).",
+                bundle: .toolkitModule,
+                comment: "A message indicating that the attachment's size exceeds the allowed maximum."
+            )
+        } else {
+            nil
+        }
+    }
+    
+    var maxAttachmentCountMessage: Text? {
+        return if let maxAttachmentCount {
+            Text(
+                "The maximum number of attachments allowed is \(maxAttachmentCount).",
+                bundle: .toolkitModule,
+                comment: "A message indicating that no more attachments can be added because the maximum count has been reached."
+            )
+        } else {
+            nil
+        }
+    }
+    
+    var minAttachmentCountMessage: Text? {
+        return if let minAttachmentCount {
+            if minAttachmentCount == 1 {
+                Text(
+                    "At least \(minAttachmentCount) attachment is required.",
+                    bundle: .toolkitModule,
+                    comment: "A message indicating the element requires at least one attachment."
+                )
+            } else {
+                Text(
+                    "At least \(minAttachmentCount) attachments are required.",
+                    bundle: .toolkitModule,
+                    comment: "A message indicating the element requires multiple attachments."
+                )
+            }
+        } else {
+            nil
         }
     }
 }

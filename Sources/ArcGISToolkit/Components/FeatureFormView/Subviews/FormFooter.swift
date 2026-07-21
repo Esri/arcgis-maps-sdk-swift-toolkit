@@ -54,7 +54,7 @@ struct FormFooter: View {
     
     var saveButton: some View {
         Button {
-            if featureForm.validationErrors.isEmpty {
+            if featureForm.elementValidationErrors.isEmpty {
                 Task {
                     do {
                         try await featureForm.finishEditing()
