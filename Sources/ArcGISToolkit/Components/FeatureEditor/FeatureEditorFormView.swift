@@ -78,7 +78,7 @@ struct FeatureEditorFormView: View {
                 }
                 .onDisappear {
                     clearSelectedFeature()
-                    model.geometryEditor.tool.style.opacity = 0
+                    model.geometryEditor.tool.style.opacity = 1
                 }
         }
     }
@@ -140,6 +140,8 @@ struct FeatureEditorFormView: View {
     /// Zooms to and briefly selects a feature on the map.
     /// - Parameter feature: The `ArcGISFeature` to show.
     private func showFeatureOnMap(_ feature: ArcGISFeature) async {
+        guard feature.geometry?.isEmpty == false else { return }
+        
         model.viewpointGeometry = feature.geometry
         
         do {
@@ -168,8 +170,12 @@ struct FeatureEditorFormView: View {
         
         // Briefly hides the geometry editor so the user can still locate the
         // selected feature when it's covered by the geometry editor symbology.
-        guard let geometryEditorGeometry = model.geometryEditorGeometry,
-              !geometryEditorGeometry.isEmpty else {
+        guard let editorGeometry = model.geometryEditorGeometry,
+              !editorGeometry.isEmpty,
+              let featureGeometry = feature.geometry,
+              // Editor geometry is buffered to account for the vertex and line symbols.
+              let bufferedGeometry = GeometryEngine.buffer(around: editorGeometry, distance: 10),
+              GeometryEngine.isGeometry(featureGeometry, intersecting: bufferedGeometry) else {
             throw InvalidGeometryError()
         }
         
