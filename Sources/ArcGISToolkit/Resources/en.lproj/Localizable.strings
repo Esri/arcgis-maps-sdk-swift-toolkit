@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "The certificate file was invalid.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@ MB." = "The file is too large. Maximum allowed file size is %@ MB.";
+"The file is too large. Maximum allowed file size is %@." = "The file is too large. Maximum allowed file size is %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "The form wasn't submitted";
