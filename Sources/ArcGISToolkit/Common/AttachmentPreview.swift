@@ -45,7 +45,7 @@ struct AttachmentPreview: View {
     
     func makeCarouselContent(for size: CGSize) -> some View {
         ForEach(attachmentModels) { attachmentModel in
-            AttachmentCell(
+            Cell(
                 attachmentModel: attachmentModel,
                 cellSize: size
             )
@@ -53,7 +53,7 @@ struct AttachmentPreview: View {
     }
     
     /// A view representing a single cell in an `AttachmentPreview`.
-    struct AttachmentCell: View  {
+    struct Cell: View  {
         /// The model representing the attachment to display.
         @ObservedObject var attachmentModel: AttachmentModel
         
@@ -198,7 +198,7 @@ struct AttachmentPreview: View {
                         if attachmentModel.loadStatus == .loaded {
                             VStack {
                                 Spacer()
-                                ThumbnailViewFooter(
+                                Footer(
                                     displaysFilename: displaysFilename,
                                     name: attachmentModel.name,
                                     size: attachmentModel.thumbnailSize
@@ -232,37 +232,33 @@ struct AttachmentPreview: View {
             .clipShape(.rect(cornerRadius: 8))
             .hoverEffect()
         }
-    }
-}
-
-/// A view displaying details for popup media.
-struct ThumbnailViewFooter: View {
-    /// A Boolean value indicating whether attachment filenames are displayed.
-    let displaysFilename: Bool
-    /// The name of the attachment.
-    let name: String
-    /// The size of the media's frame.
-    let size: CGSize
-    
-    private var shouldShowFooter: Bool {
-        displaysFilename && !name.isEmpty
-    }
-    
-    var body: some View {
-        if shouldShowFooter {
-            ZStack {
-                let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
-                Rectangle()
-                    .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
-                    .frame(height: size.height * 0.25)
-                HStack {
-                    Text(name)
-                        .foregroundStyle(.white)
-                        .font(.caption)
-                        .lineLimit(1)
-                    Spacer()
+        
+        /// A view representing a footer in an `AttachmentPreview.Cell`.
+        struct Footer: View {
+            /// A Boolean value indicating whether attachment filenames are displayed.
+            let displaysFilename: Bool
+            /// The name of the attachment.
+            let name: String
+            /// The size of the media's frame.
+            let size: CGSize
+            
+            var body: some View {
+                if displaysFilename && !name.isEmpty {
+                    ZStack {
+                        let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
+                        Rectangle()
+                            .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
+                            .frame(height: size.height * 0.25)
+                        HStack {
+                            Text(name)
+                                .foregroundStyle(.white)
+                                .font(.caption)
+                                .lineLimit(1)
+                            Spacer()
+                        }
+                        .padding([.leading, .trailing], 6)
+                    }
                 }
-                .padding([.leading, .trailing], 6)
             }
         }
     }
