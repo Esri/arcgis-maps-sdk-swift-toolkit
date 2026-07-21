@@ -64,8 +64,8 @@ struct AttachmentPreview: View {
         @Environment(\.displaysFilename) private var displaysFilename
         @Environment(\.editControlsEnabled) private var editControlsEnabled
         @Environment(\.formElement) private var formElement
-        @Environment(\.onDelete) private var onDelete
-        @Environment(\.onRename) private var onRename
+        @Environment(\.delete) private var delete
+        @Environment(\.rename) private var rename
         
         /// The maximum attachment download size limit.
         private let attachmentDownloadSizeLimit = Measurement(
@@ -117,7 +117,7 @@ struct AttachmentPreview: View {
                         }
                     }
                     Button.delete {
-                        onDelete?(attachmentModel)
+                        delete?(attachmentModel)
                     }
                 }
             } label: {
@@ -160,9 +160,9 @@ struct AttachmentPreview: View {
                     let currentName = renamedAttachmentModel.name
                     if let separatorIndex = currentName.lastIndex(of: ".") {
                         let fileExtension = String(currentName[currentName.index(after: separatorIndex)...])
-                        onRename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
+                        rename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
                     } else {
-                        onRename?(renamedAttachmentModel, newAttachmentName)
+                        rename?(renamedAttachmentModel, newAttachmentName)
                     }
                 }
             }

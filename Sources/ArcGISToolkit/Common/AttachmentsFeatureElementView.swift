@@ -134,8 +134,8 @@ struct AttachmentsFeatureElementView: View {
         .environment(\.displaysFilename, formElement?.displaysFilename ?? true)
         .environment(\.editControlsEnabled, isEditable)
         .environment(\.formElement, formElement)
-        .environment(\.onDelete, onDelete(attachmentModel:))
-        .environment(\.onRename, onRename(attachmentModel:newAttachmentName:))
+        .environment(\.delete, DeleteAction(deleteAction: onDelete(attachmentModel:)))
+        .environment(\.rename, RenameAction(renameAction: onRename(attachmentModel:newAttachmentName:)))
         switch featureElement.attachmentsDisplayType {
         case .list:
             AttachmentList(
@@ -260,6 +260,20 @@ extension AttachmentsFeatureElementView {
             }
         }
     }
+    
+    struct DeleteAction {
+        let deleteAction: (AttachmentModel) -> Void
+        func callAsFunction(_ model: AttachmentModel) {
+            deleteAction(model)
+        }
+    }
+    
+    struct RenameAction {
+        let renameAction: (AttachmentModel, String) -> Void
+        func callAsFunction(_ attachment: AttachmentModel, _ newName: String) {
+            renameAction(attachment, newName)
+        }
+    }
 }
 
 extension View {
@@ -292,7 +306,7 @@ extension EnvironmentValues /* AttachmentsFeatureElement */ {
     /// The parent form element.
     @Entry var formElement: FormElement?
     /// Deletes the attachment associated with the given model.
-    @Entry var onDelete: ((AttachmentModel) -> Void)?
+    @Entry var delete: AttachmentsFeatureElementView.DeleteAction?
     /// Renames the attachment associated with the given model.
-    @Entry var onRename: ((AttachmentModel, String) -> Void)?
+    @Entry var rename: AttachmentsFeatureElementView.RenameAction?
 }
