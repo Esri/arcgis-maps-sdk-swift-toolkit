@@ -34,6 +34,8 @@ private struct FeatureEditorModifier: ViewModifier {
     /// The inspector's currently selected presentation detent.
     /// This is needed to set the default detent to medium.
     @State private var selectedPresentationDetent = PresentationDetent.medium
+    /// A Boolean value indicating whether the feature editor is retrying to start editing.
+    @State private var isRetrying = false
     
     func body(content: Content) -> some View {
         content
@@ -55,11 +57,16 @@ private struct FeatureEditorModifier: ViewModifier {
                             Text(error.localizedDescription)
                         } actions: {
                             Button {
-                                Task { await model.retryStartEditing() }
+                                isRetrying = true
                             } label: {
                                 Text.tryAgain
                             }
+                            .task(id: isRetrying) {
+                                defer { isRetrying = false }
+                                await model.retryStartEditing()
+                            }
                             .buttonStyle(.borderedProminent)
+                            .disabled(isRetrying)
                             
                             Button {
                                 model.stopEditing()
