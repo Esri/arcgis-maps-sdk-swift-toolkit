@@ -65,9 +65,11 @@ struct FeatureEditorFormView: View {
                 .animation(.default, value: geometryEditorOpacity)
                 .task(id: editingEvent) {
                     guard let editingEvent else { return }
-                    defer { self.editingEvent = nil }
-                    
                     await handleEditingEvent(editingEvent.event)
+                    
+                    // Prevents clearing an editing event set while this task was running.
+                    guard !Task.isCancelled else { return }
+                    self.editingEvent = nil
                 }
                 .task(id: presentedFeatureForm.map(ObjectIdentifier.init)) {
                     guard let presentedFeatureForm else { return }
