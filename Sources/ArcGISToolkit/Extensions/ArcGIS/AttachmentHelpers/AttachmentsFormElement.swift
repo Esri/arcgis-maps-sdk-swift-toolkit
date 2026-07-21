@@ -79,7 +79,7 @@ extension AttachmentsFormElement /* Validation error messages */ {
     var maxFileSizeMessage: Text? {
         return if let maxFileSize = (inputs.first(where: { $0 is DocumentFormInput }) as? DocumentFormInput)?.maxFileSize {
             Text(
-                "The file is too large. Maximum allowed file size is \(maxFileSize) MB.",
+                "The file is too large. Maximum allowed file size is \(maxFileSize, format: .byteCount(style: .file)).",
                 bundle: .toolkitModule,
                 comment: "A message indicating that the attachment's size exceeds the allowed maximum."
             )
