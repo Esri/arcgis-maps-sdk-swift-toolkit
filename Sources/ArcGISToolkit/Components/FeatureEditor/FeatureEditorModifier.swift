@@ -59,6 +59,7 @@ private struct FeatureEditorModifier: ViewModifier {
                             } label: {
                                 Text.tryAgain
                             }
+                            .buttonStyle(.borderedProminent)
                             
                             Button {
                                 model.stopEditing()
@@ -66,6 +67,7 @@ private struct FeatureEditorModifier: ViewModifier {
                             } label: {
                                 Text.cancel
                             }
+                            .buttonStyle(.bordered)
                         }
                     } else {
                         FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
