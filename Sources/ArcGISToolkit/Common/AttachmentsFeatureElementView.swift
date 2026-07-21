@@ -131,7 +131,7 @@ struct AttachmentsFeatureElementView: View {
             proposedCellSize: thumbnailSize
         )
         .environment(\.allowsRenamingByUser, formElement?.allowsRenamingByUser ?? true)
-        .environment(\.displaysFilename, formElement?.displaysFilename ?? false)
+        .environment(\.displaysFilename, formElement?.displaysFilename ?? true)
         .environment(\.editControlsEnabled, isEditable)
         .environment(\.formElement, formElement)
         .environment(\.onDelete, onDelete(attachmentModel:))
@@ -286,7 +286,7 @@ extension EnvironmentValues /* AttachmentsFeatureElement */ {
     /// `true` if the user can rename attachments added through this element, `false` otherwise.
     @Entry var allowsRenamingByUser = true
     /// `true` if attachment file names should be displayed, `false` otherwise.
-    @Entry var displaysFilename = false
+    @Entry var displaysFilename = true
     /// A Boolean value that indicates whether the element is editable.
     @Entry var editControlsEnabled = false
     /// The parent form element.
