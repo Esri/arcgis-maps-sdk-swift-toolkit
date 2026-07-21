@@ -198,6 +198,18 @@ struct AttachmentsFeatureElementView: View {
         lastAttachmentAdded = newModel
     }
     
+    /// Renames the attachment associated with the given model.
+    /// - Parameters:
+    ///   - attachmentModel: The model for the attachment to rename.
+    ///   - newAttachmentName: The new attachment name.
+    func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
+        guard let attachment = attachmentModel.attachment as? FormAttachment else { return }
+        attachment.name = newAttachmentName
+        withAnimation { attachmentModel.sync() }
+        embeddedFeatureFormViewModel?.focusedElement = formElement
+        embeddedFeatureFormViewModel?.evaluateExpressions()
+    }
+    
     /// Deletes the attachment associated with the given model.
     /// - Parameters:
     ///   - attachmentModel: The model for the attachment to delete.
@@ -209,19 +221,6 @@ struct AttachmentsFeatureElementView: View {
         withAnimation { attachmentModels = .success(models) }
         embeddedFeatureFormViewModel?.focusedElement = formElement
         embeddedFeatureFormViewModel?.evaluateExpressions()
-    }
-    
-    /// Renames the attachment associated with the given model.
-    /// - Parameters:
-    ///   - attachmentModel: The model for the attachment to rename.
-    ///   - newAttachmentName: The new attachment name.
-    func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
-        if let attachment = attachmentModel.attachment as? FormAttachment {
-            attachment.name = newAttachmentName
-            withAnimation { attachmentModel.sync() }
-            embeddedFeatureFormViewModel?.focusedElement = formElement
-            embeddedFeatureFormViewModel?.evaluateExpressions()
-        }
     }
 }
 
