@@ -44,7 +44,7 @@ struct FeatureEditorFormView: View {
         guard model.geometryEditorCanUndo else { return nil }
         return {
             guard let geometry = model.geometryEditorGeometry, geometry.sketchIsValid else {
-                throw InvalidGeometryError()
+                throw GeometryEditorError.invalidGeometry
             }
             model.feature?.geometry = geometry
         }
@@ -159,7 +159,7 @@ struct FeatureEditorFormView: View {
     
     /// Selects a feature on the map and briefly hides the geometry editor's symbology.
     /// - Parameter feature: The feature to select.
-    /// - Throws: If the geometry editor does not have a valid geometry to hide.
+    /// - Throws: If the geometry editor was not hidden.
     private func selectFeature(_ feature: ArcGISFeature) async throws {
         clearSelectedFeature()
         
@@ -176,7 +176,7 @@ struct FeatureEditorFormView: View {
               // Editor geometry is buffered to account for the vertex and line symbols.
               let bufferedGeometry = GeometryEngine.buffer(around: editorGeometry, distance: 10),
               GeometryEngine.isGeometry(featureGeometry, intersecting: bufferedGeometry) else {
-            throw InvalidGeometryError()
+            throw GeometryEditorError.notHidden
         }
         
         model.geometryEditor.clearSelection()
@@ -209,13 +209,25 @@ private struct EquatableEditingEvent: Equatable {
     }
 }
 
-/// An error indicating that the geometry is invalid and must be corrected before saving.
-private struct InvalidGeometryError: LocalizedError {
-    let errorDescription: String? = String(
-        localized: "The geometry is invalid. It must be corrected before saving.",
-        bundle: .toolkitModule,
-        comment: "An error message shown when trying to save an invalid geometry."
-    )
+/// An error relating to the geometry editor.
+private enum GeometryEditorError: LocalizedError {
+    /// The geometry editor's geometry is invalid and must be corrected before saving.
+    case invalidGeometry
+    /// The geometry editor was not hidden when selecting a feature.
+    case notHidden
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidGeometry:
+            String(
+                localized: "The geometry is invalid. It must be corrected before saving.",
+                bundle: .toolkitModule,
+                comment: "An error message shown when trying to save an invalid geometry."
+            )
+        default:
+            nil
+        }
+    }
 }
 
 // MARK: Feature Selectable Layer

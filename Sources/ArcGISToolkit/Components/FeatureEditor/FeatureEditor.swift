@@ -132,7 +132,7 @@ public struct FeatureEditor: View {
     private func setViewpoint() async {
         guard let viewpointGeometry = model.viewpointGeometry else { return }
         guard let mapViewProxy else {
-            // Clears viewpointGeometry to prevent setting the viewpoint if the proxy later is set.
+            // Clears viewpointGeometry to prevent setting the viewpoint if the proxy is set later.
             model.viewpointGeometry = nil
             return
         }
@@ -141,7 +141,7 @@ public struct FeatureEditor: View {
         let viewpoint = Viewpoint(boundingGeometry: expandedGeometry)
         await mapViewProxy.setViewpoint(viewpoint, duration: 0.5)
         
-        // Prevents cancelling an animation started while this task was running.
+        // Prevents canceling an animation started while this task was running.
         guard !Task.isCancelled else { return }
         model.viewpointGeometry = nil
     }
