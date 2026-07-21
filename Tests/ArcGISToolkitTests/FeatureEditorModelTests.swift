@@ -267,6 +267,7 @@ private extension FeatureEditorModel {
         #expect(feature == nil, sourceLocation: sourceLocation)
         #expect(!isPresented, sourceLocation: sourceLocation)
         #expect(rootFeatureForm == nil, sourceLocation: sourceLocation)
+        #expect(startEditingError == nil, sourceLocation: sourceLocation)
         #expect(!snapSettingsSheetIsPresented, sourceLocation: sourceLocation)
         #expect(viewpointGeometry == nil, sourceLocation: sourceLocation)
         
