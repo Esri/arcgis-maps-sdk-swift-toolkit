@@ -119,9 +119,9 @@ final class FeatureEditorModel {
         presentedFeatureForm = featureForm
         
         do {
-            defer { isLoaded = true }
             try await loadFeature()
             try await setUpGeometryEditing()
+            isLoaded = true
         } catch {
             startEditingError = error
             Logger.featureEditor.error(
@@ -139,7 +139,6 @@ final class FeatureEditorModel {
         rootFeatureForm = FeatureForm(feature: feature)
         self.map = map
         do {
-            defer { isLoaded = true }
             try await loadFeature()
             if let map {
                 // Only try to set up snap rules when a map is provided.
@@ -148,6 +147,7 @@ final class FeatureEditorModel {
                 await map.utilityNetworks.load()
             }
             try await setUpGeometryEditing()
+            isLoaded = true
         } catch {
             // Don't start editing whichever error occurs, and let user retry.
             startEditingError = error
@@ -161,7 +161,6 @@ final class FeatureEditorModel {
     func retryStartEditing() async {
         guard startEditingError != nil else { return }
         do {
-            defer { isLoaded = true }
             try await loadFeature()
             if let map {
                 try await map.retryLoad()
@@ -169,6 +168,7 @@ final class FeatureEditorModel {
             }
             try await setUpGeometryEditing()
             startEditingError = nil
+            isLoaded = true
         } catch {
             // Don't start editing whichever error occurs, and let user retry.
             startEditingError = error

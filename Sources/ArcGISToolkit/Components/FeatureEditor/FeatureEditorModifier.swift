@@ -62,6 +62,7 @@ private struct FeatureEditorModifier: ViewModifier {
                                 Text.tryAgain
                             }
                             .task(id: isRetrying) {
+                                guard isRetrying else { return }
                                 defer { isRetrying = false }
                                 await model.retryStartEditing()
                             }
