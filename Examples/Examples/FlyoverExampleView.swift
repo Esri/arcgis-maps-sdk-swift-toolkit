@@ -33,8 +33,12 @@ struct FlyoverExampleView: View {
                 .onSingleTapGesture { screen, _ in
                     print("Identifying...")
                     Task { @MainActor in
-                        let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
-                        print("\(results.count) identify result(s).")
+                        do {
+                            let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
+                            print("\(results.count) identify result(s).")
+                        } catch {
+                            print("Identify failed. \(error.localizedDescription)")
+                        }
                     }
                 }
         }
