@@ -1759,7 +1759,7 @@ final class FeatureFormViewTests: XCTestCase {
         let newAssociationText = app.staticTexts["New Association"]
         let saveButton = app.buttons["Save"]
         let searchField = app.textFields["Search"]
-        let structureJunction2 = app.buttons["Structure Junction, 2"]
+        let structureJunction = app.buttons["Structure Junction, 1"]
         let structureJunctionDataSourceButton = app.buttons["Structure Junction"]
         let toElementValueLabel = app.staticTexts["Vault"]
         let toElementLabel = app.staticTexts["To Element"]
@@ -1817,7 +1817,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         addButton.tap()
         
-        structureJunction2.assertExistence()
+        structureJunction.assertExistence()
         
         saveButton.assertExistence()
         
