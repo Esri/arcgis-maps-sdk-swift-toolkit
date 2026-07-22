@@ -49,6 +49,8 @@ final class FeatureEditorModel {
     var snapSettingsSheetIsPresented = false
     /// The geometry used to set the viewpoint.
     var viewpointGeometry: Geometry?
+    /// A Boolean value indicating whether the model is loaded.
+    var isLoaded = false
     
     // MARK: Geometry Editor Properties
     
@@ -117,6 +119,8 @@ final class FeatureEditorModel {
         presentedFeatureForm = featureForm
         
         do {
+            defer { isLoaded = true }
+            try await loadFeature()
             try await setUpGeometryEditing()
         } catch {
             startEditingError = error
@@ -135,6 +139,8 @@ final class FeatureEditorModel {
         rootFeatureForm = FeatureForm(feature: feature)
         self.map = map
         do {
+            defer { isLoaded = true }
+            try await loadFeature()
             if let map {
                 // Only try to set up snap rules when a map is provided.
                 // Sets up the utility network so snap rules can be created.
@@ -155,6 +161,8 @@ final class FeatureEditorModel {
     func retryStartEditing() async {
         guard startEditingError != nil else { return }
         do {
+            defer { isLoaded = true }
+            try await loadFeature()
             if let map {
                 try await map.retryLoad()
                 await map.utilityNetworks.retryLoad()
@@ -188,6 +196,7 @@ final class FeatureEditorModel {
         
         snapRules = nil
         map = nil
+        isLoaded = false
     }
     
     /// Syncs the `geometryEditor.snapSettings`' source settings.
@@ -210,10 +219,9 @@ final class FeatureEditorModel {
         }
     }
     
-    /// Performs setup needed for geometry editing and starts the geometry editor if applicable.
-    private func setUpGeometryEditing() async throws {
+    /// Loads the feature and its table if needed to allow geometry editing.
+    private func loadFeature() async throws {
         guard let feature else { return }
-        
         // Loads the feature so canUpdateGeometry can be accessed. It is always false otherwise.
         try await feature.retryLoad()
         guard feature.canUpdateGeometry else { return }
@@ -223,7 +231,11 @@ final class FeatureEditorModel {
         if feature.geometry == nil, let table = feature.table {
             try await table.retryLoad()
         }
-        
+    }
+    
+    /// Performs setup needed for geometry editing and starts the geometry editor if applicable.
+    private func setUpGeometryEditing() async throws {
+        guard let feature else { return }
         // Sets up the snap rules and syncs the snap source settings.
         if let utilityNetwork, let element = utilityNetwork.makeElement(arcGISFeature: feature) {
             // Errors are ignored to set snapRules to nil if creation fails, so

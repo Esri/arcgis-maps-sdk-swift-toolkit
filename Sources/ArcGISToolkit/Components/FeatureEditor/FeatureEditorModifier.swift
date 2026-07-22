@@ -77,6 +77,8 @@ private struct FeatureEditorModifier: ViewModifier {
                             }
                             .buttonStyle(.bordered)
                         }
+                    } else if !model.isLoaded {
+                        ProgressView()
                     } else {
                         FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
                     }
