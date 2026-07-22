@@ -224,7 +224,6 @@ final class FeatureEditorModel {
         guard let feature else { return }
         // Loads the feature so canUpdateGeometry can be accessed. It is always false otherwise.
         try await feature.retryLoad()
-        guard feature.canUpdateGeometry else { return }
         
         // Loads the feature's table if the geometry is nil so geometryType can be accessed.
         // It is always nil otherwise.
@@ -235,7 +234,7 @@ final class FeatureEditorModel {
     
     /// Performs setup needed for geometry editing and starts the geometry editor if applicable.
     private func setUpGeometryEditing() async throws {
-        guard let feature else { return }
+        guard let feature, feature.canUpdateGeometry else { return }
         // Sets up the snap rules and syncs the snap source settings.
         if let utilityNetwork, let element = utilityNetwork.makeElement(arcGISFeature: feature) {
             // Errors are ignored to set snapRules to nil if creation fails, so
