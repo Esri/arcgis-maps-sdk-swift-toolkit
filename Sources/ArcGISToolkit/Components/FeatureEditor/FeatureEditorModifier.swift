@@ -42,7 +42,10 @@ private struct FeatureEditorModifier: ViewModifier {
             .safeInspector(isPresented: $model.isPresented) {
                 // VStack is needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
-                    if let error = model.startEditingError {
+                    switch model.loadResult {
+                    case .success:
+                        FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
+                    case .failure(let error):
                         ContentUnavailableView {
                             Label {
                                 Text(
@@ -78,10 +81,8 @@ private struct FeatureEditorModifier: ViewModifier {
                             }
                             .buttonStyle(.bordered)
                         }
-                    } else if !model.isLoaded {
+                    default:
                         ProgressView()
-                    } else {
-                        FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
                     }
                 }
                 .presentationBackgroundInteraction(.enabled)
