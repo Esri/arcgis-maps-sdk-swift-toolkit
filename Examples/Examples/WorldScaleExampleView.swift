@@ -65,8 +65,12 @@ struct WorldScaleExampleView: View {
                 .onSingleTapGesture { screen, _ in
                     print("Identifying...")
                     Task {
-                        let results = try await sceneView.identifyLayers(screenPoint: screen, tolerance: 20)
-                        print("\(results.count) identify result(s).")
+                        do {
+                            let results = try await sceneView.identifyLayers(screenPoint: screen, tolerance: 20)
+                            print("\(results.count) identify result(s).")
+                        } catch {
+                            print("Identify failed. \(error.localizedDescription)")
+                        }
                     }
                 }
         }
