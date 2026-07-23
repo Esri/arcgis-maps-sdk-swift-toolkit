@@ -61,7 +61,7 @@ struct JobManagerExampleView: View {
                 do {
                     _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
                 } catch {
-                    print(error.localizedDescription)
+                    Logger.jobManagerExample.error(error.localizedDescription)
                 }
             }
             .padding()
