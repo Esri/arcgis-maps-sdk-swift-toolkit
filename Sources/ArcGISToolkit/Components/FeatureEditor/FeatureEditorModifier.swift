@@ -81,7 +81,7 @@ private struct FeatureEditorModifier: ViewModifier {
                             }
                             .buttonStyle(.bordered)
                         }
-                    default:
+                    case .none:
                         ProgressView()
                     }
                 }
