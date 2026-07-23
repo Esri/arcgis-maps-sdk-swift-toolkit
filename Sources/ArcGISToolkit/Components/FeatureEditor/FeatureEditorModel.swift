@@ -38,7 +38,6 @@ final class FeatureEditorModel {
     }
     /// The form currently presented in the feature editor's `FeatureFormView`.
     /// This is non-`nil` after a new feature form is shown in the view.
-    @ObservationIgnored
     private var presentedFeatureForm: FeatureForm?
     /// The root feature form to edit with the feature editor.
     private(set) var rootFeatureForm: FeatureForm?
