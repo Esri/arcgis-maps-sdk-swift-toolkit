@@ -16,6 +16,8 @@ import ArcGIS
 import CoreLocation
 import SwiftUI
 
+internal import os
+
 /// A button that allows a user to control their location display on a map view.
 /// Gives the user a variety of options to set the auto-pan mode or stop the
 /// location data source.
@@ -334,7 +336,7 @@ extension LocationButton {
                     locationDisplay.autoPanMode = initialAutoPanMode
                     try await locationDisplay.dataSource.start()
                 } catch {
-                    print("Error starting location display: \(error)")
+                    Logger.locationButton.error("Error starting location display: \(error)")
                 }
                 isPerformingButtonAction = false
             }

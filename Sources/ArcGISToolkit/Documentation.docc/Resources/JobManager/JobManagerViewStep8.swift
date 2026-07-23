@@ -56,7 +56,7 @@ struct JobManagerTutorialView: View {
                                     try await makeNapervilleOfflineMapJob()
                                 )
                             } catch {
-                                print("Error creating offline map job: \(error)")
+                                Logger.jobManagerExample.error("Error creating offline map job: \(error, privacy: .public)")
                             }
                             job = jobManager.jobs.first
                             job?.start()
@@ -74,7 +74,7 @@ struct JobManagerTutorialView: View {
         .onAppear {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
                 if let error {
-                    print(error.localizedDescription)
+                    Logger.jobManagerExample.error(error.localizedDescription)
                 }
             }
             if jobManager.jobs.count > 0 {
@@ -139,4 +139,11 @@ extension JobManagerTutorialView {
         let downloadURL = documentsPath.appendingPathComponent(UUID().uuidString)
         return task.makeGenerateOfflineMapJob(parameters: params, downloadDirectory: downloadURL)
     }
+}
+
+extension Logger {
+    /// A logger for the job manager tutorial.
+    Logger.jobManagerExample: Logger = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Tutorials", category: "JobManagerTutorial")
+    }()
 }

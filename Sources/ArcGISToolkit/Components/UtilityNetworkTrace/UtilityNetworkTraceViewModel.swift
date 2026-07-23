@@ -17,6 +17,8 @@ import Combine
 import Foundation
 import SwiftUI
 
+internal import os
+
 @MainActor final class UtilityNetworkTraceViewModel: ObservableObject {
     // MARK: Published Properties
     
@@ -176,7 +178,7 @@ import SwiftUI
         do {
             return try await network?.features(for: [element]).first ?? nil
         } catch {
-            print(error.localizedDescription)
+            Logger.utilityNetworkTrace.error("\(error.localizedDescription)")
             return nil
         }
     }
@@ -189,7 +191,7 @@ import SwiftUI
                 try await network.load()
             }
         } catch {
-            print(error.localizedDescription)
+            Logger.utilityNetworkTrace.error("\(error.localizedDescription)")
         }
         network = map.utilityNetworks.first
         configurations = await utilityNamedTraceConfigurations(from: map)
@@ -495,10 +497,7 @@ import SwiftUI
         do {
             return try await map.namedTraceConfigurations(from: network)
         } catch {
-            print(
-                "Failed to retrieve configurations.",
-                error.localizedDescription
-            )
+            Logger.utilityNetworkTrace.error("Failed to retrieve configurations. \(error.localizedDescription)")
             return []
         }
     }

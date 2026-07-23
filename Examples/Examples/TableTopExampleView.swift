@@ -14,6 +14,7 @@
 
 import ArcGIS
 import ArcGISToolkit
+import os
 import SwiftUI
 
 struct TableTopExampleView: View {
@@ -48,16 +49,23 @@ struct TableTopExampleView: View {
         ) { proxy in
             SceneView(scene: scene)
                 .onSingleTapGesture { screen, _ in
-                    print("Identifying...")
+                    Logger.tableTopExample.info("Identifying...")
                     Task { @MainActor in
                         do {
                             let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
-                            print("\(results.count) identify result(s).")
+                            Logger.tableTopExample.info("\(results.count) identify result(s).")
                         } catch {
-                            print("Identify failed. \(error.localizedDescription)")
+                            Logger.tableTopExample.error("Identify failed. \(error.localizedDescription)")
                         }
                     }
                 }
         }
     }
+}
+
+extension Logger {
+    /// A logger for the Augmented Reality Table Top example.
+    static let tableTopExample: Self = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Examples", category: "AugmentedRealityTableTop")
+    }()
 }

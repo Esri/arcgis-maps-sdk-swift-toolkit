@@ -15,6 +15,7 @@
 import ArcGIS
 import ArcGISToolkit
 import CoreLocation
+import os
 import SwiftUI
 
 #if os(iOS)
@@ -58,18 +59,19 @@ struct WorldScaleExampleView: View {
         WorldScaleSceneView(provider: provider) { context in
             AppleWorldTrackingCameraFeedView(context: context)
                 .onCameraTrackingStateChanged { cameraTrackingState in
-                    print("cameraTrackingState: \(cameraTrackingState)")
+                    let state = "\(cameraTrackingState)"
+                    Logger.worldScaleExample.info("cameraTrackingState: \(state)")
                 }
         } sceneView: { sceneView in
             SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
                 .onSingleTapGesture { screen, _ in
-                    print("Identifying...")
+                    Logger.worldScaleExample.info("Identifying...")
                     Task {
                         do {
                             let results = try await sceneView.identifyLayers(screenPoint: screen, tolerance: 20)
-                            print("\(results.count) identify result(s).")
+                            Logger.worldScaleExample.info("\(results.count) identify result(s).")
                         } catch {
-                            print("Identify failed. \(error.localizedDescription)")
+                            Logger.worldScaleExample.error("Identify failed. \(error.localizedDescription)")
                         }
                     }
                 }
@@ -105,3 +107,10 @@ struct WorldScaleExampleView: View {
     }
 }
 #endif
+
+extension Logger {
+    /// A logger for the Augmented Reality World Scale example.
+    static let worldScaleExample: Self = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Examples", category: "AugmentedRealityWorldScale")
+    }()
+}

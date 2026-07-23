@@ -14,6 +14,7 @@
 
 import ArcGIS
 import ArcGISToolkit
+import os
 import SwiftUI
 
 struct FlyoverExampleView: View {
@@ -31,16 +32,23 @@ struct FlyoverExampleView: View {
         ) { proxy in
             SceneView(scene: scene)
                 .onSingleTapGesture { screen, _ in
-                    print("Identifying...")
+                    Logger.flyoverExample.info("Identifying...")
                     Task { @MainActor in
                         do {
                             let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
-                            print("\(results.count) identify result(s).")
+                            Logger.flyoverExample.info("\(results.count) identify result(s).")
                         } catch {
-                            print("Identify failed. \(error.localizedDescription)")
+                            Logger.flyoverExample.error("Identify failed. \(error.localizedDescription)")
                         }
                     }
                 }
         }
     }
+}
+
+extension Logger {
+    /// A logger for the Augmented Reality Flyover example.
+    static let flyoverExample: Self = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Examples", category: "AugmentedRealityFlyover")
+    }()
 }

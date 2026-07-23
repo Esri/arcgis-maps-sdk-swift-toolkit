@@ -25,7 +25,7 @@ struct UtilityNetworkTraceExampleView: View {
                     let publicSample = try await ArcGISCredential.publicSample
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
                 } catch {
-                    print("Error creating credential:", error.localizedDescription)
+                    Logger.utilityNetworkTraceExample.error("Error creating credential: \(error.localizedDescription)")
                 }
             }
             .floatingPanel(

@@ -28,7 +28,7 @@ struct JobManagerTutorialView: View {
                                     try await makeNapervilleOfflineMapJob()
                                 )
                             } catch {
-                                print("Error creating offline map job: \(error)")
+                                Logger.jobManagerExample.error("Error creating offline map job: \(error, privacy: .public)")
                             }
                             job = jobManager.jobs.first
                             job?.start()
@@ -44,4 +44,11 @@ struct JobManagerTutorialView: View {
             }
         }
     }
+}
+
+extension Logger {
+    /// A logger for the job manager tutorial.
+    Logger.jobManagerExample: Logger = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Tutorials", category: "JobManagerTutorial")
+    }()
 }
