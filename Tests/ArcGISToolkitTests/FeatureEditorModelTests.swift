@@ -170,8 +170,11 @@ struct FeatureEditorModelTests {
         
         // Simulates map fails to load by creating a map with nil spatial reference.
         await model.startEditing(rootFeature: feature, on: map)
-        
-        #expect(model.startEditingError != nil)
+        let result = try #require(model.loadResult)
+        let error = #expect(throws: MappingError.self) {
+            try result.get()
+        }
+        #expect(error == .missingSpatialReference(details: ""))
         await Task.yieldExpect(!model.geometryEditorIsStarted)
         await Task.yieldExpect(model.geometryEditorGeometry == nil)
         
@@ -179,7 +182,7 @@ struct FeatureEditorModelTests {
         map.setSpatialReference(.wgs84)
         await model.retryStartEditing()
         
-        #expect(model.startEditingError == nil)
+        try model.loadResult?.get()
         await model.expectIsGeometryEditing()
         await model.expectIsEditing(geometry: geometry)
     }
@@ -267,7 +270,7 @@ private extension FeatureEditorModel {
         #expect(feature == nil, sourceLocation: sourceLocation)
         #expect(!isPresented, sourceLocation: sourceLocation)
         #expect(rootFeatureForm == nil, sourceLocation: sourceLocation)
-        #expect(startEditingError == nil, sourceLocation: sourceLocation)
+        #expect(loadResult == nil, sourceLocation: sourceLocation)
         #expect(!snapSettingsSheetIsPresented, sourceLocation: sourceLocation)
         #expect(viewpointGeometry == nil, sourceLocation: sourceLocation)
         
