@@ -22,6 +22,11 @@ extension Logger {
         Logger(subsystem: Bundle.toolkitIdentifier, category: "AttachmentsFeatureElementView")
     }
     
+    /// A logger for the `Authentication` component.
+    static var authentication: Logger {
+        Logger(subsystem: Bundle.toolkitIdentifier, category: "Authentication")
+    }
+    
     /// A logger for the `BasemapGallery` component.
     static var basemapGallery: Logger {
         Logger(subsystem: Bundle.toolkitIdentifier, category: "BasemapGallery")
