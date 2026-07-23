@@ -154,7 +154,7 @@ struct FeatureEditorModelTests {
         }
     }
     
-    /// Verifies setup failure records `startEditingError`, blocks editing,
+    /// Verifies setup failure leads to loadResult failure, blocks editing,
     /// and `retryStartEditing()` clears the error on success.
     @Test
     func startEditingErrorAndRetry() async throws {
