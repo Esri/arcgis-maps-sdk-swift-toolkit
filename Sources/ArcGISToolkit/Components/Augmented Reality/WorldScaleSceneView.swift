@@ -389,13 +389,15 @@ private extension WorldScaleSceneView {
         return Camera(transformationMatrix: scenePointMatrix).location
     }
 }
-#endif
 
 /// A store for the default Apple world-tracking provider.
 ///
 /// This is necessary to store the provider as a state object, ensuring that
 /// it is only created once.
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 @MainActor private final class WorldScaleDefaultProviderStore: ObservableObject {
     /// The default provider instance.
     private(set) var provider = AppleWorldTracking(mode: .geoTracking)
 }
+#endif
