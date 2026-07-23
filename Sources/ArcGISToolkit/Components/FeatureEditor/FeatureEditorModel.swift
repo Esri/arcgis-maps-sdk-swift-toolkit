@@ -42,16 +42,14 @@ final class FeatureEditorModel {
     private var presentedFeatureForm: FeatureForm?
     /// The root feature form to edit with the feature editor.
     private(set) var rootFeatureForm: FeatureForm?
-    /// The error when starting editing fails.
-    private(set) var startEditingError: (any Error)?
+    /// The result of trying to load the resources and starting editing.
+    private(set) var loadResult: Result<Void, Error>?
     /// A Boolean value indicating whether the snap settings sheet is presented.
     /// This is needed to display the sheet from the modifier to prevent it from
     /// dismissing the feature editor when the horizontal size class is compact.
     var snapSettingsSheetIsPresented = false
     /// The geometry used to set the viewpoint.
     var viewpointGeometry: Geometry?
-    /// A Boolean value indicating whether the model is loaded.
-    var isLoaded = false
     
     // MARK: Geometry Editor Properties
     
@@ -121,15 +119,9 @@ final class FeatureEditorModel {
         geometryEditor.stop()
         presentedFeatureForm = featureForm
         
-        do {
+        loadResult = await Result {
             try await loadFeature()
             try await setUpGeometryEditing()
-            isLoaded = true
-        } catch {
-            startEditingError = error
-            Logger.featureEditor.error(
-                "Error starting feature editor: \(error.localizedDescription)"
-            )
         }
     }
     
@@ -141,43 +133,29 @@ final class FeatureEditorModel {
         stopEditing()
         rootFeatureForm = FeatureForm(feature: feature)
         self.map = map
-        do {
+        loadResult = await Result {
             try await loadFeature()
             if let map {
-                // Only try to set up snap rules when a map is provided.
+                // Only tries to set up snap rules when a map is provided.
                 // Sets up the utility network so snap rules can be created.
                 try await map.load()
                 await map.utilityNetworks.load()
             }
             try await setUpGeometryEditing()
-            isLoaded = true
-        } catch {
-            // Don't start editing whichever error occurs, and let user retry.
-            startEditingError = error
-            Logger.featureEditor.error(
-                "Error starting feature editor: \(error.localizedDescription)"
-            )
         }
     }
     
     /// Retries starting an editing session.
     func retryStartEditing() async {
-        guard startEditingError != nil else { return }
-        do {
+        // Makes sure the previous load failed and sets the loadResult to nil.
+        guard case .failure = loadResult.take() else { return }
+        loadResult = await Result { [weak map] in
             try await loadFeature()
             if let map {
                 try await map.retryLoad()
                 await map.utilityNetworks.retryLoad()
             }
             try await setUpGeometryEditing()
-            startEditingError = nil
-            isLoaded = true
-        } catch {
-            // Don't start editing whichever error occurs, and let user retry.
-            startEditingError = error
-            Logger.featureEditor.error(
-                "Error retry starting feature editor: \(error.localizedDescription)"
-            )
         }
     }
     
@@ -190,7 +168,6 @@ final class FeatureEditorModel {
         presentedFeatureForm = nil
         snapSettingsSheetIsPresented = false
         viewpointGeometry = nil
-        startEditingError = nil
         
         geometryEditor.stop()
         geometryEditorCanUndo = false
@@ -199,7 +176,7 @@ final class FeatureEditorModel {
         
         snapRules = nil
         map = nil
-        isLoaded = false
+        loadResult = nil
     }
     
     /// Syncs the `geometryEditor.snapSettings`' source settings.
@@ -225,11 +202,12 @@ final class FeatureEditorModel {
     /// Loads the feature and its table if needed to allow geometry editing.
     private func loadFeature() async throws {
         guard let feature else { return }
-        // Loads the feature so canUpdateGeometry can be accessed. It is always false otherwise.
+        // Loads the feature so canUpdateGeometry can be accessed. It is always
+        // false otherwise.
         try await feature.retryLoad()
         
-        // Loads the feature's table if the geometry is nil so geometryType can be accessed.
-        // It is always nil otherwise.
+        // Loads the feature's table if the geometry is nil so geometryType
+        // can be accessed. It is always nil otherwise.
         if feature.geometry == nil, let table = feature.table {
             try await table.retryLoad()
         }
