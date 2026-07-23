@@ -170,9 +170,8 @@ struct FeatureEditorModelTests {
         
         // Simulates map fails to load by creating a map with nil spatial reference.
         await model.startEditing(rootFeature: feature, on: map)
-        let result = try #require(model.loadResult)
         let error = #expect(throws: MappingError.self) {
-            try result.get()
+            try #require(model.loadResult).get()
         }
         #expect(error == .missingSpatialReference(details: ""))
         await Task.yieldExpect(!model.geometryEditorIsStarted)
@@ -182,7 +181,7 @@ struct FeatureEditorModelTests {
         map.setSpatialReference(.wgs84)
         await model.retryStartEditing()
         
-        try result.get()
+        try #require(model.loadResult).get()
         await model.expectIsGeometryEditing()
         await model.expectIsEditing(geometry: geometry)
     }
