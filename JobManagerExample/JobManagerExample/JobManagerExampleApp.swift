@@ -14,7 +14,7 @@
 
 import ArcGIS
 import ArcGISToolkit
-import OSLog
+import os
 import SwiftUI
 
 @main
