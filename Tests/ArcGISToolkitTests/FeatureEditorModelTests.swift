@@ -182,7 +182,7 @@ struct FeatureEditorModelTests {
         map.setSpatialReference(.wgs84)
         await model.retryStartEditing()
         
-        try model.loadResult?.get()
+        try result.get()
         await model.expectIsGeometryEditing()
         await model.expectIsEditing(geometry: geometry)
     }
