@@ -123,10 +123,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
         do {
             try await mmpk.load()
-            status = .downloaded
             mobileMapPackage = mmpk
             sizeInBytes = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
+            status = .downloaded
         } catch {
             status = .mmpkLoadFailure(error)
             mobileMapPackage = nil
