@@ -56,7 +56,7 @@ struct JobManagerTutorialView: View {
                                     try await makeNapervilleOfflineMapJob()
                                 )
                             } catch {
-                                Logger.jobManagerExample.error("Error creating offline map job: \(error, privacy: .public)")
+                                Logger.jobManagerTutorial.error("Error creating offline map job: \(error, privacy: .public)")
                             }
                             job = jobManager.jobs.first
                             job?.start()
@@ -74,7 +74,7 @@ struct JobManagerTutorialView: View {
         .onAppear {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
                 if let error {
-                    Logger.jobManagerExample.error("\(error.localizedDescription)")
+                    Logger.jobManagerTutorial.error("\(error.localizedDescription)")
                 }
             }
         }
@@ -140,7 +140,7 @@ extension JobManagerTutorialView {
 
 extension Logger {
     /// A logger for the job manager tutorial.
-    Logger.jobManagerExample: Logger = {
+    Logger.jobManagerTutorial: Logger = {
         Logger(subsystem: "com.esri.ArcGISToolkit.Tutorials", category: "JobManagerTutorial")
     }()
 }

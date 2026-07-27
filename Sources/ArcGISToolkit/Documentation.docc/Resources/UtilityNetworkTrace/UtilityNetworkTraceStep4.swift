@@ -25,7 +25,7 @@ struct UtilityNetworkTraceExampleView: View {
                     let publicSample = try await ArcGISCredential.publicSample
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
                 } catch {
-                    Logger.utilityNetworkTraceExample.error("Error creating credential: \(error.localizedDescription)")
+                    Logger.utilityNetworkTraceTutorial.error("Error creating credential: \(error.localizedDescription)")
                 }
             }
             .floatingPanel(
@@ -67,8 +67,8 @@ private extension ArcGISCredential {
 }
 
 extension Logger {
-    /// A logger for the Utility Network Trace example.
-    static let utilityNetworkTraceExample: Self = {
+    /// A logger for the Utility Network Trace tutorial.
+    static let utilityNetworkTraceTutorial: Self = {
         Logger(subsystem: "com.esri.ArcGISToolkit.Tutorials", category: "UtilityNetworkTrace")
     }()
 }
