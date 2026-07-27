@@ -65,3 +65,10 @@ private extension ArcGISCredential {
         }
     }
 }
+
+extension Logger {
+    /// A logger for the Utility Network Trace example.
+    static let utilityNetworkTraceExample: Self = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Tutorials", category: "UtilityNetworkTrace")
+    }()
+}
