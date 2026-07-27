@@ -256,6 +256,7 @@ private extension FeatureFormTestView {
     
     /// The set of all Form View UI test cases.
     var cases: [TestCase] {[
+        .init("testAttachmentDeletion", objectID: 3, portalID: .attachmentMapID),
         .init("testAttachmentLoadDurability", objectID: 1, portalID: .groupAndAttachments),
         .init("testAttachmentRenaming", objectID: 1, portalID: .attachmentMapID),
         .init("testAttachmentsResetOnDiscard", objectID: 1, portalID: .attachmentMapID),

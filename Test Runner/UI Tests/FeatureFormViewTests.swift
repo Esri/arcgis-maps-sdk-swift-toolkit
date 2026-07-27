@@ -40,6 +40,36 @@ final class FeatureFormViewTests: XCTestCase {
         formViewTestsButton.tap()
     }
     
+    func testAttachmentDeletion() {
+        let app = XCUIApplication()
+        let elementTitle = "Attachments"
+        let formTitle = app.staticTexts["Esri Location"]
+#if targetEnvironment(macCatalyst)
+        let esriHQAttachmentCell = app.popUpButtons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+        let delete = app.menuItems["delete"]
+        let logoAttachmentCell = app.popUpButtons["AttachmentPreview-Cell-Logo.jpeg"]
+#else
+        let esriHQAttachmentCell = app.buttons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+        let delete = app.buttons["Delete"]
+        let logoAttachmentCell = app.buttons["AttachmentPreview-Cell-Logo.jpeg"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        esriHQAttachmentCell.assertExistence()
+        logoAttachmentCell.assertExistence()
+#if targetEnvironment(macCatalyst)
+        logoAttachmentCell.rightClick()
+#else
+        logoAttachmentCell.press(forDuration: 1)
+#endif
+        delete.assertExistenceAndTap()
+        esriHQAttachmentCell.assertExistence()
+        logoAttachmentCell.assertNonExistence()
+    }
+    
     /// Verify that the attachments form element load isn't cancelled early when it's pushed below the fold
     /// by a group element.
     func testAttachmentLoadDurability() {
@@ -59,15 +89,16 @@ final class FeatureFormViewTests: XCTestCase {
     func testAttachmentRenaming() {
         let app = XCUIApplication()
         let activityIndicator = app.activityIndicators.firstMatch
-        let attachmentLabel = app.staticTexts["EsriHQ.jpeg"]
         let elementTitle = "Attachments"
         let formTitle = app.staticTexts["Esri Location"]
         let nameField = app.textFields["New name"]
         let okButton = app.buttons["OK"]
         let renamedAttachmentLabel = app.staticTexts["EsriHQ\(#function).jpeg"]
 #if targetEnvironment(macCatalyst)
+        let attachmentCell = app.popUpButtons["AttachmentPreview-Cell-EsriHQ.jpeg"]
         let rename = app.menuItems["Rename"]
 #else
+        let attachmentCell = app.buttons["AttachmentPreview-Cell-EsriHQ.jpeg"]
         let rename = app.buttons["Rename"]
 #endif
         
@@ -78,12 +109,12 @@ final class FeatureFormViewTests: XCTestCase {
         
         activityIndicator.assertNonExistence()
         
-        attachmentLabel.assertExistence()
+        attachmentCell.assertExistence()
         
 #if targetEnvironment(macCatalyst)
-        attachmentLabel.rightClick()
+        attachmentCell.rightClick()
 #else
-        attachmentLabel.press(forDuration: 1)
+        attachmentCell.press(forDuration: 1)
 #endif
         
         rename.assertExistenceAndTap()
@@ -99,28 +130,29 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testAttachmentsResetOnDiscard() {
         let app = XCUIApplication()
-        let attachmentLabel = app.staticTexts["EsriHQ.jpeg"]
         let discardButton = app.buttons["Discard"]
         let formTitle = app.staticTexts["Esri Location"]
 #if targetEnvironment(macCatalyst)
+        let attachmentCell = app.popUpButtons["AttachmentPreview-Cell-EsriHQ.jpeg"]
         let delete = app.menuItems["delete"]
 #else
+        let attachmentCell = app.buttons["AttachmentPreview-Cell-EsriHQ.jpeg"]
         let delete = app.buttons["Delete"]
 #endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
         
-        attachmentLabel.assertExistence()
+        attachmentCell.assertExistence()
 #if targetEnvironment(macCatalyst)
-        attachmentLabel.rightClick()
+        attachmentCell.rightClick()
 #else
-        attachmentLabel.press(forDuration: 1)
+        attachmentCell.press(forDuration: 1)
 #endif
         delete.assertExistenceAndTap()
-        attachmentLabel.assertNonExistence()
+        attachmentCell.assertNonExistence()
         discardButton.assertExistenceAndTap()
-        attachmentLabel.assertExistence()
+        attachmentCell.assertExistence()
     }
     
     func testEditingButtonsHidden() {
@@ -1182,6 +1214,11 @@ final class FeatureFormViewTests: XCTestCase {
         let placeholderImage = app.images["Photo"]
         let sizeLabel = app.staticTexts["154 kB"]
         let thumbnailImage = app.images["EsriHQ.jpeg Thumbnail"]
+#if targetEnvironment(macCatalyst)
+        let attachmentCell = app.popUpButtons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+#else
+        let attachmentCell = app.buttons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -1192,7 +1229,7 @@ final class FeatureFormViewTests: XCTestCase {
         sizeLabel.assertExistence()
         downloadIcon.assertExistence()
         
-        placeholderImage.assertExistenceAndTap()
+        attachmentCell.assertExistenceAndTap()
         
         thumbnailImage.assertExistence()
         placeholderImage.assertNonExistence()
