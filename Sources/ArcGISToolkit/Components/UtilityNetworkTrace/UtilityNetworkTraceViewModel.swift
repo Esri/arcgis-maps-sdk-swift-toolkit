@@ -191,7 +191,7 @@ internal import os
                 try await network.load()
             }
         } catch {
-            Logger.utilityNetworkTrace.error("The map or the utility networks within it failed to load with error: \(error.localizedDescription)")
+            Logger.utilityNetworkTrace.error("The map or the utility networks within it failed to load with an error: \(error.localizedDescription)")
         }
         network = map.utilityNetworks.first
         configurations = await utilityNamedTraceConfigurations(from: map)
