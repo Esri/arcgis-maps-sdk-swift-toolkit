@@ -59,6 +59,7 @@ struct JobManagerExampleView: View {
 #endif
             .task {
                 do {
+                    Logger.jobManagerExample.info("Requesting authorization to send notifications.")
                     _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
                 } catch {
                     Logger.jobManagerExample.error("Authorization failed with an error: \(error.localizedDescription)")

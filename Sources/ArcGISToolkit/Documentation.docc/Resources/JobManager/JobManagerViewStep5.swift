@@ -68,6 +68,7 @@ struct JobManagerTutorialView: View {
             }
         }
         .onAppear {
+            Logger.jobManagerTutorial.info("Requesting authorization to send notifications.")
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
                 if let error {
                     Logger.jobManagerTutorial.error("Authorization failed with an error: \(error.localizedDescription)")
