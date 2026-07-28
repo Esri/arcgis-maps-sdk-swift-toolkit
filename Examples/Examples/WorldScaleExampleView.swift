@@ -15,6 +15,7 @@
 import ArcGIS
 import ArcGISToolkit
 import CoreLocation
+import os
 import SwiftUI
 
 /// An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
@@ -52,10 +53,14 @@ struct WorldScaleExampleView: View {
         WorldScaleSceneView { proxy in
             SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
                 .onSingleTapGesture { screen, _ in
-                    print("Identifying...")
+                    Logger.worldScaleExample.info("Identifying...")
                     Task {
-                        let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
-                        print("\(results.count) identify result(s).")
+                        do {
+                            let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
+                            Logger.worldScaleExample.info("\(results.count) identify result(s).")
+                        } catch {
+                            Logger.worldScaleExample.error("Identify failed. \(error.localizedDescription)")
+                        }
                     }
                 }
         }
@@ -88,4 +93,11 @@ struct WorldScaleExampleView: View {
             await locationDataSource.stop()
         }
     }
+}
+
+extension Logger {
+    /// A logger for the Augmented Reality World Scale example.
+    static let worldScaleExample: Self = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Examples", category: "AugmentedRealityWorldScale")
+    }()
 }
