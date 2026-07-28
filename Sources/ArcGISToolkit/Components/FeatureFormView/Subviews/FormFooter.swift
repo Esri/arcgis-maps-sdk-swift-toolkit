@@ -32,7 +32,7 @@ struct FormFooter: View {
     @Binding var finishEditingError: (any Error)?
     
     /// The environment value to set the continuation to use when the user responds to the alert.
-    @Environment(\.setAlertContinuation) var setAlertContinuation
+    @Environment(\.unsavedEditsAlertContinuation) var unsavedEditsAlertContinuation
     
     var body: some View {
         HStack {
@@ -71,7 +71,7 @@ struct FormFooter: View {
                 }
             } else {
                 validationErrorVisibilityInternal.wrappedValue = .visible
-                setAlertContinuation?(false, {})
+                unsavedEditsAlertContinuation?.wrappedValue = .init(willNavigate: false)
             }
         } label: {
             Text(

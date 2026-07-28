@@ -36,7 +36,7 @@ extension EnvironmentValues /* FeatureFormView */ {
     @Entry var onFormEditingEventAction: FormEditingEventAction?
     
     /// The environment value to set the continuation to use when the user responds to the alert.
-    @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
+    @Entry var unsavedEditsAlertContinuation: Binding<UnsavedEditsAlertContinuation?>?
     
     /// The developer configurable validation error visibility.
     @Entry var validationErrorVisibilityExternal: FeatureFormView.ValidationErrorVisibility = .automatic
@@ -53,4 +53,11 @@ struct FormEditingEventAction: Identifiable {
     func callAsFunction(_ event: FeatureFormView.EditingEvent) {
         action(event)
     }
+}
+
+struct UnsavedEditsAlertContinuation {
+    /// A Boolean value indicating whether the view will navigate to another form after the alert is dismissed.
+    var willNavigate: Bool
+    /// An action to perform after the view is dismissed.
+    var action: (() -> Void)?
 }

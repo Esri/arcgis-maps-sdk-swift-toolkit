@@ -61,7 +61,7 @@ extension FeatureFormView {
         @Environment(\.navigationPath) var navigationPath
         
         /// The environment value to set the continuation to use when the user responds to the alert.
-        @Environment(\.setAlertContinuation) var setAlertContinuation
+        @Environment(\.unsavedEditsAlertContinuation) var unsavedEditsAlertContinuation
         
         /// The view model for the form.
         let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
@@ -72,7 +72,7 @@ extension FeatureFormView {
         var body: some View {
             List(utilityAssociationGroupResult.associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
                 Button {
-                    let navigationAction = {
+                    let navigationAction: () -> Void = {
                         navigationPath?.wrappedValue.append(
                             FeatureFormView.NavigationPathItem.form(
                                 FeatureForm(feature: utilityAssociationResult.associatedFeature)
@@ -80,9 +80,7 @@ extension FeatureFormView {
                         )
                     }
                     if embeddedFeatureFormViewModel.featureForm.hasEdits {
-                        setAlertContinuation?(true) {
-                            navigationAction()
-                        }
+                        unsavedEditsAlertContinuation?.wrappedValue = .init(willNavigate: true, action: navigationAction)
                     } else {
                         navigationAction()
                     }
