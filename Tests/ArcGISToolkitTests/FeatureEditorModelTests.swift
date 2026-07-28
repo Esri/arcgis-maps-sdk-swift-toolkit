@@ -104,7 +104,7 @@ struct FeatureEditorModelTests {
         await model.expectIsEditing(geometry: newGeometry)
     }
     
-    /// Verifies `startEditingFeature(_:on:)` and `startEditing(newFeatureForm:)` using
+    /// Verifies `startEditingFeature(_:on:)` and `startEditingFeatureForm(_:)` using
     /// features with geometries.
     @Test
     func startEditing() async throws {
@@ -133,14 +133,14 @@ struct FeatureEditorModelTests {
             #expect(map.loadStatus == .loaded)
         }
         
-        // Verifies startEditing(newFeatureForm:) updates the correct model properties.
+        // Verifies startEditingFeatureForm(_:) updates the correct model properties.
         do {
             let geometry = Point(latitude: 1, longitude: 1)
             let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
             let featureForm = FeatureForm(feature: feature)
             
             // Verifies feature editor uses the new feature instance.
-            await model.startEditing(newFeatureForm: featureForm)
+            await model.startEditingFeatureForm(featureForm)
             #expect(model.feature === feature)
             
             // Verifies rootFeatureForm does not update.

@@ -142,7 +142,7 @@ private struct FeatureEditorFormView: View {
                 .task(id: presentedFeatureForm.map(ObjectIdentifier.init)) {
                     guard let presentedFeatureForm else { return }
                     defer { self.presentedFeatureForm = nil }
-                    await model.startEditing(newFeatureForm: presentedFeatureForm)
+                    await model.startEditingFeatureForm(presentedFeatureForm)
                 }
         }
     }

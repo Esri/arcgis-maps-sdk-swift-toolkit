@@ -114,7 +114,7 @@ final class FeatureEditorModel {
     
     /// Starts editing a new `FeatureForm` that is shown in the feature editor's `FeatureFormView`.
     /// - Parameter featureForm: The new feature form to edit.
-    func startEditing(newFeatureForm featureForm: FeatureForm) async {
+    func startEditingFeatureForm(_ featureForm: FeatureForm) async {
         geometryEditor.stop()
         presentedFeatureForm = featureForm
         
