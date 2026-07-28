@@ -69,7 +69,7 @@ struct JobManagerTutorialView: View {
 extension JobManagerTutorialView {
     /// Creates a job that generates an offline map for Naperville.
     func makeNapervilleOfflineMapJob() async throws -> GenerateOfflineMapJob {
-        let map = Map(url:  URL(string: "https://www.arcgis.com/home/item.html?id=acc027394bc84c2fb04d1ed317aac674")!)!
+        let map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=acc027394bc84c2fb04d1ed317aac674")!)!
         let naperville = Envelope(
             xMin: -9813416.487598,
             yMin: 5126112.596989,
