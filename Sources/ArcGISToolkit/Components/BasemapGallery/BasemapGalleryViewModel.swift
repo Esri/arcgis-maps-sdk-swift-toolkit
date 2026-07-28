@@ -141,7 +141,7 @@ internal import os
                 do {
                     try await geoModel.load()
                 } catch {
-                    Logger.basemapGallery.error("The GeoModel failed to load. \(error.localizedDescription)")
+                    Logger.basemapGallery.error("The GeoModel failed to load with an error: \(error.localizedDescription)")
                     return
                 }
                 
