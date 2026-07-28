@@ -66,7 +66,12 @@ private struct FeatureEditorModifier: ViewModifier {
                             }
                             .task(id: isRetrying) {
                                 guard isRetrying else { return }
-                                defer { isRetrying = false }
+                                defer {
+                                    // Avoid state updates from cancelled tasks.
+                                    if !Task.isCancelled {
+                                        isRetrying = false
+                                    }
+                                }
                                 await model.retryStartEditing()
                             }
                             .buttonStyle(.borderedProminent)
