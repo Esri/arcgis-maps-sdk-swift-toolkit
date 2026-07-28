@@ -61,17 +61,8 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     
-    /// A store for the default Apple world-tracking provider.
-    ///
-    /// This is necessary to store the provider as a state object, ensuring that
-    /// it is only created once.
-    @MainActor private class DefaultProviderStore: ObservableObject {
-        /// The default provider instance.
-        private(set) var provider = AppleWorldTracking(mode: .geoTracking)
-    }
-    
     /// The state object that owns the default Apple world-tracking provider.
-    @StateObject private var defaultProviderStore = DefaultProviderStore()
+    @StateObject private var defaultProviderStore = WorldScaleDefaultProviderStore()
     
     /// The world tracking provider for this view.
     ///
@@ -397,5 +388,16 @@ private extension WorldScaleSceneView {
         // Create a camera from transformationMatrix and return its location.
         return Camera(transformationMatrix: scenePointMatrix).location
     }
+}
+
+/// A store for the default Apple world-tracking provider.
+///
+/// This is necessary to store the provider as a state object, ensuring that
+/// it is only created once.
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
+@MainActor private final class WorldScaleDefaultProviderStore: ObservableObject {
+    /// The default provider instance.
+    private(set) var provider = AppleWorldTracking(mode: .geoTracking)
 }
 #endif

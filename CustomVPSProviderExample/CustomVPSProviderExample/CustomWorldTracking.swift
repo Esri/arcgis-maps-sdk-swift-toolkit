@@ -17,6 +17,7 @@ import ArcGISToolkit
 import ARCore
 import ARCoreGeospatial
 import ARKit
+import os
 import RealityKit
 
 /// A world-tracking provider backed by the Google ARCore SDK.
@@ -95,20 +96,20 @@ private extension CustomWorldTracking {
     func setProjectionEngineDirectoryURL() {
         if let pedataURL = Bundle.main.url(forResource: "pedata", withExtension: nil) {
             do {
-                print("Setting Projection Engine Directory: \(pedataURL)")
+                Logger.customVPSProviderExample.info("Setting Projection Engine Directory: \(pedataURL)")
                 try TransformationCatalog.setProjectionEngineDirectoryURL(pedataURL)
             } catch {
-                print("Error setting Projection Engine Directory: \(error)")
+                Logger.customVPSProviderExample.error("Error setting Projection Engine Directory: \(error)")
             }
         } else if let egm96URL = Bundle.main.url(forResource: "egm96", withExtension: "grd") {
             let pedataURL = egm96URL.deletingLastPathComponent()
             do {
                 try TransformationCatalog.setProjectionEngineDirectoryURL(pedataURL)
             } catch {
-                print("Error setting Projection Engine Directory: \(error)")
+                Logger.customVPSProviderExample.error("Error setting Projection Engine Directory: \(error)")
             }
         } else {
-            print("Note: PE data not found - using built-in transformations")
+            Logger.customVPSProviderExample.warning("Note: PE data not found - using built-in transformations")
         }
     }
 }
@@ -182,4 +183,11 @@ extension CustomWorldTracking {
         }
         streetscapeGeometryModels.removeAll()
     }
+}
+
+extension Logger {
+    /// A logger for the custom VPS provider example.
+    static let customVPSProviderExample: Self = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Examples", category: "CustomVPSProvider")
+    }()
 }
