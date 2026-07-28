@@ -90,7 +90,7 @@ struct JobManagerExampleView: View {
                             try await makeWildfiresGeodatabaseJob()
                         )
                     } catch {
-                        Logger.jobManagerExample.error("Error creating generate geodatabase job: \(error, privacy: .public)")
+                        Logger.jobManagerExample.error("Error creating generate geodatabase job: \(error.localizedDescription, privacy: .public)")
                     }
                     isAddingGeodatabaseJob = false
                 }
@@ -107,7 +107,7 @@ struct JobManagerExampleView: View {
                             try await makeNapervilleOfflineMapJob()
                         )
                     } catch {
-                        Logger.jobManagerExample.error("Error creating offline map job: \(error, privacy: .public)")
+                        Logger.jobManagerExample.error("Error creating offline map job: \(error.localizedDescription, privacy: .public)")
                     }
                     isAddingOfflineMapJob = false
                 }

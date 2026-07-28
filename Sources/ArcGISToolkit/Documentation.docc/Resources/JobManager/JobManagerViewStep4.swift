@@ -52,7 +52,7 @@ struct JobManagerTutorialView: View {
                                     try await makeNapervilleOfflineMapJob()
                                 )
                             } catch {
-                                Logger.jobManagerTutorial.error("Error creating offline map job: \(error, privacy: .public)")
+                                Logger.jobManagerTutorial.error("Error creating offline map job: \(error.localizedDescription, privacy: .public)")
                             }
                             job = jobManager.jobs.first
                             job?.start()
