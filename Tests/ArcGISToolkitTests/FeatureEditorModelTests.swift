@@ -157,7 +157,7 @@ struct FeatureEditorModelTests {
     /// Verifies setup failure leads to loadResult failure, blocks editing,
     /// and `retryStartEditing()` clears the error on success.
     @Test
-    func startEditingErrorAndRetry() async throws {
+    func retryStartEditingAfterFailure() async throws {
         let model = FeatureEditorModel()
         let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
         defer { monitorGeometryEditorStreamsTask.cancel() }
