@@ -128,7 +128,7 @@ final class FeatureEditorModel {
     /// - Parameters:
     ///   - feature: The root feature to edit.
     ///   - map: The map that `feature` is part of, used to set up rule-based snapping.
-    func startEditing(rootFeature feature: ArcGISFeature, on map: Map?) async {
+    func startEditingFeature(_ feature: ArcGISFeature, on map: Map?) async {
         stopEditing()
         rootFeatureForm = FeatureForm(feature: feature)
         self.map = map

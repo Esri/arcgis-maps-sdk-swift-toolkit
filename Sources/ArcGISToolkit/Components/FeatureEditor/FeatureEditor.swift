@@ -112,7 +112,7 @@ public struct FeatureEditor: View {
             }
             .task(id: startEditingIDs) {
                 if let feature {
-                    await model.startEditing(rootFeature: feature, on: map)
+                    await model.startEditingFeature(feature, on: map)
                 } else {
                     model.stopEditing()
                 }
