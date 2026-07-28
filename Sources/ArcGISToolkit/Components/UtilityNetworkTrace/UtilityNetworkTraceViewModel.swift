@@ -497,7 +497,7 @@ internal import os
         do {
             return try await map.namedTraceConfigurations(from: network)
         } catch {
-            Logger.utilityNetworkTrace.error("Failed to retrieve configurations. \(error.localizedDescription)")
+            Logger.utilityNetworkTrace.error("Failed to retrieve named trace configurations for network \(network.name) with an error: \(error.localizedDescription)")
             return []
         }
     }
