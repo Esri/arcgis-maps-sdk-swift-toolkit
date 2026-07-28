@@ -79,7 +79,7 @@ struct JobManagerTutorialView: View {
                     Logger.jobManagerTutorial.error("Authorization failed with an error: \(error.localizedDescription)")
                 }
             }
-            if jobManager.jobs.count > 0 {
+            if !jobManager.jobs.isEmpty {
                 job = jobManager.jobs.first
             }
         }
