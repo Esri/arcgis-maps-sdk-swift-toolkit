@@ -41,7 +41,7 @@ struct FormFooter: View {
     var discardButton: some View {
         Button(role: .destructive) {
             featureForm.discardEdits()
-            formHandlingEventAction?.action(.discardedEdits(willNavigate: false))
+            formHandlingEventAction?(.discardedEdits(willNavigate: false))
             featureFormViewModel.validationErrorVisibilityInternal = .automatic
         } label: {
             Text(
@@ -58,7 +58,7 @@ struct FormFooter: View {
                 Task {
                     do {
                         try await featureForm.finishEditing()
-                        formHandlingEventAction?.action(.savedEdits(willNavigate: false))
+                        formHandlingEventAction?(.savedEdits(willNavigate: false))
                     } catch {
                         featureFormViewModel.finishEditingError = error
                     }
