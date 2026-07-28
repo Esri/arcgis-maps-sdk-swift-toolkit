@@ -154,19 +154,19 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
         do {
             try await mmpk.load()
-            // Set status to downloaded if not already set.
-            switch status {
-            case .downloaded:
-                break
-            default:
-                status = .downloaded
-            }
             mobileMapPackage = mmpk
             sizeInBytes = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
             if thumbnail == nil, let loadable = mmpk.item?.thumbnail {
                 try? await loadable.load()
                 thumbnail = loadable.image
+            }
+            // Set status to downloaded if not already set.
+            switch status {
+            case .downloaded:
+                break
+            default:
+                status = .downloaded
             }
         } catch {
             status = .mmpkLoadFailure(error)

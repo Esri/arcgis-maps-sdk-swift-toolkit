@@ -40,6 +40,10 @@ struct AttachmentsFeatureElementView: View {
     @State private var isExpanded = true
     /// The last locally added attachment.
     @State private var lastAttachmentAdded: AttachmentModel?
+    /// If `embeddedFeatureFormViewModel` is set, this holds the last recorded value of
+    /// `FeatureForm.hasEdits`. If the value changes from `true` to `false` edits were discarded
+    /// and the attachments should be refreshed.
+    @State private var previousHasEdits = false
     
     /// Creates a new `AttachmentsFeatureElementView` for a Feature Form.
     /// - Parameter formElement: The `AttachmentsFeatureElement`.
@@ -88,6 +92,17 @@ struct AttachmentsFeatureElementView: View {
                 .onAttachmentIsEditableChange(of: formElement) { newIsEditable in
                     isEditable = newIsEditable
                 }
+                .task {
+                    if let form = embeddedFeatureFormViewModel?.featureForm {
+                        for await hasEdits in form.$hasEdits {
+                            if previousHasEdits && !hasEdits {
+                                // Edits were discarded, refresh attachments
+                                loadAttachments()
+                            }
+                            previousHasEdits = hasEdits
+                        }
+                    }
+                }
             } else if !models.isEmpty {
                 DisclosureGroup(isExpanded: $isExpanded) {
                     attachmentBody(attachmentModels: models)
@@ -110,34 +125,27 @@ struct AttachmentsFeatureElementView: View {
     }
     
     @ViewBuilder private func attachmentBody(attachmentModels: [AttachmentModel]) -> some View {
+        let attachmentPreview = AttachmentPreview(
+            attachmentModels: attachmentModels,
+            lastAttachmentAdded: lastAttachmentAdded,
+            proposedCellSize: thumbnailSize
+        )
+        .environment(\.allowsRenamingByUser, formElement?.allowsRenamingByUser ?? true)
+        .environment(\.displaysFilename, formElement?.displaysFilename ?? true)
+        .environment(\.editControlsEnabled, isEditable)
+        .environment(\.formElement, formElement)
+        .environment(\.delete, DeleteAction(deleteAction: onDelete(attachmentModel:)))
+        .environment(\.rename, RenameAction(renameAction: onRename(attachmentModel:newAttachmentName:)))
         switch featureElement.attachmentsDisplayType {
         case .list:
             AttachmentList(
                 attachmentModels: attachmentModels
             )
         case .preview:
-            AttachmentPreview(
-                allowsRenamingByUser: allowsRenamingByUser,
-                attachmentModels: attachmentModels,
-                displaysFilename: displaysFilename,
-                editControlsDisabled: !isEditable,
-                lastAttachmentAdded: lastAttachmentAdded,
-                onRename: onRename,
-                onDelete: onDelete,
-                proposedCellSize: thumbnailSize
-            )
+            attachmentPreview
         case .auto:
             if isRegularWidth {
-                AttachmentPreview(
-                    allowsRenamingByUser: allowsRenamingByUser,
-                    attachmentModels: attachmentModels,
-                    displaysFilename: displaysFilename,
-                    editControlsDisabled: !isEditable,
-                    lastAttachmentAdded: lastAttachmentAdded,
-                    onRename: onRename,
-                    onDelete: onDelete,
-                    proposedCellSize: thumbnailSize
-                )
+                attachmentPreview
             } else {
                 AttachmentList(
                     attachmentModels: attachmentModels
@@ -195,13 +203,11 @@ struct AttachmentsFeatureElementView: View {
     ///   - attachmentModel: The model for the attachment to rename.
     ///   - newAttachmentName: The new attachment name.
     func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
-        guard allowsRenamingByUser else { return }
-        if let attachment = attachmentModel.attachment as? FormAttachment {
-            attachment.name = newAttachmentName
-            withAnimation { attachmentModel.sync() }
-            embeddedFeatureFormViewModel?.focusedElement = formElement
-            embeddedFeatureFormViewModel?.evaluateExpressions()
-        }
+        guard let attachment = attachmentModel.attachment as? FormAttachment else { return }
+        attachment.name = newAttachmentName
+        withAnimation { attachmentModel.sync() }
+        embeddedFeatureFormViewModel?.focusedElement = formElement
+        embeddedFeatureFormViewModel?.evaluateExpressions()
     }
     
     /// Deletes the attachment associated with the given model.
@@ -230,16 +236,6 @@ private extension AttachmentsFeatureElement {
 }
 
 extension AttachmentsFeatureElementView {
-    /// A Boolean value indicating whether users can rename attachments.
-    private var allowsRenamingByUser: Bool {
-        formElement?.allowsRenamingByUser ?? true
-    }
-    
-    /// A Boolean value indicating whether attachment filenames should be shown.
-    private var displaysFilename: Bool {
-        formElement?.displaysFilename ?? true
-    }
-    
     /// The model's element as an attachments form element.
     private var formElement: AttachmentsFormElement? {
         featureElement as? AttachmentsFormElement
@@ -264,6 +260,20 @@ extension AttachmentsFeatureElementView {
             }
         }
     }
+    
+    struct DeleteAction {
+        let deleteAction: (AttachmentModel) -> Void
+        func callAsFunction(_ model: AttachmentModel) {
+            deleteAction(model)
+        }
+    }
+    
+    struct RenameAction {
+        let renameAction: (AttachmentModel, String) -> Void
+        func callAsFunction(_ attachment: AttachmentModel, _ newName: String) {
+            renameAction(attachment, newName)
+        }
+    }
 }
 
 extension View {
@@ -284,4 +294,19 @@ extension View {
                 }
             }
     }
+}
+
+extension EnvironmentValues /* AttachmentsFeatureElement */ {
+    /// `true` if the user can rename attachments added through this element, `false` otherwise.
+    @Entry var allowsRenamingByUser = true
+    /// `true` if attachment file names should be displayed, `false` otherwise.
+    @Entry var displaysFilename = true
+    /// A Boolean value that indicates whether the element is editable.
+    @Entry var editControlsEnabled = false
+    /// The parent form element.
+    @Entry var formElement: FormElement?
+    /// Deletes the attachment associated with the given model.
+    @Entry var delete: AttachmentsFeatureElementView.DeleteAction?
+    /// Renames the attachment associated with the given model.
+    @Entry var rename: AttachmentsFeatureElementView.RenameAction?
 }
