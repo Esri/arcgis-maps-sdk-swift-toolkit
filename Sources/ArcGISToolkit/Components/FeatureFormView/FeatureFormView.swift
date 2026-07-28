@@ -95,7 +95,7 @@ public struct FeatureFormView: View {
     var navigationIsDisabled = false
     
     /// The closure to perform when a ``EditingEvent`` occurs.
-    var onFormEditingEventAction: ((EditingEvent) -> Void)?
+    var onFormEditingEventAction: FormEditingEventAction?
     
     /// The developer configurable validation error visibility.
     var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
@@ -325,7 +325,7 @@ public extension FeatureFormView {
     /// - Since: 200.8
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
         var copy = self
-        copy.onFormEditingEventAction = action
+        copy.onFormEditingEventAction = .init(action: action)
         return copy
     }
     

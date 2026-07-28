@@ -23,7 +23,7 @@ struct FormFooter: View {
     ///
     /// - Note: This property is optional as the modifier providing the closure may not be applied
     /// to the ``FeatureFormView``.
-    let formHandlingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
+    let formHandlingEventAction: FormEditingEventAction?
     
     /// The internally managed validation error visibility.
     @Environment(\.validationErrorVisibilityInternal) var validationErrorVisibilityInternal

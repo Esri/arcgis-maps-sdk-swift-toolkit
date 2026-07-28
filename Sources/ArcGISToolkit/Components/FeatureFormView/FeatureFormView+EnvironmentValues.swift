@@ -33,7 +33,7 @@ extension EnvironmentValues /* FeatureFormView */ {
     @Entry var navigationPath: Binding<NavigationPath>?
     
     /// The closure to perform when a ``EditingEvent`` occurs.
-    @Entry var onFormEditingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
+    @Entry var onFormEditingEventAction: FormEditingEventAction?
     
     /// The environment value to set the continuation to use when the user responds to the alert.
     @Entry var setAlertContinuation: ((Bool, @escaping () -> Void) -> Void)?
@@ -43,4 +43,14 @@ extension EnvironmentValues /* FeatureFormView */ {
     
     /// The internally managed validation error visibility.
     @Entry var validationErrorVisibilityInternal: Binding<FeatureFormView.ValidationErrorVisibility> = .constant(.automatic)
+}
+
+
+struct FormEditingEventAction: Identifiable {
+    let action: (FeatureFormView.EditingEvent) -> Void
+    let id = UUID()
+    
+    func callAsFunction(_ event: FeatureFormView.EditingEvent) {
+        action(event)
+    }
 }
