@@ -64,11 +64,11 @@ final class FeatureEditorModel {
     // MARK: Snapping Properties
     
     /// The map that contains the utility network being edited.
-    @ObservationTracked
+    @ObservationIgnored
     private var map: Map?
     /// The snap rules for the `feature`, used to sync snap source settings.
     /// This is non-`nil` when snap rules were successfully created using the `utilityNetwork`.
-    @ObservationTracked
+    @ObservationIgnored
     private var snapRules: SnapRules?
     /// The `feature`'s utility network used to create snap rules.
     /// This is non-`nil` when a map containing the feature's UN is used to start editing.
