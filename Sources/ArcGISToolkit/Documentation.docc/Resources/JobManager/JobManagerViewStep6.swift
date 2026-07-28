@@ -111,6 +111,8 @@ extension Job.Status {
             return "Failed"
         case .canceling:
             return "Canceling"
+        @unknown default:
+            return "Unknown"
         }
     }
 }
