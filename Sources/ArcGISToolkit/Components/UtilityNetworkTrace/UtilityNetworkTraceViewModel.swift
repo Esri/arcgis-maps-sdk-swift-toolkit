@@ -178,7 +178,7 @@ internal import os
         do {
             return try await network?.features(for: [element]).first ?? nil
         } catch {
-            Logger.utilityNetworkTrace.error("Failed to get feature for element \(element.objectID) with error: \(error.localizedDescription)")
+            Logger.utilityNetworkTrace.error("Failed to get feature for element \(element.objectID) with an error: \(error.localizedDescription)")
             return nil
         }
     }
