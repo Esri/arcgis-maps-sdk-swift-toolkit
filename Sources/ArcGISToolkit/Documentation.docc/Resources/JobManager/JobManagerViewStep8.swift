@@ -145,7 +145,7 @@ extension JobManagerTutorialView {
 
 extension Logger {
     /// A logger for the job manager tutorial.
-    Logger.jobManagerTutorial: Logger = {
+    static let jobManagerTutorial: Self = {
         Logger(subsystem: "com.esri.ArcGISToolkit.Tutorials", category: "JobManagerTutorial")
     }()
 }
