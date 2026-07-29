@@ -104,6 +104,38 @@ struct FeatureEditorModelTests {
         await model.expectIsEditing(geometry: newGeometry)
     }
     
+    /// Verifies setup failure leads to loadResult failure, blocks editing,
+    /// and `retryStartEditing()` clears the error on success.
+    @Test
+    func retryStartEditingAfterFailure() async throws {
+        let model = FeatureEditorModel()
+        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
+        defer { monitorGeometryEditorStreamsTask.cancel() }
+        
+        let geodatabaseFile = try await TemporaryGeodatabaseFile()
+        let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
+        let geometry = Point(latitude: 2, longitude: 2)
+        let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
+        let map = Map(spatialReference: nil)
+        
+        // Simulates map fails to load by creating a map with nil spatial reference.
+        await model.startEditingFeature(feature, on: map)
+        let error = #expect(throws: MappingError.self) {
+            try #require(model.loadResult).get()
+        }
+        #expect(error == .missingSpatialReference(details: ""))
+        await Task.yieldExpect(!model.geometryEditorIsStarted)
+        await Task.yieldExpect(model.geometryEditorGeometry == nil)
+        
+        // Sets the map's spatial reference to a valid value and retries starting the feature editor.
+        map.setSpatialReference(.wgs84)
+        await model.retryStartEditing()
+        
+        try #require(model.loadResult).get()
+        await model.expectIsGeometryEditing()
+        await model.expectIsEditing(geometry: geometry)
+    }
+    
     /// Verifies `startEditingFeature(_:on:)` and `startEditingFeatureForm(_:)` using
     /// features with geometries.
     @Test
@@ -152,38 +184,6 @@ struct FeatureEditorModelTests {
             await model.expectIsGeometryEditing()
             await model.expectIsEditing(geometry: geometry)
         }
-    }
-    
-    /// Verifies setup failure leads to loadResult failure, blocks editing,
-    /// and `retryStartEditing()` clears the error on success.
-    @Test
-    func retryStartEditingAfterFailure() async throws {
-        let model = FeatureEditorModel()
-        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
-        defer { monitorGeometryEditorStreamsTask.cancel() }
-        
-        let geodatabaseFile = try await TemporaryGeodatabaseFile()
-        let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
-        let geometry = Point(latitude: 2, longitude: 2)
-        let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
-        let map = Map(spatialReference: nil)
-        
-        // Simulates map fails to load by creating a map with nil spatial reference.
-        await model.startEditingFeature(feature, on: map)
-        let error = #expect(throws: MappingError.self) {
-            try #require(model.loadResult).get()
-        }
-        #expect(error == .missingSpatialReference(details: ""))
-        await Task.yieldExpect(!model.geometryEditorIsStarted)
-        await Task.yieldExpect(model.geometryEditorGeometry == nil)
-        
-        // Sets the map's spatial reference to a valid value and retries starting the feature editor.
-        map.setSpatialReference(.wgs84)
-        await model.retryStartEditing()
-        
-        try #require(model.loadResult).get()
-        await model.expectIsGeometryEditing()
-        await model.expectIsEditing(geometry: geometry)
     }
     
     /// Verifies `startEditingFeature(_:on:)` using a feature without a geometry.
