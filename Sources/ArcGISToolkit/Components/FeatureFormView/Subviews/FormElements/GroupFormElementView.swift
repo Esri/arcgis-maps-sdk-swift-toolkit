@@ -98,17 +98,19 @@ struct GroupFormElementView<Content>: View where Content: View {
                 isExpanded.toggle()
             }
         } label: {
-            VStack(alignment: .leading) {
-                HStack {
+            HStack {
+                VStack(alignment: .leading) {
                     titleLine1
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .fontWeight(.bold)
-                        .foregroundStyle(.tertiary)
-                        .rotationEffect(.degrees(isExpanded ? 90 : 0))
+                    titleLine2
                 }
-                titleLine2
+                .foregroundStyle(.secondary)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .fontWeight(.bold)
+                    .foregroundStyle(.primary)
+                    .rotationEffect(.degrees(isExpanded ? 90 : 0))
             }
+            .contentShape(.rect)
         }
         .buttonStyle(.plain)
         .foregroundStyle(.secondary)
@@ -119,7 +121,6 @@ struct GroupFormElementView<Content>: View where Content: View {
         Text(element.label)
             .font(.title3)
             .fontWeight(.semibold)
-            .foregroundStyle(.primary)
     }
     
     @ViewBuilder private var titleLine2: some View {
