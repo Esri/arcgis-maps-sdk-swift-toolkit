@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "Seosed";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "Š_At least %lld attachment is required____________________ä.";
+"At least %lld attachment is required." = "Nõutav on vähemalt %lld manus.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "Š_At least %lld attachments are required_____________________ä.";
+"At least %lld attachments are required." = "Nõutav on vähemalt %lld manust.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "Š_Attach File____________ä";
+"Attach File" = "Manusta fail";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Manus";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Väärtus";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Š_Choose Photo_____________ä";
+"Choose Photo" = "Vali foto";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Š_Choose Photo or Video______________________ä";
+"Choose Photo or Video" = "Vali foto või video";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Š_Choose Photo_____________ä";
+"Choose Photo" = "Vali foto";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Š_Choose Photo or Video______________________ä";
+"Choose Photo or Video" = "Vali foto või video";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Vali, et lisada";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "Š_Choose Video_____________ä";
+"Choose Video" = "Vali video";
 
 /* Cities (Level of Detail) */
 "Cities" = "Linnad";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Tänavad";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "Š_Take Photo_____________________ä";
+"Take Photo" = "Pildista";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Võtke foto või video";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "Š_Take Video_____________________ä";
+"Take Video" = "Salvesta video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Serdifail ei sobinud.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "Š_The file is too large. Maximum allowed file size is %@_____________________________ä.";
+"The file is too large. Maximum allowed file size is %@." = "Fail on liiga suur. Faili lubatud suurus on %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Vormi ei esitatud";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Kaart ei ole ilma võrguühenduseta kasutamiseks aktiveeritud.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "Š_The maximum number of attachments allowed is %lld__________________________ä.";
+"The maximum number of attachments allowed is %lld." = "Suurim lubatud manuste arv on %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Š_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ä.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Meediasisu on liiga pikk. Suurim lubatud kestus on ^[%lld sekundit](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Kaardiala nimi peab olema kordumatu.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Sellel kaardil ei ole kaardialasid. Alustamiseks puudutage allolevat nuppu.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "Š_This file type is not supported_________________ä.";
+"This file type is not supported." = "Seda failitüüpi ei toetata.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "See vorm on tühi.";

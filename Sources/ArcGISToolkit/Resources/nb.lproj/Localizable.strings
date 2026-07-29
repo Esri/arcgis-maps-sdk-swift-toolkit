@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "Tilknytninger";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "å_At least %lld attachment is required____________________ø.";
+"At least %lld attachment is required." = "Minst %lld vedlegg er påkrevd.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "å_At least %lld attachments are required_____________________ø.";
+"At least %lld attachments are required." = "Minst %lld vedlegg er påkrevd.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "å_Attach File____________ø";
+"Attach File" = "Legg ved fil";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Vedlegg";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Verdi";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "å_Choose Photo_____________ø";
+"Choose Photo" = "Velg bilde";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "å_Choose Photo or Video______________________ø";
+"Choose Photo or Video" = "Velg bilde eller video";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "å_Choose Photo_____________ø";
+"Choose Photo" = "Velg bilde";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "å_Choose Photo or Video______________________ø";
+"Choose Photo or Video" = "Velg bilde eller video";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Velg for å legge til";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "å_Choose Video_____________ø";
+"Choose Video" = "Velg video";
 
 /* Cities (Level of Detail) */
 "Cities" = "Steder";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Gater";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "å_Take Photo_____________________ø";
+"Take Photo" = "Ta bilde";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Ta bilde eller video";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "å_Take Video_____________________ø";
+"Take Video" = "Ta opp video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Sertifikatfilen var ugyldig.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "å_The file is too large. Maximum allowed file size is %@_____________________________ø.";
+"The file is too large. Maximum allowed file size is %@." = "Filen er for stor. Maksimalt tillatt filstørrelse er %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Skjemaet ble ikke sendt inn";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Kartet er ikke aktivert for bruk i frakoblet modus.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "å_The maximum number of attachments allowed is %lld__________________________ø.";
+"The maximum number of attachments allowed is %lld." = "Maksimalt antall tillatte vedlegg er %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "å_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ø.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Mediet er for langt. Maksimalt tillatt varighet er ^[%lld sekunder](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Navnet på kartområdet må være unikt.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Det er ingen kartområder for dette kartet. Trykk på knappen nedenfor for å komme i gang.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "å_This file type is not supported_________________ø.";
+"This file type is not supported." = "Denne filtypen støttes ikke.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Skjemaet er tomt.";

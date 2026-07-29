@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "Saistības";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "ķ_At least %lld attachment is required____________________ū.";
+"At least %lld attachment is required." = "Nepieciešams vismaz %lld pielikums.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "ķ_At least %lld attachments are required_____________________ū.";
+"At least %lld attachments are required." = "Nepieciešami vismaz %lld pielikumi.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "ķ_Attach File____________ū";
+"Attach File" = "Pievienot failu";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Pielikums";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Vērtība";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ķ_Choose Photo_____________ū";
+"Choose Photo" = "Izvēlēties fotoattēlu";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ķ_Choose Photo or Video______________________ū";
+"Choose Photo or Video" = "Izvēlēties fotoattēlu vai video";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ķ_Choose Photo_____________ū";
+"Choose Photo" = "Izvēlēties fotoattēlu";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ķ_Choose Photo or Video______________________ū";
+"Choose Photo or Video" = "Izvēlēties fotoattēlu vai video";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Izvēlēties, lai pievienotu";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "ķ_Choose Video_____________ū";
+"Choose Video" = "Izvēlēties video";
 
 /* Cities (Level of Detail) */
 "Cities" = "Pilsētas";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Ielas";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "ķ_Take Photo_____________________ū";
+"Take Photo" = "Uzņemt fotoattēlu";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Uzņemt fotoattēlu vai video";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "ķ_Take Video_____________________ū";
+"Take Video" = "Uzņemt video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Sertifikāta fails bija nederīgs.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "ķ_The file is too large. Maximum allowed file size is %@_____________________________ū.";
+"The file is too large. Maximum allowed file size is %@." = "Šis fails ir pārāk liels. Maksimālais atļautais faila izmērs ir %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Forma netika iesniegta";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Karte nav iespējota lietošanai bezsaistē.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "ķ_The maximum number of attachments allowed is %lld__________________________ū.";
+"The maximum number of attachments allowed is %lld." = "Maksimālais atļautais failu skaits ir %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "ķ_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ū.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Multivides fails ir pārāk garš. Maksimālais atļautais ilgums ir ^[%lld sekundes](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Martes teritorijas nosaukumam ir jābūt unikālam.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Šai kartei nav kartes teritoriju. Lai sāktu, nospiediet zemāk redzamo pogu.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "ķ_This file type is not supported_________________ū.";
+"This file type is not supported." = "Šis faila veids netiek atbalstīts";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Veidlapa ir tukša.";

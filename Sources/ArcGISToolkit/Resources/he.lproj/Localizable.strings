@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "אסוסיאציות";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "כן_At least %lld attachment is required____________________ש.";
+"At least %lld attachment is required." = "נדרש לפחות קובץ מצורף %lld.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "כן_At least %lld attachments are required_____________________ש.";
+"At least %lld attachments are required." = "נדרשים לפחות %lld קבצים מצורפים.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "כן_Attach File____________ש";
+"Attach File" = "צרף קובץ";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "קובץ מצורף";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "ערך";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "כן_Choose Photo_____________ש";
+"Choose Photo" = "בחר תמונה";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "כן_Choose Photo or Video______________________ש";
+"Choose Photo or Video" = "בחר תמונה או סרטון";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "כן_Choose Photo_____________ש";
+"Choose Photo" = "בחר תמונה";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "כן_Choose Photo or Video______________________ש";
+"Choose Photo or Video" = "בחר תמונה או סרטון";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "בחר להוסיף";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "כן_Choose Video_____________ש";
+"Choose Video" = "בחר סרטון";
 
 /* Cities (Level of Detail) */
 "Cities" = "ערים";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "רחובות";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "כן_Take Photo_____________________ש";
+"Take Photo" = "צלם תמונה";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "צלם תמונה או סרטון";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "כן_Take Video_____________________ש";
+"Take Video" = "הקלט וידאו";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "קובץ האישור היה לא חוקי.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "כן_The file is too large. Maximum allowed file size is %@_____________________________ש.";
+"The file is too large. Maximum allowed file size is %@." = "הקובץ גדול מדי. גודל הקובץ המרבי המותר הוא %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "הטופס לא נשלח";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "המפה אינה מופעלת לשימוש במצב לא-מקוון.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "כן_The maximum number of attachments allowed is %lld__________________________ש.";
+"The maximum number of attachments allowed is %lld." = "המספר המרבי המותר של קבצים מצורפים הוא %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "כן_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ש.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "המדיה ארוכה מדי. משך הזמן המרבי המותר הוא ^[%lld שניות](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "השם עבור אזור המפה חייב להיות ייחודי.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "אין אזורי מפה עבור מפה זו. הקש על הלחצן להלן כדי להתחיל.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "כן_This file type is not supported_________________ש.";
+"This file type is not supported." = "אין תמיכה בסוג קובץ זה.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "טופס זה ריק";

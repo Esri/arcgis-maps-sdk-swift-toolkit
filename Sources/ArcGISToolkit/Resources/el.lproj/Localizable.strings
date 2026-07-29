@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "Συσχετίσεις";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "Đ_At least %lld attachment is required____________________ớ.";
+"At least %lld attachment is required." = "Απαιτείται τουλάχιστον %lld συνημμένο.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "Đ_At least %lld attachments are required_____________________ớ.";
+"At least %lld attachments are required." = "Απαιτούνται τουλάχιστον %lld συνημμένα.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "Đ_Attach File____________ớ";
+"Attach File" = "Επισύναψη";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Συνημμένο";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Τιμή";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Đ_Choose Photo_____________ớ";
+"Choose Photo" = "Επιλέξτε φωτογραφία";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Đ_Choose Photo or Video______________________ớ";
+"Choose Photo or Video" = "Επιλέξτε φωτογραφία ή βίντεο";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Đ_Choose Photo_____________ớ";
+"Choose Photo" = "Επιλέξτε φωτογραφία";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Đ_Choose Photo or Video______________________ớ";
+"Choose Photo or Video" = "Επιλέξτε φωτογραφία ή βίντεο";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Επιλέξτε για προσθήκη";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "Đ_Choose Video_____________ớ";
+"Choose Video" = "Επιλέξτε βίντεο";
 
 /* Cities (Level of Detail) */
 "Cities" = "Πόλεις";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Οδικό δίκτυο";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "Đ_Take Photo_____________________ớ";
+"Take Photo" = "Λήψη φωτογραφίας";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Λήψη φωτογραφίας ή βίντεο";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "Đ_Take Video_____________________ớ";
+"Take Video" = "Λήψη βίντεο";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Το αρχείο του πιστοποιητικού ήταν άκυρο.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "Đ_The file is too large. Maximum allowed file size is %@_____________________________ớ.";
+"The file is too large. Maximum allowed file size is %@." = "Το αρχείο είναι πολύ μεγάλο. Το μέγιστο επιτρεπόμενο μέγεθος αρχείου είναι %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Η φόρμα δεν υποβλήθηκε";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Ο χάρτης δεν είναι ενεργοποιημένος για χρήση εκτός σύνδεσης.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "Đ_The maximum number of attachments allowed is %lld__________________________ớ.";
+"The maximum number of attachments allowed is %lld." = "Ο μέγιστος επιτρεπόμενος αριθμός συνημμένων είναι %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Đ_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ớ.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Το αρχείο πολυμέσων είναι πολύ μεγάλο. Η μέγιστη επιτρεπόμενη διάρκεια είναι ^[%lld δευτερόλεπτα](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Το όνομα της περιοχής χάρτη πρέπει να είναι μοναδικό.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Δεν υπάρχουν περιοχές χάρτη για αυτόν τον χάρτη. Πατήστε το παρακάτω κουμπί για να ξεκινήσετε.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "Đ_This file type is not supported_________________ớ.";
+"This file type is not supported." = "Αυτός ο τύπος αρχείου δεν υποστηρίζεται.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Αυτή η φόρμα είναι κενή.";

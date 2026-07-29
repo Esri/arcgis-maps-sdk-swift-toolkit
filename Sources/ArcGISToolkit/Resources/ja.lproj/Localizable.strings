@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "関連付け";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "須_At least %lld attachment is required____________________鷗.";
+"At least %lld attachment is required." = "少なくとも %lld 個の添付ファイルが必要です。";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "須_At least %lld attachments are required_____________________鷗.";
+"At least %lld attachments are required." = "少なくとも %lld 個の添付ファイルが必要です。";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "須_Attach File____________鷗";
+"Attach File" = "ファイルの添付";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "添付ファイル";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "値";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "須_Choose Photo_____________鷗";
+"Choose Photo" = "写真の選択";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "須_Choose Photo or Video______________________鷗";
+"Choose Photo or Video" = "写真またはビデオの選択";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "須_Choose Photo_____________鷗";
+"Choose Photo" = "写真の選択";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "須_Choose Photo or Video______________________鷗";
+"Choose Photo or Video" = "写真またはビデオの選択";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "選択して追加";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "須_Choose Video_____________鷗";
+"Choose Video" = "ビデオの選択";
 
 /* Cities (Level of Detail) */
 "Cities" = "都市 (複数)";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "道路 (複数)";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "須_Take Photo_____________________鷗";
+"Take Photo" = "写真の撮影";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "写真またはビデオを撮る";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "須_Take Video_____________________鷗";
+"Take Video" = "ビデオの撮影";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "証明書ファイルが無効です。";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "須_The file is too large. Maximum allowed file size is %@_____________________________鷗.";
+"The file is too large. Maximum allowed file size is %@." = "ファイルが大きすぎます。 許可されている最大ファイル サイズは %@ です。";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "フォームが送信されませんでした";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "マップはオフラインでは使用できません。";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "須_The maximum number of attachments allowed is %lld__________________________鷗.";
+"The maximum number of attachments allowed is %lld." = "添付できるファイルの最大数は %lld 個です。";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "須_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________鷗.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "メディアの再生時間が長すぎます。 許可されている最大再生時間は ^[%lld seconds](inflect: true) です。";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "マップ エリアの名前は一意である必要があります。";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "このマップにはマップ エリアはありません。 以下のボタンをタップして開始します。";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "須_This file type is not supported_________________鷗.";
+"This file type is not supported." = "このファイル タイプはサポートされていません。";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "このフォームは空です。";

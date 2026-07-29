@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "Associaties";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "Ĳ_At least %lld attachment is required____________________ä.";
+"At least %lld attachment is required." = "Er is minstens %lld bijlage vereist.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "Ĳ_At least %lld attachments are required_____________________ä.";
+"At least %lld attachments are required." = "Er zijn minstens %lld bijlagen vereist.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "Ĳ_Attach File____________ä";
+"Attach File" = "Bestand als bijlage toevoegen";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Bijlage";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Waarde";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Ĳ_Choose Photo_____________ä";
+"Choose Photo" = "Foto kiezen";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Ĳ_Choose Photo or Video______________________ä";
+"Choose Photo or Video" = "Foto of video kiezen";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Ĳ_Choose Photo_____________ä";
+"Choose Photo" = "Foto kiezen";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Ĳ_Choose Photo or Video______________________ä";
+"Choose Photo or Video" = "Foto of video kiezen";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Toe te voegen veld kiezen";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "Ĳ_Choose Video_____________ä";
+"Choose Video" = "Video kiezen";
 
 /* Cities (Level of Detail) */
 "Cities" = "Steden";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Straten";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "Ĳ_Take Photo_____________________ä";
+"Take Photo" = "Foto maken";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Foto of video maken";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "Ĳ_Take Video_____________________ä";
+"Take Video" = "Video maken";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Het certificaatbestand is ongeldig.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "Ĳ_The file is too large. Maximum allowed file size is %@_____________________________ä.";
+"The file is too large. Maximum allowed file size is %@." = "Het bestand is te groot. De maximaal toegestane bestandsgrootte is %@";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Het formulier is niet ingediend";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Offline gebruik is niet ingeschakeld voor deze kaart.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "Ĳ_The maximum number of attachments allowed is %lld__________________________ä.";
+"The maximum number of attachments allowed is %lld." = "Het maximaal toegestane aantal bijlagen is %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Ĳ_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ä.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Het medium is te lang. De maximaal toegestane duur is ^[%lld seconds](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "De naam van het kaartgebied moet uniek zijn.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Er zijn geen kaartgebieden voor deze kaart. Tik op de onderstaande knop om aan de slag te gaan.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "Ĳ_This file type is not supported_________________ä.";
+"This file type is not supported." = "Dit bestandstype wordt niet ondersteund.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Dit formulier is leeg";

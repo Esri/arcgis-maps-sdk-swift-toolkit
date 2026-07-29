@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "Asociácie";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "ĺ_At least %lld attachment is required____________________ľ.";
+"At least %lld attachment is required." = "Vyžaduje sa minimálne %lld príloha.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "ĺ_At least %lld attachments are required_____________________ľ.";
+"At least %lld attachments are required." = "Vyžadujú sa minimálne %lld prílohy.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "ĺ_Attach File____________ľ";
+"Attach File" = "Pripojiť súbor";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Príloha";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Hodnota";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ĺ_Choose Photo_____________ľ";
+"Choose Photo" = "Vybrať fotografiu";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ĺ_Choose Photo or Video______________________ľ";
+"Choose Photo or Video" = "Vybrať fotografiu alebo video";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ĺ_Choose Photo_____________ľ";
+"Choose Photo" = "Vybrať fotografiu";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ĺ_Choose Photo or Video______________________ľ";
+"Choose Photo or Video" = "Vybrať fotografiu alebo video";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Vybrať na pridanie";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "ĺ_Choose Video_____________ľ";
+"Choose Video" = "Vybrať video";
 
 /* Cities (Level of Detail) */
 "Cities" = "Mestá";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Ulice";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "ĺ_Take Photo_____________________ľ";
+"Take Photo" = "Odfotiť";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Odfotiť alebo natočiť video";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "ĺ_Take Video_____________________ľ";
+"Take Video" = "Nahrať video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Súbor certifikátu bol neplatný.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "ĺ_The file is too large. Maximum allowed file size is %@_____________________________ľ.";
+"The file is too large. Maximum allowed file size is %@." = "Súbor je príliš veľký. Maximálna povolená veľkosť súboru je %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Formulár nebol odoslaný";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Túto mapu nie je možné používať offline.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "ĺ_The maximum number of attachments allowed is %lld__________________________ľ.";
+"The maximum number of attachments allowed is %lld." = "Maximálny povolený počet príloh je %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "ĺ_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ľ.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Médiá sú príliš dlhé. Maximálne povolené trvanie je ^[%lld seconds](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Názov mapovej oblasti musí byť jedinečný.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Pre túto mapu neexistujú žiadne mapové oblasti. Začnite ťuknutím na tlačidlo nižšie.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "ĺ_This file type is not supported_________________ľ.";
+"This file type is not supported." = "Tento typ súboru nie je podporovaný.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Tento formulár je prázdny.";

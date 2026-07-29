@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "İlişkilendirmeler";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "ı_At least %lld attachment is required____________________İ.";
+"At least %lld attachment is required." = "En az %lld ek gereklidir.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "ı_At least %lld attachments are required_____________________İ.";
+"At least %lld attachments are required." = "En az %lld ek gereklidir.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "ı_Attach File____________İ";
+"Attach File" = "Dosya Ekle";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Ek";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Değer";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ı_Choose Photo_____________İ";
+"Choose Photo" = "Fotoğraf Seç";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ı_Choose Photo or Video______________________İ";
+"Choose Photo or Video" = "Fotoğraf veya Video Seç";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ı_Choose Photo_____________İ";
+"Choose Photo" = "Fotoğraf Seç";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ı_Choose Photo or Video______________________İ";
+"Choose Photo or Video" = "Fotoğraf veya Video Seç";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Eklemeyi seç";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "ı_Choose Video_____________İ";
+"Choose Video" = "Video Seç";
 
 /* Cities (Level of Detail) */
 "Cities" = "Şehirler";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Sokaklar";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "ı_Take Photo_____________________İ";
+"Take Photo" = "Fotoğraf Çek";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Fotoğraf veya Video Çek";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "ı_Take Video_____________________İ";
+"Take Video" = "Video Çek";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Sertifika dosyası geçersiz.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "ı_The file is too large. Maximum allowed file size is %@_____________________________İ.";
+"The file is too large. Maximum allowed file size is %@." = "Dosya fazla büyük. Maksimum izin verilen dosya boyutu %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Form gönderilmedi";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Harita çevrim dışı kullanım için etkinleştirilmemiştir.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "ı_The maximum number of attachments allowed is %lld__________________________İ.";
+"The maximum number of attachments allowed is %lld." = "İzin verilen maksimum ek sayısı %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "ı_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________İ.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Ortam çok uzun. İzin verilen maksimum süre ^[%lld saniye](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Harita alanının adı benzersiz olmalıdır.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Bu harita için herhangi bir harita alanı bulunmamaktadır. Başlamak için aşağıdaki butona dokunun.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "ı_This file type is not supported_________________İ.";
+"This file type is not supported." = "Bu dosya türü desteklenmiyor.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Bu form boş.";
