@@ -60,8 +60,8 @@ struct GroupFormElementView<Content>: View where Content: View {
             }
         }
         
-        // GroupFormElement content is placed outside the Section above
-        // for the following reasons:
+        // GroupFormElement content is placed outside the Section above for the
+        // following reasons:
         // 1. Avoids indentation introduced by components like a DisclosureGroup.
         // 2. Avoids unwanted impacts on appearance from nested Sections.
         // 3. Avoids the header receiving a pill-shaped background.
