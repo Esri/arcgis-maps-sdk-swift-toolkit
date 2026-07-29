@@ -104,7 +104,7 @@ struct FeatureEditorFormView: View {
         case .navigationChanged(let view):
             switch view {
             case .utilityAssociationCreationView(_, _, _, let candidate):
-                await showCandidateOnMap(candidate)
+                await showCandidate(candidate)
             default:
                 // Clears selection when the user navigates away from the current view.
                 clearSelectedFeature()
@@ -114,13 +114,13 @@ struct FeatureEditorFormView: View {
             guard !willNavigate else { break }
             model.isPresented = false
         case .showOnMapRequested(let feature):
-            await showFeatureOnMap(feature)
+            await showFeature(feature)
         }
     }
     
     /// Zooms to and selects an association candidate feature on the map.
     /// - Parameter candidate: The `UtilityAssociationFeatureCandidate` to show.
-    private func showCandidateOnMap(_ candidate: UtilityAssociationFeatureCandidate) async {
+    private func showCandidate(_ candidate: UtilityAssociationFeatureCandidate) async {
         guard let candidateGeometry = candidate.feature.geometry,
               !candidateGeometry.isEmpty,
               let geometryEditorGeometry = model.geometryEditorGeometry else {
@@ -139,7 +139,7 @@ struct FeatureEditorFormView: View {
     
     /// Zooms to and briefly selects a feature on the map.
     /// - Parameter feature: The `ArcGISFeature` to show.
-    private func showFeatureOnMap(_ feature: ArcGISFeature) async {
+    private func showFeature(_ feature: ArcGISFeature) async {
         guard feature.geometry?.isEmpty == false else { return }
         
         model.viewpointGeometry = feature.geometry
