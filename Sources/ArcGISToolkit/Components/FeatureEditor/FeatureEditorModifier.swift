@@ -67,7 +67,7 @@ private struct FeatureEditorModifier: ViewModifier {
                             .task(id: isRetrying) {
                                 guard isRetrying else { return }
                                 defer {
-                                    // Avoid state updates from cancelled tasks.
+                                    // Avoids state updates from cancelled tasks.
                                     if !Task.isCancelled {
                                         isRetrying = false
                                     }
