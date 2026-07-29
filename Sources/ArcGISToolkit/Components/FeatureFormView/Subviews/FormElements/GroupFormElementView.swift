@@ -34,9 +34,8 @@ struct GroupFormElementView<Content>: View where Content: View {
     }
     
     var body: some View {
-        // Placing the label inside a Section ensures that consecutive
-        // collapsed GroupFormElements have spacing consistent with other
-        // form elements.
+        // Using a Section ensures that consecutive collapsed GroupFormElements
+        // have spacing consistent with other form elements.
         Section {
             if UIDevice.current.userInterfaceIdiom == .mac {
                 // Mac Catalyst using the "Optimized for Mac" interface only.
@@ -79,27 +78,11 @@ struct GroupFormElementView<Content>: View where Content: View {
         }
     }
     
-    @ViewBuilder private var commonDescription: some View {
-        if !element.description.isEmpty {
-            Text(element.description)
-                .accessibilityIdentifier("\(element.label) Description")
-                .font(.footnote)
-                .multilineTextAlignment(.leading)
-        }
-    }
-    
-    private var commonLabel: some View {
-        Text(element.label)
-            .font(.title3)
-            .fontWeight(.semibold)
-            .foregroundStyle(.primary)
-    }
-    
     /// The label for the group element.
     private var label: some View {
         VStack(alignment: .leading) {
-            commonLabel
-            commonDescription
+            titleLine1
+            titleLine2
         }
         .foregroundStyle(.secondary)
         .textCase(nil)
@@ -117,19 +100,35 @@ struct GroupFormElementView<Content>: View where Content: View {
         } label: {
             VStack(alignment: .leading) {
                 HStack {
-                    commonLabel
+                    titleLine1
                     Spacer()
                     Image(systemName: "chevron.right")
                         .fontWeight(.bold)
                         .foregroundStyle(.tertiary)
                         .rotationEffect(.degrees(isExpanded ? 90 : 0))
                 }
-                commonDescription
+                titleLine2
             }
         }
         .buttonStyle(.plain)
         .foregroundStyle(.secondary)
         .textCase(nil)
+    }
+    
+    private var titleLine1: some View {
+        Text(element.label)
+            .font(.title3)
+            .fontWeight(.semibold)
+            .foregroundStyle(.primary)
+    }
+    
+    @ViewBuilder private var titleLine2: some View {
+        if !element.description.isEmpty {
+            Text(element.description)
+                .accessibilityIdentifier("\(element.label) Description")
+                .font(.footnote)
+                .multilineTextAlignment(.leading)
+        }
     }
     
     /// The list of visible group elements.
