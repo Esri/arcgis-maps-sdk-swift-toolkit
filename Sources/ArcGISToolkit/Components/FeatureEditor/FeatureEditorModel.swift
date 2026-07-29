@@ -73,13 +73,9 @@ final class FeatureEditorModel {
     /// The `feature`'s utility network used to create snap rules.
     /// This is non-`nil` when a map containing the feature's UN is used to start editing.
     private var utilityNetwork: UtilityNetwork? {
-        if let map, let feature {
-            return map.utilityNetworks.first { utilityNetwork in
-                utilityNetwork.makeElement(arcGISFeature: feature) != nil
-            }
-        } else {
-            return nil
-        }
+        guard let map, let feature else { return nil }
+        return map.utilityNetworks
+            .first(where: { $0.makeElement(arcGISFeature: feature) != nil })
     }
     
     // MARK: Methods
