@@ -34,11 +34,17 @@ struct GroupFormElementView<Content>: View where Content: View {
     }
     
     var body: some View {
-        // Placing the DisclosureGroup inside a Section ensures that consecutive
-        // collapsed GroupFormElements have spacing consistent with other form elements.
+        // Placing the label inside a Section ensures that consecutive
+        // collapsed GroupFormElements have spacing consistent with other
+        // form elements.
         Section {
-            DisclosureGroup(isExpanded: $isExpanded) {} label: {
-                label
+            if UIDevice.current.userInterfaceIdiom == .mac {
+                // Mac Catalyst using the "Optimized for Mac" interface only.
+                labelOptimizedForMac
+            } else {
+                DisclosureGroup(isExpanded: $isExpanded) {} label: {
+                    label
+                }
             }
         }
         .task {
@@ -73,20 +79,55 @@ struct GroupFormElementView<Content>: View where Content: View {
         }
     }
     
+    @ViewBuilder private var commonDescription: some View {
+        if !element.description.isEmpty {
+            Text(element.description)
+                .accessibilityIdentifier("\(element.label) Description")
+                .font(.footnote)
+                .multilineTextAlignment(.leading)
+        }
+    }
+    
+    private var commonLabel: some View {
+        Text(element.label)
+            .font(.title3)
+            .fontWeight(.semibold)
+            .foregroundStyle(.primary)
+    }
+    
     /// The label for the group element.
     private var label: some View {
         VStack(alignment: .leading) {
-            Text(element.label)
-                .font(.title3)
-                .fontWeight(.semibold)
-                .foregroundStyle(.primary)
-            if !element.description.isEmpty {
-                Text(element.description)
-                    .accessibilityIdentifier("\(element.label) Description")
-                    .font(.footnote)
-                    .multilineTextAlignment(.leading)
+            commonLabel
+            commonDescription
+        }
+        .foregroundStyle(.secondary)
+        .textCase(nil)
+    }
+    
+    /// The label for the group element on Mac Catalyst apps.
+    ///
+    /// For Mac Catalyst apps using the "Optimize for Mac" interface, a DisclosureGroup's indicator
+    /// is scrunched up against its label so a special label replaces the DisclosureGroup here.
+    private var labelOptimizedForMac: some View {
+        Button {
+            withAnimation {
+                isExpanded.toggle()
+            }
+        } label: {
+            VStack(alignment: .leading) {
+                HStack {
+                    commonLabel
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .fontWeight(.bold)
+                        .foregroundStyle(.tertiary)
+                        .rotationEffect(.degrees(isExpanded ? 90 : 0))
+                }
+                commonDescription
             }
         }
+        .buttonStyle(.plain)
         .foregroundStyle(.secondary)
         .textCase(nil)
     }
