@@ -131,8 +131,9 @@ final class FeatureEditorModel {
         loadResult = await Result {
             try await loadFeature()
             if let map {
-                // Only tries to set up snap rules when a map is provided.
-                // Sets up the utility network so snap rules can be created.
+                // When a map is provided, it implies the user wants to set up
+                // rule-based snapping for the geometry editor. Loads the
+                // utility network so snap rules can be created.
                 try await map.load()
                 await map.utilityNetworks.load()
             }
