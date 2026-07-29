@@ -233,7 +233,7 @@ private enum GeometryEditorError: LocalizedError {
 // MARK: Feature Selectable Layer
 
 /// A layer that can select and unselect a feature.
-private protocol FeatureSelectableLayer {
+private protocol FeatureSelectableLayer: Layer {
     func selectFeature(_ feature: Feature)
     func unselectFeature(_ feature: Feature)
 }
