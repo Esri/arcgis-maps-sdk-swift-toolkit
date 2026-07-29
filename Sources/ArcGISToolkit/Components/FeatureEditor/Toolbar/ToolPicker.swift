@@ -109,7 +109,6 @@ private enum Tool: Hashable {
         // Makes the fill symbol semi-transparent to avoid obscuring the map beneath polygons.
         if let fillSymbol = tool.style.fillSymbol as? FillSymbol {
             fillSymbol.color = fillSymbol.color.withAlphaComponent(0.5)
-            tool.style.fillSymbol = fillSymbol
         }
         
         return tool

@@ -224,7 +224,7 @@ private enum GeometryEditorError: LocalizedError {
                 bundle: .toolkitModule,
                 comment: "An error message shown when trying to save an invalid geometry."
             )
-        default:
+        case .notHidden:
             nil
         }
     }
@@ -247,7 +247,7 @@ extension OrientedImageryLayer: FeatureSelectableLayer {}
 // MARK: On Animation Change Modifier
 
 /// A view modifier that performs an action when the animation data of a given value changes.
-private struct OnAnimationChangeModifier<Value: VectorArithmetic>: @MainActor AnimatableModifier {
+private struct OnAnimationChangeModifier<Value: VectorArithmetic>: @MainActor Animatable & ViewModifier {
     /// The value to observe for changes in its animation data.
     let value: Value
     /// The action to perform when the animation data changes.
