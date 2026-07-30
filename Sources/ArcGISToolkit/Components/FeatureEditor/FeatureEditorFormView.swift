@@ -18,6 +18,8 @@ import SwiftUI
 
 /// A view that contains the `FeatureFormView` for the feature editor.
 struct FeatureEditorFormView: View {
+    /// The root feature form to display in form view.
+    let rootFeatureForm: FeatureForm
     /// A Boolean value indicating whether the parent presentation is minimized.
     let isMinimized: Bool
     
@@ -51,41 +53,39 @@ struct FeatureEditorFormView: View {
     }
     
     var body: some View {
-        if let rootFeatureForm = model.rootFeatureForm {
-            @Bindable var model = model
-            
-            FeatureFormView(root: rootFeatureForm, isPresented: $model.isPresented)
-                .editingButtons(isMinimized ? .hidden : .automatic)
-                .onFeatureFormChanged { presentedFeatureForm = $0 }
-                .onFormEditingEvent { editingEvent = EquatableEditingEvent(event: $0) }
-                .environment(\.externalSaveAction, saveGeometryEditsAction)
-                .onAnimationChange(of: geometryEditorOpacity) { newOpacity in
-                    model.geometryEditor.tool.style.opacity = newOpacity
-                }
-                .animation(.default, value: geometryEditorOpacity)
-                .task(id: editingEvent) {
-                    guard let editingEvent else { return }
-                    await handleEditingEvent(editingEvent.event)
-                    
-                    // Prevents clearing editingEvent if it was set while this
-                    // task was running.
-                    guard !Task.isCancelled else { return }
-                    self.editingEvent = nil
-                }
-                .task(id: presentedFeatureForm.map(ObjectIdentifier.init)) {
-                    guard let presentedFeatureForm else { return }
-                    await model.startEditingFeatureForm(presentedFeatureForm)
-                    
-                    // Prevents clearing presentedFeatureForm if it was set
-                    // while this task was running.
-                    guard !Task.isCancelled else { return }
-                    self.presentedFeatureForm = nil
-                }
-                .onDisappear {
-                    clearSelectedFeature()
-                    model.geometryEditor.tool.style.opacity = 1
-                }
-        }
+        @Bindable var model = model
+        
+        FeatureFormView(root: rootFeatureForm, isPresented: $model.isPresented)
+            .editingButtons(isMinimized ? .hidden : .automatic)
+            .onFeatureFormChanged { presentedFeatureForm = $0 }
+            .onFormEditingEvent { editingEvent = EquatableEditingEvent(event: $0) }
+            .environment(\.externalSaveAction, saveGeometryEditsAction)
+            .onAnimationChange(of: geometryEditorOpacity) { newOpacity in
+                model.geometryEditor.tool.style.opacity = newOpacity
+            }
+            .animation(.default, value: geometryEditorOpacity)
+            .task(id: editingEvent) {
+                guard let editingEvent else { return }
+                await handleEditingEvent(editingEvent.event)
+                
+                // Prevents clearing editingEvent if it was set while this
+                // task was running.
+                guard !Task.isCancelled else { return }
+                self.editingEvent = nil
+            }
+            .task(id: presentedFeatureForm.map(ObjectIdentifier.init)) {
+                guard let presentedFeatureForm else { return }
+                await model.startEditingFeatureForm(presentedFeatureForm)
+                
+                // Prevents clearing presentedFeatureForm if it was set
+                // while this task was running.
+                guard !Task.isCancelled else { return }
+                self.presentedFeatureForm = nil
+            }
+            .onDisappear {
+                clearSelectedFeature()
+                model.geometryEditor.tool.style.opacity = 1
+            }
     }
     
     /// Clears `selectedFeature` and unselects it on its layer.

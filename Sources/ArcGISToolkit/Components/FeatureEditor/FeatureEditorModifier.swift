@@ -42,7 +42,12 @@ private struct FeatureEditorModifier: ViewModifier {
                 VStack(spacing: 0) {
                     switch model.loadResult {
                     case .success:
-                        FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
+                        if let rootFeatureForm = model.rootFeatureForm {
+                            FeatureEditorFormView(
+                                rootFeatureForm: rootFeatureForm,
+                                isMinimized: selectedPresentationDetent == .bar
+                            )
+                        }
                     case .failure(let error):
                         NavigationStack {
                             makeContentUnavailableView(error: error)
