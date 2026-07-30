@@ -243,6 +243,7 @@ private struct FloorFilterBody: View {
                 .font(.system(size: FloorFilterBody.fontSize))
                 .contentShape(FloorFilterBody.buttonShape)
         }
+        .accessibilityLabel(siteSelectorButtonLabel)
         .accessibilityIdentifier("FloorFilter.siteSelectorButton")
         .buttonStyle(.plain)
         .popover(isPresented: $isSiteSelectorPresented) {
@@ -406,5 +407,15 @@ private struct LevelButton: View {
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("FloorFilter.levelButton.\(level.shortName)")
+    }
+}
+
+private extension FloorFilterBody {
+    var siteSelectorButtonLabel: String {
+        .init(
+            localized: "Select Site",
+            bundle: .toolkitModule,
+            comment: "A label for a button that presents a site selector."
+        )
     }
 }
