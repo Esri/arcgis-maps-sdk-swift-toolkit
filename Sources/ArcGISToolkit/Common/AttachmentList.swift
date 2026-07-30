@@ -105,12 +105,42 @@ struct AttachmentLoadButton: View  {
             .frame(width: 24, height: 24)
             .padding(.leading)
         }
+        .accessibilityLabel(attachmentButtonLabel)
         .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { }
         .disabled(isLoading)
         .task(id: isLoading) {
             guard isLoading else { return }
             defer { isLoading = false }
             await attachmentModel.load()
+        }
+    }
+    
+    private var attachmentButtonLabel: String {
+        switch attachmentModel.loadStatus {
+        case .notLoaded:
+            String(
+                localized: "Download Attachment",
+                bundle: .toolkitModule,
+                comment: "A label for a button that downloads an attachment."
+            )
+        case .loading:
+            String(
+                localized: "Loading Attachment",
+                bundle: .toolkitModule,
+                comment: "A label for a button indicating an attachment is loading."
+            )
+        case .loaded:
+            String(
+                localized: "Attachment Loaded",
+                bundle: .toolkitModule,
+                comment: "A label for a button indicating an attachment has loaded."
+            )
+        case .failed:
+            String(
+                localized: "Attachment Failed to Load",
+                bundle: .toolkitModule,
+                comment: "A label for a button indicating an attachment has failed to load."
+            )
         }
     }
 }
