@@ -69,6 +69,18 @@ private struct FeatureEditorModifier: ViewModifier {
                         }
                     }
                 }
+                .task(id: isRetrying) {
+                    // The task modifier is attached to the VStack so it is
+                    // not canceled when the ContentUnavailableView disappears.
+                    guard isRetrying else { return }
+                    defer {
+                        // Avoids state updates from cancelled tasks.
+                        if !Task.isCancelled {
+                            isRetrying = false
+                        }
+                    }
+                    await model.retryStartEditing()
+                }
                 .presentationBackgroundInteraction(.enabled)
                 .presentationContentInteraction(.scrolls)
                 .presentationDetents(
@@ -109,16 +121,6 @@ private struct FeatureEditorModifier: ViewModifier {
                 isRetrying = true
             } label: {
                 Text.tryAgain
-            }
-            .task(id: isRetrying) {
-                guard isRetrying else { return }
-                defer {
-                    // Avoids state updates from cancelled tasks.
-                    if !Task.isCancelled {
-                        isRetrying = false
-                    }
-                }
-                await model.retryStartEditing()
             }
             .buttonStyle(.borderedProminent)
             .disabled(isRetrying)
