@@ -67,14 +67,19 @@ struct FeatureEditorFormView: View {
                     guard let editingEvent else { return }
                     await handleEditingEvent(editingEvent.event)
                     
-                    // Prevents clearing an editing event set while this task was running.
+                    // Prevents clearing editingEvent if it was set while this
+                    // task was running.
                     guard !Task.isCancelled else { return }
                     self.editingEvent = nil
                 }
                 .task(id: presentedFeatureForm.map(ObjectIdentifier.init)) {
                     guard let presentedFeatureForm else { return }
-                    defer { self.presentedFeatureForm = nil }
                     await model.startEditingFeatureForm(presentedFeatureForm)
+                    
+                    // Prevents clearing presentedFeatureForm if it was set
+                    // while this task was running.
+                    guard !Task.isCancelled else { return }
+                    self.presentedFeatureForm = nil
                 }
                 .onDisappear {
                     clearSelectedFeature()
