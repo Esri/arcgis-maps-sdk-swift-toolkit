@@ -201,7 +201,7 @@ final class FeatureEditorModel {
         // Loads the feature so canUpdateGeometry can be accessed. It is always
         // false otherwise.
         try await feature.retryLoad()
-        // No need to load the feature's table upfront if the we don't edit its
+        // No need to load the feature's table upfront if we don't edit its
         // geometry.
         guard feature.canUpdateGeometry else { return }
         
