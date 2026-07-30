@@ -251,18 +251,14 @@ extension OrientedImageryLayer: FeatureSelectableLayer {}
 
 // MARK: On Animation Change Modifier
 
-/// A view modifier that performs an action when the animation data of a given value changes.
-private struct OnAnimationChangeModifier<Value: VectorArithmetic>: @MainActor Animatable & ViewModifier {
-    /// The value to observe for changes in its animation data.
-    let value: Value
-    /// The action to perform when the animation data changes.
-    let action: (_ animatableData: Value) -> Void
-    
-    /// The value's animation data that is observed for changes.
-    var animatableData: Value {
-        get { value }
-        set { action(newValue) }
+/// A view modifier that performs an action when animatable data changes.
+private struct OnAnimationChangeModifier<Data: Sendable & VectorArithmetic>: Animatable & ViewModifier {
+    /// The data to animate.
+    var animatableData: Data {
+        didSet { action(animatableData) }
     }
+    /// The action to perform when the animatable data changes.
+    let action: (_ animatableData: Data) -> Void
     
     func body(content: Content) -> some View {
         content
@@ -270,15 +266,15 @@ private struct OnAnimationChangeModifier<Value: VectorArithmetic>: @MainActor An
 }
 
 private extension View {
-    /// Performs an action when the animation data of a given value changes.
+    /// Performs an action when animatable data changes.
     /// - Parameters:
-    ///   - value: The value to observe for changes in its animation data.
-    ///   - action: The action to perform when the animation data changes.
-    ///   The new animation data is passed as a parameter.
-    func onAnimationChange<Value: VectorArithmetic>(
-        of value: Value,
-        perform action: @escaping (_ animatableData: Value) -> Void
+    ///   - animatableData: The data to animate.
+    ///   - action: The action to perform when the animatable data changes.
+    ///   The new animatable data is passed as a parameter.
+    func onAnimationChange<Data: Sendable & VectorArithmetic>(
+        of animatableData: Data,
+        perform action: @escaping (_ animatableData: Data) -> Void
     ) -> some View {
-        modifier(OnAnimationChangeModifier(value: value, action: action))
+        modifier(OnAnimationChangeModifier(animatableData: animatableData, action: action))
     }
 }
