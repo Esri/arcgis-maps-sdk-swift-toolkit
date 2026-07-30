@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "З’єднання";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "ґ_At least %lld attachment is required____________________Ї.";
+"At least %lld attachment is required." = "Потрібне щонайменше %lld прикріплення.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "ґ_At least %lld attachments are required_____________________Ї.";
+"At least %lld attachments are required." = "Потрібно щонайменше %lld прикріплення(нь).";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "ґ_Attach File____________Ї";
+"Attach File" = "Прикріпити файл";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Прикріплення";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Значення";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ґ_Choose Photo_____________Ї";
+"Choose Photo" = "Вибрати фотографію";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ґ_Choose Photo or Video______________________Ї";
+"Choose Photo or Video" = "Вибрати фотографію або відео";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ґ_Choose Photo_____________Ї";
+"Choose Photo" = "Вибрати фотографію";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ґ_Choose Photo or Video______________________Ї";
+"Choose Photo or Video" = "Вибрати фотографію або відео";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Оберіть для додавання";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "ґ_Choose Video_____________Ї";
+"Choose Video" = "Вибрати відео";
 
 /* Cities (Level of Detail) */
 "Cities" = "Міста";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Вулиці";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "ґ_Take Photo_____________________Ї";
+"Take Photo" = "Зробити фото";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Зробити фото або відео";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "ґ_Take Video_____________________Ї";
+"Take Video" = "Зробити відео";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Файл сертифіката недійсний.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "ґ_The file is too large. Maximum allowed file size is %@_____________________________Ї.";
+"The file is too large. Maximum allowed file size is %@." = "Занадто великий розмір файлу. Максимальний дозволений розмір файлу — %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Форму не було надіслано";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Карту не активовано для використання в автономному режимі.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "ґ_The maximum number of attachments allowed is %lld__________________________Ї.";
+"The maximum number of attachments allowed is %lld." = "Максимально допустима кількість прикріплень — %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "ґ_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________Ї.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Занадто велика тривалість мультимедійного вмісту. Максимальна допустима тривалість ^[%lld сек](зігнути: істина)";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Назва області карти має бути унікальною";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Для цієї карти немає областей карти. Натисніть кнопку нижче, щоб розпочати.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "ґ_This file type is not supported_________________Ї.";
+"This file type is not supported." = "Цей тип файлу не підтримується.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Ця форма порожня.";

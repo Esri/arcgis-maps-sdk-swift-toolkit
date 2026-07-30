@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "Susiejimai";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "Į_At least %lld attachment is required____________________š.";
+"At least %lld attachment is required." = "Reikalingas bent %lld priedas.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "Į_At least %lld attachments are required_____________________š.";
+"At least %lld attachments are required." = "Reikalingi bent %lld priedai.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "Į_Attach File____________š";
+"Attach File" = "Pridėti failą";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Priedas";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Vertė";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Į_Choose Photo_____________š";
+"Choose Photo" = "Pasirinkti nuotrauką";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Į_Choose Photo or Video______________________š";
+"Choose Photo or Video" = "Pasirinkti nuotrauką ar vaizdo įrašą";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Į_Choose Photo_____________š";
+"Choose Photo" = "Pasirinkti nuotrauką";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Į_Choose Photo or Video______________________š";
+"Choose Photo or Video" = "Pasirinkti nuotrauką ar vaizdo įrašą";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Pasirinkti norint pridėti";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "Į_Choose Video_____________š";
+"Choose Video" = "Pasirinkti vaizdo įrašą";
 
 /* Cities (Level of Detail) */
 "Cities" = "Miestai";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Gatvės";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "Į_Take Photo_____________________š";
+"Take Photo" = "Fotografuoti";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Fotografuoti arba filmuoti";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "Į_Take Video_____________________š";
+"Take Video" = "Įrašyti vaizdą";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Sertifikato failas yra neteisingas.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "Į_The file is too large. Maximum allowed file size is %@_____________________________š.";
+"The file is too large. Maximum allowed file size is %@." = "Failas per didelis. Maksimalus leidžiamas failo dydis yra %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Forma nepateikta";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Žemėlapio negalima naudoti neprisijungus.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "Į_The maximum number of attachments allowed is %lld__________________________š.";
+"The maximum number of attachments allowed is %lld." = "Maksimalus leidžiamas priedų skaičius yra %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Į_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________š.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Medija per ilga. Maksimali leidžiama trukmė yra ^[%lld seconds](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Žemėlapio teritorijos pavadinimas turi būti unikalus.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Nėra šio žemėlapio teritorijų. Norėdami pradėti, bakstelėkite toliau esantį mygtuką.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "Į_This file type is not supported_________________š.";
+"This file type is not supported." = "Šis failo tipas nepalaikomas.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Forma tuščia.";

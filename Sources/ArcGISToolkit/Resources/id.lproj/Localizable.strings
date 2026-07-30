@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "Asosiasi";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "ng_At least %lld attachment is required____________________ny.";
+"At least %lld attachment is required." = "Diperlukan setidaknya %lld lampiran.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "ng_At least %lld attachments are required_____________________ny.";
+"At least %lld attachments are required." = "Diperlukan setidaknya %lld lampiran.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "ng_Attach File____________ny";
+"Attach File" = "Lampirkan File";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Lampiran";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Nilai";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ng_Choose Photo_____________ny";
+"Choose Photo" = "Pilih Foto";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ng_Choose Photo or Video______________________ny";
+"Choose Photo or Video" = "Pilih Foto atau Video";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ng_Choose Photo_____________ny";
+"Choose Photo" = "Pilih Foto";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ng_Choose Photo or Video______________________ny";
+"Choose Photo or Video" = "Pilih Foto atau Video";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Pilih untuk ditambahkan";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "ng_Choose Video_____________ny";
+"Choose Video" = "Pilih Video";
 
 /* Cities (Level of Detail) */
 "Cities" = "Kota";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Jalan";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "ng_Take Photo_____________________ny";
+"Take Photo" = "Ambil Foto";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Ambil Foto atau Video";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "ng_Take Video_____________________ny";
+"Take Video" = "Rekam Video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "File sertifikat tidak valid.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "ng_The file is too large. Maximum allowed file size is %@_____________________________ny.";
+"The file is too large. Maximum allowed file size is %@." = "File ini terlalu besar. Ukuran file maksimum yang diperbolehkan adalah %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Formulir tidak dikirim";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Peta tidak diaktifkan untuk penggunaan offline.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "ng_The maximum number of attachments allowed is %lld__________________________ny.";
+"The maximum number of attachments allowed is %lld." = "Jumlah lampiran maksimum yang diperbolehkan adalah %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "ng_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ny.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Media ini terlalu panjang. Durasi maksimum yang diperbolehkan adalah ^[%lld seconds](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Nama untuk area peta harus unik.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Tidak ada area peta untuk peta ini. Ketuk tombol di bawah ini untuk memulai.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "ng_This file type is not supported_________________ny.";
+"This file type is not supported." = "Jenis file ini tidak didukung.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Formulir ini kosong";

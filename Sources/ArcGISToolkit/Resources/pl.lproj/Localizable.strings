@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "Powiązania";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "ł_At least %lld attachment is required____________________ą.";
+"At least %lld attachment is required." = "Wymaga się co najmniej %lld załącznik(ów).";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "ł_At least %lld attachments are required_____________________ą.";
+"At least %lld attachments are required." = "Wymagana liczba załączników: co najmniej %lld.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "ł_Attach File____________ą";
+"Attach File" = "Załącz plik";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Załącznik";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Wartość";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ł_Choose Photo_____________ą";
+"Choose Photo" = "Wybierz zdjęcie";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ł_Choose Photo or Video______________________ą";
+"Choose Photo or Video" = "Wybierz zdjęcie lub film";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ł_Choose Photo_____________ą";
+"Choose Photo" = "Wybierz zdjęcie";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ł_Choose Photo or Video______________________ą";
+"Choose Photo or Video" = "Wybierz zdjęcie lub film";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Wybierz do dodania";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "ł_Choose Video_____________ą";
+"Choose Video" = "Wybierz film";
 
 /* Cities (Level of Detail) */
 "Cities" = "Miasta";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Ulice";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "ł_Take Photo_____________________ą";
+"Take Photo" = "Zrób zdjęcie";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Zrób zdjęcie lub nagraj film";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "ł_Take Video_____________________ą";
+"Take Video" = "Zarejestruj film";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Plik certyfikatu był nieprawidłowy.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "ł_The file is too large. Maximum allowed file size is %@_____________________________ą.";
+"The file is too large. Maximum allowed file size is %@." = "Plik jest za duży. Maksymalny dozwolony rozmiar pliku to %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Nie przesłano formularza";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Tej mapy nie można używać w trybie offline.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "ł_The maximum number of attachments allowed is %lld__________________________ą.";
+"The maximum number of attachments allowed is %lld." = "Dozwolona maksymalna liczba załączników to %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "ł_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ą.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Plik multimedialny jest za długi. Maksymalny dozwolony czas trwania to ^[%lld sekund](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Nazwa obszaru mapy musi być unikalna.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Na tej mapie nie ma obszarów mapy. Naciśnij poniższy przycisk, aby rozpocząć.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "ł_This file type is not supported_________________ą.";
+"This file type is not supported." = "Ten typ pliku nie jest obsługiwany.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Ten formularz jest pusty.";

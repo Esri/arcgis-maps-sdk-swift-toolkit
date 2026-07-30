@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "연관";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "한_At least %lld attachment is required____________________빠.";
+"At least %lld attachment is required." = "최소 %lld개의 첨부 파일이 필요합니다.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "한_At least %lld attachments are required_____________________빠.";
+"At least %lld attachments are required." = "최소 %lld개의 첨부 파일이 필요합니다.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "한_Attach File____________빠";
+"Attach File" = "파일 첨부";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "첨부 파일";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "값";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "한_Choose Photo_____________빠";
+"Choose Photo" = "사진 선택";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "한_Choose Photo or Video______________________빠";
+"Choose Photo or Video" = "사진 또는 비디오 선택";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "한_Choose Photo_____________빠";
+"Choose Photo" = "사진 선택";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "한_Choose Photo or Video______________________빠";
+"Choose Photo or Video" = "사진 또는 비디오 선택";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "추가하려면 선택";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "한_Choose Video_____________빠";
+"Choose Video" = "비디오 선택";
 
 /* Cities (Level of Detail) */
 "Cities" = "도시";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "도로";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "한_Take Photo_____________________빠";
+"Take Photo" = "사진 촬영";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "사진 또는 비디오 촬영";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "한_Take Video_____________________빠";
+"Take Video" = "비디오 촬영";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "인증서 파일이 잘못되었습니다.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "한_The file is too large. Maximum allowed file size is %@_____________________________빠.";
+"The file is too large. Maximum allowed file size is %@." = "파일이 너무 큽니다. 허용되는 최대 파일 크기는 %@입니다.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "양식이 제출되지 않았습니다.";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "이 맵은 오프라인용으로 활성화되지 않았습니다.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "한_The maximum number of attachments allowed is %lld__________________________빠.";
+"The maximum number of attachments allowed is %lld." = "허용되는 최대 첨부 파일 수는 %lld개입니다.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "한_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________빠.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "미디어가 너무 깁니다. 허용되는 최대 재생 시간은 ^[%lld초]입니다(inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "맵 영역의 이름은 고유해야 합니다.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "이 맵에 대한 맵 영역이 없습니다. 시작하려면 아래 버튼을 누르세요.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "한_This file type is not supported_________________빠.";
+"This file type is not supported." = "이 파일 유형은 지원되지 않습니다.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "이 양식은 비어 있습니다.";

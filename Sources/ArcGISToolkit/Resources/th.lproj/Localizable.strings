@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "ความสัมพันธ์";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "ก้_At least %lld attachment is required____________________ษฺ.";
+"At least %lld attachment is required." = "ต้องการไฟล์แนบอย่างน้อย %lld รายการ";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "ก้_At least %lld attachments are required_____________________ษฺ.";
+"At least %lld attachments are required." = "ต้องการไฟล์แนบอย่างน้อย %lld รายการ";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "ก้_Attach File____________ษฺ";
+"Attach File" = "แนบไฟล์";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "ไฟล์แนบ";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "ค่า";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ก้_Choose Photo_____________ษฺ";
+"Choose Photo" = "เลือกรูปถ่าย";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ก้_Choose Photo or Video______________________ษฺ";
+"Choose Photo or Video" = "เลือกภาพถ่ายหรือวิดีโอ";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "ก้_Choose Photo_____________ษฺ";
+"Choose Photo" = "เลือกรูปถ่าย";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "ก้_Choose Photo or Video______________________ษฺ";
+"Choose Photo or Video" = "เลือกภาพถ่ายหรือวิดีโอ";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "เลือกเพื่อเพิ่ม";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "ก้_Choose Video_____________ษฺ";
+"Choose Video" = "เลือกวิดีโอ";
 
 /* Cities (Level of Detail) */
 "Cities" = "เมือง";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "ถนนต่างๆ";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "ก้_Take Photo_____________________ษฺ";
+"Take Photo" = "ถ่ายภาพ";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "ถ่ายภาพหรือวิดีโอ";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "ก้_Take Video_____________________ษฺ";
+"Take Video" = "บันทึกวิดีโอ";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "ไฟล์ใบรับรองใช้งานไม่ได้";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "ก้_The file is too large. Maximum allowed file size is %@_____________________________ษฺ.";
+"The file is too large. Maximum allowed file size is %@." = "ไฟล์ใหญ่เกินไป ขนาดไฟล์สูงสุดที่อนุญาตคือ %@";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "ไม่ได้ส่งฟอร์ม";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "ไม่ได้เปิดใช้งานแผนที่ไว้สำหรับการใช้ขณะออฟไลน์";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "ก้_The maximum number of attachments allowed is %lld__________________________ษฺ.";
+"The maximum number of attachments allowed is %lld." = "จำนวนไฟล์แนบสูงสุดที่อนุญาตคือ %lld";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "ก้_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ษฺ.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "มีเดียยาวเกินไป ระยะเวลาสูงสุดที่อนุญาตคือ ^[%lld วินาที](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "ชื่อพื้นที่แผนที่ต้องไม่ซ้ำกัน";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "ไม่มีพื้นที่แผนที่สำหรับแผนที่นี้ แตะปุ่มด้านล่างเพื่อเริ่มใช้งาน";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "ก้_This file type is not supported_________________ษฺ.";
+"This file type is not supported." = "ไม่รองรับไฟล์ประเภทนี้";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "ฟอร์มนี้ว่างเปล่า";

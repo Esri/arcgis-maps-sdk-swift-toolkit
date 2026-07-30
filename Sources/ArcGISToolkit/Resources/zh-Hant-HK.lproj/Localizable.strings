@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "關聯";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "試_At least %lld attachment is required____________________驗.";
+"At least %lld attachment is required." = "至少須有 %lld 個附件。";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "試_At least %lld attachments are required_____________________驗.";
+"At least %lld attachments are required." = "至少須有 %lld 個附件。";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "試_Attach File____________驗";
+"Attach File" = "附加檔案";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "附件";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "值";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "試_Choose Photo_____________驗";
+"Choose Photo" = "選擇相片";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "試_Choose Photo or Video______________________驗";
+"Choose Photo or Video" = "選擇相片或影片";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "試_Choose Photo_____________驗";
+"Choose Photo" = "選擇相片";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "試_Choose Photo or Video______________________驗";
+"Choose Photo or Video" = "選擇相片或影片";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "選擇以新增";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "試_Choose Video_____________驗";
+"Choose Video" = "選擇影片";
 
 /* Cities (Level of Detail) */
 "Cities" = "城市";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "街道";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "試_Take Photo_____________________驗";
+"Take Photo" = "拍照";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "拍照或攝影";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "試_Take Video_____________________驗";
+"Take Video" = "錄影";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "憑證檔無效。";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "試_The file is too large. Maximum allowed file size is %@_____________________________驗.";
+"The file is too large. Maximum allowed file size is %@." = "檔案太大。 允許的檔案大小上限為 %@。";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "未提交表格";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "地圖未啟用離線使用。";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "試_The maximum number of attachments allowed is %lld__________________________驗.";
+"The maximum number of attachments allowed is %lld." = "允許的附件數上限為 %lld。";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "試_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________驗.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "媒體太長。 允許的時間長度上限為 ^[%lld 秒](inflect: true)。";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "地圖區域的名稱必須是唯一的。";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "此地圖沒有地圖區域。 點一下下方按鈕開始使用。";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "試_This file type is not supported_________________驗.";
+"This file type is not supported." = "不支援此檔案類型。";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "此表單是空的。";

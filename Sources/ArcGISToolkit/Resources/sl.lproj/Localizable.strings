@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "Asociacije";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "Š_At least %lld attachment is required____________________č.";
+"At least %lld attachment is required." = "Zahtevana je vsaj %lld priloga.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "Š_At least %lld attachments are required_____________________č.";
+"At least %lld attachments are required." = "Zahtevanih je vsaj %lld prilog.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "Š_Attach File____________č";
+"Attach File" = "Priloži datoteko";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Priloga";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Vrednost";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Š_Choose Photo_____________č";
+"Choose Photo" = "Izberi fotografijo";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Š_Choose Photo or Video______________________č";
+"Choose Photo or Video" = "Izberi fotografijo ali video";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Š_Choose Photo_____________č";
+"Choose Photo" = "Izberi fotografijo";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Š_Choose Photo or Video______________________č";
+"Choose Photo or Video" = "Izberi fotografijo ali video";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Izberi za dodajanje";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "Š_Choose Video_____________č";
+"Choose Video" = "Izberi video";
 
 /* Cities (Level of Detail) */
 "Cities" = "Mesta";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Ulice";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "Š_Take Photo_____________________č";
+"Take Photo" = "Fotografiraj";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Zajemi fotografijo ali video";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "Š_Take Video_____________________č";
+"Take Video" = "Zajemi video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Datoteka certifikata ni bila veljavna.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "Š_The file is too large. Maximum allowed file size is %@_____________________________č.";
+"The file is too large. Maximum allowed file size is %@." = "Datoteka je prevelika. Največja dovoljena velikost datoteke je %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Obrazec ni bil poslan";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Karta ni omogočena za uporabo brez povezave.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "Š_The maximum number of attachments allowed is %lld__________________________č.";
+"The maximum number of attachments allowed is %lld." = "Največje število dovoljenih prilog je %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Š_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________č.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Predstavnostna datoteka je predolga. Najdaljše dovoljeno trajanje je ^[%lld sekund](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Ime za območje karte mora biti enolično.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Brez območij karte za to karto. Za začetek tapnite na gumb spodaj.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "Š_This file type is not supported_________________č.";
+"This file type is not supported." = "Ta tip datoteke ni podprt.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Ta oblika je prazna.";

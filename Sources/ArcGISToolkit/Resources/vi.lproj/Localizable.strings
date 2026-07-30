@@ -69,13 +69,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Associations" = "Liên kết";
 
 /* A message indicating the element requires at least one attachment. */
-"At least %lld attachment is required." = "Đ_At least %lld attachment is required____________________ớ.";
+"At least %lld attachment is required." = "Cần ít nhất %lld tệp đính kèm.";
 
 /* A message indicating the element requires multiple attachments. */
-"At least %lld attachments are required." = "Đ_At least %lld attachments are required_____________________ớ.";
+"At least %lld attachments are required." = "Cần ít nhất %lld tệp đính kèm.";
 
 /* A label for a button to choose a file from the user's files. */
-"Attach File" = "Đ_Attach File____________ớ";
+"Attach File" = "Đính kèm Tệp";
 
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Phần đính kèm";
@@ -160,23 +160,23 @@ Cancel your current action to close/hide a sheet or pop-up. */
 "chart-mark-label-value" = "Giá trị";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Đ_Choose Photo_____________ớ";
+"Choose Photo" = "Chọn Ảnh";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Đ_Choose Photo or Video______________________ớ";
+"Choose Photo or Video" = "Chọn Ảnh hoặc Video";
 
 /* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Đ_Choose Photo_____________ớ";
+"Choose Photo" = "Chọn Ảnh";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Đ_Choose Photo or Video______________________ớ";
+"Choose Photo or Video" = "Chọn Ảnh hoặc Video";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Chọn để thêm";
 
 /* A label for a button to choose a video from the user's photo library. */
-"Choose Video" = "Đ_Choose Video_____________ớ";
+"Choose Video" = "Chọn Video";
 
 /* Cities (Level of Detail) */
 "Cities" = "Thành phố";
@@ -910,13 +910,13 @@ network trace operation. */
 "Streets" = "Các Đường phố";
 
 /* A label for a button to capture a new photo. */
-"Take Photo" = "Đ_Take Photo_____________________ớ";
+"Take Photo" = "Chụp Ảnh";
 
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Chụp Ảnh hoặc Quay Video";
 
 /* A label for a button to capture a new video. */
-"Take Video" = "Đ_Take Video_____________________ớ";
+"Take Video" = "Quay Video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -950,7 +950,7 @@ match the spatial reference of the map. */
 "The certificate file was invalid." = "Tệp chứng chỉ không hợp lệ.";
 
 /* A message indicating that the attachment's size exceeds the allowed maximum. */
-"The file is too large. Maximum allowed file size is %@." = "Đ_The file is too large. Maximum allowed file size is %@_____________________________ớ.";
+"The file is too large. Maximum allowed file size is %@." = "Tệp quá lớn. Kích cỡ tệp tối đa được cho phép là %@.";
 
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Biểu mẫu chưa được gửi";
@@ -965,10 +965,10 @@ match the spatial reference of the map. */
 "The map is not enabled for offline use." = "Bản đồ không được kích hoạt để sử dụng ngoại tuyến.";
 
 /* A message indicating that no more attachments can be added because the maximum count has been reached. */
-"The maximum number of attachments allowed is %lld." = "Đ_The maximum number of attachments allowed is %lld__________________________ớ.";
+"The maximum number of attachments allowed is %lld." = "Số lượng tệp đính kèm tối đa được cho phép là %lld.";
 
 /* A message indicating that the attachment's duration exceeds the allowed maximum. */
-"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Đ_The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)__________________________________________ớ.";
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Phương tiện quá dài. Thời lượng tối đa được cho phép là ^[%lld giây](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Tên khu vực bản đồ phải là duy nhất.";
@@ -993,7 +993,7 @@ to be imported as an attachment. */
 "There are no map areas for this map. Tap the button below to get started." = "Không có khu vực bản đồ cho bản đồ này. Chạm vào nút bên dưới để bắt đầu.";
 
 /* A message indicating the type of the supplied attachment is not supported. */
-"This file type is not supported." = "Đ_This file type is not supported_________________ớ.";
+"This file type is not supported." = "Loại tệp này không được hỗ trợ.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Mẫu form này trống.";
