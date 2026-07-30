@@ -169,18 +169,17 @@ private extension TextInput {
             }
 #if !os(visionOS)
             if isBarcodeScanner {
-                Button {
+                Button(scanBarcodeButtonLabel, systemImage: "barcode.viewfinder") {
                     embeddedFeatureFormViewModel.focusedElement = element
                     if cameraRequester.authorizationStatus == .authorized {
                         scannerIsPresented = true
                     } else {
                         cameraRequester.request()
                     }
-                } label: {
-                    Image(systemName: "barcode.viewfinder")
-                        .font(.title2)
-                        .foregroundStyle(Color.accentColor)
                 }
+                .labelStyle(.iconOnly)
+                .font(.title2)
+                .foregroundStyle(Color.accentColor)
                 .disabled(cameraIsDisabled)
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("\(element.label) Scan Button")
@@ -285,5 +284,15 @@ private extension TextInput {
 private extension TextInput {
     private var isBarcodeScanner: Bool {
         element.input is BarcodeScannerFormInput
+    }
+}
+
+private extension TextInput {
+    var scanBarcodeButtonLabel: String {
+        .init(
+            localized: "Scan Barcode",
+            bundle: .toolkitModule,
+            comment: "A label for a button that initiates a barcode scan."
+        )
     }
 }
