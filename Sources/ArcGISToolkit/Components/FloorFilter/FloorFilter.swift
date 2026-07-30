@@ -293,6 +293,7 @@ private struct LevelSelector: View {
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("FloorFilter.collapseButton")
+            .accessibilityLabel(collapseButtonLabel)
         }
     }
     
@@ -417,5 +418,21 @@ private extension FloorFilterBody {
             bundle: .toolkitModule,
             comment: "A label for a button that presents a site selector."
         )
+    }
+}
+
+private extension LevelSelector {
+    var collapseButtonLabel: String {
+        isCollapsed
+            ? String(
+                localized: "Expand Level List",
+                bundle: .toolkitModule,
+                comment: "A label for a button that expands the level selector."
+            )
+            : String(
+                localized: "Collapse Level List",
+                bundle: .toolkitModule,
+                comment: "A label for a button that collapses the level selector."
+            )
     }
 }
