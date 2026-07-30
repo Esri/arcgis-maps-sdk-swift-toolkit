@@ -34,6 +34,11 @@ struct GroupFormElementView<Content>: View where Content: View {
     }
     
     var body: some View {
+#if os(visionOS)
+        // An empty section prevents visual grouping in the hover effect with
+        // sequential GroupFormElements.
+        Section {}
+#endif
         DisclosureGroup(isExpanded: $isExpanded) {} label: {
             label
         }
