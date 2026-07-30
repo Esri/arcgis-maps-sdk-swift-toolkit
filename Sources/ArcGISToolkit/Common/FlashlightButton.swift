@@ -42,6 +42,29 @@ struct FlashlightButton: View {
         }
     }
     
+    var flashlightButtonLabel: String {
+        switch (hasTorch, torchIsOn) {
+        case (false, _):
+            String(
+                localized: "Flashlight Unavailable",
+                bundle: .toolkitModule,
+                comment: "A label for a button indicating the flashlight is unavailable."
+            )
+        case (_, true):
+            String(
+                localized: "Turn Off Flashlight",
+                bundle: .toolkitModule,
+                comment: "A label for a button that turns off the flashlight."
+            )
+        case (_, false):
+            String(
+                localized: "Turn On Flashlight",
+                bundle: .toolkitModule,
+                comment: "A label for a button that turns on the flashlight."
+            )
+        }
+    }
+    
     var isHiddenIfUnavailable = false
     
     var body: some View {
@@ -58,6 +81,7 @@ struct FlashlightButton: View {
                     .background(.tint)
                     .clipShape(.circle)
             }
+            .accessibilityLabel(flashlightButtonLabel)
             .buttonStyle(.plain)
             .disabled(!hasTorch)
             .onDisappear {

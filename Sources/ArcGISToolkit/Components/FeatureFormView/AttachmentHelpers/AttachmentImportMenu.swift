@@ -72,33 +72,24 @@ struct AttachmentImportMenu: View {
     
     @available(visionOS, unavailable)
     private func takePhotoOrVideoButton() -> Button<some View> {
-        Button {
+        Button(cameraButtonLabel, systemImage: "camera") {
             if cameraRequester.authorizationStatus == .authorized {
                 cameraControllerIsPresented = true
             } else {
                 cameraRequester.request()
             }
-        } label: {
-            Text(cameraButtonLabel)
-            Image(systemName: "camera")
         }
     }
     
     private func chooseFromLibraryButton() -> Button<some View> {
-        Button {
+        Button(libraryButtonLabel, systemImage: "photo") {
             photoPickerIsPresented = true
-        } label: {
-            Text(libraryButtonLabel)
-            Image(systemName: "photo")
         }
     }
     
     private func chooseFromFilesButton() -> Button<some View> {
-        Button {
+        Button(filesButtonLabel, systemImage: "folder") {
             fileImporterIsPresented = true
-        } label: {
-            Text(filesButtonLabel)
-            Image(systemName: "folder")
         }
     }
     

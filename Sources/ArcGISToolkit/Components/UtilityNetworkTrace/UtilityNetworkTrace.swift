@@ -388,26 +388,24 @@ public struct UtilityNetworkTrace: View {
         if viewModel.completedTraces.count > 1 {
             HStack {
                 if viewModel.completedTraces.count > 1 {
-                    Button {
+                    Button(String.previousTraceButtonLabel, systemImage: "chevron.backward") {
                         viewModel.selectPreviousTrace()
                         if let extent = viewModel.selectedTrace?.resultExtent {
                             updateViewpoint(to: extent)
                         }
-                    } label: {
-                        Image(systemName: "chevron.backward")
                     }
+                    .labelStyle(.iconOnly)
                 }
                 Text(currentTraceLabel)
                     .padding(.horizontal)
                 if viewModel.completedTraces.count > 1 {
-                    Button {
+                    Button(String.nextTraceButtonLabel, systemImage: "chevron.forward") {
                         viewModel.selectNextTrace()
                         if let extent = viewModel.selectedTrace?.resultExtent {
                             updateViewpoint(to: extent)
                         }
-                    } label: {
-                        Image(systemName: "chevron.forward")
                     }
+                    .labelStyle(.iconOnly)
                 }
             }
         }
@@ -644,10 +642,8 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             .swipeActions {
-                Button(role: .destructive) {
+                Button(deleteStartingPointLabel, systemImage: "trash", role: .destructive) {
                     viewModel.deleteStartingPoint(startingPoint)
-                } label: {
-                    Image(systemName: "trash")
                 }
             }
         }
@@ -784,7 +780,16 @@ public struct UtilityNetworkTrace: View {
             comment: "A label indicating the index of the trace being viewed out of the total number of traces completed."
         )
     }
-    
+
+    /// A label for the button that deletes a starting point.
+    private var deleteStartingPointLabel: String {
+        String(
+            localized: "Delete Starting Point",
+            bundle: .toolkitModule,
+            comment: "A label for a button that deletes a utility network trace starting point."
+        )
+    }
+
     /// The name of the selected utility element asset group.
     private var selectedAssetGroupName: String? {
         if case let .viewingTraces(activity) = currentActivity,
@@ -974,11 +979,27 @@ private extension String {
         )
     }
     
+    static var nextTraceButtonLabel: Self {
+        .init(
+            localized: "Next Trace",
+            bundle: .toolkitModule,
+            comment: "A label for a button to view the next completed trace result."
+        )
+    }
+    
     static var noConfigurationsAvailable: Self {
         .init(
             localized: "No configurations available.",
             bundle: .toolkitModule,
             comment: "A statement that no utility trace configurations are available."
+        )
+    }
+    
+    static var previousTraceButtonLabel: Self {
+        .init(
+            localized: "Previous Trace",
+            bundle: .toolkitModule,
+            comment: "A label for a button to view the previous completed trace result."
         )
     }
     

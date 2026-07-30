@@ -411,7 +411,7 @@ private struct FieldView: View {
     
     /// The button that allows a user to switch the numeric value between positive and negative.
     var positiveNegativeButton: some View {
-        Button {
+        Button(positiveNegativeButtonLabel, systemImage: "plus.forwardslash.minus") {
             if let value = Int(fieldFilter.value) {
                 fieldFilter.value = String(value * -1)
             } else if let value = Float(fieldFilter.value) {
@@ -419,9 +419,8 @@ private struct FieldView: View {
             } else if let value = Double(fieldFilter.value) {
                 fieldFilter.value = String(value * -1)
             }
-        } label: {
-            Image(systemName: "plus.forwardslash.minus")
         }
+        .labelStyle(.iconOnly)
         .tint(.blue)
     }
 }
@@ -450,5 +449,15 @@ extension Field {
     /// - Returns: A string representing the display title for the `Field`.
     var title: String {
         alias.isEmpty ? name : alias
+    }
+}
+
+private extension FieldView {
+    var positiveNegativeButtonLabel: String {
+        .init(
+            localized: "Toggle Sign",
+            bundle: .toolkitModule,
+            comment: "A label for a button that toggles a numeric value between negative and positive sign."
+        )
     }
 }

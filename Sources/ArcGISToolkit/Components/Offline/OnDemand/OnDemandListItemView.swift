@@ -57,12 +57,11 @@ struct OnDemandListItemView: View {
     }
     
     @ViewBuilder private var removeDownloadButton: some View {
-        Button {
+        Button(removeDownloadButtonLabel, systemImage: "xmark.circle") {
             model.removeDownloadedArea()
-        } label: {
-            Image(systemName: "xmark.circle")
-                .imageScale(.large)
         }
+        .labelStyle(.iconOnly)
+        .imageScale(.large)
         // Have to apply a style or it won't be tappable.
         .buttonStyle(.borderless)
     }
@@ -118,6 +117,16 @@ private extension LocalizedStringResource {
             "Cancelled",
             bundle: .toolkit,
             comment: "The status text when a map area download is cancelled."
+        )
+    }
+}
+
+private extension OnDemandListItemView {
+    var removeDownloadButtonLabel: String {
+        .init(
+            localized: "Remove Downloaded Area",
+            bundle: .toolkitModule,
+            comment: "A label for a button that removes a downloaded map area."
         )
     }
 }

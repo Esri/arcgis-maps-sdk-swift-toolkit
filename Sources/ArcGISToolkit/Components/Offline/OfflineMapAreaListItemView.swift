@@ -225,18 +225,25 @@ struct DownloadOfflineMapAreaButton<Model: OfflineMapAreaListItemInfo>: View {
     @ObservedObject var model: Model
     
     var body: some View {
-        Button {
+        Button(downloadButtonLabel, systemImage: "arrow.down.circle") {
             model.startDownload()
-        } label: {
-            Image(systemName: "arrow.down.circle")
-                .imageScale(.large)
         }
+        .labelStyle(.iconOnly)
+        .imageScale(.large)
         // Have to apply a style or it won't be tappable.
         .buttonStyle(.borderless)
         .disabled(!model.allowsDownload)
     }
+    
+    private var downloadButtonLabel: String {
+        .init(
+            localized: "Download Map Area",
+            bundle: .toolkitModule,
+            comment: "A label for a button that downloads a map area."
+        )
+    }
 }
-
+    
 /// A view for displaying the progress of an offline job.
 /// This button is meant to be used in the `OfflineMapAreaListItemView`.
 struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
@@ -253,6 +260,16 @@ struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
             }
             // Have to apply a style or it won't be tappable.
             .buttonStyle(.plain)
+            .accessibilityLabel(cancelJobButtonLabel)
         }
     }
+    private var cancelJobButtonLabel: String {
+        String(
+            localized: "Cancel Download",
+            bundle: .toolkitModule,
+            comment: "A label for a button that cancels a map area download."
+        )
+    }
 }
+
+

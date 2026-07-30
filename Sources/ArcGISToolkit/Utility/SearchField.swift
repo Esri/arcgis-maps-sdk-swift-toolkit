@@ -88,23 +88,33 @@ public struct SearchField: View {
             
             // Show Results button
             if !isResultsButtonHidden {
-                Button {
+                Button(
+                    resultsButtonLabel,
+                    systemImage: (isResultListHidden?.wrappedValue ?? false) ? "chevron.down" : "chevron.up"
+                ) {
                     isResultListHidden?.wrappedValue.toggle()
-                } label: {
-                    Image(
-                        systemName: (isResultListHidden?.wrappedValue ?? false) ?
-                        "chevron.down" :
-                            "chevron.up"
-                    )
-#if !os(visionOS)
-                    .foregroundStyle(Color.secondary)
-#endif
                 }
+                .labelStyle(.iconOnly)
 #if !os(visionOS)
+                .foregroundStyle(Color.secondary)
                 .buttonStyle(.plain)
 #endif
             }
         }
         .esriBorder()
+    }
+
+    private var resultsButtonLabel: String {
+        (isResultListHidden?.wrappedValue ?? false)
+        ? String(
+            localized: "Show Results",
+            bundle: .toolkitModule,
+            comment: "A label for a button that shows search results."
+        )
+        : String(
+            localized: "Hide Results",
+            bundle: .toolkitModule,
+            comment: "A label for a button that hides search results."
+        )
     }
 }
