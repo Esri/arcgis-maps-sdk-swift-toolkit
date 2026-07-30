@@ -46,48 +46,27 @@ private struct FeatureEditorModifier: ViewModifier {
                     case .success:
                         FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
                     case .failure(let error):
-                        ContentUnavailableView {
-                            Label {
-                                Text(
-                                    "Failed to start editing",
-                                    bundle: .toolkitModule,
-                                    comment: "A title shown when feature editing could not start."
-                                )
-                            } icon: {
-                                Image(systemName: "exclamationmark.triangle")
-                            }
-                        } description: {
-                            Text(error.localizedDescription)
-                        } actions: {
-                            Button {
-                                isRetrying = true
-                            } label: {
-                                Text.tryAgain
-                            }
-                            .task(id: isRetrying) {
-                                guard isRetrying else { return }
-                                defer {
-                                    // Avoids state updates from cancelled tasks.
-                                    if !Task.isCancelled {
-                                        isRetrying = false
+                        NavigationStack {
+                            makeContentUnavailableView(error: error)
+                                .toolbar {
+                                    ToolbarItem(placement: .topBarTrailing) {
+                                        DismissButton(kind: .close) {
+                                            model.isPresented = false
+                                        }
                                     }
                                 }
-                                await model.retryStartEditing()
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .disabled(isRetrying)
-                            
-                            Button {
-                                // When the inspector is dismissed, the
-                                // feature editor will also stop editing.
-                                model.isPresented = false
-                            } label: {
-                                Text.cancel
-                            }
-                            .buttonStyle(.bordered)
                         }
                     case .none:
-                        ProgressView()
+                        NavigationStack {
+                            ProgressView()
+                                .toolbar {
+                                    ToolbarItem(placement: .topBarTrailing) {
+                                        DismissButton(kind: .close) {
+                                            model.isPresented = false
+                                        }
+                                    }
+                                }
+                        }
                     }
                 }
                 .presentationBackgroundInteraction(.enabled)
@@ -107,6 +86,43 @@ private struct FeatureEditorModifier: ViewModifier {
                 }
             }
             .environment(model)
+    }
+    
+    /// Creates a view for start editing failure.
+    /// - Parameter error: The error that caused the failure.
+    /// - Returns: A `ContentUnavailableView` with failure reason and actions.
+    private func makeContentUnavailableView(error: Error) -> some View {
+        ContentUnavailableView {
+            Label {
+                Text(
+                    "Failed to start editing",
+                    bundle: .toolkitModule,
+                    comment: "A title shown when feature editing could not start."
+                )
+            } icon: {
+                Image(systemName: "exclamationmark.triangle")
+            }
+        } description: {
+            Text(error.localizedDescription)
+        } actions: {
+            Button {
+                isRetrying = true
+            } label: {
+                Text.tryAgain
+            }
+            .task(id: isRetrying) {
+                guard isRetrying else { return }
+                defer {
+                    // Avoids state updates from cancelled tasks.
+                    if !Task.isCancelled {
+                        isRetrying = false
+                    }
+                }
+                await model.retryStartEditing()
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(isRetrying)
+        }
     }
 }
 
