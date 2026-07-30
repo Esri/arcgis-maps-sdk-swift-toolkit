@@ -388,26 +388,24 @@ public struct UtilityNetworkTrace: View {
         if viewModel.completedTraces.count > 1 {
             HStack {
                 if viewModel.completedTraces.count > 1 {
-                    Button {
+                    Button(String.previousTraceButtonLabel, systemImage: "chevron.backward") {
                         viewModel.selectPreviousTrace()
                         if let extent = viewModel.selectedTrace?.resultExtent {
                             updateViewpoint(to: extent)
                         }
-                    } label: {
-                        Image(systemName: "chevron.backward")
                     }
+                    .labelStyle(.iconOnly)
                 }
                 Text(currentTraceLabel)
                     .padding(.horizontal)
                 if viewModel.completedTraces.count > 1 {
-                    Button {
+                    Button(String.nextTraceButtonLabel, systemImage: "chevron.forward") {
                         viewModel.selectNextTrace()
                         if let extent = viewModel.selectedTrace?.resultExtent {
                             updateViewpoint(to: extent)
                         }
-                    } label: {
-                        Image(systemName: "chevron.forward")
                     }
+                    .labelStyle(.iconOnly)
                 }
             }
         }
@@ -974,11 +972,27 @@ private extension String {
         )
     }
     
+    static var nextTraceButtonLabel: Self {
+        .init(
+            localized: "Next Trace",
+            bundle: .toolkitModule,
+            comment: "A label for a button to view the next completed trace result."
+        )
+    }
+    
     static var noConfigurationsAvailable: Self {
         .init(
             localized: "No configurations available.",
             bundle: .toolkitModule,
             comment: "A statement that no utility trace configurations are available."
+        )
+    }
+    
+    static var previousTraceButtonLabel: Self {
+        .init(
+            localized: "Previous Trace",
+            bundle: .toolkitModule,
+            comment: "A label for a button to view the previous completed trace result."
         )
     }
     
