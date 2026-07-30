@@ -34,18 +34,15 @@ struct GroupFormElementView<Content>: View where Content: View {
     }
     
     var body: some View {
-        // Using a Section ensures that consecutive collapsed GroupFormElements
+        // An empty Section ensures that consecutive collapsed GroupFormElements
         // have spacing consistent with other form elements.
-        Section {
-            if UIDevice.current.userInterfaceIdiom == .mac {
-                // Mac Catalyst using the "Optimized for Mac" interface only.
-                labelOptimizedForMac
-            } else {
-                DisclosureGroup(isExpanded: $isExpanded) {} label: {
-                    label
-                }
-            }
+        Section {}
+        DisclosureGroup(isExpanded: $isExpanded) {} label: {
+            label
         }
+        .disclosureGroupStyleOptimizedForMac()
+        // Group element headers shouldn't have a darkened background.
+        .listRowBackground(Color.clear)
         .task {
             await withTaskGroup { group in
                 for element in element.elements {
@@ -59,11 +56,9 @@ struct GroupFormElementView<Content>: View where Content: View {
             }
         }
         
-        // GroupFormElement content is placed outside the Section above for the
-        // following reasons:
-        // 1. Avoids indentation introduced by components like a DisclosureGroup.
-        // 2. Avoids unwanted impacts on appearance from nested Sections.
-        // 3. Avoids the header receiving a pill-shaped background.
+        // GroupFormElement content is placed outside the DisclosureGroup to
+        // avoid indentation and other unwanted visual impacts from nesting
+        // elements within the group.
         if isExpanded {
             ForEach(visibleElements, id: \.self) { element in
                 Section {
@@ -73,7 +68,6 @@ struct GroupFormElementView<Content>: View where Content: View {
                 } footer: {
                     FormElementFooter(element: element)
                 }
-                .textCase(nil)
             }
         }
     }
@@ -81,55 +75,18 @@ struct GroupFormElementView<Content>: View where Content: View {
     /// The label for the group element.
     private var label: some View {
         VStack(alignment: .leading) {
-            titleLine1
-            titleLine2
-        }
-        .foregroundStyle(.secondary)
-        .textCase(nil)
-    }
-    
-    /// The label for the group element on Mac Catalyst apps.
-    ///
-    /// For Mac Catalyst apps using the "Optimize for Mac" interface, a DisclosureGroup's indicator
-    /// is scrunched up against its label so a special label replaces the DisclosureGroup here.
-    private var labelOptimizedForMac: some View {
-        Button {
-            withAnimation {
-                isExpanded.toggle()
+            Text(element.label)
+                .font(.title3)
+                .fontWeight(.semibold)
+            if !element.description.isEmpty {
+                Text(element.description)
+                    .accessibilityIdentifier("\(element.label) Description")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.leading)
             }
-        } label: {
-            HStack {
-                VStack(alignment: .leading) {
-                    titleLine1
-                    titleLine2
-                }
-                .foregroundStyle(.secondary)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .fontWeight(.bold)
-                    .foregroundStyle(.primary)
-                    .rotationEffect(.degrees(isExpanded ? 90 : 0))
-            }
-            .contentShape(.rect)
         }
-        .buttonStyle(.plain)
-        .foregroundStyle(.secondary)
         .textCase(nil)
-    }
-    
-    private var titleLine1: some View {
-        Text(element.label)
-            .font(.title3)
-            .fontWeight(.semibold)
-    }
-    
-    @ViewBuilder private var titleLine2: some View {
-        if !element.description.isEmpty {
-            Text(element.description)
-                .accessibilityIdentifier("\(element.label) Description")
-                .font(.footnote)
-                .multilineTextAlignment(.leading)
-        }
     }
     
     /// The list of visible group elements.
@@ -137,5 +94,48 @@ struct GroupFormElementView<Content>: View where Content: View {
         element
             .elements
             .filter { elementVisibility[$0] == true }
+    }
+}
+
+extension DisclosureGroup {
+    /// Applies a style to the DisclosureGroup in apps running on Mac Catalyst with the "Optimized
+    /// for Mac" interface that keeps the header visually consistent with other platforms.
+    @MainActor
+    @ViewBuilder
+    func disclosureGroupStyleOptimizedForMac() -> some View {
+        if UIDevice.current.userInterfaceIdiom == .mac {
+            self.disclosureGroupStyle(OptimizedForMac())
+        } else {
+            self
+        }
+    }
+}
+
+/// A style that places the disclosure arrow to the right of the label similar to
+/// `AutomaticDisclosureGroupStyle`.
+///
+/// This is intended for Mac Catalyst apps using the "Optimized for Mac" interface where the
+/// disclosure arrow is squished to the left of the content.
+struct OptimizedForMac: DisclosureGroupStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button {
+            withAnimation {
+                configuration.isExpanded.toggle()
+            }
+        } label: {
+            HStack {
+                configuration.label
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .fontWeight(.bold)
+                    .foregroundStyle(.tertiary)
+                    .rotationEffect(.degrees(configuration.isExpanded ? 90 : 0))
+            }
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        if configuration.isExpanded {
+            configuration.content
+        }
     }
 }
