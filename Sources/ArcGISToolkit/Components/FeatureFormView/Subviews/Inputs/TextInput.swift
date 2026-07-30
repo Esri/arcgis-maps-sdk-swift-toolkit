@@ -215,7 +215,7 @@ private extension TextInput {
     
     /// The button that allows a user to switch the numeric value between positive and negative.
     var positiveNegativeButton: some View {
-        Button {
+        Button(positiveNegativeButtonLabel, systemImage: "plus.forwardslash.minus") {
             if let value = Int(text) {
                 text = String(value * -1)
             } else if let value = Float(text) {
@@ -223,10 +223,17 @@ private extension TextInput {
             } else if let value = Double(text) {
                 text = String(value * -1)
             }
-        } label: {
-            Image(systemName: "plus.forwardslash.minus")
         }
+        .labelStyle(.iconOnly)
         .inspectorTint(.blue)
+    }
+    
+    var positiveNegativeButtonLabel: String {
+        .init(
+            localized: "Toggle Sign",
+            bundle: .toolkitModule,
+            comment: "A label for a button that toggles a numeric value between negative and positive sign."
+        )
     }
 }
 
