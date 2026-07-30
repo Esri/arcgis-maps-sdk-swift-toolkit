@@ -34,13 +34,52 @@ private struct FeatureEditorModifier: ViewModifier {
     /// The inspector's currently selected presentation detent.
     /// This is needed to set the default detent to medium.
     @State private var selectedPresentationDetent = PresentationDetent.medium
+    /// A Boolean value indicating whether the feature editor is retrying to start editing.
+    @State private var isRetrying = false
     
     func body(content: Content) -> some View {
         content
             .safeInspector(isPresented: $model.isPresented) {
                 // VStack is needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
-                    FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
+                    switch model.loadResult {
+                    case .success:
+                        FeatureEditorFormView(isMinimized: selectedPresentationDetent == .bar)
+                    case .failure(let error):
+                        NavigationStack {
+                            makeContentUnavailableView(error: error)
+                                .toolbar {
+                                    ToolbarItem(placement: .topBarTrailing) {
+                                        DismissButton(kind: .close) {
+                                            model.isPresented = false
+                                        }
+                                    }
+                                }
+                        }
+                    case .none:
+                        NavigationStack {
+                            ProgressView()
+                                .toolbar {
+                                    ToolbarItem(placement: .topBarTrailing) {
+                                        DismissButton(kind: .close) {
+                                            model.isPresented = false
+                                        }
+                                    }
+                                }
+                        }
+                    }
+                }
+                .task(id: isRetrying) {
+                    // The task modifier is attached to the VStack so it is
+                    // not canceled when the ContentUnavailableView disappears.
+                    guard isRetrying else { return }
+                    defer {
+                        // Avoids state updates from cancelled tasks.
+                        if !Task.isCancelled {
+                            isRetrying = false
+                        }
+                    }
+                    await model.retryStartEditing()
                 }
                 .presentationBackgroundInteraction(.enabled)
                 .presentationContentInteraction(.scrolls)
@@ -59,6 +98,33 @@ private struct FeatureEditorModifier: ViewModifier {
                 }
             }
             .environment(model)
+    }
+    
+    /// Creates a view for start editing failure.
+    /// - Parameter error: The error that caused the failure.
+    /// - Returns: A `ContentUnavailableView` with failure reason and actions.
+    private func makeContentUnavailableView(error: Error) -> some View {
+        ContentUnavailableView {
+            Label {
+                Text(
+                    "Failed to start editing",
+                    bundle: .toolkitModule,
+                    comment: "A title shown when feature editing could not start."
+                )
+            } icon: {
+                Image(systemName: "exclamationmark.triangle")
+            }
+        } description: {
+            Text(error.localizedDescription)
+        } actions: {
+            Button {
+                isRetrying = true
+            } label: {
+                Text.tryAgain
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(isRetrying)
+        }
     }
 }
 
@@ -99,14 +165,7 @@ private struct FeatureEditorFormView: View {
                 .task(id: presentedFeatureForm.map(ObjectIdentifier.init)) {
                     guard let presentedFeatureForm else { return }
                     defer { self.presentedFeatureForm = nil }
-                    
-                    do {
-                        try await model.startEditing(newFeatureForm: presentedFeatureForm)
-                    } catch {
-                        Logger.featureEditor.error(
-                            "Error starting feature editor: \(error.localizedDescription)"
-                        )
-                    }
+                    await model.startEditingFeatureForm(presentedFeatureForm)
                 }
         }
     }

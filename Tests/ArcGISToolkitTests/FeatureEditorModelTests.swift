@@ -41,7 +41,7 @@ struct FeatureEditorModelTests {
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
         
         // Verifies isPresented is true when feature editor starts.
-        try await model.startEditing(rootFeature: feature, on: nil)
+        await model.startEditingFeature(feature, on: nil)
         model.expectIsEditing(rootFeature: feature)
         
         await model.expectIsGeometryEditing()
@@ -91,7 +91,7 @@ struct FeatureEditorModelTests {
         let geometry = Point(latitude: 0, longitude: 0)
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
         
-        try await model.startEditing(rootFeature: feature, on: nil)
+        await model.startEditingFeature(feature, on: nil)
         await model.expectIsGeometryEditing()
         await model.expectIsEditing(geometry: geometry)
         
@@ -104,7 +104,39 @@ struct FeatureEditorModelTests {
         await model.expectIsEditing(geometry: newGeometry)
     }
     
-    /// Verifies `startEditing(rootFeature:on:)` and `startEditing(newFeatureForm:)` using
+    /// Verifies setup failure leads to loadResult failure, blocks editing,
+    /// and `retryStartEditing()` clears the error on success.
+    @Test
+    func retryStartEditingAfterFailure() async throws {
+        let model = FeatureEditorModel()
+        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
+        defer { monitorGeometryEditorStreamsTask.cancel() }
+        
+        let geodatabaseFile = try await TemporaryGeodatabaseFile()
+        let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
+        let geometry = Point(latitude: 2, longitude: 2)
+        let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
+        let map = Map(spatialReference: nil)
+        
+        // Simulates map fails to load by creating a map with nil spatial reference.
+        await model.startEditingFeature(feature, on: map)
+        let error = #expect(throws: MappingError.self) {
+            try #require(model.loadResult).get()
+        }
+        #expect(error == .missingSpatialReference(details: ""))
+        await Task.yieldExpect(!model.geometryEditorIsStarted)
+        await Task.yieldExpect(model.geometryEditorGeometry == nil)
+        
+        // Sets the map's spatial reference to a valid value and retries starting the feature editor.
+        map.setSpatialReference(.wgs84)
+        await model.retryStartEditing()
+        
+        try #require(model.loadResult).get()
+        await model.expectIsGeometryEditing()
+        await model.expectIsEditing(geometry: geometry)
+    }
+    
+    /// Verifies `startEditingFeature(_:on:)` and `startEditingFeatureForm(_:)` using
     /// features with geometries.
     @Test
     func startEditing() async throws {
@@ -115,14 +147,14 @@ struct FeatureEditorModelTests {
         let geodatabaseFile = try await TemporaryGeodatabaseFile()
         let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
         
-        // Verifies startEditing(rootFeature:on:) starts the feature editor and geometry editor.
+        // Verifies startEditingFeature(_:on:) starts the feature editor and geometry editor.
         do {
             let geometry = Point(latitude: 0, longitude: 0)
             let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
             let map = Map(spatialReference: .wgs84)
             
             // Verifies feature editor is started using the feature instance.
-            try await model.startEditing(rootFeature: feature, on: map)
+            await model.startEditingFeature(feature, on: map)
             model.expectIsEditing(rootFeature: feature)
             
             // Verifies geometry editor is started using the feature's geometry.
@@ -133,14 +165,14 @@ struct FeatureEditorModelTests {
             #expect(map.loadStatus == .loaded)
         }
         
-        // Verifies startEditing(newFeatureForm:) updates the correct model properties.
+        // Verifies startEditingFeatureForm(_:) updates the correct model properties.
         do {
             let geometry = Point(latitude: 1, longitude: 1)
             let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
             let featureForm = FeatureForm(feature: feature)
             
             // Verifies feature editor uses the new feature instance.
-            try await model.startEditing(newFeatureForm: featureForm)
+            await model.startEditingFeatureForm(featureForm)
             #expect(model.feature === feature)
             
             // Verifies rootFeatureForm does not update.
@@ -154,7 +186,7 @@ struct FeatureEditorModelTests {
         }
     }
     
-    /// Verifies `startEditing(rootFeature:on:)` using a feature without a geometry.
+    /// Verifies `startEditingFeature(_:on:)` using a feature without a geometry.
     @Test
     func startEditingFeatureWithoutGeometry() async throws {
         let model = FeatureEditorModel()
@@ -167,7 +199,7 @@ struct FeatureEditorModelTests {
         #expect(feature.geometry == nil)
         
         // Verifies feature editor and geometry editor are started.
-        try await model.startEditing(rootFeature: feature, on: nil)
+        await model.startEditingFeature(feature, on: nil)
         model.expectIsEditing(rootFeature: feature)
         await model.expectIsGeometryEditing()
         
@@ -178,7 +210,7 @@ struct FeatureEditorModelTests {
         #expect(model.viewpointGeometry == nil)
     }
     
-    /// Verifies `startEditing(rootFeature:on:)` using a non-spatial feature.
+    /// Verifies `startEditingFeature(_:on:)` using a non-spatial feature.
     @Test
     func startEditingNonSpatialFeature() async throws {
         let model = FeatureEditorModel()
@@ -194,7 +226,7 @@ struct FeatureEditorModelTests {
         #expect(!feature.canUpdateGeometry)
         
         // Verifies feature editor is started using the feature instance.
-        try await model.startEditing(rootFeature: feature, on: nil)
+        await model.startEditingFeature(feature, on: nil)
         model.expectIsEditing(rootFeature: feature)
         
         // Geometry editor is not started.
@@ -218,7 +250,7 @@ struct FeatureEditorModelTests {
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
         
         // Verifies feature editor and geometry editor are started.
-        try await model.startEditing(rootFeature: feature, on: nil)
+        await model.startEditingFeature(feature, on: nil)
         model.expectIsEditing(rootFeature: feature)
         await model.expectIsGeometryEditing()
         await model.expectIsEditing(geometry: geometry)
@@ -237,6 +269,7 @@ private extension FeatureEditorModel {
         #expect(feature == nil, sourceLocation: sourceLocation)
         #expect(!isPresented, sourceLocation: sourceLocation)
         #expect(rootFeatureForm == nil, sourceLocation: sourceLocation)
+        #expect(loadResult == nil, sourceLocation: sourceLocation)
         #expect(!snapSettingsSheetIsPresented, sourceLocation: sourceLocation)
         #expect(viewpointGeometry == nil, sourceLocation: sourceLocation)
         

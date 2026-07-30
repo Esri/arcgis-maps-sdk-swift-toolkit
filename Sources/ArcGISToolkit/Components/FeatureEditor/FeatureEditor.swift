@@ -112,13 +112,7 @@ public struct FeatureEditor: View {
             }
             .task(id: startEditingIDs) {
                 if let feature {
-                    do {
-                        try await model.startEditing(rootFeature: feature, on: map)
-                    } catch {
-                        Logger.featureEditor.error(
-                            "Error starting feature editor: \(error.localizedDescription)"
-                        )
-                    }
+                    await model.startEditingFeature(feature, on: map)
                 } else {
                     model.stopEditing()
                 }
