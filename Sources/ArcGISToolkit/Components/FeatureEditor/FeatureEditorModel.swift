@@ -201,6 +201,9 @@ final class FeatureEditorModel {
         // Loads the feature so canUpdateGeometry can be accessed. It is always
         // false otherwise.
         try await feature.retryLoad()
+        // No need to load the feature's table upfront if the we don't edit its
+        // geometry.
+        guard feature.canUpdateGeometry else { return }
         
         // Loads the feature's table if the geometry is nil so geometryType
         // can be accessed. It is always nil otherwise.
