@@ -260,6 +260,16 @@ struct OfflineJobProgressView<Model: OfflineMapAreaListItemInfo>: View {
             }
             // Have to apply a style or it won't be tappable.
             .buttonStyle(.plain)
+            .accessibilityLabel(cancelJobButtonLabel)
         }
     }
+    private var cancelJobButtonLabel: String {
+        String(
+            localized: "Cancel Download",
+            bundle: .toolkitModule,
+            comment: "A label for a button that cancels a map area download."
+        )
+    }
 }
+
+
