@@ -642,10 +642,8 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             .swipeActions {
-                Button(role: .destructive) {
+                Button(deleteStartingPointLabel, systemImage: "trash", role: .destructive) {
                     viewModel.deleteStartingPoint(startingPoint)
-                } label: {
-                    Image(systemName: "trash")
                 }
             }
         }
@@ -782,7 +780,16 @@ public struct UtilityNetworkTrace: View {
             comment: "A label indicating the index of the trace being viewed out of the total number of traces completed."
         )
     }
-    
+
+    /// A label for the button that deletes a starting point.
+    private var deleteStartingPointLabel: String {
+        String(
+            localized: "Delete Starting Point",
+            bundle: .toolkitModule,
+            comment: "A label for a button that deletes a utility network trace starting point."
+        )
+    }
+
     /// The name of the selected utility element asset group.
     private var selectedAssetGroupName: String? {
         if case let .viewingTraces(activity) = currentActivity,
