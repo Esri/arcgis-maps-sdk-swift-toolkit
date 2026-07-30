@@ -154,7 +154,7 @@ struct FeatureEditorFormView: View {
         } catch {
             // Sleeps if the geometry editor wasn't hidden so there is still a
             // delay before the selection is cleared.
-            try? await Task.sleep(for: .seconds(1))
+            try? await Task.sleep(for: .featureHighlightDelay)
         }
         
         // Prevents clearing a selection made by another task while this one was still running.
@@ -186,12 +186,17 @@ struct FeatureEditorFormView: View {
         
         model.geometryEditor.clearSelection()
         geometryEditorOpacity = 0.1
-        try? await Task.sleep(for: .seconds(1))
+        try? await Task.sleep(for: .featureHighlightDelay)
         geometryEditorOpacity = 1
     }
 }
 
 // MARK: - Helpers
+
+private extension Duration {
+    /// The duration before a feature highlight (selection and geometry editor opacity) is cleared.
+    static let featureHighlightDelay = Self.seconds(1)
+}
 
 /// A wrapper for `FeatureFormView.EditingEvent` that conforms to `Equatable`.
 private struct EquatableEditingEvent: Equatable {
