@@ -90,6 +90,7 @@ private struct SiteList: View {
         Group {
             if sites.isEmpty {
                 ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List(sites) { site in
                     NavigationLink {
@@ -107,6 +108,8 @@ private struct SiteList: View {
 #endif
             }
         }
+        // Prevents background flicker when navigating back from FacilityList.
+        .background(Color(.systemBackground))
         .searchable(
             text: $searchText,
             placement: .navigationBarDrawer(displayMode: .always),
