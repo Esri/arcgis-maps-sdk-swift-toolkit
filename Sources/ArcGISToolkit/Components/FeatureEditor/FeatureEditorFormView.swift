@@ -29,7 +29,7 @@ struct FeatureEditorFormView: View {
     
     /// The current editing event from the form view. This is non-`nil` while
     /// the event is being processed by this view.
-    @State private var editingEvent: EquatableEditingEvent?
+    @State private var editingEvent: FeatureFormView.EditingEvent?
     /// The opacity of the geometry editor tool's symbology. This is used to
     /// animate changes to the geometry editor's opacity.
     @State private var geometryEditorOpacity: Float = 1
@@ -58,7 +58,7 @@ struct FeatureEditorFormView: View {
         FeatureFormView(root: rootFeatureForm, isPresented: $model.isPresented)
             .editingButtons(isMinimized ? .hidden : .automatic)
             .onFeatureFormChanged { presentedFeatureForm = $0 }
-            .onFormEditingEvent { editingEvent = EquatableEditingEvent(event: $0) }
+            .onFormEditingEvent { editingEvent = $0 }
             .environment(\.externalSaveAction, saveGeometryEditsAction)
             .onAnimationChange(of: geometryEditorOpacity) { newOpacity in
                 model.geometryEditor.tool.style.opacity = newOpacity
@@ -66,7 +66,7 @@ struct FeatureEditorFormView: View {
             .animation(.default, value: geometryEditorOpacity)
             .task(id: editingEvent) {
                 guard let editingEvent else { return }
-                await handleEditingEvent(editingEvent.event)
+                await handleEditingEvent(editingEvent)
                 
                 // Prevents clearing editingEvent if it was set while this
                 // task was running.
@@ -196,27 +196,6 @@ struct FeatureEditorFormView: View {
 private extension Duration {
     /// The duration before a feature highlight (selection and geometry editor opacity) is cleared.
     static let featureHighlightDelay = Self.seconds(1)
-}
-
-/// A wrapper for `FeatureFormView.EditingEvent` that conforms to `Equatable`.
-private struct EquatableEditingEvent: Equatable {
-    /// The form editing event.
-    let event: FeatureFormView.EditingEvent
-    
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        return switch (lhs.event, rhs.event) {
-        case let (.discardedEdits(lhsWillNavigate), .discardedEdits(rhsWillNavigate)):
-            lhsWillNavigate == rhsWillNavigate
-        case let (.navigationChanged(lhsView), .navigationChanged(rhsView)):
-            lhsView == rhsView
-        case let (.savedEdits(lhsWillNavigate), .savedEdits(rhsWillNavigate)):
-            lhsWillNavigate == rhsWillNavigate
-        case let (.showOnMapRequested(lhsFeature), .showOnMapRequested(rhsFeature)):
-            lhsFeature === rhsFeature
-        default:
-            false
-        }
-    }
 }
 
 /// An error relating to the geometry editor.
