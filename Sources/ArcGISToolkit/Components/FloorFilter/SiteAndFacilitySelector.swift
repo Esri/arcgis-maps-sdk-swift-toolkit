@@ -85,7 +85,7 @@ private struct SiteList: View {
     }
     
     var body: some View {
-        VStack {
+        Group {
             if sites.isEmpty {
                 ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
             } else {
@@ -100,16 +100,16 @@ private struct SiteList: View {
                             .lineLimit(1)
                     }
                 }
-                .searchable(
-                    text: $searchText,
-                    placement: .navigationBarDrawer(displayMode: .always),
-                    prompt: String.filterSites
-                )
 #if !os(visionOS)
                 .listStyle(.plain)
 #endif
             }
         }
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: String.filterSites
+        )
         .navigationTitle(String.sites)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -166,7 +166,7 @@ private struct FacilityList: View {
     }
     
     var body: some View {
-        VStack {
+        Group {
             if facilities.isEmpty {
                 ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
             } else {
@@ -198,11 +198,6 @@ private struct FacilityList: View {
                         .buttonStyle(.plain)
 #endif
                     }
-                    .searchable(
-                        text: $searchText,
-                        placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: String.filterFacilities
-                    )
 #if !os(visionOS)
                     .listStyle(.plain)
 #endif
@@ -215,6 +210,11 @@ private struct FacilityList: View {
                 }
             }
         }
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: String.filterFacilities
+        )
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 DismissButton(kind: .cancel) {
