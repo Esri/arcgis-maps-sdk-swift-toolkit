@@ -52,7 +52,9 @@ struct SiteAndFacilitySelector: View {
                 }
                 .onAppear {
                     // If there not multiple sites, then we go straight to the facilities list.
-                    guard model.sites.count > 1, let facility = model.selection?.facility else {
+                    guard navigationPath.isEmpty,
+                          model.sites.count > 1,
+                          let facility = model.selection?.facility else {
                         return
                     }
                     navigationPath.append(facility)
