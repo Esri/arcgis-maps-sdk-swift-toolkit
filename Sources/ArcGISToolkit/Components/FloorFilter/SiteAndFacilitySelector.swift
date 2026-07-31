@@ -37,7 +37,7 @@ struct SiteAndFacilitySelector: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             if readyToPresent {
-                VStack {
+                Group {
                     if model.sites.count > 1 {
                         SiteList(isPresented: $isPresented)
                     } else {
@@ -62,7 +62,7 @@ struct SiteAndFacilitySelector: View {
         .onAppear {
             readyToPresent = true
         }
-        .frame(minWidth: 360, minHeight: 500)
+        .frame(idealWidth: 360, idealHeight: 500)
     }
 }
 
