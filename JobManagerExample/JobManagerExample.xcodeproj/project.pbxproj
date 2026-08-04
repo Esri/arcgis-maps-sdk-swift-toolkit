@@ -325,7 +325,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 300.0.0;
+				MARKETING_VERSION = 300.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.JobManagerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -362,7 +362,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 300.0.0;
+				MARKETING_VERSION = 300.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.JobManagerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
