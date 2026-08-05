@@ -14,6 +14,7 @@
 
 import SwiftUI
 import ArcGIS
+import Combine
 
 /// A view that shows information for an offline area for use in a List.
 @MainActor
@@ -28,7 +29,7 @@ struct OfflineMapAreaListItemView<Model: OfflineMapAreaListItemInfo, TrailingCon
         self.isSelected = isSelected
         self.trailingContent = trailingContent
     }
-        
+    
     /// The view model for the item view.
     @ObservedObject var model: Model
     
@@ -185,7 +186,7 @@ private class MockMetadata: OfflineMapAreaListItemInfo {
 struct OpenOfflineMapAreaButton: View {
     /// The currently selected map.
     @Binding var selectedMap: Map?
-
+    
     /// The map to open.
     let map: Map?
     

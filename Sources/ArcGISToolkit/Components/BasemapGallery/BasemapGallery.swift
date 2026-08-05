@@ -14,6 +14,7 @@
 
 import SwiftUI
 import ArcGIS
+import Combine
 
 /// The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
 /// portal, or an array of ``BasemapGalleryItem`` objects. When a new basemap is selected from the

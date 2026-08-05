@@ -15,6 +15,7 @@
 import ArcGIS
 import Combine
 import Foundation
+import UIKit
 
 @MainActor
 final class ScalebarViewModel: ObservableObject {

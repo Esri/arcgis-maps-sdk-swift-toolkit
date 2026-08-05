@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import Combine
 import Foundation
 
 /// The model class that represents information for an offline map.
@@ -53,7 +54,7 @@ class OfflineMapViewModel: ObservableObject {
     
     /// A Boolean value indicating whether the models are loading.
     @Published private(set) var isLoadingModels = false
-
+    
     /// A Boolean value indicating whether the web map is offline disabled.
     @Published private(set) var mapIsOfflineDisabled = false
     
