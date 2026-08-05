@@ -46,8 +46,10 @@ struct PreplannedListItemView: View {
     
     @ViewBuilder private var trailingButton: some View {
         switch model.status {
-        case .notLoaded, .loadFailure, .packaging, .packageFailure, .mmpkLoadFailure:
+        case .notLoaded, .loadFailure, .packaging, .packageFailure:
             EmptyView()
+        case .mmpkLoadFailure:
+            removeDownloadButton
         case .loading:
             ProgressView()
         case .packaged, .downloadFailure:
@@ -62,6 +64,17 @@ struct PreplannedListItemView: View {
                 dismiss: shouldDismiss ? dismiss : nil
             )
         }
+    }
+    
+    @ViewBuilder private var removeDownloadButton: some View {
+        Button {
+            model.removeDownloadedArea()
+        } label: {
+            Image(systemName: "xmark.circle")
+                .imageScale(.large)
+        }
+        // Have to apply a style or it won't be tappable.
+        .buttonStyle(.borderless)
     }
 }
 
