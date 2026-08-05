@@ -257,7 +257,7 @@ final class UtilityNetworkTraceViewModelTests: XCTestCase {
         XCTAssertTrue(success)
         XCTAssertFalse(viewModel.canRunTrace)
         XCTAssertEqual(viewModel.completedTraces.first?.functionOutputs.count, 6)
-        XCTAssertEqual(functionOutput.function.functionType, .add)
+        XCTAssertEqual(functionOutput.function.kind, .add)
         XCTAssertEqual(functionOutput.function.networkAttribute.name, "Service Load")
         XCTAssertEqual(functionOutput.result as? Double, 600.0)
     }

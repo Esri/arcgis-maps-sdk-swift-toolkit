@@ -61,7 +61,7 @@ extension View {
         subtitle: S
     ) -> some View where T: StringProtocol, S: StringProtocol {
         if !subtitle.isEmpty {
-#if swift(>=6.2) && !os(visionOS)
+#if !os(visionOS)
             if #available(iOS 26.0, *) {
                 self.navigationTitle(title)
                     .navigationSubtitle(subtitle)

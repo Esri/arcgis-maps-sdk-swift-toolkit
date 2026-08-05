@@ -56,6 +56,15 @@ extension Text {
         )
     }
     
+    /// An error message explaining attachments with empty files (0 bytes) cannot be downloaded.
+    static var emptyAttachmentDownloadErrorMessage: Self {
+        .init(
+            "Empty attachments cannot be downloaded.",
+            bundle: .toolkitModule,
+            comment: "An error message explaining attachments with empty files (0 bytes) cannot be downloaded."
+        )
+    }
+    
     /// Localized text for the word "Field".
     static var field: Self {
         .init(

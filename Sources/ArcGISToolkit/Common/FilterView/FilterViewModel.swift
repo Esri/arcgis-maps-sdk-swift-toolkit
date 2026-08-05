@@ -17,7 +17,11 @@ import Foundation
 import SwiftUI
 
 @MainActor @Observable
-final class FilterViewModel {
+@_spi(Experimental)
+public final class FilterViewModel {
+    /// Creates a filter view model.
+    public init() {}
+    
     /// The feature table containing the fields to filter on.
     ///
     /// Use this to auto-populate the filterable fields. Alternatively, use `setFields(_:)` to customize
@@ -40,7 +44,7 @@ final class FilterViewModel {
     private var originalFieldFilters = [FieldFilter]()
     
     /// A Boolean value indicating whether the filter view is presented.
-    var filterViewIsPresented = false
+    public var filterViewIsPresented = false
     
     /// The list of fields generated from the `featureTable`.
     private(set) var fields = [Field]()
@@ -58,13 +62,13 @@ final class FilterViewModel {
     /// Use this to customize the filterable fields. Alternatively, set `featureTable` to auto-populate
     /// the filterable fields.
     /// - Parameter fields: The filterable fields.
-    func setFields(_ fields: [Field]) {
+    public func setFields(_ fields: [Field]) {
         self.fields = supportedUNFields(fields)
     }
     
     /// The "where" clause assembled from the list of applied `FieldFilter` objects.
     /// - Returns: A SQL query assembled from the list of applied filters. The `FieldFilter` objects are joined by `AND`.
-    func whereClause() -> String {
+    public func whereClause() -> String {
         whereClause(filters: fieldFilters)
     }
     

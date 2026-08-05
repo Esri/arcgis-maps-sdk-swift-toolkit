@@ -80,7 +80,7 @@ struct RadioButtonsInput: View {
                 }
             }
             .onChange(of: selectedValue) {
-                guard selectedValue?.name != element.formattedValue else { return }
+                guard selectedValue?.name ?? "" != element.formattedValue else { return }
                 embeddedFeatureFormViewModel.focusedElement = element
                 element.updateValue(selectedValue?.code)
                 embeddedFeatureFormViewModel.evaluateExpressions()

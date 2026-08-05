@@ -12,66 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ARKit
+#if os(iOS)
 import SwiftUI
-import ArcGIS
-
-/// A view model that stores state information for the calibration.
-@MainActor
-class WorldScaleCalibrationViewModel: ObservableObject {
-    /// The total heading correction.
-    @Published
-    private(set) var totalHeadingCorrection: Double = 0
-    
-    /// The total elevation correction.
-    @Published
-    private(set) var totalElevationCorrection: Double = 0
-    
-    /// The camera controller for which corrections will be applied.
-    let cameraController = TransformationMatrixCameraController()
-    
-    /// Creates a calibration view model.
-    init() {
-        cameraController.translationFactor = 1
-    }
-    
-    /// Proposes a heading correction.
-    /// This will limit the total heading correction to -180...180.
-    fileprivate func propose(headingCorrection: Double) {
-        let newTotalHeadingCorrection = (totalHeadingCorrection + headingCorrection)
-            .clamped(to: -180...180)
-        let allowedHeadingCorrection = newTotalHeadingCorrection - totalHeadingCorrection
-        totalHeadingCorrection = newTotalHeadingCorrection
-        
-        // Update camera controller.
-        let originCamera = cameraController.originCamera
-        cameraController.originCamera = originCamera.rotatedTo(
-            heading: originCamera.heading + allowedHeadingCorrection,
-            pitch: originCamera.pitch,
-            roll: originCamera.roll
-        )
-    }
-    
-    /// Proposes an elevation correction.
-    fileprivate func propose(elevationCorrection: Double) {
-        totalElevationCorrection += elevationCorrection
-        
-        // Update camera controller.
-        cameraController.originCamera = cameraController.originCamera.elevated(by: elevationCorrection)
-    }
-}
 
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 extension WorldScaleSceneView {
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
     struct CalibrationView: View {
-        @ObservedObject
-        var viewModel: WorldScaleCalibrationViewModel
-        
+        @Bindable var calibration: Calibration
         /// A Boolean value that indicates if the user is presenting the calibration view.
-        @Binding
-        var isPresented: Bool
+        @Binding var isPresented: Bool
         
         /// A number format style for signed values with their fractional component removed.
         private let numberFormat = FloatingPointFormatStyle<Double>.number
@@ -80,12 +31,12 @@ extension WorldScaleSceneView {
         
         /// The total heading correction measurement in degrees.
         private var totalHeadingCorrectionMeasurement: Measurement<UnitAngle> {
-            Measurement<UnitAngle>(value: viewModel.totalHeadingCorrection, unit: .degrees)
+            Measurement<UnitAngle>(value: calibration.totalHeadingCorrection, unit: .degrees)
         }
         
         /// The total elevation correction measurement in meters.
         private var totalElevationCorrectionMeasurement: Measurement<UnitLength> {
-            Measurement<UnitLength>(value: viewModel.totalElevationCorrection, unit: .meters)
+            Measurement<UnitLength>(value: calibration.totalElevationCorrection, unit: .meters)
         }
         
         var body: some View {
@@ -128,14 +79,14 @@ extension WorldScaleSceneView {
                             Spacer()
                         }
                     } onIncrement: {
-                        viewModel.propose(headingCorrection: 1)
+                        calibration.proposeHeadingCorrection(1)
                     } onDecrement: {
-                        viewModel.propose(headingCorrection: -1)
+                        calibration.proposeHeadingCorrection(-1)
                     }
                 }
                 Joyslider()
                     .onChanged { delta in
-                        viewModel.propose(headingCorrection: delta)
+                        calibration.proposeHeadingCorrection(delta)
                     }
             }
         }
@@ -154,14 +105,14 @@ extension WorldScaleSceneView {
                             Spacer()
                         }
                     } onIncrement: {
-                        viewModel.propose(elevationCorrection: 1)
+                        calibration.proposeElevationCorrection(1)
                     } onDecrement: {
-                        viewModel.propose(elevationCorrection: -1)
+                        calibration.proposeElevationCorrection(-1)
                     }
                 }
                 Joyslider()
                     .onChanged { delta in
-                        viewModel.propose(elevationCorrection: delta)
+                        calibration.proposeElevationCorrection(delta)
                     }
             }
         }
@@ -203,11 +154,13 @@ private extension WorldScaleSceneView.CalibrationView {
     }
 }
 
-#if !os(visionOS) && !targetEnvironment(macCatalyst)
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
 #Preview {
-    WorldScaleSceneView.CalibrationView(
-        viewModel: WorldScaleCalibrationViewModel(),
-        isPresented: .constant(true)
+    @Previewable @State var isPresented = true
+    WorldScaleSceneView<AppleWorldTracking>.CalibrationView(
+        calibration: Calibration(),
+        isPresented: $isPresented
     )
 }
 #endif

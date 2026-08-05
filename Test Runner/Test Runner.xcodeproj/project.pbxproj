@@ -24,6 +24,13 @@
 		75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */; };
 		75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */; };
 		75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */; };
+		797951842FA54050000E537C /* BuildingExplorerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797951832FA5404B000E537C /* BuildingExplorerTests.swift */; };
+		797951882FA549C1000E537C /* BuildingExplorerTestCase1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797951872FA549C1000E537C /* BuildingExplorerTestCase1View.swift */; };
+		7979518B2FA55647000E537C /* BuildingExplorerTestViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7979518A2FA55647000E537C /* BuildingExplorerTestViews.swift */; };
+		7979518D2FA563B6000E537C /* BuildingExplorerTestCase2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7979518C2FA563B4000E537C /* BuildingExplorerTestCase2View.swift */; };
+		7979518F2FA566FB000E537C /* BuildingExplorerTestCase3View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7979518E2FA566FA000E537C /* BuildingExplorerTestCase3View.swift */; };
+		797951912FA56CAC000E537C /* BuildingExplorerTestCase4View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797951902FA56CAB000E537C /* BuildingExplorerTestCase4View.swift */; };
+		79A0AB152FA8F89B001C81C8 /* BuildingExplorerTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A0AB142FA8F88F001C81C8 /* BuildingExplorerTestData.swift */; };
 		8A1138132BC7407D007E0BFB /* BookmarksTestCase6View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1138122BC7407D007E0BFB /* BookmarksTestCase6View.swift */; };
 		8A1562F52B86896300000DD6 /* UI Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F42B86896300000DD6 /* UI Tests.xctestplan */; };
 		8A1562F72B86896C00000DD6 /* Unit Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */; };
@@ -33,7 +40,7 @@
 		8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */; };
 		8A9845772C3F444B001CCE22 /* AttachmentCameraControllerTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */; platformFilters = (ios, maccatalyst, ); };
 		8A99A0B42F20578B0021819A /* XCTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0332232F20562600D5B463 /* XCTestCase.swift */; };
-		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; };
+		8A9F898F2B5B4F0A0027215E /* FeatureFormViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormViewTestView.swift */; };
 		8AC5AA652E428CB000F0F0E0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5AA642E428CAC00F0F0E0 /* UserDefaults.swift */; };
 		8AC5AA692E428D3E00F0F0E0 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5AA682E428D3C00F0F0E0 /* Binding.swift */; };
 		8AF7DF432F52329B00174515 /* XCUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF7DF412F52324000174515 /* XCUIElement.swift */; };
@@ -92,6 +99,13 @@
 		75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTestView.swift; sourceTree = "<group>"; };
 		75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTests.swift; sourceTree = "<group>"; };
 		75CCCD612A5F691E0098B059 /* Test Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Test Runner.entitlements"; sourceTree = "<group>"; };
+		797951832FA5404B000E537C /* BuildingExplorerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingExplorerTests.swift; sourceTree = "<group>"; };
+		797951872FA549C1000E537C /* BuildingExplorerTestCase1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingExplorerTestCase1View.swift; sourceTree = "<group>"; };
+		7979518A2FA55647000E537C /* BuildingExplorerTestViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingExplorerTestViews.swift; sourceTree = "<group>"; };
+		7979518C2FA563B4000E537C /* BuildingExplorerTestCase2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingExplorerTestCase2View.swift; sourceTree = "<group>"; };
+		7979518E2FA566FA000E537C /* BuildingExplorerTestCase3View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingExplorerTestCase3View.swift; sourceTree = "<group>"; };
+		797951902FA56CAB000E537C /* BuildingExplorerTestCase4View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingExplorerTestCase4View.swift; sourceTree = "<group>"; };
+		79A0AB142FA8F88F001C81C8 /* BuildingExplorerTestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingExplorerTestData.swift; sourceTree = "<group>"; };
 		8A0332232F20562600D5B463 /* XCTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCase.swift; sourceTree = "<group>"; };
 		8A1138122BC7407D007E0BFB /* BookmarksTestCase6View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase6View.swift; sourceTree = "<group>"; };
 		8A1562F42B86896300000DD6 /* UI Tests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UI Tests.xctestplan"; sourceTree = "<group>"; };
@@ -101,7 +115,7 @@
 		8A9419632E035FED003C7D10 /* AppSecrets.swift.masque */ = {isa = PBXFileReference; lastKnownFileType = text; name = AppSecrets.swift.masque; path = ../AppSecrets.swift.masque; sourceTree = "<group>"; };
 		8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCameraControllerTests.swift; sourceTree = "<group>"; };
 		8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCameraControllerTestView.swift; sourceTree = "<group>"; };
-		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; };
+		8A9F898E2B5B4F0A0027215E /* FeatureFormViewTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormViewTestView.swift; sourceTree = "<group>"; };
 		8AC5AA642E428CAC00F0F0E0 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		8AC5AA682E428D3C00F0F0E0 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		8AF7DF412F52324000174515 /* XCUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUIElement.swift; sourceTree = "<group>"; };
@@ -188,6 +202,7 @@
 				8A9845742C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift */,
 				75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */,
 				7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */,
+				797951832FA5404B000E537C /* BuildingExplorerTests.swift */,
 				75022F952A7AC9A0000ED7B7 /* FeatureFormViewTests.swift */,
 				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
 				D7FDFCBB2DF208BD00ED91C1 /* PopupViewTests.swift */,
@@ -216,12 +231,26 @@
 				7584B7532B1A798B00772AB7 /* BookmarksTestViews */,
 				8A9845762C3F4447001CCE22 /* AttachmentCameraControllerTestView.swift */,
 				75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */,
-				8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */,
+				797951892FA5560B000E537C /* BuildingExplorerTestViews */,
+				8A9F898E2B5B4F0A0027215E /* FeatureFormViewTestView.swift */,
 				75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */,
 				D7FDFCBD2DF2090300ED91C1 /* PopupTestView.swift */,
 				8A3982E12E39393500A8F1AF /* UtilityNetworkTraceTestView.swift */,
 			);
 			path = TestViews;
+			sourceTree = "<group>";
+		};
+		797951892FA5560B000E537C /* BuildingExplorerTestViews */ = {
+			isa = PBXGroup;
+			children = (
+				797951872FA549C1000E537C /* BuildingExplorerTestCase1View.swift */,
+				7979518C2FA563B4000E537C /* BuildingExplorerTestCase2View.swift */,
+				7979518E2FA566FA000E537C /* BuildingExplorerTestCase3View.swift */,
+				797951902FA56CAB000E537C /* BuildingExplorerTestCase4View.swift */,
+				79A0AB142FA8F88F001C81C8 /* BuildingExplorerTestData.swift */,
+				7979518A2FA55647000E537C /* BuildingExplorerTestViews.swift */,
+			);
+			path = BuildingExplorerTestViews;
 			sourceTree = "<group>";
 		};
 		8A0332212F20561000D5B463 /* XCTest */ = {
@@ -427,12 +456,18 @@
 				75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */,
 				7552A7622A573D810023DA5A /* BookmarksTestCase1View.swift in Sources */,
 				7584B7592B1A817A00772AB7 /* BookmarksTestCase3View.swift in Sources */,
+				7979518D2FA563B6000E537C /* BuildingExplorerTestCase2View.swift in Sources */,
 				8A3982E22E39394700A8F1AF /* UtilityNetworkTraceTestView.swift in Sources */,
 				8AC5AA692E428D3E00F0F0E0 /* Binding.swift in Sources */,
+				7979518B2FA55647000E537C /* BuildingExplorerTestViews.swift in Sources */,
+				797951912FA56CAC000E537C /* BuildingExplorerTestCase4View.swift in Sources */,
 				7584B7572B1A7AF100772AB7 /* BookmarksTestCase2View.swift in Sources */,
-				8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */,
+				797951882FA549C1000E537C /* BuildingExplorerTestCase1View.swift in Sources */,
+				8A9F898F2B5B4F0A0027215E /* FeatureFormViewTestView.swift in Sources */,
 				8A1138132BC7407D007E0BFB /* BookmarksTestCase6View.swift in Sources */,
+				79A0AB152FA8F89B001C81C8 /* BuildingExplorerTestData.swift in Sources */,
 				8AC5AA652E428CB000F0F0E0 /* UserDefaults.swift in Sources */,
+				7979518F2FA566FB000E537C /* BuildingExplorerTestCase3View.swift in Sources */,
 				7584B75B2B1A824300772AB7 /* BookmarksTestCase4View.swift in Sources */,
 				D7FDFCBE2DF2090300ED91C1 /* PopupTestView.swift in Sources */,
 				75B236692A5CB49B00AEFACE /* BasemapGalleryTestView.swift in Sources */,
@@ -449,6 +484,7 @@
 				75022F962A7AC9A0000ED7B7 /* FeatureFormViewTests.swift in Sources */,
 				75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */,
 				D7FDFCBC2DF208BD00ED91C1 /* PopupViewTests.swift in Sources */,
+				797951842FA54050000E537C /* BuildingExplorerTests.swift in Sources */,
 				8A3982E42E3942A100A8F1AF /* UtilityNetworkTraceTests.swift in Sources */,
 				8AF7DF432F52329B00174515 /* XCUIElement.swift in Sources */,
 				8A99A0B42F20578B0021819A /* XCTestCase.swift in Sources */,
@@ -519,7 +555,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -581,7 +617,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -616,12 +652,11 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 300.0.0;
+				MARKETING_VERSION = 300.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.Test-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -652,12 +687,11 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 300.0.0;
+				MARKETING_VERSION = 300.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.Test-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;

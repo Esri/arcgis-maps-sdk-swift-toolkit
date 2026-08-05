@@ -58,37 +58,29 @@ struct FieldsPopupElementView: View {
                 Text(field.label)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                FormattedValueText(formattedValue: field.formattedValue)
+                makeAttributedText(with: field.formattedValue)
                     .padding([.bottom], -1)
             }
             .background(Color.clear)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-    }
-    
-    /// A view for displaying a formatted value.
-    private struct FormattedValueText: View {
-        /// The String to display.
-        let formattedValue: String
         
-        var body: some View {
-            if formattedValue.lowercased().hasPrefix("http"),
-               let url = URL(string: formattedValue) {
-                Link(destination: url) {
-                    Text(
-                        "View",
-                        bundle: .toolkitModule,
-                        comment: "E.g. Open a hyperlink."
-                    )
+        /// Makes text with clickable links.
+        /// - Parameter string: A string that may contain hyperlinks and or phone numbers.
+        /// - Returns: Text where hyperlinks and phone numbers have been converted into interactive links.
+        private func makeAttributedText(with string: String) -> Text {
+            let detector = DataDetector()
+            let links = detector.detect(in: string)
+            guard !(links?.isEmpty ?? true) else { return Text(string) }
+            var attributed = AttributedString(string)
+            for link in links ?? [] {
+                if let range = Range(link.range, in: attributed) {
+                    attributed[range].link = link.url
+                    attributed[range].foregroundColor = .blue
+                    attributed[range].underlineStyle = .single
                 }
-#if os(visionOS)
-                    .buttonStyle(.bordered)
-#else
-                    .buttonStyle(.borderless)
-#endif
-            } else {
-                Text(formattedValue)
             }
+            return Text(attributed)
         }
     }
 }

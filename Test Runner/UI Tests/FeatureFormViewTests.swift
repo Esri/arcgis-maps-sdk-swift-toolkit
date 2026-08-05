@@ -40,6 +40,36 @@ final class FeatureFormViewTests: XCTestCase {
         formViewTestsButton.tap()
     }
     
+    func testAttachmentDeletion() {
+        let app = XCUIApplication()
+        let elementTitle = "Attachments"
+        let formTitle = app.staticTexts["Esri Location"]
+#if targetEnvironment(macCatalyst)
+        let esriHQAttachmentCell = app.popUpButtons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+        let delete = app.menuItems["delete"]
+        let logoAttachmentCell = app.popUpButtons["AttachmentPreview-Cell-Logo.jpeg"]
+#else
+        let esriHQAttachmentCell = app.buttons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+        let delete = app.buttons["Delete"]
+        let logoAttachmentCell = app.buttons["AttachmentPreview-Cell-Logo.jpeg"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        esriHQAttachmentCell.assertExistence()
+        logoAttachmentCell.assertExistence()
+#if targetEnvironment(macCatalyst)
+        logoAttachmentCell.rightClick()
+#else
+        logoAttachmentCell.press(forDuration: 1)
+#endif
+        delete.assertExistenceAndTap()
+        esriHQAttachmentCell.assertExistence()
+        logoAttachmentCell.assertNonExistence()
+    }
+    
     /// Verify that the attachments form element load isn't cancelled early when it's pushed below the fold
     /// by a group element.
     func testAttachmentLoadDurability() {
@@ -59,15 +89,16 @@ final class FeatureFormViewTests: XCTestCase {
     func testAttachmentRenaming() {
         let app = XCUIApplication()
         let activityIndicator = app.activityIndicators.firstMatch
-        let attachmentLabel = app.staticTexts["EsriHQ.jpeg"]
         let elementTitle = "Attachments"
         let formTitle = app.staticTexts["Esri Location"]
         let nameField = app.textFields["New name"]
         let okButton = app.buttons["OK"]
         let renamedAttachmentLabel = app.staticTexts["EsriHQ\(#function).jpeg"]
 #if targetEnvironment(macCatalyst)
+        let attachmentCell = app.popUpButtons["AttachmentPreview-Cell-EsriHQ.jpeg"]
         let rename = app.menuItems["Rename"]
 #else
+        let attachmentCell = app.buttons["AttachmentPreview-Cell-EsriHQ.jpeg"]
         let rename = app.buttons["Rename"]
 #endif
         
@@ -78,12 +109,12 @@ final class FeatureFormViewTests: XCTestCase {
         
         activityIndicator.assertNonExistence()
         
-        attachmentLabel.assertExistence()
+        attachmentCell.assertExistence()
         
 #if targetEnvironment(macCatalyst)
-        attachmentLabel.rightClick()
+        attachmentCell.rightClick()
 #else
-        attachmentLabel.press(forDuration: 1)
+        attachmentCell.press(forDuration: 1)
 #endif
         
         rename.assertExistenceAndTap()
@@ -95,6 +126,67 @@ final class FeatureFormViewTests: XCTestCase {
         okButton.assertExistenceAndTap()
         
         renamedAttachmentLabel.assertExistence()
+    }
+    
+    func testAttachmentsResetOnDiscard() {
+        let app = XCUIApplication()
+        let discardButton = app.buttons["Discard"]
+        let formTitle = app.staticTexts["Esri Location"]
+#if targetEnvironment(macCatalyst)
+        let attachmentCell = app.popUpButtons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+        let delete = app.menuItems["delete"]
+#else
+        let attachmentCell = app.buttons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+        let delete = app.buttons["Delete"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        attachmentCell.assertExistence()
+#if targetEnvironment(macCatalyst)
+        attachmentCell.rightClick()
+#else
+        attachmentCell.press(forDuration: 1)
+#endif
+        delete.assertExistenceAndTap()
+        attachmentCell.assertNonExistence()
+        discardButton.assertExistenceAndTap()
+        attachmentCell.assertExistence()
+    }
+    
+    func testEditingButtonsHidden() {
+        let app = XCUIApplication()
+        let discardButton = app.buttons["Discard"]
+        let formTitle = app.staticTexts["Place of Interest"]
+        let funActivitiesButton = app.buttons["Fun Activities"]
+        let saveButton = app.buttons["Save"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        saveButton.assertNonExistence()
+        discardButton.assertNonExistence()
+        
+        funActivitiesButton.assertExistenceAndTap()
+        
+        // Verify the editing buttons are hidden after making a form edit.
+        saveButton.assertNonExistence()
+        discardButton.assertNonExistence()
+    }
+    
+    func testEditingButtonsVisible() {
+        let app = XCUIApplication()
+        let discardButton = app.buttons["Discard"]
+        let formTitle = app.staticTexts["Place of Interest"]
+        let saveButton = app.buttons["Save"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        // Verify the editing buttons are visible without making any form edits.
+        saveButton.assertExistence()
+        discardButton.assertExistence()
     }
     
     // - MARK: Test case 1: Text Box with no hint, no description, value not required
@@ -1040,7 +1132,7 @@ final class FeatureFormViewTests: XCTestCase {
         let groupElementTitle = "Group"
         let longTextFieldTitle = "Long text"
         let longTextReadOnlyInput = app.staticTexts["\(longTextFieldTitle) Read Only Input"]
-        let longTextTextInputPreview = app.staticTexts["\(longTextFieldTitle) Text Input Preview"]
+        let longTextTextInputPreview = app.buttons["\(longTextFieldTitle) Text Input Preview"]
         let radioButtonsElementTitle = "Radio buttons"
         let radioButtonsOption0 = app.buttons["0"]
         let radioButtonsReadOnlyInput = app.staticTexts["\(radioButtonsElementTitle) Read Only Input"]
@@ -1122,6 +1214,11 @@ final class FeatureFormViewTests: XCTestCase {
         let placeholderImage = app.images["Photo"]
         let sizeLabel = app.staticTexts["154 kB"]
         let thumbnailImage = app.images["EsriHQ.jpeg Thumbnail"]
+#if targetEnvironment(macCatalyst)
+        let attachmentCell = app.popUpButtons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+#else
+        let attachmentCell = app.buttons["AttachmentPreview-Cell-EsriHQ.jpeg"]
+#endif
         
         openTestCase()
         assertFormOpened(titleElement: formTitle)
@@ -1132,7 +1229,7 @@ final class FeatureFormViewTests: XCTestCase {
         sizeLabel.assertExistence()
         downloadIcon.assertExistence()
         
-        placeholderImage.assertExistenceAndTap()
+        attachmentCell.assertExistenceAndTap()
         
         thumbnailImage.assertExistence()
         placeholderImage.assertNonExistence()
@@ -1662,7 +1759,7 @@ final class FeatureFormViewTests: XCTestCase {
         let newAssociationText = app.staticTexts["New Association"]
         let saveButton = app.buttons["Save"]
         let searchField = app.textFields["Search"]
-        let structureJunction2 = app.buttons["Structure Junction, 2"]
+        let structureJunction = app.buttons["Structure Junction, 1"]
         let structureJunctionDataSourceButton = app.buttons["Structure Junction"]
         let toElementValueLabel = app.staticTexts["Vault"]
         let toElementLabel = app.staticTexts["To Element"]
@@ -1720,7 +1817,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         addButton.tap()
         
-        structureJunction2.assertExistence()
+        structureJunction.assertExistence()
         
         saveButton.assertExistence()
         
@@ -2042,6 +2139,251 @@ final class FeatureFormViewTests: XCTestCase {
         addButton.assertExistenceAndTap()
         
         electricDistributionDevice2Button.assertExistence()
+    }
+    
+    func testCase_14_1() throws {
+        // This test is iOS only as it requires camera hardware.
+        try skipIf(macCatalyst: true, simulator: true, visionOS: true)
+        
+        let app = XCUIApplication()
+        let addAttachmentButton = app.buttons["Add Attachment"]
+        let attachment0Label = app.staticTexts["Attachment_0.jpeg"]
+        let attachFileButton = app.buttons["Attach File"]
+        let choosePhotoOrVideoButton = app.buttons["Choose Photo or Video"]
+        let element1Title = "General - All Inputs"
+        let element2Title = "General - Photo Only"
+        let elementFooterValidationError = app.staticTexts["At least 1 attachment is required."]
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
+        let maximumReachedMessage = app.staticTexts["The maximum number of attachments allowed is 2."]
+        let saveButton = app.buttons["Save"]
+        let shutterButton = app.buttons["Take Picture"]
+        let takePhotoButton = app.buttons["Take Photo"]
+        let takePhotoOrVideoButton = app.buttons["Take Photo or Video"]
+        let usePhotoButton = app.buttons["Use Photo"]
+        let validationErrorsAlert = app.alerts["Validation Errors"]
+        let validationErrorsAlertContinueButton = validationErrorsAlert.buttons["Continue Editing"]
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(element1Title)
+        addAttachmentButton.assertExistenceAndTap()
+        attachFileButton.assertExistence()
+        choosePhotoOrVideoButton.assertExistence()
+        takePhotoOrVideoButton.assertExistenceAndTap()
+        shutterButton.assertExistenceAndTap()
+        usePhotoButton.assertExistenceAndTap()
+        addAttachmentButton.assertExistenceAndTap()
+        takePhotoOrVideoButton.assertExistenceAndTap()
+        shutterButton.assertExistenceAndTap()
+        usePhotoButton.assertExistenceAndTap()
+        maximumReachedMessage.assertExistence()
+        app.filterElements(element2Title)
+        saveButton.assertExistenceAndTap()
+        validationErrorsAlert.assertExistence()
+        validationErrorsAlertContinueButton.assertExistenceAndTap()
+        elementFooterValidationError.assertExistence()
+        addAttachmentButton.assertExistenceAndTap()
+        takePhotoButton.assertExistenceAndTap()
+        shutterButton.assertExistenceAndTap()
+        usePhotoButton.assertExistenceAndTap()
+        elementFooterValidationError.assertNonExistence()
+        attachment0Label.assertExistence()
+    }
+    
+    func testCase_14_2() throws {
+        let app = XCUIApplication()
+        let elementTitle = "Document"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
+        
+#if os(visionOS)
+        let addAttachmentButton = app.collectionViews.buttons.staticTexts["Add Attachment"]
+#else
+        let addAttachmentButton = app.buttons["Add Attachment"]
+#endif
+        
+#if targetEnvironment(macCatalyst)
+        let attachFileButton = app.menuItems["attach_file"]
+        let choosePhotoButton = app.menuItems["choose_photo"]
+        let choosePhotoOrVideoButton = app.buttons["choose_photo_or_video"]
+        let chooseVideoButton = app.buttons["Choose_video"]
+#else
+        let attachFileButton = app.buttons["Attach File"]
+        let choosePhotoButton = app.buttons["Choose Photo"]
+        let choosePhotoOrVideoButton = app.buttons["Choose Photo or Video"]
+        let chooseVideoButton = app.buttons["Choose Video"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(elementTitle)
+        addAttachmentButton.assertExistenceAndTap()
+        attachFileButton.assertExistence()
+        choosePhotoButton.assertNonExistence()
+        choosePhotoOrVideoButton.assertNonExistence()
+        chooseVideoButton.assertNonExistence()
+    }
+    
+    func testCase_14_3() throws {
+        // visionOS doesn't provide a way of dismissing the attachment import
+        // menu which the test design calls for in two spots.
+        try skipIf(visionOS: true)
+        
+        let app = XCUIApplication()
+        let addAttachmentButton = app.buttons["Add Attachment"]
+        let cancelButton = app.buttons["Cancel"].firstMatch
+        let element1Title = "Media - Photo - Any"
+        let element2Title = "Media - Photo - Capture"
+        let element3Title = "Media - Photo - Upload"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
+        
+#if targetEnvironment(macCatalyst)
+        let attachFileButton = app.menuItems["attach_file"]
+        let choosePhotoButton = app.menuItems["choose_photo"]
+        let takePhotoButton = app.menuItems["take_photo"]
+#else
+        let attachFileButton = app.buttons["Attach File"]
+        let choosePhotoButton = app.buttons["Choose Photo"]
+        let takePhotoButton = app.buttons["Take Photo"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(element1Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takePhotoButton.assertExistence()
+        choosePhotoButton.assertExistence()
+        attachFileButton.assertExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        cancelButton.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element2Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takePhotoButton.assertExistence()
+        attachFileButton.assertNonExistence()
+        choosePhotoButton.assertNonExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        cancelButton.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element3Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takePhotoButton.assertNonExistence()
+        attachFileButton.assertExistence()
+        choosePhotoButton.assertExistence()
+    }
+    
+    func testCase_14_4() throws {
+        // visionOS doesn't provide a way of dismissing the attachment import
+        // menu which the test design calls for in two spots.
+        try skipIf(visionOS: true)
+        
+        let app = XCUIApplication()
+        let addAttachmentButton = app.buttons["Add Attachment"]
+        let cancelButton = app.buttons["Cancel"].firstMatch
+        let element1Title = "Media - Video - Any"
+        let element2Title = "Media - Video - Capture"
+        let element3Title = "Media - Video - Upload"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
+        
+#if targetEnvironment(macCatalyst)
+        let attachFileButton = app.menuItems["attach_file"]
+        let chooseVideoButton = app.menuItems["choose_video"]
+        let takeVideoButton = app.menuItems["take_video"]
+#else
+        let attachFileButton = app.buttons["Attach File"]
+        let chooseVideoButton = app.buttons["Choose Video"]
+        let takeVideoButton = app.buttons["Take Video"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(element1Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takeVideoButton.assertExistence()
+        chooseVideoButton.assertExistence()
+        attachFileButton.assertExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        cancelButton.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element2Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takeVideoButton.assertExistence()
+        attachFileButton.assertNonExistence()
+        chooseVideoButton.assertNonExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        cancelButton.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element3Title)
+        addAttachmentButton.assertExistenceAndTap()
+        takeVideoButton.assertNonExistence()
+        attachFileButton.assertExistence()
+        chooseVideoButton.assertExistence()
+    }
+    
+    func testCase_14_5() throws {
+        // visionOS doesn't provide a way of dismissing the attachment import
+        // menu which the test design calls for in two spots.
+        try skipIf(visionOS: true)
+        
+        let app = XCUIApplication()
+        let addAttachmentButton = app.buttons["Add Attachment"]
+        let cancelButton = app.buttons["Cancel"].firstMatch
+        let element1Title = "Media - Audio - Any"
+        let element2Title = "Media - Audio - Capture"
+        let element3Title = "Media - Audio - Upload"
+        let formTitle = app.staticTexts["AttachmentsFormElement"]
+        
+#if targetEnvironment(macCatalyst)
+        let attachFileButton = app.menuItems["attach_file"]
+#else
+        let attachFileButton = app.buttons["Attach File"]
+#endif
+        
+        openTestCase()
+        assertFormOpened(titleElement: formTitle)
+        
+        app.filterElements(element1Title)
+        addAttachmentButton.assertExistenceAndTap()
+        attachFileButton.assertExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        cancelButton.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element2Title)
+        addAttachmentButton.assertExistenceAndTap()
+        attachFileButton.assertNonExistence()
+        
+#if targetEnvironment(macCatalyst)
+        addAttachmentButton.assertExistenceAndTap()
+#else
+        cancelButton.assertExistenceAndTap()
+#endif
+        
+        app.filterElements(element3Title)
+        addAttachmentButton.assertExistenceAndTap()
+        attachFileButton.assertExistence()
     }
 }
 

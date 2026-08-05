@@ -21,4 +21,29 @@ extension Logger {
     static var attachmentsFeatureElementView: Logger {
         Logger(subsystem: Bundle.toolkitIdentifier, category: "AttachmentsFeatureElementView")
     }
+    
+    /// A logger for the `Authentication` component.
+    static var authentication: Logger {
+        Logger(subsystem: Bundle.toolkitIdentifier, category: "Authentication")
+    }
+    
+    /// A logger for the `BasemapGallery` component.
+    static var basemapGallery: Logger {
+        Logger(subsystem: Bundle.toolkitIdentifier, category: "BasemapGallery")
+    }
+    
+    /// A logger for the `FloorFilter` component.
+    static var floorFilter: Logger {
+        Logger(subsystem: Bundle.toolkitIdentifier, category: "FloorFilter")
+    }
+    
+    /// A logger for the `LocationButton` component.
+    static var locationButton: Logger {
+        Logger(subsystem: Bundle.toolkitIdentifier, category: "LocationButton")
+    }
+    
+    /// A logger for the `UtilityNetworkTrace` component.
+    static var utilityNetworkTrace: Logger {
+        Logger(subsystem: Bundle.toolkitIdentifier, category: "UtilityNetworkTrace")
+    }
 }

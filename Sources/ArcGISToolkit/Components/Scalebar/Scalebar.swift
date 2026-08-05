@@ -104,10 +104,10 @@ public struct Scalebar: View {
     static let lineWidth: Double = 2.0
     
     /// Appearance settings.
-    let settings: ScalebarSettings
+    let settings: Settings
     
     /// The render style for this `Scalebar`.
-    private let style: ScalebarStyle
+    private let style: Style
     
     // - MARK: Public methods/vars
     
@@ -128,10 +128,10 @@ public struct Scalebar: View {
     public init(
         maxWidth: Double,
         minScale: Double = .zero,
-        settings: ScalebarSettings = ScalebarSettings(),
+        settings: Settings = Settings(),
         spatialReference: SpatialReference?,
-        style: ScalebarStyle = .alternatingBar,
-        units: ScalebarUnits = NSLocale.current.measurementSystem == .metric ? .metric : .imperial,
+        style: Style = .alternatingBar,
+        units: Units = NSLocale.current.measurementSystem == .metric ? .metric : .imperial,
         unitsPerPoint: Double?,
         useGeodeticCalculations: Bool = true,
         viewpoint: Viewpoint?

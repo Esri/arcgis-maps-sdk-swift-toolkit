@@ -96,24 +96,25 @@ private extension TextInput {
         HStack {
             Group {
                 if element.isMultiline {
-                    Text(text)
-                        .accessibilityIdentifier("\(element.label) Text Input Preview")
-                        .fixedSize(horizontal: false, vertical: true)
-                        .lineLimit(5)
-                        .truncationMode(.tail)
-                        .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(text: $text, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel)
-                                .padding()
+                    Button {
+                        fullScreenTextInputIsPresented = true
+                    } label: {
+                        Text(text)
+                            .lineLimit(5)
+                            .truncationMode(.tail)
+                            .frame(maxWidth: .infinity, minHeight: 100, alignment: .topLeading)
+                    }
+                    .foregroundStyle(.primary)
+                    .accessibilityIdentifier("\(element.label) Text Input Preview")
+                    .fixedSize(horizontal: false, vertical: true)
+                    .sheet(isPresented: $fullScreenTextInputIsPresented) {
+                        FullScreenTextInput(text: $text, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel)
+                            .padding()
 #if targetEnvironment(macCatalyst)
-                                .environment(embeddedFeatureFormViewModel)
-                                .environment(featureFormViewModel)
+                            .environment(embeddedFeatureFormViewModel)
+                            .environment(featureFormViewModel)
 #endif
-                        }
-                        .frame(maxWidth: .infinity, minHeight: 100, alignment: .topLeading)
-                        .contentShape(.rect)
-                        .onTapGesture {
-                            fullScreenTextInputIsPresented = true
-                        }
+                    }
                 } else {
                     TextField(
                         element.label,

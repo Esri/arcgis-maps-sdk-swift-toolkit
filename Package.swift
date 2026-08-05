@@ -20,8 +20,8 @@ let package = Package(
     name: "arcgis-maps-sdk-swift-toolkit",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v17),
-        .macCatalyst(.v17),
+        .iOS(.v18),
+        .macCatalyst(.v18),
         .visionOS(.v2)
     ],
     products: [
@@ -31,8 +31,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "300.0.0")),
-        .package(url: "https://github.com/swiftlang/swift-markdown.git", .upToNextMinor(from: "0.4.0"))
+        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", from: "300.1.0"),
+        .package(url: "https://github.com/swiftlang/swift-markdown.git", from: "0.4.0")
     ],
     targets: [
         .target(

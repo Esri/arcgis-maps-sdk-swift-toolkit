@@ -1,0 +1,456 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1C0FDEC02FD8EC0D009EB851 /* ARCoreAugmentedFaces in Frameworks */ = {isa = PBXBuildFile; productRef = 1C0FDEBF2FD8EC0D009EB851 /* ARCoreAugmentedFaces */; };
+		1C0FDEC22FD8EC0D009EB851 /* ARCoreCloudAnchors in Frameworks */ = {isa = PBXBuildFile; productRef = 1C0FDEC12FD8EC0D009EB851 /* ARCoreCloudAnchors */; };
+		1C0FDEC42FD8EC0D009EB851 /* ARCoreGARSession in Frameworks */ = {isa = PBXBuildFile; productRef = 1C0FDEC32FD8EC0D009EB851 /* ARCoreGARSession */; };
+		1C0FDEC62FD8EC0D009EB851 /* ARCoreGeospatial in Frameworks */ = {isa = PBXBuildFile; productRef = 1C0FDEC52FD8EC0D009EB851 /* ARCoreGeospatial */; };
+		1C0FDEC82FD8EC0D009EB851 /* ARCoreSemantics in Frameworks */ = {isa = PBXBuildFile; productRef = 1C0FDEC72FD8EC0D009EB851 /* ARCoreSemantics */; };
+		88140D6D2A8BDCBE003F55D4 /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = 88140D6C2A8BDCBE003F55D4 /* ArcGISToolkit */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		88140D592A8BD940003F55D4 /* CustomVPSProviderExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomVPSProviderExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		88140D6A2A8BDC75003F55D4 /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "arcgis-maps-sdk-swift-toolkit"; path = ..; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1CF4F1BF2FDCA6CD00FD76A5 /* Exceptions for "CustomVPSProviderExample" folder in "CustomVPSProviderExample" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 88140D582A8BD940003F55D4 /* CustomVPSProviderExample */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		1CF4F1B62FDCA6CC00FD76A5 /* CustomVPSProviderExample */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1CF4F1BF2FDCA6CD00FD76A5 /* Exceptions for "CustomVPSProviderExample" folder in "CustomVPSProviderExample" target */,
+			);
+			path = CustomVPSProviderExample;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		88140D562A8BD940003F55D4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C0FDEC02FD8EC0D009EB851 /* ARCoreAugmentedFaces in Frameworks */,
+				88140D6D2A8BDCBE003F55D4 /* ArcGISToolkit in Frameworks */,
+				1C0FDEC62FD8EC0D009EB851 /* ARCoreGeospatial in Frameworks */,
+				1C0FDEC42FD8EC0D009EB851 /* ARCoreGARSession in Frameworks */,
+				1C0FDEC82FD8EC0D009EB851 /* ARCoreSemantics in Frameworks */,
+				1C0FDEC22FD8EC0D009EB851 /* ARCoreCloudAnchors in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		88140D502A8BD940003F55D4 = {
+			isa = PBXGroup;
+			children = (
+				88140D6A2A8BDC75003F55D4 /* arcgis-maps-sdk-swift-toolkit */,
+				1CF4F1B62FDCA6CC00FD76A5 /* CustomVPSProviderExample */,
+				88140D5A2A8BD940003F55D4 /* Products */,
+				88140D6B2A8BDCBE003F55D4 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		88140D5A2A8BD940003F55D4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				88140D592A8BD940003F55D4 /* CustomVPSProviderExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		88140D6B2A8BDCBE003F55D4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		88140D582A8BD940003F55D4 /* CustomVPSProviderExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 88140D672A8BD941003F55D4 /* Build configuration list for PBXNativeTarget "CustomVPSProviderExample" */;
+			buildPhases = (
+				88140D552A8BD940003F55D4 /* Sources */,
+				88140D562A8BD940003F55D4 /* Frameworks */,
+				88140D572A8BD940003F55D4 /* Resources */,
+				8AA526712BCF18A4007D28B1 /* Lint Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				1CF4F1B62FDCA6CC00FD76A5 /* CustomVPSProviderExample */,
+			);
+			name = CustomVPSProviderExample;
+			packageProductDependencies = (
+				88140D6C2A8BDCBE003F55D4 /* ArcGISToolkit */,
+				1C0FDEBF2FD8EC0D009EB851 /* ARCoreAugmentedFaces */,
+				1C0FDEC12FD8EC0D009EB851 /* ARCoreCloudAnchors */,
+				1C0FDEC32FD8EC0D009EB851 /* ARCoreGARSession */,
+				1C0FDEC52FD8EC0D009EB851 /* ARCoreGeospatial */,
+				1C0FDEC72FD8EC0D009EB851 /* ARCoreSemantics */,
+			);
+			productName = JobManagerExample;
+			productReference = 88140D592A8BD940003F55D4 /* CustomVPSProviderExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		88140D512A8BD940003F55D4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					88140D582A8BD940003F55D4 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 88140D542A8BD940003F55D4 /* Build configuration list for PBXProject "CustomVPSProviderExample" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 88140D502A8BD940003F55D4;
+			packageReferences = (
+				1C0FDEBE2FD8EC0D009EB851 /* XCRemoteSwiftPackageReference "arcore-ios-sdk" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 88140D5A2A8BD940003F55D4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				88140D582A8BD940003F55D4 /* CustomVPSProviderExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		88140D572A8BD940003F55D4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8AA526712BCF18A4007D28B1 /* Lint Sources */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Lint Sources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint --config ../.swiftlint.yml\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		88140D552A8BD940003F55D4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		88140D652A8BD941003F55D4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		88140D662A8BD941003F55D4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		88140D682A8BD941003F55D4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CustomVPSProviderExample/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CustomVPSProviderExample/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 300.1.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.esri.CustomVPSProviderExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		88140D692A8BD941003F55D4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CustomVPSProviderExample/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CustomVPSProviderExample/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 300.1.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.esri.CustomVPSProviderExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		88140D542A8BD940003F55D4 /* Build configuration list for PBXProject "CustomVPSProviderExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88140D652A8BD941003F55D4 /* Debug */,
+				88140D662A8BD941003F55D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		88140D672A8BD941003F55D4 /* Build configuration list for PBXNativeTarget "CustomVPSProviderExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88140D682A8BD941003F55D4 /* Debug */,
+				88140D692A8BD941003F55D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1C0FDEBE2FD8EC0D009EB851 /* XCRemoteSwiftPackageReference "arcore-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google-ar/arcore-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.54.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1C0FDEBF2FD8EC0D009EB851 /* ARCoreAugmentedFaces */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1C0FDEBE2FD8EC0D009EB851 /* XCRemoteSwiftPackageReference "arcore-ios-sdk" */;
+			productName = ARCoreAugmentedFaces;
+		};
+		1C0FDEC12FD8EC0D009EB851 /* ARCoreCloudAnchors */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1C0FDEBE2FD8EC0D009EB851 /* XCRemoteSwiftPackageReference "arcore-ios-sdk" */;
+			productName = ARCoreCloudAnchors;
+		};
+		1C0FDEC32FD8EC0D009EB851 /* ARCoreGARSession */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1C0FDEBE2FD8EC0D009EB851 /* XCRemoteSwiftPackageReference "arcore-ios-sdk" */;
+			productName = ARCoreGARSession;
+		};
+		1C0FDEC52FD8EC0D009EB851 /* ARCoreGeospatial */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1C0FDEBE2FD8EC0D009EB851 /* XCRemoteSwiftPackageReference "arcore-ios-sdk" */;
+			productName = ARCoreGeospatial;
+		};
+		1C0FDEC72FD8EC0D009EB851 /* ARCoreSemantics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1C0FDEBE2FD8EC0D009EB851 /* XCRemoteSwiftPackageReference "arcore-ios-sdk" */;
+			productName = ARCoreSemantics;
+		};
+		88140D6C2A8BDCBE003F55D4 /* ArcGISToolkit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ArcGISToolkit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 88140D512A8BD940003F55D4 /* Project object */;
+}

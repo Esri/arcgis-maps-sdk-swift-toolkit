@@ -144,6 +144,32 @@ struct BuildingExplorerForm: View {
                 // Update explorer contents.
                 await updateForm()
             }
+            .onChange(of: selectedLevel) {
+                if selection.level != selectedLevel {
+                    selection.level = selectedLevel
+                    
+                    // Only change filter if the new selected level
+                    // is different. If the user has a filter
+                    // already present then we don't want to
+                    // change that when they open up the building
+                    // explorer. Only change the filter if they
+                    // selected a new level.
+                    selection.layer.activeFilter = levelAndPhaseFilter
+                }
+            }
+            .onChange(of: selectedPhase) {
+                if selection.phase != selectedPhase {
+                    selection.phase = selectedPhase
+                    
+                    // Only change filter if the new selected phase
+                    // is different. If the user has a filter
+                    // already present then we don't want to
+                    // change that when they open up the building
+                    // explorer. Only change the filter if they
+                    // selected a new phase.
+                    selection.layer.activeFilter = levelAndPhaseFilter
+                }
+            }
         }
     }
     
@@ -219,19 +245,6 @@ struct BuildingExplorerForm: View {
         } label: {
             Text.level
         }
-        .onChange(of: selectedLevel) {
-            if selection.level != selectedLevel {
-                selection.level = selectedLevel
-                
-                // Only change filter if the new selected level
-                // is different. If the user has a filter
-                // already present then we don't want to
-                // change that when they open up the building
-                // explorer. Only change the filter if they
-                // selected a new level.
-                selection.layer.activeFilter = levelAndPhaseFilter
-            }
-        }
     }
     
     /// The construction phase picker to select a phase on the building.
@@ -240,19 +253,6 @@ struct BuildingExplorerForm: View {
             ForEach(availablePhases, id: \.self) { phase in
                 Text(phase, format: .number)
                     .tag(phase)
-            }
-            .onChange(of: selectedPhase) {
-                if selection.phase != selectedPhase {
-                    selection.phase = selectedPhase
-                    
-                    // Only change filter if the new selected phase
-                    // is different. If the user has a filter
-                    // already present then we don't want to
-                    // change that when they open up the building
-                    // explorer. Only change the filter if they
-                    // selected a new phase.
-                    selection.layer.activeFilter = levelAndPhaseFilter
-                }
             }
         } label: {
             Text.constructionPhase

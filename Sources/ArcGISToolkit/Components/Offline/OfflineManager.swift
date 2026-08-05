@@ -15,8 +15,9 @@
 import ArcGIS
 import BackgroundTasks
 import Combine
-import OSLog
 import SwiftUI
+
+internal import os
 
 /// A utility object that maintains the state of offline map areas and their
 /// storage on the device.

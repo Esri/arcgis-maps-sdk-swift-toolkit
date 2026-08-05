@@ -21,25 +21,18 @@ struct FeatureFormTestView: View {
     
     /// An error that occurred during testing.
     @State private var error: TestingError?
-    
     /// The form being edited in the form view.
     @State private var featureForm: FeatureForm?
-    
     /// The list of identify layer results.
     @State private var identifyLayerResults = [IdentifyLayerResult]()
-    
     /// A Boolean value indicating whether the initial draw of the map view completed.
     @State private var initialDrawCompleted = false
-    
     /// The `Map` displayed in the `MapView`.
     @State private var map: Map?
-    
     /// The string for the test search bar.
     @State private var searchTerm = ""
-    
     /// The current test case.
     @State private var testCase: TestCase?
-    
     /// The test setup task to run once was the map has finished its initial draw.
     @State private var testSetupTask: Task<Void, Never>?
     
@@ -75,7 +68,10 @@ struct FeatureFormTestView: View {
         .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(featureForm != nil)
         .sheet(isPresented: Binding(get: { featureForm != nil }, set: { _ in })) {
-            FeatureFormView(root: featureForm!)
+            if let featureForm, let testCase {
+                FeatureFormView(root: featureForm)
+                    .editingButtons(testCase.editingButtonsVisibility)
+            }
         }
         .task {
             await setup()
@@ -221,6 +217,8 @@ private extension FeatureFormTestView {
         
         /// Optional ArcGIS credential info for the test data.
         let credentialInfo: CredentialInfo?
+        /// The visibility of the form's Save and Discard buttons.
+        let editingButtonsVisibility: Visibility
         /// The name of the test case.
         let id: String
         /// The object ID of the feature being tested.
@@ -242,9 +240,11 @@ private extension FeatureFormTestView {
             objectID: Int,
             layerName: String = "",
             portalID: String,
-            credentialInfo: CredentialInfo? = nil
+            credentialInfo: CredentialInfo? = nil,
+            editingButtonsVisibility: Visibility = .automatic
         ) {
             self.credentialInfo = credentialInfo
+            self.editingButtonsVisibility = editingButtonsVisibility
             self.id = name
             self.objectID = objectID
             self.layerName = layerName
@@ -256,8 +256,12 @@ private extension FeatureFormTestView {
     
     /// The set of all Form View UI test cases.
     var cases: [TestCase] {[
+        .init("testAttachmentDeletion", objectID: 3, portalID: .attachmentMapID),
         .init("testAttachmentLoadDurability", objectID: 1, portalID: .groupAndAttachments),
         .init("testAttachmentRenaming", objectID: 1, portalID: .attachmentMapID),
+        .init("testAttachmentsResetOnDiscard", objectID: 1, portalID: .attachmentMapID),
+        .init("testEditingButtonsHidden", objectID: 1, portalID: .placeOfInterestID, editingButtonsVisibility: .hidden),
+        .init("testEditingButtonsVisible", objectID: 1, portalID: .placeOfInterestID, editingButtonsVisibility: .visible),
         .init("testCase_1_1", objectID: 1, portalID: .inputValidationMapID),
         .init("testCase_1_2", objectID: 1, portalID: .inputValidationMapID),
         .init("testCase_1_3", objectID: 1, portalID: .inputValidationMapID),
@@ -295,10 +299,15 @@ private extension FeatureFormTestView {
         .init("testCase_12_6", objectID: 3321, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_13_1", objectID: 3321, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_13_2", objectID: 5050, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
-        .init("testCase_13_3", objectID: 311, layerName: "Electric Distribution Junction", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_13_3", objectID: 3214, layerName: "Electric Distribution Junction", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_13_4", objectID: 311, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_13_5", objectID: 311, layerName: "Electric Distribution Device", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
         .init("testCase_13_6", objectID: 194, layerName: "Structure Junction", portalID: .napervilleElectricUtilityNetwork, credentialInfo: .sampleServer7Viewer01),
+        .init("testCase_14_1", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_2", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_3", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_4", objectID: 1, portalID: .testCase14),
+        .init("testCase_14_5", objectID: 1, portalID: .testCase14)
     ]}
 }
 
@@ -311,14 +320,7 @@ private extension ArcGISFeature {
         }
     }
     
-    var objectID: Int64? {
-        if let id = attributes["objectid"] as? Int64 {
-            return id
-        } else {
-            print(type(of: attributes["objectid"]!))
-            return nil
-        }
-    }
+    var objectID: Int64? { attributes["objectid"] as? Int64 }
 }
 
 private extension String {
@@ -329,6 +331,7 @@ private extension String {
     static let groupElementMapID = "97495f67bd2e442dbbac485232375b07"
     static let inputValidationMapID = "5d69e2301ad14ec8a73b568dfc29450a"
     static let napervilleElectricUtilityNetwork = "471eb0bf37074b1fbb972b1da70fb310"
+    static let placeOfInterestID = "f72207ac170a40d8992b7a3507b44fad"
     static let radioButtonMapID = "476e9b4180234961809485c8eff83d5d"
     static let rangeDomainMapID = "bb4c5e81740e4e7296943988c78a7ea6"
     static let readOnlyMapID = "1d6cd4607edf4a50ac10b5165926b597"
@@ -336,6 +339,7 @@ private extension String {
     static let testCase9 = "5f71b243b37e43a5ace3190241db0ac9"
     static let testCase10 = "e10c0061182c4102a109dc6b030aa9ef"
     static let testCase11 = "a14a825c22884dfe9998ac964bd1cf89"
+    static let testCase14 = "7064081d2d1a4af6b871d35954417e5e"
 }
 
 private extension FeatureFormTestView.TestCase.CredentialInfo {

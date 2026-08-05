@@ -17,6 +17,8 @@ import Combine
 import SwiftUI
 import UniformTypeIdentifiers
 
+internal import os
+
 /// An object that provides the business logic for the workflow of prompting the user for a
 /// certificate and a password.
 @MainActor final class CertificatePickerViewModel: ObservableObject {
@@ -68,8 +70,12 @@ import UniformTypeIdentifiers
         Task {
             // If we don't delay this, then the picker does not animate in.
             // Delay for 0.25 seconds.
-            try await Task.sleep(nanoseconds: 250_000_000)
-            self.showPicker = true
+            do {
+                try await Task.sleep(nanoseconds: 250_000_000)
+                self.showPicker = true
+            } catch {
+                Logger.authentication.error("There was an error presenting the certificate picker.")
+            }
         }
     }
     

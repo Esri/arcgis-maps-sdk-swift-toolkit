@@ -68,6 +68,15 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label in reference to utility associations elements contained within a popup. */
 "Associations" = "Asocieri";
 
+/* A message indicating the element requires at least one attachment. */
+"At least %lld attachment is required." = "Este necesar cel puțin %lld fișier atașat.";
+
+/* A message indicating the element requires multiple attachments. */
+"At least %lld attachments are required." = "Sunt necesare cel puțin %lld fișier atașate.";
+
+/* A label for a button to choose a file from the user's files. */
+"Attach File" = "Atașați un fișier";
+
 /* A label for the "Attachment" utility association kind. */
 "Attachment" = "Fișier atașat";
 
@@ -150,15 +159,24 @@ Cancel your current action to close/hide a sheet or pop-up. */
 /* A label of a mark on a chart. */
 "chart-mark-label-value" = "Valoare";
 
-/* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "Alegeți din Fișiere";
+/* A label for a button to choose a photo from the user's photo library. */
+"Choose Photo" = "Alegeți o fotografie";
 
 /* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "Alegeți din Bibliotecă";
+"Choose Photo or Video" = "Alegeți o fotografie sau un videoclip";
+
+/* A label for a button to choose a photo from the user's photo library. */
+"Choose Photo" = "Alegeți o fotografie";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose Photo or Video" = "Alegeți o fotografie sau un videoclip";
 
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Alegeți pentru a adăuga";
+
+/* A label for a button to choose a video from the user's photo library. */
+"Choose Video" = "Alegeți un videoclip";
 
 /* Cities (Level of Detail) */
 "Cities" = "Orașe";
@@ -891,8 +909,14 @@ network trace operation. */
 /* Streets (Level of Detail) */
 "Streets" = "Străzi";
 
+/* A label for a button to capture a new photo. */
+"Take Photo" = "Realizare fotografie";
+
 /* A label for a button to capture a new photo or video. */
 "Take Photo or Video" = "Faceți o fotografie sau un videoclip";
+
+/* A label for a button to capture a new video. */
+"Take Video" = "Realizare videoclip";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
@@ -925,6 +949,9 @@ match the spatial reference of the map. */
 /* A label indicating the chosen file was invalid. */
 "The certificate file was invalid." = "Fișierul certificat a fost nevalid.";
 
+/* A message indicating that the attachment's size exceeds the allowed maximum. */
+"The file is too large. Maximum allowed file size is %@." = "Fișierul este prea mare. Dimensiunea maximă permisă a fișierului este %@.";
+
 /* The title shown when the feature form failed to save. */
 "The form wasn't submitted" = "Formularul nu a fost trimis";
 
@@ -936,6 +963,12 @@ match the spatial reference of the map. */
 
 /* A message indicating that the map is not offline enabled. */
 "The map is not enabled for offline use." = "Harta nu este activată pentru utilizare offline.";
+
+/* A message indicating that no more attachments can be added because the maximum count has been reached. */
+"The maximum number of attachments allowed is %lld." = "Număr maxim de fișiere atașate permis este %lld.";
+
+/* A message indicating that the attachment's duration exceeds the allowed maximum. */
+"The media is too long. Maximum allowed duration is ^[%lld seconds](inflect: true)." = "Fișierul media este prea lung. Durata maximă permisă este ^[%lld seconds](inflect: true).";
 
 /* A message explaining that the map area name must be unique. */
 "The name for the map area must be unique." = "Numele zonei de hartă trebuie să fie unic.";
@@ -958,6 +991,9 @@ to be imported as an attachment. */
 
 /* A message explaining that there are no map areas for this map and to tap the button below to add a map area. */
 "There are no map areas for this map. Tap the button below to get started." = "Nu există zone de hartă pentru această hartă. Atingeți butonul de mai jos pentru a începe.";
+
+/* A message indicating the type of the supplied attachment is not supported. */
+"This file type is not supported." = "Acest tip de fișier nu este acceptat.";
 
 /* A notice communicating that a feature form has no elements. */
 "This form is empty." = "Acest formular este gol.";
@@ -1047,9 +1083,6 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* Text indicating a field's value must not be empty. */
 "Value must not be empty" = "Valoarea nu trebuie să fie goală";
-
-/* E.g. Open a hyperlink. */
-"View" = "Vizualizează";
 
 /* A label for the visible toggle in the Building Explorer. */
 "Visible" = "Vizibil";
