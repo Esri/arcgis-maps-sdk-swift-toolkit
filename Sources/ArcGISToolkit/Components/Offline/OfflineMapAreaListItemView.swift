@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
 import Combine
+import SwiftUI
 
 /// A view that shows information for an offline area for use in a List.
 @MainActor
