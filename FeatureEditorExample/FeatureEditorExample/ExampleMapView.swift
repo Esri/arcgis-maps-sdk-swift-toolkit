@@ -31,7 +31,7 @@ struct ExampleMapView: View {
         // Enables full resolution feature tiling to improve snapping accuracy.
         map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
         
-        let initialExtent = Envelope(xRange: -9815340 ... -9815040, yRange: 5129550 ... 5130070)
+        let initialExtent = Envelope(xRange: -9812750 ... -9812387, yRange: 5131332 ... 5131965)
         map.initialViewpoint = Viewpoint(boundingGeometry: initialExtent)
         
         return map

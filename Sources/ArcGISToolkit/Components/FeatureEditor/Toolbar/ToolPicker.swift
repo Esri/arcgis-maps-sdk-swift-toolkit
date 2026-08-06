@@ -91,19 +91,27 @@ private enum Tool: Hashable {
     
     /// The geometry editor tool associated with the tool.
     var geometryEditorTool: GeometryEditorTool {
+        let tool: GeometryEditorTool
         switch self {
         case .freehand:
-            return FreehandTool()
+            tool = FreehandTool()
         case .shape(let kind):
             let shapeTool = ShapeTool(kind: kind)
             // Allows the shape tool to be used when there is an existing geometry.
             shapeTool.configuration.allowsPartCreation = true
-            return shapeTool
+            tool = shapeTool
         case .vertex:
-            return VertexTool()
+            tool = VertexTool()
         case .vertexReticle:
-            return ReticleVertexTool()
+            tool = ReticleVertexTool()
         }
+        
+        // Makes the fill symbol semi-transparent to avoid obscuring the map beneath polygons.
+        if let fillSymbol = tool.style.fillSymbol as? FillSymbol {
+            fillSymbol.color = fillSymbol.color.withAlphaComponent(0.5)
+        }
+        
+        return tool
     }
     
     /// A localized, user-friendly label for the tool.

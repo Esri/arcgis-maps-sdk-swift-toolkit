@@ -131,12 +131,19 @@ public struct FeatureEditor: View {
     /// Sets the viewpoint using `model.viewpointGeometry` and the `mapViewProxy`.
     private func setViewpoint() async {
         guard let viewpointGeometry = model.viewpointGeometry else { return }
-        defer { model.viewpointGeometry = nil }
-        guard let mapViewProxy else { return }
-        
-        let expandedGeometry = viewpointGeometry.extent.withBuilder { $0.expand(by: 2) }
-        let viewpoint = Viewpoint(boundingGeometry: expandedGeometry)
-        await mapViewProxy.setViewpoint(viewpoint, duration: 0.5)
+        if let mapViewProxy {
+            let expandedGeometry = viewpointGeometry.extent.withBuilder { $0.expand(by: 2) }
+            let viewpoint = Viewpoint(boundingGeometry: expandedGeometry)
+            await mapViewProxy.setViewpoint(viewpoint, duration: 0.5)
+            
+            // Prevents canceling an animation started while this task was running.
+            if !Task.isCancelled {
+                model.viewpointGeometry = nil
+            }
+        } else {
+            // Clears viewpointGeometry to prevent setting the viewpoint if the proxy is set later.
+            model.viewpointGeometry = nil
+        }
     }
 }
 

@@ -374,6 +374,22 @@ public extension FeatureFormView {
     }
 }
 
+extension FeatureFormView.EditingEvent: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        return switch (lhs, rhs) {
+        case let (.discardedEdits(lhsWillNavigate), .discardedEdits(rhsWillNavigate)),
+            let (.savedEdits(lhsWillNavigate), .savedEdits(rhsWillNavigate)):
+            lhsWillNavigate == rhsWillNavigate
+        case let (.navigationChanged(lhsPathItem), .navigationChanged(rhsPathItem)):
+            lhsPathItem == rhsPathItem
+        case let (.showOnMapRequested(lhsFeature), .showOnMapRequested(rhsFeature)):
+            lhsFeature === rhsFeature
+        default:
+            false
+        }
+    }
+}
+
 extension FeatureFormView {
     /// A Boolean value indicating whether the finish editing error alert is presented.
     var alertForFinishEditingErrorsIsPresented: Binding<Bool> {
