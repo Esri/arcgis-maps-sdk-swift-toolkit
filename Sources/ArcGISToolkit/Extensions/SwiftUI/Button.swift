@@ -78,7 +78,7 @@ extension Button<Text> {
     }
 }
 
-/// A button that opens that provided URL. The button is disabled when the URL is `nil`.
+/// A button that opens the provided URL. The button is disabled when the URL is `nil`.
 @MainActor
 private struct OpenURLButton<T>: View where T: View {
     @Environment(\.openURL) private var openURL
