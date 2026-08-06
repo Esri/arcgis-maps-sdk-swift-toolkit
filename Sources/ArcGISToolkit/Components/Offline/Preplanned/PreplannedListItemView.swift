@@ -67,9 +67,7 @@ struct PreplannedListItemView: View {
     }
     
     @ViewBuilder private var removeDownloadButton: some View {
-        Button {
-            model.removeDownloadedArea()
-        } label: {
+        Button(action: model.removeDownloadedArea) {
             Image(systemName: "xmark.circle")
                 .imageScale(.large)
         }
