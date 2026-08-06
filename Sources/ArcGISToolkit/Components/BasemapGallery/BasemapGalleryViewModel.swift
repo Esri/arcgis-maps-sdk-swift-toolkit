@@ -15,8 +15,7 @@
 import ArcGIS
 import Combine
 import Foundation
-
-internal import os
+import os
 
 /// Manages the state for a `BasemapGallery`.
 @MainActor class BasemapGalleryViewModel: ObservableObject {

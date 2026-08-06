@@ -15,8 +15,7 @@
 import ArcGIS
 import Combine
 import Foundation
-
-internal import os
+import os
 
 /// An object that encapsulates state about a preplanned map.
 @MainActor

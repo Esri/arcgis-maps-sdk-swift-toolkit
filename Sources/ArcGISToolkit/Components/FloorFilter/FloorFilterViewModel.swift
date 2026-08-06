@@ -14,9 +14,8 @@
 
 import ArcGIS
 import Combine
+import os
 import SwiftUI
-
-internal import os
 
 /// Manages the state for a `FloorFilter`.
 @MainActor

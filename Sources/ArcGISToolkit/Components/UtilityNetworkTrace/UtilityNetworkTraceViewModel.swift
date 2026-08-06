@@ -15,9 +15,8 @@
 import ArcGIS
 import Combine
 import Foundation
+import os
 import SwiftUI
-
-internal import os
 
 @MainActor final class UtilityNetworkTraceViewModel: ObservableObject {
     // MARK: Published Properties

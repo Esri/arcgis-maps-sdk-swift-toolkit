@@ -14,10 +14,9 @@
 
 import ArcGIS
 import Combine
+import os
 @preconcurrency import QuickLook
 import SwiftUI
-
-internal import os
 
 /// A view model representing the combination of a `FeatureAttachment` and
 /// an associated `UIImage` used as a thumbnail.

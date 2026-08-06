@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
+public import ArcGIS
+public import Foundation
+
 import Combine
+import os
 import SwiftUI
 import UniformTypeIdentifiers
-
-internal import os
 
 /// An object that provides the business logic for the workflow of prompting the user for a
 /// certificate and a password.

@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import os
 import Foundation
-
-internal import os
 
 extension Logger {
     /// A logger for the common `AttachmentsFeatureElementView` view.

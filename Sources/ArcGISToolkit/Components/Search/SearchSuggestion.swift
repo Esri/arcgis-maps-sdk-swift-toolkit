@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
-import ArcGIS
+public import ArcGIS
+public import Foundation
 
 /// Wraps a suggestion for display.
 public struct SearchSuggestion: @unchecked Sendable {
