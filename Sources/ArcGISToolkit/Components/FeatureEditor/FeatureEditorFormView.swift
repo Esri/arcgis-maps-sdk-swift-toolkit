@@ -142,7 +142,7 @@ struct FeatureEditorFormView: View {
         try? await selectFeature(candidate.feature)
     }
     
-    /// Zooms to and briefly selects a feature on the map.
+    /// Zooms to and selects a feature on the map for 1 second.
     /// - Parameter feature: The `ArcGISFeature` to show.
     private func showFeature(_ feature: ArcGISFeature) async {
         guard feature.geometry?.isEmpty == false else { return }
@@ -150,10 +150,13 @@ struct FeatureEditorFormView: View {
         model.viewpointGeometry = feature.geometry
         
         do {
+            // Selects the feature and delays for 1 sec while the geometry editor is hidden.
             try await selectFeature(feature)
         } catch {
-            // Sleeps if the geometry editor wasn't hidden so there is still a
-            // delay before the selection is cleared.
+            // If selectFeature(_:) throws, the feature was selected, but a 1
+            // sec delay was not performed since the geometry editor couldn't
+            // be hidden. This performs the delay if that happens so that the
+            // feature is still selected for one 1 sec.
             try? await Task.sleep(for: .featureHighlightDelay)
         }
         
@@ -162,7 +165,7 @@ struct FeatureEditorFormView: View {
         clearSelectedFeature()
     }
     
-    /// Selects a feature on the map and briefly hides the geometry editor's symbology.
+    /// Selects a feature on the map and hides the geometry editor's symbology for 1 second.
     /// - Parameter feature: The feature to select.
     /// - Throws: If the geometry editor was not hidden.
     private func selectFeature(_ feature: ArcGISFeature) async throws {
