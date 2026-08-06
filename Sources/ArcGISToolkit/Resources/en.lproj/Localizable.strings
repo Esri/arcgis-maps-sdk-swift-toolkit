@@ -165,12 +165,6 @@ Cancel your current action to close/hide a sheet or pop-up. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose Photo or Video" = "Choose Photo or Video";
 
-/* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Choose Photo";
-
-/* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Choose Photo or Video";
-
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Choose to add";
