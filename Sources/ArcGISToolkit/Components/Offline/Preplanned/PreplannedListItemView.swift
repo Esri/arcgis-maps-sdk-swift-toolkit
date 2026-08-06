@@ -73,7 +73,7 @@ struct PreplannedListItemView: View {
             Image(systemName: "xmark.circle")
                 .imageScale(.large)
         }
-        // Have to apply a style or it won't be tappable.
+        // Apply a style to make it tappable.
         .buttonStyle(.borderless)
     }
 }
