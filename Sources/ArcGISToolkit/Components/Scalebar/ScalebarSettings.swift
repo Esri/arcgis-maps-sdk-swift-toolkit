@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+public import SwiftUI
 
 extension Scalebar {
     /// Customizes scalebar appearance and behavior.

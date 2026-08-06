@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-import Observation
+public import ArcGIS
+public import Observation
 
 /// An item that can be shown in the ``BuildingExplorer``.
 ///- Since: 300.0

@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-import Combine
+public import ArcGIS
+public import Combine
+
 import CryptoTokenKit
 
 /// The `Authenticator` is a configurable object that handles authentication challenges. It will
@@ -22,7 +23,7 @@ import CryptoTokenKit
 /// ![image](https://user-images.githubusercontent.com/3998072/203615041-c887d5e3-bb64-469a-a76b-126059329e92.png)
 ///
 /// **Features**
-/// 
+///
 /// The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is
 /// asked to handle an authentication challenge. This will handle many different types of
 /// authentication, for example:

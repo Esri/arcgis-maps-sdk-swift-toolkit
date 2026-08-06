@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
+public import ArcGIS
+
 import UIKit
 
 /// A starting point of a utility network trace.

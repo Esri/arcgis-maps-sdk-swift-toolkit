@@ -309,7 +309,7 @@ class OnDemandMapModelTests: XCTestCase {
 }
 
 extension OnDemandMapModel.Status: Equatable {
-    public static func == (lhs: OnDemandMapModel.Status, rhs: OnDemandMapModel.Status) -> Bool {
+    static func == (lhs: OnDemandMapModel.Status, rhs: OnDemandMapModel.Status) -> Bool {
         return switch (lhs, rhs) {
         case (.initialized, .initialized),
             (.downloading, .downloading),

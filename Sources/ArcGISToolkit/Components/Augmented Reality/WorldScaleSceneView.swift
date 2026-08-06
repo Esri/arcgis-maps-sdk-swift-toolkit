@@ -13,10 +13,11 @@
 // limitations under the License.
 
 #if os(iOS)
-import ArcGIS
-import ARKit
+public import ArcGIS
+public import ARKit
+public import SwiftUI
+
 import Combine
-import SwiftUI
 
 /// A scene view that provides an augmented reality world scale experience.
 @available(macCatalyst, unavailable)
