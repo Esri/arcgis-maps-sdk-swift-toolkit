@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app uses your location to anchor virtual objects to real-world locations in an augmented reality experience.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app uses your camera to provide a live feed in an augmented reality experience.</string>
+</dict>
+</plist>

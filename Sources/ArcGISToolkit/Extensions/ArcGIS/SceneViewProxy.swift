@@ -12,25 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
 import ArcGIS
 import ARKit
+import Foundation
 import SwiftUI
 
 #if os(iOS)
-extension SceneViewProxy {
-    /// Updates the scene view's camera for a given augmented reality frame.
+public extension SceneViewProxy {
+    /// Updates the scene view's camera for a given augmented reality camera.
     /// - Parameters:
-    ///   - frame: The current AR frame.
-    ///   - cameraController: The current camera controller assigned to the scene view.
+    ///   - camera: The current AR camera.
+    ///   - cameraController: The current camera controller assigned to the
+    ///   scene view.
     ///   - orientation: The interface orientation.
+    ///   - initialTransformation: The initial transformation matrix.
     func updateCamera(
-        frame: ARFrame,
+        camera: ARCamera,
         cameraController: TransformationMatrixCameraController,
         orientation: InterfaceOrientation,
         initialTransformation: TransformationMatrix? = nil
     ) {
-        let transform = frame.camera.transform(for: orientation)
+        let transform = camera.transform(for: orientation)
         let quaternion = simd_quatf(transform)
         let transformationMatrix = TransformationMatrix.normalized(
             quaternionX: Double(quaternion.vector.x),
@@ -43,19 +45,19 @@ extension SceneViewProxy {
         )
         
         // Set the matrix on the camera controller.
-        if let initialTransformation {
-            cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
+        cameraController.transformationMatrix = if let initialTransformation {
+            initialTransformation.adding(transformationMatrix)
         } else {
-            cameraController.transformationMatrix = transformationMatrix
+            transformationMatrix
         }
     }
     
-    /// Sets the field of view for the scene view's camera for a given augmented reality frame.
+    /// Sets the field of view for the scene view's camera for a given augmented
+    /// reality camera.
     /// - Parameters:
-    ///   - frame: The current AR frame.
+    ///   - camera: The current AR camera.
     ///   - orientation: The interface orientation.
-    func setFieldOfView(for frame: ARFrame, orientation: InterfaceOrientation) {
-        let camera = frame.camera
+    func setFieldOfView(for camera: ARCamera, orientation: InterfaceOrientation) {
         let intrinsics = camera.intrinsics
         let imageResolution = camera.imageResolution
         
@@ -73,7 +75,8 @@ extension SceneViewProxy {
 
 private extension ARCamera {
     /// The transform rotated for a particular interface orientation.
-    /// - Parameter orientation: The interface orientation that the transform is appropriate for.
+    /// - Parameter orientation: The interface orientation that the transform is
+    /// appropriate for.
     func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
         switch orientation {
         case .portrait:

@@ -1,35 +1,45 @@
 @Tutorial(time: 10) {
     @Intro(title: "WorldScaleSceneView Tutorial") {
-        `WorldScaleSceneView` provides an augmented reality world scale experience.
+        `WorldScaleSceneView` provides an augmented reality world-scale experience.
         @Image(source: WorldScaleSceneView, alt: "An image of a world scale AR experience.")
     }
     
     @Section(title: "Using the WorldScaleSceneView") {
         @ContentAndMedia {
-            @Image(source: WorldScaleSceneView, alt: "An image of a world scale top AR experience.")
+            @Image(source: WorldScaleSceneView, alt: "An image of a world-scale AR experience.")
         }
         
         @Steps {
             @Step {
-                Initialize a `WorldScaleSceneView`. Specify the clipping distance. The tracking mode is set to `worldTracking` by default.
+                Initialize a `WorldScaleSceneView` which requires a world-tracking
+                `provider` and closures for the `cameraFeedView` and `sceneView`.
+                @Code(name: "WorldScaleExampleView.swift", file: WorldScaleSceneViewStep1.swift)
+            }
+            
+            @Step {
+                Specify the `provider` for the `WorldScaleSceneView`. The provider is responsible for providing the world tracking data to the `WorldScaleSceneView`. In this example, we use the `AppleWorldTracking` provider which utilizes ARKit's world tracking capabilities. For the `AppleWorldTracking.Mode` we specify `.worldTracking` to use Apple's `ARWorldTrackingConfiguration`.
                 
-                The clipping distance is the distance in meters that the ArcGIS Scene data will be clipped to.
-                The tracking mode determines the type of tracking configuration that will be used by the AR view. 
-                The `worldTracking` mode uses the `ARWorldTrackingConfiguration` and the `geoTracking` mode uses the `ARGeoTrackingConfiguration`. The `preferGeoTracking` mode uses the `ARGeoTrackingConfiguration` if 
-                geo tracking is available, otherwise, `ARWorldTrackingConfiguration` is used.
-                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep1.swift)
+                See the `CustomVPSProviderExample` project for an example of how to implement a custom VPS provider that conforms to the `WorldTrackingProvider` protocol.
+                @Code(name: "WorldScaleExampleView.swift", file: WorldScaleSceneViewStep2.swift)
+            }
+            
+            @Step {
+                Add a `View` that displays the camera feed to the `cameraFeedView` closure. The closure builds and displays the camera feed for the augmented reality experience. In this example, we use the `AppleWorldTrackingCameraFeedView` and specify the session provider `context`. The `AppleWorldTrackingCameraFeedView` also has view modifers to observe the status of the AR session including `onCameraTrackingStateChanged(perform:)` and `onGeoTrackingStatusChanged(perform:)`.
+                
+                If you are implementing a custom provider, you will also need to implement a custom camera feed view that uses the session provider `context`. See the `CustomVPSProviderExample` project for an example of how to implement a custom camera feed view.
+                @Code(name: "WorldScaleExampleView.swift", file: WorldScaleSceneViewStep3.swift)
             }
             
             @Step {
                 Add a `SceneView` to the `WorldScaleSceneView` closure. The closure builds and overlays 
                 the scene view on top of the augmented reality video feed. Specify the `scene` state 
                 variable.
-                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep2.swift)
+                @Code(name: "WorldScaleExampleView.swift", file: WorldScaleSceneViewStep4.swift)
             }
             
             @Step {
                 Set the `scene.baseSurface.opacity` to zero to make the basemap transparent.
-                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep3.swift)
+                @Code(name: "WorldScaleExampleView.swift", file: WorldScaleSceneViewStep5.swift)
             }
             
             @Step {
@@ -39,23 +49,18 @@
                 in order to display a ring around the initial location. The current location is also
                 necessary because the `WorldScaleSceneView` utilizes a location datasource that
                 will not start until authorized.
-                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep4.swift)
+                @Code(name: "WorldScaleExampleView.swift", file: WorldScaleSceneViewStep6.swift)
             }
             
             @Step {
-                Start the location datasource and get the initial location.
-                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep5.swift)
+                Start the provider location datasource and get the initial location.
+                @Code(name: "WorldScaleExampleView.swift", file: WorldScaleSceneViewStep7.swift)
             }
             
             @Step {
                 To display a ring around the initial location, create a graphic using the 
                 initial location and add it to the graphics overlay.
-                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep6.swift)
-            }
-            
-            @Step {
-                Stop the location datasource after the initial location is retrieved.
-                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep7.swift)
+                @Code(name: "WorldScaleExampleView.swift", file: WorldScaleSceneViewStep8.swift)
             }
         }
     }

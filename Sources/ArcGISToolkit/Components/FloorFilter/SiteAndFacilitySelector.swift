@@ -37,7 +37,7 @@ struct SiteAndFacilitySelector: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             if readyToPresent {
-                VStack {
+                Group {
                     if model.sites.count > 1 {
                         SiteList(isPresented: $isPresented)
                     } else {
@@ -52,7 +52,9 @@ struct SiteAndFacilitySelector: View {
                 }
                 .onAppear {
                     // If there not multiple sites, then we go straight to the facilities list.
-                    guard model.sites.count > 1, let facility = model.selection?.facility else {
+                    guard navigationPath.isEmpty,
+                          model.sites.count > 1,
+                          let facility = model.selection?.facility else {
                         return
                     }
                     navigationPath.append(facility)
@@ -62,7 +64,7 @@ struct SiteAndFacilitySelector: View {
         .onAppear {
             readyToPresent = true
         }
-        .frame(minWidth: 360, minHeight: 500)
+        .frame(idealWidth: 360, idealHeight: 500)
     }
 }
 
@@ -85,9 +87,10 @@ private struct SiteList: View {
     }
     
     var body: some View {
-        VStack {
+        Group {
             if sites.isEmpty {
                 ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List(sites) { site in
                     NavigationLink {
@@ -100,16 +103,18 @@ private struct SiteList: View {
                             .lineLimit(1)
                     }
                 }
-                .searchable(
-                    text: $searchText,
-                    placement: .navigationBarDrawer(displayMode: .always),
-                    prompt: String.filterSites
-                )
 #if !os(visionOS)
                 .listStyle(.plain)
 #endif
             }
         }
+        // Prevents background flicker when navigating back from FacilityList.
+        .background(Color(.systemBackground))
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: String.filterSites
+        )
         .navigationTitle(String.sites)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -166,7 +171,7 @@ private struct FacilityList: View {
     }
     
     var body: some View {
-        VStack {
+        Group {
             if facilities.isEmpty {
                 ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
             } else {
@@ -198,11 +203,6 @@ private struct FacilityList: View {
                         .buttonStyle(.plain)
 #endif
                     }
-                    .searchable(
-                        text: $searchText,
-                        placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: String.filterFacilities
-                    )
 #if !os(visionOS)
                     .listStyle(.plain)
 #endif
@@ -215,6 +215,11 @@ private struct FacilityList: View {
                 }
             }
         }
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: String.filterFacilities
+        )
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 DismissButton(kind: .cancel) {

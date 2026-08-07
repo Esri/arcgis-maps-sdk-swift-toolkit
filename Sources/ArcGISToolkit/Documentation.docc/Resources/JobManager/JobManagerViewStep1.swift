@@ -1,5 +1,6 @@
 import ArcGIS
 import ArcGISToolkit
+import os
 import SwiftUI
 
 struct JobManagerTutorialView: View {
@@ -28,7 +29,7 @@ struct JobManagerTutorialView: View {
                                     try await makeNapervilleOfflineMapJob()
                                 )
                             } catch {
-                                print("Error creating offline map job: \(error)")
+                                Logger.jobManagerTutorial.error("Error creating offline map job: \(error.localizedDescription, privacy: .public)")
                             }
                             job = jobManager.jobs.first
                             job?.start()
@@ -44,4 +45,11 @@ struct JobManagerTutorialView: View {
             }
         }
     }
+}
+
+extension Logger {
+    /// A logger for the job manager tutorial.
+    static let jobManagerTutorial: Self = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Tutorials", category: "JobManagerTutorial")
+    }()
 }

@@ -14,6 +14,7 @@
 
 import ArcGIS
 import ArcGISToolkit
+import os
 import SwiftUI
 
 /// A demonstration of the utility network trace tool which runs traces on a web map published with
@@ -55,7 +56,7 @@ struct UtilityNetworkTraceExampleView: View {
                         let publicSample = try await ArcGISCredential.publicSample
                         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
                     } catch {
-                        print("Error creating credential:", error.localizedDescription)
+                        Logger.utilityNetworkTraceExample.error("Error creating credential: \(error.localizedDescription)")
                     }
                 }
 #if os(visionOS)
@@ -131,4 +132,11 @@ private extension EnvironmentValues {
     var isPortraitOrientation: Bool {
         horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
+}
+
+extension Logger {
+    /// A logger for the Utility Network Trace example.
+    static let utilityNetworkTraceExample: Self = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Examples", category: "UtilityNetworkTrace")
+    }()
 }

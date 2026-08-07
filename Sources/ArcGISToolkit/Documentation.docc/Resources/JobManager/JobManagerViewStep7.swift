@@ -1,5 +1,6 @@
 import ArcGIS
 import ArcGISToolkit
+import os
 import SwiftUI
 
 struct JobManagerTutorialView: View {
@@ -56,7 +57,7 @@ struct JobManagerTutorialView: View {
                                     try await makeNapervilleOfflineMapJob()
                                 )
                             } catch {
-                                print("Error creating offline map job: \(error)")
+                                Logger.jobManagerTutorial.error("Error creating offline map job: \(error.localizedDescription, privacy: .public)")
                             }
                             job = jobManager.jobs.first
                             job?.start()
@@ -72,9 +73,10 @@ struct JobManagerTutorialView: View {
             }
         }
         .onAppear {
+            Logger.jobManagerTutorial.info("Requesting authorization to send notifications.")
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
                 if let error {
-                    print(error.localizedDescription)
+                    Logger.jobManagerTutorial.error("Authorization failed with an error: \(error.localizedDescription)")
                 }
             }
         }
@@ -113,6 +115,8 @@ extension Job.Status {
             return "Failed"
         case .canceling:
             return "Canceling"
+        @unknown default:
+            return "Unknown"
         }
     }
 }
@@ -120,7 +124,7 @@ extension Job.Status {
 extension JobManagerTutorialView {
     /// Creates a job that generates an offline map for Naperville.
     func makeNapervilleOfflineMapJob() async throws -> GenerateOfflineMapJob {
-        let map = Map(url:  URL(string: "https://www.arcgis.com/home/item.html?id=acc027394bc84c2fb04d1ed317aac674")!)!
+        let map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=acc027394bc84c2fb04d1ed317aac674")!)!
         let naperville = Envelope(
             xMin: -9813416.487598,
             yMin: 5126112.596989,
@@ -136,4 +140,11 @@ extension JobManagerTutorialView {
         let downloadURL = documentsPath.appendingPathComponent(UUID().uuidString)
         return task.makeGenerateOfflineMapJob(parameters: params, downloadDirectory: downloadURL)
     }
+}
+
+extension Logger {
+    /// A logger for the job manager tutorial.
+    static let jobManagerTutorial: Self = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Tutorials", category: "JobManagerTutorial")
+    }()
 }

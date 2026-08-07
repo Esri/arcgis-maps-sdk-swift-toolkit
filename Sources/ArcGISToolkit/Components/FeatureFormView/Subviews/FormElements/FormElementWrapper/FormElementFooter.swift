@@ -17,53 +17,117 @@ import SwiftUI
 
 /// A footer for elements in a feature form.
 struct FormElementFooter: View {
+    /// The view model for the form.
+    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+    /// The model for the FeatureFormView containing the view.
+    @Environment(FeatureFormViewModel.self) private var featureFormViewModel
+    /// A vertical amount of padding to use between form elements.
     @Environment(\.formElementPadding) var formElementPadding
+    /// The developer configurable validation error visibility.
+    @Environment(\.validationErrorVisibilityExternal) private var validationErrorVisibilityExternal
+    
+    /// An ID which changes each time the element's validation errors change, or the validation error
+    /// visibility changes.
+    @State private var id = UUID()
     
     /// The form element the footer belongs to.
     let element: FormElement
     
     var body: some View {
-        footerTextForElement
+        text
+            .id(id)
+            .onChange(of: featureFormViewModel.validationErrorVisibilityInternal) { id = .init() }
+            .onChange(of: validationErrorVisibilityExternal) { id = .init() }
             .font(.footnote)
             .padding(.vertical, formElementPadding / 2)
     }
     
     @ViewBuilder
-    var footerTextForElement: some View {
+    var text: some View {
         switch element {
+        case let element as AttachmentsFormElement:
+            AttachmentsFormElementFooter(element: element, showsErrorsIfPresent: showsErrorsIfPresent)
+                .task { for await _ in element.$validationErrors { id = .init() } }
         case let element as FieldFormElement:
-            FieldFormElementFooter(element: element)
+            FieldFormElementFooter(element: element, showsErrorsIfPresent: showsErrorsIfPresent)
+                .task { for await _ in element.$validationErrors { id = .init() } }
         case let element as UtilityAssociationsFormElement:
             UtilityAssociationsFormElementFooter(element: element)
         default:
-            // GroupFormElement's description is shown in the DisclosureGroup's
-            // label.
+            // GroupFormElements provide their own footer.
             EmptyView()
         }
     }
+    
+    /// A Boolean value which indicates whether or not the footer should show validation errors for the
+    /// element, if any are present.
+    var showsErrorsIfPresent: Bool {
+        embeddedFeatureFormViewModel.previouslyFocusedElements.contains(element) ||
+        validationErrorVisibilityExternal == .visible ||
+        featureFormViewModel.validationErrorVisibilityInternal == .visible
+    }
+}
+
+protocol FormElementFooterProvider: View {
+    /// Localized error text to be shown to a user depending on the type of error information available.
+    var error: Text? { get }
+    /// A Boolean value which indicates whether or not an error is showing in the footer.
+    var isShowingError: Bool { get }
 }
 
 extension FormElementFooter {
-    struct FieldFormElementFooter: View {
+    struct AttachmentsFormElementFooter: FormElementFooterProvider {
+        let element: AttachmentsFormElement
+        let showsErrorsIfPresent: Bool
+        
+        var body: some View {
+            if isShowingError {
+                error
+                    .foregroundStyle(.red)
+            } else {
+                Text(element.description)
+            }
+        }
+        
+        var error: Text? {
+            guard let error = element.validationErrors.first as? FeatureFormError else { return nil }
+            return switch error {
+            case .exceedsMaximumAttachmentCount:
+                element.maxAttachmentCountMessage
+            case .exceedsMaximumAttachmentSize:
+                element.maxFileSizeMessage
+            case .incorrectAttachmentType:
+                element.incorrectAttachmentTypeMessage
+            case .lessThanMinimumAttachmentCount:
+                element.minAttachmentCountMessage
+            default:
+                Text(
+                    "Unknown validation error",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field has an unknown validation error."
+                )
+            }
+        }
+        
+        var isShowingError: Bool {
+            showsErrorsIfPresent &&
+            element.isEditable &&
+            !element.validationErrors.isEmpty
+        }
+    }
+    
+    struct FieldFormElementFooter: FormElementFooterProvider {
         /// The view model for the form.
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
-        /// The model for the FeatureFormView containing the view.
-        @Environment(FeatureFormViewModel.self) private var featureFormViewModel
-        /// The developer configurable validation error visibility.
-        @Environment(\.validationErrorVisibilityExternal) private var validationErrorVisibilityExternal
         
         let element: FieldFormElement
-        
-        /// An ID regenerated each time the element's value changes.
-        ///
-        /// Allows the footer to be recomputed to reflect changes in validation errors or input length.
-        @State private var id = UUID()
+        let showsErrorsIfPresent: Bool
         
         var body: some View {
             HStack(alignment: .top) {
                 Group {
                     if isShowingError {
-                        errorMessage
+                        error
                     } else if !element.description.isEmpty {
                         Text(element.description)
                     } else if embeddedFeatureFormViewModel.focusedElement == element {
@@ -88,16 +152,9 @@ extension FormElementFooter {
                 }
             }
             .foregroundStyle(isShowingError ? .red : .secondary)
-            .id(id)
-            .task {
-                for await _ in element.$value {
-                    id = UUID()
-                }
-            }
         }
         
-        /// Localized error text to be shown to a user depending on the type of error information available.
-        var errorMessage: Text? {
+        var error: Text? {
             guard let error = primaryError else { return nil }
             return switch error {
             case .nullNotAllowed:
@@ -210,7 +267,7 @@ extension FormElementFooter {
                         comment: "Text indicating a field's value must be of the correct type."
                     )
                 }
-            @unknown default:
+            default:
                 Text(
                     "Unknown validation error",
                     bundle: .toolkitModule,
@@ -227,16 +284,10 @@ extension FormElementFooter {
             && (element.description.isEmpty || primaryError != nil)
         }
         
-        /// A Boolean value which indicates whether or not an error is showing in the footer.
         var isShowingError: Bool {
-            element.isEditable
-            && primaryError != nil
-            &&
-            (
-                embeddedFeatureFormViewModel.previouslyFocusedElements.contains(element)
-                || validationErrorVisibilityExternal == .visible
-                || featureFormViewModel.validationErrorVisibilityInternal == .visible
-            )
+            showsErrorsIfPresent &&
+            element.isEditable &&
+            primaryError != nil
         }
         
         /// The allowable number of characters in the input.
@@ -364,13 +415,21 @@ extension FormElementFooter {
         }
     }
     
-    struct UtilityAssociationsFormElementFooter: View {
+    struct UtilityAssociationsFormElementFooter: FormElementFooterProvider {
         let element: UtilityAssociationsFormElement
         
         var body: some View {
-            if !element.description.isEmpty {
-                Text(element.description)
-            }
+            Text(element.description)
+        }
+        
+        var error: Text? {
+            // UtilityAssociationsFormElements do not currently have validation errors.
+            nil
+        }
+        
+        var isShowingError: Bool {
+            // UtilityAssociationsFormElements do not currently have validation errors.
+            false
         }
     }
 }

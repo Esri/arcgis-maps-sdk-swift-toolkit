@@ -1,4 +1,4 @@
-// Copyright 2022 Esri
+// Copyright 2026 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,17 +13,17 @@
 // limitations under the License.
 
 import ArcGIS
+import SwiftUI
 
-extension UtilityTraceFunction.FunctionType {
-    var title: String {
-        switch self {
-        case .add: return "Add"
-        case .average: return "Average"
-        case .count: return "Count"
-        case .max: return "Max"
-        case .min: return "Min"
-        case .subtract: return "Subtract"
-        @unknown default: return "Unknown"
+@main
+struct CustomVPSProviderExampleApp: App {
+    init() {
+        ArcGISEnvironment.apiKey = APIKey("<#API Key#>")!
+    }
+    
+    var body: some SwiftUI.Scene {
+        WindowGroup {
+            CustomVPSProviderExampleView()
         }
     }
 }
