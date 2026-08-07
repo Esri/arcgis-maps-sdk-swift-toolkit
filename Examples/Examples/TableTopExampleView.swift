@@ -55,7 +55,7 @@ struct TableTopExampleView: View {
                             let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
                             Logger.tableTopExample.info("\(results.count) identify result(s).")
                         } catch {
-                            Logger.tableTopExample.error("Identify failed. \(error.localizedDescription)")
+                            Logger.tableTopExample.error("Identify failed with an error: \(error.localizedDescription)")
                         }
                     }
                 }
