@@ -59,7 +59,7 @@ struct WorldScaleExampleView: View {
                             let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
                             Logger.worldScaleExample.info("\(results.count) identify result(s).")
                         } catch {
-                            Logger.worldScaleExample.error("Identify failed. \(error.localizedDescription)")
+                            Logger.worldScaleExample.error("Identify failed with an error: \(error.localizedDescription)")
                         }
                     }
                 }
