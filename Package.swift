@@ -56,3 +56,9 @@ let package = Package(
         )
     ]
 )
+
+for target in package.targets where target.type != .plugin {
+    target.swiftSettings = (target.swiftSettings ?? []) + [
+        .enableUpcomingFeature("MemberImportVisibility")
+    ]
+}

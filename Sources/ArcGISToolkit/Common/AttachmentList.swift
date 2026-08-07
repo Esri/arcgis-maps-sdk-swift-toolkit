@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import QuickLook
 import SwiftUI
 
 /// A view displaying a list of attachments, with a thumbnail, title, and download button.

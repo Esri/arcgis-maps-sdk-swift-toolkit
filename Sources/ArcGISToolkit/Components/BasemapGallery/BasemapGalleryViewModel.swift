@@ -14,6 +14,7 @@
 
 import ArcGIS
 import Combine
+import Foundation
 
 internal import os
 
