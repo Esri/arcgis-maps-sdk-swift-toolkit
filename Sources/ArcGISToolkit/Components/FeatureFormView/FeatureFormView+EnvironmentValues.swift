@@ -24,7 +24,7 @@ extension EnvironmentValues /* FeatureFormView */ {
     @Entry var navigationIsDisabled = false
     
     /// The closure to perform when a ``EditingEvent`` occurs.
-    @Entry var onFormEditingEventAction: ((FeatureFormView.EditingEvent) -> Void)?
+    @Entry var onFormEditingEventAction: FormEditingEventAction?
     
     /// The developer configurable validation error visibility.
     @Entry var validationErrorVisibilityExternal: FeatureFormView.ValidationErrorVisibility = .automatic
@@ -38,4 +38,13 @@ extension EnvironmentValues /* FeatureFormView + FeatureEditor */ {
     /// for saving. The closure will throw if the Feature Editor needs to block saving, so this
     /// should be called before performing any other save actions.
     @Entry var externalSaveAction: (() throws -> Void)?
+}
+
+struct FormEditingEventAction: Identifiable {
+    let action: (FeatureFormView.EditingEvent) -> Void
+    let id = UUID()
+    
+    func callAsFunction(_ event: FeatureFormView.EditingEvent) {
+        action(event)
+    }
 }

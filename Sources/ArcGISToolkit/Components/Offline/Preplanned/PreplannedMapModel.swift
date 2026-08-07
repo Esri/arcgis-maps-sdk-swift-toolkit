@@ -123,10 +123,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
         do {
             try await mmpk.load()
-            status = .downloaded
             mobileMapPackage = mmpk
             sizeInBytes = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
+            status = .downloaded
         } catch {
             status = .mmpkLoadFailure(error)
             mobileMapPackage = nil
@@ -205,31 +205,30 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         Task { [weak self, job] in
             let result = await job.result
             guard let self else { return }
-            self.updateDownloadStatus(for: result)
-            if let mmpk = try? result.get().mobileMapPackage {
-                await loadAndUpdateMobileMapPackage(mmpk: mmpk)
+            
+            switch result {
+            case .success(let downloadResult):
+                await loadAndUpdateMobileMapPackage(mmpk: downloadResult.mobileMapPackage)
+            case .failure(let error):
+                updateDownloadFailureStatus(for: error)
             }
+            
             self.job = nil
         }
     }
     
-    /// Updates the status based on the download result of the mobile map package.
-    private func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>) {
-        switch downloadResult {
-        case .success:
-            status = .downloaded
-        case .failure(let error):
-            if error is CancellationError {
-                // Reset status to packaged if the job was cancelled.
-                Logger.offlineManager.info("DownloadPreplannedOfflineMapJob job cancelled.")
-                status = .packaged
-            } else {
-                Logger.offlineManager.error("DownloadPreplannedOfflineMapJob job failed with error: \(error).")
-                status = .downloadFailure(error)
-            }
-            // Remove contents of mmpk directory when download fails.
-            try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+    /// Updates the status based on a failed download result error.
+    private func updateDownloadFailureStatus(for error: any Error) {
+        if error is CancellationError {
+            // Reset status to packaged if the job was cancelled.
+            Logger.offlineManager.info("DownloadPreplannedOfflineMapJob job cancelled.")
+            status = .packaged
+        } else {
+            Logger.offlineManager.error("DownloadPreplannedOfflineMapJob job failed with error: \(error).")
+            status = .downloadFailure(error)
         }
+        // Remove contents of mmpk directory when download fails.
+        try? FileManager.default.removeItem(at: mmpkDirectoryURL)
     }
     
     /// Cancels the in-progress job.

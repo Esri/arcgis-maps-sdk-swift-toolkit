@@ -126,12 +126,19 @@ private extension TextInput {
                     .focused($isFocused)
                     .keyboardType(keyboardType)
                     .onChange(of: isFocused) {
-                        embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                        if isFocused {
+                            embeddedFeatureFormViewModel.focusedElement = element
+                        } else if embeddedFeatureFormViewModel.focusedElement == element {
+                            // Only clears focusedElement if it matches the input's
+                            // element to prevent unfocusing another text input
+                            // that received focus while this one was still focused.
+                            embeddedFeatureFormViewModel.focusedElement = nil
+                        }
                     }
                     .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
                         // Another form input took focus.
                         if embeddedFeatureFormViewModel.focusedElement != element {
-                            isFocused  = false
+                            isFocused = false
                         }
                     }
                 }

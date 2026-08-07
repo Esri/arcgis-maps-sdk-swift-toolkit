@@ -76,6 +76,6 @@ import Observation
     
     /// A Boolean value indicating if the form presented in the navigation stack has validation errors.
     var presentedFormHasValidationErrors: Bool {
-        !(presentedForm?.validationErrors.isEmpty ?? true)
+        !(presentedForm?.elementValidationErrors.isEmpty ?? true)
     }
 }

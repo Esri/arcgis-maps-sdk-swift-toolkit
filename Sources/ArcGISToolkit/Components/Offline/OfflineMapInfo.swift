@@ -14,8 +14,9 @@
 
 import ArcGIS
 import Foundation
-import OSLog
 import UIKit.UIImage
+
+internal import os
 
 /// Information for an online map that has been taken offline.
 ///
