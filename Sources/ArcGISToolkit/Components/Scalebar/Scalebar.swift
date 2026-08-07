@@ -198,3 +198,36 @@ public struct Scalebar: View {
         .environment(\.scalebarSettings, settings)
     }
 }
+
+#Preview {
+    @Previewable @State var spatialReference: SpatialReference?
+    @Previewable @State var unitsPerPoint: Double?
+    @Previewable @State var viewpoint: Viewpoint?
+    @Previewable @State var style = ScalebarStyle.alternatingBar
+
+    VStack {
+        Scalebar(
+            maxWidth: 175,
+            spatialReference: spatialReference,
+            style: style,
+            unitsPerPoint: unitsPerPoint,
+            viewpoint: viewpoint
+        )
+        .onAppear {
+            unitsPerPoint = 99689
+            viewpoint = .init(center: .init(x: 0, y: 0, spatialReference: .webMercator), scale: 376777662)
+            spatialReference = .webMercator
+        }
+        .padding()
+
+        Form {
+            Picker("Style", selection: $style) {
+                Text("Alternating Bar").tag(ScalebarStyle.alternatingBar)
+                Text("Bar").tag(ScalebarStyle.bar)
+                Text("Dual Unit Line").tag(ScalebarStyle.dualUnitLine)
+                Text("Graduated Line").tag(ScalebarStyle.graduatedLine)
+                Text("Line").tag(ScalebarStyle.line)
+            }
+        }
+    }
+}
