@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
+public import ArcGIS
+public import SwiftUI
+
 import ARKit
 import Combine
-import SwiftUI
 
 /// A scene view that provides an augmented reality fly over experience.
 @available(macCatalyst, unavailable)

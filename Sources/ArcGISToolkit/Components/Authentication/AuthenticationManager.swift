@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
+public import ArcGIS
 
 public extension AuthenticationManager {
     /// Sets up authenticator as ArcGIS and Network challenge handlers to handle authentication

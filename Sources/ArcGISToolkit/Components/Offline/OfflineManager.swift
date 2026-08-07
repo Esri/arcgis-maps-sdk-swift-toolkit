@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-import BackgroundTasks
-import Combine
-import SwiftUI
+public import ArcGIS
+public import Combine
+public import SwiftUI
 
-internal import os
+import BackgroundTasks
+import os
 
 /// A utility object that maintains the state of offline map areas and their
 /// storage on the device.

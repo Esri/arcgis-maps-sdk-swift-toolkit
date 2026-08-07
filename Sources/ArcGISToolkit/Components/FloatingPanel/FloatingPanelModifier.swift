@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+public import SwiftUI
 
 public extension View {
     /// A floating panel is a view that overlays a view and supplies view-related

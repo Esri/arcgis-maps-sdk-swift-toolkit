@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+public import SwiftUI
 
 /// A modifier which displays a 2 point width border and a shadow around a view.
 struct EsriBorderViewModifier: ViewModifier {
