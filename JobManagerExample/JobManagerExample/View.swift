@@ -16,26 +16,25 @@ import SwiftUI
 
 extension View {
     /// Adds an action to perform when this view detects data emitted by the
-    /// given async sequence. If `action` is `nil`, then the async sequence is not observed.
+    /// given async stream. If `action` is `nil`, then the async sequence is not observed.
     /// The `action` closure is captured the first time the view appears.
     /// - Parameters:
-    ///   - sequence: The async sequence to observe.
-    ///   - action: The action to perform when a value is emitted by `sequence`.
-    ///   The value emitted by `sequence` is passed as a parameter to `action`.
+    ///   - stream: The async stream to observe.
+    ///   - action: The action to perform when a value is emitted by `stream`.
+    ///   The value emitted by `stream` is passed as a parameter to `action`.
     ///   The `action` is called on the `MainActor`.
-    /// - Returns: A view that triggers `action` when `sequence` emits a value.
+    /// - Returns: A view that triggers `action` when `stream` emits a value.
     @ViewBuilder
-    func onReceive<S>(
-        _ sequence: S,
-        perform action: (@MainActor (S.Element) -> Void)?
-    ) -> some View where S: AsyncSequence & Sendable, S.Element: Sendable {
+    func onReceive<Element>(
+        _ stream: AsyncStream<Element>,
+        perform action: (@MainActor (Element) -> Void)?
+    ) -> some View where Element: Sendable {
         if let action {
             task {
-                do {
-                    for try await element in sequence {
-                        action(element)
-                    }
-                } catch {}
+                var iterator = stream.makeAsyncIterator()
+                while let element = await iterator.next() {
+                    action(element)
+                }
             }
         } else {
             self

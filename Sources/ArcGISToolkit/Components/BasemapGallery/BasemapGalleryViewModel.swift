@@ -15,6 +15,8 @@
 import ArcGIS
 import Combine
 
+internal import os
+
 /// Manages the state for a `BasemapGallery`.
 @MainActor class BasemapGalleryViewModel: ObservableObject {
     /// Creates a `BasemapGalleryViewModel`. Uses the given array of basemap gallery items.
@@ -135,12 +137,22 @@ import Combine
         if let geoModel = geoModel {
             Task {
                 // Ensure the geoModel is loaded.
-                try await geoModel.load()
+                do {
+                    try await geoModel.load()
+                } catch {
+                    Logger.basemapGallery.error("The GeoModel failed to load with an error: \(error.localizedDescription)")
+                    return
+                }
                 
-                // Update the basemap gallery item's `spatialReferenceStatus`.
-                try await basemapGalleryItem.updateSpatialReferenceStatus(
-                    geoModel.actualSpatialReference
-                )
+                do {
+                    // Update the basemap gallery item's `spatialReferenceStatus`.
+                    try await basemapGalleryItem.updateSpatialReferenceStatus(
+                        geoModel.actualSpatialReference
+                    )
+                } catch {
+                    Logger.basemapGallery.error("The gallery item's spatial reference couldn't be updated.")
+                    return
+                }
                 
                 switch basemapGalleryItem.spatialReferenceStatus {
                 case .match, .unknown:

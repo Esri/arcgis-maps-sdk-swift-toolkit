@@ -95,13 +95,10 @@ public struct FeatureFormView: View {
     var navigationIsDisabled = false
     
     /// The closure to perform when a ``EditingEvent`` occurs.
-    var onFormEditingEventAction: ((EditingEvent) -> Void)?
+    var onFormEditingEventAction: FormEditingEventAction?
     
     /// The developer configurable validation error visibility.
     var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
-    
-    /// Continuation information for the alert.
-    @State private var alertContinuation: (willNavigate: Bool, action: () -> Void)?
     
     /// An error thrown from finish editing.
     @State private var finishEditingError: (any Error)?
@@ -111,6 +108,9 @@ public struct FeatureFormView: View {
     
     /// The feature form currently visible in the navigation stack.
     @State private var presentedForm: FeatureForm
+    
+    /// Continuation information for the unsaved edits alert.
+    @State private var unsavedEditsAlertContinuation: UnsavedEditsAlertContinuation?
     
     /// The internally managed validation error visibility.
     @State private var validationErrorVisibilityInternal = ValidationErrorVisibility.automatic
@@ -163,12 +163,12 @@ public struct FeatureFormView: View {
                 presentedForm.validationErrors.isEmpty ? discardEditsQuestion : validationErrors,
                 isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
-                    if let (willNavigate, continuation) = alertContinuation {
+                    if let continuation = unsavedEditsAlertContinuation {
                         Button(role: .destructive) {
                             presentedForm.discardEdits()
-                            onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
+                            onFormEditingEventAction?(.discardedEdits(willNavigate: continuation.willNavigate))
                             validationErrorVisibilityInternal = .automatic
-                            continuation()
+                            continuation.action?()
                         } label: {
                             discardEdits
                         }
@@ -182,8 +182,8 @@ public struct FeatureFormView: View {
                                 Task {
                                     do {
                                         try await presentedForm.finishEditing()
-                                        onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
-                                        continuation()
+                                        onFormEditingEventAction?(.savedEdits(willNavigate: continuation.willNavigate))
+                                        continuation.action?()
                                     } catch {
                                         finishEditingError = error
                                     }
@@ -264,7 +264,7 @@ public struct FeatureFormView: View {
             .environment(\.navigationIsDisabled, navigationIsDisabled)
             .environment(\.navigationPath, $navigationPath)
             .environment(\.onFormEditingEventAction, onFormEditingEventAction)
-            .environment(\.setAlertContinuation, setAlertContinuation)
+            .environment(\.unsavedEditsAlertContinuation, $unsavedEditsAlertContinuation)
             .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
             .environment(\.validationErrorVisibilityInternal, $validationErrorVisibilityInternal)
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) { wrappedFeatureForm in
@@ -325,7 +325,7 @@ public extension FeatureFormView {
     /// - Since: 200.8
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
         var copy = self
-        copy.onFormEditingEventAction = action
+        copy.onFormEditingEventAction = .init(action: action)
         return copy
     }
     
@@ -376,10 +376,10 @@ extension FeatureFormView {
     /// A Boolean value indicating whether the unsaved edits alert is presented.
     var alertForUnsavedEditsIsPresented: Binding<Bool> {
         Binding {
-            alertContinuation != nil
+            unsavedEditsAlertContinuation != nil
         } set: { newIsPresented in
             if !newIsPresented {
-                alertContinuation = nil
+                unsavedEditsAlertContinuation = nil
             }
         }
     }
@@ -400,13 +400,6 @@ extension FeatureFormView {
                 validationErrorVisibilityInternal = .automatic
                 onFeatureFormChanged?(featureForm)
             }
-        }
-    }
-    
-    /// A closure used to set the alert continuation.
-    var setAlertContinuation: (Bool, @escaping () -> Void) -> Void {
-        { willNavigate, continuation in
-            alertContinuation = (willNavigate: willNavigate, action: continuation)
         }
     }
     
