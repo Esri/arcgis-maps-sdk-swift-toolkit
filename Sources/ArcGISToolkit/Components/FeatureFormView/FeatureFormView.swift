@@ -84,6 +84,8 @@ public struct FeatureFormView: View {
     private let rootFeatureForm: FeatureForm?
     
     /// The visibility of the "save" and "discard" buttons.
+    var attachmentCustomization: AttachmentCustomization?
+    /// The visibility of the "save" and "discard" buttons.
     var editingButtonsVisibility: Visibility = .automatic
     /// A Boolean which declares whether navigation to forms for features associated via utility association
     /// form elements is disabled.
@@ -100,9 +102,10 @@ public struct FeatureFormView: View {
     ///   - root: The feature form defining the editing experience.
     ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Since: 200.8
-    public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
+    public init(root: FeatureForm, isPresented: Binding<Bool>? = nil, attachmentCustomization: AttachmentCustomization? = nil) {
         self.isPresented = isPresented
         self.rootFeatureForm = root
+        self.attachmentCustomization = attachmentCustomization
     }
     
     public var body: some View {
@@ -285,6 +288,7 @@ public struct FeatureFormView: View {
                 }
             )
             .animation(.default, value: ObjectIdentifier(rootFeatureForm))
+            .environment(\.attachmentCustomization, attachmentCustomization)
             .environment(featureFormViewModel)
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.isPresented, isPresented)
