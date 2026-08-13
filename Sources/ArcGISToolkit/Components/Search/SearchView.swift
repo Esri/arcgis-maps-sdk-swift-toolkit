@@ -88,7 +88,7 @@ public struct SearchView: View {
     /// activity of searching. The view observes `SearchViewModel` for changes in state. The view
     /// calls methods on `SearchViewModel` in response to user action.
     @StateObject private var viewModel: SearchViewModel
-
+    
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     var currentQuery = ""
 

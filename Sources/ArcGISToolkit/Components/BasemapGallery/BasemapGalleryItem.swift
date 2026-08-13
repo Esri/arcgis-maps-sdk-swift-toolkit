@@ -70,7 +70,7 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
     
     /// The thumbnail used to represent the `basemap`.
     @Published public private(set) var thumbnail: UIImage?
-
+    
     /// The spatial reference status of the item. This is set via a call to
     /// ``updateSpatialReferenceStatus(_:)``.
     @Published public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown

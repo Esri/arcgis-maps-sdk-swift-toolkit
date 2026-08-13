@@ -47,7 +47,7 @@ public struct LocationButton: View {
     var buttonIsDisabled: Bool {
         status == .starting || status == .stopping || isPerformingButtonAction
     }
-
+    
 #if os(visionOS)
     /// The auto-pan modes that are selectable by the user.
     private(set) var autoPanModes: [LocationDisplay.AutoPanMode] = [
