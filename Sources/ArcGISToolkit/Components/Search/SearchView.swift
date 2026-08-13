@@ -477,7 +477,7 @@ extension ResultRow {
                  Image(systemName: "magnifyingglass") :
                     Image("pin", bundle: .toolkitModule)
                 )
-                 .foregroundStyle(.secondary)
+                .foregroundStyle(.secondary)
             )
         )
     }
