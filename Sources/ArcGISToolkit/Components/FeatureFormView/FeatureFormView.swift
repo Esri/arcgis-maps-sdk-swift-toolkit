@@ -133,7 +133,7 @@ public struct FeatureFormView: View {
                                 filter: filter,
                                 form: form
                             )
-                            // This view purposely excludes the feature form
+                            // This view intentionally excludes the feature form
                             // toolbar in order to present it modally.
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(newAssociation)
