@@ -133,7 +133,8 @@ public struct FeatureFormView: View {
                                 filter: filter,
                                 form: form
                             )
-                            .featureFormToolbar(form)
+                            // This view purposely excludes the feature form
+                            // toolbar in order to present it modally.
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(newAssociation)
                         case let .utilityAssociationDetailsView(form, element, associationResult):
