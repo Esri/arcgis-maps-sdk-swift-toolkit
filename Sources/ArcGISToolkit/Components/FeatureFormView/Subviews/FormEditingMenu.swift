@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-struct FormEditingButtons: View {
+struct FormEditingMenu: View {
     /// The backing feature form.
     let featureForm: FeatureForm
     
@@ -29,13 +29,14 @@ struct FormEditingButtons: View {
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
     var body: some View {
-//        HStack {
-//            discardButton
-//                .inspectorTint(.red)
-//            Spacer()
-            saveButton
-                .inspectorTint(.blue)
-//        }
+        Menu {
+            discardButton
+        } label: {
+            menuLabel
+                .labelStyle(.iconOnly)
+        } primaryAction: {
+            onSave()
+        }
     }
     
     var discardButton: some View {
@@ -52,32 +53,31 @@ struct FormEditingButtons: View {
         }
     }
     
-    var saveButton: some View {
-        Button {
-            if featureForm.elementValidationErrors.isEmpty {
-                Task {
-                    do {
-                        try await featureForm.finishEditing()
-                        formHandlingEventAction?(.savedEdits(willNavigate: false))
-                    } catch {
-                        featureFormViewModel.finishEditingError = error
-                    }
+    var menuLabel: Label<Text, Image> {
+        Label {
+            Text(
+                "Save",
+                bundle: .toolkitModule,
+                comment: "Finish editing the feature form."
+            )
+        } icon: {
+            Image(systemName: "checkmark")
+        }
+    }
+    
+    func onSave() {
+        if featureForm.elementValidationErrors.isEmpty {
+            Task {
+                do {
+                    try await featureForm.finishEditing()
+                    formHandlingEventAction?(.savedEdits(willNavigate: false))
+                } catch {
+                    featureFormViewModel.finishEditingError = error
                 }
-            } else {
-                featureFormViewModel.validationErrorVisibilityInternal = .visible
-                featureFormViewModel.navigationAlertInfo = (false, {})
             }
-        } label: {
-            Label {
-                Text(
-                    "Save",
-                    bundle: .toolkitModule,
-                    comment: "Finish editing the feature form."
-                )
-            } icon: {
-                Image(systemName: "checkmark")
-            }
-            .labelStyle(.iconOnly)
+        } else {
+            featureFormViewModel.validationErrorVisibilityInternal = .visible
+            featureFormViewModel.navigationAlertInfo = (false, {})
         }
     }
 }
