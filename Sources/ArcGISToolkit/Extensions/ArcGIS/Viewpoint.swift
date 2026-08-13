@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
+public import ArcGIS
 
 public extension Viewpoint {
     /// Creates a new viewpoint with the same target geometry and scale but with a new rotation.

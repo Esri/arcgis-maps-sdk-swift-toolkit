@@ -15,8 +15,8 @@
 import ArcGIS
 import Combine
 import Foundation
+import os
 import UIKit
-internal import os
 
 @MainActor
 class OnDemandMapModel: ObservableObject, Identifiable {
@@ -154,19 +154,19 @@ class OnDemandMapModel: ObservableObject, Identifiable {
     private func loadAndUpdateMobileMapPackage(mmpk: MobileMapPackage) async {
         do {
             try await mmpk.load()
-            // Set status to downloaded if not already set.
-            switch status {
-            case .downloaded:
-                break
-            default:
-                status = .downloaded
-            }
             mobileMapPackage = mmpk
             sizeInBytes = FileManager.default.sizeOfDirectory(at: mmpkDirectoryURL)
             map = mmpk.maps.first
             if thumbnail == nil, let loadable = mmpk.item?.thumbnail {
                 try? await loadable.load()
                 thumbnail = loadable.image
+            }
+            // Set status to downloaded if not already set.
+            switch status {
+            case .downloaded:
+                break
+            default:
+                status = .downloaded
             }
         } catch {
             status = .mmpkLoadFailure(error)
@@ -238,10 +238,14 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         Task { [weak self, job] in
             let result = await job.result
             guard let self else { return }
-            self.updateDownloadStatus(for: result)
-            if let mmpk = try? result.get().mobileMapPackage {
-                await loadAndUpdateMobileMapPackage(mmpk: mmpk)
+            
+            switch result {
+            case .success(let downloadResult):
+                await loadAndUpdateMobileMapPackage(mmpk: downloadResult.mobileMapPackage)
+            case .failure(let error):
+                updateDownloadFailureStatus(for: error)
             }
+            
             self.job = nil
         }
     }
@@ -256,23 +260,17 @@ class OnDemandMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Updates the status based on the download result of the mobile map package.
-    private func updateDownloadStatus(for downloadResult: Result<GenerateOfflineMapResult, any Error>) {
-        switch downloadResult {
-        case .success:
-            Logger.offlineManager.info("GenerateOfflineMap job succeeded.")
-            status = .downloaded
-        case .failure(let error):
-            if error is CancellationError {
-                Logger.offlineManager.info("GenerateOfflineMap job cancelled.")
-                status = .downloadCancelled
-            } else {
-                Logger.offlineManager.error("GenerateOfflineMap job failed with error: \(error).")
-                status = .downloadFailure(error)
-            }
-            // Remove contents of mmpk directory when download fails.
-            try? FileManager.default.removeItem(at: mmpkDirectoryURL)
+    /// Updates the status based on a failed download result error.
+    private func updateDownloadFailureStatus(for error: any Error) {
+        if error is CancellationError {
+            Logger.offlineManager.info("GenerateOfflineMap job cancelled.")
+            status = .downloadCancelled
+        } else {
+            Logger.offlineManager.error("GenerateOfflineMap job failed with error: \(error).")
+            status = .downloadFailure(error)
         }
+        // Remove contents of mmpk directory when download fails.
+        try? FileManager.default.removeItem(at: mmpkDirectoryURL)
     }
 }
 

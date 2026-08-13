@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-import Combine
-import Foundation
+public import ArcGIS
+public import Combine
+public import Foundation
 
 /// Uses a Locator to provide search and suggest results. Most configuration should be done on the
 /// `GeocodeParameters` directly.

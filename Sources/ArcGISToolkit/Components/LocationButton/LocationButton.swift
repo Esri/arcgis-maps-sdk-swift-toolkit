@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
+public import ArcGIS
+public import SwiftUI
+
 import CoreLocation
-import SwiftUI
+import os
 
 /// A button that allows a user to control their location display on a map view.
 /// Gives the user a variety of options to set the auto-pan mode or stop the
@@ -45,7 +47,7 @@ public struct LocationButton: View {
     var buttonIsDisabled: Bool {
         status == .starting || status == .stopping || isPerformingButtonAction
     }
-
+    
 #if os(visionOS)
     /// The auto-pan modes that are selectable by the user.
     private(set) var autoPanModes: [LocationDisplay.AutoPanMode] = [
@@ -334,7 +336,7 @@ extension LocationButton {
                     locationDisplay.autoPanMode = initialAutoPanMode
                     try await locationDisplay.dataSource.start()
                 } catch {
-                    print("Error starting location display: \(error)")
+                    Logger.locationButton.error("Error starting location display: \(error)")
                 }
                 isPerformingButtonAction = false
             }

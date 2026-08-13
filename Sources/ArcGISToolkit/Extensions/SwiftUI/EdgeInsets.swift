@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+public import SwiftUI
 
 public extension EdgeInsets {
     /// A reusable set of edge insets for use across toolkit components.

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
 import Observation
 
 private import os
@@ -39,6 +40,7 @@ final class EmbeddedFeatureFormViewModel {
         didSet {
             if !hasEdits {
                 previouslyFocusedElements.removeAll()
+                evaluateExpressions()
             }
         }
     }

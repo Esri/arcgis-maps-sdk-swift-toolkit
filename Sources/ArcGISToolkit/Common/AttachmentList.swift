@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import QuickLook
 import SwiftUI
 
 /// A view displaying a list of attachments, with a thumbnail, title, and download button.
@@ -105,7 +106,7 @@ struct AttachmentLoadButton: View  {
             .frame(width: 24, height: 24)
             .padding(.leading)
         }
-        .alert(String.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) { }
+        .alert(Text.emptyAttachmentDownloadErrorMessage, isPresented: $downloadAlertIsPresented) {}
         .disabled(isLoading)
         .task(id: isLoading) {
             guard isLoading else { return }

@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-import SwiftUI
+public import ArcGIS
+public import SwiftUI
 
-internal import os
+import os
 
 /// The `FeatureFormView` component enables users to edit field values of a feature using
 /// pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
@@ -91,7 +91,7 @@ public struct FeatureFormView: View {
     /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
     var onFeatureFormChanged: ((FeatureForm) -> Void)?
     /// The user-provided closure to perform when a ``EditingEvent`` occurs.
-    var onFormEditingEventAction: ((EditingEvent) -> Void)?
+    var onFormEditingEventAction: FormEditingEventAction?
     /// The developer configurable validation error visibility.
     var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
     
@@ -229,7 +229,7 @@ public struct FeatureFormView: View {
                 message: {
                     if featureFormViewModel.presentedFormHasValidationErrors {
                         Text(
-                            "You have ^[\(featureFormViewModel.presentedForm?.validationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
+                            "You have ^[\(featureFormViewModel.presentedForm?.elementValidationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
                             bundle: .toolkitModule,
                             comment:
                                 """
@@ -363,7 +363,7 @@ public extension FeatureFormView {
     /// - Since: 200.8
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
         var copy = self
-        copy.onFormEditingEventAction = action
+        copy.onFormEditingEventAction = .init(action: action)
         return copy
     }
 }

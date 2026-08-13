@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-import ArcGIS
+public import ArcGIS
+public import SwiftUI
 
 /// The `PopupView` component will display a popup for an individual feature. This includes showing
 /// the feature's title, attributes, custom description, media, and attachments. The new online Map

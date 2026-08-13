@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import Markdown
 import SwiftUI
-
-internal import Markdown
 
 /// Rendered Markdown text content.
 ///
@@ -120,7 +119,7 @@ struct Visitor: MarkupVisitor {
         )
     }
     
-    mutating func visitDocument(_ document: Document) -> Result {
+    mutating func visitDocument(_ document: Markdown.Document) -> Result {
         visitChildren(document.children)
     }
     

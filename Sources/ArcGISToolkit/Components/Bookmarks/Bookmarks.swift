@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-import SwiftUI
+public import ArcGIS
+public import SwiftUI
 
 /// The `Bookmarks` component displays a list of bookmarks and allows the user to make a selection.
 /// You can initialize the component with an array of bookmarks or with a `GeoModel`

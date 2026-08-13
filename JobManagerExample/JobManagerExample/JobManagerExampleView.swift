@@ -14,7 +14,7 @@
 
 import ArcGIS
 import ArcGISToolkit
-import OSLog
+import os
 import SwiftUI
 import UserNotifications
 
@@ -59,9 +59,10 @@ struct JobManagerExampleView: View {
 #endif
             .task {
                 do {
+                    Logger.jobManagerExample.info("Requesting authorization to send notifications.")
                     _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])
                 } catch {
-                    print(error.localizedDescription)
+                    Logger.jobManagerExample.error("Authorization failed with an error: \(error.localizedDescription)")
                 }
             }
             .padding()
@@ -89,7 +90,7 @@ struct JobManagerExampleView: View {
                             try await makeWildfiresGeodatabaseJob()
                         )
                     } catch {
-                        Logger.jobManagerExample.error("Error creating generate geodatabase job: \(error, privacy: .public)")
+                        Logger.jobManagerExample.error("Error creating generate geodatabase job: \(error.localizedDescription, privacy: .public)")
                     }
                     isAddingGeodatabaseJob = false
                 }
@@ -106,7 +107,7 @@ struct JobManagerExampleView: View {
                             try await makeNapervilleOfflineMapJob()
                         )
                     } catch {
-                        Logger.jobManagerExample.error("Error creating offline map job: \(error, privacy: .public)")
+                        Logger.jobManagerExample.error("Error creating offline map job: \(error.localizedDescription, privacy: .public)")
                     }
                     isAddingOfflineMapJob = false
                 }
@@ -341,7 +342,7 @@ extension FileManager {
     }
 }
 
-public extension JobProtocol {
+extension JobProtocol {
     /// The id of the job.
     var id: ObjectIdentifier {
         ObjectIdentifier(self)

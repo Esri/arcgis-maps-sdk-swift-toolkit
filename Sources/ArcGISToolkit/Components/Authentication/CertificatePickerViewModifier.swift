@@ -12,8 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
+public import ArcGIS
+public import Foundation
+
 import Combine
+import os
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -68,8 +71,12 @@ import UniformTypeIdentifiers
         Task {
             // If we don't delay this, then the picker does not animate in.
             // Delay for 0.25 seconds.
-            try await Task.sleep(nanoseconds: 250_000_000)
-            self.showPicker = true
+            do {
+                try await Task.sleep(nanoseconds: 250_000_000)
+                self.showPicker = true
+            } catch {
+                Logger.authentication.error("There was an error presenting the certificate picker.")
+            }
         }
     }
     

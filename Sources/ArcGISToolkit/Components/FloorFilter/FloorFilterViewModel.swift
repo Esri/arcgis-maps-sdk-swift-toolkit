@@ -14,6 +14,7 @@
 
 import ArcGIS
 import Combine
+import os
 import SwiftUI
 
 /// Manages the state for a `FloorFilter`.
@@ -264,7 +265,7 @@ final class FloorFilterViewModel: ObservableObject {
             do {
                 try await floorManager.load()
             } catch {
-                print("error: \(error)")
+                Logger.floorFilter.error("Error loading the floor manager: \(error)")
             }
         }
     }

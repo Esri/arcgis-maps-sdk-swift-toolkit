@@ -15,6 +15,7 @@
 import ArcGIS
 import Combine
 import Foundation
+import os
 import SwiftUI
 
 @MainActor final class UtilityNetworkTraceViewModel: ObservableObject {
@@ -176,7 +177,7 @@ import SwiftUI
         do {
             return try await network?.features(for: [element]).first ?? nil
         } catch {
-            print(error.localizedDescription)
+            Logger.utilityNetworkTrace.error("Failed to get feature for element \(element.objectID) with an error: \(error.localizedDescription)")
             return nil
         }
     }
@@ -189,7 +190,7 @@ import SwiftUI
                 try await network.load()
             }
         } catch {
-            print(error.localizedDescription)
+            Logger.utilityNetworkTrace.error("The map or the utility networks within it failed to load with an error: \(error.localizedDescription)")
         }
         network = map.utilityNetworks.first
         configurations = await utilityNamedTraceConfigurations(from: map)
@@ -495,10 +496,7 @@ import SwiftUI
         do {
             return try await map.namedTraceConfigurations(from: network)
         } catch {
-            print(
-                "Failed to retrieve configurations.",
-                error.localizedDescription
-            )
+            Logger.utilityNetworkTrace.error("Failed to retrieve named trace configurations for network \(network.name) with an error: \(error.localizedDescription)")
             return []
         }
     }
