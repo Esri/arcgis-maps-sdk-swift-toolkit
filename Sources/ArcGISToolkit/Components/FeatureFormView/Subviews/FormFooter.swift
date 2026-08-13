@@ -68,11 +68,16 @@ struct FormFooter: View {
                 featureFormViewModel.navigationAlertInfo = (false, {})
             }
         } label: {
-            Text(
-                "Save",
-                bundle: .toolkitModule,
-                comment: "Finish editing the feature form."
-            )
+            Label {
+                Text(
+                    "Save",
+                    bundle: .toolkitModule,
+                    comment: "Finish editing the feature form."
+                )
+            } icon: {
+                Image(systemName: "checkmark")
+            }
+            .labelStyle(.iconOnly)
         }
     }
 }
