@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-
 import SwiftUI
+import ArcGIS
 
 extension FloorFacility {
     /// - Returns: The default level for the facility, which is the level with vertical order 0.

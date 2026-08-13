@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import SwiftUI
+import ArcGIS
+import SwiftUI
 
 /// A scalebar displays the representation of an accurate linear measurement on the map. It provides
 /// a visual indication through which users can determine the size of features or the distance

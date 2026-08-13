@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import UIKit.UIImage
+import UIKit.UIImage
+import ArcGIS
 
 /// Wraps a search result for display.
 public struct SearchResult: @unchecked Sendable {

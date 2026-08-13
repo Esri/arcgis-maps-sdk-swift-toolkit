@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import SwiftUI
+import ArcGIS
+import SwiftUI
 
 /// The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
 /// building in your application. It allows you to filter the floor plan data displayed in your map

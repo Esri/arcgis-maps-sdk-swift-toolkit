@@ -414,7 +414,7 @@ class PreplannedMapModelTests: XCTestCase {
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first { $0.title == "Country Commons Area" })
         let areaID = try XCTUnwrap(area.portalItem.id)
-        
+
         let model = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,
@@ -432,7 +432,7 @@ class PreplannedMapModelTests: XCTestCase {
 }
 
 extension PreplannedMapModel.Status: Equatable {
-    static func == (lhs: PreplannedMapModel.Status, rhs: PreplannedMapModel.Status) -> Bool {
+    public static func == (lhs: PreplannedMapModel.Status, rhs: PreplannedMapModel.Status) -> Bool {
         return switch (lhs, rhs) {
         case (.notLoaded, .notLoaded),
             (.loading, .loading),

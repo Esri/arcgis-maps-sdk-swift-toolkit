@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
+import ArcGIS
 
 ///  A selected site, facility, or level.
 public enum FloorFilterSelection: Hashable, Sendable {

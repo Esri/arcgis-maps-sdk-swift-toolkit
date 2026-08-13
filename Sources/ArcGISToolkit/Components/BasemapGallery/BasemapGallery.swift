@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import SwiftUI
-
+import ArcGIS
 import Combine
+import SwiftUI
 
 /// The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
 /// portal, or an array of ``BasemapGalleryItem`` objects. When a new basemap is selected from the

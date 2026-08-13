@@ -14,9 +14,10 @@
 
 #if os(iOS)
 public import ArcGIS
-public import ARKit
 public import Observation
 public import RealityKit
+
+import ARKit
 
 /// A world-tracking provider that supports system-provided geo tracking and
 /// world tracking.

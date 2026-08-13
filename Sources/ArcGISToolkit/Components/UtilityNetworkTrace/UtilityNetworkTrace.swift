@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import SwiftUI
+import ArcGIS
+import SwiftUI
 
 /// `UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace configurations.
 ///

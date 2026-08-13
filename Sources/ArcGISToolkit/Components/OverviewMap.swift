@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import SwiftUI
-
+import ArcGIS
 import Combine
+import SwiftUI
 
 /// `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
 /// on an existing `GeoView`, which shows a representation of the current `visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).

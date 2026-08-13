@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
+import ArcGIS
 
 extension FormElement {
     /// The id of the element.

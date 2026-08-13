@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import Combine
-public import Foundation
-
+import ArcGIS
 import BackgroundTasks
-import os
+import Combine
+import Foundation
 import UIKit
+
+internal import os
 
 /// An object that manages saving and loading jobs so that they can continue to run if the
 /// app is backgrounded or even terminated.

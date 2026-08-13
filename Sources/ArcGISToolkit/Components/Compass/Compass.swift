@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import SwiftUI
+import ArcGIS
+import SwiftUI
 
 /// A `Compass` (alias North arrow) shows where north is in a `MapView` or `SceneView`.
 ///

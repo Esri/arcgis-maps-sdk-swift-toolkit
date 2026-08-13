@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import SwiftUI
-
 import ArcGIS
+import SwiftUI
 
 /// A view allowing the user to assemble a list of `FieldFilter` objects used to filter a list of features.
 @_spi(Experimental)

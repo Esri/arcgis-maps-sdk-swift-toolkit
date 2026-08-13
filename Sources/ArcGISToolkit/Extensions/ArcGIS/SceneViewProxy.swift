@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if os(iOS)
-public import ArcGIS
-public import ARKit
-public import SwiftUI
-
+import ArcGIS
+import ARKit
 import Foundation
+import SwiftUI
 
+#if os(iOS)
 public extension SceneViewProxy {
     /// Updates the scene view's camera for a given augmented reality camera.
     /// - Parameters:

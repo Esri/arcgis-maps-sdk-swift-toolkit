@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import UIKit.UIImage
-
+import ArcGIS
 import Foundation
-import os
+import UIKit.UIImage
+
+internal import os
 
 /// Information for an online map that has been taken offline.
 ///

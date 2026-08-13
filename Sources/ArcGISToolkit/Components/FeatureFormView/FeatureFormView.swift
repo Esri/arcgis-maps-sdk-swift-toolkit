@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import SwiftUI
+import ArcGIS
+import SwiftUI
 
-import os
+internal import os
 
 /// The `FeatureFormView` component enables users to edit field values of a feature using
 /// pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
