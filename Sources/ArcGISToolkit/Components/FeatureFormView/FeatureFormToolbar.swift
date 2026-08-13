@@ -91,7 +91,7 @@ struct FeatureFormToolbar: ViewModifier {
                 ToolbarItem(placement: .topBarTrailing) {
                     if (hasEdits && editingButtonsVisibility == .automatic)
                         || (editingButtonsVisibility == .visible) {
-                        FormFooter(
+                        FormEditingButtons(
                             featureForm: featureForm,
                             formHandlingEventAction: onFormEditingEventAction
                         )

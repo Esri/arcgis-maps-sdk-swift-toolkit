@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-struct FormFooter: View {
+struct FormEditingButtons: View {
     /// The backing feature form.
     let featureForm: FeatureForm
     
