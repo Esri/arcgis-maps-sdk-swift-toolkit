@@ -88,8 +88,14 @@ struct FeatureFormToolbar: ViewModifier {
                         .disabled(navigationIsDisabled)
                     }
                 }
-                if let isPresented {
-                    ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .topBarTrailing) {
+                    if (hasEdits && editingButtonsVisibility == .automatic)
+                        || (editingButtonsVisibility == .visible) {
+                        FormFooter(
+                            featureForm: featureForm,
+                            formHandlingEventAction: onFormEditingEventAction
+                        )
+                    } else if let isPresented {
                         DismissButton(kind: .cancel) {
                             if hasEdits {
                                 featureFormViewModel.navigationAlertInfo = (false, {
@@ -99,15 +105,6 @@ struct FeatureFormToolbar: ViewModifier {
                                 isPresented.wrappedValue = false
                             }
                         }
-                    }
-                }
-                if (hasEdits && editingButtonsVisibility == .automatic)
-                    || (editingButtonsVisibility == .visible) {
-                    ToolbarItem(placement: .bottomBar) {
-                        FormFooter(
-                            featureForm: featureForm,
-                            formHandlingEventAction: onFormEditingEventAction
-                        )
                     }
                 }
             }
