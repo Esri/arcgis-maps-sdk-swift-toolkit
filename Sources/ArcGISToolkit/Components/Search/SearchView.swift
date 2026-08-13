@@ -91,14 +91,14 @@ public struct SearchView: View {
     
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     var currentQuery = ""
-
+    
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     var resultMode: SearchResultMode = .automatic
-
+    
     /// The search area to be used for the current query. If `nil`, then there is no limiting of the
     /// search results to a given area.
     @Binding var queryArea: Geometry?
-
+    
     /// Defines the center for the search. Defaults to `nil`.
     ///
     /// If `nil`, does not prioritize the search results around any point.
@@ -115,7 +115,7 @@ public struct SearchView: View {
     
     /// Determines whether the `geoView` is navigating in response to user interaction.
     @Binding private var isGeoViewNavigating: Bool
-
+    
     /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
     var resultsOverlay: GraphicsOverlay? = nil
     
@@ -477,7 +477,7 @@ extension ResultRow {
                  Image(systemName: "magnifyingglass") :
                     Image("pin", bundle: .toolkitModule)
                 )
-                    .foregroundStyle(.secondary)
+                 .foregroundStyle(.secondary)
             )
         )
     }

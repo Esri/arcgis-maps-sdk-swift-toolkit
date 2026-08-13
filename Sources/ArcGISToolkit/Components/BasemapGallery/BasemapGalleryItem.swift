@@ -77,10 +77,10 @@ public final class BasemapGalleryItem: ObservableObject, Sendable {
     
     /// A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
     @Published private(set) var isBasemapLoading = true
-
+    
     /// The error generated loading the basemap, if any.
     @Published private(set) var loadBasemapError: Error? = nil
-
+    
     /// The spatial reference of ``basemap``. This will be `nil` until the
     /// basemap's base layers have been loaded by
     /// ``updateSpatialReferenceStatus(_:)``.
