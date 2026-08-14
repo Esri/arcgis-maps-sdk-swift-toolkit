@@ -432,7 +432,7 @@ class PreplannedMapModelTests: XCTestCase {
 }
 
 extension PreplannedMapModel.Status: Equatable {
-    static func == (lhs: PreplannedMapModel.Status, rhs: PreplannedMapModel.Status) -> Bool {
+    public static func == (lhs: PreplannedMapModel.Status, rhs: PreplannedMapModel.Status) -> Bool {
         return switch (lhs, rhs) {
         case (.notLoaded, .notLoaded),
             (.loading, .loading),
