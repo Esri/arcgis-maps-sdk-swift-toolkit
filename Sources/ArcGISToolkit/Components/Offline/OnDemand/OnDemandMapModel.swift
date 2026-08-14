@@ -15,8 +15,8 @@
 import ArcGIS
 import Combine
 import Foundation
-import os
 import UIKit
+internal import os
 
 @MainActor
 class OnDemandMapModel: ObservableObject, Identifiable {

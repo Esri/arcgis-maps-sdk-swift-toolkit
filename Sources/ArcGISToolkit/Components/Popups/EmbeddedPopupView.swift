@@ -13,8 +13,9 @@
 // limitations under the License.
 
 import ArcGIS
-import os
 import SwiftUI
+
+internal import os
 
 /// A view that display a `Popup` and its evaluated elements.
 ///

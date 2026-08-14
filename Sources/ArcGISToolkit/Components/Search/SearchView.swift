@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import SwiftUI
+import SwiftUI
+import ArcGIS
 
 /// `SearchView` enables searching using one or more locators, with support for suggestions,
 /// automatic zooming, and custom search sources.

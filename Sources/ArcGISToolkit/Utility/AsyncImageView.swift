@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import SwiftUI
+import SwiftUI
+import ArcGIS
 
 /// A view displaying an async image, with error display and progress view.
 public struct AsyncImageView: View {

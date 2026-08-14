@@ -13,9 +13,10 @@
 // limitations under the License.
 
 #if os(iOS)
-public import ARKit
-public import RealityKit
-public import SwiftUI
+import ArcGIS
+import ARKit
+import RealityKit
+import SwiftUI
 
 /// A type that provides AR world-tracking behavior.
 @available(macCatalyst, unavailable)

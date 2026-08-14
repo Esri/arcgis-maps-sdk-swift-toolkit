@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import SwiftUI
-
+import ArcGIS
 import CoreLocation
-import os
+import SwiftUI
+
+internal import os
 
 /// A button that allows a user to control their location display on a map view.
 /// Gives the user a variety of options to set the auto-pan mode or stop the

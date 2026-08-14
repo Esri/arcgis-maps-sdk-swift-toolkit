@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-
 import SwiftUI
+import ArcGIS
 
 /// Extends `LocatorSearchSource` with intelligent search behaviors; adds support for features like
 /// type-specific placemarks, repeated search, and more on the world geocode service.

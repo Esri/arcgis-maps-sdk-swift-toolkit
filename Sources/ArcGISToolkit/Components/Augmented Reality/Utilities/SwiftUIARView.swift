@@ -13,10 +13,10 @@
 // limitations under the License.
 
 #if os(iOS)
-public import ArcGIS
-public import ARKit
-public import RealityKit
-public import SwiftUI
+import ArcGIS
+import ARKit
+import RealityKit
+import SwiftUI
 
 /// A SwiftUI version of an AR view.
 public struct SwiftUIARView {

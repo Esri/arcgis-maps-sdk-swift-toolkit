@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import Combine
-public import UIKit
+import ArcGIS
+import Combine
+import UIKit
 
 ///  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 @MainActor

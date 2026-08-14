@@ -13,11 +13,10 @@
 // limitations under the License.
 
 #if os(iOS)
-public import ARKit
-public import SwiftUI
-
 import ArcGIS
+import ARKit
 import CoreLocation
+import SwiftUI
 
 /// The camera scene view corresponding to `AppleWorldTracking`.
 @available(macCatalyst, unavailable)

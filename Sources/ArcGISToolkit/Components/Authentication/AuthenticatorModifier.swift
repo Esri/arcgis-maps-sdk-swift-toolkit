@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import SwiftUI
-
+import SwiftUI
 import ArcGIS
 
 public extension View {

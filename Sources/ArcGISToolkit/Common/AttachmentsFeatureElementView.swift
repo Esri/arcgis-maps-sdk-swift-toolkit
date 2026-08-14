@@ -13,9 +13,10 @@
 // limitations under the License.
 
 import ArcGIS
-import os
 import QuickLook
 import SwiftUI
+
+internal import os
 
 /// A view displaying an `AttachmentsFeatureElement`.
 struct AttachmentsFeatureElementView: View {

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-public import ArcGIS
-public import SwiftUI
+import SwiftUI
+import ArcGIS
 
 /// The `OfflineMapAreasView` allows users to take a web map offline by
 /// downloading map areas.
