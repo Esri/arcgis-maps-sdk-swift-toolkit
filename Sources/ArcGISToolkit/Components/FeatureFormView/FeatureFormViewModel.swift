@@ -82,6 +82,8 @@ import Observation
     struct UnsavedEditsAlertInfo {
         /// A Boolean value indicating whether the alert should include the option to save edits
         /// if any exist.
+        ///
+        /// Even when this is set *true*, the save option is only available if there are no validation errors.
         let includeSaveOption: Bool
         /// A Boolean value indicating whether the view will navigate to a new feature after the alert
         /// is dismissed.

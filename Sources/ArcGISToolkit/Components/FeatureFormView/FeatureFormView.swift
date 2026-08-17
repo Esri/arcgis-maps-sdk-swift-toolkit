@@ -188,7 +188,7 @@ public struct FeatureFormView: View {
             }
             // Alert for abandoning unsaved edits
             .alert(
-                !featureFormViewModel.presentedFormHasValidationErrors ? discardEditsQuestion : validationErrors,
+                alertForUnsavedEditsTitle,
                 isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
                     if let info = featureFormViewModel.unsavedEditsAlertInfo {
@@ -229,7 +229,10 @@ public struct FeatureFormView: View {
                     }
                 },
                 message: {
-                    if featureFormViewModel.presentedFormHasValidationErrors {
+                    // Only mention validation errors if the alert would allow saving without them.
+                    if let info = featureFormViewModel.unsavedEditsAlertInfo,
+                       info.includeSaveOption,
+                       featureFormViewModel.presentedFormHasValidationErrors {
                         Text(
                             "You have ^[\(featureFormViewModel.presentedForm?.elementValidationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
                             bundle: .toolkitModule,
@@ -391,6 +394,14 @@ extension FeatureFormView {
                 featureFormViewModel.unsavedEditsAlertInfo = nil
             }
         }
+    }
+    
+    var alertForUnsavedEditsTitle: Text {
+        // Only mention validation errors if the alert would allow saving without them.
+        ((featureFormViewModel.unsavedEditsAlertInfo?.includeSaveOption ?? false) &&
+         featureFormViewModel.presentedFormHasValidationErrors) ?
+        validationErrors :
+        discardEditsQuestion
     }
     
     /// The closure to perform when the presented feature form changes.

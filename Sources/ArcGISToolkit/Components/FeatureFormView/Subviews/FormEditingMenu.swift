@@ -95,7 +95,7 @@ struct FormEditingMenu: View {
             }
         } else {
             featureFormViewModel.validationErrorVisibilityInternal = .visible
-            featureFormViewModel.unsavedEditsAlertInfo = .init(includeSaveOption: false, willNavigate: false)
+            featureFormViewModel.unsavedEditsAlertInfo = .init(includeSaveOption: true, willNavigate: false)
         }
     }
 }
