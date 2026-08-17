@@ -89,8 +89,10 @@ struct FeatureFormToolbar: ViewModifier {
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    if (hasEdits && editingButtonsVisibility == .automatic)
-                        || (editingButtonsVisibility == .visible) {
+                    if (editingButtonsVisibility == .automatic && hasEdits)
+                        || (editingButtonsVisibility == .automatic && !featureForm.feature.isAddedToTable)
+                        || (editingButtonsVisibility == .visible)
+                    {
                         FormEditingMenu(
                             featureForm: featureForm,
                             formHandlingEventAction: onFormEditingEventAction
