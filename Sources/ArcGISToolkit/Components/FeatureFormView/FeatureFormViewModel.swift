@@ -79,6 +79,8 @@ import Observation
         !(presentedForm?.elementValidationErrors.isEmpty ?? true)
     }
     
+    
+    /// Configuration information for a form's unsaved edits alert.
     struct UnsavedEditsAlertInfo {
         /// A Boolean value indicating whether the alert should include the option to save edits
         /// if any exist.
