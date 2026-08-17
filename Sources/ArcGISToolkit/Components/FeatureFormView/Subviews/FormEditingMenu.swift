@@ -16,6 +16,9 @@ import ArcGIS
 import SwiftUI
 
 struct FormEditingMenu: View {
+    /// A binding to a Boolean value controlling whether the FeatureFormView is presented.
+    @Environment(\.isPresented) var isPresented
+    
     /// The backing feature form.
     let featureForm: FeatureForm
     
@@ -31,6 +34,7 @@ struct FormEditingMenu: View {
     var body: some View {
         Menu {
             discardButton
+            discardAndCloseButton
         } label: {
             menuLabel
                 .labelStyle(.iconOnly)
@@ -41,15 +45,29 @@ struct FormEditingMenu: View {
     
     var discardButton: some View {
         Button(role: .destructive) {
-            featureForm.discardEdits()
-            formHandlingEventAction?(.discardedEdits(willNavigate: false))
-            featureFormViewModel.validationErrorVisibilityInternal = .automatic
+            featureFormViewModel.unsavedEditsAlertInfo = .init(includeSaveOption: false, willNavigate: false)
         } label: {
             Text(
                 "Discard",
                 bundle: .toolkitModule,
                 comment: "Discard edits on the feature form."
             )
+        }
+    }
+    
+    @ViewBuilder var discardAndCloseButton: some View {
+        if let isPresented {
+            Button(role: .destructive) {
+                featureFormViewModel.unsavedEditsAlertInfo = .init(includeSaveOption: false, willNavigate: false) {
+                    isPresented.wrappedValue = false
+                }
+            } label: {
+                Text(
+                    "Discard And Close",
+                    bundle: .toolkitModule,
+                    comment: "Discard edits on the feature form and close it."
+                )
+            }
         }
     }
     
@@ -77,7 +95,7 @@ struct FormEditingMenu: View {
             }
         } else {
             featureFormViewModel.validationErrorVisibilityInternal = .visible
-            featureFormViewModel.navigationAlertInfo = (false, {})
+            featureFormViewModel.unsavedEditsAlertInfo = .init(includeSaveOption: false, willNavigate: false)
         }
     }
 }

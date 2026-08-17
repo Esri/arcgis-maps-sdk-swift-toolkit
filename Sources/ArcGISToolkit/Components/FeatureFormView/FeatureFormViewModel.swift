@@ -22,8 +22,8 @@ import Observation
     /// An error thrown from finish editing.
     var finishEditingError: (any Error)?
     
-    /// Continuation information for the alert.
-    var navigationAlertInfo: (willNavigate: Bool, action: () -> Void)?
+    /// A configuration for the unsaved edits alert.
+    var unsavedEditsAlertInfo: UnsavedEditsAlertInfo?
     
     /// The navigation path used by the navigation stack in the root feature form view.
     var navigationPath: [FeatureFormView.NavigationPathItem] = []
@@ -77,5 +77,22 @@ import Observation
     /// A Boolean value indicating if the form presented in the navigation stack has validation errors.
     var presentedFormHasValidationErrors: Bool {
         !(presentedForm?.elementValidationErrors.isEmpty ?? true)
+    }
+    
+    struct UnsavedEditsAlertInfo {
+        /// A Boolean value indicating whether the alert should include the option to save edits
+        /// if any exist.
+        let includeSaveOption: Bool
+        /// A Boolean value indicating whether the view will navigate to a new feature after the alert
+        /// is dismissed.
+        let willNavigate: Bool
+        /// An action to be performed when the alert is dismissed.
+        let onDismiss: (() -> Void)?
+        
+        init(includeSaveOption: Bool, willNavigate: Bool, onDismiss: (() -> Void)? = nil) {
+            self.includeSaveOption = includeSaveOption
+            self.willNavigate = willNavigate
+            self.onDismiss = onDismiss
+        }
     }
 }

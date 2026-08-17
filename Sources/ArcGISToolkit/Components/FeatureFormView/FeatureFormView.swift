@@ -191,12 +191,12 @@ public struct FeatureFormView: View {
                 !featureFormViewModel.presentedFormHasValidationErrors ? discardEditsQuestion : validationErrors,
                 isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
-                    if let (willNavigate, continuation) = featureFormViewModel.navigationAlertInfo {
+                    if let info = featureFormViewModel.unsavedEditsAlertInfo {
                         Button(role: .destructive) {
                             featureFormViewModel.presentedForm?.discardEdits()
-                            onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
+                            onFormEditingEventAction?(.discardedEdits(willNavigate: info.willNavigate))
                             featureFormViewModel.validationErrorVisibilityInternal = .automatic
-                            continuation()
+                            info.onDismiss?()
                         } label: {
                             Text.discardEdits
                         }
@@ -205,13 +205,14 @@ public struct FeatureFormView: View {
                                 featureFormViewModel.validationErrorVisibilityInternal = .visible
                             }
                         }
-                        if !featureFormViewModel.presentedFormHasValidationErrors {
+                        if info.includeSaveOption, !featureFormViewModel.presentedFormHasValidationErrors {
                             Button {
                                 Task {
                                     do {
                                         try await featureFormViewModel.presentedForm?.finishEditing()
-                                        onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
-                                        continuation()
+                                        onFormEditingEventAction?(.savedEdits(willNavigate: info.willNavigate))
+                                        featureFormViewModel.validationErrorVisibilityInternal = .automatic
+                                        info.onDismiss?()
                                     } catch {
                                         featureFormViewModel.finishEditingError = error
                                     }
@@ -384,10 +385,10 @@ extension FeatureFormView {
     /// A Boolean value indicating whether the unsaved edits alert is presented.
     var alertForUnsavedEditsIsPresented: Binding<Bool> {
         Binding {
-            featureFormViewModel.navigationAlertInfo != nil
+            featureFormViewModel.unsavedEditsAlertInfo != nil
         } set: { newIsPresented in
             if !newIsPresented {
-                featureFormViewModel.navigationAlertInfo = nil
+                featureFormViewModel.unsavedEditsAlertInfo = nil
             }
         }
     }

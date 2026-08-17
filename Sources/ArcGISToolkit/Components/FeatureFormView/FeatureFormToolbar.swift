@@ -66,10 +66,10 @@ struct FeatureFormToolbar: ViewModifier {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
                             if alertBeforeDismissing {
-                                featureFormViewModel.navigationAlertInfo = (true, {
+                                featureFormViewModel.unsavedEditsAlertInfo = .init(includeSaveOption: true, willNavigate: true) {
                                     dismiss()
                                     onBackNavigation?()
-                                })
+                                }
                             } else {
                                 dismiss()
                                 onBackNavigation?()
@@ -98,9 +98,9 @@ struct FeatureFormToolbar: ViewModifier {
                     } else if let isPresented {
                         DismissButton(kind: .cancel) {
                             if hasEdits {
-                                featureFormViewModel.navigationAlertInfo = (false, {
+                                featureFormViewModel.unsavedEditsAlertInfo = .init(includeSaveOption: true, willNavigate: false) {
                                     isPresented.wrappedValue = false
-                                })
+                                }
                             } else {
                                 isPresented.wrappedValue = false
                             }
