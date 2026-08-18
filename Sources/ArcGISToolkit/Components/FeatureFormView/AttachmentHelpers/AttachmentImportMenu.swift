@@ -39,7 +39,8 @@ struct AttachmentImportMenu: View {
         self.onAdd = onAdd
     }
     
-    @Environment(\.attachmentCustomization) var attachmentCustomization
+    /// The attachment customiztion options.
+    @Environment(\.featureFormViewCustomization) var featureFormViewCustomization
     
     /// Performs camera authorization request handling.
     @State private var cameraRequester = CameraRequester()
@@ -340,9 +341,13 @@ struct AttachmentImportMenu: View {
             let uploadResult: Result<FormAttachment, Error>
             switch (newAttachmentImportData.fileName, newAttachmentImportData.data, newAttachmentImportData.filePath) {
                 case let (.some(name), .some(data), .none):
-                    var customizedData: Data? = data
-                    if let customization = attachmentCustomization {
-                        let result = customization.action(newAttachmentImportData.contentType, data, nil)
+                    var customizedData: Data?
+                    if let customization = featureFormViewCustomization,
+                        let result = customization.addAttachmentAction?(
+                            newAttachmentImportData.contentType,
+                            data,
+                            nil
+                        ) {
                         if result.0 != nil {
                             customizedData = result.0
                         }
@@ -356,9 +361,13 @@ struct AttachmentImportMenu: View {
                         )
                     }
                 case let (.none, .some(data), .none):
-                    var customizedData: Data? = data
-                    if let customization = attachmentCustomization {
-                        let result = customization.action(newAttachmentImportData.contentType, data, nil)
+                    var customizedData: Data?
+                    if let customization = featureFormViewCustomization,
+                       let result = customization.addAttachmentAction?(
+                            newAttachmentImportData.contentType,
+                            data,
+                            nil
+                       ) {
                         if result.0 != nil {
                             customizedData = result.0
                         }
@@ -373,9 +382,13 @@ struct AttachmentImportMenu: View {
                 case let (.some(name), .none, .some(path)):
                     _ = path.startAccessingSecurityScopedResource()
                     defer { path.stopAccessingSecurityScopedResource() }
-                    var customizedPath: URL? = path
-                    if let customization = attachmentCustomization {
-                        let result = customization.action(newAttachmentImportData.contentType, nil, path)
+                    var customizedPath: URL?
+                    if let customization = featureFormViewCustomization,
+                       let result = customization.addAttachmentAction?(
+                            newAttachmentImportData.contentType,
+                            nil,
+                            path
+                       ) {
                         if result.0 != nil {
                             customizedPath = result.1
                         }
@@ -387,9 +400,13 @@ struct AttachmentImportMenu: View {
                 case let (.none, .none, .some(path)):
                     _ = path.startAccessingSecurityScopedResource()
                     defer { path.stopAccessingSecurityScopedResource() }
-                    var customizedPath: URL? = path
-                    if let customization = attachmentCustomization {
-                        let result = customization.action(newAttachmentImportData.contentType, nil, path)
+                    var customizedPath: URL?
+                    if let customization = featureFormViewCustomization,
+                       let result = customization.addAttachmentAction?(
+                            newAttachmentImportData.contentType,
+                            nil,
+                            path
+                       ) {
                         if result.0 != nil {
                             customizedPath = result.1
                         }
