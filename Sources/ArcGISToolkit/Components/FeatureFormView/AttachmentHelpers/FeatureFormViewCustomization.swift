@@ -17,15 +17,15 @@ public import UniformTypeIdentifiers
 
 /// A struct allowing clients to customize feature form behavior.
 public struct FeatureFormViewCustomization {
-    /// Creates an attachment customization structure.
-    /// - Parameter action: The action called when the user selects an attachment to add.o
+    /// Creates an feature form customization structure.
+    /// - Parameter action: The action called when the user selects an attachment to add.
     public init(
         addAttachmentAction: ((UTType, Data?, URL?) -> (Data?, URL?))? = nil
     ) {
         self.addAttachmentAction = addAttachmentAction
     }
     
-    /// The action is initiated when the user is in the process of adding a new attachment. This allows cilents access to
+    /// The action initiated when the user is in the process of adding a new attachment. This allows cilents access to
     /// the attachment data prior to adding the attachment and can be used for modifying the data, such as adding a copyright
     /// notice, watermark, or blurring personally identifying information. Because attachments can be loaded
     /// from a file, from the user's Photo Library, or taken as an image or video from the camers, the actual data representing
@@ -39,6 +39,6 @@ public struct FeatureFormViewCustomization {
     /// Note: only one of `Data?` or `URL?` will be non-nil and is dependent on the source of the attachment,
     /// such as camera, photo library, or file.
     /// - Returns: The data or URL representing the newly modified attachment data. This should be the same UTType as the
-    /// argument to `action` and should match the the format of that passed in, either `Data` or `URL`.
+    /// argument to `action` and should match the the format of the type passed in, either `Data` or `URL`.
     let addAttachmentAction: ((UTType, Data?, URL?) -> (Data?, URL?))?
 }
