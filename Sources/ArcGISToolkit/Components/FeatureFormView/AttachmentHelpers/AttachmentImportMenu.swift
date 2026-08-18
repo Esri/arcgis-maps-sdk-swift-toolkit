@@ -39,8 +39,8 @@ struct AttachmentImportMenu: View {
         self.onAdd = onAdd
     }
     
-    /// The attachment customiztion options.
-    @Environment(\.featureFormViewCustomization) var featureFormViewCustomization
+    /// The feature for view customiztion options.
+    @Environment(\.customization) var customization
     
     /// Performs camera authorization request handling.
     @State private var cameraRequester = CameraRequester()
@@ -342,7 +342,7 @@ struct AttachmentImportMenu: View {
             switch (newAttachmentImportData.fileName, newAttachmentImportData.data, newAttachmentImportData.filePath) {
                 case let (.some(name), .some(data), .none):
                     var customizedData: Data?
-                    if let customization = featureFormViewCustomization,
+                    if let customization,
                         let result = customization.addAttachmentAction?(
                             newAttachmentImportData.contentType,
                             data,
@@ -362,7 +362,7 @@ struct AttachmentImportMenu: View {
                     }
                 case let (.none, .some(data), .none):
                     var customizedData: Data?
-                    if let customization = featureFormViewCustomization,
+                    if let customization,
                        let result = customization.addAttachmentAction?(
                             newAttachmentImportData.contentType,
                             data,
@@ -383,7 +383,7 @@ struct AttachmentImportMenu: View {
                     _ = path.startAccessingSecurityScopedResource()
                     defer { path.stopAccessingSecurityScopedResource() }
                     var customizedPath: URL?
-                    if let customization = featureFormViewCustomization,
+                    if let customization,
                        let result = customization.addAttachmentAction?(
                             newAttachmentImportData.contentType,
                             nil,
@@ -401,7 +401,7 @@ struct AttachmentImportMenu: View {
                     _ = path.startAccessingSecurityScopedResource()
                     defer { path.stopAccessingSecurityScopedResource() }
                     var customizedPath: URL?
-                    if let customization = featureFormViewCustomization,
+                    if let customization,
                        let result = customization.addAttachmentAction?(
                             newAttachmentImportData.contentType,
                             nil,
