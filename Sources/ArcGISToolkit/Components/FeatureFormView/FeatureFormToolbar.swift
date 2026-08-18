@@ -42,6 +42,9 @@ struct FeatureFormToolbar: ViewModifier {
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits = false
     
+    /// A Boolean value indicating whether the presented form has validation errors.
+    @State private var hasValidationErrors = false
+    
     /// The currently presented feature form.
     let featureForm: FeatureForm
     
@@ -59,6 +62,12 @@ struct FeatureFormToolbar: ViewModifier {
             .task(id: featureForm.feature.globalID) {
                 for await hasEdits in featureForm.$hasEdits {
                     withAnimation { self.hasEdits = hasEdits }
+                }
+                
+            }
+            .task(id: featureForm.feature.globalID) {
+                for await validationErrors in featureForm.$elementValidationErrors {
+                    hasValidationErrors = !validationErrors.isEmpty
                 }
             }
             .toolbar {
@@ -90,7 +99,7 @@ struct FeatureFormToolbar: ViewModifier {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     if (editingButtonsVisibility == .automatic && hasEdits)
-                        || (editingButtonsVisibility == .automatic && !featureForm.feature.isAddedToTable)
+                        || (editingButtonsVisibility == .automatic && !featureForm.feature.isAddedToTable && !hasValidationErrors)
                         || (editingButtonsVisibility == .visible)
                     {
                         FormEditingMenu(
