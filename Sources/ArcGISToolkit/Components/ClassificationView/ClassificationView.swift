@@ -17,7 +17,26 @@ import SwiftUI
 
 internal import os
 
-/// Portal item content framed by classification bars.
+/// A view that frames content with a portal item's classification marking.
+///
+/// A classification view displays matching classification bars above and below
+/// its content. It uses the classification assigned to the supplied portal item
+/// and does not aggregate classifications from the item's basemap or operational
+/// layers.
+///
+/// The view loads the portal item through an authenticated portal and uses the
+/// portal's classification schema to resolve the banner colors when available.
+/// The application is responsible for configuring authentication challenge
+/// handling before displaying the view. While loading, or when no classification
+/// is available, the content is displayed without classification bars.
+///
+/// Use the ``classification(portalItem:)`` modifier to add the classification
+/// bars to an existing view:
+///
+/// ```swift
+/// MapView(map: map)
+///     .classification(portalItem: portalItem)
+/// ```
 public struct ClassificationView<Content: View>: View {
     /// The content framed by classification bars.
     private let content: Content
@@ -142,7 +161,17 @@ private extension PortalItem {
 }
 
 public extension View {
-    /// Adds classification bars above and below this view.
+    /// Frames this view with a portal item's classification marking.
+    ///
+    /// The modifier loads the portal item through an authenticated portal. If
+    /// the item has a classification, matching bars appear above and below this
+    /// view using the portal's classification schema colors when available. If
+    /// the item has no classification or loading fails, this view is displayed
+    /// without classification bars.
+    ///
+    /// The application is responsible for configuring authentication challenge
+    /// handling.
+    ///
     /// - Parameter portalItem: The portal item whose classification is displayed.
     /// - Returns: A view framed by the portal item's classification bars.
     func classification(portalItem: PortalItem?) -> some View {
