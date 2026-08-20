@@ -27,6 +27,10 @@ final class FeatureEditorModel {
     var feature: ArcGISFeature? {
         presentedFeatureForm?.feature ?? rootFeatureForm?.feature
     }
+    /// The geometry of the `feature` before editing, used to reset the
+    /// geometry when edits are discarded.
+    @ObservationIgnored
+    private var initialGeometry: Geometry?
     /// A Boolean value that indicates whether the Feature Editor inspector is presented.
     /// This maps `rootFeatureForm` to a Boolean value.
     var isPresented: Bool {
@@ -103,8 +107,10 @@ final class FeatureEditorModel {
     
     /// Restarts the `geometryEditor` if it is started.
     /// This can be used to discard geometry edits or set up a new geometry editor.
-    func restartGeometryEditor() {
+    func restartGeometryEditor() async {
         guard geometryEditorIsStarted else { return }
+        
+        await setFormGeometry(to: initialGeometry)
         startGeometryEditor()
     }
     
@@ -155,6 +161,25 @@ final class FeatureEditorModel {
         }
     }
     
+    /// Sets the form's feature geometry and reevaluates expressions to update
+    /// possible geometry dependent form elements.
+    /// - Parameter geometry: The new geometry to set on the feature.
+    func setFormGeometry(to geometry: Geometry?) async {
+        guard let featureForm = presentedFeatureForm ?? rootFeatureForm,
+              featureForm.feature.geometry != geometry else {
+            return
+        }
+        
+        do {
+            featureForm.feature.geometry = geometry
+            try await featureForm.evaluateExpressions()
+        } catch {
+            Logger.featureEditor.error(
+                "Error evaluating expression: \(error.localizedDescription)"
+            )
+        }
+    }
+    
     /// Stops the feature editor and resets the model's properties.
     ///
     /// This is needed to prevent the current state from interfering with
@@ -162,6 +187,7 @@ final class FeatureEditorModel {
     func stopEditing() {
         rootFeatureForm = nil
         presentedFeatureForm = nil
+        initialGeometry = nil
         snapSettingsSheetIsPresented = false
         viewpointGeometry = nil
         
@@ -238,5 +264,6 @@ final class FeatureEditorModel {
         } else if let geometryType = feature.table?.geometryType {
             geometryEditor.start(withType: geometryType)
         }
+        initialGeometry = feature.geometry
     }
 }

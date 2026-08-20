@@ -82,6 +82,10 @@ struct FeatureEditorFormView: View {
                 guard !Task.isCancelled else { return }
                 self.presentedFeatureForm = nil
             }
+            .task(id: model.geometryEditorGeometry) {
+                guard model.geometryEditorIsStarted else { return }
+                await model.setFormGeometry(to: model.geometryEditorGeometry)
+            }
             .onDisappear {
                 clearSelectedFeature()
                 model.geometryEditor.tool.style.opacity = 1
@@ -105,7 +109,7 @@ struct FeatureEditorFormView: View {
         case .discardedEdits(let willNavigate):
             // Restarts the geometry editor when the form footer discard button is pressed.
             guard !willNavigate else { break }
-            model.restartGeometryEditor()
+            await model.restartGeometryEditor()
         case .navigationChanged(let view):
             switch view {
             case .utilityAssociationCreationView(_, _, _, let candidate):
