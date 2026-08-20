@@ -117,7 +117,7 @@ final class FeatureEditorModel {
     /// Starts editing a new `FeatureForm` that is shown in the feature editor's `FeatureFormView`.
     /// - Parameter featureForm: The new feature form to edit.
     func startEditingFeatureForm(_ featureForm: FeatureForm) async {
-        geometryEditor.stop()
+        stopGeometryEditing()
         presentedFeatureForm = featureForm
         
         loadResult = await Result {
@@ -191,10 +191,7 @@ final class FeatureEditorModel {
         snapSettingsSheetIsPresented = false
         viewpointGeometry = nil
         
-        geometryEditor.stop()
-        geometryEditorCanUndo = false
-        geometryEditorGeometry = nil
-        geometryEditorIsStarted = false
+        stopGeometryEditing()
         
         snapRules = nil
         map = nil
@@ -265,5 +262,13 @@ final class FeatureEditorModel {
             geometryEditor.start(withType: geometryType)
         }
         initialGeometry = feature.geometry
+    }
+    
+    /// Stops the geometry editor and resets the related model properties.
+    private func stopGeometryEditing() {
+        geometryEditor.stop()
+        geometryEditorCanUndo = false
+        geometryEditorGeometry = nil
+        geometryEditorIsStarted = false
     }
 }
