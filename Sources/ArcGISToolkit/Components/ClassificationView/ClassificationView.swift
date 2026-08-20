@@ -37,6 +37,9 @@ internal import os
 /// MapView(map: map)
 ///     .classification(portalItem: portalItem)
 /// ```
+///
+/// To learn more about using `ClassificationView`, see the
+/// <doc:ClassificationViewTutorial>.
 public struct ClassificationView<Content: View>: View {
     /// The content framed by classification bars.
     private let content: Content
