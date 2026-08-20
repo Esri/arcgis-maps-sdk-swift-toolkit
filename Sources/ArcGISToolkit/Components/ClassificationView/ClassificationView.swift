@@ -94,15 +94,21 @@ public struct ClassificationView<Content: View>: View {
 
         // Classification information is only returned when the item is
         // loaded through an authenticated portal.
+        // And even then, if the item is loaded before the portal is loaded
+        // the classification information will not be returned.
+        // So we have to ensure that we load an authenticated portal first unless
+        // there is classification information already available on the item.
         let authenticatedPortalItem: PortalItem
-        if portalItem.portal.connection == .authenticated || portalItem.portal.user != nil {
+        if portalItem.classification != nil {
             authenticatedPortalItem = portalItem
+            Logger.classificationView.debug("Using classification from provided portal item.")
         } else {
             let authenticatedPortal = Portal(
                 url: portalItem.portal.url,
                 connection: .authenticated
             )
             authenticatedPortalItem = PortalItem(portal: authenticatedPortal, id: id)
+            Logger.classificationView.debug("Creating a new portal and item to load to get classification information.")
         }
 
         do {
