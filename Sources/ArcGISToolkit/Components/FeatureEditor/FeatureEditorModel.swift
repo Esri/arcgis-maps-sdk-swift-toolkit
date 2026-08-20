@@ -162,7 +162,7 @@ final class FeatureEditorModel {
     }
     
     /// Sets the form's feature geometry and reevaluates expressions to update
-    /// possible geometry dependent form elements.
+    /// possible geometry-dependent form elements.
     /// - Parameter geometry: The new geometry to set on the feature.
     func setFormGeometry(to geometry: Geometry?) async {
         guard let featureForm = presentedFeatureForm ?? rootFeatureForm,
@@ -175,7 +175,7 @@ final class FeatureEditorModel {
             try await featureForm.evaluateExpressions()
         } catch {
             Logger.featureEditor.error(
-                "Error evaluating expression: \(error.localizedDescription)"
+                "Error evaluating expressions: \(error.localizedDescription)"
             )
         }
     }
@@ -185,9 +185,9 @@ final class FeatureEditorModel {
     /// This is needed to prevent the current state from interfering with
     /// future uses of the `FeatureEditor` view.
     func stopEditing() {
+        initialGeometry = nil
         rootFeatureForm = nil
         presentedFeatureForm = nil
-        initialGeometry = nil
         snapSettingsSheetIsPresented = false
         viewpointGeometry = nil
         
