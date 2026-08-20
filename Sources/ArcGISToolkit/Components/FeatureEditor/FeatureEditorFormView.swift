@@ -82,10 +82,7 @@ struct FeatureEditorFormView: View {
                 guard !Task.isCancelled else { return }
                 self.presentedFeatureForm = nil
             }
-            .task(id: model.geometryEditorGeometry) {
-                guard model.geometryEditorIsStarted else { return }
-                await model.setFormGeometry(to: model.geometryEditorGeometry)
-            }
+            .task(id: model.geometryEditorGeometry, model.updateFormGeometry)
             .onDisappear {
                 clearSelectedFeature()
                 model.geometryEditor.tool.style.opacity = 1

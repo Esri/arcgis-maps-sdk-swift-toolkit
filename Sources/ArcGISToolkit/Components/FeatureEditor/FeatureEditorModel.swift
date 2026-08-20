@@ -161,25 +161,6 @@ final class FeatureEditorModel {
         }
     }
     
-    /// Sets the form's feature geometry and reevaluates expressions to update
-    /// possible geometry-dependent form elements.
-    /// - Parameter geometry: The new geometry to set on the feature.
-    func setFormGeometry(to geometry: Geometry?) async {
-        guard let featureForm = presentedFeatureForm ?? rootFeatureForm,
-              featureForm.feature.geometry != geometry else {
-            return
-        }
-        
-        do {
-            featureForm.feature.geometry = geometry
-            try await featureForm.evaluateExpressions()
-        } catch {
-            Logger.featureEditor.error(
-                "Error evaluating expressions: \(error.localizedDescription)"
-            )
-        }
-    }
-    
     /// Stops the feature editor and resets the model's properties.
     ///
     /// This is needed to prevent the current state from interfering with
@@ -218,6 +199,18 @@ final class FeatureEditorModel {
         }
     }
     
+    /// Updates the form's feature geometry using the geometry editor's current
+    /// geometry to update possible geometry-dependent form elements.
+    func updateFormGeometry() async {
+        guard geometryEditorIsStarted else { return }
+        
+        // Uses initialGeometry if the geometry editor has no edits to prevent
+        // an empty geometry from being used when geometry editor was started
+        // using the table's geometryType (when feature.geometry is nil).
+        let geometry = geometryEditorCanUndo ? geometryEditorGeometry : initialGeometry
+        await setFormGeometry(to: geometry)
+    }
+    
     /// Loads the feature and its table if needed to allow geometry editing.
     private func loadFeature() async throws {
         guard let feature else { return }
@@ -232,6 +225,25 @@ final class FeatureEditorModel {
         // can be accessed. It is always nil otherwise.
         if feature.geometry == nil, let table = feature.table {
             try await table.retryLoad()
+        }
+    }
+    
+    /// Sets the form's feature geometry and reevaluates expressions to update
+    /// possible geometry-dependent form elements.
+    /// - Parameter geometry: The new geometry to set on the feature.
+    private func setFormGeometry(to geometry: Geometry?) async {
+        guard let featureForm = presentedFeatureForm ?? rootFeatureForm,
+              featureForm.feature.geometry != geometry else {
+            return
+        }
+        
+        do {
+            featureForm.feature.geometry = geometry
+            try await featureForm.evaluateExpressions()
+        } catch {
+            Logger.featureEditor.error(
+                "Error evaluating expressions: \(error.localizedDescription)"
+            )
         }
     }
     

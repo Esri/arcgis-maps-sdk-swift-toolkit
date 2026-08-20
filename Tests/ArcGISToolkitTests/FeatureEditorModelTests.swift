@@ -139,9 +139,12 @@ struct FeatureEditorModelTests {
         await model.expectIsEditing(geometry: geometry)
     }
     
-    /// Verifies `setFormGeometry(to:)` updates the feature's geometry.
-    @Test func setFormGeometry() async throws {
+    /// Verifies `updateFormGeometry()` sets the `feature` geometry correctly.
+    @Test
+    func updateFormGeometry() async throws {
         let model = FeatureEditorModel()
+        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
+        defer { monitorGeometryEditorStreamsTask.cancel() }
         
         let geodatabaseFile = try await TemporaryGeodatabaseFile()
         let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
@@ -151,9 +154,25 @@ struct FeatureEditorModelTests {
         #expect(feature.geometry == initialGeometry)
         
         await model.startEditingFeature(feature, on: nil)
+        await model.expectIsGeometryEditing()
         
+        // Verifies updateFormGeometry() resets the feature's geometry to its
+        // initial value if the geometry editor is started and has no edits.
         let newGeometry = Point(latitude: 1, longitude: 1)
-        await model.setFormGeometry(to: newGeometry)
+        feature.geometry = newGeometry
+        #expect(feature.geometry == newGeometry)
+        
+        await model.updateFormGeometry()
+        #expect(feature.geometry == initialGeometry)
+        
+        // Verifies updateFormGeometry() does nothing if the geometry editor is not started.
+        model.geometryEditor.stop()
+        await Task.yieldExpect(!model.geometryEditorIsStarted)
+        
+        feature.geometry = newGeometry
+        #expect(feature.geometry == newGeometry)
+        
+        await model.updateFormGeometry()
         #expect(feature.geometry == newGeometry)
     }
     
