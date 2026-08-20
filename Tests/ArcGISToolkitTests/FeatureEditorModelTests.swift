@@ -82,26 +82,29 @@ struct FeatureEditorModelTests {
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
         // Verifies restartGeometryEditor does nothing if the geometry editor has not started.
-        model.restartGeometryEditor()
+        await model.restartGeometryEditor()
         await model.expectDefaultPropertyValues()
         
         // Starts the feature editor.
         let geodatabaseFile = try await TemporaryGeodatabaseFile()
         let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
-        let geometry = Point(latitude: 0, longitude: 0)
-        let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
+        let initialGeometry = Point(latitude: 0, longitude: 0)
+        let feature = try #require(table.makeFeature(geometry: initialGeometry) as? ArcGISFeature)
         
         await model.startEditingFeature(feature, on: nil)
         await model.expectIsGeometryEditing()
-        await model.expectIsEditing(geometry: geometry)
+        await model.expectIsEditing(geometry: initialGeometry)
         
-        // Verifies restartGeometryEditor restarts the geometry editor when it is started.
+        // Verifies restartGeometryEditor restarts the geometry editor and
+        // resets feature's geometry.
         let newGeometry = Point(latitude: 1, longitude: 1)
         feature.geometry = newGeometry
+        #expect(feature.geometry == newGeometry)
         
-        model.restartGeometryEditor()
+        await model.restartGeometryEditor()
         await model.expectIsGeometryEditing()
-        await model.expectIsEditing(geometry: newGeometry)
+        await model.expectIsEditing(geometry: initialGeometry)
+        #expect(feature.geometry == initialGeometry)
     }
     
     /// Verifies setup failure leads to loadResult failure, blocks editing,
@@ -134,6 +137,24 @@ struct FeatureEditorModelTests {
         try #require(model.loadResult).get()
         await model.expectIsGeometryEditing()
         await model.expectIsEditing(geometry: geometry)
+    }
+    
+    /// Verifies `setFormGeometry(to:)` updates the feature's geometry.
+    @Test func setFormGeometry() async throws {
+        let model = FeatureEditorModel()
+        
+        let geodatabaseFile = try await TemporaryGeodatabaseFile()
+        let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
+        
+        let initialGeometry = Point(latitude: 0, longitude: 0)
+        let feature = try #require(table.makeFeature(geometry: initialGeometry) as? ArcGISFeature)
+        #expect(feature.geometry == initialGeometry)
+        
+        await model.startEditingFeature(feature, on: nil)
+        
+        let newGeometry = Point(latitude: 1, longitude: 1)
+        await model.setFormGeometry(to: newGeometry)
+        #expect(feature.geometry == newGeometry)
     }
     
     /// Verifies `startEditingFeature(_:on:)` and `startEditingFeatureForm(_:)` using
