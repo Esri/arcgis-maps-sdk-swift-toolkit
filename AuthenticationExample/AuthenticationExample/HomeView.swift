@@ -13,40 +13,25 @@
 // limitations under the License.
 
 import ArcGIS
+import ArcGISToolkit
 import SwiftUI
 
 /// The view that is displayed after successfully signing in.
 struct HomeView: View {
-    /// The portal that the user is signed in to.
-    @State private var portal: Portal?
-    
-    /// A Boolean value indicating whether the profile view should be presented.
-    @State private var showProfile = false
-    
+    @State private var map = {
+        let portal = Portal(
+            url: URL(string: "https://.com/portal")!,
+            connection: .authenticated
+        )
+        let portalItem = PortalItem(
+            portal: portal,
+            id: Item.ID(rawValue: "")!
+        )
+        return Map(item: portalItem)
+    }()
+
     var body: some View {
-        if let portal = portal {
-            NavigationSplitView {
-                WebMapsView(portal: portal)
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button {
-                                showProfile = true
-                            } label: {
-                                Image(systemName: "person.circle")
-                            }
-                            .sheet(isPresented: $showProfile) {
-                                ProfileView(portal: portal) {
-                                    self.portal = nil
-                                    self.showProfile = false
-                                }
-                            }
-                        }
-                    }
-            } detail: {
-                Text("No Webmap Selected")
-            }
-        } else {
-            SignInView(portal: $portal)
-        }
+        MapView(map: map)
+            .classification(portalItem: map.item as? PortalItem)
     }
 }

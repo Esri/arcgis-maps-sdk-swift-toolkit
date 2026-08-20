@@ -18,7 +18,7 @@ import SwiftUI
 
 @main
 struct AuthenticationApp: App {
-    @StateObject private var authenticator = Authenticator()
+    @StateObject private var authenticator = Authenticator(promptForUntrustedHosts: true)
     
     @State private var isSettingUp = true
     
@@ -39,6 +39,7 @@ struct AuthenticationApp: App {
             // - Client Certificate (PKI)
             .authenticator(authenticator)
             .task {
+                await ArcGISEnvironment.authenticationManager.clearCredentialStores()
                 isSettingUp = true
                 // If you want to use OAuth, uncomment this code:
 //                authenticator.oAuthUserConfigurations.append(.oAuthUserConfiguration)
@@ -50,7 +51,7 @@ struct AuthenticationApp: App {
                 // It also means that a user can sign in without having to be prompted for
                 // credentials. Once credentials are cleared from the stores ("sign-out"),
                 // then the user will need to be prompted once again.
-                try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+//                try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
                 isSettingUp = false
             }
         }
