@@ -48,6 +48,14 @@ extension FeatureFormBrowserView /* Model */ {
         public func add(form: FeatureForm) {
             forms.append(form)
         }
+        
+        /// <#Description#>
+        /// - Parameter form: <#form description#>
+        public func remove(form: FeatureForm) {
+            forms.removeAll {
+                $0.feature.globalID == form.feature.globalID
+            }
+        }
     }
 }
 
@@ -57,8 +65,21 @@ extension FeatureFormBrowserView /* TabView */ {
         TabView {
             ForEach(model.forms, id: \.feature.globalID) { form in
                 Tab {
-                    FeatureFormView(root: form)
-                        .editingButtons(.hidden)
+                    FeatureFormView(
+                        root: form,
+                        isPresented: Binding(
+                            get: {
+                                model.forms.contains {
+                                    $0.feature.globalID == form.feature.globalID
+                                }
+                            },
+                            set: { _ in
+                                model.remove(form: form)
+                            }
+                        )
+                    )
+                    .editingButtons(.hidden)
+                    .environment(model)
                 } label: {
                     Image(systemName: "list.bullet.clipboard")
                     Text(form.title)
