@@ -18,6 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
+        /// <#Description#>
+        @Environment(FeatureFormBrowserView.Model.self) var browserModel: FeatureFormBrowserView.Model?
         /// The model for the FeatureFormView containing the view.
         @Environment(FeatureFormViewModel.self) var featureFormViewModel
         /// A Boolean which declares whether navigation to forms for features associated via utility
@@ -156,19 +158,25 @@ extension FeatureFormView {
         
         func mainButton(for result: UtilityAssociationResult) -> some View {
             Button {
-                let navigationAction = {
-                    let form = FeatureForm(feature: result.associatedFeature)
-                    featureFormViewModel.addModel(form)
-                    featureFormViewModel.navigationPath.append(
-                        FeatureFormView.NavigationPathItem.form(form)
-                    )
-                }
-                if embeddedFeatureFormViewModel?.featureForm.hasEdits ?? false {
-                    featureFormViewModel.navigationAlertInfo = (true, {
-                        navigationAction()
-                    })
+                let form = FeatureForm(feature: result.associatedFeature)
+                // If the FeatureFormView is in a FeatureFormBrowserView, open
+                // the association in a new tab.
+                if let browserModel {
+                    browserModel.add(form: form)
                 } else {
-                    navigationAction()
+                    let navigationAction = {
+                        featureFormViewModel.addModel(form)
+                        featureFormViewModel.navigationPath.append(
+                            FeatureFormView.NavigationPathItem.form(form)
+                        )
+                    }
+                    if embeddedFeatureFormViewModel?.featureForm.hasEdits ?? false {
+                        featureFormViewModel.navigationAlertInfo = (true, {
+                            navigationAction()
+                        })
+                    } else {
+                        navigationAction()
+                    }
                 }
             } label: {
                 HStack {
