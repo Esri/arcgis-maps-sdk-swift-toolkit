@@ -38,15 +38,45 @@ extension FeatureFormBrowserView /* Model */ {
         /// - Parameter forms: <#forms description#>
         public init(forms: [FeatureForm] = []) {
             self.forms = forms
+            self.selectedID = forms.first?.feature.globalID
         }
         
         /// <#Description#>
         var forms = [FeatureForm]()
         
         /// <#Description#>
+        var selectedID: UUID? {
+            didSet {
+                if let oldValue {
+                    backStack.append(oldValue)
+                }
+            }
+        }
+        
+        /// <#Description#>
+        var ids: [UUID] {
+            forms.compactMap { $0.feature.globalID }
+        }
+        
+        /// <#Description#>
+        var selectedForm: FeatureForm? {
+            if let selectedID {
+                form(for: selectedID) ?? nil
+            } else {
+                nil
+            }
+        }
+        
+        /// <#Description#>
+        private var backStack = [UUID]()
+        
+        /// <#Description#>
         /// - Parameter form: <#form description#>
-        public func add(form: FeatureForm) {
+        public func add(form: FeatureForm, select: Bool = true) {
             forms.append(form)
+            if select {
+                self.select(form: form)
+            }
         }
         
         /// <#Description#>
@@ -55,6 +85,24 @@ extension FeatureFormBrowserView /* Model */ {
             forms.removeAll {
                 $0.feature.globalID == form.feature.globalID
             }
+            backStack.removeLast()
+            selectedID = backStack.last
+        }
+        
+        /// <#Description#>
+        /// - Parameter id: <#id description#>
+        /// - Returns: <#description#>
+        public func form(for id: UUID) -> FeatureForm? {
+            forms.first { $0.feature.globalID == id } ?? nil
+        }
+        
+        /// <#Description#>
+        /// - Parameter form: <#form description#>
+        public func select(form: FeatureForm) {
+            if let selectedID {
+                backStack.append(selectedID)
+            }
+            selectedID = form.feature.globalID
         }
     }
 }
@@ -62,27 +110,23 @@ extension FeatureFormBrowserView /* Model */ {
 extension FeatureFormBrowserView /* TabView */ {
     /// <#Description#>
     var tabView: some View {
-        TabView {
-            ForEach(model.forms, id: \.feature.globalID) { form in
-                Tab {
-                    FeatureFormView(
-                        root: form,
-                        isPresented: Binding(
-                            get: {
-                                model.forms.contains {
-                                    $0.feature.globalID == form.feature.globalID
-                                }
-                            },
-                            set: { _ in
-                                model.remove(form: form)
-                            }
+        TabView(selection: $model.selectedID) {
+            ForEach(model.ids, id: \.self) { id in
+                if let form = model.form(for: id) {
+                    Tab(value: id) {
+                        FeatureFormView(
+                            root: form,
+                            isPresented: Binding(
+                                get: { true },
+                                set: { _ in model.remove(form: form) }
+                            )
                         )
-                    )
-                    .editingButtons(.hidden)
-                    .environment(model)
-                } label: {
-                    Image(systemName: "list.bullet.clipboard")
-                    Text(form.title)
+                        .editingButtons(.hidden)
+                        .environment(model)
+                    } label: {
+                        Image(systemName: "list.bullet.clipboard")
+                        Text(model.selectedForm?.title ?? "")
+                    }
                 }
             }
         }
