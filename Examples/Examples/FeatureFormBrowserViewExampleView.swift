@@ -1,4 +1,4 @@
-// Copyright 2023 Esri
+// Copyright 2026 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,9 +32,18 @@ struct FeatureFormBrowserViewExampleView: View {
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     /// The `Map` displayed in the `MapView`.
-    @State private var map = Map(url: .sampleData)!
+    @State private var map = makeMap()
     /// The error to be presented in the alert.
     @State private var submissionError: SubmissionError?
+    
+    /// Makes a map from a portal item.
+    static func makeMap() -> Map {
+        let portalItem = PortalItem(
+            portal: .arcGISOnline(connection: .anonymous),
+            id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
+        )
+        return Map(item: portalItem)
+    }
     
     var body: some View {
         MapViewReader { mapView in
