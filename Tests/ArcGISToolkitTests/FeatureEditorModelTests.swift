@@ -299,6 +299,14 @@ struct FeatureEditorModelTests {
         model.stopEditing()
         await model.expectDefaultPropertyValues()
     }
+    
+    @Test func startAndStopAddingFeatures() {
+        let model = FeatureEditorModel()
+        model.startAddingFeatures()
+        #expect(model.state == .adding)
+        model.stopAddingFeatures()
+        #expect(model.state == .stopped)
+    }
 }
 
 // MARK: Helper

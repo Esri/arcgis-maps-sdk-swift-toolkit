@@ -80,16 +80,13 @@ private extension FeatureEditorTestView {
             try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(.publicSample)
             try await map.retryLoad()
             
-            guard let objectID = UserDefaults.standard.objectID,
+            if let objectID = UserDefaults.standard.objectID,
                   let layerName = UserDefaults.standard.layerName,
                   let groupLayer = map.operationalLayers.first as? GroupLayer,
                   let layer = groupLayer.layers.first(where: { $0.name == layerName }),
-                  let featureLayer = layer as? FeatureLayer else {
-                errorDescription = "Missing or invalid launch arguments."
-                return
+                  let featureLayer = layer as? FeatureLayer {
+                try await startEditingFeature(withIdentifier: objectID, on: featureLayer)
             }
-            
-            try await startEditingFeature(withIdentifier: objectID, on: featureLayer)
         } catch {
             errorDescription = error.localizedDescription
         }

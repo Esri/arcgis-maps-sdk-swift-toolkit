@@ -21,6 +21,21 @@ internal import os
 @MainActor
 @Observable
 final class FeatureEditorModel {
+    // MARK: State
+    
+    /// The various states of the feature editor.
+    enum State: Equatable {
+        /// The feature editor is adding features.
+        case adding
+        /// The feature editor is editing a feature.
+        case editing
+        /// The feature editor is stopped.
+        case stopped
+    }
+    
+    /// The current state of the feature editor.
+    private(set) var state: State = .stopped
+    
     // MARK: Properties
     
     /// The feature currently being edited by the feature editor.
@@ -34,7 +49,7 @@ final class FeatureEditorModel {
     /// A Boolean value that indicates whether the Feature Editor inspector is presented.
     /// This maps `rootFeatureForm` to a Boolean value.
     var isPresented: Bool {
-        get { rootFeatureForm != nil }
+        get { state != .stopped }
         set {
             guard !newValue else { return }
             stopEditing()
@@ -120,6 +135,20 @@ final class FeatureEditorModel {
         startGeometryEditor()
     }
     
+    // MARK: Adding
+    
+    /// Starts adding new features from templates.
+    func startAddingFeatures() {
+        state = .adding
+    }
+    
+    /// Stops adding new features.
+    func stopAddingFeatures() {
+        state = .stopped
+    }
+    
+    // MARK: Editing
+    
     /// Starts editing a new `FeatureForm` that is shown in the feature editor's `FeatureFormView`.
     /// - Parameter featureForm: The new feature form to edit.
     func startEditingFeatureForm(_ featureForm: FeatureForm) async {
@@ -137,7 +166,8 @@ final class FeatureEditorModel {
     ///   - feature: The root feature to edit.
     ///   - map: The map that `feature` is part of, used to set up rule-based snapping.
     func startEditingFeature(_ feature: ArcGISFeature, on map: Map?) async {
-        stopEditing()
+        state = .editing
+        resetProperties()
         rootFeatureForm = FeatureForm(feature: feature)
         self.map = map
         loadResult = await Result {
@@ -172,6 +202,15 @@ final class FeatureEditorModel {
     /// This is needed to prevent the current state from interfering with
     /// future uses of the `FeatureEditor` view.
     func stopEditing() {
+        state = .stopped
+        resetProperties()
+    }
+    
+    /// Resets the model's properties.
+    ///
+    /// This is needed to prevent the current state from interfering with
+    /// future uses of the `FeatureEditor` view.
+    private func resetProperties() {
         initialGeometry = nil
         rootFeatureForm = nil
         presentedFeatureForm = nil

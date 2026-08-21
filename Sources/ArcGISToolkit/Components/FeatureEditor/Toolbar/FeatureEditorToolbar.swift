@@ -34,7 +34,8 @@ struct FeatureEditorToolbar: View {
     
     var body: some View {
         Group {
-            if model.geometryEditorIsStarted {
+            switch model.state {
+            case .editing where model.geometryEditorIsStarted:
                 switch style {
                 case .vertical:
                     VStack(spacing: stackSpacing) {
@@ -51,6 +52,20 @@ struct FeatureEditorToolbar: View {
                 case nil:
                     controls
                 }
+            case .stopped:
+                Button(
+                    LocalizedStringResource(
+                        "Add Features",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to show a feature template picker."
+                    ),
+                    systemImage: "plus",
+                    action: model.startAddingFeatures
+                )
+                .toolbarStackStyle()
+            default:
+                // No controls.
+                EmptyView()
             }
         }
         .animation(.default, value: model.geometryEditorIsStarted)

@@ -40,36 +40,45 @@ private struct FeatureEditorModifier: ViewModifier {
             .safeInspector(isPresented: $model.isPresented) {
                 // VStack is needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
-                    switch model.loadResult {
-                    case .success:
-                        if let rootFeatureForm = model.rootFeatureForm {
-                            FeatureEditorFormView(
-                                rootFeatureForm: rootFeatureForm,
-                                isMinimized: selectedPresentationDetent == .bar
-                            )
-                        }
-                    case .failure(let error):
+                    switch model.state {
+                    case .adding:
                         NavigationStack {
-                            makeContentUnavailableView(error: error)
-                                .toolbar {
-                                    ToolbarItem(placement: .topBarTrailing) {
-                                        DismissButton(kind: .close) {
-                                            model.isPresented = false
+                            FeatureEditorTemplatePicker()
+                        }
+                    case .editing:
+                        switch model.loadResult {
+                        case .success:
+                            if let rootFeatureForm = model.rootFeatureForm {
+                                FeatureEditorFormView(
+                                    rootFeatureForm: rootFeatureForm,
+                                    isMinimized: selectedPresentationDetent == .bar
+                                )
+                            }
+                        case .failure(let error):
+                            NavigationStack {
+                                makeContentUnavailableView(error: error)
+                                    .toolbar {
+                                        ToolbarItem(placement: .topBarTrailing) {
+                                            DismissButton(kind: .close) {
+                                                model.isPresented = false
+                                            }
                                         }
                                     }
-                                }
-                        }
-                    case .none:
-                        NavigationStack {
-                            ProgressView()
-                                .toolbar {
-                                    ToolbarItem(placement: .topBarTrailing) {
-                                        DismissButton(kind: .close) {
-                                            model.isPresented = false
+                            }
+                        case .none:
+                            NavigationStack {
+                                ProgressView()
+                                    .toolbar {
+                                        ToolbarItem(placement: .topBarTrailing) {
+                                            DismissButton(kind: .close) {
+                                                model.isPresented = false
+                                            }
                                         }
                                     }
-                                }
+                            }
                         }
+                    case .stopped:
+                        EmptyView()
                     }
                 }
                 .task(id: isRetrying) {
