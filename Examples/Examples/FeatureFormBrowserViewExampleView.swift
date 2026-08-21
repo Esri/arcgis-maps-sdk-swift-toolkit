@@ -21,7 +21,7 @@ struct FeatureFormBrowserViewExampleView: View {
     /// A Boolean value indicating whether general form workflow errors are presented.
     @State private var alertIsPresented = false
     /// <#Description#>
-    @State private var browserModel = FeatureFormBrowserView.Model()
+    @State private var browserModel = FeatureFormBrowserView.Model(mode: .menu)
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.

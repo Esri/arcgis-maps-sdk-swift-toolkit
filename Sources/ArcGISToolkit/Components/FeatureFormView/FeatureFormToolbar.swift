@@ -27,6 +27,8 @@ struct FeatureFormToolbar: ViewModifier {
     /// The visibility of the "save" and "discard" buttons.
     @Environment(\.editingButtonVisibility) var editingButtonsVisibility
     
+    /// <#Description#>
+    @Environment(FeatureFormBrowserView.Model.self) var browserModel: FeatureFormBrowserView.Model?
     /// The model for the FeatureFormView containing the view.
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
@@ -88,7 +90,33 @@ struct FeatureFormToolbar: ViewModifier {
                         .disabled(navigationIsDisabled)
                     }
                 }
-                if let isPresented {
+                if let browserModel {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu {
+                            Section {
+                                Button("Save All") {}
+                                Button("Discard Edits", role: .destructive) {}
+                            }
+                            ForEach(browserModel.ids, id: \.self) { id in
+                                if let form = browserModel.form(for: id) {
+                                    Button {
+                                        browserModel.select(form: form)
+                                    } label: {
+                                        Label {
+                                            Text(form.title)
+                                        } icon: {
+                                            if browserModel.selectedID == id {
+                                                Image(systemName: "checkmark")
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } label: {
+                            Text(browserModel.forms.count - 1, format: .number)
+                        }
+                    }
+                } else if let isPresented {
                     ToolbarItem(placement: .topBarTrailing) {
                         DismissButton(kind: .cancel) {
                             if hasEdits {

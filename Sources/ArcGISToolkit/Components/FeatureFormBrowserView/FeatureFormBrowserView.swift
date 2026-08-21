@@ -27,7 +27,12 @@ public struct FeatureFormBrowserView: View {
     }
     
     public var body: some View {
-        tabView
+        switch model.mode {
+        case .menu:
+            menuView
+        case .tabs:
+            tabView
+        }
     }
 }
 
@@ -35,9 +40,19 @@ extension FeatureFormBrowserView /* Model */ {
     /// <#Description#>
     @Observable public final class Model {
         /// <#Description#>
+        public enum Mode {
+            case menu
+            case tabs
+        }
+        
+        /// <#Description#>
+        let mode: Mode
+        
+        /// <#Description#>
         /// - Parameter forms: <#forms description#>
-        public init(forms: [FeatureForm] = []) {
+        public init(forms: [FeatureForm] = [], mode: Mode = .tabs) {
             self.forms = forms
+            self.mode = mode
             self.selectedID = forms.first?.feature.globalID
         }
         
@@ -129,6 +144,15 @@ extension FeatureFormBrowserView /* TabView */ {
                     }
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    var menuView: some View {
+        if let form = model.selectedForm {
+            FeatureFormView(root: form)
+                .editingButtons(.hidden)
+                .environment(model)
         }
     }
 }
