@@ -27,21 +27,11 @@ public struct FeatureFormBrowserView: View {
     }
     
     public var body: some View {
-        TabView {
-            ForEach(model.forms, id: \.feature.globalID) { form in
-                Tab {
-                    FeatureFormView(root: form)
-                        .editingButtons(.hidden)
-                } label: {
-                    Image(systemName: "list.bullet.clipboard")
-                    Text(form.title)
-                }
-            }
-        }
+        tabView
     }
 }
 
-extension FeatureFormBrowserView {
+extension FeatureFormBrowserView /* Model */ {
     /// <#Description#>
     @Observable public final class Model {
         /// <#Description#>
@@ -57,6 +47,23 @@ extension FeatureFormBrowserView {
         /// - Parameter form: <#form description#>
         public func add(form: FeatureForm) {
             forms.append(form)
+        }
+    }
+}
+
+extension FeatureFormBrowserView /* TabView */ {
+    /// <#Description#>
+    var tabView: some View {
+        TabView {
+            ForEach(model.forms, id: \.feature.globalID) { form in
+                Tab {
+                    FeatureFormView(root: form)
+                        .editingButtons(.hidden)
+                } label: {
+                    Image(systemName: "list.bullet.clipboard")
+                    Text(form.title)
+                }
+            }
         }
     }
 }
