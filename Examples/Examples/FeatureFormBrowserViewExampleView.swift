@@ -16,9 +16,11 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-struct FeatureFormExampleView: View {
+struct FeatureFormBrowserViewExampleView: View {
     /// A Boolean value indicating whether general form workflow errors are presented.
     @State private var alertIsPresented = false
+    /// <#Description#>
+    @State private var browserModel = FeatureFormBrowserView.Model()
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
@@ -49,7 +51,7 @@ struct FeatureFormExampleView: View {
                 .sheet(isPresented: $featureFormViewIsPresented) {
                     featureForm = nil
                 } content: {
-                    featureFormView
+                    FeatureFormBrowserView(model: $browserModel)
                 }
                 .task(id: identifyScreenPoint) {
                     guard !editsAreBeingApplied,
@@ -65,7 +67,7 @@ struct FeatureFormExampleView: View {
     }
 }
 
-extension FeatureFormExampleView {
+extension FeatureFormBrowserViewExampleView {
     /// An error encountered while submitting edits.
     enum SubmissionError: LocalizedError {
         case anyError(any Error)
@@ -136,8 +138,9 @@ extension FeatureFormExampleView {
         )
         if let geoElements = identifyLayerResults?.first?.geoElements,
            let feature = geoElements.first as? ArcGISFeature {
-            featureForm = FeatureForm(feature: feature)
+            let featureForm = FeatureForm(feature: feature)
             featureFormViewIsPresented = true
+            browserModel.add(form: featureForm)
         }
     }
     

@@ -18,6 +18,7 @@
 		79A97FE32F590656005C91CF /* BuildingExplorerExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A97FE22F59064E005C91CF /* BuildingExplorerExampleView.swift */; };
 		882899FD2AB5099300A0BDC1 /* FlyoverExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */; platformFilter = ios; };
 		88519D3F2C8A7967007D7015 /* LocationButtonExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88519D3E2C8A7967007D7015 /* LocationButtonExampleView.swift */; };
+		8A9244493038E8440035D547 /* FeatureFormBrowserViewExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9244483038E8440035D547 /* FeatureFormBrowserViewExampleView.swift */; };
 		8A9419622E035F1D003C7D10 /* AppSecrets.swift.masque in Sources */ = {isa = PBXBuildFile; fileRef = 8A9419612E035F1D003C7D10 /* AppSecrets.swift.masque */; };
 		8AC666152DA865EE00F33C36 /* Examples+ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */; };
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; };
@@ -77,6 +78,7 @@
 		79A97FE22F59064E005C91CF /* BuildingExplorerExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildingExplorerExampleView.swift; sourceTree = "<group>"; };
 		882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyoverExampleView.swift; sourceTree = "<group>"; };
 		88519D3E2C8A7967007D7015 /* LocationButtonExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationButtonExampleView.swift; sourceTree = "<group>"; };
+		8A9244483038E8440035D547 /* FeatureFormBrowserViewExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFormBrowserViewExampleView.swift; sourceTree = "<group>"; };
 		8A9419612E035F1D003C7D10 /* AppSecrets.swift.masque */ = {isa = PBXFileReference; lastKnownFileType = text; name = AppSecrets.swift.masque; path = ../AppSecrets.swift.masque; sourceTree = "<group>"; };
 		8AC666142DA865DD00F33C36 /* Examples+ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Examples+ListItem.swift"; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */,
 				79A97FE22F59064E005C91CF /* BuildingExplorerExampleView.swift */,
 				75657E4727ABAC8400EE865B /* CompassExampleView.swift */,
+				8A9244483038E8440035D547 /* FeatureFormBrowserViewExampleView.swift */,
 				75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */,
 				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
 				E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */,
@@ -321,6 +324,7 @@
 				79A97FE32F590656005C91CF /* BuildingExplorerExampleView.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
 				E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */,
+				8A9244493038E8440035D547 /* FeatureFormBrowserViewExampleView.swift in Sources */,
 				E4AA9316276BF5ED000E6289 /* FloatingPanelExampleView.swift in Sources */,
 				E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */,
 				4D19FCB52881C8F3002601E8 /* PopupExampleView.swift in Sources */,
