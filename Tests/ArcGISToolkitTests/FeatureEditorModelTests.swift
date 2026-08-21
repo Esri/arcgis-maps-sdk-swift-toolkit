@@ -96,7 +96,7 @@ struct FeatureEditorModelTests {
         await model.expectIsEditing(geometry: initialGeometry)
         
         // Verifies restartGeometryEditor restarts the geometry editor and
-        // resets feature's geometry.
+        // resets the feature's geometry.
         let newGeometry = Point(latitude: 1, longitude: 1)
         feature.geometry = newGeometry
         #expect(feature.geometry == newGeometry)

@@ -205,8 +205,8 @@ final class FeatureEditorModel {
         guard geometryEditorIsStarted else { return }
         
         // Uses initialGeometry if the geometry editor has no edits to prevent
-        // an empty geometry from being used when geometry editor was started
-        // using the table's geometryType (when feature.geometry is nil).
+        // an empty geometry from being used when the geometry editor was
+        // started using a geometryType (when feature.geometry is nil).
         let geometry = geometryEditorCanUndo ? geometryEditorGeometry : initialGeometry
         await setFormGeometry(to: geometry)
     }
