@@ -110,7 +110,13 @@ final class FeatureEditorModel {
     func restartGeometryEditor() async {
         guard geometryEditorIsStarted else { return }
         
-        await setFormGeometry(to: initialGeometry)
+        do {
+            try await setFormGeometry(to: initialGeometry)
+        } catch {
+            Logger.featureEditor.error(
+                "Error updating form geometry: \(error.localizedDescription)"
+            )
+        }
         startGeometryEditor()
     }
     
@@ -201,14 +207,14 @@ final class FeatureEditorModel {
     
     /// Updates the form's feature geometry using the geometry editor's current
     /// geometry to update possible geometry-dependent form elements.
-    func updateFormGeometry() async {
+    func updateFormGeometry() async throws {
         guard geometryEditorIsStarted else { return }
         
         // Uses initialGeometry if the geometry editor has no edits to prevent
         // an empty geometry from being used when the geometry editor was
         // started using a geometryType (when feature.geometry is nil).
         let geometry = geometryEditorCanUndo ? geometryEditorGeometry : initialGeometry
-        await setFormGeometry(to: geometry)
+        try await setFormGeometry(to: geometry)
     }
     
     /// Loads the feature and its table if needed to allow geometry editing.
@@ -231,20 +237,14 @@ final class FeatureEditorModel {
     /// Sets the form's feature geometry and reevaluates expressions to update
     /// possible geometry-dependent form elements.
     /// - Parameter geometry: The new geometry to set on the feature.
-    private func setFormGeometry(to geometry: Geometry?) async {
+    private func setFormGeometry(to geometry: Geometry?) async throws {
         guard let featureForm = presentedFeatureForm ?? rootFeatureForm,
               featureForm.feature.geometry != geometry else {
             return
         }
         
-        do {
-            featureForm.feature.geometry = geometry
-            try await featureForm.evaluateExpressions()
-        } catch {
-            Logger.featureEditor.error(
-                "Error evaluating expressions: \(error.localizedDescription)"
-            )
-        }
+        featureForm.feature.geometry = geometry
+        try await featureForm.evaluateExpressions()
     }
     
     /// Performs setup needed for geometry editing and starts the geometry editor if applicable.

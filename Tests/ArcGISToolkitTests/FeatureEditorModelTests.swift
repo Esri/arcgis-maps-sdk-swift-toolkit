@@ -162,7 +162,7 @@ struct FeatureEditorModelTests {
         feature.geometry = newGeometry
         #expect(feature.geometry == newGeometry)
         
-        await model.updateFormGeometry()
+        try await model.updateFormGeometry()
         #expect(feature.geometry == initialGeometry)
         
         // Verifies updateFormGeometry() does nothing if the geometry editor is not started.
@@ -172,7 +172,7 @@ struct FeatureEditorModelTests {
         feature.geometry = newGeometry
         #expect(feature.geometry == newGeometry)
         
-        await model.updateFormGeometry()
+        try await model.updateFormGeometry()
         #expect(feature.geometry == newGeometry)
     }
     

@@ -82,7 +82,15 @@ struct FeatureEditorFormView: View {
                 guard !Task.isCancelled else { return }
                 self.presentedFeatureForm = nil
             }
-            .task(id: model.geometryEditorGeometry, model.updateFormGeometry)
+            .task(id: model.geometryEditorGeometry) {
+                do {
+                    try await model.updateFormGeometry()
+                } catch {
+                    Logger.featureEditor.error(
+                        "Error updating form geometry: \(error.localizedDescription)"
+                    )
+                }
+            }
             .onDisappear {
                 clearSelectedFeature()
                 model.geometryEditor.tool.style.opacity = 1
