@@ -14,6 +14,7 @@
 
 import ArcGIS
 import ArcGISToolkit
+import os
 import SwiftUI
 
 struct FeatureFormBrowserViewExampleView: View {
@@ -61,6 +62,14 @@ struct FeatureFormBrowserViewExampleView: View {
                     featureForm = nil
                 } content: {
                     FeatureFormBrowserView(model: $browserModel)
+                }
+                .task {
+                    do {
+                        let publicSample = try await ArcGISCredential.publicSample
+                        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample)
+                    } catch {
+                        Logger.featureFormBrowserViewExample.error("Error creating credential: \(error.localizedDescription)")
+                    }
                 }
                 .task(id: identifyScreenPoint) {
                     guard !editsAreBeingApplied,
@@ -206,6 +215,19 @@ extension FeatureFormBrowserViewExampleView {
     }
 }
 
+
+private extension ArcGISCredential {
+    static var publicSample: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+                username: "viewer01",
+                password: "I68VGU^nMurF"
+            )
+        }
+    }
+}
+
 private extension Array where Element == FeatureEditResult {
     ///  Any errors from the edit results and their inner attachment results.
     var errors: [Error] {
@@ -217,4 +239,11 @@ private extension URL {
     static var sampleData: Self {
         .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
     }
+}
+
+extension Logger {
+    /// A logger for the Feature Form Browser View example.
+    static let featureFormBrowserViewExample: Self = {
+        Logger(subsystem: "com.esri.ArcGISToolkit.Examples", category: "FeatureFormBrowserViewExampleView")
+    }()
 }
