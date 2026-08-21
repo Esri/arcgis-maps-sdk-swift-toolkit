@@ -125,7 +125,7 @@ extension FeatureFormBrowserView /* TabView */ {
                         .environment(model)
                     } label: {
                         Image(systemName: "list.bullet.clipboard")
-                        Text(model.selectedForm?.title ?? "")
+                        Text(form.title)
                     }
                 }
             }
