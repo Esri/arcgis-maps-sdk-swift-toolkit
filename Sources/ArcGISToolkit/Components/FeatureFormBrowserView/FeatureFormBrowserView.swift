@@ -16,7 +16,7 @@ import ArcGIS
 import SwiftUI
 
 /// <#Description#>
-public struct FeatureFormBrowser: View {
+public struct FeatureFormBrowserView: View {
     /// <#Description#>
     @Binding var model: Model
     
@@ -31,6 +31,7 @@ public struct FeatureFormBrowser: View {
             ForEach(model.forms, id: \.feature.globalID) { form in
                 Tab {
                     FeatureFormView(root: form)
+                        .editingButtons(.hidden)
                 } label: {
                     Image(systemName: "list.bullet.clipboard")
                     Text(form.title)
@@ -40,7 +41,7 @@ public struct FeatureFormBrowser: View {
     }
 }
 
-extension FeatureFormBrowser {
+extension FeatureFormBrowserView {
     /// <#Description#>
     @Observable public final class Model {
         /// <#Description#>
