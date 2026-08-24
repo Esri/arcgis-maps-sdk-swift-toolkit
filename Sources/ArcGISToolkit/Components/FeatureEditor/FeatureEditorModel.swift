@@ -47,7 +47,6 @@ final class FeatureEditorModel {
     @ObservationIgnored
     private var initialGeometry: Geometry?
     /// A Boolean value that indicates whether the Feature Editor inspector is presented.
-    /// This maps `rootFeatureForm` to a Boolean value.
     var isPresented: Bool {
         get { state != .stopped }
         set {
