@@ -314,6 +314,7 @@ struct FeatureEditorModelTests {
 private extension FeatureEditorModel {
     /// Verifies the model's properties have their default values.
     func expectDefaultPropertyValues(sourceLocation: SourceLocation = #_sourceLocation) async {
+        #expect(state == .stopped, sourceLocation: sourceLocation)
         #expect(feature == nil, sourceLocation: sourceLocation)
         #expect(!isPresented, sourceLocation: sourceLocation)
         #expect(rootFeatureForm == nil, sourceLocation: sourceLocation)
