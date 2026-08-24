@@ -100,6 +100,7 @@ extension FeatureFormBrowserView /* Model */ {
             forms.removeAll {
                 $0.feature.globalID == form.feature.globalID
             }
+            guard !backStack.isEmpty else { return }
             backStack.removeLast()
             selectedID = backStack.last
         }
