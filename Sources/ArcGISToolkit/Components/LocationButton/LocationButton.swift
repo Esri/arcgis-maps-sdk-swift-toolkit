@@ -91,7 +91,7 @@ public struct LocationButton: View {
     
     /// Sets whether the user can hide the location display.
     /// - Parameter isAllowed: A Boolean value indicating whether hiding the
-    ///   location display is included in the context menu.
+    /// location display is included in the context menu.
     /// - Returns: A new location button configured with the given value.
     public func allowsHidingLocationDisplay(_ isAllowed: Bool) -> Self {
         var copy = self
