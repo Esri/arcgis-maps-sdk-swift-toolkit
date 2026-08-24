@@ -49,11 +49,11 @@ struct FeatureEditorToolbar: View {
                     }
                     .padding(.horizontal, stackEdgePadding)
                     .toolbarStyle()
-                case nil:
+                case .none:
                     controls
                 }
             case .stopped:
-                Button(
+                let addButton = Button(
                     LocalizedStringResource(
                         "Add Features",
                         bundle: .toolkitModule,
@@ -62,7 +62,12 @@ struct FeatureEditorToolbar: View {
                     systemImage: "plus",
                     action: model.startAddingFeatures
                 )
-                .toolbarStyle()
+                if style != nil {
+                    addButton
+                        .toolbarStyle()
+                } else {
+                    addButton
+                }
             default:
                 // No controls.
                 EmptyView()
