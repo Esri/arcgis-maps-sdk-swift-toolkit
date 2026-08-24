@@ -82,6 +82,15 @@ struct FeatureEditorFormView: View {
                 guard !Task.isCancelled else { return }
                 self.presentedFeatureForm = nil
             }
+            .task(id: model.geometryEditorGeometry) {
+                do {
+                    try await model.updateFormGeometry()
+                } catch {
+                    Logger.featureEditor.error(
+                        "Error updating form geometry: \(error.localizedDescription)"
+                    )
+                }
+            }
             .onDisappear {
                 clearSelectedFeature()
                 model.geometryEditor.tool.style.opacity = 1
@@ -105,7 +114,7 @@ struct FeatureEditorFormView: View {
         case .discardedEdits(let willNavigate):
             // Restarts the geometry editor when the form footer discard button is pressed.
             guard !willNavigate else { break }
-            model.restartGeometryEditor()
+            await model.restartGeometryEditor()
         case .navigationChanged(let view):
             switch view {
             case .utilityAssociationCreationView(_, _, _, let candidate):

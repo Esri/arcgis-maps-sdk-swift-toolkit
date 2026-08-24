@@ -107,7 +107,7 @@ public struct FeatureEditor: View {
         FeatureEditorToolbar(style: toolbarStyle)
             .task(id: ObjectIdentifier(geometryEditor)) {
                 model.geometryEditor = geometryEditor
-                model.restartGeometryEditor()
+                await model.restartGeometryEditor()
                 await model.monitorGeometryEditorStreams()
             }
             .task(id: startEditingIDs) {
