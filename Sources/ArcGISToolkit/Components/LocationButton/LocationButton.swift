@@ -44,7 +44,7 @@ public struct LocationButton: View {
     
     /// A Boolean value indicating whether the user can hide the location display.
     private(set) var allowsHidingLocationDisplay = true
-
+    
     /// The action performed when the button is pressed.
     var currentAction: Action? {
         Action(
@@ -53,7 +53,7 @@ public struct LocationButton: View {
             autoPanOptions: autoPanModes
         )
     }
-
+    
     /// A value indicating whether the button is disabled.
     var buttonIsDisabled: Bool {
         status == .starting ||
@@ -98,7 +98,7 @@ public struct LocationButton: View {
         copy.allowsHidingLocationDisplay = isAllowed
         return copy
     }
-
+    
     public var body: some View {
         Button {
             buttonAction()
@@ -322,7 +322,7 @@ extension LocationButton {
     var shouldShowContextMenu: Bool {
         allowsHidingLocationDisplay || autoPanModes.count > 1
     }
-
+    
     /// The initial auto-pan mode to be used.
     var initialAutoPanMode: LocationDisplay.AutoPanMode {
         autoPanModes.first ?? .off
