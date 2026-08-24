@@ -24,7 +24,7 @@ struct FeatureEditorTemplatePicker: View {
                 LocalizedStringResource(
                     "Templates",
                     bundle: .toolkit,
-                    comment: "The title of the template picker view"
+                    comment: "The title of the template picker view."
                 )
             )
             .toolbar {
