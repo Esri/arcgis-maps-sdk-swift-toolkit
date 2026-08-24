@@ -331,7 +331,7 @@ extension LocationButton {
     /// The context menu auto-pan mode options.
     ///
     /// The context menu options will be in the order the user specifies
-    /// except the off option, when included, will be first.
+    /// except the off option, which, when included, will be first.
     var contextMenuAutoPanOptions: [LocationDisplay.AutoPanMode] {
         autoPanModes.filter { $0 == .off } +
         autoPanModes.filter { $0 != .off }
