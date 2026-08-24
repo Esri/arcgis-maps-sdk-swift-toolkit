@@ -43,7 +43,8 @@ import SwiftUI
 ///
 /// **Behavior**
 ///
-/// The toolbar is visible only while a feature's geometry is being edited.
+/// When no feature is selected, the toolbar includes a button to add features.
+/// When a feature is selected, the toolbar includes feature editing controls.
 ///
 /// **Associated Types**
 ///
