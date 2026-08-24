@@ -81,10 +81,10 @@ private extension FeatureEditorTestView {
             try await map.retryLoad()
             
             if let objectID = UserDefaults.standard.objectID,
-                  let layerName = UserDefaults.standard.layerName,
-                  let groupLayer = map.operationalLayers.first as? GroupLayer,
-                  let layer = groupLayer.layers.first(where: { $0.name == layerName }),
-                  let featureLayer = layer as? FeatureLayer {
+               let layerName = UserDefaults.standard.layerName,
+               let groupLayer = map.operationalLayers.first as? GroupLayer,
+               let layer = groupLayer.layers.first(where: { $0.name == layerName }),
+               let featureLayer = layer as? FeatureLayer {
                 try await startEditingFeature(withIdentifier: objectID, on: featureLayer)
             }
         } catch {
