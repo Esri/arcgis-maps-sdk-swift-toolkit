@@ -42,13 +42,13 @@ struct FeatureEditorToolbar: View {
                         controls
                     }
                     .padding(.vertical, stackEdgePadding)
-                    .toolbarStackStyle()
+                    .toolbarStyle()
                 case .horizontal:
                     HStack(spacing: stackSpacing) {
                         controls
                     }
                     .padding(.horizontal, stackEdgePadding)
-                    .toolbarStackStyle()
+                    .toolbarStyle()
                 case nil:
                     controls
                 }
@@ -62,7 +62,7 @@ struct FeatureEditorToolbar: View {
                     systemImage: "plus",
                     action: model.startAddingFeatures
                 )
-                .toolbarStackStyle()
+                .toolbarStyle()
             default:
                 // No controls.
                 EmptyView()
@@ -188,10 +188,10 @@ private struct SnapSettingsButton: View {
 // MARK: - Helper
 
 private extension View {
-    /// Applies the shared styling used by the vertical and horizontal stacks
-    /// in a `FeatureEditorToolbar`.
+    /// Applies the shared styling used by the feature editor toolbar and its
+    /// controls.
     @ViewBuilder
-    func toolbarStackStyle() -> some View {
+    func toolbarStyle() -> some View {
         // glassEffect is not used because it bases its background color on the content behind it,
         // but the ToolPicker does not, causing the color to jump when the picker menu closes.
         self.fixedSize()
