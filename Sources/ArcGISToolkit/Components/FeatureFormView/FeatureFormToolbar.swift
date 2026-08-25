@@ -98,12 +98,13 @@ struct FeatureFormToolbar: ViewModifier {
                                 Button("Discard Edits", role: .destructive) {}
                             }
                             ForEach(browserModel.ids, id: \.self) { id in
-                                if let form = browserModel.form(for: id) {
+                                if let form = browserModel.form(for: id),
+                                   let objectID = form.feature.objectID {
                                     Button {
                                         browserModel.select(form: form)
                                     } label: {
                                         Label {
-                                            Text(form.title)
+                                            Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
                                         } icon: {
                                             if browserModel.selectedID == id {
                                                 Image(systemName: "checkmark")
@@ -113,7 +114,7 @@ struct FeatureFormToolbar: ViewModifier {
                                 }
                             }
                         } label: {
-                            Text(browserModel.forms.count - 1, format: .number)
+                            Text(browserModel.forms.count, format: .number)
                         }
                     }
                 } else if let isPresented {
