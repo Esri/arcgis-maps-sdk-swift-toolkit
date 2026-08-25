@@ -28,6 +28,17 @@ extension ArcGISFeature {
         attributes.valueIgnoringCase(for: "globalid") as? UUID
     }
     
+    /// A Boolean value indicating whether the feature has been added to its table.
+    var isAddedToTable: Bool {
+        objectID != nil
+    }
+    
+    /// The object ID of the feature.
+    var objectID: Int64? {
+        guard let table = table as? ArcGISFeatureTable else { return nil }
+        return attributeValue(forKey: table.objectIDField) as? Int64
+    }
+    
     /// The symbol for the feature from its layer.
     var symbol: Image? {
         get async {
