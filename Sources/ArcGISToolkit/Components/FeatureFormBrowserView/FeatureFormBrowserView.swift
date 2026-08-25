@@ -89,11 +89,24 @@ extension FeatureFormBrowserView /* Model */ {
         
         /// <#Description#>
         /// - Parameter form: <#form description#>
+        /// - Parameter select: <#select description#>
         public func add(form: FeatureForm, select: Bool = true) {
-            forms.append(form)
-            if select {
-                self.select(form: form)
+            guard let id = form.feature.globalID else {
+                Logger.featureFormBrowserView.warning("The feature cannot be added because the its global ID is not available.")
+                return
             }
+            defer {
+                // Select the form, if directed, regardless of whether it's
+                // already in the collection of managed forms.
+                if select {
+                    self.select(form: form)
+                }
+            }
+            guard !ids.contains(id) else {
+                Logger.featureFormBrowserView.info("Feature \(id) is already added.")
+                return
+            }
+            forms.append(form)
         }
         
         /// <#Description#>
