@@ -24,18 +24,7 @@ struct ExampleMapView: View {
     /// on the `MapView`.
     @State private var geometryEditor = GeometryEditor()
     /// The map with the features to edit, created from a Naperville Electric web map portal item.
-    @State private var map: Map = {
-        let url = URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
-        let map = Map(url: url)!
-        
-        // Enables full resolution feature tiling to improve snapping accuracy.
-        map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
-        
-        let initialExtent = Envelope(xRange: -9812750 ... -9812387, yRange: 5131332 ... 5131965)
-        map.initialViewpoint = Viewpoint(boundingGeometry: initialExtent)
-        
-        return map
-    }()
+    @State private var map = Map()
     /// The point on the screen where the user tapped.
     @State private var tapPoint: CGPoint?
     
@@ -99,6 +88,15 @@ struct ExampleMapView: View {
     
     /// Sets up the map.
     private func setUp() async throws {
+        let url = URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
+        let map = Map(url: url)!
+        
+        // Enables full resolution feature tiling to improve snapping accuracy.
+        map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
+        
+        let initialExtent = Envelope(xRange: -9812750 ... -9812387, yRange: 5131332 ... 5131965)
+        map.initialViewpoint = Viewpoint(boundingGeometry: initialExtent)
+        
         // Note: Never hardcode login information in a production application.
         // This is done solely for the sake of the example.
         let credential = try await TokenCredential.credential(
@@ -107,6 +105,8 @@ struct ExampleMapView: View {
             password: "I68VGU^nMurF"
         )
         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
-        try await map.retryLoad()
+        try await map.load()
+        
+        self.map = map
     }
 }
