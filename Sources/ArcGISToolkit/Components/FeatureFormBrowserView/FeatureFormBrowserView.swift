@@ -103,7 +103,15 @@ extension FeatureFormBrowserView /* Model */ {
                 }
             }
             guard !ids.contains(id) else {
-                Logger.featureFormBrowserView.info("Feature \(id) is already added.")
+                let id: any CustomStringConvertible
+                if let objectID = form.feature.objectID {
+                    id = objectID
+                } else if let globalID = form.feature.globalID {
+                    id = globalID
+                } else {
+                    id = "?"
+                }
+                Logger.featureFormBrowserView.info("Feature \(id.description) is already added.")
                 return
             }
             forms.append(form)
