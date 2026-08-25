@@ -37,6 +37,27 @@ final class FeatureEditorToolbarTests: XCTestCase {
         featureEditorTestsButton.assertExistenceAndTap()
     }
     
+    /// Tests that the template picker can be presented and dismissed.
+    func testAddingFeatures() {
+        let app = XCUIApplication()
+        app.launch()
+        app.openFeatureEditorTestView()
+        
+        let addFeaturesButton = app.buttons["Add Features"]
+        addFeaturesButton.assertExistence()
+        
+        let templates = app.staticTexts["Templates"]
+        addFeaturesButton.tap()
+        templates.assertExistence()
+        XCTAssertFalse(addFeaturesButton.exists)
+        
+        let closeButton = app.buttons["Close"]
+        XCTAssertTrue(closeButton.exists)
+        
+        closeButton.tap()
+        addFeaturesButton.assertExistence()
+    }
+    
     /// Tests the default style for the feature editor toolbar is vertical.
     /// Verifies that the tool button is positioned above the delete button
     /// by comparing their midY values.
@@ -195,6 +216,14 @@ private extension String {
     static let electricDistributionDevice = "Electric Distribution Device"
     static let electricDistributionLine = "Electric Distribution Line"
     static let structureBoundary = "Structure Boundary"
+}
+
+private extension XCUIApplication {
+    /// Opens the feature editor test view without selecting a feature.
+    func openFeatureEditorTestView() {
+        let featureEditorTestsButton = buttons["Feature Editor Tests"]
+        featureEditorTestsButton.assertExistenceAndTap()
+    }
 }
 
 private extension XCUIElement {

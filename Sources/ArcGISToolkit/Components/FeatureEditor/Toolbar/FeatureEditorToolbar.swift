@@ -34,23 +34,43 @@ struct FeatureEditorToolbar: View {
     
     var body: some View {
         Group {
-            if model.geometryEditorIsStarted {
+            switch model.state {
+            case .editing where model.geometryEditorIsStarted:
                 switch style {
                 case .vertical:
                     VStack(spacing: stackSpacing) {
                         controls
                     }
                     .padding(.vertical, stackEdgePadding)
-                    .toolbarStackStyle()
+                    .toolbarStyle()
                 case .horizontal:
                     HStack(spacing: stackSpacing) {
                         controls
                     }
                     .padding(.horizontal, stackEdgePadding)
-                    .toolbarStackStyle()
-                case nil:
+                    .toolbarStyle()
+                case .none:
                     controls
                 }
+            case .stopped:
+                let addButton = Button(
+                    LocalizedStringResource(
+                        "Add Features",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to show a feature template picker."
+                    ),
+                    systemImage: "plus",
+                    action: model.startAddingFeatures
+                )
+                if style != nil {
+                    addButton
+                        .toolbarStyle()
+                } else {
+                    addButton
+                }
+            default:
+                // No controls.
+                EmptyView()
             }
         }
         .animation(.default, value: model.geometryEditorIsStarted)
@@ -173,10 +193,10 @@ private struct SnapSettingsButton: View {
 // MARK: - Helper
 
 private extension View {
-    /// Applies the shared styling used by the vertical and horizontal stacks
-    /// in a `FeatureEditorToolbar`.
+    /// Applies the shared styling used by the feature editor toolbar and its
+    /// controls.
     @ViewBuilder
-    func toolbarStackStyle() -> some View {
+    func toolbarStyle() -> some View {
         // glassEffect is not used because it bases its background color on the content behind it,
         // but the ToolPicker does not, causing the color to jump when the picker menu closes.
         self.fixedSize()
