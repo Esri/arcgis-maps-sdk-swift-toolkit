@@ -42,6 +42,9 @@ struct FeatureFormToolbar: ViewModifier {
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits = false
     
+    /// A Boolean value indicating whether the presented form has validation errors.
+    @State private var hasValidationErrors = false
+    
     /// The currently presented feature form.
     let featureForm: FeatureForm
     
@@ -60,16 +63,22 @@ struct FeatureFormToolbar: ViewModifier {
                 for await hasEdits in featureForm.$hasEdits {
                     withAnimation { self.hasEdits = hasEdits }
                 }
+                
+            }
+            .task(id: featureForm.feature.globalID) {
+                for await validationErrors in featureForm.$elementValidationErrors {
+                    hasValidationErrors = !validationErrors.isEmpty
+                }
             }
             .toolbar {
                 if !isRootView {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
                             if alertBeforeDismissing {
-                                featureFormViewModel.navigationAlertInfo = (true, {
+                                featureFormViewModel.unsavedEditsAlertInfo = .init(includeSaveOption: true, willNavigate: true) {
                                     dismiss()
                                     onBackNavigation?()
-                                })
+                                }
                             } else {
                                 dismiss()
                                 onBackNavigation?()
@@ -88,26 +97,25 @@ struct FeatureFormToolbar: ViewModifier {
                         .disabled(navigationIsDisabled)
                     }
                 }
-                if let isPresented {
-                    ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
+                    if (editingButtonsVisibility == .automatic && hasEdits)
+                        || (editingButtonsVisibility == .automatic && !featureForm.feature.isAddedToTable && !hasValidationErrors)
+                        || (editingButtonsVisibility == .visible)
+                    {
+                        FormEditingMenu(
+                            featureForm: featureForm,
+                            formHandlingEventAction: onFormEditingEventAction
+                        )
+                    } else if let isPresented {
                         DismissButton(kind: .cancel) {
                             if hasEdits {
-                                featureFormViewModel.navigationAlertInfo = (false, {
+                                featureFormViewModel.unsavedEditsAlertInfo = .init(includeSaveOption: true, willNavigate: false) {
                                     isPresented.wrappedValue = false
-                                })
+                                }
                             } else {
                                 isPresented.wrappedValue = false
                             }
                         }
-                    }
-                }
-                if (hasEdits && editingButtonsVisibility == .automatic)
-                    || (editingButtonsVisibility == .visible) {
-                    ToolbarItem(placement: .bottomBar) {
-                        FormFooter(
-                            featureForm: featureForm,
-                            formHandlingEventAction: onFormEditingEventAction
-                        )
                     }
                 }
             }
