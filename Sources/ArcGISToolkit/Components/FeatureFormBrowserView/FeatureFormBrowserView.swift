@@ -15,6 +15,8 @@
 import ArcGIS
 import SwiftUI
 
+internal import os
+
 /// <#Description#>
 public struct FeatureFormBrowserView: View {
     /// <#Description#>
@@ -155,5 +157,12 @@ extension FeatureFormBrowserView /* TabView */ {
                 .editingButtons(.hidden)
                 .environment(model)
         }
+    }
+}
+
+extension Logger {
+    /// A logger for the feature form view.
+    static var featureFormBrowserView: Logger {
+        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormBrowserView")
     }
 }
