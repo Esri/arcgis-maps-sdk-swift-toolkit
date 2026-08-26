@@ -23,7 +23,7 @@ struct ExampleMapView: View {
     /// The geometry editor that the feature editor will use to edit geometries
     /// on the `MapView`.
     @State private var geometryEditor = GeometryEditor()
-    /// The map with the features to edit, created from a Naperville Electric web map portal item.
+    /// The map with the features to edit.
     @State private var map = Map()
     /// The point on the screen where the user tapped.
     @State private var tapPoint: CGPoint?
@@ -79,15 +79,16 @@ struct ExampleMapView: View {
         }
         .task {
             do {
-                try await setUp()
+                map = try await makeMap()
             } catch {
-                print("Setup error:", error)
+                print("Failed to make map:", error)
             }
         }
     }
     
-    /// Sets up the map.
-    private func setUp() async throws {
+    /// Returns a map with the features to edit, created from a Naperville
+    /// Electric web map portal item.
+    private func makeMap() async throws -> Map {
         let url = URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
         let map = Map(url: url)!
         
@@ -107,6 +108,6 @@ struct ExampleMapView: View {
         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
         try await map.load()
         
-        self.map = map
+        return map
     }
 }
