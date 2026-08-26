@@ -184,6 +184,7 @@ extension FeatureFormBrowserView /* Browser style variants */ {
         }
     }
     
+    /// <#Description#>
     @ViewBuilder
     var menuView: some View {
         if let form = model.selectedForm {
