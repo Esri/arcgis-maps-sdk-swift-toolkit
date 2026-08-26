@@ -104,7 +104,7 @@ struct FeatureFormToolbar: ViewModifier {
                         .disabled(navigationIsDisabled)
                     }
                 }
-                if let browserModel, browserModel.mode == .menu {
+                if let browserModel, browserModel.style == .menu {
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
                             Section {

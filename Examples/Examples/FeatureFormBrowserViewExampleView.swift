@@ -21,7 +21,9 @@ struct FeatureFormBrowserViewExampleView: View {
     /// A Boolean value indicating whether general form workflow errors are presented.
     @State private var alertIsPresented = false
     /// <#Description#>
-    @State private var browserModel = FeatureFormBrowserView.Model(mode: .menu)
+    @State private var browserModel = FeatureFormBrowserView.Model()
+    /// <#Description#>
+    @State private var browserStyle = FeatureFormBrowserView.Style.tabs
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
@@ -62,6 +64,7 @@ struct FeatureFormBrowserViewExampleView: View {
                     featureForm = nil
                 } content: {
                     FeatureFormBrowserView(model: $browserModel)
+                        .style(browserStyle)
                 }
                 .task {
                     do {
@@ -79,6 +82,16 @@ struct FeatureFormBrowserViewExampleView: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         submitButton
+                    }
+                    ToolbarItem(placement: .bottomBar) {
+                        Menu("Settings") {
+                            Button("Tabs") {
+                                browserStyle = .tabs
+                            }
+                            Button("Menu") {
+                                browserStyle = .menu
+                            }
+                        }
                     }
                 }
         }
