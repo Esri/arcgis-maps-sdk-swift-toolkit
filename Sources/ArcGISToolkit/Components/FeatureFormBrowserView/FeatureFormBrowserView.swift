@@ -165,7 +165,7 @@ extension FeatureFormBrowserView /* Model */ {
     }
 }
 
-extension FeatureFormBrowserView /* TabView */ {
+extension FeatureFormBrowserView /* Browser style variants */ {
     /// <#Description#>
     var tabView: some View {
         TabView(selection: $model.selectedID) {
