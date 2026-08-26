@@ -64,8 +64,22 @@ struct FeatureFormToolbar: ViewModifier {
                 }
             }
             .toolbar {
-                if !isRootView {
-                    ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .topBarLeading) {
+                    if isRootView, let browserModel, browserModel.canGoBack {
+                        Button {
+                            browserModel.navigateBack()
+                        } label: {
+                            Label {
+                                Text(
+                                    "Back",
+                                    bundle: .toolkitModule,
+                                    comment: "A generic label for navigating to the previous screen or returning to the previous context."
+                                )
+                            } icon: {
+                                Image(systemName: "chevron.backward")
+                            }
+                        }
+                    } else if !isRootView {
                         Button {
                             if alertBeforeDismissing {
                                 featureFormViewModel.navigationAlertInfo = (true, {

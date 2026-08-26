@@ -59,6 +59,11 @@ extension FeatureFormBrowserView /* Model */ {
         }
         
         /// <#Description#>
+        var canGoBack: Bool {
+            backStack.count > 1
+        }
+        
+        /// <#Description#>
         var forms = [FeatureForm]()
         
         /// <#Description#>
@@ -115,6 +120,20 @@ extension FeatureFormBrowserView /* Model */ {
                 return
             }
             forms.append(form)
+        }
+        
+        /// <#Description#>
+        public func navigateBack() {
+            guard canGoBack else {
+                Logger.featureFormBrowserView.warning("Cannot navigate backwards without history.")
+                return
+            }
+            backStack.removeLast()
+            guard let lastID = backStack.last, let form = form(for: lastID) else {
+                Logger.featureFormBrowserView.warning("No ID for back navigation.")
+                return
+            }
+            select(form: form)
         }
         
         /// <#Description#>
