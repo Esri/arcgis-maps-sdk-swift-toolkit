@@ -58,6 +58,11 @@ extension FeatureFormBrowserView /* Model */ {
         }
         
         /// <#Description#>
+        public var count: Int {
+            forms.count == ids.count ? forms.count : -1
+        }
+        
+        /// <#Description#>
         var forms = [FeatureForm]()
         
         /// <#Description#>
@@ -89,7 +94,7 @@ extension FeatureFormBrowserView /* Model */ {
         /// <#Description#>
         /// - Parameter form: <#form description#>
         /// - Parameter select: <#select description#>
-        public func add(form: FeatureForm, select: Bool = true) {
+        public func add(form: FeatureForm, select: Bool = false) {
             guard let id = form.feature.globalID else {
                 Logger.featureFormBrowserView.warning("The feature cannot be added because the its global ID is not available.")
                 return
@@ -127,7 +132,7 @@ extension FeatureFormBrowserView /* Model */ {
                 Logger.featureFormBrowserView.warning("No ID for back navigation.")
                 return
             }
-            select(form: form)
+            select(form: form, recordNavigation: false)
         }
         
         /// <#Description#>
@@ -150,8 +155,8 @@ extension FeatureFormBrowserView /* Model */ {
         
         /// <#Description#>
         /// - Parameter form: <#form description#>
-        public func select(form: FeatureForm) {
-            if let selectedID {
+        public func select(form: FeatureForm, recordNavigation: Bool = true) {
+            if recordNavigation, let selectedID {
                 backStack.append(selectedID)
             }
             selectedID = form.feature.globalID

@@ -28,8 +28,6 @@ struct FeatureFormBrowserViewExampleView: View {
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
     @State private var editsAreBeingApplied = false
-    /// The presented feature form.
-    @State private var featureForm: FeatureForm?
     /// A Boolean value indicating whether the form is presented.
     @State private var featureFormViewIsPresented = false
     /// The point on the screen the user tapped on to identify a feature.
@@ -61,7 +59,13 @@ struct FeatureFormBrowserViewExampleView: View {
                     submittingOverlay
                 }
                 .sheet(isPresented: $featureFormViewIsPresented) {
-                    featureForm = nil
+                    browserModel = FeatureFormBrowserView.Model()
+                    map.operationalLayers.forEach {
+                        ($0 as? FeatureLayer)?.clearSelection()
+                        ($0 as? GroupLayer)?.layers.forEach {
+                            ($0 as? FeatureLayer)?.clearSelection()
+                        }
+                    }
                 } content: {
                     FeatureFormBrowserView(model: $browserModel)
                         .style(browserStyle)
@@ -74,6 +78,12 @@ struct FeatureFormBrowserViewExampleView: View {
                         Logger.featureFormBrowserViewExample.error("Error creating credential: \(error.localizedDescription)")
                     }
                 }
+                .task(id: browserModel.count) {
+                    // swiftlint:disable:next empty_count
+                    if browserModel.count == 0 {
+                        featureFormViewIsPresented = false
+                    }
+                }
                 .task(id: identifyScreenPoint) {
                     guard !editsAreBeingApplied,
                           let identifyScreenPoint else { return }
@@ -84,14 +94,11 @@ struct FeatureFormBrowserViewExampleView: View {
                         submitButton
                     }
                     ToolbarItem(placement: .bottomBar) {
-                        Menu("Settings") {
-                            Button("Tabs") {
-                                browserStyle = .tabs
-                            }
-                            Button("Menu") {
-                                browserStyle = .menu
-                            }
+                        Button("Open Browser \(browserModel.count)") {
+                            featureFormViewIsPresented = true
                         }
+                        // swiftlint:disable:next empty_count
+                        .disabled(browserModel.count == 0)
                     }
                 }
         }
@@ -170,25 +177,12 @@ extension FeatureFormBrowserViewExampleView {
         if let geoElements = identifyLayerResults?.first?.geoElements,
            let feature = geoElements.first as? ArcGISFeature {
             let featureForm = FeatureForm(feature: feature)
-            featureFormViewIsPresented = true
+            (feature.table?.layer as? FeatureLayer)?.selectFeature(feature)
             browserModel.add(form: featureForm)
         }
     }
     
     // MARK: Properties
-    
-    /// The feature form view shown in the sheet over the map.
-    private var featureFormView: some View {
-        let featureForm = featureForm!
-        return FeatureFormView(root: featureForm, isPresented: $featureFormViewIsPresented)
-            .onFormEditingEvent { editingEvent in
-                if case .savedEdits = editingEvent,
-                   let table = featureForm.feature.table as? ServiceFeatureTable,
-                   !editedTables.contains(where: { $0 === table }) {
-                    editedTables.append(table)
-                }
-            }
-    }
     
     /// The button used to dismiss the submission error alert.
     private var okButton: some View {
@@ -227,7 +221,6 @@ extension FeatureFormBrowserViewExampleView {
         }
     }
 }
-
 
 private extension ArcGISCredential {
     static var publicSample: ArcGISCredential {
