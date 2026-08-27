@@ -100,9 +100,10 @@ extension FeatureFormBrowserView /* Model */ {
                 return
             }
             defer {
-                // Select the form, if directed, regardless of whether it's
-                // already in the collection of managed forms.
-                if select {
+                // Select the form, if directed or no form is already selected,
+                // regardless of whether it's already in the collection of
+                // managed forms.
+                if select || selectedID == nil {
                     self.select(form: form)
                 }
             }
@@ -196,6 +197,10 @@ extension FeatureFormBrowserView /* Browser style variants */ {
             FeatureFormView(root: form)
                 .editingButtons(.hidden)
                 .environment(model)
+        } else {
+            ContentUnavailableView {
+                Text("An unexpected error has occurred.")
+            }
         }
     }
 }

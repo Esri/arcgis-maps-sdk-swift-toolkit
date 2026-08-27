@@ -22,8 +22,6 @@ struct FeatureFormBrowserViewExampleView: View {
     @State private var alertIsPresented = false
     /// <#Description#>
     @State private var browserModel = FeatureFormBrowserView.Model()
-    /// <#Description#>
-    @State private var browserStyle = FeatureFormBrowserView.Style.tabs
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
@@ -68,7 +66,6 @@ struct FeatureFormBrowserViewExampleView: View {
                     }
                 } content: {
                     FeatureFormBrowserView(model: $browserModel)
-                        .style(browserStyle)
                 }
                 .task {
                     do {
