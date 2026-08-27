@@ -109,8 +109,12 @@ struct FeatureFormToolbar: ViewModifier {
                         Menu {
                             @Bindable var model = browserModel
                             Picker("Browser Style", selection: $model.style) {
+                                Text("List")
+                                    .tag(FeatureFormBrowserView.Style.list)
                                 Text("Menu")
                                     .tag(FeatureFormBrowserView.Style.menu)
+                                Text("Paged")
+                                    .tag(FeatureFormBrowserView.Style.paged)
                                 Text("Tabs")
                                     .tag(FeatureFormBrowserView.Style.tabs)
                             }

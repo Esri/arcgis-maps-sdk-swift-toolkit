@@ -30,8 +30,12 @@ public struct FeatureFormBrowserView: View {
     
     public var body: some View {
         switch model.style {
+        case .list:
+            list
         case .menu:
             menuView
+        case .paged:
+            paged
         case .tabs:
             tabView
         }
@@ -167,6 +171,40 @@ extension FeatureFormBrowserView /* Model */ {
 
 extension FeatureFormBrowserView /* Browser style variants */ {
     /// <#Description#>
+    @ViewBuilder
+    var list: some View {
+        Text("Under construction")
+            .foregroundStyle(.red)
+        List(model.forms, id: \.feature.globalID) { form in
+            Text(form.title)
+                .disabled(true)
+        }
+        menuView
+    }
+    
+    /// <#Description#>
+    @ViewBuilder
+    var menuView: some View {
+        if let form = model.selectedForm {
+            FeatureFormView(root: form)
+                .editingButtons(.hidden)
+                .environment(model)
+        } else {
+            ContentUnavailableView {
+                Text("An unexpected error has occurred.")
+            }
+        }
+    }
+    
+    /// <#Description#>
+    @ViewBuilder
+    var paged: some View {
+        Text("Under construction")
+            .foregroundStyle(.red)
+        menuView
+    }
+    
+    /// <#Description#>
     var tabView: some View {
         TabView(selection: $model.selectedID) {
             ForEach(model.ids, id: \.self) { id in
@@ -189,26 +227,14 @@ extension FeatureFormBrowserView /* Browser style variants */ {
             }
         }
     }
-    
-    /// <#Description#>
-    @ViewBuilder
-    var menuView: some View {
-        if let form = model.selectedForm {
-            FeatureFormView(root: form)
-                .editingButtons(.hidden)
-                .environment(model)
-        } else {
-            ContentUnavailableView {
-                Text("An unexpected error has occurred.")
-            }
-        }
-    }
 }
 
 extension FeatureFormBrowserView /* Enums */ {
     /// <#Description#>
     public enum Style {
+        case list
         case menu
+        case paged
         case tabs
     }
 }
