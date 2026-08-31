@@ -23,19 +23,9 @@ struct ExampleMapView: View {
     /// The geometry editor that the feature editor will use to edit geometries
     /// on the `MapView`.
     @State private var geometryEditor = GeometryEditor()
-    /// The map with the features to edit, created from a Naperville Electric web map portal item.
-    @State private var map: Map = {
-        let url = URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
-        let map = Map(url: url)!
-        
-        // Enables full resolution feature tiling to improve snapping accuracy.
-        map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
-        
-        let initialExtent = Envelope(xRange: -9812750 ... -9812387, yRange: 5131332 ... 5131965)
-        map.initialViewpoint = Viewpoint(boundingGeometry: initialExtent)
-        
-        return map
-    }()
+    /// The result of loading the map used by the example. When the operation
+    /// succeeds, this will contain a map with features to edit.
+    @State private var mapLoadResult: Result<Map, (any Error)>?
     /// The point on the screen where the user tapped.
     @State private var tapPoint: CGPoint?
     
@@ -50,55 +40,74 @@ struct ExampleMapView: View {
     }
     
     var body: some View {
-        MapViewReader { mapViewProxy in
-            MapView(map: map)
-                .contentInsets(contentInsets)
-                .geometryEditor(geometryEditor)
-                .onSingleTapGesture { screenPoint, _ in
-                    guard tapPoint == nil else { return }
-                    tapPoint = screenPoint
-                }
-                .task(id: tapPoint) {
-                    // Identifies the feature at the tapped screen point and
-                    // uses it to display the feature editor.
-                    guard let tapPoint else { return }
-                    defer { self.tapPoint = nil }
-                    
-                    do {
-                        let results = try await mapViewProxy.identifyLayers(
-                            screenPoint: tapPoint,
-                            tolerance: 10
-                        )
-                        let firstFeature = results.first?.geoElements.first as? ArcGISFeature
-                        // The identified feature is passed to the feature editor.
-                        featureToEdit = firstFeature
-                    } catch {
-                        print("Identify error:", error)
+        switch mapLoadResult {
+        case .success(let map):
+            MapViewReader { mapViewProxy in
+                MapView(map: map)
+                    .contentInsets(contentInsets)
+                    .geometryEditor(geometryEditor)
+                    .onSingleTapGesture { screenPoint, _ in
+                        guard tapPoint == nil else { return }
+                        tapPoint = screenPoint
                     }
-                }
-                .overlay(alignment: .topTrailing) {
-                    // The feature editor needs to be placed below the
-                    // `featureEditorInspector` modifier in the view hierarchy.
-                    FeatureEditor(
-                        $featureToEdit,
-                        geometryEditor: geometryEditor,
-                        map: map,
-                        mapViewProxy: mapViewProxy
-                    )
-                    .padding()
-                }
-        }
-        .task {
-            do {
-                try await setUp()
-            } catch {
-                print("Setup error:", error)
+                    .task(id: tapPoint) {
+                        // Identifies the feature at the tapped screen point and
+                        // uses it to display the feature editor.
+                        guard let tapPoint else { return }
+                        defer { self.tapPoint = nil }
+                        
+                        do {
+                            let results = try await mapViewProxy.identifyLayers(
+                                screenPoint: tapPoint,
+                                tolerance: 10
+                            )
+                            let firstFeature = results.first?.geoElements.first as? ArcGISFeature
+                            // The identified feature is passed to the feature editor.
+                            featureToEdit = firstFeature
+                        } catch {
+                            print("Identify error:", error)
+                        }
+                    }
+                    .overlay(alignment: .topTrailing) {
+                        // The feature editor needs to be placed below the
+                        // `featureEditorInspector` modifier in the view hierarchy.
+                        FeatureEditor(
+                            $featureToEdit,
+                            geometryEditor: geometryEditor,
+                            map: map,
+                            mapViewProxy: mapViewProxy
+                        )
+                        .padding()
+                    }
             }
+        case .failure(let error):
+            ContentUnavailableView {
+                Label("Failed to load map", systemImage: "exclamationmark.triangle")
+            } description: {
+                Text(error.localizedDescription)
+            } actions: {
+                Button("Retry") { mapLoadResult = nil }
+            }
+        case .none:
+            ProgressView("Loading map")
+                .task {
+                    mapLoadResult = await Result { try await makeMap() }
+                }
         }
     }
     
-    /// Sets up the map.
-    private func setUp() async throws {
+    /// Returns a map with the features to edit, created from a Naperville
+    /// Electric web map portal item.
+    private func makeMap() async throws -> Map {
+        let url = URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
+        let map = Map(url: url)!
+        
+        // Enables full resolution feature tiling to improve snapping accuracy.
+        map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
+        
+        let initialExtent = Envelope(xRange: -9812750 ... -9812387, yRange: 5131332 ... 5131965)
+        map.initialViewpoint = Viewpoint(boundingGeometry: initialExtent)
+        
         // Note: Never hardcode login information in a production application.
         // This is done solely for the sake of the example.
         let credential = try await TokenCredential.credential(
@@ -107,6 +116,8 @@ struct ExampleMapView: View {
             password: "I68VGU^nMurF"
         )
         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
-        try await map.retryLoad()
+        try await map.load()
+        
+        return map
     }
 }
