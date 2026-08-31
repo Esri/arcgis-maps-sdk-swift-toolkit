@@ -125,6 +125,9 @@ public struct FeatureEditor: View {
             .onChange(of: ObjectIdentifier(model.geometryEditor.snapSettings)) {
                 model.syncSnapSourceSettings()
             }
+            .task(id: map) {
+                await model.populateSharedTemplates(from: map)
+            }
             .task(id: model.viewpointGeometry, setViewpoint)
             .onDisappear(perform: model.stopEditing)
     }
