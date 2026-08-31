@@ -57,6 +57,17 @@ struct CustomVPSProviderExampleView: View {
                         SceneView(scene: scene)
                     }
                     .calibrationViewHidden(true)
+                    .safeAreaInset(edge: .top) {
+                        Label(
+                            provider.statusMessage,
+                            systemImage: provider.hasBlockingError
+                                ? "exclamationmark.triangle"
+                                : "location.viewfinder"
+                        )
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
+                        .background(.regularMaterial, in: .capsule)
+                    }
                     .toolbar {
                         ToolbarItem(placement: .bottomBar) {
                             Toggle("Show Buildings", isOn: $streetscapeGeometryEnabled)
