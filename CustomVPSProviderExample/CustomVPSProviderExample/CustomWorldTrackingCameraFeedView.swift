@@ -24,6 +24,17 @@ import SwiftUI
 /// Displays the AR camera feed and updates world-scale camera state using
 /// Google geospatial tracking.
 struct CustomWorldTrackingCameraFeedView: View {
+    // These thresholds match Google's ARCore Geospatial example:
+    // https://github.com/google-ar/arcore-ios-sdk/blob/5aa221f8e9a516643fcc7b080c565f22b20ab57c/Examples/GeospatialExample/GeospatialExample/GeospatialManager.swift#L43-L53
+    /// Accuracy required to initially consider the device localized.
+    private static let localizedHorizontalAccuracy = 10.0
+    /// Yaw accuracy required to initially consider the device localized.
+    private static let localizedYawAccuracy = 15.0
+    /// Accuracy at which an already-localized device loses localization.
+    private static let retainedHorizontalAccuracy = 20.0
+    /// Yaw accuracy at which an already-localized device loses localization.
+    private static let retainedYawAccuracy = 25.0
+    
     /// Shared world-scale context used to read provider state and update the
     /// scene.
     let context: WorldScaleSceneView<CustomWorldTracking>.Context
@@ -46,13 +57,16 @@ struct CustomWorldTrackingCameraFeedView: View {
     var body: some View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
-                guard let interfaceOrientation,
+                guard context.provider.isGARSessionConfigured,
+                      !context.provider.hasBlockingError,
+                      let interfaceOrientation,
                       let garFrame = try? context.provider.garSession.update(frame),
                       let earth = garFrame.earth else {
                     return
                 }
                 
                 let camera = frame.camera
+                updateLocalizationState(for: earth)
                 
                 if context.isLocalized {
                     updateCameraController(
@@ -68,8 +82,6 @@ struct CustomWorldTrackingCameraFeedView: View {
                     if streetscapeGeometryEnabled {
                         updateStreetscapeGeometry(using: garFrame.streetscapeGeometries ?? [])
                     }
-                } else {
-                    updateLocalizationState(for: earth.trackingState)
                 }
             }
             .onCameraDidChangeTrackingState { _, trackingState in
@@ -82,11 +94,41 @@ struct CustomWorldTrackingCameraFeedView: View {
             }
     }
     
-    /// Updates the localization based on the given tracking state.
-    /// - Parameter trackingState: The ARCore frame tracking state.
-    func updateLocalizationState(for trackingState: GARTrackingState?) {
-        guard trackingState == .tracking else { return }
-        context.isLocalized = true
+    /// Updates localization using ARCore Earth state and geospatial accuracy.
+    /// - Parameter earth: The ARCore Earth state for the current frame.
+    func updateLocalizationState(for earth: GAREarth) {
+        guard earth.earthState == .enabled else {
+            context.isLocalized = false
+            context.provider.updateStatus(
+                "Google Earth localization is unavailable.",
+                isBlocking: true
+            )
+            return
+        }
+        
+        guard earth.trackingState == .tracking,
+              let transform = earth.cameraGeospatialTransform else {
+            context.isLocalized = false
+            context.provider.updateStatus(
+                "Point the camera at nearby buildings and signs."
+            )
+            return
+        }
+        
+        let isAccurate = if context.isLocalized {
+            transform.horizontalAccuracy < Self.retainedHorizontalAccuracy
+                && transform.orientationYawAccuracy < Self.retainedYawAccuracy
+        } else {
+            transform.horizontalAccuracy < Self.localizedHorizontalAccuracy
+                && transform.orientationYawAccuracy < Self.localizedYawAccuracy
+        }
+        
+        context.isLocalized = isAccurate
+        context.provider.updateStatus(
+            isAccurate
+                ? "Localization complete."
+                : "Improving Google VPS accuracy…"
+        )
     }
 }
 
