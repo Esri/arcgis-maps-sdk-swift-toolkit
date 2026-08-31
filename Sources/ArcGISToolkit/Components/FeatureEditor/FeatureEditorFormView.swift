@@ -43,12 +43,21 @@ struct FeatureEditorFormView: View {
     /// non-`nil` only when there are edits, so the `FeatureFormView`
     /// knows when to show the editing buttons and block navigation.
     private var saveGeometryEditsAction: (() throws -> Void)? {
-        guard model.geometryEditorCanUndo else { return nil }
+        let initialGeometry = model.initialGeometry
+        let currentGeometry = model.geometryEditorGeometry
+        let geometryIsUnchanged = currentGeometry == initialGeometry
+        // This is needed because the geometry editor starts with an empty
+        // geometry when initialGeometry is nil, which causes
+        // geometryIsUnchanged to be false even though no edits have been made.
+        let startedWithGeometryType = initialGeometry == nil && currentGeometry?.isEmpty == true
+        
+        guard !geometryIsUnchanged, !startedWithGeometryType else { return nil }
+        
         return {
-            guard let geometry = model.geometryEditorGeometry, geometry.sketchIsValid else {
+            guard let currentGeometry, currentGeometry.sketchIsValid else {
                 throw GeometryEditorError.invalidGeometry
             }
-            model.feature?.geometry = geometry
+            model.feature?.geometry = currentGeometry
         }
     }
     

@@ -42,10 +42,8 @@ final class FeatureEditorModel {
     var feature: ArcGISFeature? {
         presentedFeatureForm?.feature ?? rootFeatureForm?.feature
     }
-    /// The geometry of the `feature` before editing, used to reset the
-    /// geometry when edits are discarded.
-    @ObservationIgnored
-    private var initialGeometry: Geometry?
+    /// The geometry of the `feature` before editing.
+    private(set) var initialGeometry: Geometry?
     /// A Boolean value that indicates whether the Feature Editor inspector is presented.
     var isPresented: Bool {
         get { state != .stopped }
