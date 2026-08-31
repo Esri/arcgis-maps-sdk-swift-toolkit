@@ -247,6 +247,7 @@ struct FeatureEditorModelTests {
         let modelGeometry = try #require(model.geometryEditorGeometry)
         #expect(modelGeometry is Point)
         #expect(modelGeometry.isEmpty)
+        #expect(model.initialGeometry == nil)
         #expect(model.viewpointGeometry == nil)
     }
     
@@ -316,6 +317,7 @@ private extension FeatureEditorModel {
     func expectDefaultPropertyValues(sourceLocation: SourceLocation = #_sourceLocation) async {
         #expect(state == .stopped, sourceLocation: sourceLocation)
         #expect(feature == nil, sourceLocation: sourceLocation)
+        #expect(initialGeometry == nil, sourceLocation: sourceLocation)
         #expect(!isPresented, sourceLocation: sourceLocation)
         #expect(rootFeatureForm == nil, sourceLocation: sourceLocation)
         #expect(loadResult == nil, sourceLocation: sourceLocation)
@@ -350,6 +352,7 @@ private extension FeatureEditorModel {
             self.geometryEditorGeometry == geometry,
             sourceLocation: sourceLocation
         )
+        #expect(initialGeometry == geometry, sourceLocation: sourceLocation)
         
         // The geometry is used to set the viewpoint.
         #expect(viewpointGeometry == geometry, sourceLocation: sourceLocation)
