@@ -17,32 +17,49 @@ import ArcGISToolkit
 import ARCore
 import ARCoreGeospatial
 import ARKit
+import CoreLocation
+import Observation
 import os
 import RealityKit
 
 /// A world-tracking provider backed by the Google ARCore SDK.
-final class CustomWorldTracking {
-    @MainActor let arSessionProvider = ARSessionProvider<ARView>()
+@MainActor
+@Observable
+final class CustomWorldTracking: NSObject {
+    let arSessionProvider = ARSessionProvider<ARView>()
     /// The ARCore session that produces geospatial and streetscape updates.
     let garSession: GARSession
     /// The root world origin anchor for all generated streetscape content.
-    @MainActor let worldOrigin = AnchorEntity(world: matrix_identity_float4x4)
+    let worldOrigin = AnchorEntity(world: matrix_identity_float4x4)
     /// A cache of generated streetscape models keyed by ARCore geometry
     /// identifier.
-    var streetscapeGeometryModels: [UUID: ModelEntity] = [:]
+    @ObservationIgnored var streetscapeGeometryModels: [UUID: ModelEntity] = [:]
+    /// Guidance or failure information for the current localization state.
+    private(set) var statusMessage = "Starting Google VPS…"
+    /// A Boolean value indicating whether an unrecoverable issue prevents
+    /// localization.
+    private(set) var hasBlockingError = false
+    
+    /// The location manager retained for the asynchronous authorization and
+    /// VPS availability flow.
+    private let locationManager = CLLocationManager()
+    /// A Boolean value indicating whether the ARCore session is ready for
+    /// frame updates.
+    @ObservationIgnored private(set) var isGARSessionConfigured = false
     
     /// Creates an instance with the given API key and bundle identifier.
     /// - Parameters:
     ///   - apiKey: An API key for Google Cloud Services.
     ///   - bundleIdentifier: The bundle identifier associated to the API key.
     ///   If `nil`, defaults to `Bundle.main.bundleIdentifier`.
-    @MainActor
     init(apiKey: String, bundleIdentifier: String? = nil) throws {
         garSession = try GARSession(apiKey: apiKey, bundleIdentifier: bundleIdentifier)
+        super.init()
+        locationManager.delegate = self
     }
 }
 
-extension CustomWorldTracking: WorldTrackingProvider {
+extension CustomWorldTracking: @MainActor WorldTrackingProvider {
     typealias CameraFeedView = CustomWorldTrackingCameraFeedView
     
     var arConfiguration: ARConfiguration {
@@ -58,35 +75,128 @@ extension CustomWorldTracking: WorldTrackingProvider {
             setProjectionEngineDirectoryURL()
         }
         
-        let locationManager = CLLocationManager()
-        if locationManager.authorizationStatus == .notDetermined {
-            locationManager.requestWhenInUseAuthorization()
-        }
-        
-        guard locationManager.authorizationStatus == .authorizedWhenInUse else {
-            return
-        }
-        
         runARSession()
         arSessionProvider.scene.addAnchor(worldOrigin)
-        setupGARSession()
+        updateLocationAuthorization()
     }
     
     func stop() {
         pauseARSession()
+        locationManager.stopUpdatingLocation()
+    }
+    
+    func reset() {
+        updateStatus("Localizing with Google VPS…")
+        runARSession(options: .resetTracking)
+    }
+}
+
+extension CustomWorldTracking: @MainActor CLLocationManagerDelegate {
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        updateLocationAuthorization()
+    }
+    
+    func locationManager(
+        _ manager: CLLocationManager,
+        didUpdateLocations locations: [CLLocation]
+    ) {
+        guard let coordinate = locations.last?.coordinate else { return }
+        manager.stopUpdatingLocation()
+        garSession.checkVPSAvailability(coordinate: coordinate) { availability in
+            Task { @MainActor in
+                if availability != .available {
+                    self.updateStatus(
+                        "Google VPS is unavailable at the current location.",
+                        isBlocking: true
+                    )
+                }
+            }
+        }
+    }
+    
+    func locationManager(
+        _ manager: CLLocationManager,
+        didFailWithError error: any Error
+    ) {
+        Logger.customVPSProviderExample.error(
+            "Location request failed: \(error.localizedDescription)"
+        )
+        updateStatus(
+            "Google VPS could not determine the current location.",
+            isBlocking: true
+        )
     }
 }
 
 extension CustomWorldTracking {
+    /// Updates the user-facing localization status.
+    /// - Parameters:
+    ///   - message: The guidance or error to display.
+    ///   - isBlocking: A Boolean value indicating whether localization cannot
+    ///   continue without user action.
+    func updateStatus(_ message: String, isBlocking: Bool = false) {
+        statusMessage = message
+        hasBlockingError = isBlocking
+    }
+    
+    /// Updates ARCore setup in response to location authorization.
+    private func updateLocationAuthorization() {
+        switch locationManager.authorizationStatus {
+        case .authorizedAlways, .authorizedWhenInUse:
+            guard locationManager.accuracyAuthorization == .fullAccuracy else {
+                updateStatus(
+                    "Google VPS requires Precise Location.",
+                    isBlocking: true
+                )
+                return
+            }
+            setupGARSession()
+            guard isGARSessionConfigured else { return }
+            updateStatus("Point the camera at nearby buildings and signs.")
+            locationManager.requestLocation()
+        case .notDetermined:
+            updateStatus("Allow location access to use Google VPS.")
+            locationManager.requestWhenInUseAuthorization()
+        case .denied, .restricted:
+            updateStatus(
+                "Google VPS requires location permission.",
+                isBlocking: true
+            )
+        @unknown default:
+            updateStatus(
+                "Google VPS could not determine location authorization.",
+                isBlocking: true
+            )
+        }
+    }
+    
     /// Configures the ARCore session.
     private func setupGARSession() {
-        guard garSession.isGeospatialModeSupported(.enabled) else { return }
+        guard !isGARSessionConfigured else { return }
+        guard garSession.isGeospatialModeSupported(.enabled) else {
+            updateStatus(
+                "Google geospatial tracking is unsupported on this device.",
+                isBlocking: true
+            )
+            return
+        }
         
         let configuration = GARSessionConfiguration()
         configuration.geospatialMode = .enabled
         configuration.streetscapeGeometryMode = .enabled
         var error: NSError?
         garSession.setConfiguration(configuration, error: &error)
+        if let error {
+            Logger.customVPSProviderExample.error(
+                "ARCore configuration failed: \(error.localizedDescription)"
+            )
+            updateStatus(
+                "Google VPS could not be configured.",
+                isBlocking: true
+            )
+        } else {
+            isGARSessionConfigured = true
+        }
     }
 }
 
