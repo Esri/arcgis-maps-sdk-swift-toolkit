@@ -208,7 +208,6 @@ final class FeatureEditorModel {
     /// This is needed to prevent the current state from interfering with
     /// future uses of the `FeatureEditor` view.
     private func resetProperties() {
-        initialGeometry = nil
         rootFeatureForm = nil
         presentedFeatureForm = nil
         snapSettingsSheetIsPresented = false
@@ -318,5 +317,6 @@ final class FeatureEditorModel {
         geometryEditorCanUndo = false
         geometryEditorGeometry = nil
         geometryEditorIsStarted = false
+        initialGeometry = nil
     }
 }
