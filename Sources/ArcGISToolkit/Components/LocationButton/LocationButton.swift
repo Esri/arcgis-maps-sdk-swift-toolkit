@@ -22,14 +22,13 @@ internal import os
 /// Gives the user a variety of options to set the auto-pan mode or stop the
 /// location data source.
 ///
-/// The button will cycle through the specified auto-pan modes on tap. The user
-/// can also hide the location display or select the auto-pan mode through a
-/// context menu.
+/// After starting the location display, the button cycles through the specified
+/// auto-pan modes on tap.
 ///
-/// If there are no auto-pan modes specified, or if the only specified mode is
-/// `off`, then:
-/// - the location display is toggled on/off when pressed
-/// - the context menu is not shown when long pressed
+/// By default, a context menu allows the user to hide the location display.
+/// The menu can also be shown when hiding is disabled if at least two auto-pan
+/// modes are specified. Auto-pan mode options appear in the menu only when at
+/// least two modes are specified.
 public struct LocationButton: View {
     /// The location display controlled by the location button.
     let locationDisplay: LocationDisplay
@@ -43,9 +42,24 @@ public struct LocationButton: View {
     /// A Boolean value indicating that the button action is being performed.
     @State private(set) var isPerformingButtonAction = false
     
+    /// A Boolean value indicating whether the user can hide the location display.
+    private(set) var allowsHidingLocationDisplay = true
+    
+    /// The action performed when the button is pressed.
+    var currentAction: Action? {
+        Action(
+            status: status,
+            autoPanMode: autoPanMode,
+            autoPanOptions: autoPanModes
+        )
+    }
+    
     /// A value indicating whether the button is disabled.
     var buttonIsDisabled: Bool {
-        status == .starting || status == .stopping || isPerformingButtonAction
+        status == .starting ||
+        status == .stopping ||
+        isPerformingButtonAction ||
+        (currentAction == nil && !shouldShowContextMenu)
     }
     
 #if os(visionOS)
@@ -72,6 +86,16 @@ public struct LocationButton: View {
     public func autoPanModes(_ autoPanModes: [LocationDisplay.AutoPanMode]) -> Self {
         var copy = self
         copy.autoPanModes = Array(autoPanModes.uniqued())
+        return copy
+    }
+    
+    /// Sets whether the user can hide the location display.
+    /// - Parameter isAllowed: A Boolean value indicating whether hiding the
+    /// location display is included in the context menu.
+    /// - Returns: A new location button configured with the given value.
+    public func allowsHidingLocationDisplay(_ isAllowed: Bool) -> Self {
+        var copy = self
+        copy.allowsHidingLocationDisplay = isAllowed
         return copy
     }
     
@@ -226,44 +250,48 @@ public struct LocationButton: View {
     
     @ViewBuilder
     private var contextMenuItems: some View {
-        // Only show context menu if there are 2 or more auto-pan options and
-        // status of the location display is started.
-        if autoPanModes.count >= 2 && status == .started {
-            Section {
-                ForEach(contextMenuAutoPanOptions, id: \.self) { autoPanMode in
-                    Button {
-                        self.autoPanMode = autoPanMode
-                    } label: {
-                        Label {
-                            autoPanMode.label
-                        } icon: {
-                            Image(systemName: autoPanMode.imageSystemName)
+        if shouldShowContextMenu && status == .started {
+            if autoPanModes.count > 1 {
+                Section {
+                    ForEach(contextMenuAutoPanOptions, id: \.self) { autoPanMode in
+                        Button {
+                            self.autoPanMode = autoPanMode
+                        } label: {
+                            Label {
+                                autoPanMode.label
+                            } icon: {
+                                Image(systemName: autoPanMode.imageSystemName)
+                            }
                         }
+                        .accessibilityHint(autoPanMode.accessibilityHint)
                     }
-                    .accessibilityHint(autoPanMode.accessibilityHint)
+                } header: {
+                    autoPanSectionHeaderLabelText
                 }
-            } header: {
-                autoPanSectionHeaderLabelText
             }
             
-            Button {
-                Task {
-                    await hideLocationDisplay()
+            if allowsHidingLocationDisplay {
+                Button {
+                    isPerformingButtonAction = true
+                    Task {
+                        await hideLocationDisplay()
+                        isPerformingButtonAction = false
+                    }
+                } label: {
+                    Label {
+                        hideLocationLabelText
+                    } icon: {
+                        Image(systemName: "location.slash")
+                    }
                 }
-            } label: {
-                Label {
-                    hideLocationLabelText
-                } icon: {
-                    Image(systemName: "location.slash")
-                }
-            }
-            .accessibilityHint(
-                Text(
-                    "Hide location display",
-                    bundle: .toolkitModule,
-                    comment: "The accessibility hint of the hide location display context menu option."
+                .accessibilityHint(
+                    Text(
+                        "Hide location display",
+                        bundle: .toolkitModule,
+                        comment: "The accessibility hint of the hide location display context menu option."
+                    )
                 )
-            )
+            }
         }
     }
     
@@ -290,6 +318,11 @@ public struct LocationButton: View {
 }
 
 extension LocationButton {
+    /// A Boolean value indicating whether the context menu should be shown.
+    var shouldShowContextMenu: Bool {
+        allowsHidingLocationDisplay || autoPanModes.count > 1
+    }
+    
     /// The initial auto-pan mode to be used.
     var initialAutoPanMode: LocationDisplay.AutoPanMode {
         autoPanModes.first ?? .off
@@ -298,9 +331,10 @@ extension LocationButton {
     /// The context menu auto-pan mode options.
     ///
     /// The context menu options will be in the order the user specifies
-    /// except the off option will be first.
+    /// except the off option, which, when included, will be first.
     var contextMenuAutoPanOptions: [LocationDisplay.AutoPanMode] {
-        [.off] + autoPanModes.filter { $0 != .off }
+        autoPanModes.filter { $0 == .off } +
+        autoPanModes.filter { $0 != .off }
     }
     
     /// Observe the status of the location display datasource.
@@ -321,10 +355,11 @@ extension LocationButton {
     
     /// This should be called when the button is pressed.
     func buttonAction() {
-        isPerformingButtonAction = true
+        guard let currentAction else { return }
         
-        switch Action(status: status, autoPanOptions: autoPanModes) {
+        switch currentAction {
         case .start:
+            isPerformingButtonAction = true
             // If the datasource is a system location datasource, then request authorization.
             if locationDisplay.dataSource is SystemLocationDataSource,
                CLLocationManager.shared.authorizationStatus == .notDetermined {
@@ -340,18 +375,8 @@ extension LocationButton {
                 }
                 isPerformingButtonAction = false
             }
-        case .stop:
-            Task {
-                await hideLocationDisplay()
-                isPerformingButtonAction = false
-            }
         case .autoPanCycle:
-            // Need to use the select method here so that last selected mode
-            // gets set.
             autoPanMode = nextAutoPanMode(current: autoPanMode, initial: initialAutoPanMode)
-            isPerformingButtonAction = false
-        case .none:
-            return
         }
     }
     
@@ -376,14 +401,13 @@ extension LocationButton {
     enum Action {
         /// Start the location display.
         case start
-        /// Stop the location display.
-        case stop
         /// Set the next auto-pan mode for cycling through.
         case autoPanCycle
         
         /// The action that should occur for the specified state.
         init?(
             status: LocationDataSource.Status,
+            autoPanMode: LocationDisplay.AutoPanMode,
             autoPanOptions: [LocationDisplay.AutoPanMode]
         ) {
             // Decide the button behavior based on the status.
@@ -391,13 +415,10 @@ extension LocationButton {
             case .stopped, .failedToStart:
                 self = .start
             case .started:
-                self = if autoPanOptions.count < 2 {
-                    // Since there were no non-off options specified then set it
-                    // to off since the status is started.
-                    .stop
-                } else {
-                    .autoPanCycle
+                guard autoPanOptions.contains(where: { $0 != autoPanMode }) else {
+                    return nil
                 }
+                self = .autoPanCycle
             case .starting, .stopping:
                 return nil
             @unknown default:
