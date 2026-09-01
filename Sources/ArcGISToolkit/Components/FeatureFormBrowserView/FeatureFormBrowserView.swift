@@ -51,7 +51,7 @@ extension FeatureFormBrowserView /* Model */ {
         /// - Parameter forms: <#forms description#>
         public init(forms: [FeatureForm] = []) {
             self.forms = forms
-            self.style = .tabs
+            self.style = .list
             self.selectedID = forms.first?.feature.globalID
         }
         
