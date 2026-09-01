@@ -113,8 +113,6 @@ struct FeatureFormToolbar: ViewModifier {
                                     .tag(FeatureFormBrowserView.Style.list)
                                 Text("Menu")
                                     .tag(FeatureFormBrowserView.Style.menu)
-                                Text("Paged")
-                                    .tag(FeatureFormBrowserView.Style.paged)
                                 Text("Tabs")
                                     .tag(FeatureFormBrowserView.Style.tabs)
                             }

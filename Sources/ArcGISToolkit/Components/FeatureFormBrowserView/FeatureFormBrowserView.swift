@@ -34,8 +34,6 @@ public struct FeatureFormBrowserView: View {
             list
         case .menu:
             menuView
-        case .paged:
-            paged
         case .tabs:
             tabView
         }
@@ -197,14 +195,6 @@ extension FeatureFormBrowserView /* Browser style variants */ {
     }
     
     /// <#Description#>
-    @ViewBuilder
-    var paged: some View {
-        Text("Under construction")
-            .foregroundStyle(.red)
-        menuView
-    }
-    
-    /// <#Description#>
     var tabView: some View {
         TabView(selection: $model.selectedID) {
             ForEach(model.ids, id: \.self) { id in
@@ -234,7 +224,6 @@ extension FeatureFormBrowserView /* Enums */ {
     public enum Style {
         case list
         case menu
-        case paged
         case tabs
     }
 }
