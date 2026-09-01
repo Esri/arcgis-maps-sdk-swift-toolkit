@@ -162,7 +162,7 @@ extension FeatureFormView {
                 // If the FeatureFormView is in a FeatureFormBrowserView, open
                 // the association in a new tab.
                 if let browserModel {
-                    browserModel.add(form: form)
+                    browserModel.add(form: form, select: true)
                 } else {
                     let navigationAction = {
                         featureFormViewModel.addModel(form)
