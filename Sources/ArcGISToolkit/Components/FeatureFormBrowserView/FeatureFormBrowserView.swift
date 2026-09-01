@@ -55,8 +55,13 @@ extension FeatureFormBrowserView /* Model */ {
         }
         
         /// <#Description#>
+        ///
+        /// When using the list style, users can always navigate back into the central list view.
         var canGoBack: Bool {
-            backStack.count > 1
+            // The list style is applied and the user is in a form.
+            (style == .list && selectedForm != nil)
+            // There's a previous item to navigate back to.
+            || backStack.count > 1
         }
         
         /// <#Description#>
@@ -130,12 +135,18 @@ extension FeatureFormBrowserView /* Model */ {
                 Logger.featureFormBrowserView.warning("Cannot navigate backwards without history.")
                 return
             }
-            backStack.removeLast()
-            guard let lastID = backStack.last, let form = form(for: lastID) else {
-                Logger.featureFormBrowserView.warning("No ID for back navigation.")
-                return
+            if style == .list {
+                withAnimation {
+                    selectedID = nil
+                }
+            } else {
+                backStack.removeLast()
+                guard let lastID = backStack.last, let form = form(for: lastID) else {
+                    Logger.featureFormBrowserView.warning("No ID for back navigation.")
+                    return
+                }
+                select(form: form, recordNavigation: false)
             }
-            select(form: form, recordNavigation: false)
         }
         
         /// <#Description#>
@@ -171,13 +182,30 @@ extension FeatureFormBrowserView /* Browser style variants */ {
     /// <#Description#>
     @ViewBuilder
     var list: some View {
-        Text("Under construction")
-            .foregroundStyle(.red)
-        List(model.forms, id: \.feature.globalID) { form in
-            Text(form.title)
-                .disabled(true)
+        Group {
+            if let selected = model.selectedForm {
+                FeatureFormView(root: selected)
+                    .transition(.asymmetric(insertion: .push(from: .trailing), removal: .move(edge: .trailing)))
+            } else {
+                NavigationStack {
+                    List(model.forms, id: \.feature.globalID) { form in
+                        Button(form.title) {
+                            withAnimation {
+                                model.select(form: form)
+                            }
+                        }
+                    }
+                    .navigationTitle(
+                        model.forms.count > 1
+                        ? "Editing \(model.forms.count) Features"
+                        : "Editing 1 Feature"
+                    )
+                }
+                .environment(model)
+                .transition(.asymmetric(insertion: .push(from: .leading), removal: .move(edge: .leading)))
+            }
         }
-        menuView
+        .environment(model)
     }
     
     /// <#Description#>
