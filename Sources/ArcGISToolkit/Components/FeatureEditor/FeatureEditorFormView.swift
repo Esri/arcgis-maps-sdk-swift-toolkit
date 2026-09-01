@@ -43,12 +43,19 @@ struct FeatureEditorFormView: View {
     /// non-`nil` only when there are edits, so the `FeatureFormView`
     /// knows when to show the editing buttons and block navigation.
     private var saveGeometryEditsAction: (() throws -> Void)? {
-        guard model.geometryEditorCanUndo else { return nil }
+        let initialGeometry = model.initialGeometry
+        guard model.geometryEditorIsStarted,
+              let currentGeometry = model.geometryEditorGeometry,
+              currentGeometry != initialGeometry,
+              initialGeometry != nil || !currentGeometry.isEmpty else {
+            return nil
+        }
+        
         return {
-            guard let geometry = model.geometryEditorGeometry, geometry.sketchIsValid else {
+            guard currentGeometry.sketchIsValid else {
                 throw GeometryEditorError.invalidGeometry
             }
-            model.feature?.geometry = geometry
+            model.feature?.geometry = currentGeometry
         }
     }
     

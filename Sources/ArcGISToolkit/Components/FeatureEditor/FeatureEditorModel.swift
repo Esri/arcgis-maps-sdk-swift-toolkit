@@ -42,10 +42,8 @@ final class FeatureEditorModel {
     var feature: ArcGISFeature? {
         presentedFeatureForm?.feature ?? rootFeatureForm?.feature
     }
-    /// The geometry of the `feature` before editing, used to reset the
-    /// geometry when edits are discarded.
-    @ObservationIgnored
-    private var initialGeometry: Geometry?
+    /// The geometry of the `feature` before editing.
+    private(set) var initialGeometry: Geometry?
     /// A Boolean value that indicates whether the Feature Editor inspector is presented.
     var isPresented: Bool {
         get { state != .stopped }
@@ -210,7 +208,6 @@ final class FeatureEditorModel {
     /// This is needed to prevent the current state from interfering with
     /// future uses of the `FeatureEditor` view.
     private func resetProperties() {
-        initialGeometry = nil
         rootFeatureForm = nil
         presentedFeatureForm = nil
         snapSettingsSheetIsPresented = false
@@ -320,5 +317,6 @@ final class FeatureEditorModel {
         geometryEditorCanUndo = false
         geometryEditorGeometry = nil
         geometryEditorIsStarted = false
+        initialGeometry = nil
     }
 }
