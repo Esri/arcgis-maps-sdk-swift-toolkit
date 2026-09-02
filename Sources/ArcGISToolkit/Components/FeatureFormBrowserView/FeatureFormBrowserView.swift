@@ -152,7 +152,7 @@ extension FeatureFormBrowserView /* Model */ {
         }
         
         public func debugLog() {
-            print("Selected:", selectedID)
+            print("Selected:", selectedID ?? "None")
             print("Can Go Back:", canGoBack)
             print("Back Stack \(backStack.count)")
             backStack.forEach { item in
