@@ -130,6 +130,16 @@ extension FeatureFormBrowserView /* Model */ {
             forms.append(form)
         }
         
+        public func debugLog() {
+            print("Selected:", selectedID ?? "None")
+            print("Can Go Back:", canGoBack)
+            print("Back Stack \(backStack.count)")
+            backStack.forEach { item in
+                print("\t", item)
+            }
+            print("--- End Debug Print ---")
+        }
+        
         /// <#Description#>
         public func navigateBack() {
             guard canGoBack else {
@@ -149,16 +159,6 @@ extension FeatureFormBrowserView /* Model */ {
                 }
                 select(form: form, recordNavigation: false)
             }
-        }
-        
-        public func debugLog() {
-            print("Selected:", selectedID ?? "None")
-            print("Can Go Back:", canGoBack)
-            print("Back Stack \(backStack.count)")
-            backStack.forEach { item in
-                print("\t", item)
-            }
-            print("--- End Debug Print ---")
         }
         
         /// <#Description#>
