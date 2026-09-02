@@ -315,6 +315,9 @@ struct FeatureFormBrowserViewPreview: View {
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
                     let map = Map(url: URL(string: "https://maps.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310")!)
                     try await map?.load()
+                    for utilityNetwork in map?.utilityNetworks ?? [] {
+                        try await utilityNetwork.load()
+                    }
                     let layer = map?.operationalLayers.first
                     try await layer?.load()
                     let groupLayer = layer as? GroupLayer
