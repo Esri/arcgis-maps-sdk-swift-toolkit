@@ -104,23 +104,6 @@ struct FeatureFormToolbar: ViewModifier {
                         .disabled(navigationIsDisabled)
                     }
                 }
-                if let browserModel {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Menu {
-                            @Bindable var model = browserModel
-                            Picker("Browser Style", selection: $model.style) {
-                                Text("List")
-                                    .tag(FeatureFormBrowserView.Style.list)
-                                Text("Menu")
-                                    .tag(FeatureFormBrowserView.Style.menu)
-                                Text("Tabs")
-                                    .tag(FeatureFormBrowserView.Style.tabs)
-                            }
-                        } label: {
-                            Image(systemName: "gear")
-                        }
-                    }
-                }
                 if let browserModel, browserModel.style == .menu {
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {

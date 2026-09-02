@@ -270,3 +270,67 @@ extension Logger {
         Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormBrowserView")
     }
 }
+
+struct FeatureFormBrowserViewPreview: View {
+    @State private var style: FeatureFormBrowserView.Style = .list
+    @Binding var model: FeatureFormBrowserView.Model
+    var body: some View {
+        FeatureFormBrowserView(model: $model)
+            .style(style)
+        Menu {
+            Picker("Browser Style", selection: $style) {
+                Text("List")
+                    .tag(FeatureFormBrowserView.Style.list)
+                Text("Menu")
+                    .tag(FeatureFormBrowserView.Style.menu)
+                Text("Tabs")
+                    .tag(FeatureFormBrowserView.Style.tabs)
+            }
+        } label: {
+            Text("Style")
+        }
+    }
+}
+
+#Preview {
+    @Previewable @State var model = FeatureFormBrowserView.Model()
+    @Previewable @State var loadResult: Result<Void, Error>?
+    
+    switch loadResult {
+    case .success(let success):
+        FeatureFormBrowserViewPreview(model: $model)
+    case .failure(let failure):
+        ContentUnavailableView {
+            Text(failure.localizedDescription)
+        }
+    case nil:
+        ProgressView()
+            .task {
+                loadResult = await Result {
+                    let credential = try await TokenCredential.credential(
+                        for: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+                        username: "viewer01",
+                        password: "I68VGU^nMurF"
+                    )
+                    ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
+                    let map = Map(url: URL(string: "https://maps.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310")!)
+                    try await map?.load()
+                    let layer = map?.operationalLayers.first
+                    try await layer?.load()
+                    let groupLayer = layer as? GroupLayer
+                    let featureLayer = groupLayer?.layers.first { layer in
+                        layer.name == "Electric Distribution Assembly"
+                    } as? FeatureLayer
+                    let featureTable = featureLayer?.featureTable as? ArcGISFeatureTable
+                    try await featureTable?.load()
+                    let queryParameters = QueryParameters()
+                    queryParameters.addObjectIDs([1, 2, 3])
+                    let featureQueryResult = try await featureTable?.queryFeatures(using: queryParameters)
+                    let features = featureQueryResult?.features().compactMap { $0 as? ArcGISFeature }
+                    features?.forEach { feature in
+                        model.add(form: FeatureForm.init(feature: feature))
+                    }
+                }
+            }
+    }
+}
