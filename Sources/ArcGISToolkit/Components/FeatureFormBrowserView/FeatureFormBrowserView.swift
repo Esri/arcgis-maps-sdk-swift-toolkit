@@ -197,9 +197,9 @@ extension FeatureFormBrowserView /* Browser style variants */ {
                         }
                     }
                     .navigationTitle(
-                        model.forms.count > 1
-                        ? "Editing \(model.forms.count) Features"
-                        : "Editing 1 Feature"
+                        model.forms.count == 1
+                        ? "Editing 1 Feature"
+                        : "Editing \(model.forms.count) Features"
                     )
                 }
                 .environment(model)
