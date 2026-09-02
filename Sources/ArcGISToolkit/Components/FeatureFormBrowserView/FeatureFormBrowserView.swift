@@ -52,7 +52,6 @@ extension FeatureFormBrowserView /* Model */ {
         public init(forms: [FeatureForm] = []) {
             self.forms = forms
             self.style = .list
-            self.selectedID = forms.first?.feature.globalID
         }
         
         /// <#Description#>
@@ -108,10 +107,10 @@ extension FeatureFormBrowserView /* Model */ {
                 return
             }
             defer {
-                // Select the form, if directed or no form is already selected,
-                // regardless of whether it's already in the collection of
-                // managed forms.
-                if select || selectedID == nil {
+                // Select the form, if directed, or if not in list style and no
+                // form is already selected, regardless of whether it's already
+                // in the collection of managed forms.
+                if select || (style != .list && selectedID == nil) {
                     self.select(form: form)
                 }
             }
