@@ -45,7 +45,14 @@ extension FeatureFormBrowserView /* Model */ {
     /// <#Description#>
     @Observable public final class Model {
         /// <#Description#>
-        var style: Style
+        var style: Style {
+            didSet {
+                if style == .menu || style == .tabs,
+                   let firstForm = forms.first {
+                    select(form: firstForm, recordNavigation: false)
+                }
+            }
+        }
         
         /// <#Description#>
         /// - Parameter forms: <#forms description#>
@@ -61,7 +68,7 @@ extension FeatureFormBrowserView /* Model */ {
             // The list style is applied and the user is in a form.
             (style == .list && selectedForm != nil)
             // There's a previous item to navigate back to.
-            || backStack.count > 1
+            || (style != .list && backStack.count > 0)
         }
         
         /// <#Description#>
@@ -73,13 +80,7 @@ extension FeatureFormBrowserView /* Model */ {
         var forms = [FeatureForm]()
         
         /// <#Description#>
-        var selectedID: UUID? {
-            didSet {
-                if let oldValue {
-                    backStack.append(oldValue)
-                }
-            }
-        }
+        private(set) var selectedID: UUID?
         
         /// <#Description#>
         var ids: [UUID] {
@@ -139,14 +140,25 @@ extension FeatureFormBrowserView /* Model */ {
                 withAnimation {
                     selectedID = nil
                 }
+                backStack.removeAll()
             } else {
-                backStack.removeLast()
-                guard let lastID = backStack.last, let form = form(for: lastID) else {
+                let top = backStack.removeFirst()
+                guard let form = form(for: top) else {
                     Logger.featureFormBrowserView.warning("No ID for back navigation.")
                     return
                 }
                 select(form: form, recordNavigation: false)
             }
+        }
+        
+        public func debugLog() {
+            print("Selected:", selectedID)
+            print("Can Go Back:", canGoBack)
+            print("Back Stack \(backStack.count)")
+            backStack.forEach { item in
+                print("\t", item)
+            }
+            print("--- End Debug Print ---")
         }
         
         /// <#Description#>
@@ -155,8 +167,15 @@ extension FeatureFormBrowserView /* Model */ {
             forms.removeAll {
                 $0.feature.globalID == form.feature.globalID
             }
-            guard !backStack.isEmpty else { return }
-            backStack.removeLast()
+            backStack.removeAll { id in
+                form.feature.globalID == id
+            }
+            if selectedID == form.feature.globalID, canGoBack {
+                let top = backStack.removeFirst()
+                if let _form = self.form(for: top) {
+                    select(form: form)
+                }
+            }
             selectedID = backStack.last
         }
         
@@ -171,7 +190,7 @@ extension FeatureFormBrowserView /* Model */ {
         /// - Parameter form: <#form description#>
         public func select(form: FeatureForm, recordNavigation: Bool = true) {
             if recordNavigation, let selectedID {
-                backStack.append(selectedID)
+                backStack.insert(selectedID, at: 0)
             }
             selectedID = form.feature.globalID
         }
@@ -224,7 +243,14 @@ extension FeatureFormBrowserView /* Browser style variants */ {
     
     /// <#Description#>
     var tabView: some View {
-        TabView(selection: $model.selectedID) {
+        TabView(
+            selection: Binding {
+                model.selectedID!
+            } set: { newID in
+                guard let form = model.form(for: newID) else { return }
+                model.select(form: form, recordNavigation: true)
+            }
+        ) {
             ForEach(model.ids, id: \.self) { id in
                 if let form = model.form(for: id) {
                     Tab(value: id) {
@@ -276,17 +302,22 @@ struct FeatureFormBrowserViewPreview: View {
     var body: some View {
         FeatureFormBrowserView(model: $model)
             .style(style)
-        Menu {
-            Picker("Browser Style", selection: $style) {
-                Text("List")
-                    .tag(FeatureFormBrowserView.Style.list)
-                Text("Menu")
-                    .tag(FeatureFormBrowserView.Style.menu)
-                Text("Tabs")
-                    .tag(FeatureFormBrowserView.Style.tabs)
+        HStack {
+            Menu {
+                Picker("Browser Style", selection: $style) {
+                    Text("List")
+                        .tag(FeatureFormBrowserView.Style.list)
+                    Text("Menu")
+                        .tag(FeatureFormBrowserView.Style.menu)
+                    Text("Tabs")
+                        .tag(FeatureFormBrowserView.Style.tabs)
+                }
+            } label: {
+                Text("Style")
             }
-        } label: {
-            Text("Style")
+            Button("Log model state") {
+                model.debugLog()
+            }
         }
     }
 }
