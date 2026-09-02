@@ -35,7 +35,7 @@ public struct FeatureFormBrowserView: View {
             list
         case .menu:
             menuView
-        case .tabs:
+        case .menuWithTabs:
             tabView
         }
     }
@@ -47,7 +47,7 @@ extension FeatureFormBrowserView /* Model */ {
         /// <#Description#>
         var style: Style {
             didSet {
-                if style == .menu || style == .tabs,
+                if style == .menu || style == .menuWithTabs,
                    let firstForm = forms.first {
                     select(form: firstForm, recordNavigation: false)
                 }
@@ -278,7 +278,7 @@ extension FeatureFormBrowserView /* Enums */ {
     public enum Style {
         case list
         case menu
-        case tabs
+        case menuWithTabs
     }
 }
 
@@ -309,8 +309,8 @@ struct FeatureFormBrowserViewPreview: View {
                         .tag(FeatureFormBrowserView.Style.list)
                     Text("Menu")
                         .tag(FeatureFormBrowserView.Style.menu)
-                    Text("Tabs")
-                        .tag(FeatureFormBrowserView.Style.tabs)
+                    Text("Menu With Tabs")
+                        .tag(FeatureFormBrowserView.Style.menuWithTabs)
                 }
             } label: {
                 Text("Style")

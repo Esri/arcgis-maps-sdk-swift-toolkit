@@ -105,7 +105,7 @@ struct FeatureFormToolbar: ViewModifier {
                     }
                 }
                 if let browserModel,
-                   browserModel.style == .menu || browserModel.style == .tabs {
+                   browserModel.style == .menu || browserModel.style == .menuWithTabs {
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
                             Section {
