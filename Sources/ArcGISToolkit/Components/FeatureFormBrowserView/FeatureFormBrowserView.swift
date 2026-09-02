@@ -302,7 +302,7 @@ struct FeatureFormBrowserViewPreview: View {
     var body: some View {
         FeatureFormBrowserView(model: $model)
             .style(style)
-        HStack {
+        HStack(spacing: 50) {
             Menu {
                 Picker("Browser Style", selection: $style) {
                     Text("List")
