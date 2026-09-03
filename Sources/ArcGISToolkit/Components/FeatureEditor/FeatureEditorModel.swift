@@ -259,10 +259,10 @@ final class FeatureEditorModel {
             guard let utilityNetwork = serviceGeodatabase.utilityNetwork else { return nil }
             try await utilityNetwork.retryLoad()
             
-            if let element = utilityNetwork.makeElement(arcGISFeature: feature) {
-                return try await .rules(for: utilityNetwork, assetType: element.assetType)
+            return if let element = utilityNetwork.makeElement(arcGISFeature: feature) {
+                try await .rules(for: utilityNetwork, assetType: element.assetType)
             } else {
-                return try await .rules(
+                try await .rules(
                     for: utilityNetwork,
                     featureTable: featureTable,
                     attributes: feature.attributes
