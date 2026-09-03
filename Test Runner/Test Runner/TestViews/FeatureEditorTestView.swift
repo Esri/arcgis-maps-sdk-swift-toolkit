@@ -30,12 +30,8 @@ struct FeatureEditorTestView: View {
         MapView(map: map)
             .geometryEditor(geometryEditor)
             .overlay(alignment: .topTrailing) {
-                FeatureEditor(
-                    $featureToEdit,
-                    geometryEditor: geometryEditor,
-                    map: map
-                )
-                .padding()
+                FeatureEditor($featureToEdit, geometryEditor: geometryEditor)
+                    .padding()
             }
             .task(setUpTest)
             .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {
