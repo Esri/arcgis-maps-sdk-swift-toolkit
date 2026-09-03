@@ -41,7 +41,7 @@ struct FeatureEditorModelTests {
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
         
         // Verifies isPresented is true when feature editor starts.
-        await model.startEditingFeature(feature, on: nil)
+        await model.startEditingFeature(feature)
         model.expectIsEditing(rootFeature: feature)
         
         await model.expectIsGeometryEditing()
@@ -91,7 +91,7 @@ struct FeatureEditorModelTests {
         let initialGeometry = Point(latitude: 0, longitude: 0)
         let feature = try #require(table.makeFeature(geometry: initialGeometry) as? ArcGISFeature)
         
-        await model.startEditingFeature(feature, on: nil)
+        await model.startEditingFeature(feature)
         await model.expectIsGeometryEditing()
         await model.expectIsEditing(geometry: initialGeometry)
         
@@ -115,27 +115,45 @@ struct FeatureEditorModelTests {
         let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
-        let geodatabaseFile = try await TemporaryGeodatabaseFile()
-        let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
-        let geometry = Point(latitude: 2, longitude: 2)
-        let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
-        let map = Map(spatialReference: nil)
+        let electricDistributionDeviceURL = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer/0")!
+        let credential = try await TokenCredential.credential(
+            for: electricDistributionDeviceURL,
+            username: "viewer01",
+            password: "I68VGU^nMurF"
+        )
+        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
+        defer { ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll() }
         
-        // Simulates map fails to load by creating a map with nil spatial reference.
-        await model.startEditingFeature(feature, on: map)
-        let error = #expect(throws: MappingError.self) {
+        let serviceFeatureTable = ServiceFeatureTable(url: electricDistributionDeviceURL)
+        try await serviceFeatureTable.load()
+        
+        let parameters = QueryParameters()
+        parameters.addObjectID(3726)
+        
+        let result = try await serviceFeatureTable.queryFeatures(using: parameters)
+        let features = Array(result.features())
+        let feature = try #require(features.first as? ArcGISFeature)
+        
+        // Removes the credential and verifies startEditingFeature doesn't start geometry editing.
+        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
+        await model.startEditingFeature(feature)
+        
+        let error = #expect(throws: ArcGISAuthenticationError.self) {
             try #require(model.loadResult).get()
         }
-        #expect(error == .missingSpatialReference(details: ""))
+        #expect(error == .tokenRequired)
+        
         await Task.yieldExpect(!model.geometryEditorIsStarted)
         await Task.yieldExpect(model.geometryEditorGeometry == nil)
         
-        // Sets the map's spatial reference to a valid value and retries starting the feature editor.
-        map.setSpatialReference(.wgs84)
+        // Re-adds the credential and verifies retry-start-editing starts geometry editing.
+        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
         await model.retryStartEditing()
         
         try #require(model.loadResult).get()
         await model.expectIsGeometryEditing()
+        
+        let geometry = try #require(feature.geometry)
         await model.expectIsEditing(geometry: geometry)
     }
     
@@ -153,7 +171,7 @@ struct FeatureEditorModelTests {
         let feature = try #require(table.makeFeature(geometry: initialGeometry) as? ArcGISFeature)
         #expect(feature.geometry == initialGeometry)
         
-        await model.startEditingFeature(feature, on: nil)
+        await model.startEditingFeature(feature)
         await model.expectIsGeometryEditing()
         
         // Verifies updateFormGeometry() resets the feature's geometry to its
@@ -176,7 +194,7 @@ struct FeatureEditorModelTests {
         #expect(feature.geometry == newGeometry)
     }
     
-    /// Verifies `startEditingFeature(_:on:)` and `startEditingFeatureForm(_:)` using
+    /// Verifies `startEditingFeature(_:)` and `startEditingFeatureForm(_:)` using
     /// features with geometries.
     @Test
     func startEditing() async throws {
@@ -187,22 +205,18 @@ struct FeatureEditorModelTests {
         let geodatabaseFile = try await TemporaryGeodatabaseFile()
         let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
         
-        // Verifies startEditingFeature(_:on:) starts the feature editor and geometry editor.
+        // Verifies startEditingFeature(_:) starts the feature editor and geometry editor.
         do {
             let geometry = Point(latitude: 0, longitude: 0)
             let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
-            let map = Map(spatialReference: .wgs84)
             
             // Verifies feature editor is started using the feature instance.
-            await model.startEditingFeature(feature, on: map)
+            await model.startEditingFeature(feature)
             model.expectIsEditing(rootFeature: feature)
             
             // Verifies geometry editor is started using the feature's geometry.
             await model.expectIsGeometryEditing()
             await model.expectIsEditing(geometry: geometry)
-            
-            // Verifies map is loaded when starting.
-            #expect(map.loadStatus == .loaded)
         }
         
         // Verifies startEditingFeatureForm(_:) updates the correct model properties.
@@ -226,7 +240,7 @@ struct FeatureEditorModelTests {
         }
     }
     
-    /// Verifies `startEditingFeature(_:on:)` using a feature without a geometry.
+    /// Verifies `startEditingFeature(_:)` using a feature without a geometry.
     @Test
     func startEditingFeatureWithoutGeometry() async throws {
         let model = FeatureEditorModel()
@@ -239,7 +253,7 @@ struct FeatureEditorModelTests {
         #expect(feature.geometry == nil)
         
         // Verifies feature editor and geometry editor are started.
-        await model.startEditingFeature(feature, on: nil)
+        await model.startEditingFeature(feature)
         model.expectIsEditing(rootFeature: feature)
         await model.expectIsGeometryEditing()
         
@@ -251,7 +265,7 @@ struct FeatureEditorModelTests {
         #expect(model.viewpointGeometry == nil)
     }
     
-    /// Verifies `startEditingFeature(_:on:)` using a non-spatial feature.
+    /// Verifies `startEditingFeature(_:)` using a non-spatial feature.
     @Test
     func startEditingNonSpatialFeature() async throws {
         let model = FeatureEditorModel()
@@ -267,7 +281,7 @@ struct FeatureEditorModelTests {
         #expect(!feature.canUpdateGeometry)
         
         // Verifies feature editor is started using the feature instance.
-        await model.startEditingFeature(feature, on: nil)
+        await model.startEditingFeature(feature)
         model.expectIsEditing(rootFeature: feature)
         
         // Geometry editor is not started.
@@ -291,7 +305,7 @@ struct FeatureEditorModelTests {
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
         
         // Verifies feature editor and geometry editor are started.
-        await model.startEditingFeature(feature, on: nil)
+        await model.startEditingFeature(feature)
         model.expectIsEditing(rootFeature: feature)
         await model.expectIsGeometryEditing()
         await model.expectIsEditing(geometry: geometry)

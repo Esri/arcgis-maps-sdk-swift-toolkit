@@ -74,7 +74,6 @@ struct ExampleMapView: View {
                         FeatureEditor(
                             $featureToEdit,
                             geometryEditor: geometryEditor,
-                            map: map,
                             mapViewProxy: mapViewProxy
                         )
                         .padding()

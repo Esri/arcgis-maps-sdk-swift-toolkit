@@ -76,23 +76,10 @@ final class FeatureEditorModel {
     private(set) var geometryEditorGeometry: Geometry?
     /// A Boolean value indicating whether the geometry editor has started.
     private(set) var geometryEditorIsStarted = false
-    
-    // MARK: Snapping Properties
-    
-    /// The map that contains the utility network being edited.
-    @ObservationIgnored
-    private var map: Map?
     /// The snap rules for the `feature`, used to sync snap source settings.
-    /// This is non-`nil` when snap rules were successfully created using the `utilityNetwork`.
+    /// These are created from the feature's utility network, if available.
     @ObservationIgnored
     private var snapRules: SnapRules?
-    /// The `feature`'s utility network used to create snap rules.
-    /// This is non-`nil` when a map containing the feature's UN is used to start editing.
-    private var utilityNetwork: UtilityNetwork? {
-        guard let map, let feature else { return nil }
-        return map.utilityNetworks
-            .first(where: { $0.makeElement(arcGISFeature: feature) != nil })
-    }
     
     // MARK: Methods
     
@@ -151,47 +138,23 @@ final class FeatureEditorModel {
     func startEditingFeatureForm(_ featureForm: FeatureForm) async {
         stopGeometryEditing()
         presentedFeatureForm = featureForm
-        
-        loadResult = await Result {
-            try await loadFeature()
-            try await setUpGeometryEditing()
-        }
+        await setUpGeometryEditing()
     }
     
     /// Starts an editing session for the given `feature`.
-    /// - Parameters:
-    ///   - feature: The root feature to edit.
-    ///   - map: The map that `feature` is part of, used to set up rule-based snapping.
-    func startEditingFeature(_ feature: ArcGISFeature, on map: Map?) async {
+    /// - Parameter feature: The root feature to edit.
+    func startEditingFeature(_ feature: ArcGISFeature) async {
         state = .editing
         resetProperties()
         rootFeatureForm = FeatureForm(feature: feature)
-        self.map = map
-        loadResult = await Result {
-            try await loadFeature()
-            if let map {
-                // When a map is provided, it implies the user wants to set up
-                // rule-based snapping for the geometry editor. Loads the
-                // utility network so snap rules can be created.
-                try await map.load()
-                await map.utilityNetworks.load()
-            }
-            try await setUpGeometryEditing()
-        }
+        await setUpGeometryEditing()
     }
     
     /// Retries starting an editing session.
     func retryStartEditing() async {
         // Makes sure the previous load failed and sets the loadResult to nil.
         guard case .failure = loadResult.take() else { return }
-        loadResult = await Result { [weak map] in
-            try await loadFeature()
-            if let map {
-                try await map.retryLoad()
-                await map.utilityNetworks.retryLoad()
-            }
-            try await setUpGeometryEditing()
-        }
+        await setUpGeometryEditing()
     }
     
     /// Stops the feature editor and resets the model's properties.
@@ -215,8 +178,6 @@ final class FeatureEditorModel {
         
         stopGeometryEditing()
         
-        snapRules = nil
-        map = nil
         loadResult = nil
     }
     
@@ -226,7 +187,10 @@ final class FeatureEditorModel {
             let snapSettings = geometryEditor.snapSettings
             
             if let snapRules {
-                try snapSettings.syncSourceSettings(rules: snapRules, sourceEnablingBehavior: .preserve)
+                try snapSettings.syncSourceSettings(
+                    rules: snapRules,
+                    sourceEnablingBehavior: .preserve
+                )
             } else {
                 try snapSettings.syncSourceSettings()
             }
@@ -252,23 +216,6 @@ final class FeatureEditorModel {
         try await setFormGeometry(to: geometry)
     }
     
-    /// Loads the feature and its table if needed to allow geometry editing.
-    private func loadFeature() async throws {
-        guard let feature else { return }
-        // Loads the feature so canUpdateGeometry can be accessed. It is always
-        // false otherwise.
-        try await feature.retryLoad()
-        // No need to load the feature's table upfront if we don't edit its
-        // geometry.
-        guard feature.canUpdateGeometry else { return }
-        
-        // Loads the feature's table if the geometry is nil so geometryType
-        // can be accessed. It is always nil otherwise.
-        if feature.geometry == nil, let table = feature.table {
-            try await table.retryLoad()
-        }
-    }
-    
     /// Sets the form's feature geometry and reevaluates expressions to update
     /// possible geometry-dependent form elements.
     /// - Parameter geometry: The new geometry to set on the feature.
@@ -283,19 +230,73 @@ final class FeatureEditorModel {
     }
     
     /// Performs setup needed for geometry editing and starts the geometry editor if applicable.
-    private func setUpGeometryEditing() async throws {
-        guard let feature, feature.canUpdateGeometry else { return }
-        // Sets up the snap rules and syncs the snap source settings.
-        if let utilityNetwork, let element = utilityNetwork.makeElement(arcGISFeature: feature) {
-            // Errors are ignored to set snapRules to nil if creation fails, so
-            // the old rules don't get used in future syncing.
-            snapRules = try? await .rules(for: utilityNetwork, assetType: element.assetType)
-        } else {
-            snapRules = nil
+    private func setUpGeometryEditing() async {
+        loadResult = await Result { @MainActor in
+            guard let feature else { return }
+            
+            // Loads the feature so canUpdateGeometry can be accessed. It is always
+            // false otherwise.
+            try await feature.retryLoad()
+            guard feature.canUpdateGeometry else { return }
+            
+            snapRules = try await makeSnapRules(for: feature)
+            syncSnapSourceSettings()
+            
+            startGeometryEditor()
         }
-        syncSnapSourceSettings()
+    }
+    
+    /// Creates snap rules created from the given feature's utility network, if available.
+    /// - Parameter feature: The feature to create snap rules for.
+    private func makeSnapRules(for feature: ArcGISFeature) async throws -> SnapRules? {
+        guard let featureTable = feature.table else { return nil }
+        try await featureTable.retryLoad()
         
-        startGeometryEditor()
+        if let serviceFeatureTable = featureTable as? ServiceFeatureTable,
+           let serviceGeodatabase = serviceFeatureTable.serviceGeodatabase {
+            try await serviceGeodatabase.retryLoad()
+            
+            guard let utilityNetwork = serviceGeodatabase.utilityNetwork else { return nil }
+            try await utilityNetwork.retryLoad()
+            
+            if let element = utilityNetwork.makeElement(arcGISFeature: feature) {
+                return try await .rules(for: utilityNetwork, assetType: element.assetType)
+            } else {
+                return try await .rules(
+                    for: utilityNetwork,
+                    featureTable: featureTable,
+                    attributes: feature.attributes
+                )
+            }
+        } else if let geodatabaseFeatureTable = feature.table as? GeodatabaseFeatureTable,
+                  let geodatabase = geodatabaseFeatureTable.geodatabase {
+            try await geodatabase.retryLoad()
+            
+            let utilityNetworks = geodatabase.utilityNetworks
+            await utilityNetworks.retryLoad()
+            
+            for utilityNetwork in utilityNetworks {
+                if let element = utilityNetwork.makeElement(arcGISFeature: feature) {
+                    return try await .rules(for: utilityNetwork, assetType: element.assetType)
+                }
+            }
+            
+            if let utilityNetwork = utilityNetworks.first(
+                where: { utilityNetwork in
+                    utilityNetwork.definition?.networkSources.contains(
+                        where: { $0.featureTable.tableName == featureTable.tableName }
+                    ) ?? false
+                }
+            ) {
+                return try await .rules(
+                    for: utilityNetwork,
+                    featureTable: featureTable,
+                    attributes: feature.attributes
+                )
+            }
+        }
+        
+        return nil
     }
     
     /// Starts the geometry editor using the `feature`.
@@ -318,5 +319,6 @@ final class FeatureEditorModel {
         geometryEditorGeometry = nil
         geometryEditorIsStarted = false
         initialGeometry = nil
+        snapRules = nil
     }
 }

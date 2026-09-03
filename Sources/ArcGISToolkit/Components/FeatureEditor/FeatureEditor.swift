@@ -57,8 +57,6 @@ public struct FeatureEditor: View {
     @Binding private var feature: ArcGISFeature?
     /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
     private let geometryEditor: GeometryEditor
-    /// The map that `feature` is part of, used to set up rule-based snapping.
-    private let map: Map?
     /// A proxy for performing map view operations.
     private let mapViewProxy: MapViewProxy?
     /// The style to apply to the toolbar's controls.
@@ -73,10 +71,6 @@ public struct FeatureEditor: View {
     ///   The Feature Editor is displayed when the value is non-`nil`.
     ///   - geometryEditor: A geometry editor used to edit the feature's
     ///   geometry on an associated `MapView`.
-    ///   - map: The map that `feature` is part of, used to set up rule-based
-    ///   snapping for the geometry editor. If `nil` is passed, or the feature
-    ///   is not part of a utility network contained in the map, snapping is
-    ///   set up without snap rules.
     ///   - mapViewProxy: A proxy used to set the viewpoint on an associated
     ///   `MapView`.
     ///   - toolbarStyle: The style that determines the toolbar's appearance and
@@ -86,22 +80,13 @@ public struct FeatureEditor: View {
     public init(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
-        map: Map?,
         mapViewProxy: MapViewProxy? = nil,
         toolbarStyle: ToolbarStyle? = .vertical
     ) {
         self._feature = feature
         self.geometryEditor = geometryEditor
-        self.map = map
         self.mapViewProxy = mapViewProxy
         self.toolbarStyle = toolbarStyle
-    }
-    
-    /// A collection of object ids used to determine when to start editing.
-    /// This updates when the `feature` or `map` instances change.
-    private var startEditingIDs: [ObjectIdentifier] {
-        let objects: [AnyObject?] = [feature, map]
-        return objects.compactMap { $0.map(ObjectIdentifier.init) }
     }
     
     public var body: some View {
@@ -111,9 +96,9 @@ public struct FeatureEditor: View {
                 await model.restartGeometryEditor()
                 await model.monitorGeometryEditorStreams()
             }
-            .task(id: startEditingIDs) {
+            .task(id: feature.map(ObjectIdentifier.init)) {
                 if let feature {
-                    await model.startEditingFeature(feature, on: map)
+                    await model.startEditingFeature(feature)
                 } else {
                     model.stopEditing()
                 }

@@ -33,7 +33,6 @@ struct FeatureEditorTestView: View {
                 FeatureEditor(
                     $featureToEdit,
                     geometryEditor: geometryEditor,
-                    map: map
                 )
                 .padding()
             }
