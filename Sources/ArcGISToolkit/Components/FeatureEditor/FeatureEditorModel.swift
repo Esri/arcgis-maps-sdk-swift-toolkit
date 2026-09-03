@@ -246,7 +246,7 @@ final class FeatureEditorModel {
         }
     }
     
-    /// Creates snap rules created from the given feature's utility network, if available.
+    /// Creates snap rules from the given feature's utility network, if available.
     /// - Parameter feature: The feature to create snap rules for.
     private func makeSnapRules(for feature: ArcGISFeature) async throws -> SnapRules? {
         guard let featureTable = feature.table else { return nil }
