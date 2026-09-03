@@ -122,7 +122,7 @@ struct FeatureEditorModelTests {
             password: "I68VGU^nMurF"
         )
         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
-        defer { ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll() }
+        defer { ArcGISEnvironment.authenticationManager.arcGISCredentialStore.remove(credential) }
         
         let serviceFeatureTable = ServiceFeatureTable(url: electricDistributionDeviceURL)
         try await serviceFeatureTable.load()
@@ -135,7 +135,7 @@ struct FeatureEditorModelTests {
         let feature = try #require(features.first as? ArcGISFeature)
         
         // Removes the credential and verifies startEditingFeature doesn't start geometry editing.
-        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
+        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.remove(credential)
         await model.startEditingFeature(feature)
         
         let error = #expect(throws: ArcGISAuthenticationError.self) {
