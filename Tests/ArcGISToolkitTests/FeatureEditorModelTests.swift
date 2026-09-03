@@ -205,7 +205,7 @@ struct FeatureEditorModelTests {
         let geodatabaseFile = try await TemporaryGeodatabaseFile()
         let table = try await geodatabaseFile.geodatabase.makeTable(description: .points)
         
-        // Verifies startEditingFeature(_:) starts the feature editor and geometry editor.
+        // Verifies 'startEditingFeature(_:)' starts the feature editor and geometry editor.
         do {
             let geometry = Point(latitude: 0, longitude: 0)
             let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
