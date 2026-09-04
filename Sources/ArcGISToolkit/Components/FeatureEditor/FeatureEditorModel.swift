@@ -43,7 +43,7 @@ final class FeatureEditorModel {
         presentedFeatureForm?.feature ?? rootFeatureForm?.feature
     }
     /// The feature hidden to prevent its symbol from conflicting with the geometry editor.
-    /// This is needed reset the feature's visibility after geometry editing stops.
+    /// This is needed to reset the feature's visibility after geometry editing stops.
     @ObservationIgnored
     private var hiddenFeature: ArcGISFeature?
     /// The geometry of the `feature` before editing.
