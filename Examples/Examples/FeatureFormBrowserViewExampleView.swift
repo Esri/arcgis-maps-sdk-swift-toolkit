@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+@_spi(Experimental)
 import ArcGISToolkit
 import os
 import SwiftUI
