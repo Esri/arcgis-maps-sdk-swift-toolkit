@@ -47,9 +47,13 @@ extension FeatureFormBrowserView /* Model */ {
         /// <#Description#>
         var style: Style {
             didSet {
-                if style == .menu || style == .menuWithTabs,
-                   let firstForm = forms.first {
-                    select(form: firstForm, recordNavigation: false)
+                switch style {
+                case .menu, .menuWithTabs:
+                    if let firstForm = forms.first {
+                        select(form: firstForm, recordNavigation: false)
+                    }
+                case .list:
+                    break
                 }
             }
         }
