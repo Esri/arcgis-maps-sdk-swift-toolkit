@@ -49,7 +49,7 @@ extension FeatureFormBrowserView /* Model */ {
             didSet {
                 switch style {
                 case .menu, .menuWithTabs:
-                    if let firstForm = forms.first {
+                    if selectedID == nil, let firstForm = forms.first {
                         select(form: firstForm, recordNavigation: false)
                     }
                 case .list:
