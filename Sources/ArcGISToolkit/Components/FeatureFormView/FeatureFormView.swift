@@ -296,7 +296,12 @@ public struct FeatureFormView: View {
                     onFormEditingEventAction?(.navigationChanged(presentedItem))
                 }
             }
-            .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
+            .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) { oldFormID, newFormID in
+                #warning("Confirm added check does not regress #1286.")
+                // <#TODO: Revise doc comment on check#>
+                // Avoid resetting the form if we're coming back to it from
+                // another browser tab.
+                guard featureFormViewModel.presentedForm == nil else { return }
                 featureFormViewModel.setRootForm(rootFeatureForm)
             }
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
