@@ -173,7 +173,7 @@ extension FeatureFormBrowserView /* Model */ {
             if selectedID == form.feature.globalID, canGoBack {
                 let top = backStack.removeFirst()
                 if let _form = self.form(for: top) {
-                    select(form: form)
+                    select(form: _form)
                 }
             }
             selectedID = backStack.last
