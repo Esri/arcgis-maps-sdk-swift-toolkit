@@ -69,8 +69,15 @@ struct FeatureEditorTemplatePicker: View {
                 )
             )
             .navigationDestination(for: LayerTemplate.self) { layerTemplate in
-                ContentUnavailableView("Construct a Geometry", image: "")
-                    .navigationTitle(layerTemplate.name)
+                ContentUnavailableView(
+                    LocalizedStringResource(
+                        "Construct a Geometry",
+                        bundle: .toolkit,
+                        comment: "A message displayed when the user has selected a template."
+                    ),
+                    image: ""
+                )
+                .navigationTitle(layerTemplate.name)
             }
             .searchable(text: $searchText)
             .toolbar {
