@@ -164,9 +164,9 @@ extension FeatureFormView {
                     )
                 }
                 if embeddedFeatureFormViewModel?.featureForm.hasEdits ?? false {
-                    featureFormViewModel.navigationAlertInfo = (true, {
+                    featureFormViewModel.unsavedEditsAlertInfo = .init(includeSaveOption: true, willNavigate: true) {
                         navigationAction()
-                    })
+                    }
                 } else {
                     navigationAction()
                 }
