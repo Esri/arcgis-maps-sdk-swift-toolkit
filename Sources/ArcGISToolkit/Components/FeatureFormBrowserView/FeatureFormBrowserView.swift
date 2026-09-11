@@ -223,6 +223,15 @@ extension FeatureFormBrowserView /* Browser style variants */ {
                         ? "Editing 1 Feature"
                         : "Editing \(model.forms.count) Features"
                     )
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Menu {} label: {
+                                Label {} icon: {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                        }
+                    }
                 }
                 .environment(model)
                 .transition(.asymmetric(insertion: .push(from: .leading), removal: .move(edge: .leading)))
