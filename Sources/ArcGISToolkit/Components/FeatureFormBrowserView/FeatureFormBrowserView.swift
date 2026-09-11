@@ -37,6 +37,8 @@ public struct FeatureFormBrowserView: View {
             menuView
         case .menuWithTabs:
             tabView
+        case .paged:
+            pagedView
         }
     }
 }
@@ -48,7 +50,10 @@ extension FeatureFormBrowserView /* Model */ {
         var style: Style {
             didSet {
                 switch style {
-                case .menu, .menuWithTabs:
+                // Under the .menu, .menuWithTabs, and .paged styles there is
+                // always a selected form. If the style was switched from .list
+                // to one of these make sure there is a selection.
+                case .menu, .menuWithTabs, .paged:
                     if selectedID == nil, let firstForm = forms.first {
                         select(form: firstForm, recordNavigation: false)
                     }
@@ -85,6 +90,15 @@ extension FeatureFormBrowserView /* Model */ {
         
         /// <#Description#>
         private(set) var selectedID: UUID?
+        
+        /// <#Description#>
+        var selectedIndex: Int {
+            if let selectedID {
+                ids.firstIndex(of: selectedID) ?? -1
+            } else {
+                -1
+            }
+        }
         
         /// <#Description#>
         var ids: [UUID] {
@@ -198,6 +212,34 @@ extension FeatureFormBrowserView /* Model */ {
             }
             selectedID = form.feature.globalID
         }
+        
+        /// <#Description#>
+        public func selectNext() {
+            guard selectedIndex >= 0 else { return }
+            let nextIndex: Int
+            if selectedIndex == ids.count - 1 {
+                // Jump to start
+                nextIndex = 0
+            } else {
+                nextIndex = selectedIndex + 1
+            }
+            let nextForm = forms[nextIndex]
+            select(form: nextForm)
+        }
+        
+        /// <#Description#>
+        public func selectPrevious() {
+            guard selectedIndex >= 0 else { return }
+            let nextIndex: Int
+            if selectedIndex == 0 {
+                // Jump to end
+                nextIndex = ids.count - 1
+            } else {
+                nextIndex = selectedIndex - 1
+            }
+            let nextForm = forms[nextIndex]
+            select(form: nextForm)
+        }
     }
 }
 
@@ -249,39 +291,59 @@ extension FeatureFormBrowserView /* Browser style variants */ {
                 .environment(model)
         } else {
             ContentUnavailableView {
-                Text("An unexpected error has occurred.")
+                Text("No form is selected.")
             }
         }
     }
     
     /// <#Description#>
-    var tabView: some View {
-        TabView(
-            selection: Binding {
-                model.selectedID!
-            } set: { newID in
-                guard let form = model.form(for: newID) else { return }
-                model.select(form: form, recordNavigation: true)
+    @ViewBuilder
+    var pagedView: some View {
+        if let form = model.selectedForm {
+            FeatureFormView(root: form)
+                .editingButtons(.hidden)
+                .environment(model)
+                .id(model.selectedIndex)
+        }  else {
+            ContentUnavailableView {
+                Text("No form is selected.")
             }
-        ) {
-            ForEach(model.ids, id: \.self) { id in
-                if let form = model.form(for: id) {
-                    Tab(value: id) {
-                        FeatureFormView(
-                            root: form,
-                            isPresented: Binding(
-                                get: { true },
-                                set: { _ in model.remove(form: form) }
+        }
+    }
+    
+    /// <#Description#>
+    @ViewBuilder
+    var tabView: some View {
+        if let selection = model.selectedID {
+            TabView(
+                selection: Binding {
+                    selection
+                } set: { newID in
+                    guard let form = model.form(for: newID) else { return }
+                    model.select(form: form, recordNavigation: true)
+                }
+            ) {
+                ForEach(model.ids, id: \.self) { id in
+                    if let form = model.form(for: id) {
+                        Tab(value: id) {
+                            FeatureFormView(
+                                root: form,
+                                isPresented: Binding(
+                                    get: { true },
+                                    set: { _ in model.remove(form: form) }
+                                )
                             )
-                        )
-                        .editingButtons(.hidden)
-                        .environment(model)
-                    } label: {
-                        Image(systemName: "list.bullet.clipboard")
-                        Text(form.title)
+                            .editingButtons(.hidden)
+                            .environment(model)
+                        } label: {
+                            Image(systemName: "list.bullet.clipboard")
+                            Text(form.title)
+                        }
                     }
                 }
             }
+        } else {
+            Text("No form is selected.")
         }
     }
 }
@@ -292,6 +354,7 @@ extension FeatureFormBrowserView /* Enums */ {
         case list
         case menu
         case menuWithTabs
+        case paged
     }
 }
 
