@@ -388,6 +388,8 @@ struct FeatureFormBrowserViewPreview: View {
                         .tag(FeatureFormBrowserView.Style.menu)
                     Text("Menu With Tabs")
                         .tag(FeatureFormBrowserView.Style.menuWithTabs)
+                    Text("Paged")
+                        .tag(FeatureFormBrowserView.Style.paged)
                 }
             } label: {
                 Text("Style")
