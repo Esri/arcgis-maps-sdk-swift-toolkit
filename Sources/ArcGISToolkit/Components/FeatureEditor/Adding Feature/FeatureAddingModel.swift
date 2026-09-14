@@ -15,9 +15,9 @@
 import ArcGIS
 import Observation
 
+/// A view model for adding features using shared templates.
 @MainActor
 @Observable
-/// A view model for adding features using shared templates.
 final class FeatureAddingModel {
     /// The layer template groups from the map.
     private(set) var groups: [LayerTemplateGroup] = []
