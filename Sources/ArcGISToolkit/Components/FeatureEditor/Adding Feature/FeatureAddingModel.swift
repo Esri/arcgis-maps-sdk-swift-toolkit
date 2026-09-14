@@ -47,7 +47,6 @@ final class FeatureAddingModel {
     }
 }
 
-@MainActor
 private extension Map {
     /// The layer template groups from the map's operational layers.
     var layerTemplateGroups: [LayerTemplateGroup] {
