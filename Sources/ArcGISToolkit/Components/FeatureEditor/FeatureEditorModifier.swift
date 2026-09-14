@@ -46,7 +46,7 @@ private struct FeatureEditorModifier: ViewModifier {
                             FeatureEditorTemplatePicker(
                                 geometryEditor: model.geometryEditor
                             )
-                            .environment(model.featureAdding)
+                            .environment(model.featureAddingModel)
                         }
                     case .editing:
                         switch model.loadResult {

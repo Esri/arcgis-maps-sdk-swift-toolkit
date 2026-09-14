@@ -137,15 +137,15 @@ final class FeatureEditorModel {
     /// Adds shared templates from all operational layers of the map to this
     /// model.
     func populateSharedTemplates(from map: Map?) async {
-        await featureAdding.populateSharedTemplates(from: map)
+        await featureAddingModel.populateSharedTemplates(from: map)
     }
     
     /// A Boolean value indicating whether the feature editor supports adding
     /// features.
-    var supportsAddingFeatures: Bool { !featureAdding.groups.isEmpty }
+    var supportsAddingFeatures: Bool { !featureAddingModel.groups.isEmpty }
     
     /// The model for adding features.
-    var featureAdding: FeatureAddingModel {
+    var featureAddingModel: FeatureAddingModel {
         if _featureAdding == nil {
             _featureAdding = FeatureAddingModel(featureEditorModel: self)
         }
