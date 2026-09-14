@@ -156,40 +156,62 @@ struct FeatureFormToolbar: ViewModifier {
                         )
                     }
                 }
-                if let browserModel, browserModel.style == .paged {
-                    ToolbarItemGroup(placement: .bottomBar) {
-                        Button {
-                            browserModel.selectPrevious()
-                        } label: {
-                            Label {} icon: {
-                                Image(systemName: "chevron.left")
-                            }
+                if let browserModel {
+                    if browserModel.style == .menuWithTabs {
+                        ToolbarItem(placement: .bottomBar) {
+                            Picker(
+                                "Forms",
+                                selection: Binding {
+                                    browserModel.selectedID!
+                                } set: { newID in
+                                    guard let form = browserModel.form(for: newID) else { return }
+                                    browserModel.select(form: form, recordNavigation: true)
+                                }) {
+                                    ForEach(browserModel.ids, id: \.self) { id in
+                                        if let form = browserModel.form(for: id), let id = form.feature.objectID {
+                                            Text(id, format: .number.grouping(.never))
+                                        } else {
+                                            Text("?")
+                                        }
+                                    }
+                                }
+                                .pickerStyle(.segmented)
                         }
-                        Menu {
-                            ForEach(browserModel.ids, id: \.self) { id in
-                                if let form = browserModel.form(for: id),
-                                   let objectID = form.feature.objectID {
-                                    Button {
-                                        browserModel.select(form: form)
-                                    } label: {
-                                        Label {
-                                            Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
-                                        } icon: {
-                                            if browserModel.selectedID == id {
-                                                Image(systemName: "checkmark")
+                    } else if browserModel.style == .paged {
+                        ToolbarItemGroup(placement: .bottomBar) {
+                            Button {
+                                browserModel.selectPrevious()
+                            } label: {
+                                Label {} icon: {
+                                    Image(systemName: "chevron.left")
+                                }
+                            }
+                            Menu {
+                                ForEach(browserModel.ids, id: \.self) { id in
+                                    if let form = browserModel.form(for: id),
+                                       let objectID = form.feature.objectID {
+                                        Button {
+                                            browserModel.select(form: form)
+                                        } label: {
+                                            Label {
+                                                Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
+                                            } icon: {
+                                                if browserModel.selectedID == id {
+                                                    Image(systemName: "checkmark")
+                                                }
                                             }
                                         }
                                     }
                                 }
+                            } label: {
+                                Text("Feature \(browserModel.selectedIndex + 1) of \(browserModel.count)")
                             }
-                        } label: {
-                            Text("Feature \(browserModel.selectedIndex + 1) of \(browserModel.count)")
-                        }
-                        Button {
-                            browserModel.selectNext()
-                        } label: {
-                            Label {} icon: {
-                                Image(systemName: "chevron.right")
+                            Button {
+                                browserModel.selectNext()
+                            } label: {
+                                Label {} icon: {
+                                    Image(systemName: "chevron.right")
+                                }
                             }
                         }
                     }

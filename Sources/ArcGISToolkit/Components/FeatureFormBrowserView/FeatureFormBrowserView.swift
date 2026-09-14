@@ -315,32 +315,17 @@ extension FeatureFormBrowserView /* Browser style variants */ {
     @ViewBuilder
     var tabView: some View {
         if let selection = model.selectedID {
-            TabView(
-                selection: Binding {
-                    selection
-                } set: { newID in
-                    guard let form = model.form(for: newID) else { return }
-                    model.select(form: form, recordNavigation: true)
-                }
-            ) {
-                ForEach(model.ids, id: \.self) { id in
-                    if let form = model.form(for: id) {
-                        Tab(value: id) {
-                            FeatureFormView(
-                                root: form,
-                                isPresented: Binding(
-                                    get: { true },
-                                    set: { _ in model.remove(form: form) }
-                                )
-                            )
-                            .editingButtons(.hidden)
-                            .environment(model)
-                        } label: {
-                            Image(systemName: "list.bullet.clipboard")
-                            Text(form.title)
-                        }
-                    }
-                }
+            if let form = model.form(for: selection) {
+                FeatureFormView(
+                    root: form,
+                    isPresented: Binding(
+                        get: { true },
+                        set: { _ in model.remove(form: form) }
+                    )
+                )
+                .editingButtons(.hidden)
+                .environment(model)
+                .id(model.selectedIndex)
             }
         } else {
             Text("No form is selected.")
