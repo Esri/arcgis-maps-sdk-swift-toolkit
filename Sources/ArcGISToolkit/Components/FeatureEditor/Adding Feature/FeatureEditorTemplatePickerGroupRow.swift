@@ -51,8 +51,8 @@ struct FeatureEditorTemplatePickerGroupRow: View {
 }
 
 private extension UIImage {
-    /// Returns an image created by removing the transparent pixels around this
-    /// image.
+    /// Returns an image created by removing the transparent pixels around the
+    /// non-transparent pixels of this image.
     /// - Returns: The cropped image, or `nil` if the receiver cannot be
     /// cropped.
     func croppingTransparentPixels() -> UIImage? {
