@@ -23,24 +23,51 @@ struct FeatureEditorTestView: View {
     @State private var featureToEdit: ArcGISFeature?
     /// The geometry editor used by the feature editor.
     @State private var geometryEditor = GeometryEditor()
-    /// The map with a utility network displayed in the map view.
-    @State private var map = makeMap()
+    /// The result of loading the map used by the view. When the operation
+    /// succeeds, this will contain a map with features to edit.
+    @State private var mapLoadResult: Result<Map, (any Error)>?
     
     var body: some View {
-        MapView(map: map)
-            .geometryEditor(geometryEditor)
-            .overlay(alignment: .topTrailing) {
-                FeatureEditor(
-                    $featureToEdit,
-                    geometryEditor: geometryEditor,
-                    map: map
-                )
-                .padding()
+        switch mapLoadResult {
+        case .success(let map):
+            MapView(map: map)
+                .geometryEditor(geometryEditor)
+                .overlay(alignment: .topTrailing) {
+                    FeatureEditor(
+                        $featureToEdit,
+                        geometryEditor: geometryEditor,
+                        map: map
+                    )
+                    .padding()
+                }
+                .task {
+                    do {
+                        if let objectID = UserDefaults.standard.objectID,
+                           let layerName = UserDefaults.standard.layerName,
+                           let groupLayer = map.operationalLayers.first as? GroupLayer,
+                           let layer = groupLayer.layers.first(where: { $0.name == layerName }),
+                           let featureLayer = layer as? FeatureLayer {
+                            try await startEditingFeature(withIdentifier: objectID, on: featureLayer)
+                        }
+                    } catch {
+                        errorDescription = error.localizedDescription
+                    }
+                }
+                .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {
+                    Text(errorDescription ?? "Unknown")
+                }
+        case .failure(let error):
+            ContentUnavailableView {
+                Label("Failed to load map", systemImage: "exclamationmark.triangle")
+            } description: {
+                Text(error.localizedDescription)
             }
-            .task(setUpTest)
-            .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {
-                Text(errorDescription ?? "Unknown")
-            }
+        case .none:
+            ProgressView("Loading map")
+                .task {
+                    mapLoadResult = await Result { try await makeMap() }
+                }
+        }
     }
 }
 
@@ -74,33 +101,26 @@ private extension FeatureEditorTestView {
         featureToEdit = feature
     }
     
-    /// Sets up the test.
-    func setUpTest() async {
-        do {
-            try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(.publicSample)
-            try await map.retryLoad()
-            
-            if let objectID = UserDefaults.standard.objectID,
-               let layerName = UserDefaults.standard.layerName,
-               let groupLayer = map.operationalLayers.first as? GroupLayer,
-               let layer = groupLayer.layers.first(where: { $0.name == layerName }),
-               let featureLayer = layer as? FeatureLayer {
-                try await startEditingFeature(withIdentifier: objectID, on: featureLayer)
-            }
-        } catch {
-            errorDescription = error.localizedDescription
-        }
-    }
-    
     /// Makes a map from a portal item.
-    static func makeMap() -> Map {
-        let napervilleElectricUtilityNetwork = PortalItem(
-            portal: .arcGISOnline(connection: .anonymous),
-            id: PortalItem.ID("471eb0bf37074b1fbb972b1da70fb310")!
-        )
-        let map = Map(item: napervilleElectricUtilityNetwork)
+    func makeMap() async throws -> Map {
+        let map = if UserDefaults.standard.objectID != nil {
+            Map(
+                item: PortalItem(
+                    portal: .arcGISOnline(connection: .anonymous),
+                    id: PortalItem.ID("471eb0bf37074b1fbb972b1da70fb310")!
+                )
+            )
+        } else {
+            // Since there is not a feature to edit, use a map with templates
+            // to test the add features workflow.
+            Map(
+                url: URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
+            )!
+        }
         // Enables full resolution to allow snapping on all layers.
         map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
+        try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(.publicSample)
+        try await map.load()
         return map
     }
 }
