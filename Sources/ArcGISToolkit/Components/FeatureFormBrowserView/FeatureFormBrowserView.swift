@@ -359,7 +359,7 @@ extension Logger {
 }
 
 struct FeatureFormBrowserViewPreview: View {
-    @State private var style: FeatureFormBrowserView.Style = .list
+    @State private var style: FeatureFormBrowserView.Style = .paged
     @Binding var model: FeatureFormBrowserView.Model
     var body: some View {
         FeatureFormBrowserView(model: $model)
@@ -387,12 +387,16 @@ struct FeatureFormBrowserViewPreview: View {
 }
 
 #Preview {
+    @Previewable @State var map: Map?
     @Previewable @State var model = FeatureFormBrowserView.Model()
     @Previewable @State var loadResult: Result<Void, Error>?
     
     switch loadResult {
     case .success(let success):
-        FeatureFormBrowserViewPreview(model: $model)
+        MapView(map: map!)
+            .sheet(isPresented: .constant(true)) {
+                FeatureFormBrowserViewPreview(model: $model)
+            }
     case .failure(let failure):
         ContentUnavailableView {
             Text(failure.localizedDescription)
@@ -407,7 +411,7 @@ struct FeatureFormBrowserViewPreview: View {
                         password: "I68VGU^nMurF"
                     )
                     ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
-                    let map = Map(url: URL(string: "https://maps.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310")!)
+                    map = Map(url: URL(string: "https://maps.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310")!)
                     try await map?.load()
                     for utilityNetwork in map?.utilityNetworks ?? [] {
                         try await utilityNetwork.load()
