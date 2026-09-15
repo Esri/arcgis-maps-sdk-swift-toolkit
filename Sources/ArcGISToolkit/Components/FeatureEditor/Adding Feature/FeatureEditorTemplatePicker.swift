@@ -19,14 +19,7 @@ import SwiftUI
 struct FeatureEditorTemplatePicker: View {
     /// The model that manages the feature-adding workflow.
     @Environment(FeatureAddingModel.self) private var model
-    /// A binding that indicates whether the picker is presented.
-    @Environment(\.isPresented) private var isPresented
     
-    /// The geometry editor used to construct the selected template's geometry.
-    let geometryEditor: GeometryEditor
-    
-    /// The path representing the picker's navigation state.
-    @State private var navigationPath = NavigationPath()
     /// The text used to filter the available template groups.
     @State private var searchText = ""
     
@@ -52,7 +45,7 @@ struct FeatureEditorTemplatePicker: View {
     
     var body: some View {
         @Bindable var model = model
-        NavigationStack(path: $navigationPath) {
+        NavigationStack {
             Form {
                 ForEach(filteredGroups) { group in
                     FeatureEditorTemplatePickerGroup(group: group, searchText: searchText)
@@ -86,11 +79,6 @@ struct FeatureEditorTemplatePicker: View {
                     }
                 }
             }
-        }
-        .environment(\.navigationPath, $navigationPath)
-        .onChange(of: isPresented?.wrappedValue) {
-            guard let isPresented, !isPresented.wrappedValue else { return }
-            navigationPath.removeLast(navigationPath.count)
         }
     }
 }

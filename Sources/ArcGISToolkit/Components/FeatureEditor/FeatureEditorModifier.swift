@@ -43,10 +43,8 @@ private struct FeatureEditorModifier: ViewModifier {
                     switch model.state {
                     case .adding:
                         NavigationStack {
-                            FeatureEditorTemplatePicker(
-                                geometryEditor: model.geometryEditor
-                            )
-                            .environment(model.featureAddingModel)
+                            FeatureEditorTemplatePicker()
+                                .environment(model.featureAddingModel)
                         }
                     case .editing:
                         switch model.loadResult {
