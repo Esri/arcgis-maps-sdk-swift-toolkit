@@ -67,7 +67,7 @@ extension FeatureFormBrowserView /* Model */ {
         /// - Parameter forms: <#forms description#>
         public init(forms: [FeatureForm] = []) {
             self.forms = forms
-            self.style = .list
+            self.style = .paged
         }
         
         /// <#Description#>
