@@ -32,6 +32,8 @@ final class FeatureAddingModel {
     
     /// Adds shared templates from all operational layers of the map to this
     /// model.
+    /// - Parameter map: The map from whose operational layers the shared
+    /// templates should be populated.
     func populateSharedTemplates(from map: Map?) async {
         if let map {
             try? await map.load()
