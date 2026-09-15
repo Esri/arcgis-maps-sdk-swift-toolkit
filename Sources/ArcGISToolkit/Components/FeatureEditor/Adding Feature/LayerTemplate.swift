@@ -20,7 +20,7 @@ import SwiftUI
 /// A shared template associated with a feature layer.
 struct LayerTemplate {
     /// The unique identifier for this layer template.
-    let uuid = UUID()
+    let id = UUID()
     /// The identifier of the feature layer associated with this template.
     let layerID: Int
     /// The shared template used to create a feature.
@@ -39,12 +39,12 @@ extension LayerTemplate {
 
 extension LayerTemplate: Equatable {
     static func == (lhs: LayerTemplate, rhs: LayerTemplate) -> Bool {
-        return lhs.uuid == rhs.uuid
+        return lhs.id == rhs.id
     }
 }
 
 extension LayerTemplate: Hashable {
     func hash(into hasher: inout Hasher) {
-        uuid.hash(into: &hasher)
+        id.hash(into: &hasher)
     }
 }
