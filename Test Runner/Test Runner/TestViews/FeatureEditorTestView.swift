@@ -61,8 +61,6 @@ struct FeatureEditorTestView: View {
                 Label("Failed to load map", systemImage: "exclamationmark.triangle")
             } description: {
                 Text(error.localizedDescription)
-            } actions: {
-                Button("Retry") { mapLoadResult = nil }
             }
         case .none:
             ProgressView("Loading map")
