@@ -23,7 +23,7 @@ struct FeatureEditorTestView: View {
     @State private var featureToEdit: ArcGISFeature?
     /// The geometry editor used by the feature editor.
     @State private var geometryEditor = GeometryEditor()
-    /// The result of loading the map used by the example. When the operation
+    /// The result of loading the map used by the view. When the operation
     /// succeeds, this will contain a map with features to edit.
     @State private var mapLoadResult: Result<Map, (any Error)>?
     
