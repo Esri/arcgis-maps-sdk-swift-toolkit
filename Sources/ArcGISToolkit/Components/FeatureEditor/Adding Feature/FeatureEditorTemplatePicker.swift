@@ -32,11 +32,9 @@ struct FeatureEditorTemplatePicker: View {
     
     /// The template groups whose names or template names match the search text.
     var filteredGroups: [LayerTemplateGroup] {
-        guard !searchText.isEmpty else { return model.groups }
-        var filteredGroups: [LayerTemplateGroup] = []
-        for group in model.groups {
+        return model.groups.reduce(into: []) { partialResult, group in
             if group.name.localizedCaseInsensitiveContains(searchText) {
-                filteredGroups.append(group)
+                partialResult.append(group)
             } else {
                 let filteredLayers = group.layerTemplates
                     .filter { $0.sharedTemplate.name.localizedCaseInsensitiveContains(searchText) }
@@ -46,11 +44,10 @@ struct FeatureEditorTemplatePicker: View {
                         name: group.name,
                         layerTemplates: filteredLayers
                     )
-                    filteredGroups.append(new)
+                    partialResult.append(new)
                 }
             }
         }
-        return filteredGroups
     }
     
     var body: some View {
