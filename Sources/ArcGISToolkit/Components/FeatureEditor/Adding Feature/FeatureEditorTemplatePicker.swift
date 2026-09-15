@@ -22,7 +22,7 @@ struct FeatureEditorTemplatePicker: View {
     /// A binding that indicates whether the picker is presented.
     @Environment(\.isPresented) private var isPresented
     
-    /// The geometry editor used to construct the selected feature's geometry.
+    /// The geometry editor used to construct the selected template's geometry.
     let geometryEditor: GeometryEditor
     
     /// The path representing the picker's navigation state.
