@@ -27,7 +27,7 @@ final class LayerTemplateGroup: Identifiable {
     /// A Boolean value that indicates whether the group is expanded.
     var isExpanded = true
     
-    /// Creates a layer template with the given parameters.
+    /// Creates a layer template group with the given parameters.
     /// - Parameters:
     ///   - id: The stable identity of the group.
     ///   - name: The name of the group.
