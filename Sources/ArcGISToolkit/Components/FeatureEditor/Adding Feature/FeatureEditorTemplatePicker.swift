@@ -54,7 +54,7 @@ struct FeatureEditorTemplatePicker: View {
         @Bindable var model = model
         NavigationStack(path: $navigationPath) {
             Form {
-                ForEach(filteredGroups, id: \.name) { group in
+                ForEach(filteredGroups) { group in
                     FeatureEditorTemplatePickerGroup(group: group, searchText: searchText)
                 }
             }
