@@ -162,8 +162,7 @@ final class FeatureEditorModel {
     
     /// Stops adding new features.
     func stopAddingFeatures() {
-        geometryEditor.stop()
-        state = .stopped
+        stopGeometryEditing()
     }
     
     // MARK: Editing
