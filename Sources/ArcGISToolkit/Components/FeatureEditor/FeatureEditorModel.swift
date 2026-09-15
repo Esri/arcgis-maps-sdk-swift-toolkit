@@ -138,8 +138,8 @@ final class FeatureEditorModel {
     /// model.
     /// - Parameter map: The map from whose operational layers the shared
     /// templates should be populated.
-    func populateSharedTemplates(from map: Map?) async {
-        await featureAddingModel.populateSharedTemplates(from: map)
+    func populateSharedTemplates(from map: Map?) async throws {
+        try await featureAddingModel.populateSharedTemplates(from: map)
     }
     
     /// A Boolean value indicating whether the feature editor supports adding

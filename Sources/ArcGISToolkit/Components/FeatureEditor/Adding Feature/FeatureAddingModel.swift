@@ -34,10 +34,10 @@ final class FeatureAddingModel {
     /// model.
     /// - Parameter map: The map from whose operational layers the shared
     /// templates should be populated.
-    func populateSharedTemplates(from map: Map?) async {
+    func populateSharedTemplates(from map: Map?) async throws {
         if let map {
-            try? await map.load()
-            groups = await map.layerTemplateGroups
+            try await map.load()
+            groups = try await map.layerTemplateGroups
         } else {
             groups = []
         }
@@ -52,11 +52,11 @@ final class FeatureAddingModel {
 private extension Map {
     /// The layer template groups from the map's operational layers.
     var layerTemplateGroups: [LayerTemplateGroup] {
-        get async {
-            await withTaskGroup(of: Optional<LayerTemplateGroup>.self) { taskGroup in
+        get async throws {
+            try await withThrowingTaskGroup(of: Optional<LayerTemplateGroup>.self) { taskGroup in
                 for layer in operationalLayers {
                     taskGroup.addTask {
-                        guard let (tableName, layerID, templates) = await layer.sharedTemplates,
+                        guard let (tableName, layerID, templates) = try await layer.sharedTemplates,
                               !templates.isEmpty else {
                             return nil
                         }
@@ -68,7 +68,7 @@ private extension Map {
                 }
                 
                 var groupItems: [LayerTemplateGroup] = []
-                for await group in taskGroup {
+                for try await group in taskGroup {
                     guard let group else { continue }
                     groupItems.append(group)
                 }
@@ -82,16 +82,16 @@ private extension Map {
 private extension Layer {
     /// The layer's name, ID, and shared templates when it supports adding features.
     var sharedTemplates: (String, Int, [SharedTemplate])? {
-        get async {
+        get async throws {
             guard let self = self as? FeatureLayer else { return nil }
             
-            try? await self.load()
+            try await self.load()
             
             guard let table = self.featureTable as? ServiceFeatureTable else {
                 return nil
             }
             
-            try? await table.load()
+            try await table.load()
             
             guard table.hasGeometry,
                   table.isEditable,
@@ -100,7 +100,7 @@ private extension Layer {
                 return nil
             }
             
-            try? await geodatabase.load()
+            try await geodatabase.load()
             
             do {
                 let serviceLayerUD = table.serviceLayerID
