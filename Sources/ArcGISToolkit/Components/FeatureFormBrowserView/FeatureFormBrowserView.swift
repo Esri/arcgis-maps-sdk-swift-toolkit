@@ -54,7 +54,7 @@ extension FeatureFormBrowserView /* Model */ {
                 // always a selected form. If the style was switched from .list
                 // to one of these make sure there is a selection.
                 case .menu, .menuWithTabs, .paged:
-                    if selectedID == nil, let firstForm = forms.first {
+                    if selectedID == nil, let firstForm = browser.forms.first {
                         select(form: firstForm, recordNavigation: false)
                     }
                 case .list:
@@ -64,11 +64,14 @@ extension FeatureFormBrowserView /* Model */ {
         }
         
         /// <#Description#>
-        /// - Parameter forms: <#forms description#>
-        public init(forms: [FeatureForm] = []) {
-            self.forms = forms
+        /// - Parameter features: <#features description#>
+        public init(features: [ArcGISFeature] = []) {
             self.style = .paged
+            self.browser = .init(features: features)
         }
+        
+        /// <#Description#>
+        var browser: FeatureFormBrowser
         
         /// <#Description#>
         ///
@@ -82,11 +85,8 @@ extension FeatureFormBrowserView /* Model */ {
         
         /// <#Description#>
         public var count: Int {
-            forms.count == ids.count ? forms.count : -1
+            browser.forms.count == ids.count ? browser.forms.count : -1
         }
-        
-        /// <#Description#>
-        var forms = [FeatureForm]()
         
         /// <#Description#>
         private(set) var selectedID: UUID?
@@ -102,7 +102,7 @@ extension FeatureFormBrowserView /* Model */ {
         
         /// <#Description#>
         var ids: [UUID] {
-            forms.compactMap { $0.feature.globalID }
+            browser.forms.compactMap { $0.feature.globalID }
         }
         
         /// <#Description#>
@@ -145,7 +145,7 @@ extension FeatureFormBrowserView /* Model */ {
                 Logger.featureFormBrowserView.info("Feature \(id.description) is already added.")
                 return
             }
-            forms.append(form)
+            browser.forms.append(form)
         }
         
         public func debugLog() {
@@ -182,7 +182,7 @@ extension FeatureFormBrowserView /* Model */ {
         /// <#Description#>
         /// - Parameter form: <#form description#>
         public func remove(form: FeatureForm) {
-            forms.removeAll {
+            browser.forms.removeAll {
                 $0.feature.globalID == form.feature.globalID
             }
             backStack.removeAll { id in
@@ -201,7 +201,7 @@ extension FeatureFormBrowserView /* Model */ {
         /// - Parameter id: <#id description#>
         /// - Returns: <#description#>
         public func form(for id: UUID) -> FeatureForm? {
-            forms.first { $0.feature.globalID == id } ?? nil
+            browser.forms.first { $0.feature.globalID == id } ?? nil
         }
         
         /// <#Description#>
@@ -223,7 +223,7 @@ extension FeatureFormBrowserView /* Model */ {
             } else {
                 nextIndex = selectedIndex + 1
             }
-            let nextForm = forms[nextIndex]
+            let nextForm = browser.forms[nextIndex]
             select(form: nextForm)
         }
         
@@ -237,7 +237,7 @@ extension FeatureFormBrowserView /* Model */ {
             } else {
                 nextIndex = selectedIndex - 1
             }
-            let nextForm = forms[nextIndex]
+            let nextForm = browser.forms[nextIndex]
             select(form: nextForm)
         }
     }
@@ -302,7 +302,7 @@ extension FeatureFormBrowserView /* Browser style variants */ {
                     .transition(.asymmetric(insertion: .push(from: .trailing), removal: .move(edge: .trailing)))
             } else {
                 NavigationStack {
-                    List(model.forms, id: \.feature.globalID) { form in
+                    List(model.browser.forms, id: \.feature.globalID) { form in
                         Button(form.title) {
                             withAnimation {
                                 model.select(form: form)
@@ -310,9 +310,9 @@ extension FeatureFormBrowserView /* Browser style variants */ {
                         }
                     }
                     .navigationTitle(
-                        model.forms.count == 1
+                        model.browser.forms.count == 1
                         ? "Editing 1 Feature"
-                        : "Editing \(model.forms.count) Features"
+                        : "Editing \(model.browser.forms.count) Features"
                     )
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
@@ -436,7 +436,7 @@ struct FeatureFormBrowserViewPreview: View {
 
 #Preview {
     @Previewable @State var map: Map?
-    @Previewable @State var model = FeatureFormBrowserView.Model()
+    @Previewable @State var model = FeatureFormBrowserView.Model(features: [])
     @Previewable @State var loadResult: Result<Void, Error>?
     
     switch loadResult {

@@ -131,7 +131,7 @@ struct FeatureFormToolbar: ViewModifier {
                                 }
                             }
                         } label: {
-                            Text(browserModel.forms.count, format: .number)
+                            Text(browserModel.browser.forms.count, format: .number)
                         }
                     }
                 } else if let isPresented {
