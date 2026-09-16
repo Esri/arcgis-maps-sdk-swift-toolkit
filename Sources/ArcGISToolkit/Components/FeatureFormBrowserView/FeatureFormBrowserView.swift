@@ -394,9 +394,8 @@ extension FeatureFormBrowserView /* Enums */ {
 
 public extension FeatureFormBrowserView /* Modifiers */ {
     func style(_ style: FeatureFormBrowserView.Style) -> some View {
-        var copy = self
-        copy.model.style = style
-        return copy
+        model.style = style
+        return self
     }
 }
 
