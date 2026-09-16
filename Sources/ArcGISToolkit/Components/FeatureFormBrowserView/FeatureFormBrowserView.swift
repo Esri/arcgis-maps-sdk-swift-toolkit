@@ -243,6 +243,55 @@ extension FeatureFormBrowserView /* Model */ {
     }
 }
 
+public final class FeatureFormBrowser {
+    init(features: Array<ArcGISFeature>) {
+        forms = features.map { .init(feature: $0) }
+    }
+    
+    public func add(_ feature: ArcGISFeature) {
+        let newForm = FeatureForm(feature: feature)
+        forms.append(newForm)
+    }
+    
+    public func remove(_ feature: ArcGISFeature) {
+        forms.removeAll { form in
+            feature.globalID == form.feature.globalID
+        }
+    }
+    
+    public func discardEdits() async {
+        forms.forEach { form in
+            form.discardEdits()
+        }
+    }
+    
+    public func evaluateExpressions() async {
+        await withThrowingTaskGroup { group in
+            forms.forEach { form in
+                group.addTask {
+                    try await form.evaluateExpressions()
+                }
+            }
+        }
+    }
+    
+    public func finishEditing() async {
+        await withThrowingTaskGroup { group in
+            forms.forEach { form in
+                group.addTask {
+                    try await form.finishEditing()
+                }
+            }
+        }
+    }
+    
+    var forms = [FeatureForm]()
+    
+    var formsWithEdits = [FeatureForm]()
+    
+    var formsWithErrors = [FeatureForm]()
+}
+
 extension FeatureFormBrowserView /* Browser style variants */ {
     /// <#Description#>
     @ViewBuilder
