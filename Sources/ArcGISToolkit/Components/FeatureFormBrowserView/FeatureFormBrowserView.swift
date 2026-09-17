@@ -114,6 +114,13 @@ extension FeatureFormBrowserView /* Model */ {
             }
         }
         
+        var formsWithErrors: [UUID] {
+            browser.forms.filter { form in
+                !form.elementValidationErrors.isEmpty
+            }
+            .compactMap { $0.feature.globalID }
+        }
+        
         /// <#Description#>
         private var backStack = [UUID]()
         
@@ -154,6 +161,14 @@ extension FeatureFormBrowserView /* Model */ {
             print("Back Stack \(backStack.count)")
             backStack.forEach { item in
                 print("\t", item)
+            }
+            print("Forms With Errors \(formsWithErrors.count)")
+            formsWithErrors.forEach { id in
+                print("\t", id)
+            }
+            print("Browser Forms With Errors \(browser.formsWithErrors.count)")
+            browser.formsWithErrors.forEach { id in
+                print("\t", id)
             }
             print("--- End Debug Print ---")
         }
@@ -247,14 +262,54 @@ extension FeatureFormBrowserView /* Model */ {
     }
 }
 
-public final class FeatureFormBrowser {
+@Observable public final class FeatureFormBrowser: @unchecked Sendable {
     init(features: Array<ArcGISFeature>) {
         forms = features.map { .init(feature: $0) }
+        
+        forms.forEach { newForm in
+            let feature = newForm.feature
+            if let gid = feature.globalID {
+                tasks[gid] = Task { @Sendable in
+                    for await errors in newForm.$elementValidationErrors {
+                        if errors.isEmpty {
+                            formsWithErrors.removeAll { form in
+                                form.feature.globalID == feature.globalID
+                            }
+                        } else {
+                            if !formsWithErrors.contains(where: { form in
+                                form.feature.globalID == feature.globalID
+                            }) {
+                                formsWithErrors.append(newForm)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     public func add(_ feature: ArcGISFeature) {
         let newForm = FeatureForm(feature: feature)
         forms.append(newForm)
+        
+        if let gid = feature.globalID {
+            tasks[gid] = Task { @Sendable in
+                for await errors in newForm.$elementValidationErrors {
+                    if errors.isEmpty {
+                        formsWithErrors.removeAll { form in
+                            form.feature.globalID == feature.globalID
+                        }
+                    } else {
+                        if !formsWithErrors.contains(where: { form in
+                            form.feature.globalID == feature.globalID
+                        }) {
+                            formsWithErrors.append(newForm)
+                        }
+                    }
+                }
+            }
+        }
+    }
     }
     
     public func remove(_ feature: ArcGISFeature) {
@@ -268,6 +323,8 @@ public final class FeatureFormBrowser {
             form.discardEdits()
         }
     }
+    
+    var tasks = [UUID: Task<Void, Error>]()
     
     public func evaluateExpressions() async {
         await withThrowingTaskGroup { group in
@@ -349,9 +406,31 @@ extension FeatureFormBrowserView /* Browser style variants */ {
         }
     }
     
+    struct FeatureRow: View {
+        let form: FeatureForm
+        
+        @State private var errorCount = 0
+        
+        var body: some View {
+            Text(form.title)
+                .badge(errorCount)
+                .badgeProminence(.increased)
+                .task {
+                    for await errors in form.$elementValidationErrors {
+                        errorCount = errors.count
+                    }
+                }
+        }
+    }
+    
     /// <#Description#>
     @ViewBuilder
     var pagedView: some View {
+        List {
+            ForEach(model.browser.forms, id: \.feature.globalID) { form in
+                FeatureRow(form: form)
+            }
+        }
         if let form = model.selectedForm {
             FeatureFormView(root: form)
                 .editingButtons(.hidden)
