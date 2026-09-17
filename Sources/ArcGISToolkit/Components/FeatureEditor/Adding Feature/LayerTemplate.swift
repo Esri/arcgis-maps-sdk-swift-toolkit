@@ -20,18 +20,21 @@ import SwiftUI
 /// A shared template associated with a feature layer.
 struct LayerTemplate: Identifiable {
     let id = UUID()
-    /// The identifier of the feature layer associated with this template.
-    let layerID: Int
+    /// The feature table associated with this template.
+    let table: ArcGISFeatureTable
     /// The shared template used to create a feature.
     let sharedTemplate: SharedTemplate
 }
 
 extension LayerTemplate {
+    /// The identifier of the feature layer associated with this template.
+    var layerID: Int { table.serviceLayerID }
+    
     /// The name of this template.
     var name: String { sharedTemplate.name }
     
     /// Creates a swatch image with the template’s thumbnail or symbology.
-    func makeSwatch() async throws -> UIImage {
+    @MainActor func makeSwatch() async throws -> UIImage {
         return try await sharedTemplate.makeSwatch(layerID: layerID)
     }
 }

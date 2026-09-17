@@ -121,14 +121,13 @@ private extension Map {
                     guard let table = tablesKeyedByLayerID[layerID] else { continue }
                     let group = LayerTemplateGroup(
                         name: table.displayName,
-                        layerTemplates: sharedTemplates
-                            .map { .init(layerID: layerID, sharedTemplate: $0) }
+                        layerTemplates: sharedTemplates.lazy
+                            .map { .init(table: table, sharedTemplate: $0) }
                             .sorted(by: { $0.name < $1.name })
                     )
                     layerTemplateGroups.append(group)
                 }
             }
-            dump(layerTemplateGroups.sorted(by: { $0.name < $1.name }))
             return layerTemplateGroups.sorted(by: { $0.name < $1.name })
         }
     }
