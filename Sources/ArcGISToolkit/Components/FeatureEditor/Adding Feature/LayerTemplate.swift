@@ -18,8 +18,7 @@ import Observation
 import SwiftUI
 
 /// A shared template associated with a feature layer.
-struct LayerTemplate {
-    /// The unique identifier for this layer template.
+struct LayerTemplate: Identifiable {
     let id = UUID()
     /// The identifier of the feature layer associated with this template.
     let layerID: Int

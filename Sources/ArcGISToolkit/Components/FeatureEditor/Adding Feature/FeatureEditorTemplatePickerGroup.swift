@@ -27,7 +27,7 @@ struct FeatureEditorTemplatePickerGroup: View {
     var body: some View {
         @Bindable var group = group
         DisclosureGroup(isExpanded: !isSearching ? $group.isExpanded : .constant(true)) {
-            ForEach(group.layerTemplates, id: \.self) { layerTemplate in
+            ForEach(group.layerTemplates) { layerTemplate in
                 NavigationLink(value: layerTemplate) {
                     FeatureEditorTemplatePickerGroupRow(
                         layerTemplate: layerTemplate,
