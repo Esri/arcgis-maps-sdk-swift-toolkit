@@ -44,18 +44,18 @@ public struct FeatureFormBrowserView: View {
         }
         .task(id: model.browser.forms.count) {
             print("Starting new edits monitor")
-            await model.browser.monitorEdits()
+            await model.monitorEdits()
         }
         .task(id: model.browser.forms.count) {
             print("Starting new errors monitor")
-            await model.browser.monitorErrors()
+            await model.monitorErrors()
         }
     }
 }
 
 extension FeatureFormBrowserView /* Model */ {
     /// <#Description#>
-    @Observable public final class Model {
+    @Observable public final class Model: @unchecked Sendable {
         /// <#Description#>
         var style: Style {
             didSet {
@@ -124,13 +124,6 @@ extension FeatureFormBrowserView /* Model */ {
             }
         }
         
-        var formsWithErrors: [UUID] {
-            browser.forms.filter { form in
-                !form.elementValidationErrors.isEmpty
-            }
-            .compactMap { $0.feature.globalID }
-        }
-        
         /// <#Description#>
         private var backStack = [UUID]()
         
@@ -176,13 +169,13 @@ extension FeatureFormBrowserView /* Model */ {
             formsWithErrors.forEach { id in
                 print("\t", id)
             }
-            print("Browser Forms With Edits \(browser.formsWithEdits.filter({$0.value}).count)")
-            browser.formsWithEdits.forEach { id in
+            print("Browser Forms With Edits \(formsWithEdits.filter({$0.value}).count)")
+            formsWithEdits.forEach { id in
                 print("\t", id.key, id.value)
             }
-            print("Browser Forms With Errors \(browser.formsWithErrors.filter({$0.value > 0}).count)")
-            browser.formsWithErrors.forEach { id in
-                print("\t", id.key, id.value)
+            print("Browser Forms With Errors \(formsWithErrors.filter({$0.value > 0}).count)")
+            formsWithErrors.forEach { id in
+                print("\t", id, id.value)
             }
             print("--- End Debug Print ---")
         }
@@ -273,6 +266,38 @@ extension FeatureFormBrowserView /* Model */ {
             let nextForm = browser.forms[nextIndex]
             select(feature: nextForm.feature)
         }
+            
+        private(set) var formsWithEdits = [UUID: Bool]()
+        
+        private(set) var formsWithErrors = [UUID: Int]()
+        
+        public func monitorEdits() async {
+            await withTaskGroup { group in
+                for form in browser.forms {
+                    group.addTask { @Sendable in
+                        for await hasEdits in form.$hasEdits {
+                            if let globalID = form.feature.globalID {
+                                self.formsWithEdits[globalID] = hasEdits
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        public func monitorErrors() async {
+            await withTaskGroup { group in
+                for form in browser.forms {
+                    group.addTask { @Sendable in
+                        for await errors in form.$elementValidationErrors {
+                            if let globalID = form.feature.globalID {
+                                self.formsWithErrors[globalID] = errors.count
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -284,34 +309,6 @@ extension FeatureFormBrowserView /* Model */ {
     public func add(_ feature: ArcGISFeature) {
         let newForm = FeatureForm(feature: feature)
         forms.append(newForm)
-    }
-    
-    public func monitorEdits() async {
-        await withTaskGroup { group in
-            for form in forms {
-                group.addTask {
-                    for await hasEdits in form.$hasEdits {
-                        if let globalID = form.feature.globalID {
-                            self.formsWithEdits[globalID] = hasEdits
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    public func monitorErrors() async {
-        await withTaskGroup { group in
-            for form in forms {
-                group.addTask {
-                    for await errors in form.$elementValidationErrors {
-                        if let globalID = form.feature.globalID {
-                            self.formsWithErrors[globalID] = errors.count
-                        }
-                    }
-                }
-            }
-        }
     }
     
     public func remove(_ feature: ArcGISFeature) {
@@ -347,10 +344,6 @@ extension FeatureFormBrowserView /* Model */ {
     }
     
     private(set) var forms = [FeatureForm]()
-    
-    private(set) var formsWithEdits = [UUID: Bool]()
-    
-    private(set) var formsWithErrors = [UUID: Int]()
 }
 
 extension FeatureFormBrowserView /* Browser style variants */ {
@@ -432,12 +425,12 @@ extension FeatureFormBrowserView /* Browser style variants */ {
             }
         }
         LabeledContent {
-            Text(model.browser.formsWithEdits.filter({$0.value}).description)
+            Text(model.formsWithEdits.filter({$0.value}).description)
         } label: {
             Text("Edits")
         }
         LabeledContent {
-            Text(model.browser.formsWithErrors.filter({$0.value>0}).count, format: .number)
+            Text(model.formsWithErrors.filter({$0.value>0}).count, format: .number)
         } label: {
             Text("Errors")
         }
