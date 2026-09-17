@@ -25,6 +25,7 @@ struct FeatureEditorTemplatePicker: View {
     
     /// The template groups whose names or template names match the search text.
     var filteredGroups: [LayerTemplateGroup] {
+        guard !searchText.isEmpty else { return model.groups }
         return model.groups.reduce(into: []) { partialResult, group in
             if group.name.localizedCaseInsensitiveContains(searchText) {
                 partialResult.append(group)
