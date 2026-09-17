@@ -44,6 +44,9 @@ struct FeatureFormToolbar: ViewModifier {
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits = false
     
+    /// <#Description#>
+    @State private var pagedBrowserMenuIsPresented = false
+    
     /// The currently presented feature form.
     let featureForm: FeatureForm
     
@@ -186,25 +189,33 @@ struct FeatureFormToolbar: ViewModifier {
                                     Image(systemName: "chevron.left")
                                 }
                             }
-                            Menu {
-                                ForEach(browserModel.ids, id: \.self) { id in
-                                    if let form = browserModel.form(for: id),
-                                       let objectID = form.feature.objectID {
-                                        Button {
-                                            browserModel.select(feature: form.feature)
-                                        } label: {
-                                            Label {
-                                                Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
-                                            } icon: {
-                                                if browserModel.selectedID == id {
-                                                    Image(systemName: "checkmark")
+                            Button {
+                                pagedBrowserMenuIsPresented = true
+                            } label: {
+                                Text("Feature \(browserModel.selectedIndex + 1) of \(browserModel.count)")
+                            }
+                            .popover(isPresented: $pagedBrowserMenuIsPresented) {
+                                List {
+                                    ForEach(browserModel.ids, id: \.self) { id in
+                                        if let form = browserModel.form(for: id),
+                                           let objectID = form.feature.objectID {
+                                            Button {
+                                                browserModel.select(feature: form.feature)
+                                            } label: {
+                                                Label {
+                                                    Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
+                                                } icon: {
+                                                    if browserModel.selectedID == id {
+                                                        Image(systemName: "checkmark")
+                                                    }
                                                 }
                                             }
+                                            .badge(form.elementValidationErrors.count)
+                                            .badgeProminence(.increased)
                                         }
                                     }
                                 }
-                            } label: {
-                                Text("Feature \(browserModel.selectedIndex + 1) of \(browserModel.count)")
+                                .frame(idealWidth: 400, idealHeight: 500)
                             }
                             Button {
                                 browserModel.selectNext()
