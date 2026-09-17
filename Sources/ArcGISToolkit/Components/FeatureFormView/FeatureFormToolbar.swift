@@ -117,7 +117,7 @@ struct FeatureFormToolbar: ViewModifier {
                                     if let form = browserModel.form(for: id),
                                        let objectID = form.feature.objectID {
                                         Button {
-                                            browserModel.select(form: form)
+                                            browserModel.select(feature: form.feature)
                                         } label: {
                                             Label {
                                                 Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
@@ -165,7 +165,7 @@ struct FeatureFormToolbar: ViewModifier {
                                     browserModel.selectedID!
                                 } set: { newID in
                                     guard let form = browserModel.form(for: newID) else { return }
-                                    browserModel.select(form: form, recordNavigation: true)
+                                    browserModel.select(feature: form.feature, recordNavigation: true)
                                 }) {
                                     ForEach(browserModel.ids, id: \.self) { id in
                                         if let form = browserModel.form(for: id), let id = form.feature.objectID {
@@ -191,7 +191,7 @@ struct FeatureFormToolbar: ViewModifier {
                                     if let form = browserModel.form(for: id),
                                        let objectID = form.feature.objectID {
                                         Button {
-                                            browserModel.select(form: form)
+                                            browserModel.select(feature: form.feature)
                                         } label: {
                                             Label {
                                                 Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")

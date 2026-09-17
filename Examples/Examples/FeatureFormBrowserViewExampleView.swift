@@ -174,9 +174,8 @@ extension FeatureFormBrowserViewExampleView {
         )
         if let geoElements = identifyLayerResults?.first?.geoElements,
            let feature = geoElements.first as? ArcGISFeature {
-            let featureForm = FeatureForm(feature: feature)
             (feature.table?.layer as? FeatureLayer)?.selectFeature(feature)
-            browserModel.add(form: featureForm)
+            browserModel.add(feature: feature)
         }
     }
     

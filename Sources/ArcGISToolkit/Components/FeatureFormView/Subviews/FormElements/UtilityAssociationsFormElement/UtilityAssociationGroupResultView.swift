@@ -158,11 +158,10 @@ extension FeatureFormView {
         
         func mainButton(for result: UtilityAssociationResult) -> some View {
             Button {
-                let form = FeatureForm(feature: result.associatedFeature)
                 // If the FeatureFormView is in a FeatureFormBrowserView, open
                 // the association in a new tab.
                 if let browserModel {
-                    browserModel.add(form: form, select: true)
+                    browserModel.add(feature: result.associatedFeature, select: true)
                 } else {
                     let navigationAction = {
                         featureFormViewModel.addModel(form)

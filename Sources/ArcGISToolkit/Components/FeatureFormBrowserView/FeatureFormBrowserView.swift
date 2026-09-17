@@ -55,7 +55,7 @@ extension FeatureFormBrowserView /* Model */ {
                 // to one of these make sure there is a selection.
                 case .menu, .menuWithTabs, .paged:
                     if selectedID == nil, let firstForm = browser.forms.first {
-                        select(form: firstForm, recordNavigation: false)
+                        select(feature: firstForm.feature, recordNavigation: false)
                     }
                 case .list:
                     break
@@ -118,10 +118,10 @@ extension FeatureFormBrowserView /* Model */ {
         private var backStack = [UUID]()
         
         /// <#Description#>
-        /// - Parameter form: <#form description#>
+        /// - Parameter feature: <#form description#>
         /// - Parameter select: <#select description#>
-        public func add(form: FeatureForm, select: Bool = false) {
-            guard let id = form.feature.globalID else {
+        public func add(feature: ArcGISFeature, select: Bool = false) {
+            guard let id = feature.globalID else {
                 Logger.featureFormBrowserView.warning("The feature cannot be added because the its global ID is not available.")
                 return
             }
@@ -130,14 +130,14 @@ extension FeatureFormBrowserView /* Model */ {
                 // form is already selected, regardless of whether it's already
                 // in the collection of managed forms.
                 if select || (style != .list && selectedID == nil) {
-                    self.select(form: form)
+                    self.select(feature: feature)
                 }
             }
             guard !ids.contains(id) else {
                 let id: any CustomStringConvertible
-                if let objectID = form.feature.objectID {
+                if let objectID = feature.objectID {
                     id = objectID
-                } else if let globalID = form.feature.globalID {
+                } else if let globalID = feature.globalID {
                     id = globalID
                 } else {
                     id = "?"
@@ -145,7 +145,7 @@ extension FeatureFormBrowserView /* Model */ {
                 Logger.featureFormBrowserView.info("Feature \(id.description) is already added.")
                 return
             }
-            browser.forms.append(form)
+            browser.add(feature)
         }
         
         public func debugLog() {
@@ -175,23 +175,25 @@ extension FeatureFormBrowserView /* Model */ {
                     Logger.featureFormBrowserView.warning("No ID for back navigation.")
                     return
                 }
-                select(form: form, recordNavigation: false)
+                select(feature: form.feature, recordNavigation: false)
             }
         }
         
         /// <#Description#>
-        /// - Parameter form: <#form description#>
-        public func remove(form: FeatureForm) {
-            browser.forms.removeAll {
-                $0.feature.globalID == form.feature.globalID
+        /// - Parameter feature: <#form description#>
+        public func remove(feature: ArcGISFeature) {
+            browser.forms.forEach { form in
+                if feature.globalID == form.feature.globalID {
+                    browser.remove(feature)
+                }
             }
             backStack.removeAll { id in
-                form.feature.globalID == id
+                feature.globalID == id
             }
-            if selectedID == form.feature.globalID, canGoBack {
+            if selectedID == feature.globalID, canGoBack {
                 let top = backStack.removeFirst()
                 if let _form = self.form(for: top) {
-                    select(form: _form)
+                    select(feature: _form.feature)
                 }
             }
             selectedID = backStack.last
@@ -205,12 +207,14 @@ extension FeatureFormBrowserView /* Model */ {
         }
         
         /// <#Description#>
-        /// - Parameter form: <#form description#>
-        public func select(form: FeatureForm, recordNavigation: Bool = true) {
+        /// - Parameters:
+        ///   - feature: <#feature description#>
+        ///   - recordNavigation: <#recordNavigation description#>
+        public func select(feature: ArcGISFeature, recordNavigation: Bool = true) {
             if recordNavigation, let selectedID {
                 backStack.insert(selectedID, at: 0)
             }
-            selectedID = form.feature.globalID
+            selectedID = feature.globalID
         }
         
         /// <#Description#>
@@ -224,7 +228,7 @@ extension FeatureFormBrowserView /* Model */ {
                 nextIndex = selectedIndex + 1
             }
             let nextForm = browser.forms[nextIndex]
-            select(form: nextForm)
+            select(feature: nextForm.feature)
         }
         
         /// <#Description#>
@@ -238,7 +242,7 @@ extension FeatureFormBrowserView /* Model */ {
                 nextIndex = selectedIndex - 1
             }
             let nextForm = browser.forms[nextIndex]
-            select(form: nextForm)
+            select(feature: nextForm.feature)
         }
     }
 }
@@ -285,11 +289,11 @@ public final class FeatureFormBrowser {
         }
     }
     
-    var forms = [FeatureForm]()
+    private(set) var forms = [FeatureForm]()
     
-    var formsWithEdits = [FeatureForm]()
+    private(set) var formsWithEdits = [FeatureForm]()
     
-    var formsWithErrors = [FeatureForm]()
+    private(set) var formsWithErrors = [FeatureForm]()
 }
 
 extension FeatureFormBrowserView /* Browser style variants */ {
@@ -305,7 +309,7 @@ extension FeatureFormBrowserView /* Browser style variants */ {
                     List(model.browser.forms, id: \.feature.globalID) { form in
                         Button(form.title) {
                             withAnimation {
-                                model.select(form: form)
+                                model.select(feature: form.feature)
                             }
                         }
                     }
@@ -369,7 +373,9 @@ extension FeatureFormBrowserView /* Browser style variants */ {
                     root: form,
                     isPresented: Binding(
                         get: { true },
-                        set: { _ in model.remove(form: form) }
+                        set: { _ in
+                            model.browser.remove(form.feature)
+                        }
                     )
                 )
                 .editingButtons(.hidden)
@@ -477,7 +483,7 @@ struct FeatureFormBrowserViewPreview: View {
                     let featureQueryResult = try await featureTable?.queryFeatures(using: queryParameters)
                     let features = featureQueryResult?.features().compactMap { $0 as? ArcGISFeature }
                     features?.forEach { feature in
-                        model.add(form: FeatureForm.init(feature: feature))
+                        model.add(feature: feature)
                     }
                 }
             }
