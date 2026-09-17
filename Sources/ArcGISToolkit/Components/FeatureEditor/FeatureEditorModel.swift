@@ -157,6 +157,7 @@ final class FeatureEditorModel {
     
     /// Starts adding new features from templates.
     func startAddingFeatures() {
+        guard supportsAddingFeatures else { return }
         state = .adding
     }
     
