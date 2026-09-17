@@ -50,67 +50,100 @@ final class FeatureAddingModel {
 }
 
 private extension Map {
-    /// The layer template groups from the map's operational layers.
+    /// The layer template groups from the map's operational layers and tables.
     var layerTemplateGroups: [LayerTemplateGroup] {
         get async throws {
-            try await withThrowingTaskGroup(of: Optional<LayerTemplateGroup>.self) { taskGroup in
-                for layer in operationalLayers {
-                    taskGroup.addTask {
-                        guard let (tableName, layerID, templates) = try await layer.sharedTemplates,
-                              !templates.isEmpty else {
-                            return nil
+            struct HashableSharedTemplateSource: Hashable {
+                let base: any SharedTemplateSource & Loadable
+                
+                init(_ base: any SharedTemplateSource & Loadable) {
+                    self.base = base
+                }
+                
+                static func == (lhs: Self, rhs: Self) -> Bool {
+                    return lhs.base === rhs.base
+                }
+                
+                func hash(into hasher: inout Hasher) {
+                    hasher.combine(ObjectIdentifier(base))
+                }
+            }
+            
+            var featureTableArrays: [HashableSharedTemplateSource: [ArcGISFeatureTable]] = [:]
+            
+            func addTable(_ table: ArcGISFeatureTable) async throws {
+                try await table.load()
+                
+                guard table.hasGeometry,
+                      table.isEditable,
+                      table.canAddFeature,
+                      let sharedTemplateSource = table.sharedTemplateSource else {
+                    return
+                }
+                
+                let key = HashableSharedTemplateSource(sharedTemplateSource)
+                featureTableArrays[key, default: []].append(table)
+            }
+            
+            func addTables(from layers: [Layer]) async throws {
+                for layer in layers {
+                    try await layer.load()
+                    switch layer {
+                    case let groupLayer as GroupLayer:
+                        try await addTables(from: groupLayer.layers)
+                    case let featureLayer as FeatureLayer:
+                        if let featureTable = featureLayer.featureTable as? ArcGISFeatureTable {
+                            try await addTable(featureTable)
                         }
-                        let layerTemplates = templates.lazy
-                            .map { LayerTemplate(layerID: layerID, sharedTemplate: $0) }
-                            .sorted(by: { $0.name < $1.name })
-                        return LayerTemplateGroup(name: tableName, layerTemplates: layerTemplates)
+                    default:
+                        continue
                     }
                 }
-                
-                var groupItems: [LayerTemplateGroup] = []
-                for try await group in taskGroup {
-                    guard let group else { continue }
-                    groupItems.append(group)
-                }
-                
-                return groupItems.sorted { $0.name < $1.name }
             }
+            
+            try await load()
+            
+            try await addTables(from: operationalLayers)
+            for case let table as ArcGISFeatureTable in tables {
+                try await addTable(table)
+            }
+            
+            var layerTemplateGroups: [LayerTemplateGroup] = []
+            for (key, tables) in featureTableArrays {
+                let sharedTemplateSource = key.base
+                try await sharedTemplateSource.load()
+                let tablesKeyedByLayerID = Dictionary(
+                    uniqueKeysWithValues: tables.lazy.map { ($0.serviceLayerID, $0) }
+                )
+                let sharedTemplates = try await sharedTemplateSource
+                    .querySharedTemplates(using: nil)
+                for (layerID, sharedTemplates) in sharedTemplates {
+                    guard let table = tablesKeyedByLayerID[layerID] else { continue }
+                    let group = LayerTemplateGroup(
+                        name: table.displayName,
+                        layerTemplates: sharedTemplates
+                            .map { .init(layerID: layerID, sharedTemplate: $0) }
+                            .sorted(by: { $0.name < $1.name })
+                    )
+                    layerTemplateGroups.append(group)
+                }
+            }
+            dump(layerTemplateGroups.sorted(by: { $0.name < $1.name }))
+            return layerTemplateGroups.sorted(by: { $0.name < $1.name })
         }
     }
 }
 
-private extension Layer {
-    /// The layer's name, ID, and shared templates when it supports adding features.
-    var sharedTemplates: (String, Int, [SharedTemplate])? {
-        get async throws {
-            guard let self = self as? FeatureLayer else { return nil }
-            
-            try await self.load()
-            
-            guard let table = self.featureTable as? ServiceFeatureTable else {
-                return nil
-            }
-            
-            try await table.load()
-            
-            guard table.hasGeometry,
-                  table.isEditable,
-                  table.canAddFeature,
-                  let geodatabase = table.serviceGeodatabase else {
-                return nil
-            }
-            
-            try await geodatabase.load()
-            
-            do {
-                let serviceLayerUD = table.serviceLayerID
-                let parameters = SharedTemplateQueryParameters()
-                parameters.addLayerID(serviceLayerUD)
-                return try await geodatabase.querySharedTemplates().first
-                    .map { (table.displayName, $0, $1) }
-            } catch {
-                return nil
-            }
+private extension ArcGISFeatureTable {
+    /// The shared template source for this table.
+    var sharedTemplateSource: (any SharedTemplateSource & Loadable)? {
+        return switch self {
+        case let geodatabaseFeatureTable as GeodatabaseFeatureTable:
+            geodatabaseFeatureTable.geodatabase
+        case let serviceFeatureTable as ServiceFeatureTable:
+            serviceFeatureTable.serviceGeodatabase
+        default:
+            nil
         }
     }
 }
