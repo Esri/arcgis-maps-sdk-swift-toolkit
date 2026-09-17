@@ -53,9 +53,13 @@ private extension Map {
     /// The layer template groups from the map's operational layers and tables.
     var layerTemplateGroups: [LayerTemplateGroup] {
         get async throws {
+            /// A hashable shared template source.
+            /// - Note: Needed because `SharedTemplateSource` is not hashable.
             struct HashableSharedTemplateSource: Hashable {
+                /// The shared template source wrapped by this instance.
                 let base: any SharedTemplateSource & Loadable
                 
+                /// Creates an instance with the given shared template source.
                 init(_ base: any SharedTemplateSource & Loadable) {
                     self.base = base
                 }
@@ -69,7 +73,13 @@ private extension Map {
                 }
             }
             
-            var featureTableArrays: [HashableSharedTemplateSource: [ArcGISFeatureTable]] = [:]
+            /// A dictionary of feature tables, keyed by service layer
+            /// identifier, keyed by shared template source.
+            ///
+            /// This helps to:
+            /// 1. Only query for templates once per source
+            /// 2. Only include templates that are a part of the map.
+            var featureTablesBySharedTemplateSource: [HashableSharedTemplateSource: [Int: ArcGISFeatureTable]] = [:]
             
             func addTable(_ table: ArcGISFeatureTable) async throws {
                 try await table.load()
@@ -82,7 +92,7 @@ private extension Map {
                 }
                 
                 let key = HashableSharedTemplateSource(sharedTemplateSource)
-                featureTableArrays[key, default: []].append(table)
+                featureTablesBySharedTemplateSource[key, default: [:]][table.serviceLayerID] = table
             }
             
             func addTables(from layers: [Layer]) async throws {
@@ -103,22 +113,24 @@ private extension Map {
             
             try await load()
             
+            // Record all the feature table referenced by the map.
+            
             try await addTables(from: operationalLayers)
             for case let table as ArcGISFeatureTable in tables {
                 try await addTable(table)
             }
             
+            // Iterate over referenced feature table, query for shared
+            // templates, and create groups.
+            
             var layerTemplateGroups: [LayerTemplateGroup] = []
-            for (key, tables) in featureTableArrays {
+            for (key, featureTablesByLayerID) in featureTablesBySharedTemplateSource {
                 let sharedTemplateSource = key.base
                 try await sharedTemplateSource.load()
-                let tablesKeyedByLayerID = Dictionary(
-                    uniqueKeysWithValues: tables.lazy.map { ($0.serviceLayerID, $0) }
-                )
                 let sharedTemplates = try await sharedTemplateSource
                     .querySharedTemplates(using: nil)
                 for (layerID, sharedTemplates) in sharedTemplates {
-                    guard let table = tablesKeyedByLayerID[layerID] else { continue }
+                    guard let table = featureTablesByLayerID[layerID] else { continue }
                     let group = LayerTemplateGroup(
                         name: table.displayName,
                         layerTemplates: sharedTemplates.lazy
