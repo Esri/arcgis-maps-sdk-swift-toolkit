@@ -238,6 +238,7 @@ extension FeatureFormManagerView /* Model */ {
         ///   - feature: <#feature description#>
         ///   - recordNavigation: <#recordNavigation description#>
         public func select(feature: ArcGISFeature, recordNavigation: Bool = true) {
+            guard feature.globalID != selectedID else { return }
             if recordNavigation, let selectedID {
                 backStack.insert(selectedID, at: 0)
             }
@@ -246,6 +247,7 @@ extension FeatureFormManagerView /* Model */ {
         
         /// <#Description#>
         public func selectNext() {
+            guard ids.count > 1 else { return }
             guard selectedIndex >= 0 else { return }
             let nextIndex: Int
             if selectedIndex == ids.count - 1 {
@@ -260,6 +262,7 @@ extension FeatureFormManagerView /* Model */ {
         
         /// <#Description#>
         public func selectPrevious() {
+            guard ids.count > 1 else { return }
             guard selectedIndex >= 0 else { return }
             let nextIndex: Int
             if selectedIndex == 0 {
@@ -292,7 +295,7 @@ extension FeatureFormManagerView /* Model */ {
         }
         
         func monitorErrors() async {
-            Logger.featureFormBrowserView.info("Starting errors monitoring.")
+            Logger.featureFormBrowserView.info("Starting error monitoring.")
             await withTaskGroup { group in
                 for form in manager.forms {
                     group.addTask { @Sendable in
