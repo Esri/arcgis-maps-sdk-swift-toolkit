@@ -43,11 +43,9 @@ public struct FeatureFormBrowserView: View {
             }
         }
         .task(id: model.browser.forms.count) {
-            print("Starting new edits monitor")
             await model.monitorEdits()
         }
         .task(id: model.browser.forms.count) {
-            print("Starting new errors monitor")
             await model.monitorErrors()
         }
     }
@@ -271,7 +269,8 @@ extension FeatureFormBrowserView /* Model */ {
         
         private(set) var formsWithErrors = [UUID: Int]()
         
-        public func monitorEdits() async {
+        func monitorEdits() async {
+            Logger.featureFormBrowserView.info("Starting edit monitoring.")
             await withTaskGroup { group in
                 for form in browser.forms {
                     group.addTask { @Sendable in
@@ -285,7 +284,8 @@ extension FeatureFormBrowserView /* Model */ {
             }
         }
         
-        public func monitorErrors() async {
+        func monitorErrors() async {
+            Logger.featureFormBrowserView.info("Starting errors monitoring.")
             await withTaskGroup { group in
                 for form in browser.forms {
                     group.addTask { @Sendable in
@@ -399,42 +399,9 @@ extension FeatureFormBrowserView /* Browser style variants */ {
         }
     }
     
-    struct FeatureRow: View {
-        let form: FeatureForm
-        
-        @State private var errorCount = 0
-        
-        var body: some View {
-            Text(form.title)
-                .badge(errorCount)
-                .badgeProminence(.increased)
-                .task {
-                    for await errors in form.$elementValidationErrors {
-                        errorCount = errors.count
-                    }
-                }
-        }
-    }
-    
     /// <#Description#>
     @ViewBuilder
     var pagedView: some View {
-        List {
-            ForEach(model.browser.forms, id: \.feature.globalID) { form in
-                FeatureRow(form: form)
-            }
-        }
-        LabeledContent {
-            Text(model.formsWithEdits.filter({$0.value}).description)
-        } label: {
-            Text("Edits")
-        }
-        LabeledContent {
-            Text(model.formsWithErrors.filter({$0.value>0}).count, format: .number)
-        } label: {
-            Text("Errors")
-        }
-        
         if let form = model.selectedForm {
             FeatureFormView(root: form)
                 .editingButtons(.hidden)
