@@ -125,8 +125,11 @@ private extension Map {
             for (key, featureTablesByLayerID) in featureTablesBySharedTemplateSource {
                 let sharedTemplateSource = key.base
                 try await sharedTemplateSource.load()
+                let parameters = SharedTemplateQueryParameters()
+                parameters.sourceType = .layer
+                parameters.addLayerIDs(featureTablesByLayerID.keys)
                 let sharedTemplates = try await sharedTemplateSource
-                    .querySharedTemplates(using: nil)
+                    .querySharedTemplates(using: parameters)
                 for (layerID, sharedTemplates) in sharedTemplates {
                     guard let table = featureTablesByLayerID[layerID] else { continue }
                     let group = LayerTemplateGroup(
