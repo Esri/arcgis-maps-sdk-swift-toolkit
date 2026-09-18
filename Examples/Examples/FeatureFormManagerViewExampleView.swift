@@ -18,11 +18,11 @@ import ArcGISToolkit
 import os
 import SwiftUI
 
-struct FeatureFormBrowserViewExampleView: View {
+struct FeatureFormManagerViewExampleView: View {
     /// A Boolean value indicating whether general form workflow errors are presented.
     @State private var alertIsPresented = false
     /// <#Description#>
-    @State private var browserModel = FeatureFormBrowserView.Model()
+    @State private var browserModel = FeatureFormManagerView.Model()
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
@@ -58,7 +58,7 @@ struct FeatureFormBrowserViewExampleView: View {
                     submittingOverlay
                 }
                 .sheet(isPresented: $featureFormViewIsPresented) {
-                    browserModel = FeatureFormBrowserView.Model()
+                    browserModel = FeatureFormManagerView.Model()
                     map.operationalLayers.forEach {
                         ($0 as? FeatureLayer)?.clearSelection()
                         ($0 as? GroupLayer)?.layers.forEach {
@@ -66,7 +66,7 @@ struct FeatureFormBrowserViewExampleView: View {
                         }
                     }
                 } content: {
-                    FeatureFormBrowserView(model: $browserModel)
+                    FeatureFormManagerView(model: $browserModel)
                 }
                 .task {
                     do {
@@ -103,7 +103,7 @@ struct FeatureFormBrowserViewExampleView: View {
     }
 }
 
-extension FeatureFormBrowserViewExampleView {
+extension FeatureFormManagerViewExampleView {
     /// An error encountered while submitting edits.
     enum SubmissionError: LocalizedError {
         case anyError(any Error)

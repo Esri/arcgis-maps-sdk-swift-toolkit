@@ -19,7 +19,7 @@ internal import os
 
 /// <#Description#>
 @_spi(Experimental)
-public struct FeatureFormBrowserView: View {
+public struct FeatureFormManagerView: View {
     /// <#Description#>
     @Binding var model: Model
     
@@ -42,16 +42,16 @@ public struct FeatureFormBrowserView: View {
                 pagedView
             }
         }
-        .task(id: model.browser.forms.count) {
+        .task(id: model.manager.forms.count) {
             await model.monitorEdits()
         }
-        .task(id: model.browser.forms.count) {
+        .task(id: model.manager.forms.count) {
             await model.monitorErrors()
         }
     }
 }
 
-extension FeatureFormBrowserView /* Model */ {
+extension FeatureFormManagerView /* Model */ {
     /// <#Description#>
     @Observable public final class Model: @unchecked Sendable {
         /// <#Description#>
@@ -62,7 +62,7 @@ extension FeatureFormBrowserView /* Model */ {
                 // always a selected form. If the style was switched from .list
                 // to one of these make sure there is a selection.
                 case .menu, .menuWithTabs, .paged:
-                    if selectedID == nil, let firstForm = browser.forms.first {
+                    if selectedID == nil, let firstForm = manager.forms.first {
                         select(feature: firstForm.feature, recordNavigation: false)
                     }
                 case .list:
@@ -75,11 +75,11 @@ extension FeatureFormBrowserView /* Model */ {
         /// - Parameter features: <#features description#>
         public init(features: [ArcGISFeature] = []) {
             self.style = .paged
-            self.browser = .init(features: features)
+            self.manager = .init(features: features)
         }
         
         /// <#Description#>
-        var browser: FeatureFormBrowser
+        var manager: FeatureFormManager
         
         /// <#Description#>
         ///
@@ -93,7 +93,7 @@ extension FeatureFormBrowserView /* Model */ {
         
         /// <#Description#>
         public var count: Int {
-            browser.forms.count == ids.count ? browser.forms.count : -1
+            manager.forms.count == ids.count ? manager.forms.count : -1
         }
         
         /// <#Description#>
@@ -110,7 +110,7 @@ extension FeatureFormBrowserView /* Model */ {
         
         /// <#Description#>
         var ids: [UUID] {
-            browser.forms.compactMap { $0.feature.globalID }
+            manager.forms.compactMap { $0.feature.globalID }
         }
         
         /// <#Description#>
@@ -153,7 +153,7 @@ extension FeatureFormBrowserView /* Model */ {
                 Logger.featureFormBrowserView.info("Feature \(id.description) is already added.")
                 return
             }
-            browser.add(feature)
+            manager.add(feature)
         }
         
         public func debugLog() {
@@ -202,9 +202,9 @@ extension FeatureFormBrowserView /* Model */ {
         /// <#Description#>
         /// - Parameter feature: <#form description#>
         public func remove(feature: ArcGISFeature) {
-            browser.forms.forEach { form in
+            manager.forms.forEach { form in
                 if feature.globalID == form.feature.globalID {
-                    browser.remove(feature)
+                    manager.remove(feature)
                 }
             }
             backStack.removeAll { id in
@@ -223,7 +223,7 @@ extension FeatureFormBrowserView /* Model */ {
         /// - Parameter id: <#id description#>
         /// - Returns: <#description#>
         public func form(for id: UUID) -> FeatureForm? {
-            browser.forms.first { $0.feature.globalID == id } ?? nil
+            manager.forms.first { $0.feature.globalID == id } ?? nil
         }
         
         /// <#Description#>
@@ -247,7 +247,7 @@ extension FeatureFormBrowserView /* Model */ {
             } else {
                 nextIndex = selectedIndex + 1
             }
-            let nextForm = browser.forms[nextIndex]
+            let nextForm = manager.forms[nextIndex]
             select(feature: nextForm.feature)
         }
         
@@ -261,7 +261,7 @@ extension FeatureFormBrowserView /* Model */ {
             } else {
                 nextIndex = selectedIndex - 1
             }
-            let nextForm = browser.forms[nextIndex]
+            let nextForm = manager.forms[nextIndex]
             select(feature: nextForm.feature)
         }
             
@@ -272,7 +272,7 @@ extension FeatureFormBrowserView /* Model */ {
         func monitorEdits() async {
             Logger.featureFormBrowserView.info("Starting edit monitoring.")
             await withTaskGroup { group in
-                for form in browser.forms {
+                for form in manager.forms {
                     group.addTask { @Sendable in
                         for await hasEdits in form.$hasEdits {
                             if let globalID = form.feature.globalID {
@@ -287,7 +287,7 @@ extension FeatureFormBrowserView /* Model */ {
         func monitorErrors() async {
             Logger.featureFormBrowserView.info("Starting errors monitoring.")
             await withTaskGroup { group in
-                for form in browser.forms {
+                for form in manager.forms {
                     group.addTask { @Sendable in
                         for await errors in form.$elementValidationErrors {
                             if let globalID = form.feature.globalID {
@@ -301,7 +301,7 @@ extension FeatureFormBrowserView /* Model */ {
     }
 }
 
-@Observable public final class FeatureFormBrowser: @unchecked Sendable {
+@Observable public final class FeatureFormManager: @unchecked Sendable {
     init(features: Array<ArcGISFeature>) {
         forms = features.map { .init(feature: $0) }
     }
@@ -346,7 +346,7 @@ extension FeatureFormBrowserView /* Model */ {
     private(set) var forms = [FeatureForm]()
 }
 
-extension FeatureFormBrowserView /* Browser style variants */ {
+extension FeatureFormManagerView /* Manager style variants */ {
     /// <#Description#>
     @ViewBuilder
     var list: some View {
@@ -356,7 +356,7 @@ extension FeatureFormBrowserView /* Browser style variants */ {
                     .transition(.asymmetric(insertion: .push(from: .trailing), removal: .move(edge: .trailing)))
             } else {
                 NavigationStack {
-                    List(model.browser.forms, id: \.feature.globalID) { form in
+                    List(model.manager.forms, id: \.feature.globalID) { form in
                         Button(form.title) {
                             withAnimation {
                                 model.select(feature: form.feature)
@@ -364,9 +364,9 @@ extension FeatureFormBrowserView /* Browser style variants */ {
                         }
                     }
                     .navigationTitle(
-                        model.browser.forms.count == 1
+                        model.manager.forms.count == 1
                         ? "Editing 1 Feature"
-                        : "Editing \(model.browser.forms.count) Features"
+                        : "Editing \(model.manager.forms.count) Features"
                     )
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
@@ -424,7 +424,7 @@ extension FeatureFormBrowserView /* Browser style variants */ {
                     isPresented: Binding(
                         get: { true },
                         set: { _ in
-                            model.browser.remove(form.feature)
+                            model.manager.remove(form.feature)
                         }
                     )
                 )
@@ -438,7 +438,7 @@ extension FeatureFormBrowserView /* Browser style variants */ {
     }
 }
 
-extension FeatureFormBrowserView /* Enums */ {
+extension FeatureFormManagerView /* Enums */ {
     /// <#Description#>
     public enum Style {
         case list
@@ -448,8 +448,8 @@ extension FeatureFormBrowserView /* Enums */ {
     }
 }
 
-public extension FeatureFormBrowserView /* Modifiers */ {
-    func style(_ style: FeatureFormBrowserView.Style) -> some View {
+public extension FeatureFormManagerView /* Modifiers */ {
+    func style(_ style: FeatureFormManagerView.Style) -> some View {
         model.style = style
         return self
     }
@@ -462,23 +462,23 @@ extension Logger {
     }
 }
 
-struct FeatureFormBrowserViewPreview: View {
-    @State private var style: FeatureFormBrowserView.Style = .paged
-    @Binding var model: FeatureFormBrowserView.Model
+struct FeatureFormManagerViewPreview: View {
+    @State private var style: FeatureFormManagerView.Style = .paged
+    @Binding var model: FeatureFormManagerView.Model
     var body: some View {
-        FeatureFormBrowserView(model: $model)
+        FeatureFormManagerView(model: $model)
             .style(style)
         HStack(spacing: 50) {
             Menu {
                 Picker("Browser Style", selection: $style) {
                     Text("List")
-                        .tag(FeatureFormBrowserView.Style.list)
+                        .tag(FeatureFormManagerView.Style.list)
                     Text("Menu")
-                        .tag(FeatureFormBrowserView.Style.menu)
+                        .tag(FeatureFormManagerView.Style.menu)
                     Text("Menu With Tabs")
-                        .tag(FeatureFormBrowserView.Style.menuWithTabs)
+                        .tag(FeatureFormManagerView.Style.menuWithTabs)
                     Text("Paged")
-                        .tag(FeatureFormBrowserView.Style.paged)
+                        .tag(FeatureFormManagerView.Style.paged)
                 }
             } label: {
                 Text("Style")
@@ -492,14 +492,14 @@ struct FeatureFormBrowserViewPreview: View {
 
 #Preview {
     @Previewable @State var map: Map?
-    @Previewable @State var model = FeatureFormBrowserView.Model(features: [])
+    @Previewable @State var model = FeatureFormManagerView.Model(features: [])
     @Previewable @State var loadResult: Result<Void, Error>?
     
     switch loadResult {
     case .success(let success):
         MapView(map: map!)
             .sheet(isPresented: .constant(true)) {
-                FeatureFormBrowserViewPreview(model: $model)
+                FeatureFormManagerViewPreview(model: $model)
             }
     case .failure(let failure):
         ContentUnavailableView {

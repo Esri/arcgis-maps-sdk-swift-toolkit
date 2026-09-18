@@ -28,7 +28,7 @@ struct FeatureFormToolbar: ViewModifier {
     @Environment(\.editingButtonVisibility) var editingButtonsVisibility
     
     /// <#Description#>
-    @Environment(FeatureFormBrowserView.Model.self) var browserModel: FeatureFormBrowserView.Model?
+    @Environment(FeatureFormManagerView.Model.self) var browserModel: FeatureFormManagerView.Model?
     /// The model for the FeatureFormView containing the view.
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
@@ -134,7 +134,7 @@ struct FeatureFormToolbar: ViewModifier {
                                 }
                             }
                         } label: {
-                            Text(browserModel.browser.forms.count, format: .number)
+                            Text(browserModel.manager.forms.count, format: .number)
                         }
                     }
                 } else if let isPresented {
