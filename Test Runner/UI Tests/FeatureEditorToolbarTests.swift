@@ -44,7 +44,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         app.openFeatureEditorTestView()
         
         let addFeaturesButton = app.buttons["Add Features"]
-        addFeaturesButton.assertExistence()
+        addFeaturesButton.assertExistence(timeout: 10)
         
         let templates = app.staticTexts["Templates"]
         addFeaturesButton.tap()

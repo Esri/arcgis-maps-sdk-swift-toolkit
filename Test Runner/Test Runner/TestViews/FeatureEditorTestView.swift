@@ -103,20 +103,11 @@ private extension FeatureEditorTestView {
     
     /// Makes a map from a portal item.
     func makeMap() async throws -> Map {
-        let map = if UserDefaults.standard.objectID != nil {
-            Map(
-                item: PortalItem(
-                    portal: .arcGISOnline(connection: .anonymous),
-                    id: PortalItem.ID("471eb0bf37074b1fbb972b1da70fb310")!
-                )
-            )
-        } else {
-            // Since there is not a feature to edit, use a map with templates
-            // to test the add features workflow.
-            Map(
-                url: URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
-            )!
-        }
+        let napervilleElectricUtilityNetwork = PortalItem(
+            portal: .arcGISOnline(connection: .anonymous),
+            id: PortalItem.ID("471eb0bf37074b1fbb972b1da70fb310")!
+        )
+        let map = Map(item: napervilleElectricUtilityNetwork)
         // Enables full resolution to allow snapping on all layers.
         map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
         try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(.publicSample)
