@@ -22,7 +22,7 @@ struct FeatureFormManagerViewExampleView: View {
     /// A Boolean value indicating whether general form workflow errors are presented.
     @State private var alertIsPresented = false
     /// <#Description#>
-    @State private var browserModel = FeatureFormManagerView.Model()
+    @State private var browserModel = FeatureFormManagerView.Model(forms: [])
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
@@ -58,7 +58,7 @@ struct FeatureFormManagerViewExampleView: View {
                     submittingOverlay
                 }
                 .sheet(isPresented: $featureFormViewIsPresented) {
-                    browserModel = FeatureFormManagerView.Model()
+                    browserModel = FeatureFormManagerView.Model(forms: [])
                     map.operationalLayers.forEach {
                         ($0 as? FeatureLayer)?.clearSelection()
                         ($0 as? GroupLayer)?.layers.forEach {
