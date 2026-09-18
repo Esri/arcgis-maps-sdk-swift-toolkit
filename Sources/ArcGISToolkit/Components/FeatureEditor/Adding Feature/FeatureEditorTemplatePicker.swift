@@ -71,7 +71,10 @@ struct FeatureEditorTemplatePicker: View {
                 )
                 .navigationTitle(layerTemplate.name)
             }
-            .searchable(text: $searchText)
+            .searchable(
+                text: $searchText,
+                placement: .navigationBarDrawer(displayMode: .always)
+            )
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     DismissButton(kind: .close) {
