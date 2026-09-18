@@ -79,6 +79,13 @@ extension FeatureFormManagerView /* Model */ {
         }
         
         /// <#Description#>
+        /// - Parameter forms: <#forms description#>
+        public init(forms: [FeatureForm] = []) {
+            self.style = .paged
+            self.manager = .init(forms: forms)
+        }
+        
+        /// <#Description#>
         var manager: FeatureFormManager
         
         /// <#Description#>
@@ -301,9 +308,13 @@ extension FeatureFormManagerView /* Model */ {
     }
 }
 
-@Observable public final class FeatureFormManager: @unchecked Sendable {
-    init(features: Array<ArcGISFeature>) {
-        forms = features.map { .init(feature: $0) }
+@Observable public final class FeatureFormManager {
+    convenience init(features: Array<ArcGISFeature>) {
+        self.init(forms: features.map { .init(feature: $0) })
+    }
+    
+    init(forms: Array<FeatureForm>) {
+        self.forms = forms
     }
     
     public func add(_ feature: ArcGISFeature) {
@@ -311,9 +322,19 @@ extension FeatureFormManagerView /* Model */ {
         forms.append(newForm)
     }
     
+    public func add(_ form: FeatureForm) {
+        forms.append(form)
+    }
+    
     public func remove(_ feature: ArcGISFeature) {
         forms.removeAll { form in
             feature.globalID == form.feature.globalID
+        }
+    }
+    
+    public func remove(_ form: FeatureForm) {
+        forms.removeAll { _form in
+            form.feature.globalID == _form.feature.globalID
         }
     }
     
