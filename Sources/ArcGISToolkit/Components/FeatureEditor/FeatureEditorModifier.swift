@@ -44,6 +44,7 @@ private struct FeatureEditorModifier: ViewModifier {
                     case .adding:
                         NavigationStack {
                             FeatureEditorTemplatePicker()
+                                .environment(model.featureAddingModel)
                         }
                     case .editing:
                         switch model.loadResult {
