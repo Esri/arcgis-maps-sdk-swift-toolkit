@@ -96,7 +96,6 @@ private extension Map {
             
             func addTables(from layers: [Layer]) async throws {
                 for layer in layers {
-                    try await layer.load()
                     switch layer {
                     case let groupLayer as GroupLayer:
                         try await addTables(from: groupLayer.layers)
