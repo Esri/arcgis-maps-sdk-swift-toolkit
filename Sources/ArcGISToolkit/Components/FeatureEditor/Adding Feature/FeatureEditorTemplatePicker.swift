@@ -59,6 +59,7 @@ struct FeatureEditorTemplatePicker: View {
                     comment: "The title of the template picker view."
                 )
             )
+            .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: LayerTemplate.self) { layerTemplate in
                 ContentUnavailableView(
                     LocalizedStringResource(
