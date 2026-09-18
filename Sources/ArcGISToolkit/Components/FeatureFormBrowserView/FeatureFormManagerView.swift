@@ -286,7 +286,8 @@ extension FeatureFormManagerView /* Model */ {
                     group.addTask { @Sendable in
                         for await hasEdits in form.$hasEdits {
                             if let globalID = form.feature.globalID {
-                                self.formsWithEdits[globalID] = hasEdits
+#warning("Edit monitoring temporarily disabled.")
+//                                self.formsWithEdits[globalID] = hasEdits
                             }
                         }
                     }
@@ -301,7 +302,8 @@ extension FeatureFormManagerView /* Model */ {
                     group.addTask { @Sendable in
                         for await errors in form.$elementValidationErrors {
                             if let globalID = form.feature.globalID {
-                                self.formsWithErrors[globalID] = errors.count
+#warning("Error monitoring temporarily disabled.")
+//                                self.formsWithErrors[globalID] = errors.count
                             }
                         }
                     }
