@@ -37,6 +37,7 @@ struct FeatureEditorTemplatePickerGroup: View {
             }
         } label: {
             Text(group.name.bolding(group.name))
+                .catalystPadding(4)
         }
     }
 }
