@@ -84,8 +84,7 @@ private extension Map {
             func addTable(_ table: ArcGISFeatureTable) async throws {
                 try await table.load()
                 
-                guard table.hasGeometry,
-                      table.isEditable,
+                guard table.isEditable,
                       table.canAddFeature,
                       let sharedTemplateSource = table.sharedTemplateSource else {
                     return
