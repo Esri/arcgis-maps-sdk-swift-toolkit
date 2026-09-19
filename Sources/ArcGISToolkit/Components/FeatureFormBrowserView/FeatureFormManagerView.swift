@@ -428,15 +428,37 @@ extension FeatureFormManagerView /* Manager style variants */ {
     /// <#Description#>
     @ViewBuilder
     var pagedView: some View {
-        if let form = model.selectedForm {
-            FeatureFormView(root: form)
-                .editingButtons(.hidden)
-                .environment(model)
-                .id(model.selectedIndex)
-        }  else {
-            ContentUnavailableView {
-                Text("No form is selected.")
+        if let selection = model.selectedID {
+            TabView(
+                selection: Binding {
+                    selection
+                } set: { newID in
+                    guard let form = model.form(for: newID) else { return }
+                    model.select(feature: form.feature, recordNavigation: true)
+                }
+            ) {
+                ForEach(model.ids, id: \.self) { id in
+                    if let form = model.form(for: id) {
+                        Tab(value: id) {
+                            FeatureFormView(
+                                root: form,
+                                isPresented: Binding(
+                                    get: { true },
+                                    set: { _ in model.remove(feature: form.feature) }
+                                )
+                            )
+                            .editingButtons(.hidden)
+                            .environment(model)
+                        } label: {
+                            Image(systemName: "list.bullet.clipboard")
+                            Text(form.title)
+                        }
+                    }
+                }
             }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+        } else {
+            Text("No form is selected.")
         }
     }
     
