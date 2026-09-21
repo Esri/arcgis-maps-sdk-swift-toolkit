@@ -42,11 +42,18 @@ final class FeatureEditorModel {
     var feature: ArcGISFeature? {
         presentedFeatureForm?.feature ?? rootFeatureForm?.feature
     }
-    /// The geometry of the `feature` before editing.
-    private(set) var initialGeometry: Geometry?
     /// A Boolean value that indicates whether the Feature Editor inspector is presented.
     var isPresented: Bool {
-        get { state != .stopped }
+        get {
+            switch state {
+            case .adding:
+                featureAddingModel.inspectorIsPresented
+            case .editing:
+                true
+            case .stopped:
+                false
+            }
+        }
         set {
             guard !newValue else { return }
             stopEditing()
@@ -65,17 +72,6 @@ final class FeatureEditorModel {
     var snapSettingsSheetIsPresented = false
     /// The geometry used to set the viewpoint.
     var viewpointGeometry: Geometry?
-    
-    // MARK: Geometry Editor Properties
-    
-    /// The geometry editor that the feature editor will use to edit geometries on the `MapView`.
-    var geometryEditor = GeometryEditor()
-    /// A Boolean value indicating whether the geometry editor has edits to undo.
-    private(set) var geometryEditorCanUndo = false
-    /// The geometry editor's current geometry.
-    private(set) var geometryEditorGeometry: Geometry?
-    /// A Boolean value indicating whether the geometry editor has started.
-    private(set) var geometryEditorIsStarted = false
     
     // MARK: Snapping Properties
     
@@ -96,40 +92,18 @@ final class FeatureEditorModel {
     
     // MARK: Methods
     
-    /// Monitors geometry editor streams and updates the corresponding properties.
-    func monitorGeometryEditorStreams() async {
-        await withTaskGroup { group in
-            group.addTask { @MainActor @Sendable in
-                for await canUndo in self.geometryEditor.$canUndo {
-                    self.geometryEditorCanUndo = canUndo
-                }
-            }
-            group.addTask { @MainActor @Sendable in
-                for await geometry in self.geometryEditor.$geometry {
-                    self.geometryEditorGeometry = geometry
-                }
-            }
-            group.addTask { @MainActor @Sendable in
-                for await isStarted in self.geometryEditor.$isStarted {
-                    self.geometryEditorIsStarted = isStarted
-                }
-            }
-        }
-    }
-    
-    /// Restarts the `geometryEditor` if it is started.
-    /// This can be used to discard geometry edits or set up a new geometry editor.
+    /// Restarts the geometry editor if it is started and resets the form geometry.
     func restartGeometryEditor() async {
-        guard geometryEditorIsStarted else { return }
+        guard geometryEditorModel.isStarted else { return }
         
         do {
-            try await setFormGeometry(to: initialGeometry)
+            try await setFormGeometry(to: geometryEditorModel.initialGeometry)
         } catch {
             Logger.featureEditor.error(
                 "Error updating form geometry: \(error.localizedDescription)"
             )
         }
-        startGeometryEditor()
+        geometryEditorModel.restart()
     }
     
     // MARK: Adding
@@ -158,13 +132,14 @@ final class FeatureEditorModel {
     /// Starts adding new features from templates.
     func startAddingFeatures() {
         guard supportsAddingFeatures else { return }
+        featureAddingModel.start()
         state = .adding
     }
     
     /// Stops adding new features.
     func stopAddingFeatures() {
         state = .stopped
-        stopGeometryEditing()
+        geometryEditorModel.stop()
     }
     
     // MARK: Editing
@@ -172,7 +147,7 @@ final class FeatureEditorModel {
     /// Starts editing a new `FeatureForm` that is shown in the feature editor's `FeatureFormView`.
     /// - Parameter featureForm: The new feature form to edit.
     func startEditingFeatureForm(_ featureForm: FeatureForm) async {
-        stopGeometryEditing()
+        geometryEditorModel.stop()
         presentedFeatureForm = featureForm
         
         loadResult = await Result {
@@ -236,7 +211,7 @@ final class FeatureEditorModel {
         snapSettingsSheetIsPresented = false
         viewpointGeometry = nil
         
-        stopGeometryEditing()
+        geometryEditorModel.stop()
         
         snapRules = nil
         map = nil
@@ -246,7 +221,7 @@ final class FeatureEditorModel {
     /// Syncs the `geometryEditor.snapSettings`' source settings.
     func syncSnapSourceSettings() {
         do {
-            let snapSettings = geometryEditor.snapSettings
+            let snapSettings = geometryEditorModel.geometryEditor.snapSettings
             
             if let snapRules {
                 try snapSettings.syncSourceSettings(rules: snapRules, sourceEnablingBehavior: .preserve)
@@ -266,12 +241,14 @@ final class FeatureEditorModel {
     /// Updates the form's feature geometry using the geometry editor's current
     /// geometry to update possible geometry-dependent form elements.
     func updateFormGeometry() async throws {
-        guard geometryEditorIsStarted else { return }
+        guard geometryEditorModel.isStarted else { return }
         
         // Uses initialGeometry if the geometry editor has no edits to prevent
         // an empty geometry from being used when the geometry editor was
         // started using a geometryType (when feature.geometry is nil).
-        let geometry = geometryEditorCanUndo ? geometryEditorGeometry : initialGeometry
+        let geometry = geometryEditorModel.canUndo
+            ? geometryEditorModel.geometry
+            : geometryEditorModel.initialGeometry
         try await setFormGeometry(to: geometry)
     }
     
@@ -326,20 +303,19 @@ final class FeatureEditorModel {
         guard let feature else { return }
         
         if let geometry = feature.geometry {
-            geometryEditor.start(withInitial: geometry)
+            geometryEditorModel.start(withInitial: geometry)
             viewpointGeometry = geometry
         } else if let geometryType = feature.table?.geometryType {
-            geometryEditor.start(withType: geometryType)
+            geometryEditorModel.start(withType: geometryType)
         }
-        initialGeometry = feature.geometry
     }
     
-    /// Stops the geometry editor and resets the related model properties.
-    private func stopGeometryEditing() {
-        geometryEditor.stop()
-        geometryEditorCanUndo = false
-        geometryEditorGeometry = nil
-        geometryEditorIsStarted = false
-        initialGeometry = nil
+    /// The model for editing geometry.
+    var geometryEditorModel: GeometryEditorModel {
+        if _geometryEditorModel == nil {
+            _geometryEditorModel = GeometryEditorModel()
+        }
+        return _geometryEditorModel!
     }
+    @ObservationIgnored private var _geometryEditorModel: GeometryEditorModel?
 }

@@ -31,26 +31,51 @@ struct FeatureEditorToolbar: View {
     
     /// The model for the feature editor.
     @Environment(FeatureEditorModel.self) private var model
+    /// A Boolean value indicating whether the discard edits alert is presented.
+    @State private var discardEditsAlertIsPresented = false
     
     var body: some View {
         Group {
             switch model.state {
-            case .editing where model.geometryEditorIsStarted:
+            case .adding where model.geometryEditorModel.isStarted,
+                    .editing where model.geometryEditorModel.isStarted:
                 switch style {
                 case .vertical:
-                    VStack(spacing: stackSpacing) {
-                        controls
+                    VStack {
+                        if model.state == .adding {
+                            VStack(spacing: stackSpacing) {
+                                addingControls
+                            }
+                            .padding(.vertical, stackEdgePadding)
+                            .toolbarStyle()
+                        }
+                        
+                        VStack(spacing: stackSpacing) {
+                            controls
+                        }
+                        .padding(.vertical, stackEdgePadding)
+                        .toolbarStyle()
                     }
-                    .padding(.vertical, stackEdgePadding)
-                    .toolbarStyle()
                 case .horizontal:
-                    HStack(spacing: stackSpacing) {
-                        controls
+                    VStack(spacing: stackSpacing) {
+                        HStack(spacing: stackSpacing) {
+                            controls
+                        }
+                        if model.state == .adding {
+                            addingControls
+                        }
                     }
-                    .padding(.horizontal, stackEdgePadding)
+                    .padding(stackEdgePadding)
                     .toolbarStyle()
                 case .none:
-                    controls
+                    VStack(spacing: stackSpacing) {
+                        HStack(spacing: stackSpacing) {
+                            controls
+                        }
+                        if model.state == .adding {
+                            addingControls
+                        }
+                    }
                 }
             case .stopped where model.supportsAddingFeatures:
                 let addButton = Button(
@@ -73,20 +98,98 @@ struct FeatureEditorToolbar: View {
                 EmptyView()
             }
         }
-        .animation(.default, value: model.geometryEditorIsStarted)
+        .animation(.default, value: model.geometryEditorModel.isStarted)
+        .alert(
+            Text(
+                "Discard Edits?",
+                bundle: .toolkitModule,
+                comment: "A question asking if the user would like to discard their unsaved edits."
+            ),
+            isPresented: $discardEditsAlertIsPresented
+        ) {
+            Button(role: .destructive, action: model.featureAddingModel.showTemplatePicker) {
+                Text.discardEdits
+            }
+            Button(role: .cancel) {
+                discardEditsAlertIsPresented = false
+            } label: {
+                Text.cancel
+            }
+        } message: {
+            Text(
+                "Geometry edits will be lost.",
+                bundle: .toolkitModule,
+                comment: "A message explaining that unsaved geometry edits will be lost if the user dismisses geometry construction."
+            )
+        }
     }
     
     /// The control views for the toolbar.
     @ViewBuilder private var controls: some View {
-        ToolPicker()
+        if model.geometryEditorModel.selectableTools.count > 1 {
+            ToolPicker()
+        }
         DeleteButton()
         UndoButton()
         RedoButton()
         SnapSettingsButton()
     }
+    
+    /// The controls for completing or cancelling feature addition.
+    @ViewBuilder private var addingControls: some View {
+        AddingCancelButton {
+            if model.featureAddingModel.hasGeometryEdits {
+                discardEditsAlertIsPresented = true
+            } else {
+                model.featureAddingModel.showTemplatePicker()
+            }
+        }
+        AddingSaveButton()
+    }
 }
 
 // MARK: - Controls
+
+/// A button for cancelling feature addition and returning to the template picker.
+private struct AddingCancelButton: View {
+    /// The action to perform when geometry construction is cancelled.
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Label {
+                Text(
+                    "Cancel",
+                    bundle: .toolkitModule,
+                    comment: "A button for cancelling geometry construction and returning to the feature template picker."
+                )
+            } icon: {
+                Image(systemName: "xmark")
+            }
+        }
+    }
+}
+
+/// A button for saving a newly constructed feature geometry.
+private struct AddingSaveButton: View {
+    /// The model for the parent feature editor containing the geometry editor.
+    @Environment(FeatureEditorModel.self) private var featureEditorModel
+    
+    var body: some View {
+        Button(action: featureEditorModel.featureAddingModel.saveGeometryConstruction) {
+            Label {
+                Text(
+                    "Save",
+                    bundle: .toolkitModule,
+                    comment: "A button to save the new feature created from the selected template."
+                )
+            } icon: {
+                Image(systemName: "checkmark")
+            }
+        }
+        .disabled(featureEditorModel.geometryEditorModel.geometry?.sketchIsValid != true)
+    }
+}
 
 /// A button for deleting the geometry editor's currently selected element.
 private struct DeleteButton: View {
@@ -97,7 +200,7 @@ private struct DeleteButton: View {
     @State private var canDeleteSelectedElement = false
     
     var body: some View {
-        Button(action: featureEditorModel.geometryEditor.deleteSelectedElement) {
+        Button(action: featureEditorModel.geometryEditorModel.geometryEditor.deleteSelectedElement) {
             Label {
                 Text(
                     "Delete Selected Element",
@@ -109,8 +212,8 @@ private struct DeleteButton: View {
             }
         }
         .disabled(!canDeleteSelectedElement)
-        .task(id: ObjectIdentifier(featureEditorModel.geometryEditor)) {
-            for await selectedElement in featureEditorModel.geometryEditor.$selectedElement {
+        .task(id: ObjectIdentifier(featureEditorModel.geometryEditorModel.geometryEditor)) {
+            for await selectedElement in featureEditorModel.geometryEditorModel.geometryEditor.$selectedElement {
                 canDeleteSelectedElement = selectedElement?.canBeDeleted ?? false
             }
         }
@@ -126,7 +229,7 @@ private struct RedoButton: View {
     @State private var canRedo = false
     
     var body: some View {
-        Button(action: featureEditorModel.geometryEditor.redo) {
+        Button(action: featureEditorModel.geometryEditorModel.geometryEditor.redo) {
             Label {
                 Text(
                     "Redo",
@@ -138,8 +241,8 @@ private struct RedoButton: View {
             }
         }
         .disabled(!canRedo)
-        .task(id: ObjectIdentifier(featureEditorModel.geometryEditor)) {
-            for await canRedo in featureEditorModel.geometryEditor.$canRedo {
+        .task(id: ObjectIdentifier(featureEditorModel.geometryEditorModel.geometryEditor)) {
+            for await canRedo in featureEditorModel.geometryEditorModel.geometryEditor.$canRedo {
                 self.canRedo = canRedo
             }
         }
@@ -152,7 +255,7 @@ private struct UndoButton: View {
     @Environment(FeatureEditorModel.self) private var featureEditorModel
     
     var body: some View {
-        Button(action: featureEditorModel.geometryEditor.undo) {
+        Button(action: featureEditorModel.geometryEditorModel.geometryEditor.undo) {
             Label {
                 Text(
                     "Undo",
@@ -163,7 +266,7 @@ private struct UndoButton: View {
                 Image(systemName: "arrow.uturn.backward")
             }
         }
-        .disabled(!featureEditorModel.geometryEditorCanUndo)
+        .disabled(!featureEditorModel.geometryEditorModel.canUndo)
     }
 }
 
@@ -218,7 +321,7 @@ private extension View {
     
     NavigationStack {
         MapView(map: Map(spatialReference: .wgs84))
-            .geometryEditor(model.geometryEditor)
+            .geometryEditor(model.geometryEditorModel.geometryEditor)
             .overlay(alignment: .topTrailing) {
                 FeatureEditorToolbar(style: .vertical)
                     .padding()
@@ -235,8 +338,8 @@ private extension View {
             }
             .environment(model)
             .task {
-                model.geometryEditor.start(withType: Polygon.self)
-                await model.monitorGeometryEditorStreams()
+                model.geometryEditorModel.start(withType: Polygon.self)
+                await model.geometryEditorModel.monitorStreams()
             }
     }
 }

@@ -30,14 +30,14 @@ private struct FeatureEditorModifier: ViewModifier {
     /// The feature editor model shared by the toolbar and inspector.
     @State private var model = FeatureEditorModel()
     /// The inspector's currently selected presentation detent.
-    /// This is needed to set the default detent to medium.
-    @State private var selectedPresentationDetent = PresentationDetent.medium
+    /// This is needed to set the default detent to large.
+    @State private var selectedPresentationDetent = PresentationDetent.large
     /// A Boolean value indicating whether the feature editor is retrying to start editing.
     @State private var isRetrying = false
     
     func body(content: Content) -> some View {
         content
-            .safeInspector(isPresented: $model.isPresented) {
+            .safeInspector(isPresented: inspectorIsPresented) {
                 // VStack is needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
                     switch model.state {
@@ -45,6 +45,7 @@ private struct FeatureEditorModifier: ViewModifier {
                         NavigationStack {
                             FeatureEditorTemplatePicker()
                                 .environment(model.featureAddingModel)
+                                .environment(model.geometryEditorModel)
                         }
                     case .editing:
                         switch model.loadResult {
@@ -107,10 +108,25 @@ private struct FeatureEditorModifier: ViewModifier {
 #endif
                 .interactiveDismissDisabled()
                 .sheet(isPresented: $model.snapSettingsSheetIsPresented) {
-                    SnapSettingsView(settings: model.geometryEditor.snapSettings)
+                    SnapSettingsView(settings: model.geometryEditorModel.geometryEditor.snapSettings)
                 }
             }
             .environment(model)
+    }
+
+    /// The binding that controls the inspector without stopping feature addition
+    /// when it is temporarily dismissed for geometry construction.
+    private var inspectorIsPresented: Binding<Bool> {
+        Binding(
+            get: { model.isPresented },
+            set: { isPresented in
+                if model.state == .adding {
+                    model.featureAddingModel.inspectorIsPresented = isPresented
+                } else {
+                    model.isPresented = isPresented
+                }
+            }
+        )
     }
     
     /// Creates a view for start editing failure.

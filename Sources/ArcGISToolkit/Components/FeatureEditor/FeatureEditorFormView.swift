@@ -43,9 +43,10 @@ struct FeatureEditorFormView: View {
     /// non-`nil` only when there are edits, so the `FeatureFormView`
     /// knows when to show the editing buttons and block navigation.
     private var saveGeometryEditsAction: (() throws -> Void)? {
-        let initialGeometry = model.initialGeometry
-        guard model.geometryEditorIsStarted,
-              let currentGeometry = model.geometryEditorGeometry,
+          let geometryEditorModel = model.geometryEditorModel
+          let initialGeometry = geometryEditorModel.initialGeometry
+          guard geometryEditorModel.isStarted,
+              let currentGeometry = geometryEditorModel.geometry,
               currentGeometry != initialGeometry,
               initialGeometry != nil || !currentGeometry.isEmpty else {
             return nil
@@ -68,7 +69,7 @@ struct FeatureEditorFormView: View {
             .onFormEditingEvent { editingEvent = $0 }
             .environment(\.externalSaveAction, saveGeometryEditsAction)
             .onAnimationChange(of: geometryEditorOpacity) { newOpacity in
-                model.geometryEditor.tool.style.opacity = newOpacity
+                model.geometryEditorModel.geometryEditor.tool.style.opacity = newOpacity
             }
             .animation(.default, value: geometryEditorOpacity)
             .task(id: editingEvent) {
@@ -89,7 +90,7 @@ struct FeatureEditorFormView: View {
                 guard !Task.isCancelled else { return }
                 self.presentedFeatureForm = nil
             }
-            .task(id: model.geometryEditorGeometry) {
+            .task(id: model.geometryEditorModel.geometry) {
                 do {
                     try await model.updateFormGeometry()
                 } catch {
@@ -100,7 +101,7 @@ struct FeatureEditorFormView: View {
             }
             .onDisappear {
                 clearSelectedFeature()
-                model.geometryEditor.tool.style.opacity = 1
+                model.geometryEditorModel.geometryEditor.tool.style.opacity = 1
             }
     }
     
@@ -144,7 +145,7 @@ struct FeatureEditorFormView: View {
     private func showCandidate(_ candidate: UtilityAssociationFeatureCandidate) async {
         guard let candidateGeometry = candidate.feature.geometry,
               !candidateGeometry.isEmpty,
-              let geometryEditorGeometry = model.geometryEditorGeometry else {
+              let geometryEditorGeometry = model.geometryEditorModel.geometry else {
             return
         }
         
@@ -194,7 +195,7 @@ struct FeatureEditorFormView: View {
         
         // Briefly hides the geometry editor so the user can still locate the
         // selected feature when it's covered by the geometry editor symbology.
-        guard let editorGeometry = model.geometryEditorGeometry,
+        guard let editorGeometry = model.geometryEditorModel.geometry,
               !editorGeometry.isEmpty,
               let featureGeometry = feature.geometry,
               // Editor geometry is buffered to account for the vertex and line symbols.
@@ -203,7 +204,7 @@ struct FeatureEditorFormView: View {
             throw GeometryEditorError.notHidden
         }
         
-        model.geometryEditor.clearSelection()
+        model.geometryEditorModel.geometryEditor.clearSelection()
         geometryEditorOpacity = 0.1
         try? await Task.sleep(for: .featureHighlightDelay)
         geometryEditorOpacity = 1

@@ -13,14 +13,42 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
 import Observation
 
 /// A view model for adding features using shared templates.
 @MainActor
 @Observable
 final class FeatureAddingModel {
+    /// The state of geometry construction for the selected template.
+    enum GeometryConstructionState: Equatable {
+        case loading
+        case editing
+        case saving
+        case noSupportedTools
+        case error(localizedDescription: String)
+    }
+
     /// The layer template groups from the map.
     private(set) var groups: [LayerTemplateGroup] = []
+    /// The form for the first feature created from a selected template.
+    var featureForm: FeatureForm?
+    /// A Boolean value indicating whether the adding inspector is presented.
+    var inspectorIsPresented = true
+    /// The navigation path through the template picker.
+    var navigationPath: [LayerTemplate] = []
+    /// The state of geometry construction for the selected template.
+    var geometryConstructionState: GeometryConstructionState = .loading
+    /// The identifier of the template currently being used for geometry construction.
+    private var geometryConstructionTemplateID: UUID?
+    /// A Boolean value indicating whether the parent feature editor inspector is presented.
+    var isPresented: Bool {
+        get { featureEditorModel.isPresented }
+        set {
+            guard !newValue else { return }
+            stop()
+        }
+    }
     /// The feature editor model that owns this model.
     private unowned let featureEditorModel: FeatureEditorModel
     
@@ -45,7 +73,60 @@ final class FeatureAddingModel {
     
     /// Stops adding features.
     func stop() {
+        featureForm = nil
         featureEditorModel.stopAddingFeatures()
+    }
+
+    /// Prepares the template picker for a new feature-adding session.
+    func start() {
+        featureForm = nil
+        inspectorIsPresented = true
+        navigationPath = []
+        geometryConstructionState = .loading
+        geometryConstructionTemplateID = nil
+    }
+
+    /// Shows the template picker and stops the current geometry construction session.
+    func showTemplatePicker() {
+        featureEditorModel.geometryEditorModel.stop()
+        navigationPath = []
+        geometryConstructionState = .loading
+        geometryConstructionTemplateID = nil
+        inspectorIsPresented = true
+    }
+
+    /// Shows the geometry construction saving progress for the selected template.
+    func saveGeometryConstruction() {
+        geometryConstructionState = .saving
+        inspectorIsPresented = true
+    }
+
+    /// Hides the inspector while geometry construction continues in the toolbar.
+    func hideInspectorForGeometryConstruction() {
+        inspectorIsPresented = false
+    }
+
+    /// Starts geometry construction for a newly selected template.
+    /// - Parameter layerTemplate: The template selected in the template picker.
+    /// - Returns: A Boolean value indicating whether geometry construction should load.
+    func beginGeometryConstruction(for layerTemplate: LayerTemplate) -> Bool {
+        guard geometryConstructionTemplateID != layerTemplate.id else { return false }
+        geometryConstructionTemplateID = layerTemplate.id
+        geometryConstructionState = .loading
+        return true
+    }
+
+    /// A Boolean value indicating whether the active geometry editor has edits.
+    var hasGeometryEdits: Bool {
+        let geometryEditorModel = featureEditorModel.geometryEditorModel
+        let initialGeometry = geometryEditorModel.initialGeometry
+        guard geometryEditorModel.isStarted,
+              let currentGeometry = geometryEditorModel.geometry,
+              currentGeometry != initialGeometry,
+              initialGeometry != nil || !currentGeometry.isEmpty else {
+            return false
+        }
+        return true
     }
 }
 

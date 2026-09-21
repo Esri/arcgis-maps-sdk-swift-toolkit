@@ -46,36 +46,38 @@ struct FeatureEditorTemplatePicker: View {
     
     var body: some View {
         @Bindable var model = model
-        NavigationStack {
-            Form {
-                ForEach(filteredGroups) { group in
-                    FeatureEditorTemplatePickerGroup(group: group, searchText: searchText)
+        NavigationStack(path: $model.navigationPath) {
+            Group {
+                if let featureForm = model.featureForm {
+                    FeatureFormView(root: featureForm, isPresented: $model.isPresented)
+                } else {
+                    Form {
+                        ForEach(filteredGroups) { group in
+                            FeatureEditorTemplatePickerGroup(group: group, searchText: searchText)
+                        }
+                    }
+                    .navigationTitle(
+                        LocalizedStringResource(
+                            "Templates",
+                            bundle: .toolkit,
+                            comment: "The title of the template picker view."
+                        )
+                    )
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationDestination(for: LayerTemplate.self) { layerTemplate in
+                        TemplateGeometryConstructionView(layerTemplate: layerTemplate) { featureForm in
+                            model.featureForm = featureForm
+                        }
+                    }
+                    .searchable(
+                        text: $searchText,
+                        placement: .navigationBarDrawer(displayMode: .always)
+                    )
                 }
             }
-            .navigationTitle(
-                LocalizedStringResource(
-                    "Templates",
-                    bundle: .toolkit,
-                    comment: "The title of the template picker view."
-                )
-            )
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: LayerTemplate.self) { layerTemplate in
-                ContentUnavailableView(
-                    LocalizedStringResource(
-                        "Construct a Geometry",
-                        bundle: .toolkit,
-                        comment: "A message displayed when the user has selected a template."
-                    ),
-                    image: ""
-                )
-                .navigationTitle(layerTemplate.name)
-            }
-            .searchable(
-                text: $searchText,
-                placement: .navigationBarDrawer(displayMode: .always)
-            )
-            .toolbar {
+        }
+        .toolbar {
+            if model.featureForm == nil {
                 ToolbarItem(placement: .topBarTrailing) {
                     DismissButton(kind: .close) {
                         withAnimation {

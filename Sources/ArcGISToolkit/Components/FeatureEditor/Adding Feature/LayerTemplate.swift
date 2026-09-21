@@ -27,6 +27,17 @@ struct LayerTemplate: Identifiable {
 }
 
 extension LayerTemplate {
+    var featureTable: ArcGISFeatureTable? {
+        switch sharedTemplate.source {
+        case let serviceGeodatabase as ServiceGeodatabase:
+            serviceGeodatabase.table(withLayerID: layerID)
+        case let geodatabase as Geodatabase:
+            geodatabase.featureTable(withServiceLayerID: layerID)
+        default:
+            nil
+        }
+    }
+    
     /// The identifier of the feature layer associated with this template.
     var layerID: Int { table.serviceLayerID }
     
