@@ -107,31 +107,12 @@ struct FeatureFormToolbar: ViewModifier {
                         .disabled(navigationIsDisabled)
                     }
                 }
-                if let browserModel,
-                   browserModel.style == .menu || browserModel.style == .menuWithTabs || browserModel.style == .paged {
+                if let browserModel {
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
                             Section {
                                 Button("Save All") {}
                                 Button("Discard Edits", role: .destructive) {}
-                            }
-                            if browserModel.style != .paged {
-                                ForEach(browserModel.ids, id: \.self) { id in
-                                    if let form = browserModel.form(for: id),
-                                       let objectID = form.feature.objectID {
-                                        Button {
-                                            browserModel.select(feature: form.feature)
-                                        } label: {
-                                            Label {
-                                                Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
-                                            } icon: {
-                                                if browserModel.selectedID == id {
-                                                    Image(systemName: "checkmark")
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
                             }
                         } label: {
                             Text(browserModel.manager.forms.count, format: .number)
@@ -160,69 +141,47 @@ struct FeatureFormToolbar: ViewModifier {
                     }
                 }
                 if let browserModel {
-                    if browserModel.style == .menuWithTabs {
-                        ToolbarItem(placement: .bottomBar) {
-                            Picker(
-                                "Forms",
-                                selection: Binding {
-                                    browserModel.selectedID!
-                                } set: { newID in
-                                    guard let form = browserModel.form(for: newID) else { return }
-                                    browserModel.select(feature: form.feature, recordNavigation: true)
-                                }) {
-                                    ForEach(browserModel.ids, id: \.self) { id in
-                                        if let form = browserModel.form(for: id), let id = form.feature.objectID {
-                                            Text(id, format: .number.grouping(.never))
-                                        } else {
-                                            Text("?")
-                                        }
-                                    }
-                                }
-                                .pickerStyle(.segmented)
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Button {
+                            browserModel.selectPrevious()
+                        } label: {
+                            Label {} icon: {
+                                Image(systemName: "chevron.left")
+                            }
                         }
-                    } else if browserModel.style == .paged {
-                        ToolbarItemGroup(placement: .bottomBar) {
-                            Button {
-                                browserModel.selectPrevious()
-                            } label: {
-                                Label {} icon: {
-                                    Image(systemName: "chevron.left")
-                                }
-                            }
-                            Button {
-                                pagedBrowserMenuIsPresented = true
-                            } label: {
-                                Text("Feature \(browserModel.selectedIndex + 1) of \(browserModel.count)")
-                            }
-                            .popover(isPresented: $pagedBrowserMenuIsPresented) {
-                                List {
-                                    ForEach(browserModel.ids, id: \.self) { id in
-                                        if let form = browserModel.form(for: id),
-                                           let objectID = form.feature.objectID {
-                                            Button {
-                                                browserModel.select(feature: form.feature)
-                                            } label: {
-                                                Label {
-                                                    Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
-                                                } icon: {
-                                                    if browserModel.selectedID == id {
-                                                        Image(systemName: "checkmark")
-                                                    }
+                        Button {
+                            pagedBrowserMenuIsPresented = true
+                        } label: {
+                            Text("Feature \(browserModel.selectedIndex + 1) of \(browserModel.count)")
+                        }
+                        .popover(isPresented: $pagedBrowserMenuIsPresented) {
+                            List {
+                                ForEach(browserModel.ids, id: \.self) { id in
+                                    if let form = browserModel.form(for: id),
+                                       let objectID = form.feature.objectID {
+                                        Button {
+                                            browserModel.select(feature: form.feature)
+                                        } label: {
+                                            Label {
+                                                Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
+                                            } icon: {
+                                                if browserModel.selectedID == id {
+                                                    Image(systemName: "checkmark")
                                                 }
                                             }
-                                            .badge(form.elementValidationErrors.count)
-                                            .badgeProminence(.increased)
                                         }
+                                        .badge(form.elementValidationErrors.count)
+                                        .badgeProminence(.increased)
                                     }
                                 }
-                                .frame(idealWidth: 400, idealHeight: 500)
                             }
-                            Button {
-                                browserModel.selectNext()
-                            } label: {
-                                Label {} icon: {
-                                    Image(systemName: "chevron.right")
-                                }
+                            .frame(idealWidth: 400, idealHeight: 500)
+                        }
+                        Button {
+                            browserModel.selectNext()
+                        } label: {
+                            Label {} icon: {
+                                Image(systemName: "chevron.right")
                             }
                         }
                     }

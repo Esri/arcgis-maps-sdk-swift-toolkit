@@ -30,24 +30,13 @@ public struct FeatureFormManagerView: View {
     }
     
     public var body: some View {
-        Group {
-            switch model.style {
-            case .list:
-                list
-            case .menu:
-                menuView
-            case .menuWithTabs:
-                tabView
-            case .paged:
-                pagedView
+        pagedView
+            .task(id: model.manager.forms.count) {
+                await model.monitorEdits()
             }
-        }
-        .task(id: model.manager.forms.count) {
-            await model.monitorEdits()
-        }
-        .task(id: model.manager.forms.count) {
-            await model.monitorErrors()
-        }
+            .task(id: model.manager.forms.count) {
+                await model.monitorErrors()
+            }
     }
 }
 
@@ -55,33 +44,14 @@ extension FeatureFormManagerView /* Model */ {
     /// <#Description#>
     @Observable public final class Model: @unchecked Sendable {
         /// <#Description#>
-        var style: Style {
-            didSet {
-                switch style {
-                // Under the .menu, .menuWithTabs, and .paged styles there is
-                // always a selected form. If the style was switched from .list
-                // to one of these make sure there is a selection.
-                case .menu, .menuWithTabs, .paged:
-                    if selectedID == nil, let firstForm = manager.forms.first {
-                        select(feature: firstForm.feature, recordNavigation: false)
-                    }
-                case .list:
-                    break
-                }
-            }
-        }
-        
-        /// <#Description#>
         /// - Parameter features: <#features description#>
         public init(features: [ArcGISFeature] = []) {
-            self.style = .paged
             self.manager = .init(features: features)
         }
         
         /// <#Description#>
         /// - Parameter forms: <#forms description#>
         public init(forms: [FeatureForm] = []) {
-            self.style = .paged
             self.manager = .init(forms: forms)
         }
         
@@ -89,13 +59,8 @@ extension FeatureFormManagerView /* Model */ {
         var manager: FeatureFormManager
         
         /// <#Description#>
-        ///
-        /// When using the list style, users can always navigate back into the central list view.
         var canGoBack: Bool {
-            // The list style is applied and the user is in a form.
-            (style == .list && selectedForm != nil)
-            // There's a previous item to navigate back to.
-            || (style != .list && backStack.count > 0)
+            backStack.count > 0
         }
         
         /// <#Description#>
@@ -144,7 +109,7 @@ extension FeatureFormManagerView /* Model */ {
                 // Select the form, if directed, or if not in list style and no
                 // form is already selected, regardless of whether it's already
                 // in the collection of managed forms.
-                if select || (style != .list && selectedID == nil) {
+                if select || selectedID == nil {
                     self.select(feature: feature)
                 }
             }
@@ -191,19 +156,12 @@ extension FeatureFormManagerView /* Model */ {
                 Logger.featureFormBrowserView.warning("Cannot navigate backwards without history.")
                 return
             }
-            if style == .list {
-                withAnimation {
-                    selectedID = nil
-                }
-                backStack.removeAll()
-            } else {
-                let top = backStack.removeFirst()
-                guard let form = form(for: top) else {
-                    Logger.featureFormBrowserView.warning("No ID for back navigation.")
-                    return
-                }
-                select(feature: form.feature, recordNavigation: false)
+            let top = backStack.removeFirst()
+            guard let form = form(for: top) else {
+                Logger.featureFormBrowserView.warning("No ID for back navigation.")
+                return
             }
+            select(feature: form.feature, recordNavigation: false)
         }
         
         /// <#Description#>
@@ -373,57 +331,6 @@ extension FeatureFormManagerView /* Model */ {
 }
 
 extension FeatureFormManagerView /* Manager style variants */ {
-    /// <#Description#>
-    @ViewBuilder
-    var list: some View {
-        Group {
-            if let selected = model.selectedForm {
-                FeatureFormView(root: selected)
-                    .transition(.asymmetric(insertion: .push(from: .trailing), removal: .move(edge: .trailing)))
-            } else {
-                NavigationStack {
-                    List(model.manager.forms, id: \.feature.globalID) { form in
-                        Button(form.title) {
-                            withAnimation {
-                                model.select(feature: form.feature)
-                            }
-                        }
-                    }
-                    .navigationTitle(
-                        model.manager.forms.count == 1
-                        ? "Editing 1 Feature"
-                        : "Editing \(model.manager.forms.count) Features"
-                    )
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Menu {} label: {
-                                Label {} icon: {
-                                    Image(systemName: "checkmark")
-                                }
-                            }
-                        }
-                    }
-                }
-                .environment(model)
-                .transition(.asymmetric(insertion: .push(from: .leading), removal: .move(edge: .leading)))
-            }
-        }
-        .environment(model)
-    }
-    
-    /// <#Description#>
-    @ViewBuilder
-    var menuView: some View {
-        if let form = model.selectedForm {
-            FeatureFormView(root: form)
-                .editingButtons(.hidden)
-                .environment(model)
-        } else {
-            ContentUnavailableView {
-                Text("No form is selected.")
-            }
-        }
-    }
     
     /// <#Description#>
     @ViewBuilder
@@ -461,46 +368,6 @@ extension FeatureFormManagerView /* Manager style variants */ {
             Text("No form is selected.")
         }
     }
-    
-    /// <#Description#>
-    @ViewBuilder
-    var tabView: some View {
-        if let selection = model.selectedID {
-            if let form = model.form(for: selection) {
-                FeatureFormView(
-                    root: form,
-                    isPresented: Binding(
-                        get: { true },
-                        set: { _ in
-                            model.manager.remove(form.feature)
-                        }
-                    )
-                )
-                .editingButtons(.hidden)
-                .environment(model)
-                .id(model.selectedIndex)
-            }
-        } else {
-            Text("No form is selected.")
-        }
-    }
-}
-
-extension FeatureFormManagerView /* Enums */ {
-    /// <#Description#>
-    public enum Style {
-        case list
-        case menu
-        case menuWithTabs
-        case paged
-    }
-}
-
-public extension FeatureFormManagerView /* Modifiers */ {
-    func style(_ style: FeatureFormManagerView.Style) -> some View {
-        model.style = style
-        return self
-    }
 }
 
 extension Logger {
@@ -511,30 +378,9 @@ extension Logger {
 }
 
 struct FeatureFormManagerViewPreview: View {
-    @State private var style: FeatureFormManagerView.Style = .paged
     @Binding var model: FeatureFormManagerView.Model
     var body: some View {
         FeatureFormManagerView(model: $model)
-            .style(style)
-        HStack(spacing: 50) {
-            Menu {
-                Picker("Browser Style", selection: $style) {
-                    Text("List")
-                        .tag(FeatureFormManagerView.Style.list)
-                    Text("Menu")
-                        .tag(FeatureFormManagerView.Style.menu)
-                    Text("Menu With Tabs")
-                        .tag(FeatureFormManagerView.Style.menuWithTabs)
-                    Text("Paged")
-                        .tag(FeatureFormManagerView.Style.paged)
-                }
-            } label: {
-                Text("Style")
-            }
-            Button("Log model state") {
-                model.debugLog()
-            }
-        }
     }
 }
 
