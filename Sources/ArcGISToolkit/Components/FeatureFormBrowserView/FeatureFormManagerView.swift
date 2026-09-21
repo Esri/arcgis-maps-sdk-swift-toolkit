@@ -30,7 +30,7 @@ public struct FeatureFormManagerView: View {
     }
     
     public var body: some View {
-        pagedView
+        conditionalView
             .task(id: model.manager.forms.count) {
                 await model.monitorEdits()
             }
@@ -330,43 +330,63 @@ extension FeatureFormManagerView /* Model */ {
     private(set) var forms = [FeatureForm]()
 }
 
-extension FeatureFormManagerView /* Manager style variants */ {
-    
+extension FeatureFormManagerView /* Manager views */ {
     /// <#Description#>
     @ViewBuilder
-    var pagedView: some View {
+    var conditionalView: some View {
         if let selection = model.selectedID {
-            TabView(
-                selection: Binding {
-                    selection
-                } set: { newID in
-                    guard let form = model.form(for: newID) else { return }
-                    model.select(feature: form.feature, recordNavigation: true)
-                }
-            ) {
-                ForEach(model.ids, id: \.self) { id in
-                    if let form = model.form(for: id) {
-                        Tab(value: id) {
-                            FeatureFormView(
-                                root: form,
-                                isPresented: Binding(
-                                    get: { true },
-                                    set: { _ in model.remove(feature: form.feature) }
-                                )
-                            )
-                            .editingButtons(.hidden)
-                            .environment(model)
-                        } label: {
-                            Image(systemName: "list.bullet.clipboard")
-                            Text(form.title)
-                        }
-                    }
-                }
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
+            tabView(selection: selection)
         } else {
-            Text("No form is selected.")
+            ContentUnavailableView {
+                Text(
+                    "No form is selected.",
+                    bundle: .toolkitModule,
+                    comment: "A label indicating no form is selected in the Form Manager."
+                )
+            }
         }
+    }
+    
+    /// <#Description#>
+    /// - Parameter id: <#id description#>
+    @ViewBuilder
+    func tab(id: UUID) -> Tab<UUID, some View, TupleView<(Image, Text)>>? {
+        if let form = model.form(for: id) {
+            Tab(value: id) {
+                FeatureFormView(
+                    root: form,
+                    isPresented: Binding(
+                        get: { true },
+                        set: { _ in model.remove(feature: form.feature) }
+                    )
+                )
+                .editingButtons(.hidden)
+                .environment(model)
+            } label: {
+                Image(systemName: "list.bullet.clipboard")
+                Text(form.title)
+            }
+        }
+    }
+    
+    /// <#Description#>
+    /// - Parameter selection: <#selection description#>
+    /// - Returns: <#description#>
+    @ViewBuilder
+    func tabView(selection: UUID) -> some View {
+        TabView(
+            selection: Binding {
+                selection
+            } set: { newID in
+                guard let form = model.form(for: newID) else { return }
+                model.select(feature: form.feature, recordNavigation: true)
+            }
+        ) {
+            ForEach(model.ids, id: \.self) { id in
+                tab(id: id)
+            }
+        }
+        .tabViewStyle(.page(indexDisplayMode: .never))
     }
 }
 
