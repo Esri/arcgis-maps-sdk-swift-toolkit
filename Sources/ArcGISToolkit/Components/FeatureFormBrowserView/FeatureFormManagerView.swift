@@ -42,7 +42,7 @@ public struct FeatureFormManagerView: View {
 
 extension FeatureFormManagerView /* Model */ {
     /// <#Description#>
-    @Observable public final class Model: @unchecked Sendable {
+    @MainActor @Observable public final class Model {
         /// <#Description#>
         /// - Parameter features: <#features description#>
         public init(features: [ArcGISFeature] = []) {
@@ -244,8 +244,9 @@ extension FeatureFormManagerView /* Model */ {
                     group.addTask { @Sendable in
                         for await hasEdits in form.$hasEdits {
                             if let globalID = form.feature.globalID {
-#warning("Edit monitoring temporarily disabled.")
-//                                self.formsWithEdits[globalID] = hasEdits
+                                await MainActor.run {
+                                    self.formsWithEdits[globalID] = hasEdits
+                                }
                             }
                         }
                     }
@@ -260,8 +261,9 @@ extension FeatureFormManagerView /* Model */ {
                     group.addTask { @Sendable in
                         for await errors in form.$elementValidationErrors {
                             if let globalID = form.feature.globalID {
-#warning("Error monitoring temporarily disabled.")
-//                                self.formsWithErrors[globalID] = errors.count
+                                await MainActor.run {
+                                    self.formsWithErrors[globalID] = errors.count
+                                }
                             }
                         }
                     }
