@@ -53,6 +53,9 @@ extension FeatureFormManagerView /* Model */ {
         /// - Parameter forms: <#forms description#>
         public init(forms: [FeatureForm] = []) {
             self.manager = .init(forms: forms)
+            if let first = forms.first {
+                select(feature: first.feature)
+            }
         }
         
         /// <#Description#>
