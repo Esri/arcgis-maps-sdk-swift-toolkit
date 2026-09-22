@@ -301,12 +301,37 @@ struct FeatureEditorModelTests {
         await model.expectDefaultPropertyValues()
     }
     
-    @Test func startAndStopAddingFeatures() {
+    @MainActor
+    final class FeatureAddingModelTests {
+        let map = Map(
+            url: URL(
+                string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd"
+            )!
+        )!
         let model = FeatureEditorModel()
-        model.startAddingFeatures()
-        #expect(model.state == .adding)
-        model.stopAddingFeatures()
-        #expect(model.state == .stopped)
+        
+        init() async throws {
+            let credential = try await TokenCredential.credential(
+                for: map.url!,
+                username: "viewer01",
+                password: "I68VGU^nMurF"
+            )
+            ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
+        }
+        
+        deinit {
+            ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
+        }
+        
+        @Test func startAndStopAddingFeatures() async throws {
+            let featureAddingModel = model.featureAddingModel
+            try await featureAddingModel.populateSharedTemplates(from: map)
+            #expect(!featureAddingModel.groups.isEmpty)
+            model.startAddingFeatures()
+            #expect(model.state == .adding)
+            model.stopAddingFeatures()
+            #expect(model.state == .stopped)
+        }
     }
 }
 

@@ -52,7 +52,7 @@ struct FeatureEditorToolbar: View {
                 case .none:
                     controls
                 }
-            case .stopped:
+            case .stopped where model.supportsAddingFeatures:
                 let addButton = Button(
                     LocalizedStringResource(
                         "Add Features",
