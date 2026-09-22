@@ -44,17 +44,11 @@ extension FeatureFormManagerView /* Model */ {
     /// <#Description#>
     @MainActor @Observable public final class Model {
         /// <#Description#>
-        /// - Parameter features: <#features description#>
-        public init(features: [ArcGISFeature] = []) {
-            self.manager = .init(features: features)
-        }
-        
-        /// <#Description#>
         /// - Parameter forms: <#forms description#>
         public init(forms: [FeatureForm] = []) {
             self.manager = .init(forms: forms)
             if let first = forms.first {
-                select(feature: first.feature)
+                select(form: first)
             }
         }
         
@@ -101,10 +95,10 @@ extension FeatureFormManagerView /* Model */ {
         private var backStack = [UUID]()
         
         /// <#Description#>
-        /// - Parameter feature: <#form description#>
+        /// - Parameter form: <#form description#>
         /// - Parameter select: <#select description#>
-        public func add(feature: ArcGISFeature, select: Bool = false) {
-            guard let id = feature.globalID else {
+        public func add(form: FeatureForm, select: Bool = false) {
+            guard let id = form.feature.globalID else {
                 Logger.featureFormBrowserView.warning("The feature cannot be added because the its global ID is not available.")
                 return
             }
@@ -113,14 +107,14 @@ extension FeatureFormManagerView /* Model */ {
                 // form is already selected, regardless of whether it's already
                 // in the collection of managed forms.
                 if select || selectedID == nil {
-                    self.select(feature: feature)
+                    self.select(form: form)
                 }
             }
             guard !ids.contains(id) else {
                 let id: any CustomStringConvertible
-                if let objectID = feature.objectID {
+                if let objectID = form.feature.objectID {
                     id = objectID
-                } else if let globalID = feature.globalID {
+                } else if let globalID = form.feature.globalID {
                     id = globalID
                 } else {
                     id = "?"
@@ -128,7 +122,7 @@ extension FeatureFormManagerView /* Model */ {
                 Logger.featureFormBrowserView.info("Feature \(id.description) is already added.")
                 return
             }
-            manager.add(feature)
+            manager.add(form)
         }
         
         public func debugLog() {
@@ -164,24 +158,24 @@ extension FeatureFormManagerView /* Model */ {
                 Logger.featureFormBrowserView.warning("No ID for back navigation.")
                 return
             }
-            select(feature: form.feature, recordNavigation: false)
+            select(form: form, recordNavigation: false)
         }
         
         /// <#Description#>
-        /// - Parameter feature: <#form description#>
-        public func remove(feature: ArcGISFeature) {
-            manager.forms.forEach { form in
-                if feature.globalID == form.feature.globalID {
-                    manager.remove(feature)
+        /// - Parameter form: <#form description#>
+        public func remove(form: FeatureForm) {
+            manager.forms.forEach { _form in
+                if form.feature.globalID == _form.feature.globalID {
+                    manager.remove(_form)
                 }
             }
             backStack.removeAll { id in
-                feature.globalID == id
+                form.feature.globalID == id
             }
-            if selectedID == feature.globalID, canGoBack {
+            if selectedID == form.feature.globalID, canGoBack {
                 let top = backStack.removeFirst()
-                if let _form = self.form(for: top) {
-                    select(feature: _form.feature)
+                if let form = self.form(for: top) {
+                    select(form: form)
                 }
             }
             selectedID = backStack.last
@@ -196,14 +190,14 @@ extension FeatureFormManagerView /* Model */ {
         
         /// <#Description#>
         /// - Parameters:
-        ///   - feature: <#feature description#>
+        ///   - form: <#feature description#>
         ///   - recordNavigation: <#recordNavigation description#>
-        public func select(feature: ArcGISFeature, recordNavigation: Bool = true) {
-            guard feature.globalID != selectedID else { return }
+        public func select(form: FeatureForm, recordNavigation: Bool = true) {
+            guard form.feature.globalID != selectedID else { return }
             if recordNavigation, let selectedID {
                 backStack.insert(selectedID, at: 0)
             }
-            selectedID = feature.globalID
+            selectedID = form.feature.globalID
         }
         
         /// <#Description#>
@@ -218,7 +212,7 @@ extension FeatureFormManagerView /* Model */ {
                 nextIndex = selectedIndex + 1
             }
             let nextForm = manager.forms[nextIndex]
-            select(feature: nextForm.feature)
+            select(form: nextForm)
         }
         
         /// <#Description#>
@@ -233,7 +227,7 @@ extension FeatureFormManagerView /* Model */ {
                 nextIndex = selectedIndex - 1
             }
             let nextForm = manager.forms[nextIndex]
-            select(feature: nextForm.feature)
+            select(form: nextForm)
         }
             
         private(set) var formsWithEdits = [UUID: Bool]()
@@ -277,27 +271,12 @@ extension FeatureFormManagerView /* Model */ {
 }
 
 @Observable public final class FeatureFormManager {
-    convenience init(features: Array<ArcGISFeature>) {
-        self.init(forms: features.map { .init(feature: $0) })
-    }
-    
     init(forms: Array<FeatureForm>) {
         self.forms = forms
     }
     
-    public func add(_ feature: ArcGISFeature) {
-        let newForm = FeatureForm(feature: feature)
-        forms.append(newForm)
-    }
-    
     public func add(_ form: FeatureForm) {
         forms.append(form)
-    }
-    
-    public func remove(_ feature: ArcGISFeature) {
-        forms.removeAll { form in
-            feature.globalID == form.feature.globalID
-        }
     }
     
     public func remove(_ form: FeatureForm) {
@@ -362,7 +341,7 @@ extension FeatureFormManagerView /* Manager views */ {
                     root: form,
                     isPresented: Binding(
                         get: { true },
-                        set: { _ in model.remove(feature: form.feature) }
+                        set: { _ in model.remove(form: form) }
                     )
                 )
                 .editingButtons(.hidden)
@@ -384,7 +363,7 @@ extension FeatureFormManagerView /* Manager views */ {
                 selection
             } set: { newID in
                 guard let form = model.form(for: newID) else { return }
-                model.select(feature: form.feature, recordNavigation: true)
+                model.select(form: form, recordNavigation: true)
             }
         ) {
             ForEach(model.ids, id: \.self) { id in
@@ -411,7 +390,7 @@ struct FeatureFormManagerViewPreview: View {
 
 #Preview {
     @Previewable @State var map: Map?
-    @Previewable @State var model = FeatureFormManagerView.Model(features: [])
+    @Previewable @State var model = FeatureFormManagerView.Model(forms: [])
     @Previewable @State var loadResult: Result<Void, Error>?
     
     switch loadResult {
@@ -452,7 +431,7 @@ struct FeatureFormManagerViewPreview: View {
                     let featureQueryResult = try await featureTable?.queryFeatures(using: queryParameters)
                     let features = featureQueryResult?.features().compactMap { $0 as? ArcGISFeature }
                     features?.forEach { feature in
-                        model.add(feature: feature)
+                        model.add(form: FeatureForm(feature: feature))
                     }
                 }
             }

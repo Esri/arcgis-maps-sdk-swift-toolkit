@@ -28,7 +28,7 @@ struct FeatureFormToolbar: ViewModifier {
     @Environment(\.editingButtonVisibility) var editingButtonsVisibility
     
     /// <#Description#>
-    @Environment(FeatureFormManagerView.Model.self) var browserModel: FeatureFormManagerView.Model?
+    @Environment(FeatureFormManagerView.Model.self) var managerModel: FeatureFormManagerView.Model?
     /// The model for the FeatureFormView containing the view.
     @Environment(FeatureFormViewModel.self) var featureFormViewModel
     
@@ -68,9 +68,9 @@ struct FeatureFormToolbar: ViewModifier {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    if isRootView, let browserModel, browserModel.canGoBack {
+                    if isRootView, let managerModel, managerModel.canGoBack {
                         Button {
-                            browserModel.navigateBack()
+                            managerModel.navigateBack()
                         } label: {
                             Label {
                                 Text(
@@ -107,7 +107,7 @@ struct FeatureFormToolbar: ViewModifier {
                         .disabled(navigationIsDisabled)
                     }
                 }
-                if let browserModel {
+                if let managerModel {
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
                             Section {
@@ -115,7 +115,7 @@ struct FeatureFormToolbar: ViewModifier {
                                 Button("Discard Edits", role: .destructive) {}
                             }
                         } label: {
-                            Text(browserModel.manager.forms.count, format: .number)
+                            Text(managerModel.manager.forms.count, format: .number)
                         }
                     }
                 } else if let isPresented {
@@ -140,10 +140,10 @@ struct FeatureFormToolbar: ViewModifier {
                         )
                     }
                 }
-                if let browserModel {
+                if let managerModel {
                     ToolbarItemGroup(placement: .bottomBar) {
                         Button {
-                            browserModel.selectPrevious()
+                            managerModel.selectPrevious()
                         } label: {
                             Label {} icon: {
                                 Image(systemName: "chevron.left")
@@ -152,20 +152,20 @@ struct FeatureFormToolbar: ViewModifier {
                         Button {
                             pagedBrowserMenuIsPresented = true
                         } label: {
-                            Text("Feature \(browserModel.selectedIndex + 1) of \(browserModel.count)")
+                            Text("Feature \(managerModel.selectedIndex + 1) of \(managerModel.count)")
                         }
                         .popover(isPresented: $pagedBrowserMenuIsPresented) {
                             List {
-                                ForEach(browserModel.ids, id: \.self) { id in
-                                    if let form = browserModel.form(for: id),
+                                ForEach(managerModel.ids, id: \.self) { id in
+                                    if let form = managerModel.form(for: id),
                                        let objectID = form.feature.objectID {
                                         Button {
-                                            browserModel.select(feature: form.feature)
+                                            managerModel.select(form: form)
                                         } label: {
                                             Label {
                                                 Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
                                             } icon: {
-                                                if browserModel.selectedID == id {
+                                                if managerModel.selectedID == id {
                                                     Image(systemName: "checkmark")
                                                 }
                                             }
@@ -178,7 +178,7 @@ struct FeatureFormToolbar: ViewModifier {
                             .frame(idealWidth: 400, idealHeight: 500)
                         }
                         Button {
-                            browserModel.selectNext()
+                            managerModel.selectNext()
                         } label: {
                             Label {} icon: {
                                 Image(systemName: "chevron.right")
