@@ -108,14 +108,29 @@ struct FeatureFormToolbar: ViewModifier {
                     }
                 }
                 if let managerModel {
+                    let hasEdits = managerModel.formsWithEdits.contains(where: { $0.value })
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
-                            Section {
-                                Button("Save All") {}
-                                Button("Discard Edits", role: .destructive) {}
+                            if hasEdits {
+                                Button("Discard Edits", role: .destructive) {
+                                    managerModel.discardEdits()
+                                }
                             }
                         } label: {
+                            if hasEdits {
+                                Image(systemName: "checkmark")
+                            } else {
+                                Image(systemName: "xmark")
+                            }
                             Text(managerModel.manager.forms.count, format: .number)
+                                .baselineOffset(10)
+                                .font(.caption)
+                        } primaryAction: {
+                            if hasEdits {
+                                managerModel.finishEditing()
+                            } else {
+                                managerModel.discardEdits()
+                            }
                         }
                     }
                 } else if let isPresented {
@@ -160,7 +175,7 @@ struct FeatureFormToolbar: ViewModifier {
                                     if let form = managerModel.form(for: id),
                                        let objectID = form.feature.objectID {
                                         Button {
-                                            managerModel.select(form: form)
+                                            managerModel.select(form: form, clearHistory: true)
                                         } label: {
                                             Label {
                                                 Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")

@@ -148,7 +148,21 @@ extension FeatureFormManagerView /* Model */ {
         }
         
         /// <#Description#>
-        public func navigateBack() {
+        func discardEdits() {
+            Task {
+                await manager.discardEdits()
+            }
+        }
+        
+        /// <#Description#>
+        func finishEditing() {
+            Task {
+                await manager.finishEditing()
+            }
+        }
+        
+        /// <#Description#>
+        func navigateBack() {
             guard canGoBack else {
                 Logger.featureFormBrowserView.warning("Cannot navigate backwards without history.")
                 return
@@ -192,10 +206,13 @@ extension FeatureFormManagerView /* Model */ {
         /// - Parameters:
         ///   - form: <#feature description#>
         ///   - recordNavigation: <#recordNavigation description#>
-        public func select(form: FeatureForm, recordNavigation: Bool = true) {
+        public func select(form: FeatureForm, recordNavigation: Bool = true, clearHistory: Bool = false) {
             guard form.feature.globalID != selectedID else { return }
             if recordNavigation, let selectedID {
                 backStack.insert(selectedID, at: 0)
+            }
+            if clearHistory {
+                backStack.removeAll()
             }
             selectedID = form.feature.globalID
         }
@@ -212,7 +229,7 @@ extension FeatureFormManagerView /* Model */ {
                 nextIndex = selectedIndex + 1
             }
             let nextForm = manager.forms[nextIndex]
-            select(form: nextForm)
+            select(form: nextForm, clearHistory: true)
         }
         
         /// <#Description#>
@@ -227,7 +244,7 @@ extension FeatureFormManagerView /* Model */ {
                 nextIndex = selectedIndex - 1
             }
             let nextForm = manager.forms[nextIndex]
-            select(form: nextForm)
+            select(form: nextForm, clearHistory: true)
         }
             
         private(set) var formsWithEdits = [UUID: Bool]()
@@ -270,16 +287,22 @@ extension FeatureFormManagerView /* Model */ {
     }
 }
 
-@Observable public final class FeatureFormManager {
+@Observable public final class FeatureFormManager: @unchecked Sendable {
+    private let lock = NSLock()
+    
     init(forms: Array<FeatureForm>) {
         self.forms = forms
     }
     
     public func add(_ form: FeatureForm) {
+        lock.lock()
+        defer { lock.unlock() }
         forms.append(form)
     }
     
     public func remove(_ form: FeatureForm) {
+        lock.lock()
+        defer { lock.unlock() }
         forms.removeAll { _form in
             form.feature.globalID == _form.feature.globalID
         }
