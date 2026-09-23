@@ -45,7 +45,7 @@ struct FeatureFormToolbar: ViewModifier {
     @State private var hasEdits = false
     
     /// <#Description#>
-    @State private var pagedBrowserMenuIsPresented = false
+    @State private var formManagerMenuIsPresented = false
     
     /// The currently presented feature form.
     let featureForm: FeatureForm
@@ -165,17 +165,18 @@ struct FeatureFormToolbar: ViewModifier {
                             }
                         }
                         Button {
-                            pagedBrowserMenuIsPresented = true
+                            formManagerMenuIsPresented = true
                         } label: {
                             Text("Feature \(managerModel.selectedIndex + 1) of \(managerModel.count)")
                         }
-                        .popover(isPresented: $pagedBrowserMenuIsPresented) {
+                        .popover(isPresented: $formManagerMenuIsPresented ) {
                             List {
                                 ForEach(managerModel.ids, id: \.self) { id in
                                     if let form = managerModel.form(for: id),
                                        let objectID = form.feature.objectID {
                                         Button {
                                             managerModel.select(form: form, clearHistory: true)
+                                            formManagerMenuIsPresented = false
                                         } label: {
                                             Label {
                                                 Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
