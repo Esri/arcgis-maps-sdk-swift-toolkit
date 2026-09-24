@@ -403,6 +403,8 @@ struct FeatureFormManagerViewPreview: View {
     }
 }
 
+// The task on the ProgressView is problematic in Xcode 26.4.1 (Swift 6.3)
+#if swift(>=6.4)
 #Preview {
     @Previewable @State var map: Map?
     @Previewable @State var model = FeatureFormManagerView.Model(forms: [])
@@ -452,3 +454,4 @@ struct FeatureFormManagerViewPreview: View {
             }
     }
 }
+#endif
