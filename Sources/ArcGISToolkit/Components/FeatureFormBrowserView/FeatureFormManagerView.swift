@@ -342,7 +342,7 @@ extension FeatureFormManagerView /* Manager views */ {
     @ViewBuilder
     var conditionalView: some View {
         if let selection = model.selectedID {
-            tabView(selection: selection)
+            formStack(selection: selection)
         } else {
             ContentUnavailableView {
                 Text(
@@ -357,43 +357,35 @@ extension FeatureFormManagerView /* Manager views */ {
     /// <#Description#>
     /// - Parameter id: <#id description#>
     @ViewBuilder
-    func tab(id: UUID) -> Tab<UUID, some View, TupleView<(Image, Text)>>? {
+    func form(id: UUID) -> some View {
         if let form = model.form(for: id) {
-            Tab(value: id) {
-                FeatureFormView(
-                    root: form,
-                    isPresented: Binding(
-                        get: { true },
-                        set: { _ in model.remove(form: form) }
-                    )
+            FeatureFormView(
+                root: form,
+                isPresented: Binding(
+                    get: { true },
+                    set: { _ in model.remove(form: form) }
                 )
-                .editingButtons(.hidden)
-                .environment(model)
-            } label: {
-                Image(systemName: "list.bullet.clipboard")
-                Text(form.title)
-            }
+            )
+            .editingButtons(.hidden)
+            .environment(model)
         }
     }
     
     /// <#Description#>
     /// - Parameter selection: <#selection description#>
     /// - Returns: <#description#>
+    /// - Note: We use a `ZStack` of `FeatureFormView`s over something like a `TabView`
+    /// with `tabViewStyle(.page(indexDisplayMode: .never))` which causes view
+    /// re-instantiation on selection change and results in loss of state.
     @ViewBuilder
-    func tabView(selection: UUID) -> some View {
-        TabView(
-            selection: Binding {
-                selection
-            } set: { newID in
-                guard let form = model.form(for: newID) else { return }
-                model.select(form: form, recordNavigation: true)
-            }
-        ) {
+    func formStack(selection: UUID) -> some View {
+        ZStack {
             ForEach(model.ids, id: \.self) { id in
-                tab(id: id)
+                form(id: id)
+                    .allowsHitTesting(selection == id)
+                    .opacity(selection == id ? 1 : 0)
             }
         }
-        .tabViewStyle(.page(indexDisplayMode: .never))
     }
 }
 
