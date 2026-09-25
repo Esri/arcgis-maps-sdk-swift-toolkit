@@ -320,7 +320,7 @@ final class FeatureEditorModel {
             } catch {
                 snapRules = nil
                 Logger.featureEditor.error(
-                    "Error creating snap rules: \(error.localizedDescription)"
+                    "Failed to create snap rules: \(error.localizedDescription)"
                 )
             }
             syncSnapSourceSettings()
