@@ -21,12 +21,12 @@ internal import os
 @_spi(Experimental)
 public struct FeatureFormManagerView: View {
     /// <#Description#>
-    @Binding var model: Model
+    let model: Model
     
     /// <#Description#>
     /// - Parameter model: <#model description#>
-    public init(model: Binding<Model>) {
-        _model = model
+    public init(model: Model) {
+        self.model = model
     }
     
     public var body: some View {
@@ -397,9 +397,11 @@ extension Logger {
 }
 
 struct FeatureFormManagerViewPreview: View {
-    @Binding var model: FeatureFormManagerView.Model
+    let model: FeatureFormManagerView.Model?
     var body: some View {
-        FeatureFormManagerView(model: $model)
+        if let model {
+            FeatureFormManagerView(model: model)
+        }
     }
 }
 
@@ -407,14 +409,14 @@ struct FeatureFormManagerViewPreview: View {
 #if swift(>=6.4)
 #Preview {
     @Previewable @State var map: Map?
-    @Previewable @State var model = FeatureFormManagerView.Model(forms: [])
+    @Previewable @State var model: FeatureFormManagerView.Model?
     @Previewable @State var loadResult: Result<Void, Error>?
     
     switch loadResult {
     case .success(let success):
         MapView(map: map!)
             .sheet(isPresented: .constant(true)) {
-                FeatureFormManagerViewPreview(model: $model)
+                FeatureFormManagerViewPreview(model: model)
             }
     case .failure(let failure):
         ContentUnavailableView {
@@ -447,9 +449,8 @@ struct FeatureFormManagerViewPreview: View {
                     queryParameters.addObjectIDs([1, 2, 3])
                     let featureQueryResult = try await featureTable?.queryFeatures(using: queryParameters)
                     let features = featureQueryResult?.features().compactMap { $0 as? ArcGISFeature }
-                    features?.forEach { feature in
-                        model.add(form: FeatureForm(feature: feature))
-                    }
+                    let forms: [FeatureForm] = features?.map { FeatureForm(feature: $0) } ?? []
+                    model = .init(forms: forms)
                 }
             }
     }

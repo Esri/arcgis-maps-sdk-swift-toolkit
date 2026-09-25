@@ -66,7 +66,7 @@ struct FeatureFormManagerViewExampleView: View {
                         }
                     }
                 } content: {
-                    FeatureFormManagerView(model: $browserModel)
+                    FeatureFormManagerView(model: browserModel)
                 }
                 .task {
                     do {
