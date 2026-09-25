@@ -42,6 +42,10 @@ final class FeatureEditorModel {
     var feature: ArcGISFeature? {
         presentedFeatureForm?.feature ?? rootFeatureForm?.feature
     }
+    /// The feature hidden to prevent its symbol from conflicting with the geometry editor.
+    /// This is used to show the feature after geometry editing stops.
+    @ObservationIgnored
+    private var hiddenFeature: ArcGISFeature?
     /// The geometry of the `feature` before editing.
     private(set) var initialGeometry: Geometry?
     /// A Boolean value that indicates whether the Feature Editor inspector is presented.
@@ -287,6 +291,11 @@ final class FeatureEditorModel {
         if let geometry = feature.geometry {
             geometryEditor.start(withInitial: geometry)
             viewpointGeometry = geometry
+            
+            if let featureLayer = feature.featureLayer {
+                featureLayer.setVisible(false, for: feature)
+                hiddenFeature = feature
+            }
         } else if let geometryType = feature.table?.geometryType {
             geometryEditor.start(withType: geometryType)
         }
@@ -301,6 +310,11 @@ final class FeatureEditorModel {
         geometryEditorIsStarted = false
         initialGeometry = nil
         snapRules = nil
+        
+        // Clears `hiddenFeature` and resets its visibility to true.
+        if let hiddenFeature = hiddenFeature.take(), let featureLayer = hiddenFeature.featureLayer {
+            featureLayer.setVisible(true, for: hiddenFeature)
+        }
     }
 }
 
