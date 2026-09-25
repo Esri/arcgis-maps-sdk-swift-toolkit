@@ -30,32 +30,35 @@ struct FeatureEditorTestView: View {
     var body: some View {
         switch mapLoadResult {
         case .success(let map):
-            MapView(map: map)
-                .geometryEditor(geometryEditor)
-                .overlay(alignment: .topTrailing) {
-                    FeatureEditor(
-                        $featureToEdit,
-                        geometryEditor: geometryEditor,
-                        map: map
-                    )
-                    .padding()
-                }
-                .task {
-                    do {
-                        if let objectID = UserDefaults.standard.objectID,
-                           let layerName = UserDefaults.standard.layerName,
-                           let groupLayer = map.operationalLayers.first as? GroupLayer,
-                           let layer = groupLayer.layers.first(where: { $0.name == layerName }),
-                           let featureLayer = layer as? FeatureLayer {
-                            try await startEditingFeature(withIdentifier: objectID, on: featureLayer)
-                        }
-                    } catch {
-                        errorDescription = error.localizedDescription
+            MapViewReader { mapViewProxy in
+                MapView(map: map)
+                    .geometryEditor(geometryEditor)
+                    .overlay(alignment: .topTrailing) {
+                        FeatureEditor(
+                            $featureToEdit,
+                            geometryEditor: geometryEditor,
+                            map: map,
+                            mapViewProxy: mapViewProxy
+                        )
+                        .padding()
                     }
+            }
+            .task {
+                do {
+                    if let objectID = UserDefaults.standard.objectID,
+                       let layerName = UserDefaults.standard.layerName,
+                       let groupLayer = map.operationalLayers.first as? GroupLayer,
+                       let layer = groupLayer.layers.first(where: { $0.name == layerName }),
+                       let featureLayer = layer as? FeatureLayer {
+                        try await startEditingFeature(withIdentifier: objectID, on: featureLayer)
+                    }
+                } catch {
+                    errorDescription = error.localizedDescription
                 }
-                .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {
-                    Text(errorDescription ?? "Unknown")
-                }
+            }
+            .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {
+                Text(errorDescription ?? "Unknown")
+            }
         case .failure(let error):
             ContentUnavailableView {
                 Label("Failed to load map", systemImage: "exclamationmark.triangle")

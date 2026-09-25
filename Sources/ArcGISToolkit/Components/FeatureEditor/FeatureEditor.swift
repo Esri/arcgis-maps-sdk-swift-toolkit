@@ -58,9 +58,9 @@ public struct FeatureEditor: View {
     /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
     private let geometryEditor: GeometryEditor
     /// The map used to populate shared templates.
-    private let map: Map?
+    private let map: Map
     /// A proxy for performing map view operations.
-    private let mapViewProxy: MapViewProxy?
+    private let mapViewProxy: MapViewProxy
     /// The style to apply to the toolbar's controls.
     private let toolbarStyle: ToolbarStyle?
     
@@ -84,8 +84,8 @@ public struct FeatureEditor: View {
     public init(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
-        map: Map?,
-        mapViewProxy: MapViewProxy? = nil,
+        map: Map,
+        mapViewProxy: MapViewProxy,
         toolbarStyle: ToolbarStyle? = .vertical
     ) {
         self._feature = feature
@@ -132,17 +132,13 @@ public struct FeatureEditor: View {
     /// Sets the viewpoint using `model.viewpointGeometry` and the `mapViewProxy`.
     private func setViewpoint() async {
         guard let viewpointGeometry = model.viewpointGeometry else { return }
-        if let mapViewProxy {
-            let expandedGeometry = viewpointGeometry.extent.withBuilder { $0.expand(by: 2) }
-            let viewpoint = Viewpoint(boundingGeometry: expandedGeometry)
-            await mapViewProxy.setViewpoint(viewpoint, duration: 0.5)
-            
-            // Prevents canceling an animation started while this task was running.
-            if !Task.isCancelled {
-                model.viewpointGeometry = nil
-            }
-        } else {
-            // Clears viewpointGeometry to prevent setting the viewpoint if the proxy is set later.
+        
+        let expandedGeometry = viewpointGeometry.extent.withBuilder { $0.expand(by: 2) }
+        let viewpoint = Viewpoint(boundingGeometry: expandedGeometry)
+        await mapViewProxy.setViewpoint(viewpoint, duration: 0.5)
+        
+        // Prevents canceling an animation started while this task was running.
+        if !Task.isCancelled {
             model.viewpointGeometry = nil
         }
     }
