@@ -239,55 +239,6 @@ final class FeatureEditorModel {
         try await setFormGeometry(to: geometry)
     }
     
-    /// Creates snap rules from the given feature's utility network, if available.
-    /// - Parameter feature: The feature to create snap rules for.
-    private func makeSnapRules(for feature: ArcGISFeature) async throws -> SnapRules? {
-        guard let featureTable = feature.table else { return nil }
-        
-        if let serviceFeatureTable = featureTable as? ServiceFeatureTable,
-           let serviceGeodatabase = serviceFeatureTable.serviceGeodatabase {
-            try await serviceGeodatabase.retryLoad()
-            
-            guard let utilityNetwork = serviceGeodatabase.utilityNetwork else { return nil }
-            try await utilityNetwork.retryLoad()
-            
-            return if let element = utilityNetwork.makeElement(arcGISFeature: feature) {
-                try await .rules(for: utilityNetwork, assetType: element.assetType)
-            } else {
-                try await .rules(
-                    for: utilityNetwork,
-                    featureTable: featureTable,
-                    attributes: feature.attributes
-                )
-            }
-        } else if let geodatabaseFeatureTable = feature.table as? GeodatabaseFeatureTable,
-                  let geodatabase = geodatabaseFeatureTable.geodatabase {
-            try await geodatabase.retryLoad()
-            
-            let utilityNetworks = geodatabase.utilityNetworks
-            await utilityNetworks.retryLoad()
-            
-            for utilityNetwork in utilityNetworks {
-                if let element = utilityNetwork.makeElement(arcGISFeature: feature) {
-                    return try await .rules(for: utilityNetwork, assetType: element.assetType)
-                }
-            }
-            
-            for utilityNetwork in utilityNetworks {
-                if let definition = utilityNetwork.definition,
-                   definition.networkSources.contains(where: { $0.featureTable === featureTable }) {
-                    return try await .rules(
-                        for: utilityNetwork,
-                        featureTable: featureTable,
-                        attributes: feature.attributes
-                    )
-                }
-            }
-        }
-        
-        return nil
-    }
-    
     /// Sets the form's feature geometry and reevaluates expressions to update
     /// possible geometry-dependent form elements.
     /// - Parameter geometry: The new geometry to set on the feature.
@@ -316,7 +267,7 @@ final class FeatureEditorModel {
             try await feature.table?.retryLoad()
             
             do {
-                snapRules = try await makeSnapRules(for: feature)
+                snapRules = try await feature.snapRules
             } catch {
                 snapRules = nil
                 Logger.featureEditor.error(
@@ -350,5 +301,70 @@ final class FeatureEditorModel {
         geometryEditorIsStarted = false
         initialGeometry = nil
         snapRules = nil
+    }
+}
+
+private extension ArcGISFeature {
+    /// The snap rules for the feature, created from the feature's utility network, if applicable.
+    var snapRules: SnapRules? {
+        get async throws {
+            guard let table else { return nil }
+            
+            let utilityNetworks = try await table.utilityNetworks
+            await utilityNetworks.load()
+            
+            // Tries to find the feature's utility network by creating an
+            // utility element and then uses both to create snap rules.
+            for utilityNetwork in utilityNetworks {
+                if let element = utilityNetwork.makeElement(arcGISFeature: self) {
+                    return try await .rules(for: utilityNetwork, assetType: element.assetType)
+                }
+            }
+            
+            // If an utility element cannot be created, tries to find the
+            // utility network that contains the feature's table and then
+            // uses it and the feature's attributes to create snap rules.
+            for utilityNetwork in utilityNetworks {
+                if let definition = utilityNetwork.definition,
+                   definition.networkSources.contains(where: { $0.featureTable === table }) {
+                    return try await .rules(
+                        for: utilityNetwork,
+                        featureTable: table,
+                        attributes: attributes
+                    )
+                }
+            }
+            
+            return nil
+        }
+    }
+}
+
+private extension FeatureTable {
+    /// The utility networks of the table's geodatabase, if applicable.
+    var utilityNetworks: [UtilityNetwork] {
+        get async throws {
+            switch self {
+            case let serviceFeatureTable as ServiceFeatureTable:
+                guard let serviceGeodatabase = serviceFeatureTable.serviceGeodatabase else {
+                    return []
+                }
+                try await serviceGeodatabase.retryLoad()
+                
+                guard let utilityNetwork = serviceGeodatabase.utilityNetwork else {
+                    return []
+                }
+                return [utilityNetwork]
+            case let geodatabaseFeatureTable as GeodatabaseFeatureTable:
+                guard let geodatabase = geodatabaseFeatureTable.geodatabase else {
+                    return []
+                }
+                try await geodatabase.retryLoad()
+                
+                return geodatabase.utilityNetworks
+            default:
+                return []
+            }
+        }
     }
 }
