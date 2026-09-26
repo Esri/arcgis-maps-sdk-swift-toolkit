@@ -123,8 +123,6 @@ struct FeatureFormToolbar: ViewModifier {
                                 Image(systemName: "xmark")
                             }
                             Text(managerModel.manager.forms.count, format: .number)
-                                .baselineOffset(10)
-                                .font(.caption)
                         } primaryAction: {
                             if hasEdits {
                                 managerModel.finishEditing()
