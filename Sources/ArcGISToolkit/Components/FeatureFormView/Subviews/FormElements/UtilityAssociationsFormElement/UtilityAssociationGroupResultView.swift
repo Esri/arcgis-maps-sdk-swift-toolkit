@@ -19,7 +19,7 @@ extension FeatureFormView {
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
         /// <#Description#>
-        @Environment(FeatureFormManagerView.Model.self) var managerModel: FeatureFormManagerView.Model?
+        @Environment(FeatureFormGroupView.Model.self) var groupViewModel: FeatureFormGroupView.Model?
         /// The model for the FeatureFormView containing the view.
         @Environment(FeatureFormViewModel.self) var featureFormViewModel
         /// A Boolean which declares whether navigation to forms for features associated via utility
@@ -160,8 +160,8 @@ extension FeatureFormView {
             Button {
                 // If the FeatureFormView is in a FeatureFormManagerView, open
                 // the association in a new tab.
-                if let managerModel {
-                    managerModel.add(form: FeatureForm(feature: result.associatedFeature), select: true)
+                if let groupViewModel {
+                    groupViewModel.add(form: FeatureForm(feature: result.associatedFeature), select: true)
                 } else {
                     let navigationAction = {
                         featureFormViewModel.addModel(form)

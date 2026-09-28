@@ -19,7 +19,7 @@ internal import os
 
 /// <#Description#>
 @_spi(Experimental)
-public struct FeatureFormManagerView: View {
+public struct FeatureFormGroupView: View {
     /// <#Description#>
     let model: Model
     
@@ -31,29 +31,29 @@ public struct FeatureFormManagerView: View {
     
     public var body: some View {
         conditionalView
-            .task(id: model.manager.forms.count) {
+            .task(id: model.group.forms.count) {
                 await model.monitorEdits()
             }
-            .task(id: model.manager.forms.count) {
+            .task(id: model.group.forms.count) {
                 await model.monitorErrors()
             }
     }
 }
 
-extension FeatureFormManagerView /* Model */ {
+extension FeatureFormGroupView /* Model */ {
     /// <#Description#>
     @MainActor @Observable public final class Model {
         /// <#Description#>
         /// - Parameter forms: <#forms description#>
         public init(forms: [FeatureForm] = []) {
-            self.manager = .init(forms: forms)
+            self.group = .init(forms: forms)
             if let first = forms.first {
                 select(form: first)
             }
         }
         
         /// <#Description#>
-        var manager: FeatureFormManager
+        var group: FeatureFormGroup
         
         /// <#Description#>
         var canGoBack: Bool {
@@ -62,7 +62,7 @@ extension FeatureFormManagerView /* Model */ {
         
         /// <#Description#>
         public var count: Int {
-            manager.forms.count == ids.count ? manager.forms.count : -1
+            group.forms.count == ids.count ? group.forms.count : -1
         }
         
         /// <#Description#>
@@ -79,7 +79,7 @@ extension FeatureFormManagerView /* Model */ {
         
         /// <#Description#>
         var ids: [UUID] {
-            manager.forms.compactMap { $0.feature.globalID }
+            group.forms.compactMap { $0.feature.globalID }
         }
         
         /// <#Description#>
@@ -99,7 +99,7 @@ extension FeatureFormManagerView /* Model */ {
         /// - Parameter select: <#select description#>
         public func add(form: FeatureForm, select: Bool = false) {
             guard let id = form.feature.globalID else {
-                Logger.featureFormBrowserView.warning("The feature cannot be added because the its global ID is not available.")
+                Logger.featureFormGroupView.warning("The feature cannot be added because the its global ID is not available.")
                 return
             }
             defer {
@@ -119,10 +119,10 @@ extension FeatureFormManagerView /* Model */ {
                 } else {
                     id = "?"
                 }
-                Logger.featureFormBrowserView.info("Feature \(id.description) is already added.")
+                Logger.featureFormGroupView.info("Feature \(id.description) is already added.")
                 return
             }
-            manager.add(form)
+            group.add(form)
         }
         
         public func debugLog() {
@@ -150,26 +150,26 @@ extension FeatureFormManagerView /* Model */ {
         /// <#Description#>
         func discardEdits() {
             Task {
-                await manager.discardEdits()
+                await group.discardEdits()
             }
         }
         
         /// <#Description#>
         func finishEditing() {
             Task {
-                await manager.finishEditing()
+                await group.finishEditing()
             }
         }
         
         /// <#Description#>
         func navigateBack() {
             guard canGoBack else {
-                Logger.featureFormBrowserView.warning("Cannot navigate backwards without history.")
+                Logger.featureFormGroupView.warning("Cannot navigate backwards without history.")
                 return
             }
             let top = backStack.removeFirst()
             guard let form = form(for: top) else {
-                Logger.featureFormBrowserView.warning("No ID for back navigation.")
+                Logger.featureFormGroupView.warning("No ID for back navigation.")
                 return
             }
             select(form: form, recordNavigation: false)
@@ -178,9 +178,9 @@ extension FeatureFormManagerView /* Model */ {
         /// <#Description#>
         /// - Parameter form: <#form description#>
         public func remove(form: FeatureForm) {
-            manager.forms.forEach { _form in
+            group.forms.forEach { _form in
                 if form.feature.globalID == _form.feature.globalID {
-                    manager.remove(_form)
+                    group.remove(_form)
                 }
             }
             backStack.removeAll { id in
@@ -199,7 +199,7 @@ extension FeatureFormManagerView /* Model */ {
         /// - Parameter id: <#id description#>
         /// - Returns: <#description#>
         public func form(for id: UUID) -> FeatureForm? {
-            manager.forms.first { $0.feature.globalID == id } ?? nil
+            group.forms.first { $0.feature.globalID == id } ?? nil
         }
         
         /// <#Description#>
@@ -228,7 +228,7 @@ extension FeatureFormManagerView /* Model */ {
             } else {
                 nextIndex = selectedIndex + 1
             }
-            let nextForm = manager.forms[nextIndex]
+            let nextForm = group.forms[nextIndex]
             select(form: nextForm, clearHistory: true)
         }
         
@@ -243,7 +243,7 @@ extension FeatureFormManagerView /* Model */ {
             } else {
                 nextIndex = selectedIndex - 1
             }
-            let nextForm = manager.forms[nextIndex]
+            let nextForm = group.forms[nextIndex]
             select(form: nextForm, clearHistory: true)
         }
             
@@ -252,10 +252,10 @@ extension FeatureFormManagerView /* Model */ {
         private(set) var formsWithErrors = [UUID: Int]()
         
         func monitorEdits() async {
-            Logger.featureFormBrowserView.info("Starting edit monitoring.")
-            await withTaskGroup { group in
-                for form in manager.forms {
-                    group.addTask { @Sendable in
+            Logger.featureFormGroupView.info("Starting edit monitoring.")
+            await withTaskGroup { taskGroup in
+                for form in group.forms {
+                    taskGroup.addTask { @Sendable in
                         for await hasEdits in form.$hasEdits {
                             if let globalID = form.feature.globalID {
                                 await MainActor.run {
@@ -269,10 +269,10 @@ extension FeatureFormManagerView /* Model */ {
         }
         
         func monitorErrors() async {
-            Logger.featureFormBrowserView.info("Starting error monitoring.")
-            await withTaskGroup { group in
-                for form in manager.forms {
-                    group.addTask { @Sendable in
+            Logger.featureFormGroupView.info("Starting error monitoring.")
+            await withTaskGroup { taskGroup in
+                for form in group.forms {
+                    taskGroup.addTask { @Sendable in
                         for await errors in form.$elementValidationErrors {
                             if let globalID = form.feature.globalID {
                                 await MainActor.run {
@@ -287,7 +287,7 @@ extension FeatureFormManagerView /* Model */ {
     }
 }
 
-@Observable public final class FeatureFormManager: @unchecked Sendable {
+@Observable public final class FeatureFormGroup: @unchecked Sendable {
     private let lock = NSLock()
     
     init(forms: Array<FeatureForm>) {
@@ -337,7 +337,7 @@ extension FeatureFormManagerView /* Model */ {
     private(set) var forms = [FeatureForm]()
 }
 
-extension FeatureFormManagerView /* Manager views */ {
+extension FeatureFormGroupView /* Group views */ {
     /// <#Description#>
     @ViewBuilder
     var conditionalView: some View {
@@ -348,7 +348,7 @@ extension FeatureFormManagerView /* Manager views */ {
                 Text(
                     "No form is selected.",
                     bundle: .toolkitModule,
-                    comment: "A label indicating no form is selected in the Form Manager."
+                    comment: "A label indicating no form is selected in the Feature Form Group."
                 )
             }
         }
@@ -390,17 +390,17 @@ extension FeatureFormManagerView /* Manager views */ {
 }
 
 extension Logger {
-    /// A logger for the feature form view.
-    static var featureFormBrowserView: Logger {
-        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormBrowserView")
+    /// A logger for the `FeatureFormGroupView`.
+    static var featureFormGroupView: Logger {
+        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormGroupView")
     }
 }
 
-struct FeatureFormManagerViewPreview: View {
-    let model: FeatureFormManagerView.Model?
+struct FeatureFormGroupViewPreview: View {
+    let model: FeatureFormGroupView.Model?
     var body: some View {
         if let model {
-            FeatureFormManagerView(model: model)
+            FeatureFormGroupView(model: model)
         }
     }
 }
@@ -409,14 +409,14 @@ struct FeatureFormManagerViewPreview: View {
 #if swift(>=6.4)
 #Preview {
     @Previewable @State var map: Map?
-    @Previewable @State var model: FeatureFormManagerView.Model?
+    @Previewable @State var model: FeatureFormGroupView.Model?
     @Previewable @State var loadResult: Result<Void, Error>?
     
     switch loadResult {
     case .success(let success):
         MapView(map: map!)
             .sheet(isPresented: .constant(true)) {
-                FeatureFormManagerViewPreview(model: model)
+                FeatureFormGroupViewPreview(model: model)
             }
     case .failure(let failure):
         ContentUnavailableView {

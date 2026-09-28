@@ -18,17 +18,17 @@ import ArcGISToolkit
 import os
 import SwiftUI
 
-struct FeatureFormManagerViewExampleView: View {
+struct FeatureFormGroupViewExampleView: View {
     /// A Boolean value indicating whether general form workflow errors are presented.
     @State private var alertIsPresented = false
-    /// <#Description#>
-    @State private var browserModel = FeatureFormManagerView.Model(forms: [])
     /// Tables with local edits that need to be applied.
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
     @State private var editsAreBeingApplied = false
     /// A Boolean value indicating whether the form is presented.
     @State private var featureFormViewIsPresented = false
+    /// <#Description#>
+    @State private var groupViewModel = FeatureFormGroupView.Model(forms: [])
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     /// The `Map` displayed in the `MapView`.
@@ -58,7 +58,7 @@ struct FeatureFormManagerViewExampleView: View {
                     submittingOverlay
                 }
                 .sheet(isPresented: $featureFormViewIsPresented) {
-                    browserModel = FeatureFormManagerView.Model(forms: [])
+                    groupViewModel = FeatureFormGroupView.Model(forms: [])
                     map.operationalLayers.forEach {
                         ($0 as? FeatureLayer)?.clearSelection()
                         ($0 as? GroupLayer)?.layers.forEach {
@@ -66,7 +66,7 @@ struct FeatureFormManagerViewExampleView: View {
                         }
                     }
                 } content: {
-                    FeatureFormManagerView(model: browserModel)
+                    FeatureFormGroupView(model: groupViewModel)
                 }
                 .task {
                     do {
@@ -76,9 +76,9 @@ struct FeatureFormManagerViewExampleView: View {
                         Logger.featureFormBrowserViewExample.error("Error creating credential: \(error.localizedDescription)")
                     }
                 }
-                .task(id: browserModel.count) {
+                .task(id: groupViewModel.count) {
                     // swiftlint:disable:next empty_count
-                    if browserModel.count == 0 {
+                    if groupViewModel.count == 0 {
                         featureFormViewIsPresented = false
                     }
                 }
@@ -92,18 +92,18 @@ struct FeatureFormManagerViewExampleView: View {
                         submitButton
                     }
                     ToolbarItem(placement: .bottomBar) {
-                        Button("Open Browser \(browserModel.count)") {
+                        Button("Open Browser \(groupViewModel.count)") {
                             featureFormViewIsPresented = true
                         }
                         // swiftlint:disable:next empty_count
-                        .disabled(browserModel.count == 0)
+                        .disabled(groupViewModel.count == 0)
                     }
                 }
         }
     }
 }
 
-extension FeatureFormManagerViewExampleView {
+extension FeatureFormGroupViewExampleView {
     /// An error encountered while submitting edits.
     enum SubmissionError: LocalizedError {
         case anyError(any Error)
@@ -175,7 +175,7 @@ extension FeatureFormManagerViewExampleView {
         if let geoElements = identifyLayerResults?.first?.geoElements,
            let feature = geoElements.first as? ArcGISFeature {
             (feature.table?.layer as? FeatureLayer)?.selectFeature(feature)
-            browserModel.add(form: FeatureForm(feature: feature))
+            groupViewModel.add(form: FeatureForm(feature: feature))
         }
     }
     
