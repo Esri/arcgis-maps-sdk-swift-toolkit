@@ -155,6 +155,9 @@ struct AttachmentsFeatureElementView: View {
     }
     
     /// Loads the attachments associated with this element.
+    ///
+    /// The attachments are reversed when the underlying element is a form element. If
+    /// the underlying element is a popup element, the order is preserved.
     private func loadAttachments() {
         // Use an unstructured task to prevent cancellation from view-shift.
         // This can happen, for example, in FeatureFormView when the visibility
@@ -164,7 +167,6 @@ struct AttachmentsFeatureElementView: View {
             do {
                 let attachments = try await featureElement.featureAttachments
                 let attachmentModels = attachments
-                    .reversed()
                     .map {
                         AttachmentModel(
                             attachment: $0,
@@ -172,7 +174,11 @@ struct AttachmentsFeatureElementView: View {
                             thumbnailSize: thumbnailSize
                         )
                     }
-                self.attachmentModels = .success(attachmentModels)
+                if formElement != nil {
+                    self.attachmentModels = .success(attachmentModels.reversed())
+                } else {
+                    self.attachmentModels = .success(attachmentModels)
+                }
             } catch {
                 Logger.attachmentsFeatureElementView.error(
                     "Attachments failed load. \(error.localizedDescription)"
