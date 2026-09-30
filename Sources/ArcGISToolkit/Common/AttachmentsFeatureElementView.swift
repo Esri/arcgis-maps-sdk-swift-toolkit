@@ -156,8 +156,9 @@ struct AttachmentsFeatureElementView: View {
     
     /// Loads the attachments associated with this element.
     ///
-    /// The attachments are reversed when the underlying element is a form element. If
-    /// the underlying element is a popup element, the order is preserved.
+    /// The attachments are reversed when the underlying element is a form element or a popup
+    /// element with no `AttachmentsPopupElement.orderByFields`. If the underlying
+    /// element is a popup element with `orderByFields`, the order is preserved.
     private func loadAttachments() {
         // Use an unstructured task to prevent cancellation from view-shift.
         // This can happen, for example, in FeatureFormView when the visibility
@@ -174,7 +175,7 @@ struct AttachmentsFeatureElementView: View {
                             thumbnailSize: thumbnailSize
                         )
                     }
-                if formElement != nil {
+                if formElement != nil || (popupElement?.orderByFields.isEmpty ?? true) {
                     self.attachmentModels = .success(attachmentModels.reversed())
                 } else {
                     self.attachmentModels = .success(attachmentModels)
@@ -245,6 +246,11 @@ extension AttachmentsFeatureElementView {
     /// The model's element as an attachments form element.
     private var formElement: AttachmentsFormElement? {
         featureElement as? AttachmentsFormElement
+    }
+    
+    /// The model's element as an attachments popup element.
+    private var popupElement: AttachmentsPopupElement? {
+        featureElement as? AttachmentsPopupElement
     }
     
     /// A Boolean value denoting if the view should be shown as regular width.
