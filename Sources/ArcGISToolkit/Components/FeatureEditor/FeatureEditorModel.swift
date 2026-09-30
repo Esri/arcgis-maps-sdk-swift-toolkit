@@ -313,7 +313,7 @@ private extension ArcGISFeature {
             let utilityNetworks = try await table.utilityNetworks
             await utilityNetworks.load()
             
-            // Tries to find the feature's utility network by creating an
+            // Tries to find the feature's utility network by creating a
             // utility element and then uses both to create snap rules.
             for utilityNetwork in utilityNetworks {
                 if let element = utilityNetwork.makeElement(arcGISFeature: self) {
@@ -321,7 +321,7 @@ private extension ArcGISFeature {
                 }
             }
             
-            // If an utility element cannot be created, tries to find the
+            // If a utility element cannot be created, tries to find the
             // utility network that contains the feature's table and then
             // uses it and the feature's attributes to create snap rules.
             for utilityNetwork in utilityNetworks {
