@@ -90,6 +90,34 @@ extension FeatureFormGroupView /* Group views */ {
     }
 }
 
+extension FeatureFormGroupView {
+    /// Represents events that occur during the form editing lifecycle. These events notify you when the user has performed an action within a form in the group.
+    public enum EditingEvent {
+        /// Indicates that the user has discarded edits.
+        case discardedEdits
+        /// Indicates that the user has finished editing.
+        case finishedEditing
+        /// Indicates that the user has tapped on an option to visualize a feature on the map.
+        case showOnMapRequested(ArcGISFeature)
+    }
+}
+
+public extension FeatureFormGroupView /* View modifiers */ {
+    /// Sets an closure to perform when the active feature form has changed.
+    /// - Parameter action: The closure to perform.
+    func onFeatureFormChanged(perform action: @escaping (FeatureForm) -> Void) -> FeatureFormGroupView {
+        model.onFeatureFormChangedAction = action
+        return self
+    }
+    
+    /// Sets a closure to perform when a form group editing event occurs.
+    /// - Parameter action: The closure to perform.
+    func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> FeatureFormGroupView {
+        model.onFormEditingEventAction = action
+        return self
+    }
+}
+
 extension FeatureFormGroupView /* Internal view modifiers */ {
     /// Sets an action to run before finishing edits.
     ///
@@ -97,8 +125,8 @@ extension FeatureFormGroupView /* Internal view modifiers */ {
     /// not, and makes the finish editing button available.
     ///
     /// If the action throws an error, `FeatureFormGroup.finishEditing` will not be called.
-    /// - Parameter action: The action to run.
-    func willFinishEditing(_ action: @escaping () throws -> Void) -> some View {
+    /// - Parameter action: The closure to perform.
+    func willFinishEditing(perform action: @escaping () throws -> Void) -> FeatureFormGroupView {
         model.willFinishEditingAction = action
         return self
     }

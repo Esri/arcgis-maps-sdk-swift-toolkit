@@ -30,12 +30,18 @@ extension FeatureFormGroupView /* Model */ {
         }
         
         /// <#Description#>
-        var group: FeatureFormGroup
+        let group: FeatureFormGroup
         
         /// <#Description#>
         var canGoBack: Bool {
             backStack.count > 0
         }
+        
+        /// An action that will run when the active form has changed.
+        var onFeatureFormChangedAction: ((FeatureForm) -> Void)?
+        
+        /// An action that will run when a form group editing event occurs.
+        var onFormEditingEventAction: ((EditingEvent) -> Void)?
         
         /// An action to run before finishing editing.
         ///
