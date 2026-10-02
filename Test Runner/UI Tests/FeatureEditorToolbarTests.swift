@@ -58,6 +58,52 @@ final class FeatureEditorToolbarTests: XCTestCase {
         addFeaturesButton.assertExistence()
     }
     
+    /// Tests that the geometry editing toolbar buttons handle and respond to
+    /// geometry edits correctly.
+    func testGeometryEditingButtonsWithEdits() {
+        let app = XCUIApplication()
+        let deleteSelectedElementButton = app.buttons["Delete Selected Element"]
+        let redoButton = app.buttons["Redo"]
+        let undoButton = app.buttons["Undo"]
+        
+        // Waits for the Feature Editor to open.
+        openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
+        deleteSelectedElementButton.assertExistence(timeout: 30)
+        
+        // Verifies that the buttons are disabled when there are no edits.
+        deleteSelectedElementButton.assertDisabled()
+        undoButton.assertDisabled()
+        redoButton.assertDisabled()
+        
+        // Taps the map to make an edit and verifies that delete is enabled
+        // when a vertex is selected and undo is enabled when there are edits.
+        app.otherElements["Map"].tap()
+        deleteSelectedElementButton.assertEnabled()
+        undoButton.assertEnabled()
+        redoButton.assertDisabled()
+        
+        // Undoes the only edit and verifies that undo is disabled and redo is enabled.
+        undoButton.tap()
+        undoButton.assertDisabled()
+        redoButton.assertEnabled()
+        
+        // Redoes the edit and verifies that undo is enabled and redo is disabled.
+        redoButton.tap()
+        undoButton.assertEnabled()
+        redoButton.assertDisabled()
+        
+        // Deletes the selected vertex and verifies that the delete button is
+        // disabled when there is no selection.
+        deleteSelectedElementButton.tap()
+        deleteSelectedElementButton.assertDisabled()
+        
+        // Verifies that the buttons are disabled when edits are discarded.
+        app.buttons["Discard"].tap()
+        deleteSelectedElementButton.assertDisabled()
+        undoButton.assertDisabled()
+        redoButton.assertDisabled()
+    }
+    
     /// Tests the default style for the feature editor toolbar is vertical.
     /// Verifies that the tool button is positioned above the delete button
     /// by comparing their midY values.
