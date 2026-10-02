@@ -30,7 +30,7 @@ struct FeatureEditorTestView: View {
     var body: some View {
         switch mapLoadResult {
         case .success(let map):
-            MapViewReader { mapViewProxy in
+            MapViewReader { mapView in
                 MapView(map: map)
                     .geometryEditor(geometryEditor)
                     .overlay(alignment: .topTrailing) {
@@ -38,7 +38,7 @@ struct FeatureEditorTestView: View {
                             $featureToEdit,
                             geometryEditor: geometryEditor,
                             map: map,
-                            mapView: mapViewProxy
+                            mapView: mapView
                         )
                         .padding()
                     }

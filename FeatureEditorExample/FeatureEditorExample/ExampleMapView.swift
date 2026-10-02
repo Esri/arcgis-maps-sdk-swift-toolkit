@@ -42,7 +42,7 @@ struct ExampleMapView: View {
     var body: some View {
         switch mapLoadResult {
         case .success(let map):
-            MapViewReader { mapViewProxy in
+            MapViewReader { mapView in
                 MapView(map: map)
                     .contentInsets(contentInsets)
                     .geometryEditor(geometryEditor)
@@ -57,7 +57,7 @@ struct ExampleMapView: View {
                         defer { self.tapPoint = nil }
                         
                         do {
-                            let results = try await mapViewProxy.identifyLayers(
+                            let results = try await mapView.identifyLayers(
                                 screenPoint: tapPoint,
                                 tolerance: 10
                             )
@@ -75,7 +75,7 @@ struct ExampleMapView: View {
                             $featureToEdit,
                             geometryEditor: geometryEditor,
                             map: map,
-                            mapView: mapViewProxy
+                            mapView: mapView
                         )
                         .padding()
                     }
