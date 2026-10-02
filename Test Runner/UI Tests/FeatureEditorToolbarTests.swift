@@ -58,9 +58,8 @@ final class FeatureEditorToolbarTests: XCTestCase {
         addFeaturesButton.assertExistence()
     }
     
-    /// Tests that the geometry editing toolbar buttons handle and respond to
-    /// geometry edits correctly.
-    func testGeometryEditingButtonsWithEdits() {
+    /// Tests that the toolbar editing buttons handle and responds to geometry edits correctly.
+    func testEditingButtonsGeometryEditHandling() {
         let app = XCUIApplication()
         let deleteSelectedElementButton = app.buttons["Delete Selected Element"]
         let redoButton = app.buttons["Redo"]
@@ -102,6 +101,66 @@ final class FeatureEditorToolbarTests: XCTestCase {
         deleteSelectedElementButton.assertDisabled()
         undoButton.assertDisabled()
         redoButton.assertDisabled()
+    }
+    
+    /// Tests that `FeatureFormView` handles and responds to geometry edits correctly.
+    func testFormGeometryEditHandling() {
+        let app = XCUIApplication()
+        let cancelButton = app.buttons["Cancel"]
+        let continueEditingButton = app.buttons["Continue Editing"]
+        let deleteSelectedElementButton = app.buttons["Delete Selected Element"]
+        let discardButton = app.buttons["Discard"]
+        let discardEditsAlert = app.alerts["Discard Edits?"]
+        let saveButton = app.buttons["Save"]
+        
+        // Waits for the Feature Editor to open.
+        openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
+        deleteSelectedElementButton.assertExistence(timeout: 30)
+        
+        // Verifies that the handle edit buttons are not visible when there are no edits.
+        discardButton.assertNonExistence()
+        saveButton.assertNonExistence()
+        
+        // Taps the map to make a geometry edit and verifies that the handle edit buttons appear.
+        app.otherElements["Map"].tap()
+        discardButton.assertExistence()
+        saveButton.assertExistence()
+        
+        // Verifies that the form's dismiss button presents the discard edits
+        // alert when there are geometry edits.
+        cancelButton.tap()
+        discardEditsAlert.assertExistence()
+        
+        continueEditingButton.tap()
+        discardEditsAlert.assertNonExistence()
+        
+        // Verifies that trying to open an associated feature shows the discard
+        // edits alert when there are geometry edits.
+        app.staticTexts["Container"].tap()
+        app.staticTexts["Electric Distribution Assembly"].assertExistenceAndTap()
+        app.staticTexts["Association Result"].assertExistenceAndTap()
+        discardEditsAlert.assertExistence()
+        
+        continueEditingButton.tap()
+        discardEditsAlert.assertNonExistence()
+        
+        // Deletes the geometry's vertex, tries to save, and verifies that the
+        // invalid geometry message is shown.
+        deleteSelectedElementButton.tap()
+        saveButton.tap()
+        
+        let invalidGeometryText = app.staticTexts[
+            "Finish editing failed.\nThe geometry is invalid. It must be corrected before saving."
+        ]
+        invalidGeometryText.assertExistence()
+        
+        app.buttons["OK"].tap()
+        invalidGeometryText.assertNonExistence()
+        
+        // Undoes the invalid edit and verifies that the save button closes the feature editor.
+        app.buttons["Undo"].tap()
+        saveButton.tap()
+        deleteSelectedElementButton.assertNonExistence()
     }
     
     /// Tests the default style for the feature editor toolbar is vertical.
