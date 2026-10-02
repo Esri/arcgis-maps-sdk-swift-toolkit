@@ -102,7 +102,7 @@ extension FeatureFormGroupView {
     }
 }
 
-public extension FeatureFormGroupView /* View modifiers */ {
+public extension FeatureFormGroupView /* Public view modifiers */ {
     /// Sets an closure to perform when the active feature form has changed.
     /// - Parameter action: The closure to perform.
     func onFeatureFormChanged(perform action: @escaping (FeatureForm) -> Void) -> FeatureFormGroupView {
@@ -114,6 +114,18 @@ public extension FeatureFormGroupView /* View modifiers */ {
     /// - Parameter action: The closure to perform.
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> FeatureFormGroupView {
         model.onFormEditingEventAction = action
+        return self
+    }
+    
+    /// Sets the visibility of validation errors on the form group.
+    /// - Parameter visibility: The preferred visibility of validation errors in the form group.
+    ///
+    /// `FeatureFormGroupView` will automatically show validation errors on forms once they’ve
+    /// received user interaction or the user has attempted to finish editing.
+    /// If it’s preferred that validation errors are always shown, override the default behavior with
+    /// this modifier, passing `.visible`.
+    func validationErrors(_ visibility: Visibility) -> FeatureFormGroupView {
+        model.validationErrorVisibilityExternal = visibility
         return self
     }
 }

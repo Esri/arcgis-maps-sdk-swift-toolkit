@@ -14,6 +14,7 @@
 
 import ArcGIS
 import Foundation
+import SwiftUI
 
 internal import os
 
@@ -42,6 +43,9 @@ extension FeatureFormGroupView /* Model */ {
         
         /// An action that will run when a form group editing event occurs.
         var onFormEditingEventAction: ((EditingEvent) -> Void)?
+        
+        /// The external validation error visibility configuration of the form group.
+        var validationErrorVisibilityExternal = Visibility.automatic
         
         /// An action to run before finishing editing.
         ///
