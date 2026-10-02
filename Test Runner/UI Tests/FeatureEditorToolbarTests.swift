@@ -239,22 +239,26 @@ final class FeatureEditorToolbarTests: XCTestCase {
         structureLineToggle.assertExistence()
         XCTAssertFalse(structureLineToggle.isEnabled)
         
+        // Snap source toggles with "Rules prevent snapping" should be enabled.
+        let electricDistributionDeviceToggle = app.snapToggle(
+            named: "Electric Distribution Line, Rules limit snapping."
+        )
+        electricDistributionDeviceToggle.assertEnabled()
+        
         // Use one snap source toggle to verify that snapping to snap sources
         // are disabled by default.
-        let dirtyAreasToggle = app.snapToggle(named: "NapervilleElectricV5 - Dirty Areas")
-        dirtyAreasToggle.assertExistence()
-        XCTAssertEqual(dirtyAreasToggle.boolValue, false)
+        XCTAssertEqual(electricDistributionDeviceToggle.boolValue, false)
         
         // Turn on some toggles and verify their states are preserved when the
         // settings view is reopened.
         geometryGuidesToggle.tapResolvedToggleControl()
-        dirtyAreasToggle.tapResolvedToggleControl()
+        electricDistributionDeviceToggle.tapResolvedToggleControl()
         // Close the settings view.
         app.buttons["Close"].assertExistenceAndTap()
         // Reopen the settings view and verify the toggles states are preserved.
         app.buttons["Snap Settings"].assertExistenceAndTap()
         XCTAssertEqual(geometryGuidesToggle.boolValue, true)
-        XCTAssertEqual(dirtyAreasToggle.boolValue, true)
+        XCTAssertEqual(electricDistributionDeviceToggle.boolValue, true)
     }
 }
 
