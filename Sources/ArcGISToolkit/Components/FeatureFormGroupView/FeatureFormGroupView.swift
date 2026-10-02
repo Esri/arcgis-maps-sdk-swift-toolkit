@@ -60,6 +60,12 @@ extension FeatureFormGroupView /* Model */ {
             backStack.count > 0
         }
         
+        /// An action to run before finishing editing.
+        ///
+        /// If the action throws an error, `FeatureFormGroup.finishEditing` should not be
+        /// called.
+        var willFinishEditingAction: (() throws -> Void)?
+        
         /// <#Description#>
         public var count: Int {
             group.forms.count == ids.count ? group.forms.count : -1
@@ -336,6 +342,20 @@ extension FeatureFormGroupView /* Group views */ {
                     .opacity(selection == id ? 1 : 0)
             }
         }
+    }
+}
+
+extension FeatureFormGroupView /* Internal view modifiers */ {
+    /// Sets an action to run before finishing edits.
+    ///
+    /// When an action is set, the view acts as if the forms in the group have edits, even if they do
+    /// not, and makes the finish editing button available.
+    ///
+    /// If the action throws an error, `FeatureFormGroup.finishEditing` will not be called.
+    /// - Parameter action: The action to run.
+    func willFinishEditing(_ action: @escaping () throws -> Void) -> some View {
+        model.willFinishEditingAction = action
+        return self
     }
 }
 
