@@ -287,56 +287,6 @@ extension FeatureFormGroupView /* Model */ {
     }
 }
 
-@Observable public final class FeatureFormGroup: @unchecked Sendable {
-    private let lock = NSLock()
-    
-    init(forms: Array<FeatureForm>) {
-        self.forms = forms
-    }
-    
-    public func add(_ form: FeatureForm) {
-        lock.lock()
-        defer { lock.unlock() }
-        forms.append(form)
-    }
-    
-    public func remove(_ form: FeatureForm) {
-        lock.lock()
-        defer { lock.unlock() }
-        forms.removeAll { _form in
-            form.feature.globalID == _form.feature.globalID
-        }
-    }
-    
-    public func discardEdits() async {
-        forms.forEach { form in
-            form.discardEdits()
-        }
-    }
-    
-    public func evaluateExpressions() async {
-        await withThrowingTaskGroup { group in
-            forms.forEach { form in
-                group.addTask {
-                    try await form.evaluateExpressions()
-                }
-            }
-        }
-    }
-    
-    public func finishEditing() async {
-        await withThrowingTaskGroup { group in
-            forms.forEach { form in
-                group.addTask {
-                    try await form.finishEditing()
-                }
-            }
-        }
-    }
-    
-    private(set) var forms = [FeatureForm]()
-}
-
 extension FeatureFormGroupView /* Group views */ {
     /// <#Description#>
     @ViewBuilder
