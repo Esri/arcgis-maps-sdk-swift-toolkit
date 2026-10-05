@@ -58,7 +58,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         addFeaturesButton.assertExistence()
     }
     
-    /// Tests that the toolbar editing buttons handle and responds to geometry edits correctly.
+    /// Tests that the toolbar editing buttons handle and respond to geometry edits correctly.
     func testEditingButtonsGeometryEditHandling() {
         let app = XCUIApplication()
         let deleteSelectedElementButton = app.buttons["Delete Selected Element"]
@@ -75,7 +75,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         redoButton.assertDisabled()
         
         // Taps the map to make an edit and verifies that delete is enabled
-        // when a vertex is selected and undo is enabled when there are edits.
+        // when a vertex is selected and undo is enabled when there is an edit.
         app.otherElements["Map"].tap()
         deleteSelectedElementButton.assertEnabled()
         undoButton.assertEnabled()
@@ -103,32 +103,34 @@ final class FeatureEditorToolbarTests: XCTestCase {
         redoButton.assertDisabled()
     }
     
-    /// Tests that `FeatureFormView` handles and responds to geometry edits correctly.
+    /// Tests that the `FeatureFormView` handles and responds to geometry edits correctly.
     func testFormGeometryEditHandling() {
         let app = XCUIApplication()
-        let cancelButton = app.buttons["Cancel"]
         let continueEditingButton = app.buttons["Continue Editing"]
         let deleteSelectedElementButton = app.buttons["Delete Selected Element"]
         let discardButton = app.buttons["Discard"]
         let discardEditsAlert = app.alerts["Discard Edits?"]
+        let invalidGeometryText = app.staticTexts[
+            "Finish editing failed.\nThe geometry is invalid. It must be corrected before saving."
+        ]
         let saveButton = app.buttons["Save"]
         
         // Waits for the Feature Editor to open.
         openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
         deleteSelectedElementButton.assertExistence(timeout: 30)
         
-        // Verifies that the handle edit buttons are not visible when there are no edits.
+        // Verifies that save and discard are not visible when there are no geometry edits.
         discardButton.assertNonExistence()
         saveButton.assertNonExistence()
         
-        // Taps the map to make a geometry edit and verifies that the handle edit buttons appear.
+        // Taps the map to make a geometry edit and verifies that save and discard appear.
         app.otherElements["Map"].tap()
         discardButton.assertExistence()
         saveButton.assertExistence()
         
         // Verifies that the form's dismiss button presents the discard edits
         // alert when there are geometry edits.
-        cancelButton.tap()
+        app.buttons["Cancel"].tap()
         discardEditsAlert.assertExistence()
         
         continueEditingButton.tap()
@@ -145,13 +147,11 @@ final class FeatureEditorToolbarTests: XCTestCase {
         discardEditsAlert.assertNonExistence()
         
         // Deletes the geometry's vertex, tries to save, and verifies that the
-        // invalid geometry message is shown.
+        // invalid geometry alert message is shown.
         deleteSelectedElementButton.tap()
-        saveButton.tap()
+        deleteSelectedElementButton.assertDisabled()
         
-        let invalidGeometryText = app.staticTexts[
-            "Finish editing failed.\nThe geometry is invalid. It must be corrected before saving."
-        ]
+        saveButton.tap()
         invalidGeometryText.assertExistence()
         
         app.buttons["OK"].tap()
@@ -159,6 +159,8 @@ final class FeatureEditorToolbarTests: XCTestCase {
         
         // Undoes the invalid edit and verifies that the save button closes the feature editor.
         app.buttons["Undo"].tap()
+        app.buttons["Redo"].assertEnabled()
+        
         saveButton.tap()
         deleteSelectedElementButton.assertNonExistence()
     }
@@ -298,26 +300,26 @@ final class FeatureEditorToolbarTests: XCTestCase {
         structureLineToggle.assertExistence()
         XCTAssertFalse(structureLineToggle.isEnabled)
         
-        // Snap source toggles with "Rules prevent snapping" should be enabled.
-        let electricDistributionDeviceToggle = app.snapToggle(
+        // Snap source toggles with "Rules limit snapping" should be enabled.
+        let electricDistributionLineToggle = app.snapToggle(
             named: "Electric Distribution Line, Rules limit snapping."
         )
-        electricDistributionDeviceToggle.assertEnabled()
+        electricDistributionLineToggle.assertEnabled()
         
         // Use one snap source toggle to verify that snapping to snap sources
         // are disabled by default.
-        XCTAssertEqual(electricDistributionDeviceToggle.boolValue, false)
+        XCTAssertEqual(electricDistributionLineToggle.boolValue, false)
         
         // Turn on some toggles and verify their states are preserved when the
         // settings view is reopened.
         geometryGuidesToggle.tapResolvedToggleControl()
-        electricDistributionDeviceToggle.tapResolvedToggleControl()
+        electricDistributionLineToggle.tapResolvedToggleControl()
         // Close the settings view.
         app.buttons["Close"].assertExistenceAndTap()
         // Reopen the settings view and verify the toggles states are preserved.
         app.buttons["Snap Settings"].assertExistenceAndTap()
         XCTAssertEqual(geometryGuidesToggle.boolValue, true)
-        XCTAssertEqual(electricDistributionDeviceToggle.boolValue, true)
+        XCTAssertEqual(electricDistributionLineToggle.boolValue, true)
     }
 }
 
