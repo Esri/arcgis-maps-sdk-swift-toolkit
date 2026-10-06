@@ -78,7 +78,6 @@ struct Examples: View {
             .example("Building Explorer", content: BuildingExplorerExampleView()),
             .example("Compass", content: CompassExampleView()),
             .example("Feature Form", content: FeatureFormExampleView()),
-            .example("Feature Form Group", content: FeatureFormGroupViewExampleView()),
             .example("Floating Panel", content: FloatingPanelExampleView()),
             .example("Floor Filter", content: FloorFilterExampleView()),
             .example("Location Button", content: LocationButtonExampleView()),
