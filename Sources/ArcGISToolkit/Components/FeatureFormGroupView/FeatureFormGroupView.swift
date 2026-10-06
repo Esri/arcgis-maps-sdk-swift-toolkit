@@ -128,9 +128,7 @@ public extension FeatureFormGroupView /* Public view modifiers */ {
         model.validationErrorVisibilityExternal = visibility
         return self
     }
-}
-
-extension FeatureFormGroupView /* Internal view modifiers */ {
+    
     /// Sets an action to run before finishing edits.
     ///
     /// When an action is set, the view acts as if the forms in the group have edits, even if they do
@@ -138,7 +136,7 @@ extension FeatureFormGroupView /* Internal view modifiers */ {
     ///
     /// If the action throws an error, `FeatureFormGroup.finishEditing` will not be called.
     /// - Parameter action: The closure to perform.
-    func willFinishEditing(perform action: @escaping () throws -> Void) -> FeatureFormGroupView {
+    func willFinishEditing(perform action: (() throws -> Void)?) -> FeatureFormGroupView {
         model.willFinishEditingAction = action
         return self
     }
