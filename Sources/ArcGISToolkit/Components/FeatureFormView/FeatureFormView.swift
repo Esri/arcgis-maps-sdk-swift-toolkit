@@ -75,9 +75,6 @@ internal import os
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
-    /// The model for the stack view containing the form.
-    @State private var stackViewModel = FeatureFormView.StackView.Model()
-    
     /// A binding to a Boolean value that determines whether the view is presented.
     private let isPresented: Binding<Bool>?
     /// The root feature form.
