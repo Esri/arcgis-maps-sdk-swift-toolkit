@@ -20,8 +20,8 @@ private import os
 extension FeatureFormView {
     /// A view to configure and add a utility network association.
     struct UtilityAssociationCreationView: View {
-        /// The model for the FeatureFormView containing the view.
-        @Environment(FeatureFormViewModel.self) var featureFormViewModel
+        /// The model for the stack view containing the form.
+        @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
         
         /// The error to be presented when adding an association failed.
         @State private var addAssociationError: AddAssociationError?
@@ -137,7 +137,7 @@ extension FeatureFormView {
                 // views to avoid errors here. (FB20395585)
                 // https://developer.apple.com/forums/thread/802221#802221021
                 await MainActor.run {
-                    featureFormViewModel.navigationPath.removeLast(4)
+                    stackViewModel.navigationPath.removeLast(4)
                 }
             } catch let error as ArcGIS.InvalidArgumentError {
                 addAssociationError = .other(error.details)
@@ -168,7 +168,7 @@ extension FeatureFormView {
         
         /// The model for the feature form containing the element to add the association to.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
-            featureFormViewModel.getModel(form)
+            stackViewModel.getModel(form)
         }
         
         /// A Boolean value indicating whether content visibility should be specified for the new association.

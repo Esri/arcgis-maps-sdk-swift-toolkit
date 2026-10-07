@@ -18,8 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view for a utility associations filter result.
     struct UtilityAssociationsFilterResultView: View {
-        /// The model for the FeatureFormView containing the view.
-        @Environment(FeatureFormViewModel.self) var featureFormViewModel
+        /// The model for the stack view containing the form.
+        @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
         
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
@@ -38,7 +38,7 @@ extension FeatureFormView {
         
         /// The view model for the form.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
-            featureFormViewModel.getModel(form)
+            stackViewModel.getModel(form)
         }
         
         /// The set of group results within the filter result.
@@ -69,7 +69,7 @@ extension FeatureFormView {
                     Section {
                         ForEach(groupResults, id: \.name) { groupResult in
                             Button {
-                                featureFormViewModel.navigationPath.append(
+                                stackViewModel.navigationPath.append(
                                     FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
                                         form,
                                         element,
@@ -104,7 +104,7 @@ extension FeatureFormView {
         
         var addAssociationButton: some View {
             Button {
-                featureFormViewModel.navigationPath.append(
+                stackViewModel.navigationPath.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFeatureSourcesView(
                         form,
                         element,

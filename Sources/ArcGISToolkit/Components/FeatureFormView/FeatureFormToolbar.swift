@@ -29,8 +29,8 @@ struct FeatureFormToolbar: ViewModifier {
     
     /// <#Description#>
     @Environment(FeatureFormGroupView.Model.self) var groupViewModel: FeatureFormGroupView.Model?
-    /// The model for the FeatureFormView containing the view.
-    @Environment(FeatureFormViewModel.self) var featureFormViewModel
+    /// The model for the stack view containing the form.
+    @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
     
     /// A binding to a Boolean value controlling whether the FeatureFormView is presented.
     @Environment(\.isPresented) var isPresented
@@ -85,7 +85,7 @@ struct FeatureFormToolbar: ViewModifier {
                     } else if !isRootView {
                         Button {
                             if alertBeforeDismissing {
-                                featureFormViewModel.navigationAlertInfo = (true, {
+                                stackViewModel.navigationAlertInfo = (true, {
                                     dismiss()
                                     onBackNavigation?()
                                 })
@@ -135,7 +135,7 @@ struct FeatureFormToolbar: ViewModifier {
                     ToolbarItem(placement: .topBarTrailing) {
                         DismissButton(kind: .cancel) {
                             if hasEdits {
-                                featureFormViewModel.navigationAlertInfo = (false, {
+                                stackViewModel.navigationAlertInfo = (false, {
                                     isPresented.wrappedValue = false
                                 })
                             } else {
@@ -212,6 +212,6 @@ extension FeatureFormToolbar {
     
     /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
     var isRootView: Bool {
-        featureFormViewModel.navigationPath.isEmpty
+        stackViewModel.navigationPath.isEmpty
     }
 }

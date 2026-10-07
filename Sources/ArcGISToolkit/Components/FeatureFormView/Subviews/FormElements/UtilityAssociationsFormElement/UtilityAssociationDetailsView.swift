@@ -18,8 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view to inspect and delete a utility network association.
     struct UtilityAssociationDetailsView: View {
-        /// The model for the FeatureFormView containing the view.
-        @Environment(FeatureFormViewModel.self) var featureFormViewModel
+        /// The model for the stack view containing the form.
+        @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
         
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
@@ -69,7 +69,7 @@ extension FeatureFormView {
         
         /// The model for the feature form containing the element with the association.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
-            featureFormViewModel.getModel(form)
+            stackViewModel.getModel(form)
         }
         
         /// A section which contains the association type label.
@@ -147,7 +147,7 @@ extension FeatureFormView {
                         embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
                     ) {
                         associationsFilterResultsModel.fetchResults()
-                        featureFormViewModel.navigationPath.removeLast()
+                        stackViewModel.navigationPath.removeLast()
                     }
                 }
             }

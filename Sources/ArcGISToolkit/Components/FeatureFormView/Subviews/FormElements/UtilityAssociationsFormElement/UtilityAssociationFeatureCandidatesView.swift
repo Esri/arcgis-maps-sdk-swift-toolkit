@@ -18,8 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view to choose a feature source when selecting a feature to create a utility association with.
     struct UtilityAssociationFeatureCandidatesView: View {
-        /// The model for the FeatureFormView containing the view.
-        @Environment(FeatureFormViewModel.self) var featureFormViewModel
+        /// The model for the stack view containing the form.
+        @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
         
         /// The candidates that can be used to create an association.
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
@@ -129,7 +129,7 @@ extension FeatureFormView {
             Section {
                 ForEach(filteredCandidates, id: \.feature.globalID) { candidate in
                     Button {
-                        featureFormViewModel.navigationPath.append(
+                        stackViewModel.navigationPath.append(
                             FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
                                 form,
                                 element,

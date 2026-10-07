@@ -16,8 +16,8 @@ import ArcGIS
 import SwiftUI
 
 struct EmbeddedFeatureFormView: View {
-    /// The model for the FeatureFormView containing the view.
-    @Environment(FeatureFormViewModel.self) var featureFormViewModel: FeatureFormViewModel
+    /// The model for the stack view containing the form.
+    @Environment(FeatureFormView.StackView.Model.self) var stackViewModel: FeatureFormView.StackView.Model
     
     /// The feature form defining the editing experience.
     let form: FeatureForm
@@ -60,7 +60,7 @@ struct EmbeddedFeatureFormView: View {
             }
             .environment(embeddedFeatureFormViewModel)
             .featureFormToolbar(form, isAForm: true) {
-                featureFormViewModel.removeModel(form)
+                stackViewModel.removeModel(form)
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(embeddedFeatureFormViewModel.title)
@@ -79,7 +79,7 @@ struct EmbeddedFeatureFormView: View {
     
     /// The view model for the form.
     var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
-        featureFormViewModel.getModel(form)
+        stackViewModel.getModel(form)
     }
 }
 

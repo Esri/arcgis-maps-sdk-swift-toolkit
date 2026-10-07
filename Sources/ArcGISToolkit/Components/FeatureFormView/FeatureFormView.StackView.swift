@@ -17,8 +17,8 @@ import SwiftUI
 
 extension FeatureFormView {
     struct StackView: View {
-        /// The model for the feature form view.
-        @State private var featureFormViewModel = FeatureFormViewModel()
+        /// The model for the stack view containing the form.
+        @State private var stackViewModel = FeatureFormView.StackView.Model()
         
         /// A binding to a Boolean value that determines whether the view is presented.
         private let isPresented: Binding<Bool>?
@@ -49,7 +49,7 @@ extension FeatureFormView {
         
         public var body: some View {
             if let rootFeatureForm {
-                NavigationStack(path: $featureFormViewModel.navigationPath) {
+                NavigationStack(path: $stackViewModel.navigationPath) {
                     EmbeddedFeatureFormView(form: rootFeatureForm)
                         // Refresh the navigation stack's root view when the root
                         // feature form changes.
@@ -114,7 +114,7 @@ extension FeatureFormView {
                                 )
                                 .featureFormToolbar(form)
                                 .navigationBarTitleDisplayMode(.inline)
-                                .navigationTitle(filter.title, subtitle: featureFormViewModel.getModel(form)?.title ?? "")
+                                .navigationTitle(filter.title, subtitle: stackViewModel.getModel(form)?.title ?? "")
                             case let .utilityAssociationGroupResultView(form, element, filter, formSource):
                                 UtilityAssociationGroupResultView(
                                     element: element,
@@ -129,32 +129,32 @@ extension FeatureFormView {
                 }
                 // Alert for abandoning unsaved edits
                 .alert(
-                    !featureFormViewModel.presentedFormHasValidationErrors ? discardEditsQuestion : validationErrors,
+                    !stackViewModel.presentedFormHasValidationErrors ? discardEditsQuestion : validationErrors,
                     isPresented: alertForUnsavedEditsIsPresented,
                     actions: {
-                        if let (willNavigate, continuation) = featureFormViewModel.navigationAlertInfo {
+                        if let (willNavigate, continuation) = stackViewModel.navigationAlertInfo {
                             Button(role: .destructive) {
-                                featureFormViewModel.presentedForm?.discardEdits()
+                                stackViewModel.presentedForm?.discardEdits()
                                 onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
-                                featureFormViewModel.validationErrorVisibilityInternal = .automatic
+                                stackViewModel.validationErrorVisibilityInternal = .automatic
                                 continuation()
                             } label: {
                                 Text.discardEdits
                             }
                             .onAppear {
-                                if featureFormViewModel.presentedFormHasValidationErrors {
-                                    featureFormViewModel.validationErrorVisibilityInternal = .visible
+                                if stackViewModel.presentedFormHasValidationErrors {
+                                    stackViewModel.validationErrorVisibilityInternal = .visible
                                 }
                             }
-                            if !featureFormViewModel.presentedFormHasValidationErrors {
+                            if !stackViewModel.presentedFormHasValidationErrors {
                                 Button {
                                     Task {
                                         do {
-                                            try await featureFormViewModel.presentedForm?.finishEditing()
+                                            try await stackViewModel.presentedForm?.finishEditing()
                                             onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                             continuation()
                                         } catch {
-                                            featureFormViewModel.finishEditingError = error
+                                            stackViewModel.finishEditingError = error
                                         }
                                     }
                                 } label: {
@@ -169,9 +169,9 @@ extension FeatureFormView {
                         }
                     },
                     message: {
-                        if featureFormViewModel.presentedFormHasValidationErrors {
+                        if stackViewModel.presentedFormHasValidationErrors {
                             Text(
-                                "You have ^[\(featureFormViewModel.presentedForm?.elementValidationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
+                                "You have ^[\(stackViewModel.presentedForm?.elementValidationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
                                 bundle: .toolkitModule,
                                 comment:
                                     """
@@ -204,7 +204,7 @@ extension FeatureFormView {
                     isPresented: alertForFinishEditingErrorsIsPresented,
                     actions: {},
                     message: {
-                        if let error = featureFormViewModel.finishEditingError {
+                        if let error = stackViewModel.finishEditingError {
                             Text(
                                 """
                                 Finish editing failed.
@@ -227,19 +227,19 @@ extension FeatureFormView {
                     }
                 )
                 .animation(.default, value: ObjectIdentifier(rootFeatureForm))
-                .environment(featureFormViewModel)
+                .environment(stackViewModel)
                 .environment(\.editingButtonVisibility, editingButtonsVisibility)
                 .environment(\.isPresented, isPresented)
                 .environment(\.navigationIsDisabled, navigationIsDisabled)
                 .environment(\.onFormEditingEventAction, onFormEditingEventAction)
                 .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
-                .onChange(of: featureFormViewModel.navigationPath) {
-                    if let presentedItem = featureFormViewModel.navigationPath.last {
+                .onChange(of: stackViewModel.navigationPath) {
+                    if let presentedItem = stackViewModel.navigationPath.last {
                         onFormEditingEventAction?(.navigationChanged(presentedItem))
                     }
                 }
                 .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
-                    featureFormViewModel.setRootForm(rootFeatureForm)
+                    stackViewModel.setRootForm(rootFeatureForm)
                 }
                 .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
                     guard let embeddedFeatureFormViewModel = $0?.object else { return }
@@ -254,10 +254,10 @@ extension FeatureFormView.StackView {
     /// A Boolean value indicating whether the finish editing error alert is presented.
     var alertForFinishEditingErrorsIsPresented: Binding<Bool> {
         Binding {
-            featureFormViewModel.finishEditingError != nil
+            stackViewModel.finishEditingError != nil
         } set: { newIsPresented in
             if !newIsPresented {
-                featureFormViewModel.finishEditingError = nil
+                stackViewModel.finishEditingError = nil
             }
         }
     }
@@ -265,10 +265,10 @@ extension FeatureFormView.StackView {
     /// A Boolean value indicating whether the unsaved edits alert is presented.
     var alertForUnsavedEditsIsPresented: Binding<Bool> {
         Binding {
-            featureFormViewModel.navigationAlertInfo != nil
+            stackViewModel.navigationAlertInfo != nil
         } set: { newIsPresented in
             if !newIsPresented {
-                featureFormViewModel.navigationAlertInfo = nil
+                stackViewModel.navigationAlertInfo = nil
             }
         }
     }
@@ -283,8 +283,8 @@ extension FeatureFormView.StackView {
     /// the same ``FeatureForm`` make sure not to over-emit form handling events.
     var formChangedAction: (FeatureForm) -> Void {
         { featureForm in
-            if featureForm.feature.globalID != featureFormViewModel.presentedForm?.feature.globalID {
-                featureFormViewModel.setPresentedForm(featureForm)
+            if featureForm.feature.globalID != stackViewModel.presentedForm?.feature.globalID {
+                stackViewModel.setPresentedForm(featureForm)
                 onFeatureFormChanged?(featureForm)
             }
         }

@@ -20,8 +20,8 @@ extension FeatureFormView {
     struct UtilityAssociationGroupResultView: View {
         /// <#Description#>
         @Environment(FeatureFormGroupView.Model.self) var groupViewModel: FeatureFormGroupView.Model?
-        /// The model for the FeatureFormView containing the view.
-        @Environment(FeatureFormViewModel.self) var featureFormViewModel
+        /// The model for the stack view containing the form.
+        @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
         /// A Boolean which declares whether navigation to forms for features associated via utility
         /// association form elements is disabled.
         @Environment(\.navigationIsDisabled) var navigationIsDisabled
@@ -76,11 +76,11 @@ extension FeatureFormView {
                 }
                 .navigationTitle(
                     utilityAssociationGroupResult?.name ?? "",
-                    subtitle: featureFormViewModel.getModel(form)?.title ?? ""
+                    subtitle: stackViewModel.getModel(form)?.title ?? ""
                 )
                 .onChange(of: associationResults.count) {
-                    if associationResults.isEmpty, !featureFormViewModel.navigationPath.isEmpty {
-                        featureFormViewModel.navigationPath.removeLast()
+                    if associationResults.isEmpty, !stackViewModel.navigationPath.isEmpty {
+                        stackViewModel.navigationPath.removeLast()
                     }
                 }
                 .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
@@ -99,7 +99,7 @@ extension FeatureFormView {
         
         /// The view model for the form.
         var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
-            featureFormViewModel.getModel(form)
+            stackViewModel.getModel(form)
         }
         
         @ViewBuilder func deleteButton(for association: UtilityAssociation) -> some View {
@@ -123,7 +123,7 @@ extension FeatureFormView {
             Menu {
                 ShowOnMapButton(feature: result.associatedFeature)
                 Button {
-                    featureFormViewModel.navigationPath.append(
+                    stackViewModel.navigationPath.append(
                         FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
                             form,
                             element,
@@ -164,13 +164,13 @@ extension FeatureFormView {
                     groupViewModel.add(form: FeatureForm(feature: result.associatedFeature), select: true)
                 } else {
                     let navigationAction = {
-                        featureFormViewModel.addModel(form)
-                        featureFormViewModel.navigationPath.append(
+                        stackViewModel.addModel(form)
+                        stackViewModel.navigationPath.append(
                             FeatureFormView.NavigationPathItem.form(form)
                         )
                     }
                     if embeddedFeatureFormViewModel?.featureForm.hasEdits ?? false {
-                        featureFormViewModel.navigationAlertInfo = (true, {
+                        stackViewModel.navigationAlertInfo = (true, {
                             navigationAction()
                         })
                     } else {

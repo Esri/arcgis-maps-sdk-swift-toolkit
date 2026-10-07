@@ -19,8 +19,8 @@ import SwiftUI
 struct FormElementFooter: View {
     /// The view model for the form.
     @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
-    /// The model for the FeatureFormView containing the view.
-    @Environment(FeatureFormViewModel.self) private var featureFormViewModel
+    /// The model for the stack view containing the form.
+    @Environment(FeatureFormView.StackView.Model.self) private var stackViewModel
     /// A vertical amount of padding to use between form elements.
     @Environment(\.formElementPadding) var formElementPadding
     /// The developer configurable validation error visibility.
@@ -36,7 +36,7 @@ struct FormElementFooter: View {
     var body: some View {
         text
             .id(id)
-            .onChange(of: featureFormViewModel.validationErrorVisibilityInternal) { id = .init() }
+            .onChange(of: stackViewModel.validationErrorVisibilityInternal) { id = .init() }
             .onChange(of: validationErrorVisibilityExternal) { id = .init() }
             .font(.footnote)
             .padding(.vertical, formElementPadding / 2)
@@ -64,7 +64,7 @@ struct FormElementFooter: View {
     var showsErrorsIfPresent: Bool {
         embeddedFeatureFormViewModel.previouslyFocusedElements.contains(element) ||
         validationErrorVisibilityExternal == .visible ||
-        featureFormViewModel.validationErrorVisibilityInternal == .visible
+        stackViewModel.validationErrorVisibilityInternal == .visible
     }
 }
 

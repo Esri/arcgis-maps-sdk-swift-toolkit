@@ -25,8 +25,8 @@ struct FormFooter: View {
     /// to the ``FeatureFormView``.
     let formHandlingEventAction: FormEditingEventAction?
     
-    /// The model for the FeatureFormView containing the view.
-    @Environment(FeatureFormViewModel.self) var featureFormViewModel
+    /// The model for the stack view containing the form.
+    @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
     
     var body: some View {
         HStack {
@@ -42,7 +42,7 @@ struct FormFooter: View {
         Button(role: .destructive) {
             featureForm.discardEdits()
             formHandlingEventAction?(.discardedEdits(willNavigate: false))
-            featureFormViewModel.validationErrorVisibilityInternal = .automatic
+            stackViewModel.validationErrorVisibilityInternal = .automatic
         } label: {
             Text(
                 "Discard",
@@ -60,12 +60,12 @@ struct FormFooter: View {
                         try await featureForm.finishEditing()
                         formHandlingEventAction?(.savedEdits(willNavigate: false))
                     } catch {
-                        featureFormViewModel.finishEditingError = error
+                        stackViewModel.finishEditingError = error
                     }
                 }
             } else {
-                featureFormViewModel.validationErrorVisibilityInternal = .visible
-                featureFormViewModel.navigationAlertInfo = (false, {})
+                stackViewModel.validationErrorVisibilityInternal = .visible
+                stackViewModel.navigationAlertInfo = (false, {})
             }
         } label: {
             Text(

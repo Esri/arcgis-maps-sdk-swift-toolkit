@@ -69,8 +69,8 @@ extension FeatureFormView {
     private struct Row: View {
         /// The view model for the form.
         @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
-        /// The model for the FeatureFormView containing the view.
-        @Environment(FeatureFormViewModel.self) var featureFormViewModel
+        /// The model for the stack view containing the form.
+        @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
         
         /// The model containing the latest association filter results.
         let associationsFilterResultsModel: AssociationsFilterResultsModel?
@@ -90,7 +90,7 @@ extension FeatureFormView {
         
         var body: some View {
             Button {
-                featureFormViewModel.navigationPath.append(
+                stackViewModel.navigationPath.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
                         form,
                         element,
