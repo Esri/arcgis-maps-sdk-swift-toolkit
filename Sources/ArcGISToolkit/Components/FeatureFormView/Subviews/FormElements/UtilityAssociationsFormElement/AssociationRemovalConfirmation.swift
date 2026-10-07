@@ -22,7 +22,7 @@ extension View {
         isPresented: Binding<Bool>,
         association: UtilityAssociation?,
         element: UtilityAssociationsFormElement,
-        embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel,
+        formViewModel: FeatureFormView.FormView.Model,
         onRemoval: @escaping () -> Void
     ) -> some View {
         modifier(
@@ -30,7 +30,7 @@ extension View {
                 isPresented: isPresented,
                 association: association,
                 element: element,
-                embeddedFeatureFormViewModel: embeddedFeatureFormViewModel,
+                formViewModel: formViewModel,
                 onRemoval: onRemoval
             )
         )
@@ -45,7 +45,7 @@ private struct AssociationRemovalConfirmation: ViewModifier {
     /// The element containing the association to remove.
     let element: UtilityAssociationsFormElement
     /// The model for the feature form containing the element with the association to be removed.
-    let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
+    let formViewModel: FeatureFormView.FormView.Model
     /// The action to run when the removal is completed.
     let onRemoval: () -> Void
     
@@ -68,7 +68,7 @@ extension AssociationRemovalConfirmation {
             Button(role: .destructive) {
                 do {
                     try element.delete(association)
-                    embeddedFeatureFormViewModel.evaluateExpressions()
+                    formViewModel.evaluateExpressions()
                     onRemoval()
                     Logger.featureFormView.info("Association removed successfully.")
                 } catch {

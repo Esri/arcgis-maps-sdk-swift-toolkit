@@ -18,7 +18,7 @@ import SwiftUI
 /// A view for date/time input.
 struct DateTimeInput: View {
     /// The view model for the form.
-    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+    @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
     
     /// The current date selection.
     @State private var date: Date?
@@ -49,13 +49,13 @@ struct DateTimeInput: View {
     
     var body: some View {
         dateEditor
-            .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
-                isEditing = embeddedFeatureFormViewModel.focusedElement == element
+            .onChange(of: formViewModel.focusedElement) {
+                isEditing = formViewModel.focusedElement == element
             }
             .onChange(of: date) {
                 guard date != element.value as? Date else { return }
                 element.updateValue(date)
-                embeddedFeatureFormViewModel.evaluateExpressions()
+                formViewModel.evaluateExpressions()
             }
             .onValueChange(of: element) { newValue, _ in
                 guard let newDate = newValue as? Date, newDate != date else { return }
@@ -94,7 +94,7 @@ struct DateTimeInput: View {
                     }
                 }
                 isEditing.toggle()
-                embeddedFeatureFormViewModel.focusedElement = isEditing ? element : nil
+                formViewModel.focusedElement = isEditing ? element : nil
             }
         } label: {
             HStack {
@@ -113,8 +113,8 @@ struct DateTimeInput: View {
                 } else if !isRequired {
                     Spacer()
                     XButton(.clear) {
-                        embeddedFeatureFormViewModel.focusedElement = element
-                        defer { embeddedFeatureFormViewModel.focusedElement = nil }
+                        formViewModel.focusedElement = element
+                        defer { formViewModel.focusedElement = nil }
                         date = nil
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")

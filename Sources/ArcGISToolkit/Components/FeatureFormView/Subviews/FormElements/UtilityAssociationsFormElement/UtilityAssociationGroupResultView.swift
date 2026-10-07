@@ -57,7 +57,7 @@ extension FeatureFormView {
         }
         
         var body: some View {
-            if let embeddedFeatureFormViewModel {
+            if let formViewModel {
                 List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
                     mainButton(for: utilityAssociationResult)
                         .disabled(navigationIsDisabled)
@@ -70,7 +70,7 @@ extension FeatureFormView {
                     isPresented: $removalConfirmationIsPresented,
                     association: associationPendingRemoval,
                     element: element,
-                    embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+                    formViewModel: formViewModel
                 ) {
                     associationsFilterResultsModel?.fetchResults()
                 }
@@ -83,7 +83,7 @@ extension FeatureFormView {
                         stackViewModel.navigationPath.removeLast()
                     }
                 }
-                .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
+                .onChange(of: formViewModel.hasEdits) {
                     associationsFilterResultsModel?.fetchResults()
                 }
                 .onIsEditableChange(of: element) { newIsEditable in
@@ -94,11 +94,11 @@ extension FeatureFormView {
         
         /// The model containing the latest association filter results.
         var associationsFilterResultsModel: AssociationsFilterResultsModel? {
-            embeddedFeatureFormViewModel?.associationsFilterResultsModels[element]
+            formViewModel?.associationsFilterResultsModels[element]
         }
         
-        /// The view model for the form.
-        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+        /// The model for the parent form view.
+        var formViewModel: FeatureFormView.FormView.Model? {
             stackViewModel.getModel(form)
         }
         
@@ -169,7 +169,7 @@ extension FeatureFormView {
                             FeatureFormView.NavigationPathItem.form(form)
                         )
                     }
-                    if embeddedFeatureFormViewModel?.featureForm.hasEdits ?? false {
+                    if formViewModel?.featureForm.hasEdits ?? false {
                         stackViewModel.navigationAlertInfo = (true, {
                             navigationAction()
                         })

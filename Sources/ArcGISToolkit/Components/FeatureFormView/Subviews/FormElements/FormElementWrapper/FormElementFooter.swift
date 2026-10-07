@@ -18,7 +18,7 @@ import SwiftUI
 /// A footer for elements in a feature form.
 struct FormElementFooter: View {
     /// The view model for the form.
-    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+    @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
     /// The model for the stack view containing the form.
     @Environment(FeatureFormView.StackView.Model.self) private var stackViewModel
     /// A vertical amount of padding to use between form elements.
@@ -62,7 +62,7 @@ struct FormElementFooter: View {
     /// A Boolean value which indicates whether or not the footer should show validation errors for the
     /// element, if any are present.
     var showsErrorsIfPresent: Bool {
-        embeddedFeatureFormViewModel.previouslyFocusedElements.contains(element) ||
+        formViewModel.previouslyFocusedElements.contains(element) ||
         validationErrorVisibilityExternal == .visible ||
         stackViewModel.validationErrorVisibilityInternal == .visible
     }
@@ -118,7 +118,7 @@ extension FormElementFooter {
     
     struct FieldFormElementFooter: FormElementFooterProvider {
         /// The view model for the form.
-        @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+        @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
         
         let element: FieldFormElement
         let showsErrorsIfPresent: Bool
@@ -130,7 +130,7 @@ extension FormElementFooter {
                         error
                     } else if !element.description.isEmpty {
                         Text(element.description)
-                    } else if embeddedFeatureFormViewModel.focusedElement == element {
+                    } else if formViewModel.focusedElement == element {
                         if element.fieldType == .text, let lengthRange {
                             if lengthRange.lowerBound == lengthRange.upperBound {
                                 makeExactLengthMessage(lengthRange)
@@ -278,7 +278,7 @@ extension FormElementFooter {
         
         /// A Boolean value which indicates whether or not the character indicator is showing in the footer.
         var isShowingCharacterIndicator: Bool {
-            embeddedFeatureFormViewModel.focusedElement == element
+            formViewModel.focusedElement == element
             && !(element.fieldType?.isNumeric ?? false)
             && (element.input is TextAreaFormInput || element.input is TextBoxFormInput)
             && (element.description.isEmpty || primaryError != nil)
@@ -324,7 +324,7 @@ extension FormElementFooter {
                 default:
                     return false
                 }
-            }), embeddedFeatureFormViewModel.focusedElement != element {
+            }), formViewModel.focusedElement != element {
                 return requiredError
             } else {
                 return elementErrors?.first(where: {

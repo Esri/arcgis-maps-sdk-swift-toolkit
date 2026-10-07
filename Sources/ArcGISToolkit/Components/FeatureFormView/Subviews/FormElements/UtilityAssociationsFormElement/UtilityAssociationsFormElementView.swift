@@ -19,7 +19,7 @@ extension FeatureFormView {
     /// A view for a utility associations form element.
     struct UtilityAssociationsFormElementView: View {
         /// The view model for the form.
-        @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+        @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
         
         /// The form element.
         let element: UtilityAssociationsFormElement
@@ -30,7 +30,7 @@ extension FeatureFormView {
         
         /// The model for fetching the form element's associations filter results.
         var associationsFilterResultsModel: AssociationsFilterResultsModel? {
-            embeddedFeatureFormViewModel.associationsFilterResultsModels[element]
+            formViewModel.associationsFilterResultsModels[element]
         }
         
         var body: some View {
@@ -42,9 +42,9 @@ extension FeatureFormView {
                             associationsFilterResultsModel: associationsFilterResultsModel,
                             element: element,
                             filter: result.filter,
-                            form: embeddedFeatureFormViewModel.featureForm
+                            form: formViewModel.featureForm
                         )
-                        .environment(embeddedFeatureFormViewModel)
+                        .environment(formViewModel)
                     }
                 case .failure(let error):
                     Text.errorFetchingFilterResults(error)
@@ -52,12 +52,12 @@ extension FeatureFormView {
                     ProgressView()
                 }
             }
-            .onChange(of: embeddedFeatureFormViewModel.hasEdits) {
+            .onChange(of: formViewModel.hasEdits) {
                 associationsFilterResultsModel?.fetchResults()
             }
             .task {
                 guard associationsFilterResultsModel == nil else { return }
-                embeddedFeatureFormViewModel.associationsFilterResultsModels[element] = .init(
+                formViewModel.associationsFilterResultsModels[element] = .init(
                     element: element,
                     includeEmptyFilterResults: true
                 )
@@ -68,7 +68,7 @@ extension FeatureFormView {
     /// A view referencing a utility associations filter result.
     private struct Row: View {
         /// The view model for the form.
-        @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+        @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
         /// The model for the stack view containing the form.
         @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
         

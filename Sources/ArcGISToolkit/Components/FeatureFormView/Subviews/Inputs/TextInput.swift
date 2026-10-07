@@ -19,7 +19,7 @@ import SwiftUI
 /// A view for text input.
 struct TextInput: View {
     /// The view model for the embedded feature form.
-    @Environment(EmbeddedFeatureFormViewModel.self) private var embeddedFeatureFormViewModel
+    @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
     /// The model for the stack view containing the form.
     @Environment(FeatureFormView.StackView.Model.self) private var stackViewModel
     
@@ -77,7 +77,7 @@ struct TextInput: View {
             .onChange(of: text) {
                 guard text != element.formattedValue else { return }
                 element.convertAndUpdateValue(text)
-                embeddedFeatureFormViewModel.evaluateExpressions()
+                formViewModel.evaluateExpressions()
             }
 #if !os(visionOS)
             .sheet(isPresented: $scannerIsPresented) {
@@ -109,10 +109,10 @@ private extension TextInput {
                     .accessibilityIdentifier("\(element.label) Text Input Preview")
                     .fixedSize(horizontal: false, vertical: true)
                     .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                        FullScreenTextInput(text: $text, element: element, embeddedFeatureFormViewModel: embeddedFeatureFormViewModel)
+                        FullScreenTextInput(text: $text, element: element, formViewModel: formViewModel)
                             .padding()
 #if targetEnvironment(macCatalyst)
-                            .environment(embeddedFeatureFormViewModel)
+                            .environment(formViewModel)
                             .environment(featureFormViewModel)
 #endif
                     }
@@ -128,17 +128,17 @@ private extension TextInput {
                     .keyboardType(keyboardType)
                     .onChange(of: isFocused) {
                         if isFocused {
-                            embeddedFeatureFormViewModel.focusedElement = element
-                        } else if embeddedFeatureFormViewModel.focusedElement == element {
+                            formViewModel.focusedElement = element
+                        } else if formViewModel.focusedElement == element {
                             // Only clears focusedElement if it matches the input's
                             // element to prevent unfocusing another text input
                             // that received focus while this one was still focused.
-                            embeddedFeatureFormViewModel.focusedElement = nil
+                            formViewModel.focusedElement = nil
                         }
                     }
-                    .onChange(of: embeddedFeatureFormViewModel.focusedElement) {
+                    .onChange(of: formViewModel.focusedElement) {
                         // Another form input took focus.
-                        if embeddedFeatureFormViewModel.focusedElement != element {
+                        if formViewModel.focusedElement != element {
                             isFocused = false
                         }
                     }
@@ -163,8 +163,8 @@ private extension TextInput {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
                         // instantaneous focus to enable validation.
-                        embeddedFeatureFormViewModel.focusedElement = element
-                        embeddedFeatureFormViewModel.focusedElement = nil
+                        formViewModel.focusedElement = element
+                        formViewModel.focusedElement = nil
                     }
                     text.removeAll()
                 }
@@ -179,7 +179,7 @@ private extension TextInput {
 #if !os(visionOS)
             if isBarcodeScanner {
                 Button {
-                    embeddedFeatureFormViewModel.focusedElement = element
+                    formViewModel.focusedElement = element
                     if cameraRequester.authorizationStatus == .authorized {
                         scannerIsPresented = true
                     } else {
@@ -258,7 +258,7 @@ private extension TextInput {
         let element: FieldFormElement
         
         /// The view model for the form.
-        let embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel
+        let formViewModel: FeatureFormView.FormView.Model
         
         var body: some View {
             NavigationStack {
@@ -270,7 +270,7 @@ private extension TextInput {
                         isFocused = true
                     }
                     .onChange(of: isFocused) {
-                        embeddedFeatureFormViewModel.focusedElement = isFocused ? element : nil
+                        formViewModel.focusedElement = isFocused ? element : nil
                     }
                     .scrollContentBackground(.hidden)
                     .toolbar {

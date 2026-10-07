@@ -167,7 +167,7 @@ extension FeatureFormView {
         }
         
         /// The model for the feature form containing the element to add the association to.
-        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+        var formViewModel: FeatureFormView.FormView.Model? {
             stackViewModel.getModel(form)
         }
         
@@ -225,9 +225,9 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the from side of the association.
         var sectionForFromElement: some View {
             Section {
-                if let embeddedFeatureFormViewModel {
+                if let formViewModel {
                     LabeledContent {
-                        Text(candidateIsToElement ? embeddedFeatureFormViewModel.title : candidate.title)
+                        Text(candidateIsToElement ? formViewModel.title : candidate.title)
                     } label: {
                         Text.fromElement
                     }
@@ -249,9 +249,9 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the to side of the association.
         var sectionForToElement: some View {
             Section {
-                if let embeddedFeatureFormViewModel {
+                if let formViewModel {
                     LabeledContent {
-                        Text(candidateIsToElement ? candidate.title : embeddedFeatureFormViewModel.title)
+                        Text(candidateIsToElement ? candidate.title : formViewModel.title)
                     } label: {
                         Text.toElement
                     }

@@ -50,14 +50,14 @@ extension FeatureFormView {
         public var body: some View {
             if let rootFeatureForm {
                 NavigationStack(path: $stackViewModel.navigationPath) {
-                    EmbeddedFeatureFormView(form: rootFeatureForm)
+                    FormView(form: rootFeatureForm)
                         // Refresh the navigation stack's root view when the root
                         // feature form changes.
                         .id(ObjectIdentifier(rootFeatureForm))
                         .navigationDestination(for: NavigationPathItem.self) { itemType in
                             switch itemType {
                             case let .form(form):
-                                EmbeddedFeatureFormView(form: form)
+                                FormView(form: form)
                             case let .utilityAssociationAssetTypesView(form, element, filter, source):
                                 UtilityAssociationAssetTypesView(
                                     element: element,
@@ -242,8 +242,8 @@ extension FeatureFormView {
                     stackViewModel.setRootForm(rootFeatureForm)
                 }
                 .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
-                    guard let embeddedFeatureFormViewModel = $0?.object else { return }
-                    formChangedAction(embeddedFeatureFormViewModel.featureForm)
+                    guard let formViewModel = $0?.object else { return }
+                    formChangedAction(formViewModel.featureForm)
                 }
             }
         }

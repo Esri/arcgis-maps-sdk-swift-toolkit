@@ -18,7 +18,7 @@ import Observation
 extension FeatureFormView.StackView {
     @Observable final class Model {
         /// The models for each feature form in the navigation path.
-        private var formModels: [ObjectIdentifier: EmbeddedFeatureFormViewModel] = [:]
+        private var formModels: [ObjectIdentifier: FeatureFormView.FormView.Model] = [:]
         
         /// An error thrown from finish editing.
         var finishEditingError: (any Error)?
@@ -38,13 +38,13 @@ extension FeatureFormView.StackView {
         /// Creates and adds a model for the provided form.
         /// - Parameter form: The form to create and add a model for.
         @MainActor func addModel(_ form: FeatureForm) {
-            formModels[ObjectIdentifier(form)] = EmbeddedFeatureFormViewModel(featureForm: form)
+            formModels[ObjectIdentifier(form)] = FeatureFormView.FormView.Model(featureForm: form)
         }
         
         /// Gets the model for the specified form.
         /// - Parameter form: The form to get a model for.
         /// - Returns: The model for the provided form.
-        func getModel(_ form: FeatureForm) -> EmbeddedFeatureFormViewModel? {
+        func getModel(_ form: FeatureForm) -> FeatureFormView.FormView.Model? {
             formModels[ObjectIdentifier(form)]
         }
         

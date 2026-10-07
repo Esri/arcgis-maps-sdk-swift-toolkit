@@ -17,11 +17,11 @@ import SwiftUI
 
 /// A preference key that specifies the feature form currently presented in the `FeatureFormView` navigation stack.
 struct PresentedFeatureFormPreferenceKey: PreferenceKey {
-    static let defaultValue: EquatableObject<EmbeddedFeatureFormViewModel>? = nil
+    static let defaultValue: EquatableObject<FeatureFormView.FormView.Model>? = nil
     
     static func reduce(
-        value: inout EquatableObject<EmbeddedFeatureFormViewModel>?,
-        nextValue: () -> EquatableObject<EmbeddedFeatureFormViewModel>?
+        value: inout EquatableObject<FeatureFormView.FormView.Model>?,
+        nextValue: () -> EquatableObject<FeatureFormView.FormView.Model>?
     ) {
         guard let nextValue = nextValue() else { return }
         value = nextValue

@@ -30,7 +30,7 @@ struct AttachmentsFeatureElementView: View {
     ///
     /// - Note: This property is only present when
     /// `featureElement` is an `AttachmentsFormElement`.
-    private var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel?
+    private var formViewModel: FeatureFormView.FormView.Model?
     
     /// Models for the attachments held by the element.
     @State private var attachmentModels: Result<[AttachmentModel], Error>?
@@ -40,7 +40,7 @@ struct AttachmentsFeatureElementView: View {
     @State private var isExpanded = true
     /// The last locally added attachment.
     @State private var lastAttachmentAdded: AttachmentModel?
-    /// If `embeddedFeatureFormViewModel` is set, this holds the last recorded value of
+    /// If `formViewModel` is set, this holds the last recorded value of
     /// `FeatureForm.hasEdits`. If the value changes from `true` to `false` edits were discarded
     /// and the attachments should be refreshed.
     @State private var previousHasEdits = false
@@ -48,16 +48,16 @@ struct AttachmentsFeatureElementView: View {
     /// Creates a new `AttachmentsFeatureElementView` for a Feature Form.
     /// - Parameter formElement: The `AttachmentsFeatureElement`.
     /// - Parameter formViewModel: The model for the feature form containing the element.
-    init(formElement: AttachmentsFormElement, formViewModel: EmbeddedFeatureFormViewModel) {
+    init(formElement: AttachmentsFormElement, formViewModel: FeatureFormView.FormView.Model) {
         self.featureElement = formElement
-        self.embeddedFeatureFormViewModel = formViewModel
+        self.formViewModel = formViewModel
     }
     
     /// Creates a new `AttachmentsFeatureElementView` for a Popup.
     /// - Parameter popupElement: The `AttachmentsFeatureElement`.
     init(popupElement: AttachmentsPopupElement) {
         self.featureElement = popupElement
-        self.embeddedFeatureFormViewModel = nil
+        self.formViewModel = nil
     }
     
     var body: some View {
@@ -93,7 +93,7 @@ struct AttachmentsFeatureElementView: View {
                     isEditable = newIsEditable
                 }
                 .task {
-                    if let form = embeddedFeatureFormViewModel?.featureForm {
+                    if let form = formViewModel?.featureForm {
                         for await hasEdits in form.$hasEdits {
                             if previousHasEdits && !hasEdits {
                                 // Edits were discarded, refresh attachments
@@ -200,8 +200,8 @@ struct AttachmentsFeatureElementView: View {
         )
         models.insert(newModel, at: 0)
         withAnimation { attachmentModels = .success(models) }
-        embeddedFeatureFormViewModel?.focusedElement = formElement
-        embeddedFeatureFormViewModel?.evaluateExpressions()
+        formViewModel?.focusedElement = formElement
+        formViewModel?.evaluateExpressions()
         lastAttachmentAdded = newModel
     }
     
@@ -213,8 +213,8 @@ struct AttachmentsFeatureElementView: View {
         guard let attachment = attachmentModel.attachment as? FormAttachment else { return }
         attachment.name = newAttachmentName
         withAnimation { attachmentModel.sync() }
-        embeddedFeatureFormViewModel?.focusedElement = formElement
-        embeddedFeatureFormViewModel?.evaluateExpressions()
+        formViewModel?.focusedElement = formElement
+        formViewModel?.evaluateExpressions()
     }
     
     /// Deletes the attachment associated with the given model.
@@ -226,8 +226,8 @@ struct AttachmentsFeatureElementView: View {
         guard case .success(var models) = attachmentModels else { return }
         models.removeAll { $0 === attachmentModel }
         withAnimation { attachmentModels = .success(models) }
-        embeddedFeatureFormViewModel?.focusedElement = formElement
-        embeddedFeatureFormViewModel?.evaluateExpressions()
+        formViewModel?.focusedElement = formElement
+        formViewModel?.evaluateExpressions()
     }
 }
 

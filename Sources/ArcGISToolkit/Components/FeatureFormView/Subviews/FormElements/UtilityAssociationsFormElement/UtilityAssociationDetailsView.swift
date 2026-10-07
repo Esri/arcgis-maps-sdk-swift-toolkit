@@ -64,11 +64,11 @@ extension FeatureFormView {
         
         /// The model containing the latest association filter results.
         var associationsFilterResultsModel: AssociationsFilterResultsModel? {
-            embeddedFeatureFormViewModel?.associationsFilterResultsModels[element]
+            formViewModel?.associationsFilterResultsModels[element]
         }
         
-        /// The model for the feature form containing the element with the association.
-        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+        /// The model for the form view containing the element with the association.
+        var formViewModel: FeatureFormView.FormView.Model? {
             stackViewModel.getModel(form)
         }
         
@@ -86,9 +86,9 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the from side of the association.
         var sectionForFromElement: some View {
             Section {
-                if let embeddedFeatureFormViewModel {
+                if let formViewModel {
                     LabeledContent {
-                        Text(associationResult.associatedFeatureIsToElement ? embeddedFeatureFormViewModel.title : associationResult.title)
+                        Text(associationResult.associatedFeatureIsToElement ? formViewModel.title : associationResult.title)
                     } label: {
                         Text.fromElement
                     }
@@ -115,9 +115,9 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the to side of the association.
         var sectionForToElement: some View {
             Section {
-                if let embeddedFeatureFormViewModel {
+                if let formViewModel {
                     LabeledContent {
-                        Text(associationResult.associatedFeatureIsToElement ? associationResult.title : embeddedFeatureFormViewModel.title)
+                        Text(associationResult.associatedFeatureIsToElement ? associationResult.title : formViewModel.title)
                     } label: {
                         Text.toElement
                     }
@@ -131,7 +131,7 @@ extension FeatureFormView {
         /// A section with a button to remove the association.
         @ViewBuilder var sectionForRemoveButton: some View {
             if let associationsFilterResultsModel,
-               let embeddedFeatureFormViewModel,
+               let formViewModel,
                isEditable {
                 Section {
                     Button(role: .destructive) {
@@ -144,7 +144,7 @@ extension FeatureFormView {
                         isPresented: $removalConfirmationIsPresented,
                         association: associationResult.association,
                         element: element,
-                        embeddedFeatureFormViewModel: embeddedFeatureFormViewModel
+                        formViewModel: formViewModel
                     ) {
                         associationsFilterResultsModel.fetchResults()
                         stackViewModel.navigationPath.removeLast()

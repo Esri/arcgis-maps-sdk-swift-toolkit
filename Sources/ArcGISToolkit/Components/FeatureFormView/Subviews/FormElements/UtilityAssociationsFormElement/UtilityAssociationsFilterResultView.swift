@@ -33,11 +33,11 @@ extension FeatureFormView {
         
         /// The model containing the latest association filter results.
         var associationsFilterResultsModel: AssociationsFilterResultsModel? {
-            embeddedFeatureFormViewModel?.associationsFilterResultsModels[element]
+            formViewModel?.associationsFilterResultsModels[element]
         }
         
         /// The view model for the form.
-        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
+        var formViewModel: FeatureFormView.FormView.Model? {
             stackViewModel.getModel(form)
         }
         
@@ -93,7 +93,7 @@ extension FeatureFormView {
                     }
                 }
             }
-            .onChange(of: embeddedFeatureFormViewModel?.hasEdits) {
+            .onChange(of: formViewModel?.hasEdits) {
                 associationsFilterResultsModel?.fetchResults()
             }
             .overlay(alignment: .bottomLeading) {
