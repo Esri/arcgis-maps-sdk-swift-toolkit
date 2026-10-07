@@ -1,0 +1,50 @@
+@Tutorial(time: 5) {
+    @Intro(title: "ClassificationView Tutorial") {
+        This tutorial shows you how to frame a map with the classification marking
+        from its portal item.
+        @Image(
+            source: ClassificationView,
+            alt: "A web map framed by classification bars at the top and bottom."
+        )
+    }
+
+    @Section(title: "Display a portal item's classification") {
+        @ContentAndMedia {
+            Before starting, configure your app to handle authentication challenges
+            by following the <doc:AuthenticatorTutorial>. You also need the URL of
+            an authenticated portal and the ID of a classified web map in that portal.
+
+            @Image(
+                source: ClassificationView,
+                alt: "A web map framed by classification bars at the top and bottom."
+            )
+        }
+
+        @Steps {
+            @Step {
+                Create a map from a classified portal item and display it in a
+                `MapView`. Replace the placeholders with your portal URL and portal
+                item ID.
+
+                @Code(
+                    name: "ClassificationViewExample.swift",
+                    file: ClassificationViewStep1.swift
+                )
+            }
+
+            @Step {
+                Apply the `classification(portalItem:)` modifier using the map's
+                portal item.
+
+                The classification bars appear after the portal and item finish
+                loading. If the item has no classification, the map is displayed
+                without classification bars.
+
+                @Code(
+                    name: "ClassificationViewExample.swift",
+                    file: ClassificationViewStep2.swift
+                )
+            }
+        }
+    }
+}

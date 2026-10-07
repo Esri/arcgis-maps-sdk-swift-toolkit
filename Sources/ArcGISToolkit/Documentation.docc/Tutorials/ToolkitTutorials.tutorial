@@ -41,6 +41,16 @@
         @Image(source: BuildingExplorer, alt: "An image of the BuildingExplorer component.")
         @TutorialReference(tutorial: "doc:BuildingExplorerTutorial")
     }
+
+    @Chapter(name: "ClassificationView") {
+        A `ClassificationView` frames content with the classification marking from
+        its portal item.
+        @Image(
+            source: ClassificationView,
+            alt: "A web map framed by classification bars at the top and bottom."
+        )
+        @TutorialReference(tutorial: "doc:ClassificationViewTutorial")
+    }
     
     @Chapter(name: "Compass") {
         A `Compass` (alias North arrow) shows where north is in a MapView.
