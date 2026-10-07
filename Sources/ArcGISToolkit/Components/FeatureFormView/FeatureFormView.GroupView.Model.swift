@@ -18,7 +18,7 @@ import SwiftUI
 
 internal import os
 
-extension FeatureFormGroupView /* Model */ {
+extension FeatureFormView.GroupView /* Model */ {
     /// <#Description#>
     @MainActor @Observable public final class Model {
         /// <#Description#>

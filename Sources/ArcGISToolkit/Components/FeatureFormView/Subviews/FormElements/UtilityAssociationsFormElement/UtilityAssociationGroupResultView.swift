@@ -19,7 +19,7 @@ extension FeatureFormView {
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
         /// <#Description#>
-        @Environment(FeatureFormGroupView.Model.self) var groupViewModel: FeatureFormGroupView.Model?
+        @Environment(GroupView.Model.self) var groupViewModel: GroupView.Model?
         /// The model for the stack view containing the form.
         @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
         /// A Boolean which declares whether navigation to forms for features associated via utility

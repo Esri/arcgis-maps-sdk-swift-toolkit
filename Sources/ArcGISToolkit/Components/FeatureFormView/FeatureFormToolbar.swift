@@ -28,7 +28,7 @@ struct FeatureFormToolbar: ViewModifier {
     @Environment(\.editingButtonVisibility) var editingButtonsVisibility
     
     /// <#Description#>
-    @Environment(FeatureFormGroupView.Model.self) var groupViewModel: FeatureFormGroupView.Model?
+    @Environment(FeatureFormView.GroupView.Model.self) var groupViewModel: FeatureFormView.GroupView.Model?
     /// The model for the stack view containing the form.
     @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
     

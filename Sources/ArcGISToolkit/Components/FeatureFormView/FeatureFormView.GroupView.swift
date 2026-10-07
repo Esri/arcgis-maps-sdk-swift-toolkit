@@ -15,30 +15,32 @@
 import ArcGIS
 import SwiftUI
 
-/// <#Description#>
-@_spi(Experimental)
-public struct FeatureFormGroupView: View {
+extension FeatureFormView {
     /// <#Description#>
-    let model: Model
-    
-    /// <#Description#>
-    /// - Parameter model: <#model description#>
-    public init(model: Model) {
-        self.model = model
-    }
-    
-    public var body: some View {
-        conditionalView
-            .task(id: model.group.forms.count) {
-                await model.monitorEdits()
-            }
-            .task(id: model.group.forms.count) {
-                await model.monitorErrors()
-            }
+    @_spi(Experimental)
+    public struct GroupView: View {
+        /// <#Description#>
+        let model: Model
+        
+        /// <#Description#>
+        /// - Parameter model: <#model description#>
+        public init(model: Model) {
+            self.model = model
+        }
+        
+        public var body: some View {
+            conditionalView
+                .task(id: model.group.forms.count) {
+                    await model.monitorEdits()
+                }
+                .task(id: model.group.forms.count) {
+                    await model.monitorErrors()
+                }
+        }
     }
 }
 
-extension FeatureFormGroupView /* Group views */ {
+extension FeatureFormView.GroupView /* Group views */ {
     /// <#Description#>
     @ViewBuilder
     var conditionalView: some View {
@@ -90,7 +92,7 @@ extension FeatureFormGroupView /* Group views */ {
     }
 }
 
-extension FeatureFormGroupView {
+extension FeatureFormView.GroupView {
     /// Represents events that occur during the form editing lifecycle. These events notify you when the user has performed an action within a form in the group.
     public enum EditingEvent {
         /// Indicates that the user has discarded edits.
@@ -102,17 +104,17 @@ extension FeatureFormGroupView {
     }
 }
 
-public extension FeatureFormGroupView /* Public view modifiers */ {
+public extension FeatureFormView.GroupView /* Public view modifiers */ {
     /// Sets an closure to perform when the active feature form has changed.
     /// - Parameter action: The closure to perform.
-    func onFeatureFormChanged(perform action: @escaping (FeatureForm) -> Void) -> FeatureFormGroupView {
+    func onFeatureFormChanged(perform action: @escaping (FeatureForm) -> Void) -> FeatureFormView.GroupView {
         model.onFeatureFormChangedAction = action
         return self
     }
     
     /// Sets a closure to perform when a form group editing event occurs.
     /// - Parameter action: The closure to perform.
-    func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> FeatureFormGroupView {
+    func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> FeatureFormView.GroupView {
         model.onFormEditingEventAction = action
         return self
     }
@@ -124,7 +126,7 @@ public extension FeatureFormGroupView /* Public view modifiers */ {
     /// received user interaction or the user has attempted to finish editing.
     /// If it’s preferred that validation errors are always shown, override the default behavior with
     /// this modifier, passing `.visible`.
-    func validationErrors(_ visibility: Visibility) -> FeatureFormGroupView {
+    func validationErrors(_ visibility: Visibility) -> FeatureFormView.GroupView {
         model.validationErrorVisibilityExternal = visibility
         return self
     }
@@ -136,17 +138,17 @@ public extension FeatureFormGroupView /* Public view modifiers */ {
     ///
     /// If the action throws an error, `FeatureFormGroup.finishEditing` will not be called.
     /// - Parameter action: The closure to perform.
-    func willFinishEditing(perform action: (() throws -> Void)?) -> FeatureFormGroupView {
+    func willFinishEditing(perform action: (() throws -> Void)?) -> FeatureFormView.GroupView {
         model.willFinishEditingAction = action
         return self
     }
 }
 
 struct FeatureFormGroupViewPreview: View {
-    let model: FeatureFormGroupView.Model?
+    let model: FeatureFormView.GroupView.Model?
     var body: some View {
         if let model {
-            FeatureFormGroupView(model: model)
+            FeatureFormView.GroupView(model: model)
         }
     }
 }
@@ -155,7 +157,7 @@ struct FeatureFormGroupViewPreview: View {
 #if swift(>=6.4)
 #Preview {
     @Previewable @State var map: Map?
-    @Previewable @State var model: FeatureFormGroupView.Model?
+    @Previewable @State var model: FeatureFormView.GroupView.Model?
     @Previewable @State var loadResult: Result<Void, Error>?
     
     switch loadResult {
