@@ -29,8 +29,8 @@ extension FeatureFormView {
         public var body: some View {
             NavigationStack(path: $stackViewModel.navigationPath) {
                 FormView(form: stackViewModel.root)
-                // Refresh the navigation stack's root view when the root
-                // feature form changes.
+                    // Refresh the navigation stack's root view when the root
+                    // feature form changes.
                     .id(ObjectIdentifier(stackViewModel.root))
                     .navigationDestination(for: NavigationPathItem.self) { itemType in
                         switch itemType {
