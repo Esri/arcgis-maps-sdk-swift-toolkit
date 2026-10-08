@@ -134,12 +134,20 @@ extension Bookmarks {
     func selectBookmark(_ bookmark: Bookmark) {
         selection.wrappedValue = bookmark
         isPresented = false
-        
+        announceSettingViewpoint(bookmarkName: bookmark.name)
         if let geoViewProxy, let viewpoint = bookmark.viewpoint {
             Task {
                 await geoViewProxy.setViewpoint(viewpoint, duration: nil)
             }
         }
+    }
+    
+    /// Makes an accessibility voice over announcement that the viewpoint is being set to the bookmark name
+    /// - Parameter bookmarkName: The name of the bookmark the viewpoint is being set to
+    private func announceSettingViewpoint(bookmarkName: String) {
+        var announcementMessage = AttributedString("Setting viewpoint to \(bookmarkName)")
+        announcementMessage.accessibilitySpeechAnnouncementPriority = .high
+        AccessibilityNotification.Announcement(announcementMessage).post()
     }
     
     /// Makes a view that is shown when the `GeoModel` failed to load.

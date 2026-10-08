@@ -27,26 +27,30 @@ struct BookmarksHeader: View {
     
     public var body: some View {
         HStack(alignment: .top) {
-            Image(systemName: "bookmark")
-            VStack(alignment: .leading) {
-                Text(
-                    "Bookmarks",
-                    bundle: .toolkitModule,
-                    comment: "A label in reference to bookmarks contained in a map or scene."
+            HStack {
+                Image(systemName: "bookmark")
+                VStack(alignment: .leading) {
+                    Text(
+                        "Bookmarks",
+                        bundle: .toolkitModule,
+                        comment: "A label in reference to bookmarks contained in a map or scene."
+                    )
+                    .font(.headline)
+                    Text(
+                        "Select a bookmark",
+                        bundle: .toolkitModule,
+                        comment: "A label prompting the user to make a selection from the available bookmarks."
+                    )
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                }
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
                 )
-                .font(.headline)
-                Text(
-                    "Select a bookmark",
-                    bundle: .toolkitModule,
-                    comment: "A label prompting the user to make a selection from the available bookmarks."
-                )
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
             }
-            .frame(
-                maxWidth: .infinity,
-                alignment: .leading
-            )
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Bookmarks, select a bookmark")
             Spacer()
             Button.done {
                 isPresented = false
