@@ -30,14 +30,31 @@ private struct FeatureEditorModifier: ViewModifier {
     /// The feature editor model shared by the toolbar and inspector.
     @State private var model = FeatureEditorModel()
     /// The inspector's currently selected presentation detent.
-    /// This is needed to set the default detent to medium.
     @State private var selectedPresentationDetent = PresentationDetent.medium
     /// A Boolean value indicating whether the feature editor is retrying to start editing.
     @State private var isRetrying = false
     
+    /// The binding that controls the inspector without stopping feature
+    /// addition when it is temporarily dismissed for geometry construction.
+    var inspectorIsPresented: Binding<Bool> {
+        Binding {
+            switch model.state {
+            case .adding, .editing: true
+            case .stopped: false
+            }
+        } set: { newValue in
+            guard !newValue else { return }
+            switch model.state {
+            case .adding: model.featureAddingModel.stop()
+            case .editing: model.stopEditing()
+            case .stopped: break
+            }
+        }
+    }
+    
     func body(content: Content) -> some View {
         content
-            .safeInspector(isPresented: $model.isPresented) {
+            .safeInspector(isPresented: inspectorIsPresented) {
                 // VStack is needed for presentation modifiers to be applied.
                 VStack(spacing: 0) {
                     switch model.state {
@@ -107,10 +124,20 @@ private struct FeatureEditorModifier: ViewModifier {
 #endif
                 .interactiveDismissDisabled()
                 .sheet(isPresented: $model.snapSettingsSheetIsPresented) {
-                    SnapSettingsView(settings: model.geometryEditor.snapSettings)
+                    SnapSettingsView(settings: model.geometryEditorModel.geometryEditor.snapSettings)
                 }
             }
             .environment(model)
+            .onChange(of: model.state) {
+                switch model.state {
+                case .adding:
+                    selectedPresentationDetent = .large
+                case .editing:
+                    selectedPresentationDetent = .medium
+                case .stopped:
+                    break
+                }
+            }
     }
     
     /// Creates a view for start editing failure.
