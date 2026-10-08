@@ -27,9 +27,6 @@ struct FeatureFormToolbar: ViewModifier {
     /// <#Description#>
     @Environment(FeatureFormView.Model.self) var featureFormViewModel
     
-    /// <#Description#>
-    @Environment(FeatureFormView.GroupView.Model.self) var groupViewModel: FeatureFormView.GroupView.Model?
-    
     /// The model for the stack view containing the form.
     @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
     
@@ -63,9 +60,9 @@ struct FeatureFormToolbar: ViewModifier {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    if isRootView, let groupViewModel, groupViewModel.canGoBack {
+                    if isRootView, featureFormViewModel.group != nil, featureFormViewModel.canGoBack {
                         Button {
-                            groupViewModel.navigateBack()
+                            featureFormViewModel.navigateBack()
                         } label: {
                             Label {
                                 Text(
@@ -102,13 +99,13 @@ struct FeatureFormToolbar: ViewModifier {
                         .disabled(featureFormViewModel.navigationIsDisabled)
                     }
                 }
-                if let groupViewModel {
-                    let hasEdits = groupViewModel.formsWithEdits.contains(where: { $0.value })
+                if let group = featureFormViewModel.group {
+                    let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
                             if hasEdits {
                                 Button("Discard Edits", role: .destructive) {
-                                    groupViewModel.discardEdits()
+                                    featureFormViewModel.discardEdits()
                                 }
                             }
                         } label: {
@@ -117,12 +114,12 @@ struct FeatureFormToolbar: ViewModifier {
                             } else {
                                 Image(systemName: "xmark")
                             }
-                            Text(groupViewModel.group.forms.count, format: .number)
+                            Text(group.forms.count, format: .number)
                         } primaryAction: {
                             if hasEdits {
-                                groupViewModel.finishEditing()
+                                featureFormViewModel.finishEditing()
                             } else {
-                                groupViewModel.discardEdits()
+                                featureFormViewModel.discardEdits()
                             }
                         }
                     }
@@ -145,10 +142,10 @@ struct FeatureFormToolbar: ViewModifier {
                         FormFooter(featureForm: featureForm)
                     }
                 }
-                if let groupViewModel {
+                if featureFormViewModel.group != nil {
                     ToolbarItemGroup(placement: .bottomBar) {
                         Button {
-                            groupViewModel.selectPrevious()
+                            featureFormViewModel.selectPrevious()
                         } label: {
                             Label {} icon: {
                                 Image(systemName: "chevron.left")
@@ -157,21 +154,21 @@ struct FeatureFormToolbar: ViewModifier {
                         Button {
                             formManagerMenuIsPresented = true
                         } label: {
-                            Text("Feature \(groupViewModel.selectedIndex + 1) of \(groupViewModel.count)")
+                            Text("Feature \(featureFormViewModel.selectedIndex + 1) of \(featureFormViewModel.count ?? -1)")
                         }
                         .popover(isPresented: $formManagerMenuIsPresented ) {
                             List {
-                                ForEach(groupViewModel.ids, id: \.self) { id in
-                                    if let form = groupViewModel.form(for: id),
+                                ForEach(featureFormViewModel.ids, id: \.self) { id in
+                                    if let form = featureFormViewModel.form(for: id),
                                        let objectID = form.feature.objectID {
                                         Button {
-                                            groupViewModel.select(form: form, clearHistory: true)
+                                            featureFormViewModel.select(form: form, clearHistory: true)
                                             formManagerMenuIsPresented = false
                                         } label: {
                                             Label {
                                                 Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
                                             } icon: {
-                                                if groupViewModel.selectedID == id {
+                                                if featureFormViewModel.selectedID == id {
                                                     Image(systemName: "checkmark")
                                                 }
                                             }
@@ -184,7 +181,7 @@ struct FeatureFormToolbar: ViewModifier {
                             .frame(idealWidth: 400, idealHeight: 500)
                         }
                         Button {
-                            groupViewModel.selectNext()
+                            featureFormViewModel.selectNext()
                         } label: {
                             Label {} icon: {
                                 Image(systemName: "chevron.right")

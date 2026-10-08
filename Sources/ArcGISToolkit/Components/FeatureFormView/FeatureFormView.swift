@@ -74,7 +74,9 @@ import SwiftUI
 /// - Since: 200.4
 public struct FeatureFormView: View {
     @State private var model: Model
-    private var legacyIsPresented: Binding<Bool>?
+    
+    private let legacyRoot: FeatureForm?
+    private let legacyIsPresented: Binding<Bool>?
     
     /// Initializes a form view.
     /// - Parameters:
@@ -82,8 +84,10 @@ public struct FeatureFormView: View {
     ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Since: 200.8
     public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
+        self.model = .init(isPresented: isPresented?.wrappedValue)
+        
+        self.legacyRoot = root
         self.legacyIsPresented = isPresented
-        self.model = .init(isPresented: isPresented?.wrappedValue, rootFeatureForm: root)
     }
     
     /// Initializes a Feature Form View.
@@ -92,15 +96,20 @@ public struct FeatureFormView: View {
     /// - Since: 300.2
     public init(model: Model) {
         self.model = model
+        
+        self.legacyRoot = nil
+        self.legacyIsPresented = nil
     }
     
     public var body: some View {
-        if model.legacyModeIsActive {
-            legacyView
-        } else {
-            // GroupFormView
-            EmptyView()
+        Group {
+            if let legacyRoot {
+                legacyView(root: legacyRoot)
+            } else {
+                GroupView()
+            }
         }
+        .environment(model)
     }
 }
 
@@ -173,9 +182,8 @@ public extension FeatureFormView {
 }
 
 extension FeatureFormView {
-    var legacyView: some View {
-        StackView()
-            .environment(model)
+    func legacyView(root: FeatureForm) -> some View {
+        StackView(root: root)
             .onChange(of: legacyIsPresented?.wrappedValue) { _, newValue in
                 model.isPresented = newValue
             }

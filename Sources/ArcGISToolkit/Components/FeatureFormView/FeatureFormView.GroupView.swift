@@ -17,24 +17,16 @@ import SwiftUI
 
 extension FeatureFormView {
     /// <#Description#>
-    @_spi(Experimental)
     public struct GroupView: View {
-        /// <#Description#>
-        let model: Model
-        
-        /// <#Description#>
-        /// - Parameter model: <#model description#>
-        public init(model: Model) {
-            self.model = model
-        }
+        @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
         public var body: some View {
             conditionalView
-                .task(id: model.group.forms.count) {
-                    await model.monitorEdits()
+                .task(id: featureFormViewModel.group?.forms.count) {
+                    await featureFormViewModel.monitorEdits()
                 }
-                .task(id: model.group.forms.count) {
-                    await model.monitorErrors()
+                .task(id: featureFormViewModel.group?.forms.count) {
+                    await featureFormViewModel.monitorErrors()
                 }
         }
     }
@@ -44,7 +36,7 @@ extension FeatureFormView.GroupView /* Group views */ {
     /// <#Description#>
     @ViewBuilder
     var conditionalView: some View {
-        if let selection = model.selectedID {
+        if let selection = featureFormViewModel.selectedID {
             formStack(selection: selection)
         } else {
             ContentUnavailableView {
@@ -61,16 +53,8 @@ extension FeatureFormView.GroupView /* Group views */ {
     /// - Parameter id: <#id description#>
     @ViewBuilder
     func form(id: UUID) -> some View {
-        if let form = model.form(for: id) {
-            FeatureFormView(
-                root: form,
-                isPresented: Binding(
-                    get: { true },
-                    set: { _ in model.remove(form: form) }
-                )
-            )
-            .editingButtons(.hidden)
-            .environment(model)
+        if let form = featureFormViewModel.form(for: id) {
+            FeatureFormView.StackView(root: form)
         }
     }
     
@@ -83,7 +67,7 @@ extension FeatureFormView.GroupView /* Group views */ {
     @ViewBuilder
     func formStack(selection: UUID) -> some View {
         ZStack {
-            ForEach(model.ids, id: \.self) { id in
+            ForEach(featureFormViewModel.ids, id: \.self) { id in
                 form(id: id)
                     .allowsHitTesting(selection == id)
                     .opacity(selection == id ? 1 : 0)
@@ -92,63 +76,63 @@ extension FeatureFormView.GroupView /* Group views */ {
     }
 }
 
-struct FeatureFormGroupViewPreview: View {
-    let model: FeatureFormView.GroupView.Model?
-    var body: some View {
-        if let model {
-            FeatureFormView.GroupView(model: model)
-        }
-    }
-}
-
-// The task on the ProgressView is problematic in Xcode 26.4.1 (Swift 6.3)
-#if swift(>=6.4)
-#Preview {
-    @Previewable @State var map: Map?
-    @Previewable @State var model: FeatureFormView.GroupView.Model?
-    @Previewable @State var loadResult: Result<Void, Error>?
-    
-    switch loadResult {
-    case .success(let success):
-        MapView(map: map!)
-            .sheet(isPresented: .constant(true)) {
-                FeatureFormGroupViewPreview(model: model)
-            }
-    case .failure(let failure):
-        ContentUnavailableView {
-            Text(failure.localizedDescription)
-        }
-    case nil:
-        ProgressView()
-            .task {
-                loadResult = await Result {
-                    let credential = try await TokenCredential.credential(
-                        for: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
-                        username: "viewer01",
-                        password: "I68VGU^nMurF"
-                    )
-                    ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
-                    map = Map(url: URL(string: "https://maps.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310")!)
-                    try await map?.load()
-                    for utilityNetwork in map?.utilityNetworks ?? [] {
-                        try await utilityNetwork.load()
-                    }
-                    let layer = map?.operationalLayers.first
-                    try await layer?.load()
-                    let groupLayer = layer as? GroupLayer
-                    let featureLayer = groupLayer?.layers.first { layer in
-                        layer.name == "Electric Distribution Assembly"
-                    } as? FeatureLayer
-                    let featureTable = featureLayer?.featureTable as? ArcGISFeatureTable
-                    try await featureTable?.load()
-                    let queryParameters = QueryParameters()
-                    queryParameters.addObjectIDs([1, 2, 3])
-                    let featureQueryResult = try await featureTable?.queryFeatures(using: queryParameters)
-                    let features = featureQueryResult?.features().compactMap { $0 as? ArcGISFeature }
-                    let forms: [FeatureForm] = features?.map { FeatureForm(feature: $0) } ?? []
-                    model = .init(forms: forms)
-                }
-            }
-    }
-}
-#endif
+//struct FeatureFormGroupViewPreview: View {
+//    let model: FeatureFormView.GroupView.Model?
+//    var body: some View {
+//        if let model {
+//            FeatureFormView.GroupView(model: model)
+//        }
+//    }
+//}
+//
+//// The task on the ProgressView is problematic in Xcode 26.4.1 (Swift 6.3)
+//#if swift(>=6.4)
+//#Preview {
+//    @Previewable @State var map: Map?
+//    @Previewable @State var model: FeatureFormView.GroupView.Model?
+//    @Previewable @State var loadResult: Result<Void, Error>?
+//    
+//    switch loadResult {
+//    case .success(let success):
+//        MapView(map: map!)
+//            .sheet(isPresented: .constant(true)) {
+//                FeatureFormGroupViewPreview(model: model)
+//            }
+//    case .failure(let failure):
+//        ContentUnavailableView {
+//            Text(failure.localizedDescription)
+//        }
+//    case nil:
+//        ProgressView()
+//            .task {
+//                loadResult = await Result {
+//                    let credential = try await TokenCredential.credential(
+//                        for: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+//                        username: "viewer01",
+//                        password: "I68VGU^nMurF"
+//                    )
+//                    ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
+//                    map = Map(url: URL(string: "https://maps.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310")!)
+//                    try await map?.load()
+//                    for utilityNetwork in map?.utilityNetworks ?? [] {
+//                        try await utilityNetwork.load()
+//                    }
+//                    let layer = map?.operationalLayers.first
+//                    try await layer?.load()
+//                    let groupLayer = layer as? GroupLayer
+//                    let featureLayer = groupLayer?.layers.first { layer in
+//                        layer.name == "Electric Distribution Assembly"
+//                    } as? FeatureLayer
+//                    let featureTable = featureLayer?.featureTable as? ArcGISFeatureTable
+//                    try await featureTable?.load()
+//                    let queryParameters = QueryParameters()
+//                    queryParameters.addObjectIDs([1, 2, 3])
+//                    let featureQueryResult = try await featureTable?.queryFeatures(using: queryParameters)
+//                    let features = featureQueryResult?.features().compactMap { $0 as? ArcGISFeature }
+//                    let forms: [FeatureForm] = features?.map { FeatureForm(feature: $0) } ?? []
+//                    model = .init(forms: forms)
+//                }
+//            }
+//    }
+//}
+//#endif

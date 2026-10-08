@@ -20,167 +20,170 @@ extension FeatureFormView {
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
         /// The model for the stack view containing the form.
-        @State private var stackViewModel = FeatureFormView.StackView.Model()
+        @State private var stackViewModel: FeatureFormView.StackView.Model
+        
+        init(root: FeatureForm) {
+            self.stackViewModel = Model(root: root)
+        }
         
         public var body: some View {
-            if let rootFeatureForm = featureFormViewModel.rootFeatureForm {
-                NavigationStack(path: $stackViewModel.navigationPath) {
-                    FormView(form: rootFeatureForm)
-                        // Refresh the navigation stack's root view when the root
-                        // feature form changes.
-                        .id(ObjectIdentifier(rootFeatureForm))
-                        .navigationDestination(for: NavigationPathItem.self) { itemType in
-                            switch itemType {
-                            case let .form(form):
-                                FormView(form: form)
-                            case let .utilityAssociationAssetTypesView(form, element, filter, source):
-                                UtilityAssociationAssetTypesView(
-                                    element: element,
-                                    filter: filter,
-                                    form: form,
-                                    source: source
-                                )
-                                .featureFormToolbar(form)
-                                .navigationBarTitleDisplayMode(.inline)
-                                .navigationTitle(source.name)
-                            case let .utilityAssociationCreationView(form, element, filter, candidate):
-                                UtilityAssociationCreationView(
-                                    candidate: candidate,
-                                    element: element,
-                                    filter: filter,
-                                    form: form
-                                )
-                                .featureFormToolbar(form)
-                                .navigationBarTitleDisplayMode(.inline)
-                                .navigationTitle(newAssociation)
-                            case let .utilityAssociationDetailsView(form, element, associationResult):
-                                UtilityAssociationDetailsView(
-                                    associationResult: associationResult,
-                                    element: element,
-                                    form: form
-                                )
-                                .featureFormToolbar(form)
-                                .navigationBarTitleDisplayMode(.inline)
-                            case let .utilityAssociationFeatureCandidatesView(form, element, filter, source, assetType):
-                                UtilityAssociationFeatureCandidatesView(
-                                    assetType: assetType,
-                                    element: element,
-                                    filter: filter,
-                                    form: form,
-                                    source: source
-                                )
-                                .featureFormToolbar(form)
-                                .navigationBarTitleDisplayMode(.inline)
-                                .navigationTitle(assetType.name)
-                            case let .utilityAssociationFeatureSourcesView(form, element, filter):
-                                UtilityAssociationFeatureSourcesView(
-                                    element: element,
-                                    filter: filter,
-                                    form: form
-                                )
-                                .featureFormToolbar(form)
-                                .navigationBarTitleDisplayMode(.inline)
-                                .navigationTitle(networkDataSource)
-                            case let .utilityAssociationFilterResultView(form, element, filter):
-                                UtilityAssociationsFilterResultView(
-                                    element: element,
-                                    filter: filter,
-                                    form: form
-                                )
-                                .featureFormToolbar(form)
-                                .navigationBarTitleDisplayMode(.inline)
-                                .navigationTitle(filter.title, subtitle: stackViewModel.getModel(form)?.title ?? "")
-                            case let .utilityAssociationGroupResultView(form, element, filter, formSource):
-                                UtilityAssociationGroupResultView(
-                                    element: element,
-                                    featureFormSource: formSource,
-                                    filter: filter,
-                                    form: form
-                                )
-                                .featureFormToolbar(form)
-                                .navigationBarTitleDisplayMode(.inline)
+            NavigationStack(path: $stackViewModel.navigationPath) {
+                FormView(form: stackViewModel.root)
+                // Refresh the navigation stack's root view when the root
+                // feature form changes.
+                    .id(ObjectIdentifier(stackViewModel.root))
+                    .navigationDestination(for: NavigationPathItem.self) { itemType in
+                        switch itemType {
+                        case let .form(form):
+                            FormView(form: form)
+                        case let .utilityAssociationAssetTypesView(form, element, filter, source):
+                            UtilityAssociationAssetTypesView(
+                                element: element,
+                                filter: filter,
+                                form: form,
+                                source: source
+                            )
+                            .featureFormToolbar(form)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(source.name)
+                        case let .utilityAssociationCreationView(form, element, filter, candidate):
+                            UtilityAssociationCreationView(
+                                candidate: candidate,
+                                element: element,
+                                filter: filter,
+                                form: form
+                            )
+                            .featureFormToolbar(form)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(newAssociation)
+                        case let .utilityAssociationDetailsView(form, element, associationResult):
+                            UtilityAssociationDetailsView(
+                                associationResult: associationResult,
+                                element: element,
+                                form: form
+                            )
+                            .featureFormToolbar(form)
+                            .navigationBarTitleDisplayMode(.inline)
+                        case let .utilityAssociationFeatureCandidatesView(form, element, filter, source, assetType):
+                            UtilityAssociationFeatureCandidatesView(
+                                assetType: assetType,
+                                element: element,
+                                filter: filter,
+                                form: form,
+                                source: source
+                            )
+                            .featureFormToolbar(form)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(assetType.name)
+                        case let .utilityAssociationFeatureSourcesView(form, element, filter):
+                            UtilityAssociationFeatureSourcesView(
+                                element: element,
+                                filter: filter,
+                                form: form
+                            )
+                            .featureFormToolbar(form)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(networkDataSource)
+                        case let .utilityAssociationFilterResultView(form, element, filter):
+                            UtilityAssociationsFilterResultView(
+                                element: element,
+                                filter: filter,
+                                form: form
+                            )
+                            .featureFormToolbar(form)
+                            .navigationBarTitleDisplayMode(.inline)
+                            .navigationTitle(filter.title, subtitle: stackViewModel.getModel(form)?.title ?? "")
+                        case let .utilityAssociationGroupResultView(form, element, filter, formSource):
+                            UtilityAssociationGroupResultView(
+                                element: element,
+                                featureFormSource: formSource,
+                                filter: filter,
+                                form: form
+                            )
+                            .featureFormToolbar(form)
+                            .navigationBarTitleDisplayMode(.inline)
+                        }
+                    }
+            }
+            // Alert for abandoning unsaved edits
+            .alert(
+                !stackViewModel.presentedFormHasValidationErrors ? discardEditsQuestion : validationErrors,
+                isPresented: alertForUnsavedEditsIsPresented,
+                actions: {
+                    if let (willNavigate, continuation) = stackViewModel.navigationAlertInfo {
+                        Button(role: .destructive) {
+                            stackViewModel.presentedForm?.discardEdits()
+                            stackViewModel.validationErrorVisibilityInternal = .automatic
+                            featureFormViewModel.onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
+                            continuation()
+                        } label: {
+                            Text.discardEdits
+                        }
+                        .onAppear {
+                            if stackViewModel.presentedFormHasValidationErrors {
+                                stackViewModel.validationErrorVisibilityInternal = .visible
                             }
                         }
-                }
-                // Alert for abandoning unsaved edits
-                .alert(
-                    !stackViewModel.presentedFormHasValidationErrors ? discardEditsQuestion : validationErrors,
-                    isPresented: alertForUnsavedEditsIsPresented,
-                    actions: {
-                        if let (willNavigate, continuation) = stackViewModel.navigationAlertInfo {
-                            Button(role: .destructive) {
-                                stackViewModel.presentedForm?.discardEdits()
-                                stackViewModel.validationErrorVisibilityInternal = .automatic
-                                featureFormViewModel.onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
-                                continuation()
-                            } label: {
-                                Text.discardEdits
-                            }
-                            .onAppear {
-                                if stackViewModel.presentedFormHasValidationErrors {
-                                    stackViewModel.validationErrorVisibilityInternal = .visible
-                                }
-                            }
-                            if !stackViewModel.presentedFormHasValidationErrors {
-                                Button {
-                                    Task {
-                                        do {
-                                            try await stackViewModel.presentedForm?.finishEditing()
-                                            featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
-                                            continuation()
-                                        } catch {
-                                            stackViewModel.finishEditingError = error
-                                        }
+                        if !stackViewModel.presentedFormHasValidationErrors {
+                            Button {
+                                Task {
+                                    do {
+                                        try await stackViewModel.presentedForm?.finishEditing()
+                                        featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
+                                        continuation()
+                                    } catch {
+                                        stackViewModel.finishEditingError = error
                                     }
-                                } label: {
-                                    saveEdits
                                 }
-                            }
-                            Button(role: .cancel) {
-                                alertForUnsavedEditsIsPresented.wrappedValue = false
                             } label: {
-                                continueEditing
+                                saveEdits
                             }
                         }
-                    },
-                    message: {
-                        if stackViewModel.presentedFormHasValidationErrors {
-                            Text(
-                                "You have ^[\(stackViewModel.presentedForm?.elementValidationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
-                                bundle: .toolkitModule,
-                                comment:
+                        Button(role: .cancel) {
+                            alertForUnsavedEditsIsPresented.wrappedValue = false
+                        } label: {
+                            continueEditing
+                        }
+                    }
+                },
+                message: {
+                    if stackViewModel.presentedFormHasValidationErrors {
+                        Text(
+                            "You have ^[\(stackViewModel.presentedForm?.elementValidationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
+                            bundle: .toolkitModule,
+                            comment:
                                     """
                                     A message explaining that the indicated number
                                     of validation errors must be resolved before
                                     saving the feature form.
                                     """
-                            )
-                        } else {
-                            Text(
-                                "Updates to the form will be lost.",
-                                bundle: .toolkitModule,
-                                comment:
+                        )
+                    } else {
+                        Text(
+                            "Updates to the form will be lost.",
+                            bundle: .toolkitModule,
+                            comment:
                                     """
                                     A message explaining that unsaved edits will be
                                     lost if the user continues to dismiss the form
                                     without saving.
                                     """
-                            )
-                        }
+                        )
                     }
-                )
-                // Alert for finish editing errors
-                .alert(
-                    Text(
-                        "The form wasn't submitted",
-                        bundle: .toolkitModule,
-                        comment: "The title shown when the feature form failed to save."
-                    ),
-                    isPresented: alertForFinishEditingErrorsIsPresented,
-                    actions: {},
-                    message: {
-                        if let error = stackViewModel.finishEditingError {
-                            Text(
+                }
+            )
+            // Alert for finish editing errors
+            .alert(
+                Text(
+                    "The form wasn't submitted",
+                    bundle: .toolkitModule,
+                    comment: "The title shown when the feature form failed to save."
+                ),
+                isPresented: alertForFinishEditingErrorsIsPresented,
+                actions: {},
+                message: {
+                    if let error = stackViewModel.finishEditingError {
+                        Text(
                                 """
                                 Finish editing failed.
                                 \(String(describing: error))
@@ -191,30 +194,29 @@ extension FeatureFormView {
                                     The message shown when a form could not be 
                                     submitted with additional details.
                                     """
-                            )
-                        } else {
-                            Text(
-                                "Finish editing failed.",
-                                bundle: .toolkitModule,
-                                comment: "The message shown when a form could not be submitted."
-                            )
-                        }
-                    }
-                )
-                .animation(.default, value: ObjectIdentifier(rootFeatureForm))
-                .environment(stackViewModel)
-                .onChange(of: stackViewModel.navigationPath) {
-                    if let presentedItem = stackViewModel.navigationPath.last {
-                        featureFormViewModel.onFormEditingEventAction?(.navigationChanged(presentedItem))
+                        )
+                    } else {
+                        Text(
+                            "Finish editing failed.",
+                            bundle: .toolkitModule,
+                            comment: "The message shown when a form could not be submitted."
+                        )
                     }
                 }
-                .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
-                    stackViewModel.setRootForm(rootFeatureForm)
+            )
+            .animation(.default, value: ObjectIdentifier(stackViewModel.root))
+            .environment(stackViewModel)
+            .onChange(of: stackViewModel.navigationPath) {
+                if let presentedItem = stackViewModel.navigationPath.last {
+                    featureFormViewModel.onFormEditingEventAction?(.navigationChanged(presentedItem))
                 }
-                .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
-                    guard let formViewModel = $0?.object else { return }
-                    formChangedAction(formViewModel.featureForm)
-                }
+            }
+            .onChange(of: ObjectIdentifier(stackViewModel.root), initial: true) {
+                stackViewModel.setRootForm(stackViewModel.root)
+            }
+            .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
+                guard let formViewModel = $0?.object else { return }
+                formChangedAction(formViewModel.featureForm)
             }
         }
     }

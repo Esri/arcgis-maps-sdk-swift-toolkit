@@ -17,6 +17,13 @@ import Observation
 
 extension FeatureFormView.StackView {
     @Observable final class Model {
+        /// <#Description#>
+        let root: FeatureForm
+        
+        init(root: FeatureForm) {
+            self.root = root
+        }
+        
         /// The models for each feature form in the navigation path.
         private var formModels: [ObjectIdentifier: FeatureFormView.FormView.Model] = [:]
         

@@ -19,4 +19,9 @@ extension Logger /* FeatureFormView */ {
     static var featureFormView: Logger {
         Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormView")
     }
+    
+    /// A logger for the `FeatureFormGroupView`.
+    static var featureFormGroupView: Logger {
+        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormGroupView")
+    }
 }
