@@ -15,8 +15,6 @@
 import ArcGIS
 import SwiftUI
 
-internal import os
-
 /// The `FeatureFormView` component enables users to edit field values of a feature using
 /// pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
 ///
@@ -168,9 +166,5 @@ public extension FeatureFormView {
     }
 }
 
-extension Logger {
-    /// A logger for the feature form view.
-    static var featureFormView: Logger {
-        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormView")
     }
 }
