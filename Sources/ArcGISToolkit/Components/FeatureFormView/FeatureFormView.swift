@@ -106,24 +106,6 @@ public struct FeatureFormView: View {
 }
 
 public extension FeatureFormView {
-    /// Represents events that occur during the form editing lifecycle.
-    /// These events notify you when the user has performed an action within the form.
-    /// - Since: 200.8
-    enum EditingEvent {
-        /// Indicates that the user has discarded their edits.
-        /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after discarding.
-        case discardedEdits(willNavigate: Bool)
-        /// The view presented in the view changed.
-        /// - Since: 300.0
-        case navigationChanged(NavigationPathItem)
-        /// Indicates that the user has saved their edits.
-        /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after saving.
-        case savedEdits(willNavigate: Bool)
-        /// Indicates that the user has tapped on an option to visualize a feature on the map.
-        /// - Since: 300.0
-        case showOnMapRequested(ArcGISFeature)
-    }
-    
     /// Sets the visibility of the save and discard buttons on the form.
     /// - Parameter visibility: The visibility of the save and discard buttons.
     /// - Since: 200.8
