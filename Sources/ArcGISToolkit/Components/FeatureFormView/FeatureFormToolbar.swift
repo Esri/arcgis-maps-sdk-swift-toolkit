@@ -100,26 +100,18 @@ struct FeatureFormToolbar: ViewModifier {
                     }
                 }
                 if let group = featureFormViewModel.group {
-                    let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
                     ToolbarItem(placement: .topBarTrailing) {
-                        Menu {
-                            if hasEdits {
-                                Button("Discard Edits", role: .destructive) {
-                                    featureFormViewModel.discardEdits()
-                                }
+                        if group.forms.count > 1 {
+                            Button {
+                                featureFormViewModel.clearSelection()
+                            } label: {
+                                Image(systemName: "list.bullet")
                             }
-                        } label: {
-                            if hasEdits {
-                                Image(systemName: "checkmark")
-                            } else {
+                        } else {
+                            Button {
+                                featureFormViewModel.isPresented = false
+                            } label: {
                                 Image(systemName: "xmark")
-                            }
-                            Text(group.forms.count, format: .number)
-                        } primaryAction: {
-                            if hasEdits {
-                                featureFormViewModel.finishEditing()
-                            } else {
-                                featureFormViewModel.discardEdits()
                             }
                         }
                     }
@@ -140,53 +132,6 @@ struct FeatureFormToolbar: ViewModifier {
                     || (featureFormViewModel.editingButtonsVisibility == .visible) {
                     ToolbarItem(placement: .bottomBar) {
                         FormFooter(featureForm: featureForm)
-                    }
-                }
-                if featureFormViewModel.group != nil {
-                    ToolbarItemGroup(placement: .bottomBar) {
-                        Button {
-                            featureFormViewModel.selectPrevious()
-                        } label: {
-                            Label {} icon: {
-                                Image(systemName: "chevron.left")
-                            }
-                        }
-                        Button {
-                            formManagerMenuIsPresented = true
-                        } label: {
-                            Text("Feature \(featureFormViewModel.selectedIndex + 1) of \(featureFormViewModel.count ?? -1)")
-                        }
-                        .popover(isPresented: $formManagerMenuIsPresented ) {
-                            List {
-                                ForEach(featureFormViewModel.ids, id: \.self) { id in
-                                    if let form = featureFormViewModel.form(for: id),
-                                       let objectID = form.feature.objectID {
-                                        Button {
-                                            featureFormViewModel.select(form: form, clearHistory: true)
-                                            formManagerMenuIsPresented = false
-                                        } label: {
-                                            Label {
-                                                Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
-                                            } icon: {
-                                                if featureFormViewModel.selectedID == id {
-                                                    Image(systemName: "checkmark")
-                                                }
-                                            }
-                                        }
-                                        .badge(form.elementValidationErrors.count)
-                                        .badgeProminence(.increased)
-                                    }
-                                }
-                            }
-                            .frame(idealWidth: 400, idealHeight: 500)
-                        }
-                        Button {
-                            featureFormViewModel.selectNext()
-                        } label: {
-                            Label {} icon: {
-                                Image(systemName: "chevron.right")
-                            }
-                        }
                     }
                 }
             }

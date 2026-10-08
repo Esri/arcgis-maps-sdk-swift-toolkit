@@ -21,7 +21,7 @@ extension FeatureFormView {
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
         public var body: some View {
-            conditionalView
+            menuAndForms
                 .task(id: featureFormViewModel.group?.forms.count) {
                     await featureFormViewModel.monitorEdits()
                 }
@@ -34,22 +34,6 @@ extension FeatureFormView {
 
 extension FeatureFormView.GroupView /* Group views */ {
     /// <#Description#>
-    @ViewBuilder
-    var conditionalView: some View {
-        if let selection = featureFormViewModel.selectedID {
-            formStack(selection: selection)
-        } else {
-            ContentUnavailableView {
-                Text(
-                    "No form is selected.",
-                    bundle: .toolkitModule,
-                    comment: "A label indicating no form is selected in the Feature Form Group."
-                )
-            }
-        }
-    }
-    
-    /// <#Description#>
     /// - Parameter id: <#id description#>
     @ViewBuilder
     func form(id: UUID) -> some View {
@@ -59,80 +43,119 @@ extension FeatureFormView.GroupView /* Group views */ {
     }
     
     /// <#Description#>
-    /// - Parameter selection: <#selection description#>
+    @ViewBuilder
+    var menu: some View {
+        NavigationStack {
+            List {
+                if featureFormViewModel.group?.forms.isEmpty ?? true {
+                    ContentUnavailableView {
+                        Text(
+                            "No forms",
+                            bundle: .toolkitModule,
+                            comment: ""
+                        )
+                    }
+                } else {
+                    ForEach(featureFormViewModel.ids, id: \.self) { id in
+                        if let form = featureFormViewModel.form(for: id),
+                           let objectID = form.feature.objectID {
+                            Button {
+                                featureFormViewModel.select(form: form, clearHistory: true)
+                            } label: {
+                                Label {
+                                    Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
+                                } icon: {
+                                    if featureFormViewModel.selectedID == id {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
+                            .badge(form.elementValidationErrors.count)
+                            .badgeProminence(.increased)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    /// <#Description#>
     /// - Returns: <#description#>
     /// - Note: We use a `ZStack` of `FeatureFormView`s over something like a `TabView`
     /// with `tabViewStyle(.page(indexDisplayMode: .never))` which causes view
     /// re-instantiation on selection change and results in loss of state.
     @ViewBuilder
-    func formStack(selection: UUID) -> some View {
+    var menuAndForms: some View {
         ZStack {
+            menu
+                .allowsHitTesting(featureFormViewModel.selectedID == nil)
+                .opacity(featureFormViewModel.selectedID == nil ? 1 : 0)
             ForEach(featureFormViewModel.ids, id: \.self) { id in
                 form(id: id)
-                    .allowsHitTesting(selection == id)
-                    .opacity(selection == id ? 1 : 0)
+                    .allowsHitTesting(featureFormViewModel.selectedID == id)
+                    .opacity(featureFormViewModel.selectedID == id ? 1 : 0)
             }
         }
     }
 }
 
-//struct FeatureFormGroupViewPreview: View {
-//    let model: FeatureFormView.GroupView.Model?
-//    var body: some View {
-//        if let model {
-//            FeatureFormView.GroupView(model: model)
-//        }
-//    }
-//}
-//
-//// The task on the ProgressView is problematic in Xcode 26.4.1 (Swift 6.3)
-//#if swift(>=6.4)
-//#Preview {
-//    @Previewable @State var map: Map?
-//    @Previewable @State var model: FeatureFormView.GroupView.Model?
-//    @Previewable @State var loadResult: Result<Void, Error>?
-//    
-//    switch loadResult {
-//    case .success(let success):
-//        MapView(map: map!)
-//            .sheet(isPresented: .constant(true)) {
-//                FeatureFormGroupViewPreview(model: model)
-//            }
-//    case .failure(let failure):
-//        ContentUnavailableView {
-//            Text(failure.localizedDescription)
-//        }
-//    case nil:
-//        ProgressView()
-//            .task {
-//                loadResult = await Result {
-//                    let credential = try await TokenCredential.credential(
-//                        for: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
-//                        username: "viewer01",
-//                        password: "I68VGU^nMurF"
-//                    )
-//                    ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
-//                    map = Map(url: URL(string: "https://maps.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310")!)
-//                    try await map?.load()
-//                    for utilityNetwork in map?.utilityNetworks ?? [] {
-//                        try await utilityNetwork.load()
-//                    }
-//                    let layer = map?.operationalLayers.first
-//                    try await layer?.load()
-//                    let groupLayer = layer as? GroupLayer
-//                    let featureLayer = groupLayer?.layers.first { layer in
-//                        layer.name == "Electric Distribution Assembly"
-//                    } as? FeatureLayer
-//                    let featureTable = featureLayer?.featureTable as? ArcGISFeatureTable
-//                    try await featureTable?.load()
-//                    let queryParameters = QueryParameters()
-//                    queryParameters.addObjectIDs([1, 2, 3])
-//                    let featureQueryResult = try await featureTable?.queryFeatures(using: queryParameters)
-//                    let features = featureQueryResult?.features().compactMap { $0 as? ArcGISFeature }
-//                    let forms: [FeatureForm] = features?.map { FeatureForm(feature: $0) } ?? []
-//                    model = .init(forms: forms)
-//                }
-//            }
-//    }
-//}
-//#endif
+struct FeatureFormGroupViewPreview: View {
+    let model: FeatureFormView.Model?
+    var body: some View {
+        if let model {
+            FeatureFormView(model: model)
+        }
+    }
+}
+
+// The task on the ProgressView is problematic in Xcode 26.4.1 (Swift 6.3)
+#if swift(>=6.4)
+#Preview {
+    @Previewable @State var map: Map?
+    @Previewable @State var model: FeatureFormView.Model?
+    @Previewable @State var loadResult: Result<Void, Error>?
+    
+    switch loadResult {
+    case .success(let success):
+        MapView(map: map!)
+            .sheet(isPresented: .constant(true)) {
+                FeatureFormGroupViewPreview(model: model)
+            }
+    case .failure(let failure):
+        ContentUnavailableView {
+            Text(failure.localizedDescription)
+        }
+    case nil:
+        ProgressView()
+            .task {
+                loadResult = await Result {
+                    let credential = try await TokenCredential.credential(
+                        for: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+                        username: "viewer01",
+                        password: "I68VGU^nMurF"
+                    )
+                    ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(credential)
+                    map = Map(url: URL(string: "https://maps.arcgis.com/home/item.html?id=471eb0bf37074b1fbb972b1da70fb310")!)
+                    try await map?.load()
+                    for utilityNetwork in map?.utilityNetworks ?? [] {
+                        try await utilityNetwork.load()
+                    }
+                    let layer = map?.operationalLayers.first
+                    try await layer?.load()
+                    let groupLayer = layer as? GroupLayer
+                    let featureLayer = groupLayer?.layers.first { layer in
+                        layer.name == "Electric Distribution Assembly"
+                    } as? FeatureLayer
+                    let featureTable = featureLayer?.featureTable as? ArcGISFeatureTable
+                    try await featureTable?.load()
+                    let queryParameters = QueryParameters()
+                    queryParameters.addObjectIDs([1, 2, 3])
+                    let featureQueryResult = try await featureTable?.queryFeatures(using: queryParameters)
+                    let features = featureQueryResult?.features().compactMap { $0 as? ArcGISFeature }
+                    let forms: [FeatureForm] = features?.map { FeatureForm(feature: $0) } ?? []
+                    model = .init(forms: forms)
+                }
+            }
+    }
+}
+#endif

@@ -49,9 +49,6 @@ public extension FeatureFormView {
         /// - Parameter forms: <#forms description#>
         public init(forms: [FeatureForm] = []) {
             self.group = .init(forms: forms)
-            if let first = forms.first {
-                select(form: first)
-            }
         }
         
         /// <#Description#>
@@ -175,6 +172,11 @@ public extension FeatureFormView {
                 return
             }
             select(form: form, recordNavigation: false)
+        }
+        
+        public func clearSelection() {
+            selectedID = nil
+            backStack.removeAll()
         }
         
         /// <#Description#>
