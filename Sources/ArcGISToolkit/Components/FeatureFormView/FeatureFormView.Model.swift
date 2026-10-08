@@ -20,7 +20,7 @@ internal import os
 public extension FeatureFormView {
     @MainActor @Observable
     class Model {
-        /// A binding to a Boolean value that determines whether the view is presented.
+        /// A Boolean value that determines whether the view is presented.
         var isPresented: Bool?
         
         /// The visibility of the "save" and "discard" buttons.
