@@ -17,38 +17,13 @@ import SwiftUI
 
 extension FeatureFormView {
     struct StackView: View {
+        @Environment(FeatureFormView.Model.self) var featureFormViewModel
+        
         /// The model for the stack view containing the form.
         @State private var stackViewModel = FeatureFormView.StackView.Model()
         
-        /// A binding to a Boolean value that determines whether the view is presented.
-        private let isPresented: Binding<Bool>?
-        /// The root feature form.
-        private let rootFeatureForm: FeatureForm?
-        
-        /// The visibility of the "save" and "discard" buttons.
-        var editingButtonsVisibility: Visibility = .automatic
-        /// A Boolean which declares whether navigation to forms for features associated via utility association
-        /// form elements is disabled.
-        var navigationIsDisabled = false
-        /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
-        var onFeatureFormChanged: ((FeatureForm) -> Void)?
-        /// The user-provided closure to perform when a ``EditingEvent`` occurs.
-        var onFormEditingEventAction: FormEditingEventAction?
-        /// The developer configurable validation error visibility.
-        var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
-        
-        /// Initializes a form view.
-        /// - Parameters:
-        ///   - root: The feature form defining the editing experience.
-        ///   - isPresented: A Boolean value indicating if the view is presented.
-        /// - Since: 200.8
-        public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
-            self.isPresented = isPresented
-            self.rootFeatureForm = root
-        }
-        
         public var body: some View {
-            if let rootFeatureForm {
+            if let rootFeatureForm = featureFormViewModel.rootFeatureForm {
                 NavigationStack(path: $stackViewModel.navigationPath) {
                     FormView(form: rootFeatureForm)
                         // Refresh the navigation stack's root view when the root
@@ -135,8 +110,8 @@ extension FeatureFormView {
                         if let (willNavigate, continuation) = stackViewModel.navigationAlertInfo {
                             Button(role: .destructive) {
                                 stackViewModel.presentedForm?.discardEdits()
-                                onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
                                 stackViewModel.validationErrorVisibilityInternal = .automatic
+                                featureFormViewModel.onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
                                 continuation()
                             } label: {
                                 Text.discardEdits
@@ -151,7 +126,7 @@ extension FeatureFormView {
                                     Task {
                                         do {
                                             try await stackViewModel.presentedForm?.finishEditing()
-                                            onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
+                                            featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                             continuation()
                                         } catch {
                                             stackViewModel.finishEditingError = error
@@ -228,14 +203,9 @@ extension FeatureFormView {
                 )
                 .animation(.default, value: ObjectIdentifier(rootFeatureForm))
                 .environment(stackViewModel)
-                .environment(\.editingButtonVisibility, editingButtonsVisibility)
-                .environment(\.isPresented, isPresented)
-                .environment(\.navigationIsDisabled, navigationIsDisabled)
-                .environment(\.onFormEditingEventAction, onFormEditingEventAction)
-                .environment(\.validationErrorVisibilityExternal, validationErrorVisibilityExternal)
                 .onChange(of: stackViewModel.navigationPath) {
                     if let presentedItem = stackViewModel.navigationPath.last {
-                        onFormEditingEventAction?(.navigationChanged(presentedItem))
+                        featureFormViewModel.onFormEditingEventAction?(.navigationChanged(presentedItem))
                     }
                 }
                 .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
@@ -285,7 +255,7 @@ extension FeatureFormView.StackView {
         { featureForm in
             if featureForm.feature.globalID != stackViewModel.presentedForm?.feature.globalID {
                 stackViewModel.setPresentedForm(featureForm)
-                onFeatureFormChanged?(featureForm)
+                featureFormViewModel.onFeatureFormChanged?(featureForm)
             }
         }
     }

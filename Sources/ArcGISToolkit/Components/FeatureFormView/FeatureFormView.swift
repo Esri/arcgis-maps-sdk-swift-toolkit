@@ -73,22 +73,8 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
-    /// A binding to a Boolean value that determines whether the view is presented.
-    private let isPresented: Binding<Bool>?
-    /// The root feature form.
-    private let rootFeatureForm: FeatureForm?
-    
-    /// The visibility of the "save" and "discard" buttons.
-    var editingButtonsVisibility: Visibility = .automatic
-    /// A Boolean which declares whether navigation to forms for features associated via utility association
-    /// form elements is disabled.
-    var navigationIsDisabled = false
-    /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
-    var onFeatureFormChanged: ((FeatureForm) -> Void)?
-    /// The user-provided closure to perform when a ``EditingEvent`` occurs.
-    var onFormEditingEventAction: FormEditingEventAction?
-    /// The developer configurable validation error visibility.
-    var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
+    @State private var model: Model
+    private var legacyIsPresented: Binding<Bool>?
     
     /// Initializes a form view.
     /// - Parameters:
@@ -96,12 +82,25 @@ public struct FeatureFormView: View {
     ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Since: 200.8
     public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
-        self.isPresented = isPresented
-        self.rootFeatureForm = root
+        self.legacyIsPresented = isPresented
+        self.model = .init(isPresented: isPresented?.wrappedValue, rootFeatureForm: root)
+    }
+    
+    /// Initializes a Feature Form View.
+    /// - Parameters:
+    ///   - model: A model for the view.
+    /// - Since: 300.2
+    public init(model: Model) {
+        self.model = model
     }
     
     public var body: some View {
-        StackView(root: rootFeatureForm!, isPresented: isPresented)
+        if model.legacyModeIsActive {
+            legacyView
+        } else {
+            // GroupFormView
+            EmptyView()
+        }
     }
 }
 
@@ -110,9 +109,8 @@ public extension FeatureFormView {
     /// - Parameter visibility: The visibility of the save and discard buttons.
     /// - Since: 200.8
     func editingButtons(_ visibility: Visibility) -> Self {
-        var copy = self
-        copy.editingButtonsVisibility = visibility
-        return copy
+        model.editingButtonsVisibility = visibility
+        return self
     }
     
     /// Sets whether navigation to forms for features associated via utility association form
@@ -122,9 +120,8 @@ public extension FeatureFormView {
     /// - Parameter disabled: A Boolean value that determines whether navigation is disabled. Pass `true` to disable navigation; otherwise, pass `false`.
     /// - Since: 200.8
     func navigationDisabled(_ disabled: Bool) -> Self {
-        var copy = self
-        copy.navigationIsDisabled = disabled
-        return copy
+        model.navigationIsDisabled = disabled
+        return self
     }
     
     /// Sets a closure to perform when a new feature form is shown in the view.
@@ -133,18 +130,18 @@ public extension FeatureFormView {
     /// - Parameter action: The closure to perform when the new feature form is shown.
     /// - Since: 200.8
     func onFeatureFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
-        var copy = self
-        copy.onFeatureFormChanged = action
-        return copy
+        model.onFeatureFormChanged = action
+        return self
     }
     
     /// Sets a closure to perform when a form editing event occurs.
     /// - Parameter action: The closure to perform when the form editing event occurs.
     /// - Since: 200.8
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
-        var copy = self
-        copy.onFormEditingEventAction = .init(action: action)
-        return copy
+        model.onFormEditingEventAction = .init(action: action)
+        return self
+    }
+    
     /// Sets the visibility of validation errors on the form.
     /// - Parameter visibility: The preferred visibility of validation errors in the form.
     ///
@@ -158,14 +155,34 @@ public extension FeatureFormView {
     /// ``FeatureFormView/editingButtons(_:)``, use this modifier to make any validation
     /// errors visible when the user attempts to save the form with a custom save button.
     func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
-        if let model {
-            model.validationErrorVisibilityExternal = visibility
-        } else if let legacyModel {
-            legacyModel.validationErrorVisibilityExternal = visibility
-        }
+        model.validationErrorVisibilityExternal = visibility
+        return self
+    }
+    
+    /// Sets an action to run before finishing edits.
+    ///
+    /// When an action is set, the view acts as if the forms in the view have edits, even if they do
+    /// not, and makes the finish editing button available.
+    ///
+    /// If the action throws an error, `finishEditing` will not be called.
+    /// - Parameter action: The closure to perform.
+    func willFinishEditing(perform action: (() throws -> Void)?) -> Self {
+        model.willFinishEditingAction = action
         return self
     }
 }
 
+extension FeatureFormView {
+    var legacyView: some View {
+        StackView()
+            .environment(model)
+            .onChange(of: legacyIsPresented?.wrappedValue) { _, newValue in
+                model.isPresented = newValue
+            }
+            .onChange(of: model.isPresented) { _, newValue in
+                if let newValue, let legacyIsPresented, newValue != legacyIsPresented.wrappedValue {
+                    legacyIsPresented.wrappedValue = newValue
+                }
+            }
     }
 }

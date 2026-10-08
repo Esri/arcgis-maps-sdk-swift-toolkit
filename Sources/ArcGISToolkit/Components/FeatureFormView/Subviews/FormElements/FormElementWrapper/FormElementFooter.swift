@@ -17,14 +17,14 @@ import SwiftUI
 
 /// A footer for elements in a feature form.
 struct FormElementFooter: View {
+    /// <#Description#>
+    @Environment(FeatureFormView.Model.self) private var featureFormViewModel
     /// The view model for the form.
     @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
     /// The model for the stack view containing the form.
     @Environment(FeatureFormView.StackView.Model.self) private var stackViewModel
     /// A vertical amount of padding to use between form elements.
     @Environment(\.formElementPadding) var formElementPadding
-    /// The developer configurable validation error visibility.
-    @Environment(\.validationErrorVisibilityExternal) private var validationErrorVisibilityExternal
     
     /// An ID which changes each time the element's validation errors change, or the validation error
     /// visibility changes.
@@ -37,7 +37,7 @@ struct FormElementFooter: View {
         text
             .id(id)
             .onChange(of: stackViewModel.validationErrorVisibilityInternal) { id = .init() }
-            .onChange(of: validationErrorVisibilityExternal) { id = .init() }
+            .onChange(of: featureFormViewModel.validationErrorVisibilityExternal) { id = .init() }
             .font(.footnote)
             .padding(.vertical, formElementPadding / 2)
     }
@@ -63,7 +63,7 @@ struct FormElementFooter: View {
     /// element, if any are present.
     var showsErrorsIfPresent: Bool {
         formViewModel.previouslyFocusedElements.contains(element) ||
-        validationErrorVisibilityExternal == .visible ||
+        featureFormViewModel.validationErrorVisibilityExternal == .visible ||
         stackViewModel.validationErrorVisibilityInternal == .visible
     }
 }

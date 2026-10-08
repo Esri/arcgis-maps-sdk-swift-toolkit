@@ -19,11 +19,7 @@ struct FormFooter: View {
     /// The backing feature form.
     let featureForm: FeatureForm
     
-    /// The closure to perform when a choice is made.
-    ///
-    /// - Note: This property is optional as the modifier providing the closure may not be applied
-    /// to the ``FeatureFormView``.
-    let formHandlingEventAction: FormEditingEventAction?
+    @Environment(FeatureFormView.Model.self) var featureFormViewModel
     
     /// The model for the stack view containing the form.
     @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
@@ -41,7 +37,7 @@ struct FormFooter: View {
     var discardButton: some View {
         Button(role: .destructive) {
             featureForm.discardEdits()
-            formHandlingEventAction?(.discardedEdits(willNavigate: false))
+            featureFormViewModel.onFormEditingEventAction?(.discardedEdits(willNavigate: false))
             stackViewModel.validationErrorVisibilityInternal = .automatic
         } label: {
             Text(
@@ -58,7 +54,7 @@ struct FormFooter: View {
                 Task {
                     do {
                         try await featureForm.finishEditing()
-                        formHandlingEventAction?(.savedEdits(willNavigate: false))
+                        featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: false))
                     } catch {
                         stackViewModel.finishEditingError = error
                     }

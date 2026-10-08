@@ -19,12 +19,11 @@ extension FeatureFormView {
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
         /// <#Description#>
-        @Environment(GroupView.Model.self) var groupViewModel: GroupView.Model?
+        @Environment(FeatureFormView.Model.self) var featureFormViewModel
+        /// <#Description#>
+        @Environment(FeatureFormView.GroupView.Model.self) var groupViewModel: FeatureFormView.GroupView.Model?
         /// The model for the stack view containing the form.
         @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
-        /// A Boolean which declares whether navigation to forms for features associated via utility
-        /// association form elements is disabled.
-        @Environment(\.navigationIsDisabled) var navigationIsDisabled
         
         /// The association to be potentially removed.
         @State private var associationPendingRemoval: UtilityAssociation?
@@ -60,7 +59,7 @@ extension FeatureFormView {
             if let formViewModel {
                 List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
                     mainButton(for: utilityAssociationResult)
-                        .disabled(navigationIsDisabled)
+                        .disabled(featureFormViewModel.navigationIsDisabled)
                         .swipeActions {
                             deleteButton(for: utilityAssociationResult.association)
                         }

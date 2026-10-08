@@ -12,23 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-import SwiftUI
-
-extension EnvironmentValues /* FeatureFormView */ {
-    /// The visibility of the "save" and "discard" buttons.
-    @Entry var editingButtonVisibility: Visibility = .automatic
-    
-    /// The environment value which declares whether navigation to forms for features associated via utility association form
-    /// elements is disabled.
-    @Entry var navigationIsDisabled = false
-    
-    /// The closure to perform when a ``EditingEvent`` occurs.
-    @Entry var onFormEditingEventAction: FormEditingEventAction?
-    
-    /// The developer configurable validation error visibility.
-    @Entry var validationErrorVisibilityExternal: FeatureFormView.ValidationErrorVisibility = .automatic
-}
+import Foundation
 
 struct FormEditingEventAction: Identifiable {
     let action: (FeatureFormView.EditingEvent) -> Void

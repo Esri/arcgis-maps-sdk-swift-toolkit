@@ -17,15 +17,15 @@ import SwiftUI
 
 extension FeatureFormView {
     struct ShowOnMapButton: View {
-        /// The closure to perform when a ``EditingEvent`` occurs.
-        @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
+        /// <#Description#>
+        @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
         let feature: ArcGISFeature
         
         var body: some View {
             if feature.geometry != nil {
                 Button {
-                    onFormEditingEventAction?(.showOnMapRequested(feature))
+                    featureFormViewModel.onFormEditingEventAction?(.showOnMapRequested(feature))
                 } label: {
                     Label {
                         Text(

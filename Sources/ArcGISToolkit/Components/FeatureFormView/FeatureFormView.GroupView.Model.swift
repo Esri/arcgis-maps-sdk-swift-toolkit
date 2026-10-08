@@ -38,21 +38,6 @@ extension FeatureFormView.GroupView /* Model */ {
             backStack.count > 0
         }
         
-        /// An action that will run when the active form has changed.
-        var onFeatureFormChangedAction: ((FeatureForm) -> Void)?
-        
-        /// An action that will run when a form group editing event occurs.
-        var onFormEditingEventAction: ((EditingEvent) -> Void)?
-        
-        /// The external validation error visibility configuration of the form group.
-        var validationErrorVisibilityExternal = Visibility.automatic
-        
-        /// An action to run before finishing editing.
-        ///
-        /// If the action throws an error, `FeatureFormGroup.finishEditing` should not be
-        /// called.
-        var willFinishEditingAction: (() throws -> Void)?
-        
         /// <#Description#>
         public var count: Int {
             group.forms.count == ids.count ? group.forms.count : -1

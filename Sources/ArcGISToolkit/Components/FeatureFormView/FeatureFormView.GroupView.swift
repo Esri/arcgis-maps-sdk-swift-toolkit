@@ -92,58 +92,6 @@ extension FeatureFormView.GroupView /* Group views */ {
     }
 }
 
-extension FeatureFormView.GroupView {
-    /// Represents events that occur during the form editing lifecycle. These events notify you when the user has performed an action within a form in the group.
-    public enum EditingEvent {
-        /// Indicates that the user has discarded edits.
-        case discardedEdits
-        /// Indicates that the user has finished editing.
-        case finishedEditing
-        /// Indicates that the user has tapped on an option to visualize a feature on the map.
-        case showOnMapRequested(ArcGISFeature)
-    }
-}
-
-public extension FeatureFormView.GroupView /* Public view modifiers */ {
-    /// Sets an closure to perform when the active feature form has changed.
-    /// - Parameter action: The closure to perform.
-    func onFeatureFormChanged(perform action: @escaping (FeatureForm) -> Void) -> FeatureFormView.GroupView {
-        model.onFeatureFormChangedAction = action
-        return self
-    }
-    
-    /// Sets a closure to perform when a form group editing event occurs.
-    /// - Parameter action: The closure to perform.
-    func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> FeatureFormView.GroupView {
-        model.onFormEditingEventAction = action
-        return self
-    }
-    
-    /// Sets the visibility of validation errors on the form group.
-    /// - Parameter visibility: The preferred visibility of validation errors in the form group.
-    ///
-    /// `FeatureFormGroupView` will automatically show validation errors on forms once they’ve
-    /// received user interaction or the user has attempted to finish editing.
-    /// If it’s preferred that validation errors are always shown, override the default behavior with
-    /// this modifier, passing `.visible`.
-    func validationErrors(_ visibility: Visibility) -> FeatureFormView.GroupView {
-        model.validationErrorVisibilityExternal = visibility
-        return self
-    }
-    
-    /// Sets an action to run before finishing edits.
-    ///
-    /// When an action is set, the view acts as if the forms in the group have edits, even if they do
-    /// not, and makes the finish editing button available.
-    ///
-    /// If the action throws an error, `FeatureFormGroup.finishEditing` will not be called.
-    /// - Parameter action: The closure to perform.
-    func willFinishEditing(perform action: (() throws -> Void)?) -> FeatureFormView.GroupView {
-        model.willFinishEditingAction = action
-        return self
-    }
-}
-
 struct FeatureFormGroupViewPreview: View {
     let model: FeatureFormView.GroupView.Model?
     var body: some View {

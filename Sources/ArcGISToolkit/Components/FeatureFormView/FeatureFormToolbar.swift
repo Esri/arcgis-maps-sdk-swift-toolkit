@@ -24,8 +24,8 @@ extension View {
 struct FeatureFormToolbar: ViewModifier {
     @Environment(\.dismiss) var dismiss
     
-    /// The visibility of the "save" and "discard" buttons.
-    @Environment(\.editingButtonVisibility) var editingButtonsVisibility
+    /// <#Description#>
+    @Environment(FeatureFormView.Model.self) var featureFormViewModel
     
     /// <#Description#>
     @Environment(FeatureFormView.GroupView.Model.self) var groupViewModel: FeatureFormView.GroupView.Model?
@@ -35,12 +35,6 @@ struct FeatureFormToolbar: ViewModifier {
     
     /// A binding to a Boolean value controlling whether the FeatureFormView is presented.
     @Environment(\.isPresented) var isPresented
-    
-    /// The environment value which declares whether navigation to forms for features associated via utility association form elements is disabled.
-    @Environment(\.navigationIsDisabled) var navigationIsDisabled
-    
-    /// The closure to perform when a ``EditingEvent`` occurs.
-    @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
     
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits = false
@@ -105,7 +99,7 @@ struct FeatureFormToolbar: ViewModifier {
                                 Image(systemName: "chevron.backward")
                             }
                         }
-                        .disabled(navigationIsDisabled)
+                        .disabled(featureFormViewModel.navigationIsDisabled)
                     }
                 }
                 if let groupViewModel {
@@ -145,13 +139,10 @@ struct FeatureFormToolbar: ViewModifier {
                         }
                     }
                 }
-                if (hasEdits && editingButtonsVisibility == .automatic)
-                    || (editingButtonsVisibility == .visible) {
+                if (hasEdits && featureFormViewModel.editingButtonsVisibility == .automatic)
+                    || (featureFormViewModel.editingButtonsVisibility == .visible) {
                     ToolbarItem(placement: .bottomBar) {
-                        FormFooter(
-                            featureForm: featureForm,
-                            formHandlingEventAction: onFormEditingEventAction
-                        )
+                        FormFooter(featureForm: featureForm)
                     }
                 }
                 if let groupViewModel {
