@@ -40,8 +40,8 @@ public extension FeatureFormView {
         /// called.
         var willFinishEditingAction: (() throws -> Void)?
         
-        init(isPresented: Bool? = nil) {
-            self.isPresented = isPresented
+        /// <#Description#>
+        init() {
             self.group = nil
         }
         

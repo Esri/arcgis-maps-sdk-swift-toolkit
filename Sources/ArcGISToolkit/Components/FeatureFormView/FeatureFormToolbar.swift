@@ -30,9 +30,6 @@ struct FeatureFormToolbar: ViewModifier {
     /// The model for the stack view containing the form.
     @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
     
-    /// A binding to a Boolean value controlling whether the FeatureFormView is presented.
-    @Environment(\.isPresented) var isPresented
-    
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits = false
     
@@ -115,15 +112,15 @@ struct FeatureFormToolbar: ViewModifier {
                             }
                         }
                     }
-                } else if let isPresented {
+                } else if featureFormViewModel.isPresented != nil {
                     ToolbarItem(placement: .topBarTrailing) {
                         DismissButton(kind: .cancel) {
                             if hasEdits {
                                 stackViewModel.navigationAlertInfo = (false, {
-                                    isPresented.wrappedValue = false
+                                    featureFormViewModel.isPresented = false
                                 })
                             } else {
-                                isPresented.wrappedValue = false
+                                featureFormViewModel.isPresented = false
                             }
                         }
                     }

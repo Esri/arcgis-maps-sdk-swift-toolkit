@@ -73,10 +73,12 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
-    @State private var model: Model
+    private let isPresented: Binding<Bool>?
+    private let providedModel: FeatureFormView.Model?
     
+    /// A model created for the user if the 200.8 root form initializer is used.
+    @State private var legacyModel: FeatureFormView.Model?
     private let legacyRoot: FeatureForm?
-    private let legacyIsPresented: Binding<Bool>?
     
     /// Initializes a form view.
     /// - Parameters:
@@ -84,32 +86,46 @@ public struct FeatureFormView: View {
     ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Since: 200.8
     public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
-        self.model = .init(isPresented: isPresented?.wrappedValue)
-        
+        _legacyModel = .init(wrappedValue: .init())
+        self.isPresented = isPresented
         self.legacyRoot = root
-        self.legacyIsPresented = isPresented
+        self.providedModel = nil
     }
     
     /// Initializes a Feature Form View.
     /// - Parameters:
     ///   - model: A model for the view.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Since: 300.2
-    public init(model: Model) {
-        self.model = model
-        
+    public init(model: Model, isPresented: Binding<Bool>? = nil) {
+        _legacyModel = nil
+        self.isPresented = isPresented
         self.legacyRoot = nil
-        self.legacyIsPresented = nil
+        self.providedModel = model
     }
     
     public var body: some View {
         Group {
             if let legacyRoot {
-                legacyView(root: legacyRoot)
+                StackView(root: legacyRoot)
             } else {
                 GroupView()
             }
         }
         .environment(model)
+        .onAppear {
+            model.isPresented = isPresented?.wrappedValue
+        }
+        .onChange(of: model.isPresented) { _, newValue in
+            if let newValue, let isPresented, newValue != isPresented.wrappedValue {
+                isPresented.wrappedValue = newValue
+            }
+        }
+    }
+    
+    /// Coalesces the provided model or the legacy model created for the user into one property.
+    var model: FeatureFormView.Model! {
+        providedModel ?? legacyModel
     }
 }
 
@@ -126,7 +142,8 @@ public extension FeatureFormView {
     /// elements is disabled.
     ///
     /// Use this modifier to conditionally disable navigation into other forms.
-    /// - Parameter disabled: A Boolean value that determines whether navigation is disabled. Pass `true` to disable navigation; otherwise, pass `false`.
+    /// - Parameter disabled: A Boolean value that determines whether navigation is disabled.
+    /// Pass `true` to disable navigation; otherwise, pass `false`.
     /// - Since: 200.8
     func navigationDisabled(_ disabled: Bool) -> Self {
         model.navigationIsDisabled = disabled
@@ -178,19 +195,5 @@ public extension FeatureFormView {
     func willFinishEditing(perform action: (() throws -> Void)?) -> Self {
         model.willFinishEditingAction = action
         return self
-    }
-}
-
-extension FeatureFormView {
-    func legacyView(root: FeatureForm) -> some View {
-        StackView(root: root)
-            .onChange(of: legacyIsPresented?.wrappedValue) { _, newValue in
-                model.isPresented = newValue
-            }
-            .onChange(of: model.isPresented) { _, newValue in
-                if let newValue, let legacyIsPresented, newValue != legacyIsPresented.wrappedValue {
-                    legacyIsPresented.wrappedValue = newValue
-                }
-            }
     }
 }

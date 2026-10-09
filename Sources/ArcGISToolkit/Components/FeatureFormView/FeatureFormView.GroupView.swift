@@ -76,6 +76,22 @@ extension FeatureFormView.GroupView /* Group views */ {
                     }
                 }
             }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
+                    Button {
+                        if !hasEdits {
+                            featureFormViewModel.isPresented = false
+                        }
+                    } label: {
+                        if hasEdits {
+                            Image(systemName: "checkmark")
+                        } else {
+                            Image(systemName: "xmark")
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -101,9 +117,10 @@ extension FeatureFormView.GroupView /* Group views */ {
 
 struct FeatureFormGroupViewPreview: View {
     let model: FeatureFormView.Model?
+    @Binding var isPresented: Bool
     var body: some View {
         if let model {
-            FeatureFormView(model: model)
+            FeatureFormView(model: model, isPresented: $isPresented)
         }
     }
 }
@@ -114,12 +131,13 @@ struct FeatureFormGroupViewPreview: View {
     @Previewable @State var map: Map?
     @Previewable @State var model: FeatureFormView.Model?
     @Previewable @State var loadResult: Result<Void, Error>?
+    @Previewable @State var isPresented = true
     
     switch loadResult {
     case .success(let success):
         MapView(map: map!)
-            .sheet(isPresented: .constant(true)) {
-                FeatureFormGroupViewPreview(model: model)
+            .sheet(isPresented: $isPresented) {
+                FeatureFormGroupViewPreview(model: model, isPresented: $isPresented)
             }
     case .failure(let failure):
         ContentUnavailableView {
