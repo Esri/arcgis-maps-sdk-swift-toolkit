@@ -155,10 +155,13 @@ extension FeatureFormView {
         
         func mainButton(for result: UtilityAssociationResult) -> some View {
             Button {
-                // If the FeatureFormView is in a FeatureFormManagerView, open
-                // the association in a new tab.
-                if let group = featureFormViewModel.group {
-                    featureFormViewModel.add(form: FeatureForm(feature: result.associatedFeature), select: true)
+                // If the FeatureForm is in a FeatureFormGroup, add the
+                // associated form to it.
+                if featureFormViewModel.group != nil {
+                    featureFormViewModel.add(
+                        form: FeatureForm(feature: result.associatedFeature),
+                        select: true
+                    )
                 } else {
                     let navigationAction = {
                         stackViewModel.addModel(form)

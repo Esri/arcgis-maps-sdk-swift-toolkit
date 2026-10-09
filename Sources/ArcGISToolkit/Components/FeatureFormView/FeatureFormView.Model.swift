@@ -41,14 +41,15 @@ public extension FeatureFormView {
         var willFinishEditingAction: (() throws -> Void)?
         
         /// <#Description#>
-        init() {
-            self.group = nil
+        init(group: FeatureFormGroup? = nil) {
+            self.group = group
         }
         
-        /// <#Description#>
-        /// - Parameter forms: <#forms description#>
-        public init(forms: [FeatureForm] = []) {
-            self.group = .init(forms: forms)
+        /// Initializes a model for the view, creating a `FeatureFormGroup` with the provided
+        /// forms.
+        /// - Parameter forms: The initial set of forms to be edited in the view.
+        public convenience init(forms: [FeatureForm]) {
+            self.init(group: .init(forms: forms))
         }
         
         /// <#Description#>
