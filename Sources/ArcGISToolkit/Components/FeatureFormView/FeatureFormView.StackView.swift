@@ -16,10 +16,17 @@ import ArcGIS
 import SwiftUI
 
 extension FeatureFormView {
+    /// A stack view consists of views for one or more forms and the views that a user will navigate
+    /// through when browsing and editing utility network associations.
+    ///
+    /// When the legacy `FeatureFormView.init(root:isPresented:)` initializer is used,
+    /// forms for features associated via utility network associations are added onto this stack.
+    /// When the `FeatureFormView.init(model:isPresented:)` initializer is used, these
+    /// forms are instead added to the `FeatureFormGroup` on the provided model.
     struct StackView: View {
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
-        /// The model for the stack view containing the form.
+        /// The model for the stack view for the root form.
         @State private var stackViewModel: FeatureFormView.StackView.Model
         
         init(root: FeatureForm) {
