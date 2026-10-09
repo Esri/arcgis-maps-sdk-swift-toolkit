@@ -80,19 +80,26 @@ extension FeatureFormView.GroupView /* Group views */ {
                 "Editing \(featureFormViewModel.ids.count) forms"
             )
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
-                    Button {
-                        if !hasEdits {
+                let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
+                if featureFormViewModel.isPresented != nil {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            if hasEdits {
+                                #warning("TODO: Warn before closing with edits.")
+                            }
                             featureFormViewModel.isPresented = false
-                        }
-                    } label: {
-                        if hasEdits {
-                            Image(systemName: "checkmark")
-                        } else {
+                        } label: {
                             Image(systemName: "xmark")
                         }
                     }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        featureFormViewModel.finishEditing()
+                    } label: {
+                        Image(systemName: "checkmark")
+                    }
+                    .disabled(!hasEdits)
                 }
             }
         }
