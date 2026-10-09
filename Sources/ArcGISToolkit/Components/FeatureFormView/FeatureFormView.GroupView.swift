@@ -76,6 +76,9 @@ extension FeatureFormView.GroupView /* Group views */ {
                     }
                 }
             }
+            .navigationTitle(
+                "Editing \(featureFormViewModel.ids.count) forms"
+            )
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
