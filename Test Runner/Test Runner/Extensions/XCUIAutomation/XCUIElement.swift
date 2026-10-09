@@ -170,6 +170,7 @@ private extension TimeInterval {
     
     /// The human-readable description of the time interval.
     var formattedDescription: String {
-        "\(self) \(self == 1 ? "second" : "seconds")"
+        let measurement = Measurement<UnitDuration>(value: self, unit: .seconds)
+        return measurement.formatted(.measurement(width: .wide))
     }
 }
