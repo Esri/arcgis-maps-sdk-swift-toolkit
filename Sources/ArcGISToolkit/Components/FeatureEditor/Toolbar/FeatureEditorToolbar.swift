@@ -24,10 +24,10 @@ struct FeatureEditorToolbar: View {
     
     /// The spacing to apply between the controls in the stacks.
     /// This is hardcoded to match the system styling for toolbar groups on iOS.
-    private let stackSpacing = 30.0
+    private var stackSpacing: Double { 30 }
     /// The padding to apply to the long edges of the stacks containing the controls.
     /// This is hardcoded to match the system styling for toolbar groups on iOS.
-    private let stackEdgePadding = 5.0
+    private var stackEdgePadding: Double { 5 }
     
     /// The model for the feature editor.
     @Environment(FeatureEditorModel.self) private var model
@@ -35,7 +35,8 @@ struct FeatureEditorToolbar: View {
     var body: some View {
         Group {
             switch model.state {
-            case .editing where model.geometryEditorIsStarted:
+            case .adding where model.geometryEditorModel.isStarted,
+                    .editing where model.geometryEditorModel.isStarted:
                 switch style {
                 case .vertical:
                     VStack(spacing: stackSpacing) {
@@ -73,15 +74,17 @@ struct FeatureEditorToolbar: View {
                 EmptyView()
             }
         }
-        .animation(.default, value: model.geometryEditorIsStarted)
+        .animation(.default, value: model.geometryEditorModel.isStarted)
     }
     
     /// The control views for the toolbar.
     @ViewBuilder private var controls: some View {
+        let geometryEditor = model.geometryEditorModel.geometryEditor
         ToolPicker()
-        DeleteButton()
+        DeleteButton(geometryEditor: geometryEditor)
         UndoButton()
-        RedoButton()
+            .environment(model.geometryEditorModel)
+        RedoButton(geometryEditor: geometryEditor)
         SnapSettingsButton()
     }
 }
@@ -90,27 +93,29 @@ struct FeatureEditorToolbar: View {
 
 /// A button for deleting the geometry editor's currently selected element.
 private struct DeleteButton: View {
-    /// The model for the parent feature editor containing the geometry editor.
-    @Environment(FeatureEditorModel.self) private var featureEditorModel
+    /// The geometry editor to be used by this button.
+    let geometryEditor: GeometryEditor
+    
+    init(geometryEditor: GeometryEditor) {
+        self.geometryEditor = geometryEditor
+    }
     
     /// A Boolean value indicating whether the selected element can be deleted.
     @State private var canDeleteSelectedElement = false
     
     var body: some View {
-        Button(action: featureEditorModel.geometryEditor.deleteSelectedElement) {
-            Label {
-                Text(
-                    "Delete Selected Element",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to delete the selected geometry editor element."
-                )
-            } icon: {
-                Image(systemName: "circle.badge.minus")
-            }
-        }
+        Button(
+            LocalizedStringResource(
+                "Delete Selected Element",
+                bundle: .toolkit,
+                comment: "A label for a button to delete the selected geometry editor element."
+            ),
+            systemImage: "circle.badge.minus",
+            action: geometryEditor.deleteSelectedElement
+        )
         .disabled(!canDeleteSelectedElement)
-        .task(id: ObjectIdentifier(featureEditorModel.geometryEditor)) {
-            for await selectedElement in featureEditorModel.geometryEditor.$selectedElement {
+        .task(id: ObjectIdentifier(geometryEditor)) {
+            for await selectedElement in geometryEditor.$selectedElement {
                 canDeleteSelectedElement = selectedElement?.canBeDeleted ?? false
             }
         }
@@ -119,27 +124,29 @@ private struct DeleteButton: View {
 
 /// A button for redoing the geometry editor's last undone action.
 private struct RedoButton: View {
-    /// The model for the parent feature editor containing the geometry editor.
-    @Environment(FeatureEditorModel.self) private var featureEditorModel
+    /// The geometry editor to be used by this button.
+    let geometryEditor: GeometryEditor
+    
+    init(geometryEditor: GeometryEditor) {
+        self.geometryEditor = geometryEditor
+    }
     
     /// A Boolean value indicating whether the geometry editor can redo an action.
     @State private var canRedo = false
     
     var body: some View {
-        Button(action: featureEditorModel.geometryEditor.redo) {
-            Label {
-                Text(
-                    "Redo",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to redo the last undone geometry editor action."
-                )
-            } icon: {
-                Image(systemName: "arrow.uturn.forward")
-            }
-        }
+        Button(
+            LocalizedStringResource(
+                "Redo",
+                bundle: .toolkit,
+                comment: "A label for a button to redo the last undone geometry editor action."
+            ),
+            systemImage: "arrow.uturn.forward",
+            action: geometryEditor.redo
+        )
         .disabled(!canRedo)
-        .task(id: ObjectIdentifier(featureEditorModel.geometryEditor)) {
-            for await canRedo in featureEditorModel.geometryEditor.$canRedo {
+        .task(id: ObjectIdentifier(geometryEditor)) {
+            for await canRedo in geometryEditor.$canRedo {
                 self.canRedo = canRedo
             }
         }
@@ -149,21 +156,19 @@ private struct RedoButton: View {
 /// A button for undoing the geometry editor's last action.
 private struct UndoButton: View {
     /// The model for the parent feature editor containing the geometry editor.
-    @Environment(FeatureEditorModel.self) private var featureEditorModel
+    @Environment(GeometryEditorModel.self) private var geometryEditorModel
     
     var body: some View {
-        Button(action: featureEditorModel.geometryEditor.undo) {
-            Label {
-                Text(
-                    "Undo",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to undo the last geometry editor action."
-                )
-            } icon: {
-                Image(systemName: "arrow.uturn.backward")
-            }
-        }
-        .disabled(!featureEditorModel.geometryEditorCanUndo)
+        Button(
+            LocalizedStringResource(
+                "Undo",
+                bundle: .toolkit,
+                comment: "A label for a button to undo the last geometry editor action."
+            ),
+            systemImage: "arrow.uturn.backward",
+            action: geometryEditorModel.geometryEditor.undo
+        )
+        .disabled(!geometryEditorModel.canUndo)
     }
 }
 
@@ -173,19 +178,16 @@ private struct SnapSettingsButton: View {
     @Environment(FeatureEditorModel.self) private var featureEditorModel
     
     var body: some View {
-        Button {
+        Button(
+            LocalizedStringResource(
+                "Snap Settings",
+                bundle: .toolkit,
+                comment: "A label for a button to show settings for configuring snapping."
+            ),
+            systemImage: "gear"
+        ) {
             featureEditorModel.syncSnapSourceSettings()
             featureEditorModel.snapSettingsSheetIsPresented.toggle()
-        } label: {
-            Label {
-                Text(
-                    "Snap Settings",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to show settings for configuring snapping."
-                )
-            } icon: {
-                Image(systemName: "gear")
-            }
         }
     }
 }
@@ -218,7 +220,7 @@ private extension View {
     
     NavigationStack {
         MapView(map: Map(spatialReference: .wgs84))
-            .geometryEditor(model.geometryEditor)
+            .geometryEditor(model.geometryEditorModel.geometryEditor)
             .overlay(alignment: .topTrailing) {
                 FeatureEditorToolbar(style: .vertical)
                     .padding()
@@ -235,8 +237,8 @@ private extension View {
             }
             .environment(model)
             .task {
-                model.geometryEditor.start(withType: Polygon.self)
-                await model.monitorGeometryEditorStreams()
+                model.geometryEditorModel.start(withType: Polygon.self)
+                await model.geometryEditorModel.monitorStreams()
             }
     }
 }

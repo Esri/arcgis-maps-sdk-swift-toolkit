@@ -32,7 +32,9 @@ struct FeatureEditorModelTests {
     @Test
     func isPresented() async throws {
         let model = FeatureEditorModel()
-        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
+        let monitorGeometryEditorStreamsTask = Task(
+            operation: model.geometryEditorModel.monitorStreams
+        )
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
         let geodatabaseFile = try await TemporaryGeodatabaseFile()
@@ -40,7 +42,7 @@ struct FeatureEditorModelTests {
         let geometry = Point(latitude: 0, longitude: 0)
         let feature = try #require(table.makeFeature(geometry: geometry) as? ArcGISFeature)
         
-        // Verifies isPresented is true when feature editor starts.
+        // Verifies 'isPresented' is true when feature editor starts.
         await model.startEditingFeature(feature)
         model.expectIsEditing(rootFeature: feature)
         
@@ -52,33 +54,13 @@ struct FeatureEditorModelTests {
         await model.expectDefaultPropertyValues()
     }
     
-    /// Verifies `monitorGeometryEditorStreams()` updates model properties
-    /// when the geometry editor starts and stops.
-    @Test
-    func monitorGeometryEditorStreams() async {
-        let model = FeatureEditorModel()
-        let monitorTask = Task(operation: model.monitorGeometryEditorStreams)
-        defer { monitorTask.cancel() }
-        
-        // Starts the geometry editor with a geometry.
-        let geometry = Point(x: 0, y: 0)
-        model.geometryEditor.start(withInitial: geometry)
-        await Task.yieldExpect(model.geometryEditorIsStarted)
-        await Task.yieldExpect(model.geometryEditorGeometry == geometry)
-        await Task.yieldExpect(!model.geometryEditorCanUndo)
-        
-        // Stops the geometry editor.
-        model.geometryEditor.stop()
-        // Verifies the geometry editor properties have been reset and no other
-        // properties have been modified.
-        await model.expectDefaultPropertyValues()
-    }
-    
     /// Verifies `restartGeometryEditor()` restarts the geometry editor if it is started.
     @Test
     func restartGeometryEditor() async throws {
         let model = FeatureEditorModel()
-        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
+        let monitorGeometryEditorStreamsTask = Task(
+            operation: model.geometryEditorModel.monitorStreams
+        )
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
         // Verifies restartGeometryEditor does nothing if the geometry editor has not started.
@@ -112,7 +94,9 @@ struct FeatureEditorModelTests {
     @Test
     func retryStartEditingAfterFailure() async throws {
         let model = FeatureEditorModel()
-        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
+        let monitorGeometryEditorStreamsTask = Task(
+            operation: model.geometryEditorModel.monitorStreams
+        )
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
         let electricDistributionDeviceURL = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer/0")!
@@ -144,8 +128,8 @@ struct FeatureEditorModelTests {
         }
         #expect(error == .tokenRequired)
         
-        await Task.yieldExpect(!model.geometryEditorIsStarted)
-        await Task.yieldExpect(model.geometryEditorGeometry == nil)
+        await Task.yieldExpect(!model.geometryEditorModel.isStarted)
+        await Task.yieldExpect(model.geometryEditorModel.geometry == nil)
         
         // Re-adds the credential and verifies `retryStartEditing()`
         // successfully starts geometry editing.
@@ -163,7 +147,9 @@ struct FeatureEditorModelTests {
     @Test
     func updateFormGeometry() async throws {
         let model = FeatureEditorModel()
-        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
+        let monitorGeometryEditorStreamsTask = Task(
+            operation: model.geometryEditorModel.monitorStreams
+        )
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
         let geodatabaseFile = try await TemporaryGeodatabaseFile()
@@ -186,8 +172,8 @@ struct FeatureEditorModelTests {
         #expect(feature.geometry == initialGeometry)
         
         // Verifies updateFormGeometry() does nothing if the geometry editor is not started.
-        model.geometryEditor.stop()
-        await Task.yieldExpect(!model.geometryEditorIsStarted)
+        model.geometryEditorModel.geometryEditor.stop()
+        await Task.yieldExpect(!model.geometryEditorModel.isStarted)
         
         feature.geometry = newGeometry
         #expect(feature.geometry == newGeometry)
@@ -201,7 +187,9 @@ struct FeatureEditorModelTests {
     @Test
     func startEditing() async throws {
         let model = FeatureEditorModel()
-        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
+        let monitorGeometryEditorStreamsTask = Task(
+            operation: model.geometryEditorModel.monitorStreams
+        )
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
         let geodatabaseFile = try await TemporaryGeodatabaseFile()
@@ -246,7 +234,9 @@ struct FeatureEditorModelTests {
     @Test
     func startEditingFeatureWithoutGeometry() async throws {
         let model = FeatureEditorModel()
-        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
+        let monitorGeometryEditorStreamsTask = Task(
+            operation: model.geometryEditorModel.monitorStreams
+        )
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
         let geodatabaseFile = try await TemporaryGeodatabaseFile()
@@ -260,10 +250,10 @@ struct FeatureEditorModelTests {
         await model.expectIsGeometryEditing()
         
         // Verifies geometry editor is using the table's geometry type.
-        let modelGeometry = try #require(model.geometryEditorGeometry)
+        let modelGeometry = try #require(model.geometryEditorModel.geometry)
         #expect(modelGeometry is Point)
         #expect(modelGeometry.isEmpty)
-        #expect(model.initialGeometry == nil)
+        #expect(model.geometryEditorModel.initialGeometry == nil)
         #expect(model.viewpointGeometry == nil)
     }
     
@@ -271,7 +261,9 @@ struct FeatureEditorModelTests {
     @Test
     func startEditingNonSpatialFeature() async throws {
         let model = FeatureEditorModel()
-        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
+        let monitorGeometryEditorStreamsTask = Task(
+            operation: model.geometryEditorModel.monitorStreams
+        )
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
         let geodatabaseFile = try await TemporaryGeodatabaseFile()
@@ -287,18 +279,20 @@ struct FeatureEditorModelTests {
         model.expectIsEditing(rootFeature: feature)
         
         // Geometry editor is not started.
-        await Task.yieldExpect(!model.geometryEditorIsStarted)
-        await Task.yieldExpect(model.geometryEditorGeometry == nil)
-        await Task.yieldExpect(!model.geometryEditorCanUndo)
+        await Task.yieldExpect(!model.geometryEditorModel.isStarted)
+        await Task.yieldExpect(model.geometryEditorModel.geometry == nil)
+        await Task.yieldExpect(!model.geometryEditorModel.canUndo)
         #expect(model.viewpointGeometry == nil)
-        #expect(!model.geometryEditor.snapSettings.isEnabled)
+        #expect(!model.geometryEditorModel.geometryEditor.snapSettings.isEnabled)
     }
     
     /// Verifies `stopEditing()` resets the model's properties to their default values.
     @Test
     func stopEditing() async throws {
         let model = FeatureEditorModel()
-        let monitorGeometryEditorStreamsTask = Task(operation: model.monitorGeometryEditorStreams)
+        let monitorGeometryEditorStreamsTask = Task(
+            operation: model.geometryEditorModel.monitorStreams
+        )
         defer { monitorGeometryEditorStreamsTask.cancel() }
         
         let geodatabaseFile = try await TemporaryGeodatabaseFile()
@@ -358,7 +352,7 @@ private extension FeatureEditorModel {
     func expectDefaultPropertyValues(sourceLocation: SourceLocation = #_sourceLocation) async {
         #expect(state == .stopped, sourceLocation: sourceLocation)
         #expect(feature == nil, sourceLocation: sourceLocation)
-        #expect(initialGeometry == nil, sourceLocation: sourceLocation)
+        #expect(geometryEditorModel.initialGeometry == nil, sourceLocation: sourceLocation)
         #expect(!isPresented, sourceLocation: sourceLocation)
         #expect(rootFeatureForm == nil, sourceLocation: sourceLocation)
         #expect(loadResult == nil, sourceLocation: sourceLocation)
@@ -366,9 +360,9 @@ private extension FeatureEditorModel {
         #expect(viewpointGeometry == nil, sourceLocation: sourceLocation)
         
         // Yields to ensure geometry editor properties are updated by monitorGeometryEditorStreams().
-        await Task.yieldExpect(!self.geometryEditorCanUndo, sourceLocation: sourceLocation)
-        await Task.yieldExpect(self.geometryEditorGeometry == nil, sourceLocation: sourceLocation)
-        await Task.yieldExpect(!self.geometryEditorIsStarted, sourceLocation: sourceLocation)
+        await Task.yieldExpect(!self.geometryEditorModel.canUndo, sourceLocation: sourceLocation)
+        await Task.yieldExpect(self.geometryEditorModel.geometry == nil, sourceLocation: sourceLocation)
+        await Task.yieldExpect(!self.geometryEditorModel.isStarted, sourceLocation: sourceLocation)
     }
     
     /// Verifies the model has started editing a given feature instance as the root feature.
@@ -390,10 +384,10 @@ private extension FeatureEditorModel {
         sourceLocation: SourceLocation = #_sourceLocation
     ) async {
         await Task.yieldExpect(
-            self.geometryEditorGeometry == geometry,
+            self.geometryEditorModel.geometry == geometry,
             sourceLocation: sourceLocation
         )
-        #expect(initialGeometry == geometry, sourceLocation: sourceLocation)
+        #expect(geometryEditorModel.initialGeometry == geometry, sourceLocation: sourceLocation)
         
         // The geometry is used to set the viewpoint.
         #expect(viewpointGeometry == geometry, sourceLocation: sourceLocation)
@@ -401,13 +395,13 @@ private extension FeatureEditorModel {
     
     /// Verifies the model's geometry editor has started.
     func expectIsGeometryEditing(sourceLocation: SourceLocation = #_sourceLocation) async {
-        await Task.yieldExpect(self.geometryEditorIsStarted, sourceLocation: sourceLocation)
+        await Task.yieldExpect(self.geometryEditorModel.isStarted, sourceLocation: sourceLocation)
         
         // Verifies it started without any edits.
-        await Task.yieldExpect(!self.geometryEditorCanUndo, sourceLocation: sourceLocation)
+        await Task.yieldExpect(!self.geometryEditorModel.canUndo, sourceLocation: sourceLocation)
         
         // Verifies snap settings are enabled by default.
-        #expect(geometryEditor.snapSettings.isEnabled, sourceLocation: sourceLocation)
+        #expect(geometryEditorModel.geometryEditor.snapSettings.isEnabled, sourceLocation: sourceLocation)
     }
 }
 
