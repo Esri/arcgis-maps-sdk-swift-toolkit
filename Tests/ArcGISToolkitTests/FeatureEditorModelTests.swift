@@ -403,10 +403,6 @@ private extension FeatureEditorModel {
         // Verifies snap settings are enabled by default.
         #expect(geometryEditorModel.geometryEditor.snapSettings.isEnabled, sourceLocation: sourceLocation)
     }
-    
-    func startEditingFeature(_ feature: ArcGISFeature) async {
-        await startEditingFeature(feature, on: nil)
-    }
 }
 
 private extension TableDescription {
