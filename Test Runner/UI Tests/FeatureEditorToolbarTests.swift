@@ -72,37 +72,37 @@ final class FeatureEditorToolbarTests: XCTestCase {
         deleteSelectedElementButton.assertExistence(timeout: 30)
         
         // Verifies that the buttons are disabled when there are no edits.
-        deleteSelectedElementButton.assertDisabled()
-        undoButton.assertDisabled()
-        redoButton.assertDisabled()
+        assertExistsAndIsDisabled(deleteSelectedElementButton)
+        assertExistsAndIsDisabled(undoButton)
+        assertExistsAndIsDisabled(redoButton)
         
         // Taps the map to make an edit and verifies that delete is enabled
         // when a vertex is selected and undo is enabled when there is an edit.
         app.otherElements["Map"].tap()
-        deleteSelectedElementButton.assertEnabled()
-        undoButton.assertEnabled()
-        redoButton.assertDisabled()
+        assertExistsAndIsEnabled(deleteSelectedElementButton)
+        assertExistsAndIsEnabled(undoButton)
+        assertExistsAndIsDisabled(redoButton)
         
         // Undoes the only edit and verifies that undo is disabled and redo is enabled.
         undoButton.tap()
-        undoButton.assertDisabled()
-        redoButton.assertEnabled()
+        assertExistsAndIsDisabled(undoButton)
+        assertExistsAndIsEnabled(redoButton)
         
         // Redoes the edit and verifies that undo is enabled and redo is disabled.
         redoButton.tap()
-        undoButton.assertEnabled()
-        redoButton.assertDisabled()
+        assertExistsAndIsEnabled(undoButton)
+        assertExistsAndIsDisabled(redoButton)
         
         // Deletes the selected vertex and verifies that the delete button is
         // disabled when there is no selection.
         deleteSelectedElementButton.tap()
-        deleteSelectedElementButton.assertDisabled()
+        assertExistsAndIsDisabled(deleteSelectedElementButton)
         
         // Verifies that the buttons are disabled when edits are discarded.
         app.buttons["Discard"].tap()
-        deleteSelectedElementButton.assertDisabled()
-        undoButton.assertDisabled()
-        redoButton.assertDisabled()
+        assertExistsAndIsDisabled(deleteSelectedElementButton)
+        assertExistsAndIsDisabled(undoButton)
+        assertExistsAndIsDisabled(redoButton)
     }
     
     /// Tests that the `FeatureFormView` handles and responds to geometry edits correctly.
@@ -153,7 +153,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         // Deletes the geometry's vertex, tries to save, and verifies that the
         // invalid geometry alert message is shown.
         deleteSelectedElementButton.tap()
-        deleteSelectedElementButton.assertDisabled()
+        assertExistsAndIsDisabled(deleteSelectedElementButton)
         
         saveButton.tap()
         invalidGeometryText.assertExistence()
@@ -163,7 +163,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         
         // Undoes the invalid edit and verifies that the save button closes the feature editor.
         toolbar.buttons["Undo"].tap()
-        toolbar.buttons["Redo"].assertEnabled()
+        assertExistsAndIsEnabled(toolbar.buttons["Redo"])
         
         saveButton.tap()
         deleteSelectedElementButton.assertNonExistence()
@@ -309,7 +309,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         let electricDistributionLineToggle = app.snapToggle(
             named: "Electric Distribution Line, Rules limit snapping."
         )
-        electricDistributionLineToggle.assertEnabled()
+        assertExistsAndIsEnabled(electricDistributionLineToggle)
         
         // Use one snap source toggle to verify that snapping to snap sources
         // are disabled by default.
