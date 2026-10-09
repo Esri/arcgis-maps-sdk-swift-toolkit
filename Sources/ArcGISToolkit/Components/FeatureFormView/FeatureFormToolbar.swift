@@ -56,7 +56,7 @@ struct FeatureFormToolbar: ViewModifier {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItemGroup(placement: .topBarLeading) {
                     if isRootView, featureFormViewModel.group != nil, featureFormViewModel.canGoBack {
                         Button {
                             featureFormViewModel.navigateBack()
@@ -95,25 +95,7 @@ struct FeatureFormToolbar: ViewModifier {
                         }
                         .disabled(featureFormViewModel.navigationIsDisabled)
                     }
-                }
-                if let group = featureFormViewModel.group {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        if group.forms.count > 1 {
-                            Button {
-                                featureFormViewModel.clearSelection()
-                            } label: {
-                                Image(systemName: "list.bullet")
-                            }
-                        } else {
-                            Button {
-                                featureFormViewModel.isPresented = false
-                            } label: {
-                                Image(systemName: "xmark")
-                            }
-                        }
-                    }
-                } else if featureFormViewModel.isPresented != nil {
-                    ToolbarItem(placement: .topBarTrailing) {
+                    if featureFormViewModel.isPresented != nil {
                         DismissButton(kind: .cancel) {
                             if hasEdits {
                                 stackViewModel.navigationAlertInfo = (false, {
@@ -125,10 +107,41 @@ struct FeatureFormToolbar: ViewModifier {
                         }
                     }
                 }
-                if (hasEdits && featureFormViewModel.editingButtonsVisibility == .automatic)
-                    || (featureFormViewModel.editingButtonsVisibility == .visible) {
-                    ToolbarItem(placement: .bottomBar) {
-                        FormFooter(featureForm: featureForm)
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    if featureFormViewModel.group?.forms.count ?? 0 > 1 {
+                        Button {
+                            featureFormViewModel.clearSelection()
+                        } label: {
+                            Image(systemName: "house")
+                        }
+                    } else if (featureFormViewModel.editingButtonsVisibility == .automatic)
+                                || (featureFormViewModel.editingButtonsVisibility == .visible) {
+                        Button {
+                            if featureForm.elementValidationErrors.isEmpty {
+                                Task {
+                                    do {
+                                        try await featureForm.finishEditing()
+                                        featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: false))
+                                    } catch {
+                                        stackViewModel.finishEditingError = error
+                                    }
+                                }
+                            } else {
+                                stackViewModel.validationErrorVisibilityInternal = .visible
+                                stackViewModel.navigationAlertInfo = (false, {})
+                            }
+                        } label: {
+                            Label {
+                                Text(
+                                    "Save",
+                                    bundle: .toolkitModule,
+                                    comment: "Finish editing the feature form."
+                                )
+                            } icon: {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                        .disabled(!hasEdits)
                     }
                 }
             }
