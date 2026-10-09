@@ -61,9 +61,11 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// Tests that the toolbar editing buttons handle and respond to geometry edits correctly.
     func testEditingButtonsGeometryEditHandling() {
         let app = XCUIApplication()
-        let deleteSelectedElementButton = app.buttons["Delete Selected Element"]
-        let redoButton = app.buttons["Redo"]
-        let undoButton = app.buttons["Undo"]
+        let toolbar = app.featureEditorToolbar
+        
+        let deleteSelectedElementButton = toolbar.buttons["Delete Selected Element"]
+        let redoButton = toolbar.buttons["Redo"]
+        let undoButton = toolbar.buttons["Undo"]
         
         // Waits for the Feature Editor to open.
         openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
@@ -106,8 +108,10 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// Tests that the `FeatureFormView` handles and responds to geometry edits correctly.
     func testFormGeometryEditHandling() {
         let app = XCUIApplication()
+        let toolbar = app.featureEditorToolbar
+        
         let continueEditingButton = app.buttons["Continue Editing"]
-        let deleteSelectedElementButton = app.buttons["Delete Selected Element"]
+        let deleteSelectedElementButton = toolbar.buttons["Delete Selected Element"]
         let discardButton = app.buttons["Discard"]
         let discardEditsAlert = app.alerts["Discard Edits?"]
         let invalidGeometryText = app.staticTexts[
@@ -158,8 +162,8 @@ final class FeatureEditorToolbarTests: XCTestCase {
         invalidGeometryText.assertNonExistence()
         
         // Undoes the invalid edit and verifies that the save button closes the feature editor.
-        app.buttons["Undo"].tap()
-        app.buttons["Redo"].assertEnabled()
+        toolbar.buttons["Undo"].tap()
+        toolbar.buttons["Redo"].assertEnabled()
         
         saveButton.tap()
         deleteSelectedElementButton.assertNonExistence()
@@ -280,9 +284,10 @@ final class FeatureEditorToolbarTests: XCTestCase {
     /// for editing.
     func testDefaultToggleStatesAndPreservation() {
         let app = XCUIApplication()
+        let snapSettingsButton = app.featureEditorToolbar.buttons["Snap Settings"]
         
         openFeatureEditorTestViewWithStartingFeature(3321, on: .electricDistributionDevice)
-        app.buttons["Snap Settings"].assertExistenceAndTap(timeout: 30)
+        snapSettingsButton.assertExistenceAndTap(timeout: 30)
         
         let geometryGuidesToggle = app.snapToggle(named: "Snap to Geometry Guides")
         let featuresToggle = app.snapToggle(named: "Snap to Features")
@@ -317,7 +322,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         // Close the settings view.
         app.buttons["Close"].assertExistenceAndTap()
         // Reopen the settings view and verify the toggles states are preserved.
-        app.buttons["Snap Settings"].assertExistenceAndTap()
+        snapSettingsButton.assertExistenceAndTap()
         XCTAssertEqual(geometryGuidesToggle.boolValue, true)
         XCTAssertEqual(electricDistributionLineToggle.boolValue, true)
     }
@@ -330,6 +335,9 @@ private extension String {
 }
 
 private extension XCUIApplication {
+    /// The feature editor toolbar element.
+    var featureEditorToolbar: XCUIElement { otherElements["Feature Editor Toolbar"] }
+    
     /// Opens the feature editor test view without selecting a feature.
     func openFeatureEditorTestView() {
         let featureEditorTestsButton = buttons["Feature Editor Tests"]
