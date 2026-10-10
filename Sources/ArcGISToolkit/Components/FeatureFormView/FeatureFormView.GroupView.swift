@@ -59,21 +59,35 @@ extension FeatureFormView.GroupView /* Group views */ {
                     ForEach(featureFormViewModel.ids, id: \.self) { id in
                         if let form = featureFormViewModel.form(for: id),
                            let objectID = form.feature.objectID {
-                            Button {
-                                featureFormViewModel.select(form: form, clearHistory: true)
-                            } label: {
-                                Label {
-                                    Text("\(form.title) \(objectID.formatted(.number.grouping(.never)))")
-                                } icon: {
-                                    if featureFormViewModel.selectedID == id {
-                                        Image(systemName: "checkmark")
+                            LabeledContent {
+                                Button {
+                                    featureFormViewModel.select(form: form, clearHistory: true)
+                                } label: {
+                                    VStack(alignment: .leading) {
+                                        Text(form.title)
+                                        Text(objectID, format: .number.grouping(.never))
+                                            .font(.caption)
                                     }
                                 }
+                                .badge(form.elementValidationErrors.count)
+                                .badgeProminence(.increased)
+                            } label: {
+                                if form.hasEdits {
+                                    Label {
+                                        Text(
+                                            "Unsaved Edits",
+                                            bundle: .toolkitModule,
+                                            comment: ""
+                                        )
+                                    } icon: {
+                                        Image(systemName: "pencil")
+                                    }
+                                    .labelStyle(.iconOnly)
+                                }
                             }
-                            .badge(form.elementValidationErrors.count)
-                            .badgeProminence(.increased)
                         }
                     }
+                    .id(featureFormViewModel.selectedID)
                 }
             }
             .navigationTitle(
