@@ -43,6 +43,11 @@ public extension FeatureFormView {
         /// <#Description#>
         init(group: FeatureFormGroup? = nil) {
             self.group = group
+            
+            // If the group has a single form, select it.
+            if group?.forms.count == 1, let first = group?.forms.first {
+                select(form: first)
+            }
         }
         
         /// Initializes a model for the view, creating a `FeatureFormGroup` with the provided
