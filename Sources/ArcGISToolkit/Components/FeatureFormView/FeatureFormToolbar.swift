@@ -112,7 +112,7 @@ struct FeatureFormToolbar: ViewModifier {
                         Button {
                             featureFormViewModel.clearSelection()
                         } label: {
-                            Image(systemName: "house")
+                            Image(systemName: "list.clipboard")
                         }
                     } else if (featureFormViewModel.editingButtonsVisibility == .automatic)
                                 || (featureFormViewModel.editingButtonsVisibility == .visible) {
