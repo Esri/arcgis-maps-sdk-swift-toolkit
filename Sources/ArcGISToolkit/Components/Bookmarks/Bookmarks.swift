@@ -145,9 +145,12 @@ extension Bookmarks {
     /// Makes an accessibility voice over announcement that the viewpoint is being set to the bookmark name
     /// - Parameter bookmarkName: The name of the bookmark the viewpoint is being set to
     private func announceSettingViewpoint(bookmarkName: String) {
-        var announcementMessage = AttributedString("Setting viewpoint to \(bookmarkName)")
-        announcementMessage.accessibilitySpeechAnnouncementPriority = .high
-        AccessibilityNotification.Announcement(announcementMessage).post()
+        let string = String(localized: "Setting viewpoint to \(bookmarkName)",
+                            bundle: .toolkitModule,
+                            comment: "The accessibility announcement when a bookmark is selected.")
+        var attributedString = AttributedString(string)
+        attributedString.accessibilitySpeechAnnouncementPriority = .high
+        AccessibilityNotification.Announcement(attributedString).post()
     }
     
     /// Makes a view that is shown when the `GeoModel` failed to load.
