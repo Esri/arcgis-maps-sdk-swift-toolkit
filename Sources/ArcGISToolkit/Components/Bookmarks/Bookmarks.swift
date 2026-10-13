@@ -146,9 +146,11 @@ extension Bookmarks {
     /// Makes an accessibility voice over announcement that the viewpoint is being set to the bookmark name
     /// - Parameter bookmarkName: The name of the bookmark the viewpoint is being set to
     private func announceSettingViewpoint(bookmarkName: String) {
-        let string = String(localized: "Setting viewpoint to \(bookmarkName)",
-                            bundle: .toolkitModule,
-                            comment: "The accessibility announcement when a bookmark is selected.")
+        let string = String(
+            localized: "Setting viewpoint to \(bookmarkName)",
+            bundle: .toolkitModule,
+            comment: "The accessibility announcement when a bookmark is selected."
+        )
         var attributedString = AttributedString(string)
         attributedString.accessibilitySpeechAnnouncementPriority = .high
         AccessibilityNotification.Announcement(attributedString).post()

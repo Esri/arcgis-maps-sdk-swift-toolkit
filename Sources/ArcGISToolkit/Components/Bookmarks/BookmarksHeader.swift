@@ -50,9 +50,13 @@ struct BookmarksHeader: View {
                 )
             }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(String(localized: "Bookmarks, select a bookmark",
-                                       bundle: .toolkitModule,
-                                       comment: "The accessibilty label for the bookmarks header view"))
+            .accessibilityLabel(
+                String(
+                    localized: "Bookmarks, select a bookmark",
+                    bundle: .toolkitModule,
+                    comment: "The accessibilty label for the bookmarks header view"
+                )
+            )
             Spacer()
             Button.done {
                 isPresented = false
