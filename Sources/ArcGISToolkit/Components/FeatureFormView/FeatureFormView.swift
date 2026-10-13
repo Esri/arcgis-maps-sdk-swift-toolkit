@@ -133,7 +133,8 @@ public struct FeatureFormView: View {
                                 filter: filter,
                                 form: form
                             )
-                            .featureFormToolbar(form)
+                            // This view intentionally excludes the feature form
+                            // toolbar in order to present it modally.
                             .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(newAssociation)
                         case let .utilityAssociationDetailsView(form, element, associationResult):
@@ -187,15 +188,15 @@ public struct FeatureFormView: View {
             }
             // Alert for abandoning unsaved edits
             .alert(
-                !featureFormViewModel.presentedFormHasValidationErrors ? discardEditsQuestion : validationErrors,
+                alertForUnsavedEditsTitle,
                 isPresented: alertForUnsavedEditsIsPresented,
                 actions: {
-                    if let (willNavigate, continuation) = featureFormViewModel.navigationAlertInfo {
+                    if let info = featureFormViewModel.unsavedEditsAlertInfo {
                         Button(role: .destructive) {
                             featureFormViewModel.presentedForm?.discardEdits()
-                            onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
+                            onFormEditingEventAction?(.discardedEdits(willNavigate: info.willNavigate))
                             featureFormViewModel.validationErrorVisibilityInternal = .automatic
-                            continuation()
+                            info.onDismiss?()
                         } label: {
                             Text.discardEdits
                         }
@@ -204,13 +205,14 @@ public struct FeatureFormView: View {
                                 featureFormViewModel.validationErrorVisibilityInternal = .visible
                             }
                         }
-                        if !featureFormViewModel.presentedFormHasValidationErrors {
+                        if info.includeSaveOption, !featureFormViewModel.presentedFormHasValidationErrors {
                             Button {
                                 Task {
                                     do {
                                         try await featureFormViewModel.presentedForm?.finishEditing()
-                                        onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
-                                        continuation()
+                                        onFormEditingEventAction?(.savedEdits(willNavigate: info.willNavigate))
+                                        featureFormViewModel.validationErrorVisibilityInternal = .automatic
+                                        info.onDismiss?()
                                     } catch {
                                         featureFormViewModel.finishEditingError = error
                                     }
@@ -227,7 +229,10 @@ public struct FeatureFormView: View {
                     }
                 },
                 message: {
-                    if featureFormViewModel.presentedFormHasValidationErrors {
+                    // Only mention validation errors if the alert would allow saving without them.
+                    if let info = featureFormViewModel.unsavedEditsAlertInfo,
+                       info.includeSaveOption,
+                       featureFormViewModel.presentedFormHasValidationErrors {
                         Text(
                             "You have ^[\(featureFormViewModel.presentedForm?.elementValidationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
                             bundle: .toolkitModule,
@@ -383,12 +388,20 @@ extension FeatureFormView {
     /// A Boolean value indicating whether the unsaved edits alert is presented.
     var alertForUnsavedEditsIsPresented: Binding<Bool> {
         Binding {
-            featureFormViewModel.navigationAlertInfo != nil
+            featureFormViewModel.unsavedEditsAlertInfo != nil
         } set: { newIsPresented in
             if !newIsPresented {
-                featureFormViewModel.navigationAlertInfo = nil
+                featureFormViewModel.unsavedEditsAlertInfo = nil
             }
         }
+    }
+    
+    var alertForUnsavedEditsTitle: Text {
+        // Only mention validation errors if the alert would allow saving without them.
+        ((featureFormViewModel.unsavedEditsAlertInfo?.includeSaveOption ?? false) &&
+         featureFormViewModel.presentedFormHasValidationErrors) ?
+        validationErrors :
+        discardEditsQuestion
     }
     
     /// The closure to perform when the presented feature form changes.
