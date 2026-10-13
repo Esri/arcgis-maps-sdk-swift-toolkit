@@ -291,24 +291,21 @@ private extension View {
 }
 
 private extension View {
-    /// Displays a sheet that allows the user to select a certificate file.
+    /// Displays a file importer that allows the user to select a certificate file.
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating if the view is presented.
     ///   - viewModel: The view model associated with the view.
-    @MainActor @ViewBuilder func certificateFilePicker(
+    @MainActor func certificateFilePicker(
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
-        sheet(isPresented: isPresented) {
-            DocumentPickerView(contentTypes: [.pfx]) {
-                isPresented.wrappedValue = false
-                viewModel.proceedToPasswordEntry(forCertificateWithURL: $0)
-            } onCancel: {
-                isPresented.wrappedValue = false
+        fileImporter(isPresented: isPresented, allowedContentTypes: [.pfx]) { result in
+            switch result {
+            case .success(let url):
+                viewModel.proceedToPasswordEntry(forCertificateWithURL: url)
+            case .failure:
                 viewModel.cancel()
             }
-            .interactiveDismissDisabled()
-            .edgesIgnoringSafeArea(.bottom)
         }
     }
 }
