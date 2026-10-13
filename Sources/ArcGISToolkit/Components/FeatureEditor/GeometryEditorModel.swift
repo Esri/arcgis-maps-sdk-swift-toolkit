@@ -50,7 +50,7 @@ final class GeometryEditorModel {
             geometryEditor.tool = selectedTool.geometryEditorTool
         }
     }
-
+    
     /// Monitors geometry editor streams and updates the corresponding
     /// properties.
     func monitorStreams() async {
@@ -99,7 +99,7 @@ final class GeometryEditorModel {
         selectableTools = tools
         self.selectedTool = selectedTool ?? tools.first ?? .vertex
     }
-
+    
     /// Restarts the geometry editor if it is started.
     func restart() {
         guard isStarted else { return }
@@ -110,7 +110,7 @@ final class GeometryEditorModel {
             start(withType: geometryType)
         }
     }
-
+    
     /// Stops the geometry editor and resets the session state.
     /// - Parameter resetTools: Whether to reset the tools configured for the
     /// session.
@@ -126,7 +126,7 @@ final class GeometryEditorModel {
             selectableTools = FeatureEditorGeometryTool.allCases
         }
     }
-
+    
     /// Updates the tools available for the current geometry.
     private func updateSelectableTools() {
         selectableTools = if let constructionTools {
@@ -139,7 +139,7 @@ final class GeometryEditorModel {
         } else {
             FeatureEditorGeometryTool.allCases
         }
-
+        
         guard !selectableTools.contains(selectedTool),
               let firstValidTool = selectableTools.first else {
             return

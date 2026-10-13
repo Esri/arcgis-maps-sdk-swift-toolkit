@@ -155,7 +155,7 @@ private struct RedoButton: View {
 
 /// A button for undoing the geometry editor's last action.
 private struct UndoButton: View {
-    /// The model for the parent feature editor containing the geometry editor.
+    /// The model for the geometry editor.
     @Environment(GeometryEditorModel.self) private var geometryEditorModel
     
     var body: some View {
