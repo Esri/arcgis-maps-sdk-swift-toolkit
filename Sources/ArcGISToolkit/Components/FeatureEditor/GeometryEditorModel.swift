@@ -105,9 +105,7 @@ final class GeometryEditorModel {
     
     // MARK: Snapping
     
-    /// The snap rules for the `feature`, used to sync snap source settings.
-    /// These are created when `feature` is part of an available utility
-    /// network.
+    /// The snap rules used to sync snap source settings.
     @ObservationIgnored
     private var snapRules: SnapRules?
     /// A Boolean value indicating whether the snap settings sheet is presented.
