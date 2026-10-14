@@ -179,7 +179,7 @@ private struct SnapSettingsButton: View {
             systemImage: "gear"
         ) {
             model.syncSnapSourceSettings()
-            model.snapSettingsSheetIsPresented = true
+            model.snapSettingsAreBeingModified = true
         }
     }
 }

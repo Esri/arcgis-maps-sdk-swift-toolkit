@@ -101,6 +101,9 @@ final class GeometryEditorModel {
         isStarted = false
         initialGeometry = nil
         geometryType = nil
+        if snapSettingsAreBeingModified {
+            snapSettingsAreBeingModified = false
+        }
     }
     
     // MARK: Snapping
@@ -108,10 +111,9 @@ final class GeometryEditorModel {
     /// The snap rules used to sync snap source settings.
     @ObservationIgnored
     private var snapRules: SnapRules?
-    /// A Boolean value indicating whether the snap settings sheet is presented.
-    /// This is needed to display the sheet from the modifier to prevent it from
-    /// dismissing the feature editor when the horizontal size class is compact.
-    var snapSettingsSheetIsPresented = false
+    /// A Boolean value indicating whether the snap settings are currently being
+    /// modified.
+    var snapSettingsAreBeingModified = false
     
     /// Sets the given snap rules to the model
     /// - Parameter snapRules: The new snap rules.

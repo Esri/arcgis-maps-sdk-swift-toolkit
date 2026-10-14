@@ -140,7 +140,6 @@ final class FeatureEditorModel {
     private func resetProperties() {
         rootFeatureForm = nil
         presentedFeatureForm = nil
-        geometryEditorModel.snapSettingsSheetIsPresented = false
         viewpointGeometry = nil
         
         stopGeometryEditing()
