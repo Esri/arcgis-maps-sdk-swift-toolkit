@@ -66,6 +66,8 @@ final class GeometryEditorModel {
     }
     
     /// Starts the geometry editor with an initial geometry.
+    /// - Parameter geometry: The initial geometry to start the editing session
+    /// with.
     func start(withInitial geometry: Geometry) {
         initialGeometry = geometry
         geometryType = nil
@@ -73,6 +75,7 @@ final class GeometryEditorModel {
     }
     
     /// Starts the geometry editor with a geometry type.
+    /// - Parameter geometryType: The type of the geometry to edit.
     func start(withType geometryType: Geometry.Type) {
         initialGeometry = nil
         self.geometryType = geometryType
