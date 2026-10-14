@@ -30,6 +30,10 @@ struct FeatureFormToolbar: ViewModifier {
     /// The model for the stack view containing the form.
     @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
     
+    /// A slightly delayed form count, useful for animations to communicate that the form group size
+    /// has changed.
+    @State private var delayedFormCount = 0
+    
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits = false
     
@@ -50,13 +54,17 @@ struct FeatureFormToolbar: ViewModifier {
     func body(content: Content) -> some View {
         content
             .navigationBarBackButtonHidden()
+            .task(id: featureFormViewModel.ids.count) {
+                try? await Task.sleep(for: .seconds(0.1))
+                delayedFormCount = featureFormViewModel.ids.count
+            }
             .task(id: featureForm.feature.globalID) {
                 for await hasEdits in featureForm.$hasEdits {
                     withAnimation { self.hasEdits = hasEdits }
                 }
             }
             .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
+                ToolbarItem(placement: .topBarLeading) {
                     if isRootView, featureFormViewModel.group != nil, featureFormViewModel.canGoBack {
                         Button {
                             featureFormViewModel.navigateBack()
@@ -95,7 +103,12 @@ struct FeatureFormToolbar: ViewModifier {
                         }
                         .disabled(featureFormViewModel.navigationIsDisabled)
                     }
-                    if featureFormViewModel.isPresented != nil {
+                }
+                if #available(iOS 26.0, *) {
+                    ToolbarSpacer(.flexible, placement: .topBarLeading)
+                }
+                if featureFormViewModel.isPresented != nil {
+                    ToolbarItem(placement: .topBarLeading) {
                         DismissButton(kind: .cancel) {
                             if hasEdits {
                                 stackViewModel.navigationAlertInfo = (false, {
@@ -112,7 +125,11 @@ struct FeatureFormToolbar: ViewModifier {
                         Button {
                             featureFormViewModel.clearSelection()
                         } label: {
-                            Image(systemName: "list.clipboard")
+                            let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
+                            let hasErrors = featureFormViewModel.formsWithErrors.contains(where: { $0.value > 0 })
+                            Image(systemName: hasEdits ? "tray.badge": "tray")
+                                .symbolEffect(.bounce, value: delayedFormCount)
+                                .symbolRenderingMode(hasErrors ? .multicolor : .monochrome)
                         }
                     } else if (featureFormViewModel.editingButtonsVisibility == .automatic)
                                 || (featureFormViewModel.editingButtonsVisibility == .visible) {
