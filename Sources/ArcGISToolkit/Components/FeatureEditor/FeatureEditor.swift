@@ -98,9 +98,9 @@ public struct FeatureEditor: View {
     public var body: some View {
         FeatureEditorToolbar(style: toolbarStyle)
             .task(id: ObjectIdentifier(geometryEditor)) {
-                model.geometryEditor = geometryEditor
+                model.geometryEditorModel.geometryEditor = geometryEditor
                 await model.restartGeometryEditor()
-                await model.monitorGeometryEditorStreams()
+                await model.geometryEditorModel.monitorStreams()
             }
             .task(id: feature.map(ObjectIdentifier.init)) {
                 if let feature {
@@ -109,12 +109,12 @@ public struct FeatureEditor: View {
                     model.stopEditing()
                 }
             }
-            .onChange(of: model.isPresented) {
-                guard !model.isPresented else { return }
+            .onChange(of: model.state) { oldState, newState in
+                guard oldState == .editing, newState == .stopped else { return }
                 feature = nil
             }
-            .onChange(of: ObjectIdentifier(model.geometryEditor.snapSettings)) {
-                model.syncSnapSourceSettings()
+            .onChange(of: ObjectIdentifier(model.geometryEditorModel.geometryEditor.snapSettings)) {
+                model.geometryEditorModel.syncSnapSourceSettings()
             }
             .task(id: map) {
                 do {
