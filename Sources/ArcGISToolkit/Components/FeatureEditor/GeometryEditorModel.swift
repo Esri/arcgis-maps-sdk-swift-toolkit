@@ -64,14 +64,14 @@ final class GeometryEditorModel {
             }
         }
     }
-
+    
     /// Starts the geometry editor with an initial geometry.
     func start(withInitial geometry: Geometry) {
         initialGeometry = geometry
         geometryType = nil
         geometryEditor.start(withInitial: geometry)
     }
-
+    
     /// Starts the geometry editor with a geometry type.
     func start(withType geometryType: Geometry.Type) {
         initialGeometry = nil
@@ -82,7 +82,7 @@ final class GeometryEditorModel {
     /// Restarts the geometry editor if it is started.
     func restart() {
         guard isStarted else { return }
-
+        
         if let initialGeometry {
             start(withInitial: initialGeometry)
         } else if let geometryType {
