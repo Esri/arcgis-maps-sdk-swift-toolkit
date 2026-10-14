@@ -78,7 +78,6 @@ public struct FeatureFormView: View {
     
     /// A model created for the user if the 200.8 root form initializer is used.
     @State private var legacyModel: FeatureFormView.Model?
-    private let legacyRoot: FeatureForm?
     
     /// Initializes a form view.
     /// - Parameters:
@@ -86,9 +85,8 @@ public struct FeatureFormView: View {
     ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Since: 200.8
     public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
-        _legacyModel = .init(wrappedValue: .init())
+        _legacyModel = .init(wrappedValue: .init(forms: [root]))
         self.isPresented = isPresented
-        self.legacyRoot = root
         self.providedModel = nil
     }
     
@@ -100,27 +98,20 @@ public struct FeatureFormView: View {
     public init(model: Model, isPresented: Binding<Bool>? = nil) {
         _legacyModel = nil
         self.isPresented = isPresented
-        self.legacyRoot = nil
         self.providedModel = model
     }
     
     public var body: some View {
-        Group {
-            if let legacyRoot {
-                StackView(root: legacyRoot)
-            } else {
-                GroupView()
+        GroupView()
+            .environment(model)
+            .onAppear {
+                model.isPresented = isPresented?.wrappedValue
             }
-        }
-        .environment(model)
-        .onAppear {
-            model.isPresented = isPresented?.wrappedValue
-        }
-        .onChange(of: model.isPresented) { _, newValue in
-            if let newValue, let isPresented, newValue != isPresented.wrappedValue {
-                isPresented.wrappedValue = newValue
+            .onChange(of: model.isPresented) { _, newValue in
+                if let newValue, let isPresented, newValue != isPresented.wrappedValue {
+                    isPresented.wrappedValue = newValue
+                }
             }
-        }
     }
     
     /// Coalesces the provided model or the legacy model created for the user into one property.
