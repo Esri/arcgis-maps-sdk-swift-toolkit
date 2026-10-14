@@ -91,25 +91,19 @@ final class GeometryEditorModel {
     /// Stops the geometry editor and resets the session state.
     /// - Parameter resetTools: Whether to reset the tools configured for the
     /// session.
-    func stop(resetTools: Bool = true) {
+    func stop() {
         geometryEditor.stop()
         canUndo = false
         geometry = nil
         isStarted = false
         initialGeometry = nil
         geometryType = nil
-        if resetTools {
-            constructionTools = nil
-            selectableTools = FeatureEditorGeometryTool.allCases
-        }
     }
     
     // MARK: Tools
     
     /// The tools that are currently able to be selected.
     private(set) var selectableTools = FeatureEditorGeometryTool.allCases
-    /// The template-specific tools currently used to construct geometry.
-    private var constructionTools: [FeatureEditorGeometryTool]?
     /// The tool selected by the picker.
     var selectedTool: FeatureEditorGeometryTool = .vertex {
         didSet {
@@ -119,9 +113,7 @@ final class GeometryEditorModel {
     
     /// Updates the tools available for the current geometry.
     private func updateSelectableTools() {
-        selectableTools = if let constructionTools {
-            constructionTools
-        } else if let geometry, case let geometryType = type(of: geometry) {
+        selectableTools = if let geometry, case let geometryType = type(of: geometry) {
             FeatureEditorGeometryTool.allCases
                 .filter { tool in
                     tool.supportedGeometryTypes.contains(where: { $0 == geometryType })
