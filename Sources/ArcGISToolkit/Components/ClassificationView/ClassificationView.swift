@@ -13,22 +13,30 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
+internal import os
 import SwiftUI
 
-internal import os
-
-/// A view that frames content with a portal item's classification marking.
+/// Portal item content framed by classification bars.
 ///
 /// A classification view displays matching classification bars above and below
 /// its content. It uses the classification assigned to the supplied portal item
 /// and does not aggregate classifications from the item's basemap or operational
 /// layers.
 ///
-/// The view loads the portal item through an authenticated portal and uses the
-/// portal's classification schema to resolve the banner colors when available.
-/// The application is responsible for configuring authentication challenge
-/// handling before displaying the view. While loading, or when no classification
-/// is available, the content is displayed without classification bars.
+/// The view loads the supplied item's portal before resolving classification.
+/// The supplied item is reused if classification is already available or it has
+/// no identifier. Otherwise, a fresh item with the same identifier and portal
+/// is loaded for classification metadata.
+///
+/// The view does not create a portal or change its configured connection mode.
+/// Any available classification is displayed for anonymous and authenticated
+/// portals. Loading an authenticated portal may trigger authentication challenges;
+/// the application must configure challenge handling before using this view.
+///
+/// Content remains hidden until classification loading succeeds. Loading failures
+/// are logged and displayed with a retry action. Content is displayed without bars
+/// when no classification is available, or immediately when the item is missing.
 ///
 /// Use the ``classification(portalItem:)`` modifier to add the classification
 /// bars to an existing view:
@@ -47,12 +55,22 @@ public struct ClassificationView<Content: View>: View {
     /// The portal item whose classification is displayed.
     private let portalItem: PortalItem?
 
-    /// The classification displayed by the bars.
-    @State private var marking: ClassificationMarking?
+    /// The classification loading result, or `nil` while loading.
+    @State private var result: Result<ClassificationMarking?, Error>?
+    
+    /// The item associated with the loading result, preventing stale content on item changes.
+    @State private var loadingItemID: ObjectIdentifier?
+    
+    /// A new value restarts classification loading when the user retries.
+    @State private var retryID = UUID()
 
-    /// Creates a classification view for a portal item and its content.
+    /// Creates classification-framed content for a portal item.
+    ///
+    /// The view may load a separate item through the supplied item's portal to obtain
+    /// classification metadata without changing its configured connection mode.
     /// - Parameters:
-    ///   - portalItem: The portal item whose classification is displayed.
+    ///   - portalItem: The item whose classification applies to the content, or
+    ///     `nil` to display content without classification bars.
     ///   - content: The content framed by classification bars.
     public init(
         portalItem: PortalItem?,
@@ -63,6 +81,70 @@ public struct ClassificationView<Content: View>: View {
     }
 
     public var body: some View {
+        Group {
+            if portalItem == nil {
+                content
+            } else if loadingItemID != portalItem.map(ObjectIdentifier.init) {
+                loadingView
+            } else {
+                switch result {
+                case .failure(let error):
+                    ContentUnavailableView {
+                        Label {
+                            Text(
+                                "Unable to Load Classification",
+                                bundle: .toolkitModule,
+                                comment: "The title of a classification loading error."
+                            )
+                        } icon: {
+                            Image(systemName: "exclamationmark.triangle")
+                        }
+                    } description: {
+                        Text(error.localizedDescription)
+                    } actions: {
+                        Button {
+                            result = nil
+                            retryID = UUID()
+                        } label: {
+                            Label {
+                                Text(
+                                    "Retry",
+                                    bundle: .toolkitModule,
+                                    comment: "An action to retry loading classification."
+                                )
+                            } icon: {
+                                Image(systemName: "arrow.clockwise")
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .buttonBorderShape(.capsule)
+                    }
+                case .success(let marking):
+                    classifiedContent(marking: marking)
+                case nil:
+                    loadingView
+                }
+            }
+        }
+        .task(id: portalItem.map(ObjectIdentifier.init)) {
+            await loadMarking()
+        }
+        .id(retryID)
+    }
+    
+    /// A progress indicator while classification is loading.
+    private var loadingView: some View {
+        ProgressView {
+            Text(
+                "Loading classification...",
+                bundle: .toolkitModule,
+                comment: "The status while classification is loading."
+            )
+        }
+    }
+    
+    /// Frames the content with bars when a classification marking is available.
+    private func classifiedContent(marking: ClassificationMarking?) -> some View {
         VStack(spacing: 0) {
             if let marking {
                 ClassificationBar(
@@ -81,51 +163,46 @@ public struct ClassificationView<Content: View>: View {
                 .accessibilityHidden(true)
             }
         }
-        .task(id: portalItem.map(ObjectIdentifier.init)) {
-            await loadMarking()
-        }
     }
 
     /// Loads the classification marking for the portal item.
     private func loadMarking() async {
-        marking = nil
+        result = nil
+        loadingItemID = portalItem.map(ObjectIdentifier.init)
 
-        guard let portalItem, let id = portalItem.id else { return }
-
-        // Classification information is only returned when the item is
-        // loaded through an authenticated portal.
-        // And even then, if the item is loaded before the portal is loaded
-        // the classification information will not be returned.
-        // So we have to ensure that we load an authenticated portal first unless
-        // there is classification information already available on the item.
-        let authenticatedPortalItem: PortalItem
-        if portalItem.classification != nil {
-            authenticatedPortalItem = portalItem
-            Logger.classificationView.debug("Using classification from provided portal item.")
-        } else {
-            let authenticatedPortal = Portal(
-                url: portalItem.portal.url,
-                connection: .authenticated
-            )
-            authenticatedPortalItem = PortalItem(portal: authenticatedPortal, id: id)
-            Logger.classificationView.debug("Creating a new portal and item to load to get classification information.")
-        }
+        guard let portalItem else { return }
 
         do {
-            let marking = try await authenticatedPortalItem.loadClassificationMarking()
+            try await portalItem.portal.retryLoad()
             try Task.checkCancellation()
-            self.marking = marking
+            
+            let classificationItem = portalItem.itemForClassification
+            let marking = try await classificationItem.loadClassificationMarking()
+            try Task.checkCancellation()
+            result = .success(marking)
         } catch is CancellationError {
             return
         } catch {
+            guard !Task.isCancelled else { return }
+            let id = portalItem.id?.description ?? "<unknown>"
             Logger.classificationView.error(
                 "Failed to load classification marking for portal item \(id): \(error)"
             )
+            result = .failure(error)
         }
     }
 }
 
 private extension PortalItem {
+    /// The item to load after its portal for classification metadata.
+    ///
+    /// A fresh item avoids cached metadata from a map or list loading the item
+    /// before its portal. Items with classification or no identifier are reused.
+    var itemForClassification: PortalItem {
+        guard classification == nil, let id else { return self }
+        return PortalItem(portal: portal, id: id)
+    }
+    
     /// Loads the item and returns its classification marking, if one is defined.
     func loadClassificationMarking() async throws -> ClassificationMarking? {
         let id = self.id?.description ?? "<unknown>"
@@ -133,12 +210,10 @@ private extension PortalItem {
             "Loading classification marking for portal item \(id)"
         )
 
-        // The portal must finish authenticating before the item loads or the
-        // item's classification information may be unavailable.
-        try await portal.retryLoad()
-        try Task.checkCancellation()
-        try await retryLoad()
-        Logger.classificationView.debug("Loaded portal item \(id)")
+        if classification == nil {
+            try await retryLoad()
+            Logger.classificationView.debug("Loaded portal item \(id)")
+        }
         try Task.checkCancellation()
 
         guard let classification else {
@@ -172,16 +247,17 @@ private extension PortalItem {
 public extension View {
     /// Frames this view with a portal item's classification marking.
     ///
-    /// The modifier loads the portal item through an authenticated portal. If
-    /// the item has a classification, matching bars appear above and below this
-    /// view using the portal's classification schema colors when available. If
-    /// the item has no classification or loading fails, this view is displayed
-    /// without classification bars.
+    /// Uses the loading and authentication behavior of ``ClassificationView``:
+    /// any available classification is displayed regardless of connection mode.
+    /// A fresh item may be loaded through the supplied item's portal without
+    /// creating a new portal or changing its configured connection mode.
+    /// The application handles authentication challenges triggered by loading
+    /// an authenticated portal.
+    /// Content remains hidden while classification loads or loading fails.
+    /// Loading failures are displayed with a retry action.
     ///
-    /// The application is responsible for configuring authentication challenge
-    /// handling.
-    ///
-    /// - Parameter portalItem: The portal item whose classification is displayed.
+    /// - Parameter portalItem: The item whose classification applies to this
+    ///   view, or `nil` to omit the bars.
     /// - Returns: A view framed by the portal item's classification bars.
     func classification(portalItem: PortalItem?) -> some View {
         ClassificationView(portalItem: portalItem) {

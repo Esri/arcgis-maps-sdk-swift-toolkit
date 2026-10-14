@@ -12,7 +12,10 @@
         @ContentAndMedia {
             Before starting, configure your app to handle authentication challenges
             by following the <doc:AuthenticatorTutorial>. You also need the URL of
-            an authenticated portal and the ID of a classified web map in that portal.
+            a portal and the ID of a classified web map in that portal.
+
+            This example selects an authenticated connection in the app. The
+            component preserves the supplied portal and its connection mode.
 
             @Image(
                 source: ClassificationView,
@@ -36,9 +39,15 @@
                 Apply the `classification(portalItem:)` modifier using the map's
                 portal item.
 
-                The classification bars appear after the portal and item finish
-                loading. If the item has no classification, the map is displayed
-                without classification bars.
+                The component loads the supplied item's portal first, then reuses
+                available classification or loads a fresh item through the same
+                portal to obtain classification metadata.
+
+                The map remains hidden behind a loading indicator until
+                classification loading succeeds. It then appears with the
+                classification bars, or without bars if no classification was
+                returned. A loading failure displays an error with a Retry action
+                instead of the map.
 
                 @Code(
                     name: "ClassificationViewExample.swift",
