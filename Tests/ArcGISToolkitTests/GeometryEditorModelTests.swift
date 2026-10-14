@@ -57,7 +57,7 @@ struct GeometryEditorModelTests {
         #expect(!model.canUndo)
         
         model.geometryEditor.stop()
-        await Task.yield()
+        try? await Task.sleep(for: .seconds(0.1))
         
         #expect(!model.isStarted)
         #expect(model.geometry == nil)
