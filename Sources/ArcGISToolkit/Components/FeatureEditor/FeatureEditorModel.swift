@@ -212,7 +212,6 @@ final class FeatureEditorModel {
                 )
             }
             geometryEditorModel.setSnapRules(snapRules)
-            geometryEditorModel.syncSnapSourceSettings()
             
             startGeometryEditor()
         }
@@ -238,7 +237,6 @@ final class FeatureEditorModel {
     /// Stops the geometry editor and resets the related model properties.
     private func stopGeometryEditing() {
         geometryEditorModel.stop()
-        geometryEditorModel.setSnapRules(nil)
         
         // Clears `hiddenFeature` and resets its visibility to true.
         if let hiddenFeature = hiddenFeature.take(), let featureLayer = hiddenFeature.featureLayer {

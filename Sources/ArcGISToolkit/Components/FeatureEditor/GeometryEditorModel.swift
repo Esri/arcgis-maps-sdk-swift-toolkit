@@ -101,6 +101,9 @@ final class GeometryEditorModel {
         isStarted = false
         initialGeometry = nil
         geometryType = nil
+        if snapRules != nil {
+            snapRules = nil
+        }
         if snapSettingsAreBeingModified {
             snapSettingsAreBeingModified = false
         }
@@ -119,6 +122,7 @@ final class GeometryEditorModel {
     /// - Parameter snapRules: The new snap rules.
     func setSnapRules(_ snapRules: SnapRules?) {
         self.snapRules = snapRules
+        syncSnapSourceSettings()
     }
     
     /// Syncs the `geometryEditor.snapSettings`' source settings.
