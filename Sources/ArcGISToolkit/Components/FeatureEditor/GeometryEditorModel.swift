@@ -118,7 +118,7 @@ final class GeometryEditorModel {
     /// modified.
     var snapSettingsAreBeingModified = false
     
-    /// Sets the given snap rules to the model
+    /// Sets the given snap rules to the model.
     /// - Parameter snapRules: The new snap rules.
     func setSnapRules(_ snapRules: SnapRules?) {
         self.snapRules = snapRules
