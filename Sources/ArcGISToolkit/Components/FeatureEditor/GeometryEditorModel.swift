@@ -147,7 +147,7 @@ final class GeometryEditorModel {
     
     /// The tools that are currently able to be selected.
     private(set) var selectableTools = FeatureEditorGeometryTool.allCases
-    /// The tool selected by the picker.
+    /// The currently selected tool..
     var selectedTool: FeatureEditorGeometryTool = .vertex {
         didSet {
             geometryEditor.tool = selectedTool.geometryEditorTool
