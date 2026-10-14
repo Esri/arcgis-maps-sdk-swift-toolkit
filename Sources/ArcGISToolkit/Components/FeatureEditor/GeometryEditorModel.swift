@@ -94,8 +94,6 @@ final class GeometryEditorModel {
     }
     
     /// Stops the geometry editor and resets the session state.
-    /// - Parameter resetTools: Whether to reset the tools configured for the
-    /// session.
     func stop() {
         geometryEditor.stop()
         canUndo = false
