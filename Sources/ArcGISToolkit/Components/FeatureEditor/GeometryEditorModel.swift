@@ -40,16 +40,6 @@ final class GeometryEditorModel {
     private(set) var initialGeometry: Geometry?
     /// The geometry type that was used to start the current editing session.
     private var geometryType: Geometry.Type?
-    /// The tools that are currently able to be selected.
-    private(set) var selectableTools = FeatureEditorGeometryTool.allCases
-    /// The template-specific tools currently used to construct geometry.
-    private var constructionTools: [FeatureEditorGeometryTool]?
-    /// The tool selected by the picker.
-    var selectedTool: FeatureEditorGeometryTool = .vertex {
-        didSet {
-            geometryEditor.tool = selectedTool.geometryEditorTool
-        }
-    }
     
     /// Monitors geometry editor streams and updates the corresponding
     /// properties.
@@ -86,19 +76,6 @@ final class GeometryEditorModel {
         self.geometryType = geometryType
         geometryEditor.start(withType: geometryType)
     }
-
-    /// Sets the tools available for the current geometry editing session.
-    /// - Parameters:
-    ///   - tools: The tools that can be selected.
-    ///   - selectedTool: The initial selected tool.
-    func setSelectableTools(
-        _ tools: [FeatureEditorGeometryTool],
-        selectedTool: FeatureEditorGeometryTool?
-    ) {
-        constructionTools = tools
-        selectableTools = tools
-        self.selectedTool = selectedTool ?? tools.first ?? .vertex
-    }
     
     /// Restarts the geometry editor if it is started.
     func restart() {
@@ -124,6 +101,19 @@ final class GeometryEditorModel {
         if resetTools {
             constructionTools = nil
             selectableTools = FeatureEditorGeometryTool.allCases
+        }
+    }
+    
+    // MARK: Tools
+    
+    /// The tools that are currently able to be selected.
+    private(set) var selectableTools = FeatureEditorGeometryTool.allCases
+    /// The template-specific tools currently used to construct geometry.
+    private var constructionTools: [FeatureEditorGeometryTool]?
+    /// The tool selected by the picker.
+    var selectedTool: FeatureEditorGeometryTool = .vertex {
+        didSet {
+            geometryEditor.tool = selectedTool.geometryEditorTool
         }
     }
     
