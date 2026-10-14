@@ -53,6 +53,7 @@ private struct FeatureEditorModifier: ViewModifier {
     }
     
     func body(content: Content) -> some View {
+        @Bindable var geometryEditorModel = model.geometryEditorModel
         content
             .safeInspector(isPresented: inspectorIsPresented) {
                 // VStack is needed for presentation modifiers to be applied.
@@ -123,7 +124,7 @@ private struct FeatureEditorModifier: ViewModifier {
                 .inspectorColumnWidth(ideal: 320)
 #endif
                 .interactiveDismissDisabled()
-                .sheet(isPresented: $model.snapSettingsSheetIsPresented) {
+                .sheet(isPresented: $geometryEditorModel.snapSettingsSheetIsPresented) {
                     SnapSettingsView(settings: model.geometryEditorModel.geometryEditor.snapSettings)
                 }
             }

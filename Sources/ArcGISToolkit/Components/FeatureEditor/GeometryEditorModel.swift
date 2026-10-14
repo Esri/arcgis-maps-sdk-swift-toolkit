@@ -15,6 +15,8 @@
 import ArcGIS
 import Observation
 
+internal import os
+
 /// A data model that contains the state needed to use a geometry editor.
 @MainActor
 @Observable
@@ -98,6 +100,48 @@ final class GeometryEditorModel {
         isStarted = false
         initialGeometry = nil
         geometryType = nil
+    }
+    
+    // MARK: Snapping
+    
+    /// The snap rules for the `feature`, used to sync snap source settings.
+    /// These are created when `feature` is part of an available utility
+    /// network.
+    @ObservationIgnored
+    private var snapRules: SnapRules?
+    /// A Boolean value indicating whether the snap settings sheet is presented.
+    /// This is needed to display the sheet from the modifier to prevent it from
+    /// dismissing the feature editor when the horizontal size class is compact.
+    var snapSettingsSheetIsPresented = false
+    
+    /// Sets the given snap rules to the model
+    /// - Parameter snapRules: The new snap rules.
+    func setSnapRules(_ snapRules: SnapRules?) {
+        self.snapRules = snapRules
+    }
+    
+    /// Syncs the `geometryEditor.snapSettings`' source settings.
+    func syncSnapSourceSettings() {
+        do {
+            let snapSettings = geometryEditor.snapSettings
+            
+            if let snapRules {
+                try snapSettings.syncSourceSettings(
+                    rules: snapRules,
+                    sourceEnablingBehavior: .preserve
+                )
+            } else {
+                try snapSettings.syncSourceSettings()
+            }
+            
+            // Snapping is enabled by default to simplify the `SnapSettingsView`
+            // UI.
+            snapSettings.isEnabled = true
+        } catch {
+            Logger.featureEditor.error(
+                "Error syncing snap source settings: \(error.localizedDescription)"
+            )
+        }
     }
     
     // MARK: Tools

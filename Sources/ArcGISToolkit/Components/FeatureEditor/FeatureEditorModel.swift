@@ -61,14 +61,6 @@ final class FeatureEditorModel {
     private(set) var rootFeatureForm: FeatureForm?
     /// The result of trying to load the resources and starting editing.
     private(set) var loadResult: Result<Void, Error>?
-    /// A Boolean value indicating whether the snap settings sheet is presented.
-    /// This is needed to display the sheet from the modifier to prevent it from
-    /// dismissing the feature editor when the horizontal size class is compact.
-    var snapSettingsSheetIsPresented = false
-    /// The snap rules for the `feature`, used to sync snap source settings.
-    /// These are created when `feature` is part of an available utility network.
-    @ObservationIgnored
-    private var snapRules: SnapRules?
     /// The geometry used to set the viewpoint.
     var viewpointGeometry: Geometry?
     
@@ -148,35 +140,12 @@ final class FeatureEditorModel {
     private func resetProperties() {
         rootFeatureForm = nil
         presentedFeatureForm = nil
-        snapSettingsSheetIsPresented = false
+        geometryEditorModel.snapSettingsSheetIsPresented = false
         viewpointGeometry = nil
         
         stopGeometryEditing()
         
         loadResult = nil
-    }
-    
-    /// Syncs the `geometryEditor.snapSettings`' source settings.
-    func syncSnapSourceSettings() {
-        do {
-            let snapSettings = geometryEditorModel.geometryEditor.snapSettings
-            
-            if let snapRules {
-                try snapSettings.syncSourceSettings(
-                    rules: snapRules,
-                    sourceEnablingBehavior: .preserve
-                )
-            } else {
-                try snapSettings.syncSourceSettings()
-            }
-            
-            // Snapping is enabled by default to simplify the `SnapSettingsView` UI.
-            snapSettings.isEnabled = true
-        } catch {
-            Logger.featureEditor.error(
-                "Error syncing snap source settings: \(error.localizedDescription)"
-            )
-        }
     }
     
     /// Updates the form's feature geometry using the geometry editor's current
@@ -234,6 +203,7 @@ final class FeatureEditorModel {
             // snap rules can be created.
             try await feature.table?.retryLoad()
             
+            let snapRules: SnapRules?
             do {
                 snapRules = try await feature.snapRules
             } catch {
@@ -242,7 +212,8 @@ final class FeatureEditorModel {
                     "Failed to create snap rules: \(error.localizedDescription)"
                 )
             }
-            syncSnapSourceSettings()
+            geometryEditorModel.setSnapRules(snapRules)
+            geometryEditorModel.syncSnapSourceSettings()
             
             startGeometryEditor()
         }
@@ -268,7 +239,7 @@ final class FeatureEditorModel {
     /// Stops the geometry editor and resets the related model properties.
     private func stopGeometryEditing() {
         geometryEditorModel.stop()
-        snapRules = nil
+        geometryEditorModel.setSnapRules(nil)
         
         // Clears `hiddenFeature` and resets its visibility to true.
         if let hiddenFeature = hiddenFeature.take(), let featureLayer = hiddenFeature.featureLayer {

@@ -356,7 +356,7 @@ private extension FeatureEditorModel {
         #expect(!isPresented, sourceLocation: sourceLocation)
         #expect(rootFeatureForm == nil, sourceLocation: sourceLocation)
         #expect(loadResult == nil, sourceLocation: sourceLocation)
-        #expect(!snapSettingsSheetIsPresented, sourceLocation: sourceLocation)
+        #expect(!geometryEditorModel.snapSettingsSheetIsPresented, sourceLocation: sourceLocation)
         #expect(viewpointGeometry == nil, sourceLocation: sourceLocation)
         
         // Yields to ensure geometry editor properties are updated by monitorGeometryEditorStreams().

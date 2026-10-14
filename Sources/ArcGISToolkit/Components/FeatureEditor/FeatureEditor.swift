@@ -114,7 +114,7 @@ public struct FeatureEditor: View {
                 feature = nil
             }
             .onChange(of: ObjectIdentifier(model.geometryEditorModel.geometryEditor.snapSettings)) {
-                model.syncSnapSourceSettings()
+                model.geometryEditorModel.syncSnapSourceSettings()
             }
             .task(id: map) {
                 do {

@@ -86,7 +86,7 @@ struct FeatureEditorToolbar: View {
         UndoButton()
             .environment(model.geometryEditorModel)
         RedoButton(geometryEditor: geometryEditor)
-        SnapSettingsButton()
+        SnapSettingsButton(model: geometryEditorModel)
     }
 }
 
@@ -175,8 +175,8 @@ private struct UndoButton: View {
 
 /// A button for presenting a settings view for configuring snapping.
 private struct SnapSettingsButton: View {
-    /// The model for the parent feature editor containing the snap settings.
-    @Environment(FeatureEditorModel.self) private var featureEditorModel
+    /// The model geometry editor model.
+    let model: GeometryEditorModel
     
     var body: some View {
         Button(
@@ -187,8 +187,8 @@ private struct SnapSettingsButton: View {
             ),
             systemImage: "gear"
         ) {
-            featureEditorModel.syncSnapSourceSettings()
-            featureEditorModel.snapSettingsSheetIsPresented.toggle()
+            model.syncSnapSourceSettings()
+            model.snapSettingsSheetIsPresented = true
         }
     }
 }
