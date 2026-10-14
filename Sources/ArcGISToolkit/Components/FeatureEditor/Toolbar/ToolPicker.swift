@@ -17,7 +17,7 @@ import SwiftUI
 
 /// A control for picking a geometry editing tool.
 struct ToolPicker: View {
-    /// The model geometry editor model.
+    /// The geometry editor model used by this toolbar..
     @Bindable var model: GeometryEditorModel
     
     var body: some View {
