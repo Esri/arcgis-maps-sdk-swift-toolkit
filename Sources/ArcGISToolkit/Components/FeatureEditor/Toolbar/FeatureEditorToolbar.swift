@@ -83,8 +83,7 @@ struct FeatureEditorToolbar: View {
         let geometryEditor = model.geometryEditorModel.geometryEditor
         ToolPicker(model: geometryEditorModel)
         DeleteButton(geometryEditor: geometryEditor)
-        UndoButton()
-            .environment(model.geometryEditorModel)
+        UndoButton(model: geometryEditorModel)
         RedoButton(geometryEditor: geometryEditor)
         SnapSettingsButton(model: geometryEditorModel)
     }
@@ -96,10 +95,6 @@ struct FeatureEditorToolbar: View {
 private struct DeleteButton: View {
     /// The geometry editor to be used by this button.
     let geometryEditor: GeometryEditor
-    
-    init(geometryEditor: GeometryEditor) {
-        self.geometryEditor = geometryEditor
-    }
     
     /// A Boolean value indicating whether the selected element can be deleted.
     @State private var canDeleteSelectedElement = false
@@ -128,10 +123,6 @@ private struct RedoButton: View {
     /// The geometry editor to be used by this button.
     let geometryEditor: GeometryEditor
     
-    init(geometryEditor: GeometryEditor) {
-        self.geometryEditor = geometryEditor
-    }
-    
     /// A Boolean value indicating whether the geometry editor can redo an action.
     @State private var canRedo = false
     
@@ -156,8 +147,8 @@ private struct RedoButton: View {
 
 /// A button for undoing the geometry editor's last action.
 private struct UndoButton: View {
-    /// The model for the geometry editor.
-    @Environment(GeometryEditorModel.self) private var geometryEditorModel
+    /// The geometry editor model used by this button.
+    let model: GeometryEditorModel
     
     var body: some View {
         Button(
@@ -167,15 +158,15 @@ private struct UndoButton: View {
                 comment: "A label for a button to undo the last geometry editor action."
             ),
             systemImage: "arrow.uturn.backward",
-            action: geometryEditorModel.geometryEditor.undo
+            action: model.geometryEditor.undo
         )
-        .disabled(!geometryEditorModel.canUndo)
+        .disabled(!model.canUndo)
     }
 }
 
 /// A button for presenting a settings view for configuring snapping.
 private struct SnapSettingsButton: View {
-    /// The model geometry editor model.
+    /// The geometry editor model used by this button.
     let model: GeometryEditorModel
     
     var body: some View {
