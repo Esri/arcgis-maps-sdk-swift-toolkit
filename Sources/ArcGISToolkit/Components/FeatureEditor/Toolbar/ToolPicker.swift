@@ -17,36 +17,34 @@ import SwiftUI
 
 /// A control for picking a geometry editing tool.
 struct ToolPicker: View {
-    /// The model for the parent feature editor containing the geometry editor.
-    @Environment(FeatureEditorModel.self) private var featureEditorModel
+    /// The model geometry editor model.
+    @Bindable var model: GeometryEditorModel
     
     var body: some View {
-        @Bindable var geometryEditorModel = featureEditorModel.geometryEditorModel
         let title = LocalizedStringResource(
             "Tool",
             bundle: .toolkit,
             comment: "A label for a control to pick a geometry editor tool."
         )
-        Menu(title, systemImage: geometryEditorModel.selectedTool.systemImage) {
-            Picker(title, selection: $geometryEditorModel.selectedTool) {
-                ForEach(geometryEditorModel.selectableTools, id: \.self) { tool in
+        Menu(title, systemImage: model.selectedTool.systemImage) {
+            Picker(title, selection: $model.selectedTool) {
+                ForEach(model.selectableTools, id: \.self) { tool in
                     Label(tool.label, systemImage: tool.systemImage)
                 }
             }
         }
         .accessibilityIdentifier("Tool")
-        .animation(.default, value: geometryEditorModel.selectedTool)
+        .animation(.default, value: model.selectedTool)
     }
 }
 
 #Preview {
-    @Previewable @State var featureEditorModel = FeatureEditorModel()
+    @Previewable @State var model = GeometryEditorModel()
     
-    ToolPicker()
-        .environment(featureEditorModel)
+    ToolPicker(model: model)
         .task {
-            featureEditorModel.geometryEditorModel.start(withType: Polygon.self)
-            await featureEditorModel.geometryEditorModel.monitorStreams()
+            model.start(withType: Polygon.self)
+            await model.monitorStreams()
         }
 }
 

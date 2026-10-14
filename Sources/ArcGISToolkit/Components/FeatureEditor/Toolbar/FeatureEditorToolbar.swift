@@ -79,8 +79,9 @@ struct FeatureEditorToolbar: View {
     
     /// The control views for the toolbar.
     @ViewBuilder private var controls: some View {
+        let geometryEditorModel = model.geometryEditorModel
         let geometryEditor = model.geometryEditorModel.geometryEditor
-        ToolPicker()
+        ToolPicker(model: geometryEditorModel)
         DeleteButton(geometryEditor: geometryEditor)
         UndoButton()
             .environment(model.geometryEditorModel)
