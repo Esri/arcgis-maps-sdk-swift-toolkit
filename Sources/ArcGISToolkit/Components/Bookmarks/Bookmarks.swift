@@ -58,9 +58,6 @@ public struct Bookmarks: View {
     
     public var body: some View {
         VStack {
-            BookmarksHeader(isPresented: $isPresented)
-                .padding([.horizontal, .top])
-            Divider()
             switch bookmarkSource {
             case .array(let array):
                 makeList(bookmarks: array)
@@ -76,6 +73,21 @@ public struct Bookmarks: View {
             Spacer()
         }
         .frame(idealWidth: 320, idealHeight: 428)
+        .navigationTitle(
+            String(
+                localized: "Bookmarks",
+                bundle: .toolkitModule,
+                comment: "A label in reference to bookmarks contained in a map or scene."
+            )
+        )
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                DismissButton(kind: .close) {
+                    isPresented = false
+                }
+            }
+        }
     }
 }
 
