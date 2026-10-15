@@ -19,7 +19,7 @@ internal import os
 
 public extension FeatureFormView {
     @MainActor @Observable
-    class Model {
+    final class Model {
         /// A Boolean value that determines whether the view is presented.
         var isPresented: Bool?
         
