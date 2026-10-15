@@ -26,6 +26,38 @@ extension XCUIElement {
 #endif
     }
     
+    /// Asserts that the element exists and becomes disabled within an amount of time.
+    /// - Parameters:
+    ///   - timeout: The time, in seconds, the test allows for the element to become available and
+    ///   disabled. The default timeout is five seconds.
+    @MainActor func assertDisabled(
+        timeout: TimeInterval = .standard,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        assertExistence(timeout: timeout, file: file, line: line)
+        
+        let didBecomeDisabled = wait(for: \.isEnabled, toEqual: false, timeout: timeout)
+        let message = "The \(description) was not disabled after \(timeout.formattedDescription)."
+        XCTAssertTrue(didBecomeDisabled, message, file: file, line: line)
+    }
+    
+    /// Asserts that the element exists and becomes enabled within an amount of time.
+    /// - Parameters:
+    ///   - timeout: The time, in seconds, the test allows for the element to become available and
+    ///   enabled. The default timeout is five seconds.
+    @MainActor func assertEnabled(
+        timeout: TimeInterval = .standard,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        assertExistence(timeout: timeout, file: file, line: line)
+        
+        let didBecomeEnabled = wait(for: \.isEnabled, toEqual: true, timeout: timeout)
+        let message = "The \(description) was not enabled after \(timeout.formattedDescription)."
+        XCTAssertTrue(didBecomeEnabled, message, file: file, line: line)
+    }
+    
     /// Asserts that the element exists after an amount of time.
     /// - Parameters:
     ///   - timeout: The time, in seconds, the test allows for the element to become available. The
@@ -124,4 +156,9 @@ extension XCUIElement {
 private extension TimeInterval {
     /// A 5 second time interval.
     static var standard: TimeInterval { 5 }
+    
+    /// The human-readable description of the time interval.
+    var formattedDescription: String {
+        "\(self) \(self == 1 ? "second" : "seconds")"
+    }
 }
