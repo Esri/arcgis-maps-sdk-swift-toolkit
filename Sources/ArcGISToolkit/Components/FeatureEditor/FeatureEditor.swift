@@ -66,6 +66,18 @@ public struct FeatureEditor: View {
     
     /// The shared feature editor model from the environment.
     @Environment(FeatureEditorModel.self) private var model
+    /// The vertical size class of the environment.
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    
+    /// The style to use for the feature editor, taking into account the current
+    /// environment.
+    var effectiveToolbarStyle: ToolbarStyle? {
+        guard let toolbarStyle else { return nil }
+        return switch verticalSizeClass {
+        case .compact: .horizontal
+        default: toolbarStyle
+        }
+    }
     
     /// Creates a feature editor.
     /// - Parameters:
@@ -96,7 +108,7 @@ public struct FeatureEditor: View {
     }
     
     public var body: some View {
-        FeatureEditorToolbar(style: toolbarStyle)
+        FeatureEditorToolbar(style: effectiveToolbarStyle)
             .task(id: ObjectIdentifier(geometryEditor)) {
                 model.geometryEditorModel.geometryEditor = geometryEditor
                 await model.restartGeometryEditor()

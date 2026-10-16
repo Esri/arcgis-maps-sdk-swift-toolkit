@@ -18,7 +18,7 @@ import SwiftUI
 /// A view that displays a list of layer templates.
 struct FeatureEditorTemplatePicker: View {
     /// The model that manages the feature-adding workflow.
-    @Environment(FeatureAddingModel.self) private var model
+    let model: FeatureAddingModel
     
     /// The text used to filter the available template groups.
     @State private var searchText = ""
@@ -46,41 +46,35 @@ struct FeatureEditorTemplatePicker: View {
     
     var body: some View {
         @Bindable var model = model
-        NavigationStack {
-            Form {
-                ForEach(filteredGroups) { group in
-                    FeatureEditorTemplatePickerGroup(group: group, searchText: searchText)
-                }
-            }
-            .navigationTitle(
-                LocalizedStringResource(
-                    "Templates",
-                    bundle: .toolkit,
-                    comment: "The title of the template picker view."
+        Form {
+            ForEach(filteredGroups) { group in
+                FeatureEditorTemplatePickerGroup(
+                    group: group,
+                    searchText: searchText
                 )
-            )
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: LayerTemplate.self) { layerTemplate in
-                ContentUnavailableView(
-                    LocalizedStringResource(
-                        "Construct a Geometry",
-                        bundle: .toolkit,
-                        comment: "A message displayed when the user has selected a template."
-                    ),
-                    image: ""
-                )
-                .navigationTitle(layerTemplate.name)
             }
-            .searchable(
-                text: $searchText,
-                placement: .navigationBarDrawer(displayMode: .always)
+        }
+        .navigationTitle(
+            LocalizedStringResource(
+                "Templates",
+                bundle: .toolkit,
+                comment: "The title of the template picker view."
             )
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    DismissButton(kind: .close) {
-                        withAnimation {
-                            model.stop()
-                        }
+        )
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(for: LayerTemplate.self) { layerTemplate in
+            GeometryConstructionView(layerTemplate: layerTemplate)
+                .environment(model)
+        }
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always)
+        )
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                DismissButton(kind: .close) {
+                    withAnimation {
+                        model.stop()
                     }
                 }
             }

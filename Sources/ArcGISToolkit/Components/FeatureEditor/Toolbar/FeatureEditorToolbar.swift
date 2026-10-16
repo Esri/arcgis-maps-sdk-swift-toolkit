@@ -32,6 +32,9 @@ struct FeatureEditorToolbar: View {
     /// The model for the feature editor.
     @Environment(FeatureEditorModel.self) private var model
     
+    /// A Boolean value indicating whether the discard edits alert is presented.
+    @State private var discardEditsAlertIsPresented = false
+    
     var body: some View {
         Group {
             switch model.state {
@@ -39,19 +42,42 @@ struct FeatureEditorToolbar: View {
                     .editing where model.geometryEditorModel.isStarted:
                 switch style {
                 case .vertical:
-                    VStack(spacing: stackSpacing) {
-                        controls
+                    VStack {
+                        if model.state == .adding {
+                            VStack(spacing: stackSpacing) {
+                                addingControls
+                            }
+                            .padding(.vertical, stackEdgePadding)
+                            .toolbarStyle(style)
+                        }
+                        
+                        VStack(spacing: stackSpacing) {
+                            controls
+                        }
+                        .padding(.vertical, stackEdgePadding)
+                        .toolbarStyle(style)
                     }
-                    .padding(.vertical, stackEdgePadding)
-                    .toolbarStyle()
                 case .horizontal:
-                    HStack(spacing: stackSpacing) {
-                        controls
+                    HStack {
+                        HStack(spacing: stackSpacing) {
+                            controls
+                        }
+                        .padding(.horizontal, stackEdgePadding)
+                        .toolbarStyle(style)
+                        
+                        if model.state == .adding {
+                            HStack(spacing: stackSpacing) {
+                                addingControls
+                            }
+                            .padding(.horizontal, stackEdgePadding)
+                            .toolbarStyle(style)
+                        }
                     }
-                    .padding(.horizontal, stackEdgePadding)
-                    .toolbarStyle()
                 case .none:
                     controls
+                    if model.state == .adding {
+                        addingControls
+                    }
                 }
             case .stopped where model.supportsAddingFeatures:
                 let addButton = Button(
@@ -65,7 +91,7 @@ struct FeatureEditorToolbar: View {
                 )
                 if style != nil {
                     addButton
-                        .toolbarStyle()
+                        .toolbarStyle(style)
                 } else {
                     addButton
                 }
@@ -74,6 +100,8 @@ struct FeatureEditorToolbar: View {
                 EmptyView()
             }
         }
+        .animation(.default, value: model.state)
+        .animation(.default, value: model.featureAddingModel.geometryConstructionState)
         .animation(.default, value: model.geometryEditorModel.isStarted)
     }
     
@@ -86,6 +114,68 @@ struct FeatureEditorToolbar: View {
         UndoButton(model: geometryEditorModel)
         RedoButton(geometryEditor: geometryEditor)
         SnapSettingsButton(model: geometryEditorModel)
+    }
+    
+    /// The controls for completing or cancelling feature addition.
+    @ViewBuilder private var addingControls: some View {
+        Button(
+            LocalizedStringResource(
+                "Save",
+                bundle: .toolkitModule,
+                comment: "A button to save the new feature created from the selected template."
+            ),
+            systemImage: "checkmark"
+        ) {
+            model.featureAddingModel.saveConstructedGeometry()
+        }
+        .disabled(model.geometryEditorModel.geometry?.sketchIsValid == false)
+        
+        Group {
+            if #available(iOS 26, *) {
+                Button(role: .cancel, action: cancelConstruction)
+            } else {
+                Button(
+                    LocalizedStringResource.cancel,
+                    systemImage: "trash",
+                    action: cancelConstruction
+                )
+            }
+        }
+        .confirmationDialog(
+            Text(
+                "Discard Edits?",
+                bundle: .toolkitModule,
+                comment: "A question asking if the user would like to discard their unsaved edits."
+            ),
+            isPresented: $discardEditsAlertIsPresented
+        ) {
+            Button.discard {
+                model.featureAddingModel.cancelConstruction()
+            }
+        } message: {
+            Text(
+                "Geometry edits will be lost.",
+                bundle: .toolkitModule,
+                comment: """
+                    A message explaining that unsaved geometry edits will be \ 
+                    lost if the user dismisses geometry construction.
+                    """
+            )
+        }
+    }
+}
+
+private extension FeatureEditorToolbar {
+    /// Cancels geometry construction.
+    ///
+    /// If a geometry has already been constructed, a confirmation dialog is
+    /// presented.
+    func cancelConstruction() {
+        if model.geometryEditorModel.hasGeometryEdits {
+            discardEditsAlertIsPresented = true
+        } else {
+            model.featureAddingModel.cancelConstruction()
+        }
     }
 }
 
@@ -189,11 +279,21 @@ private struct SnapSettingsButton: View {
 private extension View {
     /// Applies the shared styling used by the feature editor toolbar and its
     /// controls.
+    /// - Parameter style: The style of the toolbar.
     @ViewBuilder
-    func toolbarStyle() -> some View {
+    func toolbarStyle(_ style: FeatureEditor.ToolbarStyle?) -> some View {
         // glassEffect is not used because it bases its background color on the content behind it,
         // but the ToolPicker does not, causing the color to jump when the picker menu closes.
+        let minDiameter = 29.0
         self.fixedSize()
+            .frame(
+                width: style == .vertical ? minDiameter : nil,
+                height: style == .horizontal ? minDiameter : nil
+            )
+            .frame(
+                minWidth: style == .horizontal ? minDiameter : nil,
+                minHeight: style == .vertical ? minDiameter : nil
+            )
             .labelStyle(.iconOnly)
             .font(.title2)
             .buttonStyle(.borderless)

@@ -36,6 +36,17 @@ extension LocalizedStringResource {
         )
     }
     
+    static var discard: Self {
+        .init(
+            "Discard",
+            bundle: .toolkit,
+            comment: """
+                A label for a button to that delete user data or performs an \ 
+                irreversible operation"
+                """
+        )
+    }
+    
     static var downloaded: Self {
         .init(
             "Downloaded",
