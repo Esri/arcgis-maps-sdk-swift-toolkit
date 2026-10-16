@@ -40,14 +40,12 @@ struct BookmarksExampleView: View {
                             )
                         }
                         .popover(isPresented: $bookmarksIsPresented) {
-                            NavigationStack {
-                                Bookmarks(
-                                    isPresented: $bookmarksIsPresented,
-                                    geoModel: map,
-                                    selection: $selectedBookmark,
-                                    geoViewProxy: mapViewProxy
-                                )
-                            }
+                            Bookmarks(
+                                isPresented: $bookmarksIsPresented,
+                                geoModel: map,
+                                selection: $selectedBookmark,
+                                geoViewProxy: mapViewProxy
+                            )
                         }
                     }
                 }

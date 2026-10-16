@@ -57,34 +57,35 @@ public struct Bookmarks: View {
     private var selection: Binding<Bookmark?>
     
     public var body: some View {
-        VStack {
-            switch bookmarkSource {
-            case .array(let array):
-                makeList(bookmarks: array)
-            case .geoModel(let geoModel):
-                if isGeoModelLoaded {
-                    makeList(bookmarks: geoModel.bookmarks)
-                } else if let loadingError {
-                    makeErrorMessage(with: loadingError)
-                } else if !isGeoModelLoaded {
-                    makeLoadingView(geoModel: geoModel)
+        NavigationStack {
+            Group {
+                switch bookmarkSource {
+                case .array(let array):
+                    makeList(bookmarks: array)
+                case .geoModel(let geoModel):
+                    if isGeoModelLoaded {
+                        makeList(bookmarks: geoModel.bookmarks)
+                    } else if let loadingError {
+                        makeErrorMessage(with: loadingError)
+                    } else if !isGeoModelLoaded {
+                        makeLoadingView(geoModel: geoModel)
+                    }
                 }
             }
-            Spacer()
-        }
-        .frame(idealWidth: 320, idealHeight: 428)
-        .navigationTitle(
-            String(
-                localized: "Bookmarks",
-                bundle: .toolkitModule,
-                comment: "A label in reference to bookmarks contained in a map or scene."
+            .frame(idealWidth: 320, idealHeight: 428)
+            .navigationTitle(
+                String(
+                    localized: "Bookmarks",
+                    bundle: .toolkitModule,
+                    comment: "A label in reference to bookmarks contained in a map or scene."
+                )
             )
-        )
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                DismissButton(kind: .close) {
-                    isPresented = false
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    DismissButton(kind: .close) {
+                        isPresented = false
+                    }
                 }
             }
         }
