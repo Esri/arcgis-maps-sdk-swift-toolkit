@@ -74,8 +74,8 @@ public struct Bookmarks: View {
             }
             .frame(idealWidth: 320, idealHeight: 428)
             .navigationTitle(
-                String(
-                    localized: "Bookmarks",
+                LocalizedStringResource(
+                    "Bookmarks",
                     bundle: .toolkitModule,
                     comment: "A label in reference to bookmarks contained in a map or scene."
                 )
@@ -147,9 +147,9 @@ extension Bookmarks {
     func selectBookmark(_ bookmark: Bookmark) {
         selection.wrappedValue = bookmark
         isPresented = false
-        announceSettingViewpoint(bookmarkName: bookmark.name)
         
         if let geoViewProxy, let viewpoint = bookmark.viewpoint {
+            announceSettingViewpoint(bookmarkName: bookmark.name)
             Task {
                 await geoViewProxy.setViewpoint(viewpoint, duration: nil)
             }
