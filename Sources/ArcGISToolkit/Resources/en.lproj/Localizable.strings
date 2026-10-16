@@ -822,9 +822,6 @@ candidates to use in a new utility association. */
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Search Query";
 
-/* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "Select a bookmark";
-
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Select a facility";
@@ -837,6 +834,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for button to select a utility network trace configuration. */
 "Select Trace Configuration" = "Select Trace Configuration";
+
+/* The accessibility announcement when a bookmark is selected. */
+"Setting viewpoint to %@" = "Setting viewpoint to %@";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "Settings";
