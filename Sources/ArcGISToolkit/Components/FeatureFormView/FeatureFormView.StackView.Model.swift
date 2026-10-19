@@ -25,7 +25,8 @@ extension FeatureFormView.StackView {
         }
         
         /// The models for each feature form in the navigation path.
-        private var formModels: [ObjectIdentifier: FeatureFormView.FormView.Model] = [:]
+//        private var formModels: [ObjectIdentifier: FeatureFormView.FormView.Model] = [:]
+        private var formModel: FeatureFormView.FormView.Model?
         
         /// An error thrown from finish editing.
         var finishEditingError: (any Error)?
@@ -45,20 +46,23 @@ extension FeatureFormView.StackView {
         /// Creates and adds a model for the provided form.
         /// - Parameter form: The form to create and add a model for.
         @MainActor func addModel(_ form: FeatureForm) {
-            formModels[ObjectIdentifier(form)] = FeatureFormView.FormView.Model(featureForm: form)
+//            formModels[ObjectIdentifier(form)] = FeatureFormView.FormView.Model(featureForm: form)
+            formModel = FeatureFormView.FormView.Model(featureForm: form)
         }
         
         /// Gets the model for the specified form.
         /// - Parameter form: The form to get a model for.
         /// - Returns: The model for the provided form.
         func getModel(_ form: FeatureForm) -> FeatureFormView.FormView.Model? {
-            formModels[ObjectIdentifier(form)]
+//            formModels[ObjectIdentifier(form)]
+            formModel
         }
         
         /// Removes the model for the provided form.
         /// - Parameter form: The form to remove the model for.
         func removeModel(_ form: FeatureForm) {
-            formModels.removeValue(forKey: ObjectIdentifier(form))
+//            formModels.removeValue(forKey: ObjectIdentifier(form))
+            formModel = nil
         }
         
         
@@ -73,7 +77,8 @@ extension FeatureFormView.StackView {
         /// Sets the root feature form in the feature form view.
         /// - Parameter form: The new root form.
         @MainActor func setRootForm(_ form: FeatureForm) {
-            formModels.removeAll()
+//            formModels.removeAll()
+            formModel = nil
             navigationPath.removeAll()
             addModel(form)
             presentedForm = form
