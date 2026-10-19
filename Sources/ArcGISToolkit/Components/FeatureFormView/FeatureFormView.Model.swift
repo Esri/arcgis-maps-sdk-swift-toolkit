@@ -53,7 +53,7 @@ public extension FeatureFormView {
         /// Initializes a model for the view, creating a `FeatureFormGroup` with the provided
         /// forms.
         /// - Parameter forms: The initial set of forms to be edited in the view.
-        public convenience init(forms: [FeatureForm]) {
+        public convenience init(forms: [FeatureForm] = []) {
             self.init(group: .init(forms: forms))
         }
         
@@ -72,6 +72,10 @@ public extension FeatureFormView {
         
         /// <#Description#>
         private(set) var selectedID: UUID?
+        
+        /// The global IDs of the underlying feature for forms that have been opened via utility
+        /// associations.
+        var browsedIDs = Set<UUID>()
         
         /// <#Description#>
         var selectedIndex: Int {
@@ -100,9 +104,11 @@ public extension FeatureFormView {
         private var backStack = [UUID]()
         
         /// <#Description#>
-        /// - Parameter form: <#form description#>
-        /// - Parameter select: <#select description#>
-        public func add(form: FeatureForm, select: Bool = false) {
+        /// - Parameters:
+        ///   - form: <#form description#>
+        ///   - select: <#select description#>
+        ///   - recordAsBrowsed: <#recordAsBrowsed description#>
+        func add(form: FeatureForm, select: Bool = false, recordAsBrowsed: Bool = false) {
             guard let id = form.feature.globalID else {
                 Logger.featureFormGroupView.warning("The feature cannot be added because the its global ID is not available.")
                 return
@@ -128,6 +134,16 @@ public extension FeatureFormView {
                 return
             }
             group?.add(form)
+            if recordAsBrowsed, !browsedIDs.contains(id) {
+                browsedIDs.insert(id)
+            }
+        }
+        
+        /// <#Description#>
+        /// - Parameter form: <#form description#>
+        /// - Parameter select: <#select description#>
+        public func add(form: FeatureForm, select: Bool = false) {
+            add(form: form, select: select, recordAsBrowsed: false)
         }
         
         public func debugLog() {
@@ -180,9 +196,16 @@ public extension FeatureFormView {
             select(form: form, recordNavigation: false)
         }
         
-        public func clearSelection() {
-            selectedID = nil
-            backStack.removeAll()
+        /// Unsets the active form.
+        /// - Parameter clearBackStack: A Boolean value indicating whether the navigation
+        /// history should also be cleared.
+        public func clearSelection(clearBackStack: Bool = true) {
+            guard let selectedID else { return }
+            backStack.insert(selectedID, at: 0)
+            self.selectedID = nil
+            if clearBackStack {
+                backStack.removeAll()
+            }
         }
         
         /// <#Description#>

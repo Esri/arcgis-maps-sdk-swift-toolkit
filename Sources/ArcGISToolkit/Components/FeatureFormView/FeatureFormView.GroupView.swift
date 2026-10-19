@@ -33,6 +33,19 @@ extension FeatureFormView {
 }
 
 extension FeatureFormView.GroupView /* Group views */ {
+    /// The number of forms being edited in the view.
+    ///
+    /// This is the number of forms the model was initialized with, plus any added and minus any
+    /// removed via the model, plus any forms that have been opened and edited via utility
+    /// associations.
+    var activeFormCount: Int {
+        return featureFormViewModel.ids.filter { id in
+            let form = featureFormViewModel.form(for: id)
+            guard let globalID = form?.feature.globalID else { return false }
+            return (!featureFormViewModel.browsedIDs.contains(globalID) || form?.hasEdits ?? false)
+        }.count
+    }
+    
     /// <#Description#>
     /// - Parameter id: <#id description#>
     @ViewBuilder
@@ -58,7 +71,9 @@ extension FeatureFormView.GroupView /* Group views */ {
                 } else {
                     ForEach(featureFormViewModel.ids, id: \.self) { id in
                         if let form = featureFormViewModel.form(for: id),
-                           let objectID = form.feature.objectID {
+                           let objectID = form.feature.objectID,
+                           let globalID = form.feature.globalID,
+                           (!featureFormViewModel.browsedIDs.contains(globalID) || form.hasEdits) {
                             LabeledContent {
                                 Button {
                                     featureFormViewModel.select(form: form, clearHistory: true)
@@ -91,11 +106,21 @@ extension FeatureFormView.GroupView /* Group views */ {
                 }
             }
             .navigationTitle(
-                "Editing ^[\(featureFormViewModel.ids.count) forms](inflect: true)"
+                "Editing ^[\(activeFormCount) forms](inflect: true)"
             )
             .toolbar {
                 let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
                 if featureFormViewModel.isPresented != nil {
+                    ToolbarItem(placement: .topBarLeading) {
+                        if featureFormViewModel.canGoBack {
+                            Button("Back", systemImage: "chevron.left") {
+                                featureFormViewModel.navigateBack()
+                            }
+                        }
+                    }
+                    if #available(iOS 26.0, *) {
+                        ToolbarSpacer(.flexible, placement: .topBarLeading)
+                    }
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
                             if hasEdits {

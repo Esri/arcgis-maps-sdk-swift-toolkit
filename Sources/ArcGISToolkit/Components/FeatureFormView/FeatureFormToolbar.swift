@@ -123,7 +123,7 @@ struct FeatureFormToolbar: ViewModifier {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     if featureFormViewModel.group?.forms.count ?? 0 > 1 {
                         Button {
-                            featureFormViewModel.clearSelection()
+                            featureFormViewModel.clearSelection(clearBackStack: false)
                         } label: {
                             let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
                             let hasErrors = featureFormViewModel.formsWithErrors.contains(where: { $0.value > 0 })

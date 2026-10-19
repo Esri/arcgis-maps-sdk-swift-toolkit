@@ -160,7 +160,8 @@ extension FeatureFormView {
                 if featureFormViewModel.group != nil {
                     featureFormViewModel.add(
                         form: FeatureForm(feature: result.associatedFeature),
-                        select: true
+                        select: true,
+                        recordAsBrowsed: true
                     )
                 } else {
                     let navigationAction = {
