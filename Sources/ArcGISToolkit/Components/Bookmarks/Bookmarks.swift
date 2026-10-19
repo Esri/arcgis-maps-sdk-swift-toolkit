@@ -57,25 +57,38 @@ public struct Bookmarks: View {
     private var selection: Binding<Bookmark?>
     
     public var body: some View {
-        VStack {
-            BookmarksHeader(isPresented: $isPresented)
-                .padding([.horizontal, .top])
-            Divider()
-            switch bookmarkSource {
-            case .array(let array):
-                makeList(bookmarks: array)
-            case .geoModel(let geoModel):
-                if isGeoModelLoaded {
-                    makeList(bookmarks: geoModel.bookmarks)
-                } else if let loadingError {
-                    makeErrorMessage(with: loadingError)
-                } else if !isGeoModelLoaded {
-                    makeLoadingView(geoModel: geoModel)
+        NavigationStack {
+            Group {
+                switch bookmarkSource {
+                case .array(let array):
+                    makeList(bookmarks: array)
+                case .geoModel(let geoModel):
+                    if isGeoModelLoaded {
+                        makeList(bookmarks: geoModel.bookmarks)
+                    } else if let loadingError {
+                        makeErrorMessage(with: loadingError)
+                    } else if !isGeoModelLoaded {
+                        makeLoadingView(geoModel: geoModel)
+                    }
                 }
             }
-            Spacer()
+            .frame(idealWidth: 320, idealHeight: 428)
+            .navigationTitle(
+                LocalizedStringResource(
+                    "Bookmarks",
+                    bundle: .toolkitModule,
+                    comment: "A label in reference to bookmarks contained in a map or scene."
+                )
+            )
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    DismissButton(kind: .close) {
+                        isPresented = false
+                    }
+                }
+            }
         }
-        .frame(idealWidth: 320, idealHeight: 428)
     }
 }
 
@@ -136,10 +149,25 @@ extension Bookmarks {
         isPresented = false
         
         if let geoViewProxy, let viewpoint = bookmark.viewpoint {
+            announceSettingViewpoint(bookmarkName: bookmark.name)
             Task {
                 await geoViewProxy.setViewpoint(viewpoint, duration: nil)
             }
         }
+    }
+    
+    /// Makes an accessibility voice over announcement that the viewpoint is being set to the bookmark name
+    /// WCAG 4.1.3 Status Messages (Level AA)
+    /// - Parameter bookmarkName: The name of the bookmark the viewpoint is being set to
+    private func announceSettingViewpoint(bookmarkName: String) {
+        let string = String(
+            localized: "Setting viewpoint to \(bookmarkName)",
+            bundle: .toolkitModule,
+            comment: "The accessibility announcement when a bookmark is selected."
+        )
+        var attributedString = AttributedString(string)
+        attributedString.accessibilitySpeechAnnouncementPriority = .high
+        AccessibilityNotification.Announcement(attributedString).post()
     }
     
     /// Makes a view that is shown when the `GeoModel` failed to load.
