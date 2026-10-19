@@ -157,6 +157,7 @@ extension Bookmarks {
     }
     
     /// Makes an accessibility voice over announcement that the viewpoint is being set to the bookmark name
+    /// WCAG 4.1.3 Status Messages (Level AA)
     /// - Parameter bookmarkName: The name of the bookmark the viewpoint is being set to
     private func announceSettingViewpoint(bookmarkName: String) {
         let string = String(
