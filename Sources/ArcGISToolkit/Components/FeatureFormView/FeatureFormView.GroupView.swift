@@ -109,16 +109,6 @@ extension FeatureFormView.GroupView /* Group views */ {
                 let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
                 if featureFormViewModel.isPresented != nil {
                     ToolbarItem(placement: .topBarLeading) {
-                        if featureFormViewModel.canGoBack {
-                            Button("Back", systemImage: "chevron.left") {
-                                featureFormViewModel.navigateBack()
-                            }
-                        }
-                    }
-                    if #available(iOS 26.0, *) {
-                        ToolbarSpacer(.flexible, placement: .topBarLeading)
-                    }
-                    ToolbarItem(placement: .topBarLeading) {
                         Button {
                             if hasEdits {
                                 #warning("TODO: Warn before closing with edits.")
