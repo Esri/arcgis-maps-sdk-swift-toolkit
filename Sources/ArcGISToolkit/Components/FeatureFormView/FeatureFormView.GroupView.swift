@@ -138,15 +138,10 @@ extension FeatureFormView.GroupView /* Group views */ {
     /// re-instantiation on selection change and results in loss of state.
     @ViewBuilder
     var menuAndForms: some View {
-        ZStack {
+        if let selectedID = featureFormViewModel.selectedID {
+            form(id: selectedID)
+        } else {
             menu
-                .allowsHitTesting(featureFormViewModel.selectedID == nil)
-                .opacity(featureFormViewModel.selectedID == nil ? 1 : 0)
-            ForEach(featureFormViewModel.ids, id: \.self) { id in
-                form(id: id)
-                    .allowsHitTesting(featureFormViewModel.selectedID == id)
-                    .opacity(featureFormViewModel.selectedID == id ? 1 : 0)
-            }
         }
     }
 }
