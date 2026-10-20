@@ -78,24 +78,27 @@ extension FeatureFormView.GroupView /* Group views */ {
                                 Button {
                                     featureFormViewModel.select(form: form, clearHistory: true)
                                 } label: {
-                                    Text(form.title)
+                                    HStack {
+                                        Text(form.title)
+                                        Spacer()
+                                        if form.hasEdits {
+                                            Label {
+                                                Text(
+                                                    "Unsaved Edits",
+                                                    bundle: .toolkitModule,
+                                                    comment: ""
+                                                )
+                                            } icon: {
+                                                Image(systemName: "pencil")
+                                            }
+                                            .labelStyle(.iconOnly)
+                                        }
+                                    }
                                 }
                                 .badge(form.elementValidationErrors.count)
                                 .badgeProminence(.increased)
                                 .foregroundStyle(.primary)
                             } label: {
-                                if form.hasEdits {
-                                    Label {
-                                        Text(
-                                            "Unsaved Edits",
-                                            bundle: .toolkitModule,
-                                            comment: ""
-                                        )
-                                    } icon: {
-                                        Image(systemName: "pencil")
-                                    }
-                                    .labelStyle(.iconOnly)
-                                }
                                 FeatureSymbolView(feature: form.feature)
                             }
                         }
@@ -112,7 +115,7 @@ extension FeatureFormView.GroupView /* Group views */ {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
                             if hasEdits {
-                                #warning("TODO: Warn before closing with edits.")
+#warning("TODO: Warn before closing with edits.")
                             }
                             featureFormViewModel.isPresented = false
                         } label: {
