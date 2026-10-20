@@ -71,7 +71,6 @@ extension FeatureFormView.GroupView /* Group views */ {
                 } else {
                     ForEach(featureFormViewModel.ids, id: \.self) { id in
                         if let form = featureFormViewModel.form(for: id),
-                           let objectID = form.feature.objectID,
                            let globalID = form.feature.globalID,
                            (!featureFormViewModel.browsedIDs.contains(globalID) || form.hasEdits) {
                             LabeledContent {
@@ -169,7 +168,7 @@ struct FeatureFormGroupViewPreview: View {
     @Previewable @State var isPresented = true
     
     switch loadResult {
-    case .success(let success):
+    case .success:
         MapView(map: map!)
             .sheet(isPresented: $isPresented) {
                 FeatureFormGroupViewPreview(model: model, isPresented: $isPresented)

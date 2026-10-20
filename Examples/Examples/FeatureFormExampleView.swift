@@ -211,7 +211,8 @@ private extension URL {
 }
 
 private extension View {
-    @ViewBuilder func trailingPresentationPlacement() -> some View {
+    @ViewBuilder
+    func trailingPresentationPlacement() -> some View {
         if #available(iOS 27.0, *) {
             self.presentationPlacement(.trailing)
         } else {
