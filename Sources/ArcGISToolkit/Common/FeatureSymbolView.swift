@@ -15,7 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-/// A view that loads and shows a feature's async symbol.
+/// A view that makes and shows a feature's symbol.
 struct FeatureSymbolView: View {
     @ScaledMetric(relativeTo: .body) private var maxImageSize = 19.5
     @State private var image: UIImage?
