@@ -40,15 +40,16 @@ extension ArcGISFeature {
     }
     
     /// The symbol for the feature from its layer.
-    var symbol: Image? {
+    var symbol: UIImage? {
         get async {
             guard let swatch = try? await featureLayer?
                 .renderer?
                 .symbol(for: self)?
-                .makeSwatch(scale: 1.0) else {
+                .makeSwatch(scale: 1.0)
+                .croppingTransparentPixels() else {
                 return nil
             }
-            return Image(uiImage: swatch)
+            return swatch
         }
     }
 }

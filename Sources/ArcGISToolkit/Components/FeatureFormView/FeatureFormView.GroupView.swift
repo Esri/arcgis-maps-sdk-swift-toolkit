@@ -96,6 +96,7 @@ extension FeatureFormView.GroupView /* Group views */ {
                                     }
                                     .labelStyle(.iconOnly)
                                 }
+                                FeatureSymbolView(feature: form.feature)
                             }
                         }
                     }
