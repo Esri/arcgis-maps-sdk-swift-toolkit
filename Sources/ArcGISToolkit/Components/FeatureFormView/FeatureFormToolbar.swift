@@ -107,7 +107,8 @@ struct FeatureFormToolbar: ViewModifier {
                 if #available(iOS 26.0, *) {
                     ToolbarSpacer(.flexible, placement: .topBarLeading)
                 }
-                if featureFormViewModel.isPresented != nil {
+                if featureFormViewModel.isPresented != nil,
+                    !featureFormViewModel.multiFormModeIsActive {
                     ToolbarItem(placement: .topBarLeading) {
                         DismissButton(kind: .cancel) {
                             if hasEdits {
