@@ -82,6 +82,7 @@ extension FeatureFormView.GroupView /* Group views */ {
                                 }
                                 .badge(form.elementValidationErrors.count)
                                 .badgeProminence(.increased)
+                                .foregroundStyle(.primary)
                             } label: {
                                 if form.hasEdits {
                                     Label {
