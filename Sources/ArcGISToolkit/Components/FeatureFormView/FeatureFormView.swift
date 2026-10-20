@@ -112,6 +112,12 @@ public struct FeatureFormView: View {
                     isPresented.wrappedValue = newValue
                 }
             }
+            .task(id: model.formCount) {
+                await model.monitorEdits()
+            }
+            .task(id: model.formCount) {
+                await model.monitorErrors()
+            }
     }
     
     /// Coalesces the provided model or the legacy model created for the user into one property.

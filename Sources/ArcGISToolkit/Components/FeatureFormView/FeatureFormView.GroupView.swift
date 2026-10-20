@@ -21,13 +21,11 @@ extension FeatureFormView {
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
         public var body: some View {
-            menuAndForms
-                .task(id: featureFormViewModel.formCount) {
-                    await featureFormViewModel.monitorEdits()
-                }
-                .task(id: featureFormViewModel.formCount) {
-                    await featureFormViewModel.monitorErrors()
-                }
+            if let selectedID = featureFormViewModel.selectedID {
+                form(id: selectedID)
+            } else {
+                menu
+            }
         }
     }
 }
@@ -131,20 +129,6 @@ extension FeatureFormView.GroupView /* Group views */ {
                     .disabled(!hasEdits)
                 }
             }
-        }
-    }
-    
-    /// <#Description#>
-    /// - Returns: <#description#>
-    /// - Note: We use a `ZStack` of `FeatureFormView`s over something like a `TabView`
-    /// with `tabViewStyle(.page(indexDisplayMode: .never))` which causes view
-    /// re-instantiation on selection change and results in loss of state.
-    @ViewBuilder
-    var menuAndForms: some View {
-        if let selectedID = featureFormViewModel.selectedID {
-            form(id: selectedID)
-        } else {
-            menu
         }
     }
 }
