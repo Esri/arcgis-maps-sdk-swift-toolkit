@@ -17,9 +17,14 @@ import SwiftUI
 
 /// A view that makes and shows a feature's symbol.
 struct FeatureSymbolView: View {
-    @ScaledMetric(relativeTo: .body) private var maxImageSize = 19.5
+    @ScaledMetric private var maxImageSize: CGFloat
     @State private var image: UIImage?
     let feature: ArcGISFeature
+    
+    init(feature: ArcGISFeature, maxImageSize: Double = 24) {
+        _maxImageSize = .init(wrappedValue: maxImageSize, relativeTo: .body)
+        self.feature = feature
+    }
     
     var body: some View {
         Group {
