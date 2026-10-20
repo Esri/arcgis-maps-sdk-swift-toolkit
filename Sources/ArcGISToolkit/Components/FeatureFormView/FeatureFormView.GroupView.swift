@@ -103,7 +103,7 @@ extension FeatureFormView.GroupView /* Group views */ {
                 }
             }
             .navigationTitle(
-                "Editing ^[\(activeFormCount) forms](inflect: true)"
+                "Editing ^[\(activeFormCount) features](inflect: true)"
             )
             .toolbar {
                 let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
