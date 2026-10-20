@@ -78,11 +78,7 @@ extension FeatureFormView.GroupView /* Group views */ {
                                 Button {
                                     featureFormViewModel.select(form: form, clearHistory: true)
                                 } label: {
-                                    VStack(alignment: .leading) {
-                                        Text(form.title)
-                                        Text(objectID, format: .number.grouping(.never))
-                                            .font(.caption)
-                                    }
+                                    Text(form.title)
                                 }
                                 .badge(form.elementValidationErrors.count)
                                 .badgeProminence(.increased)
