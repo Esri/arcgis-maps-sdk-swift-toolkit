@@ -254,36 +254,6 @@ public extension FeatureFormView {
             selectedID = form.feature.globalID
         }
         
-        /// <#Description#>
-        public func selectNext() {
-            guard ids.count > 1 else { return }
-            guard selectedIndex >= 0 else { return }
-            let nextIndex: Int
-            if selectedIndex == ids.count - 1 {
-                // Jump to start
-                nextIndex = 0
-            } else {
-                nextIndex = selectedIndex + 1
-            }
-            let nextForm = group.forms[nextIndex]
-            select(form: nextForm, clearHistory: true)
-        }
-        
-        /// <#Description#>
-        public func selectPrevious() {
-            guard ids.count > 1 else { return }
-            guard selectedIndex >= 0 else { return }
-            let previousIndex: Int
-            if selectedIndex == 0 {
-                // Jump to end
-                previousIndex = ids.count - 1
-            } else {
-                previousIndex = selectedIndex - 1
-            }
-            let previousForm = group.forms[previousIndex]
-            select(form: previousForm, clearHistory: true)
-        }
-            
         private(set) var formsWithEdits = [UUID: Bool]()
         
         private(set) var formsWithErrors = [UUID: Int]()
