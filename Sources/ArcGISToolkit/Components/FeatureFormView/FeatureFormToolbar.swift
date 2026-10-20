@@ -65,7 +65,7 @@ struct FeatureFormToolbar: ViewModifier {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    if isRootView, featureFormViewModel.group != nil, featureFormViewModel.canGoBack {
+                    if isRootView, featureFormViewModel.canGoBack {
                         Button {
                             featureFormViewModel.navigateBack()
                         } label: {
@@ -121,7 +121,7 @@ struct FeatureFormToolbar: ViewModifier {
                     }
                 }
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    if featureFormViewModel.group?.forms.count ?? 0 > 1 {
+                    if featureFormViewModel.multiFormModeIsActive {
                         Button {
                             featureFormViewModel.clearSelection(clearBackStack: false)
                         } label: {

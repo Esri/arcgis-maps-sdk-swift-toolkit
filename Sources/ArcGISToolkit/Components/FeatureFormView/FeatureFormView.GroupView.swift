@@ -22,10 +22,10 @@ extension FeatureFormView {
         
         public var body: some View {
             menuAndForms
-                .task(id: featureFormViewModel.group?.forms.count) {
+                .task(id: featureFormViewModel.formCount) {
                     await featureFormViewModel.monitorEdits()
                 }
-                .task(id: featureFormViewModel.group?.forms.count) {
+                .task(id: featureFormViewModel.formCount) {
                     await featureFormViewModel.monitorErrors()
                 }
         }
@@ -60,7 +60,7 @@ extension FeatureFormView.GroupView /* Group views */ {
     var menu: some View {
         NavigationStack {
             List {
-                if featureFormViewModel.group?.forms.isEmpty ?? true {
+                if featureFormViewModel.formCount == 0 {
                     ContentUnavailableView {
                         Text(
                             "No forms",

@@ -41,11 +41,11 @@ public extension FeatureFormView {
         var willFinishEditingAction: (() throws -> Void)?
         
         /// <#Description#>
-        init(group: FeatureFormGroup? = nil) {
+        init(group: FeatureFormGroup) {
             self.group = group
             
             // If the group has a single form, select it.
-            if group?.forms.count == 1, let first = group?.forms.first {
+            if !multiFormModeIsActive, let first = group.forms.first {
                 select(form: first)
             }
         }
@@ -58,7 +58,7 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        let group: FeatureFormGroup?
+        private let group: FeatureFormGroup
         
         /// <#Description#>
         var canGoBack: Bool {
@@ -66,8 +66,8 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        public var count: Int? {
-            group?.forms.count == ids.count ? group?.forms.count : -1
+        public var formCount: Int {
+            group.forms.count
         }
         
         /// <#Description#>
@@ -86,9 +86,13 @@ public extension FeatureFormView {
             }
         }
         
+        var multiFormModeIsActive: Bool {
+            group.forms.count > 1
+        }
+        
         /// <#Description#>
         var ids: [UUID] {
-            (group?.forms ?? []).compactMap { $0.feature.globalID }
+            group.forms.compactMap { $0.feature.globalID }
         }
         
         /// <#Description#>
@@ -133,7 +137,7 @@ public extension FeatureFormView {
                 Logger.featureFormGroupView.info("Feature \(id.description) is already added.")
                 return
             }
-            group?.add(form)
+            group.add(form)
             if recordAsBrowsed, !browsedIDs.contains(id) {
                 browsedIDs.insert(id)
             }
@@ -171,14 +175,14 @@ public extension FeatureFormView {
         /// <#Description#>
         func discardEdits() {
             Task {
-                await group?.discardEdits()
+                await group.discardEdits()
             }
         }
         
         /// <#Description#>
         func finishEditing() {
             Task {
-                await group?.finishEditing()
+                await group.finishEditing()
             }
         }
         
@@ -211,9 +215,9 @@ public extension FeatureFormView {
         /// <#Description#>
         /// - Parameter form: <#form description#>
         public func remove(form: FeatureForm) {
-            group?.forms.forEach { _form in
+            group.forms.forEach { _form in
                 if form.feature.globalID == _form.feature.globalID {
-                    group?.remove(_form)
+                    group.remove(_form)
                 }
             }
             backStack.removeAll { id in
@@ -232,7 +236,7 @@ public extension FeatureFormView {
         /// - Parameter id: <#id description#>
         /// - Returns: <#description#>
         public func form(for id: UUID) -> FeatureForm? {
-            group?.forms.first { $0.feature.globalID == id } ?? nil
+            group.forms.first { $0.feature.globalID == id } ?? nil
         }
         
         /// <#Description#>
@@ -261,7 +265,7 @@ public extension FeatureFormView {
             } else {
                 nextIndex = selectedIndex + 1
             }
-            guard let nextForm = group?.forms[nextIndex] else { return }
+            let nextForm = group.forms[nextIndex]
             select(form: nextForm, clearHistory: true)
         }
         
@@ -276,7 +280,7 @@ public extension FeatureFormView {
             } else {
                 previousIndex = selectedIndex - 1
             }
-            guard let previousForm = group?.forms[previousIndex] else { return }
+            let previousForm = group.forms[previousIndex]
             select(form: previousForm, clearHistory: true)
         }
             
@@ -287,7 +291,7 @@ public extension FeatureFormView {
         func monitorEdits() async {
             Logger.featureFormGroupView.info("Starting edit monitoring.")
             await withTaskGroup { taskGroup in
-                for form in group?.forms ?? [] {
+                for form in group.forms {
                     taskGroup.addTask { @Sendable in
                         for await hasEdits in form.$hasEdits {
                             if let globalID = form.feature.globalID {
@@ -304,7 +308,7 @@ public extension FeatureFormView {
         func monitorErrors() async {
             Logger.featureFormGroupView.info("Starting error monitoring.")
             await withTaskGroup { taskGroup in
-                for form in group?.forms ?? [] {
+                for form in group.forms {
                     taskGroup.addTask { @Sendable in
                         for await errors in form.$elementValidationErrors {
                             if let globalID = form.feature.globalID {

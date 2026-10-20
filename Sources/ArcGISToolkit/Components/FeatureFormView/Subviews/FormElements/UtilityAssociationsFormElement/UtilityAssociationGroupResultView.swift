@@ -157,7 +157,7 @@ extension FeatureFormView {
             Button {
                 // If the FeatureForm is in a FeatureFormGroup, add the
                 // associated form to it.
-                if featureFormViewModel.group != nil {
+                if /*featureFormViewModel.group != nil*/ true {
                     featureFormViewModel.add(
                         form: FeatureForm(feature: result.associatedFeature),
                         select: true,
