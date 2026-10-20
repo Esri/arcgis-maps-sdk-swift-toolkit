@@ -21,15 +21,18 @@ extension FeatureFormView {
     struct StackView: View {
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
-        /// The model for the stack view for the root form.
-        @State private var stackViewModel: FeatureFormView.StackView.Model
+        /// <#Description#>
+        @State private var activeNavigationPath = [FeatureFormView.NavigationPathItem]()
         
-        init(root: FeatureForm) {
-            self.stackViewModel = Model(root: root)
+        /// The model for the stack view for the root form.
+        let stackViewModel: FeatureFormView.StackView.Model
+        
+        init(model: StackView.Model) {
+            self.stackViewModel = model
         }
         
         public var body: some View {
-            NavigationStack(path: $stackViewModel.navigationPath) {
+            NavigationStack(path: $activeNavigationPath) {
                 FormView(form: stackViewModel.root)
                     // Refresh the navigation stack's root view when the root
                     // feature form changes.
@@ -219,6 +222,18 @@ extension FeatureFormView {
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
                 guard let formViewModel = $0?.object else { return }
                 formChangedAction(formViewModel.featureForm)
+            }
+//            .onAppear {
+//                print("On Appear")
+            .onChange(of: ObjectIdentifier(stackViewModel)) {
+                print("On Change of Stack View")
+                _ = Task {
+                    try await Task.sleep(for: .seconds(1))
+                    activeNavigationPath = stackViewModel.navigationPath
+                }
+            }
+            .onChange(of: stackViewModel.navigationPath) {
+                activeNavigationPath = stackViewModel.navigationPath
             }
         }
     }

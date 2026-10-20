@@ -73,6 +73,19 @@ public extension FeatureFormView {
         /// <#Description#>
         private(set) var selectedID: UUID?
         
+        /// The number of forms being edited in the view.
+        ///
+        /// This is the number of forms the model was initialized with, plus any added and minus any
+        /// removed via the model, plus any forms that have been opened and edited via utility
+        /// associations.
+        var activeFormCount: Int {
+            return ids.filter { id in
+                let form = form(for: id)
+                guard let globalID = form?.feature.globalID else { return false }
+                return (!browsedIDs.contains(globalID) || form?.hasEdits ?? false)
+            }.count
+        }
+        
         /// The global IDs of the underlying feature for forms that have been opened via utility
         /// associations.
         var browsedIDs = Set<UUID>()
@@ -87,7 +100,7 @@ public extension FeatureFormView {
         }
         
         var multiFormModeIsActive: Bool {
-            group.forms.count > 1
+            activeFormCount > 1
         }
         
         /// <#Description#>
@@ -103,6 +116,9 @@ public extension FeatureFormView {
                 nil
             }
         }
+        
+        /// Stack view models, keyed by feature global IDs.
+        private var stackViewModels: [UUID: FeatureFormView.StackView.Model] = [:]
         
         /// <#Description#>
         private var backStack = [UUID]()
@@ -237,6 +253,18 @@ public extension FeatureFormView {
         /// - Returns: <#description#>
         public func form(for id: UUID) -> FeatureForm? {
             group.forms.first { $0.feature.globalID == id } ?? nil
+        }
+        
+        func stackModel(for globalID: UUID) -> FeatureFormView.StackView.Model? {
+            if let model = stackViewModels[globalID] {
+                return model
+            } else if let form = form(for: globalID) {
+                let newModel = FeatureFormView.StackView.Model(root: form)
+                stackViewModels[globalID] = newModel
+                return newModel
+            } else {
+                return nil
+            }
         }
         
         /// <#Description#>

@@ -31,25 +31,12 @@ extension FeatureFormView {
 }
 
 extension FeatureFormView.GroupView /* Group views */ {
-    /// The number of forms being edited in the view.
-    ///
-    /// This is the number of forms the model was initialized with, plus any added and minus any
-    /// removed via the model, plus any forms that have been opened and edited via utility
-    /// associations.
-    var activeFormCount: Int {
-        return featureFormViewModel.ids.filter { id in
-            let form = featureFormViewModel.form(for: id)
-            guard let globalID = form?.feature.globalID else { return false }
-            return (!featureFormViewModel.browsedIDs.contains(globalID) || form?.hasEdits ?? false)
-        }.count
-    }
-    
     /// <#Description#>
     /// - Parameter id: <#id description#>
     @ViewBuilder
     func form(id: UUID) -> some View {
-        if let form = featureFormViewModel.form(for: id) {
-            FeatureFormView.StackView(root: form)
+        if let stackModel = featureFormViewModel.stackModel(for: id) {
+            FeatureFormView.StackView(model: stackModel)
         }
     }
     
@@ -104,7 +91,7 @@ extension FeatureFormView.GroupView /* Group views */ {
                 }
             }
             .navigationTitle(
-                "Editing ^[\(activeFormCount) features](inflect: true)"
+                "Editing ^[\(featureFormViewModel.activeFormCount) features](inflect: true)"
             )
             .toolbar {
                 let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
