@@ -143,7 +143,7 @@ public extension FeatureFormView {
         ///   - recordAsBrowsed: <#recordAsBrowsed description#>
         func add(form: FeatureForm, select: Bool = false, recordAsBrowsed: Bool = false) {
             guard let id = form.feature.globalID else {
-                Logger.featureFormGroupView.warning("The feature cannot be added because the its global ID is not available.")
+                Logger.featureFormView.warning("The feature cannot be added because the its global ID is not available.")
                 return
             }
             defer {
@@ -163,7 +163,7 @@ public extension FeatureFormView {
                 } else {
                     id = "?"
                 }
-                Logger.featureFormGroupView.info("Feature \(id.description) is already added.")
+                Logger.featureFormView.info("Feature \(id.description) is already added.")
                 return
             }
             try? group.addForm(form)
@@ -218,12 +218,12 @@ public extension FeatureFormView {
         /// <#Description#>
         func navigateBack() {
             guard canGoBack else {
-                Logger.featureFormGroupView.warning("Cannot navigate backwards without history.")
+                Logger.featureFormView.warning("Cannot navigate backwards without history.")
                 return
             }
             let top = backStack.removeFirst()
             guard let form = form(for: top) else {
-                Logger.featureFormGroupView.warning("No ID for back navigation.")
+                Logger.featureFormView.warning("No ID for back navigation.")
                 return
             }
             select(form: form, recordNavigation: false)
@@ -300,7 +300,7 @@ public extension FeatureFormView {
         private(set) var formsWithErrors = [UUID: Int]()
         
         func monitorEdits() async {
-            Logger.featureFormGroupView.info("Starting edit monitoring.")
+            Logger.featureFormView.info("Starting edit monitoring.")
             await withTaskGroup { taskGroup in
                 for form in group.forms {
                     taskGroup.addTask { @Sendable in
@@ -317,7 +317,7 @@ public extension FeatureFormView {
         }
         
         func monitorErrors() async {
-            Logger.featureFormGroupView.info("Starting error monitoring.")
+            Logger.featureFormView.info("Starting error monitoring.")
             await withTaskGroup { taskGroup in
                 for form in group.forms {
                     taskGroup.addTask { @Sendable in
