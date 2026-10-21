@@ -39,7 +39,7 @@ final class GeometryEditorModel {
     /// The geometry type that was used to start the current editing session.
     private var geometryType: Geometry.Type?
     
-    /// A Boolean value indicating whether the geometry has edits..
+    /// A Boolean value indicating whether the geometry has edits.
     var hasGeometryEdits: Bool {
         guard isStarted,
               let currentGeometry = geometry,
