@@ -30,8 +30,8 @@ struct FeatureFormToolbar: ViewModifier {
     /// The model for the stack view containing the form.
     @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
     
-    /// A slightly delayed form count, useful for animations to communicate that the form group size
-    /// has changed.
+    /// A slightly delayed form count, useful for animations to communicate that the form group
+    /// size has changed.
     @State private var delayedFormCount = 0
     
     /// A Boolean value indicating whether the presented feature form has edits.
@@ -40,8 +40,8 @@ struct FeatureFormToolbar: ViewModifier {
     /// The currently presented feature form.
     let featureForm: FeatureForm
     
-    /// A Boolean value indicating whether the modified view is a feature form view or another type of
-    /// associated view such as a `UtilityAssociationsFilterResultView` or
+    /// A Boolean value indicating whether the modified view is a feature form view or another
+    /// type of associated view such as a `UtilityAssociationsFilterResultView` or
     /// `UtilityAssociationGroupResultView`.
     let isAForm: Bool
     
@@ -70,7 +70,11 @@ struct FeatureFormToolbar: ViewModifier {
                                 Text(
                                     "Back",
                                     bundle: .toolkitModule,
-                                    comment: "A generic label for navigating to the previous screen or returning to the previous context."
+                                    comment: """
+                                    A generic label for navigating \
+                                    to the previous screen or returning to the \
+                                    previous context.
+                                    """
                                 )
                             } icon: {
                                 Image(systemName: "chevron.backward")
@@ -92,7 +96,11 @@ struct FeatureFormToolbar: ViewModifier {
                                 Text(
                                     "Back",
                                     bundle: .toolkitModule,
-                                    comment: "A generic label for navigating to the previous screen or returning to the previous context."
+                                    comment: """
+                                    A generic label for navigating to the \
+                                    previous screen or returning to the \
+                                    previous context.
+                                    """
                                 )
                             } icon: {
                                 Image(systemName: "chevron.backward")
