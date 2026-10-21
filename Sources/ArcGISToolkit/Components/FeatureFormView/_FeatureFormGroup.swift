@@ -15,20 +15,21 @@
 import ArcGIS
 import Foundation
 
-@Observable public final class FeatureFormGroup: @unchecked Sendable {
+#warning("Prototype purposes only. Do not merge.")
+@Observable public final class _FeatureFormGroup: @unchecked Sendable {
     private let lock = NSLock()
     
-    init(forms: Array<FeatureForm>) {
+    init?(forms: Array<FeatureForm>) {
         self.forms = forms
     }
     
-    public func add(_ form: FeatureForm) {
+    public func addForm(_ form: FeatureForm) throws {
         lock.lock()
         defer { lock.unlock() }
         forms.append(form)
     }
     
-    public func remove(_ form: FeatureForm) {
+    public func removeForm(_ form: FeatureForm) throws {
         lock.lock()
         defer { lock.unlock() }
         forms.removeAll { _form in
@@ -36,13 +37,13 @@ import Foundation
         }
     }
     
-    public func discardEdits() async {
+    public func discardEdits() async throws {
         forms.forEach { form in
             form.discardEdits()
         }
     }
     
-    public func evaluateExpressions() async {
+    public func evaluateExpressions() async throws {
         await withThrowingTaskGroup { group in
             forms.forEach { form in
                 group.addTask {
