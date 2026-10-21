@@ -79,37 +79,37 @@ extension FeatureFormView {
         public func hash(into hasher: inout Hasher) {
             switch self {
             case let .form(form):
-                hasher.combine(ObjectIdentifier(form))
+                hasher.combine(form.id)
             case let .utilityAssociationAssetTypesView(form, element, filter, source):
-                hasher.combine(ObjectIdentifier(form))
+                hasher.combine(form.id)
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(source))
             case let .utilityAssociationCreationView(form, element, filter, candidate):
-                hasher.combine(ObjectIdentifier(form))
+                hasher.combine(form.id)
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(candidate))
             case let .utilityAssociationDetailsView(form, element, result):
-                hasher.combine(ObjectIdentifier(form))
+                hasher.combine(form.id)
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(result))
             case let .utilityAssociationFeatureCandidatesView(form, element, filter, source, assetType):
-                hasher.combine(ObjectIdentifier(form))
+                hasher.combine(form.id)
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(source))
                 hasher.combine(ObjectIdentifier(assetType))
             case let .utilityAssociationFeatureSourcesView(form, element, filter):
-                hasher.combine(ObjectIdentifier(form))
+                hasher.combine(form.id)
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
             case let .utilityAssociationFilterResultView(form, element, filter):
-                hasher.combine(ObjectIdentifier(form))
+                hasher.combine(form.id)
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
             case let .utilityAssociationGroupResultView(form, element, filter, formSource):
-                hasher.combine(ObjectIdentifier(form))
+                hasher.combine(form.id)
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(formSource))

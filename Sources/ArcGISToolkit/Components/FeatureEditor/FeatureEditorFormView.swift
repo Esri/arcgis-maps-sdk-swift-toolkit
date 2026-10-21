@@ -81,7 +81,7 @@ struct FeatureEditorFormView: View {
                 guard !Task.isCancelled else { return }
                 self.editingEvent = nil
             }
-            .task(id: presentedFeatureForm.map(ObjectIdentifier.init)) {
+            .task(id: presentedFeatureForm?.id) {
                 guard let presentedFeatureForm else { return }
                 await model.startEditingFeatureForm(presentedFeatureForm)
                 

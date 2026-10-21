@@ -26,7 +26,7 @@ extension View {
         action: @escaping (_ newTitle: String) -> Void
     ) -> some View {
         return self
-            .task(id: ObjectIdentifier(featureForm)) {
+            .task(id: featureForm.id) {
                 for await title in featureForm.$title {
                     action(title)
                 }
