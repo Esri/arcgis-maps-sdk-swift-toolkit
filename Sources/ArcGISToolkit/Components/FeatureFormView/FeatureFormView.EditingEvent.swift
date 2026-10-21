@@ -15,21 +15,48 @@
 import ArcGIS
 
 public extension FeatureFormView {
-    /// Represents events that occur during the form editing lifecycle.
-    /// These events notify you when the user has performed an action within the form.
+    /// Represents events that occur during the form editing lifecycle. These events notify you
+    /// when the user has performed an action within the component.
     /// - Since: 200.8
     enum EditingEvent {
+        /// Indicates that edits failed to finish.
+#warning("TODO: Finalize since version.")
+        /// - Since: 300.2
+        case failed(any Error)
         /// Indicates that the user has discarded their edits.
-        /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after discarding.
-        case discardedEdits(willNavigate: Bool)
+#warning("TODO: Finalize since version.")
+        /// - Since: 300.2
+        case finished
+        /// Indicates that the user has discarded their edits.
+#warning("TODO: Finalize since version.")
+        /// - Since: 300.2
+        case discarded
         /// The view presented in the view changed.
         /// - Since: 300.0
         case navigationChanged(NavigationPathItem)
-        /// Indicates that the user has saved their edits.
-        /// - Parameter willNavigate: A Boolean value indicating whether the view will navigate after saving.
-        case savedEdits(willNavigate: Bool)
         /// Indicates that the user has tapped on an option to visualize a feature on the map.
         /// - Since: 300.0
         case showOnMapRequested(ArcGISFeature)
+        
+        // MARK: Deprecated cases
+        
+        /// Indicates that the user has discarded their edits.
+        /// - Parameter willNavigate: A Boolean value indicating whether the view will
+        /// navigate after discarding.
+#warning("TODO: Finalize deprecation version.")
+        /// - Note: Deprecated at 300.2 - discarding edits before navigation is no longer
+        /// required. Replace this with 'discarded'.
+        /// - Since: 200.8
+        @available(*, deprecated, renamed: "FeatureFormView.EditingEvent.discarded")
+        case discardedEdits(willNavigate: Bool)
+        /// Indicates that the user has saved their edits.
+        /// - Parameter willNavigate: A Boolean value indicating whether the view will
+        /// navigate after saving.
+#warning("TODO: Finalize deprecation version.")
+        /// - Note: Deprecated at 300.2 - finishing edits before navigation is no longer
+        /// required. Replace this with 'finished'.
+        /// - Since: 200.8
+        @available(*, deprecated, renamed: "FeatureFormView.EditingEvent.finished")
+        case savedEdits(willNavigate: Bool)
     }
 }
