@@ -31,7 +31,10 @@ public extension FeatureFormView {
 #warning("TODO: Finalize since version.")
         /// - Since: 300.2
         case discarded
-        /// The view presented in the view changed.
+        /// Indicates the active form or the navigation path for the active form has changed.
+        ///
+        /// Forms with `UtilityAssociationsFormElement`s have multiple possible
+        /// navigation destinations.
         /// - Since: 300.0
         case navigationChanged(NavigationPathItem)
         /// Indicates that the user has tapped on an option to visualize a feature on the map.
