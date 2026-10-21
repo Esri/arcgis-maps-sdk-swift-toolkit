@@ -37,9 +37,6 @@ struct FeatureFormToolbar: ViewModifier {
     /// A Boolean value indicating whether the presented feature form has edits.
     @State private var hasEdits = false
     
-    /// <#Description#>
-    @State private var formManagerMenuIsPresented = false
-    
     /// The currently presented feature form.
     let featureForm: FeatureForm
     
