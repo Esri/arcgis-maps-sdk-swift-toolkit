@@ -154,7 +154,7 @@ public extension FeatureFormView {
                 Logger.featureFormGroupView.info("Feature \(id.description) is already added.")
                 return
             }
-            try group.addForm(form)
+            try? group.addForm(form)
             if recordAsBrowsed, !browsedIDs.contains(id) {
                 browsedIDs.insert(id)
             }
