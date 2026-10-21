@@ -69,7 +69,7 @@ extension FeatureFormView {
         
         /// The model for the form view containing the element with the association.
         var formViewModel: FeatureFormView.FormView.Model? {
-            stackViewModel.getModel(form)
+            stackViewModel.formModel
         }
         
         /// A section which contains the association type label.

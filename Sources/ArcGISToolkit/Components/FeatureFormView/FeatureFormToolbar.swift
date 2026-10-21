@@ -54,9 +54,9 @@ struct FeatureFormToolbar: ViewModifier {
     func body(content: Content) -> some View {
         content
             .navigationBarBackButtonHidden()
-            .task(id: featureFormViewModel.ids.count) {
+            .task(id: featureFormViewModel.activeFormCount) {
                 try? await Task.sleep(for: .seconds(0.1))
-                delayedFormCount = featureFormViewModel.ids.count
+                delayedFormCount = featureFormViewModel.activeFormCount
             }
             .task(id: featureForm.feature.globalID) {
                 for await hasEdits in featureForm.$hasEdits {

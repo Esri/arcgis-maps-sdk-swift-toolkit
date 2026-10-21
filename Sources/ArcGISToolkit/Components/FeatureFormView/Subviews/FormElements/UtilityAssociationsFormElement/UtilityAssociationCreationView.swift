@@ -168,7 +168,7 @@ extension FeatureFormView {
         
         /// The model for the feature form containing the element to add the association to.
         var formViewModel: FeatureFormView.FormView.Model? {
-            stackViewModel.getModel(form)
+            stackViewModel.formModel
         }
         
         /// A Boolean value indicating whether content visibility should be specified for the new association.

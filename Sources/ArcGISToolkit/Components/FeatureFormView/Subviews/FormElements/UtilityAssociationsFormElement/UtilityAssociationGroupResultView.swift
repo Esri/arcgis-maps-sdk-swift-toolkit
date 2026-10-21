@@ -73,7 +73,7 @@ extension FeatureFormView {
                 }
                 .navigationTitle(
                     utilityAssociationGroupResult?.name ?? "",
-                    subtitle: stackViewModel.getModel(form)?.title ?? ""
+                    subtitle: stackViewModel.formModel?.title ?? ""
                 )
                 .onChange(of: associationResults.count) {
                     if associationResults.isEmpty, !stackViewModel.navigationPath.isEmpty {
@@ -96,7 +96,7 @@ extension FeatureFormView {
         
         /// The model for the parent form view.
         var formViewModel: FeatureFormView.FormView.Model? {
-            stackViewModel.getModel(form)
+            stackViewModel.formModel
         }
         
         @ViewBuilder func deleteButton(for association: UtilityAssociation) -> some View {
@@ -164,19 +164,19 @@ extension FeatureFormView {
                         recordAsBrowsed: true
                     )
                 } else {
-                    let navigationAction = {
-                        stackViewModel.addModel(form)
-                        stackViewModel.navigationPath.append(
-                            FeatureFormView.NavigationPathItem.form(form)
-                        )
-                    }
-                    if formViewModel?.featureForm.hasEdits ?? false {
-                        stackViewModel.navigationAlertInfo = (true, {
-                            navigationAction()
-                        })
-                    } else {
-                        navigationAction()
-                    }
+//                    let navigationAction = {
+//                        stackViewModel.addModel(form)
+//                        stackViewModel.navigationPath.append(
+//                            FeatureFormView.NavigationPathItem.form(form)
+//                        )
+//                    }
+//                    if formViewModel?.featureForm.hasEdits ?? false {
+//                        stackViewModel.navigationAlertInfo = (true, {
+//                            navigationAction()
+//                        })
+//                    } else {
+//                        navigationAction()
+//                    }
                 }
             } label: {
                 HStack {

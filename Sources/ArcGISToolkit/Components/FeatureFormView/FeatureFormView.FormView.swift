@@ -41,7 +41,7 @@ extension FeatureFormView {
                                         "Filter Elements",
                                         bundle: .toolkitModule,
                                         comment: """
-                                        Label for a text field used to 
+                                        Label for a text field used to \
                                         filter visible elements in a form.
                                         """
                                     )
@@ -61,7 +61,7 @@ extension FeatureFormView {
                 }
                 .environment(formViewModel)
                 .featureFormToolbar(form, isAForm: true) {
-                    stackViewModel.removeModel(form)
+//                    stackViewModel.removeModel(form)
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationTitle(formViewModel.title)
@@ -80,7 +80,7 @@ extension FeatureFormView {
         
         /// The view model for the form.
         var formViewModel: FeatureFormView.FormView.Model? {
-            stackViewModel.getModel(form)
+            stackViewModel.formModel
         }
     }
 }

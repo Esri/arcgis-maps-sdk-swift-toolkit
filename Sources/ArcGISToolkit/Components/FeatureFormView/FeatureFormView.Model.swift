@@ -74,17 +74,27 @@ public extension FeatureFormView {
         /// <#Description#>
         private(set) var selectedID: UUID?
         
+        /// <#Description#>
+        var activeForms: [FeatureForm] {
+            return ids.compactMap { id in
+                let form = form(for: id)
+                guard let globalID = form?.feature.globalID else { return nil }
+                if (!browsedIDs.contains(globalID) || form?.hasEdits ?? false) {
+                    return form
+                } else {
+                    return nil
+                }
+            }
+        }
+        
         /// The number of forms being edited in the view.
         ///
-        /// This is the number of forms the model was initialized with, plus any added and minus any
-        /// removed via the model, plus any forms that have been opened and edited via utility
-        /// associations.
+        /// This is the number of forms the model was initialized with,
+        /// plus/minus any added/removed programmatically via the model,
+        /// and plus any forms that have been interactively opened _and edited_ via
+        /// utility association elements.
         var activeFormCount: Int {
-            return ids.filter { id in
-                let form = form(for: id)
-                guard let globalID = form?.feature.globalID else { return false }
-                return (!browsedIDs.contains(globalID) || form?.hasEdits ?? false)
-            }.count
+            activeForms.count
         }
         
         /// The global IDs of the underlying feature for forms that have been opened via utility
@@ -260,7 +270,7 @@ public extension FeatureFormView {
             if let model = stackViewModels[globalID] {
                 return model
             } else if let form = form(for: globalID) {
-                let newModel = FeatureFormView.StackView.Model(root: form)
+                let newModel = FeatureFormView.StackView.Model(featureForm: form)
                 stackViewModels[globalID] = newModel
                 return newModel
             } else {

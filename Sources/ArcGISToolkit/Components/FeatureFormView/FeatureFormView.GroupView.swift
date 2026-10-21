@@ -54,37 +54,33 @@ extension FeatureFormView.GroupView /* Group views */ {
                         )
                     }
                 } else {
-                    ForEach(featureFormViewModel.ids, id: \.self) { id in
-                        if let form = featureFormViewModel.form(for: id),
-                           let globalID = form.feature.globalID,
-                           (!featureFormViewModel.browsedIDs.contains(globalID) || form.hasEdits) {
-                            LabeledContent {
-                                Button {
-                                    featureFormViewModel.select(form: form, clearHistory: true)
-                                } label: {
-                                    HStack {
-                                        Text(form.title)
-                                        Spacer()
-                                        if form.hasEdits {
-                                            Label {
-                                                Text(
-                                                    "Unsaved Edits",
-                                                    bundle: .toolkitModule,
-                                                    comment: ""
-                                                )
-                                            } icon: {
-                                                Image(systemName: "pencil")
-                                            }
-                                            .labelStyle(.iconOnly)
+                    ForEach(featureFormViewModel.activeForms, id: \.feature.globalID) { form in
+                        LabeledContent {
+                            Button {
+                                featureFormViewModel.select(form: form, clearHistory: true)
+                            } label: {
+                                HStack {
+                                    Text(form.title)
+                                    Spacer()
+                                    if form.hasEdits {
+                                        Label {
+                                            Text(
+                                                "Unsaved Edits",
+                                                bundle: .toolkitModule,
+                                                comment: ""
+                                            )
+                                        } icon: {
+                                            Image(systemName: "pencil")
                                         }
+                                        .labelStyle(.iconOnly)
                                     }
                                 }
-                                .badge(form.elementValidationErrors.count)
-                                .badgeProminence(.increased)
-                                .foregroundStyle(.primary)
-                            } label: {
-                                FeatureSymbolView(feature: form.feature)
                             }
+                            .badge(form.elementValidationErrors.count)
+                            .badgeProminence(.increased)
+                            .foregroundStyle(.primary)
+                        } label: {
+                            FeatureSymbolView(feature: form.feature)
                         }
                     }
                     .id(featureFormViewModel.selectedID)

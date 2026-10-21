@@ -38,7 +38,7 @@ extension FeatureFormView {
         
         /// The view model for the form.
         var formViewModel: FeatureFormView.FormView.Model? {
-            stackViewModel.getModel(form)
+            stackViewModel.formModel
         }
         
         /// The set of group results within the filter result.

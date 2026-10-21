@@ -33,10 +33,10 @@ extension FeatureFormView {
         
         public var body: some View {
             NavigationStack(path: $activeNavigationPath) {
-                FormView(form: stackViewModel.root)
+                FormView(form: stackViewModel.formModel!.featureForm)
                     // Refresh the navigation stack's root view when the root
                     // feature form changes.
-                    .id(ObjectIdentifier(stackViewModel.root))
+                    .id(ObjectIdentifier(stackViewModel.formModel!.featureForm))
                     .navigationDestination(for: NavigationPathItem.self) { itemType in
                         switch itemType {
                         case let .form(form):
@@ -97,7 +97,7 @@ extension FeatureFormView {
                             )
                             .featureFormToolbar(form)
                             .navigationBarTitleDisplayMode(.inline)
-                            .navigationTitle(filter.title, subtitle: stackViewModel.getModel(form)?.title ?? "")
+                            .navigationTitle(filter.title, subtitle: stackViewModel.formModel?.title ?? "")
                         case let .utilityAssociationGroupResultView(form, element, filter, formSource):
                             UtilityAssociationGroupResultView(
                                 element: element,
@@ -117,7 +117,7 @@ extension FeatureFormView {
                 actions: {
                     if let (willNavigate, continuation) = stackViewModel.navigationAlertInfo {
                         Button(role: .destructive) {
-                            stackViewModel.presentedForm?.discardEdits()
+                            stackViewModel.formModel?.featureForm.discardEdits()
                             stackViewModel.validationErrorVisibilityInternal = .automatic
                             featureFormViewModel.onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
                             continuation()
@@ -133,7 +133,7 @@ extension FeatureFormView {
                             Button {
                                 Task {
                                     do {
-                                        try await stackViewModel.presentedForm?.finishEditing()
+                                        try await stackViewModel.formModel?.featureForm.finishEditing()
                                         featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                         continuation()
                                     } catch {
@@ -154,7 +154,7 @@ extension FeatureFormView {
                 message: {
                     if stackViewModel.presentedFormHasValidationErrors {
                         Text(
-                            "You have ^[\(stackViewModel.presentedForm?.elementValidationErrors.count ?? 0) error](inflect: true) that must be fixed before saving.",
+                            "You have ^[\(stackViewModel.formModel?.featureForm.elementValidationErrors.count ?? -1) error](inflect: true) that must be fixed before saving.",
                             bundle: .toolkitModule,
                             comment:
                                     """
@@ -209,26 +209,20 @@ extension FeatureFormView {
                     }
                 }
             )
-            .animation(.default, value: ObjectIdentifier(stackViewModel.root))
+            .animation(.default, value: ObjectIdentifier(stackViewModel.formModel!.featureForm))
             .environment(stackViewModel)
             .onChange(of: stackViewModel.navigationPath) {
                 if let presentedItem = stackViewModel.navigationPath.last {
                     featureFormViewModel.onFormEditingEventAction?(.navigationChanged(presentedItem))
                 }
             }
-            .onChange(of: ObjectIdentifier(stackViewModel.root), initial: true) {
-                stackViewModel.setRootForm(stackViewModel.root)
-            }
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
                 guard let formViewModel = $0?.object else { return }
                 formChangedAction(formViewModel.featureForm)
             }
-//            .onAppear {
-//                print("On Appear")
             .onChange(of: ObjectIdentifier(stackViewModel)) {
-                print("On Change of Stack View")
                 _ = Task {
-                    try await Task.sleep(for: .seconds(1))
+                    try await Task.sleep(for: .milliseconds(100))
                     activeNavigationPath = stackViewModel.navigationPath
                 }
             }
@@ -272,8 +266,8 @@ extension FeatureFormView.StackView {
     /// the same ``FeatureForm`` make sure not to over-emit form handling events.
     var formChangedAction: (FeatureForm) -> Void {
         { featureForm in
-            if featureForm.feature.globalID != stackViewModel.presentedForm?.feature.globalID {
-                stackViewModel.setPresentedForm(featureForm)
+            if featureForm.feature.globalID != stackViewModel.formModel!.featureForm.feature.globalID {
+//                stackViewModel.setPresentedForm(featureForm)
                 featureFormViewModel.onFeatureFormChanged?(featureForm)
             }
         }

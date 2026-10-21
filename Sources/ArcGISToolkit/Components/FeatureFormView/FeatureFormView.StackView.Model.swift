@@ -16,17 +16,14 @@ import ArcGIS
 import Observation
 
 extension FeatureFormView.StackView {
-    @Observable final class Model {
-        /// <#Description#>
-        let root: FeatureForm
-        
-        init(root: FeatureForm) {
-            self.root = root
+    @MainActor @Observable final class Model {
+        init(featureForm: FeatureForm) {
+            self.formModel = .init(featureForm: featureForm)
         }
         
-        /// The models for each feature form in the navigation path.
-//        private var formModels: [ObjectIdentifier: FeatureFormView.FormView.Model] = [:]
-        private var formModel: FeatureFormView.FormView.Model?
+        #warning("Optional no longer needed here.")
+        /// The model for the feature form at the root of the navigation path.
+        var formModel: FeatureFormView.FormView.Model?
         
         /// An error thrown from finish editing.
         var finishEditingError: (any Error)?
@@ -37,59 +34,14 @@ extension FeatureFormView.StackView {
         /// The navigation path used by the navigation stack in the root feature form view.
         var navigationPath: [FeatureFormView.NavigationPathItem] = []
         
-        /// The feature form presented in the navigation stack.
-        private(set) var presentedForm: FeatureForm?
-        
         /// The internally managed validation error visibility.
         var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
-        
-        /// Creates and adds a model for the provided form.
-        /// - Parameter form: The form to create and add a model for.
-        @MainActor func addModel(_ form: FeatureForm) {
-//            formModels[ObjectIdentifier(form)] = FeatureFormView.FormView.Model(featureForm: form)
-            formModel = FeatureFormView.FormView.Model(featureForm: form)
-        }
-        
-        /// Gets the model for the specified form.
-        /// - Parameter form: The form to get a model for.
-        /// - Returns: The model for the provided form.
-        func getModel(_ form: FeatureForm) -> FeatureFormView.FormView.Model? {
-//            formModels[ObjectIdentifier(form)]
-            formModel
-        }
-        
-        /// Removes the model for the provided form.
-        /// - Parameter form: The form to remove the model for.
-        func removeModel(_ form: FeatureForm) {
-//            formModels.removeValue(forKey: ObjectIdentifier(form))
-            formModel = nil
-        }
-        
-        
-        /// Sets the presented form in the feature form view.
-        /// - Parameter form: The new presented form.
-        func setPresentedForm(_ form: FeatureForm) {
-            form.feature.refresh()
-            presentedForm = form
-            validationErrorVisibilityInternal = .automatic
-        }
-        
-        /// Sets the root feature form in the feature form view.
-        /// - Parameter form: The new root form.
-        @MainActor func setRootForm(_ form: FeatureForm) {
-//            formModels.removeAll()
-            formModel = nil
-            navigationPath.removeAll()
-            addModel(form)
-            presentedForm = form
-            validationErrorVisibilityInternal = .automatic
-        }
         
         // MARK: Computed properties
         
         /// A Boolean value indicating if the form presented in the navigation stack has validation errors.
         var presentedFormHasValidationErrors: Bool {
-            !(presentedForm?.elementValidationErrors.isEmpty ?? true)
+            !(formModel?.featureForm.elementValidationErrors.isEmpty ?? false)
         }
     }
 }
