@@ -128,7 +128,7 @@ struct FeatureFormToolbar: ViewModifier {
                         } label: {
                             let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
                             let hasErrors = featureFormViewModel.formsWithErrors.contains(where: { $0.value > 0 })
-                            Image(systemName: hasEdits ? "tray.badge": "tray")
+                            Image(systemName: hasEdits ? "tray.badge" : "tray")
                                 .symbolEffect(.bounce, value: delayedFormCount)
                                 .symbolRenderingMode(hasErrors ? .multicolor : .monochrome)
                         }
