@@ -37,6 +37,10 @@ public extension FeatureFormView {
         /// Indicates that the user has tapped on an option to visualize a feature on the map.
         /// - Since: 300.0
         case showOnMapRequested(ArcGISFeature)
+        /// Indicates that the user has started an attempt to finish editing the form(s).
+#warning("TODO: Finalize since version.")
+        /// - Since: 300.2
+        case willFinish
         
         // MARK: Deprecated cases
         
