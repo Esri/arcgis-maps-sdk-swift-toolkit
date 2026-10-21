@@ -88,6 +88,7 @@ struct FeatureFormToolbar: ViewModifier {
                                     onBackNavigation?()
                                 })
                             } else {
+                                #warning("TODO: This needs to operate on the model's stack. The dismiss action modifies the active stack.")
                                 dismiss()
                                 onBackNavigation?()
                             }

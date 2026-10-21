@@ -20,6 +20,8 @@ internal import os
 public extension FeatureFormView {
     @MainActor @Observable
     final class Model {
+        #warning("TODO: Add API for reporting external geometry edits.")
+        
         /// A Boolean value that determines whether the view is presented.
         var isPresented: Bool?
         
