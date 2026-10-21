@@ -53,8 +53,9 @@ public extension FeatureFormView {
         /// Initializes a model for the view, creating a `FeatureFormGroup` with the provided
         /// forms.
         /// - Parameter forms: The initial set of forms to be edited in the view.
-        public convenience init(forms: [FeatureForm] = []) {
-            self.init(group: .init(forms: forms))
+        public convenience init?(forms: [FeatureForm] = []) {
+            guard let group = FeatureFormGroup(forms: forms) else { return nil }
+            self.init(group: group)
         }
         
         /// <#Description#>
@@ -153,7 +154,7 @@ public extension FeatureFormView {
                 Logger.featureFormGroupView.info("Feature \(id.description) is already added.")
                 return
             }
-            group.add(form)
+            try group.addForm(form)
             if recordAsBrowsed, !browsedIDs.contains(id) {
                 browsedIDs.insert(id)
             }
@@ -191,14 +192,14 @@ public extension FeatureFormView {
         /// <#Description#>
         func discardEdits() {
             Task {
-                await group.discardEdits()
+                try? await group.discardEdits()
             }
         }
         
         /// <#Description#>
         func finishEditing() {
             Task {
-                await group.finishEditing()
+                try? await group.finishEditing()
             }
         }
         
@@ -233,7 +234,7 @@ public extension FeatureFormView {
         public func remove(form: FeatureForm) {
             group.forms.forEach { _form in
                 if form.feature.globalID == _form.feature.globalID {
-                    group.remove(_form)
+                    try? group.removeForm(_form)
                 }
             }
             backStack.removeAll { id in

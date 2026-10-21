@@ -30,7 +30,7 @@ struct FeatureFormExampleView: View {
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
     /// <#Description#>
-    @State private var model = FeatureFormView.Model()
+    @State private var model = FeatureFormView.Model()!
     /// The error to be presented in the alert.
     @State private var submissionError: SubmissionError?
     
