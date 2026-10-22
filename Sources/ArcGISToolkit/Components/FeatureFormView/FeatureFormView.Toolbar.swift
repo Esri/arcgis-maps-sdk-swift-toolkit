@@ -29,24 +29,22 @@ extension FeatureFormView {
         /// The model for the stack view containing the form.
         @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
         
-        /// A slightly delayed form count, useful for animations to communicate that the form
-        /// group size has changed.
-        @State private var delayedFormCount = 0
-        
-        /// A Boolean value indicating whether the presented feature form has edits.
-        @State private var hasEdits = false
+        /// A Boolean value indicating whether multi-form mode is active.
+        ///
+        /// Useful for animations to communicate that the component has transitioned to
+        /// multi-form mode.
+        @State private var delayedMultiFormModeActive = false
         
         func body(content: Content) -> some View {
             content
                 .navigationBarBackButtonHidden()
                 .navigationBarTitleDisplayMode(.inline)
-                .task(id: featureFormViewModel.activeFormCount) {
-                    try? await Task.sleep(for: .seconds(0.1))
-                    delayedFormCount = featureFormViewModel.activeFormCount
-                }
-                .task(id: form.id) {
-                    for await hasEdits in form.$hasEdits {
-                        withAnimation { self.hasEdits = hasEdits }
+                .onChange(of: featureFormViewModel.activeFormCount, initial: false) {
+                    Task {
+                        // A small delay allows the group icon to come into view
+                        // before we animate it.
+                        try? await Task.sleep(for: .seconds(0.1))
+                        delayedMultiFormModeActive = featureFormViewModel.multiFormModeIsActive
                     }
                 }
                 .toolbar {
@@ -112,19 +110,17 @@ extension FeatureFormView {
                             Button {
                                 featureFormViewModel.clearSelection(clearBackStack: false)
                             } label: {
-                                let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
-                                let hasErrors = featureFormViewModel.formsWithErrors.contains(where: { $0.value > 0 })
                                 Image(systemName: hasEdits ? "tray.badge" : "tray")
-                                    .symbolEffect(.bounce, value: delayedFormCount)
+                                    .symbolEffect(.bounce, value: delayedMultiFormModeActive)
                                     .symbolRenderingMode(hasErrors ? .multicolor : .monochrome)
                             }
                         } else if (featureFormViewModel.editingButtonsVisibility == .automatic)
                                     || (featureFormViewModel.editingButtonsVisibility == .visible) {
                             Button {
-                                if form.elementValidationErrors.isEmpty {
+                                if hasErrors {
                                     Task {
                                         do {
-                                            try await form.finishEditing()
+                                            try await featureFormViewModel.finishEditing()
                                             featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: false))
                                         } catch {
                                             stackViewModel.finishEditingError = error
@@ -154,9 +150,14 @@ extension FeatureFormView {
 }
 
 extension FeatureFormView.Toolbar {
-    /// The selected feature form.
-    var form: FeatureForm {
-        featureFormViewModel.selectedForm!
+    /// <#Description#>
+    var hasEdits: Bool {
+        featureFormViewModel.formsWithEdits.contains(where: { $0.value })
+    }
+    
+    /// <#Description#>
+    var hasErrors: Bool {
+        featureFormViewModel.formsWithErrors.contains(where: { $0.value > 0 })
     }
     
     /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.

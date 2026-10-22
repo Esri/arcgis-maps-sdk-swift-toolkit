@@ -45,6 +45,7 @@ public extension FeatureFormView {
         /// <#Description#>
         init(group: FeatureFormGroup) {
             self.group = group
+            self.formCount = group.forms.count
             
             // If the group has a single form, select it.
             if !multiFormModeIsActive, let first = group.forms.first {
@@ -69,9 +70,7 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        public var formCount: Int {
-            group.forms.count
-        }
+        public var formCount: Int
         
         /// <#Description#>
         private(set) var selectedID: UUID?
@@ -81,7 +80,7 @@ public extension FeatureFormView {
             return ids.compactMap { id in
                 let form = form(for: id)
                 guard let globalID = form?.feature.globalID else { return nil }
-                if (!browsedIDs.contains(globalID) || form?.hasEdits ?? false) {
+                if (!browsedIDs.contains(globalID) || formsWithEdits[globalID, default: false]) {
                     return form
                 } else {
                     return nil
@@ -142,6 +141,7 @@ public extension FeatureFormView {
         ///   - select: <#select description#>
         ///   - recordAsBrowsed: <#recordAsBrowsed description#>
         func add(form: FeatureForm, select: Bool = false, recordAsBrowsed: Bool = false) {
+            defer { formCount = group.forms.count }
             guard let id = form.feature.globalID else {
                 Logger.featureFormView.warning("The feature cannot be added because the its global ID is not available.")
                 return
@@ -222,6 +222,7 @@ public extension FeatureFormView {
         /// <#Description#>
         /// - Parameter form: <#form description#>
         public func remove(form: FeatureForm) {
+            defer { formCount = group.forms.count }
             group.forms.forEach { _form in
                 if form.feature.globalID == _form.feature.globalID {
                     try? group.removeForm(_form)
