@@ -23,8 +23,9 @@ extension FeatureFormView {
         
         /// The effective navigation path.
         ///
-        /// This path acts as read-only mirror of the path stored in the provided stack view model
-        /// which prevents SwiftUI from emptying the stored path when the active form changes.
+        /// This path acts as read-only mirror of the path stored in the stack view model which
+        /// means the navigation stack won't empty the stored path when the active form
+        /// changes.
         @State private var effectiveNavigationPath = [FeatureFormView.NavigationPathItem]()
         
         /// The model for the stack view for the root form.
