@@ -38,7 +38,7 @@ extension FeatureFormView {
         public var body: some View {
             NavigationStack(path: $effectiveNavigationPath) {
                 FormView(form: stackViewModel.formModel!.featureForm)
-                    .featureFormToolbar(stackViewModel.formModel!.featureForm)
+                    .featureFormToolbar()
                     .navigationTitle(stackViewModel.formModel!.title)
                     .navigationDestination(for: NavigationPathItem.self) { itemType in
                         switch itemType {
@@ -54,7 +54,7 @@ extension FeatureFormView {
                                 form: form,
                                 source: source
                             )
-                            .featureFormToolbar(form)
+                            .featureFormToolbar()
                             .navigationTitle(source.name)
                         case let .utilityAssociationCreationView(form, element, filter, candidate):
                             UtilityAssociationCreationView(
@@ -63,7 +63,7 @@ extension FeatureFormView {
                                 filter: filter,
                                 form: form
                             )
-                            .featureFormToolbar(form)
+                            .featureFormToolbar()
                             .navigationTitle(newAssociation)
                         case let .utilityAssociationDetailsView(form, element, associationResult):
                             UtilityAssociationDetailsView(
@@ -71,7 +71,7 @@ extension FeatureFormView {
                                 element: element,
                                 form: form
                             )
-                            .featureFormToolbar(form)
+                            .featureFormToolbar()
                         case let .utilityAssociationFeatureCandidatesView(form, element, filter, source, assetType):
                             UtilityAssociationFeatureCandidatesView(
                                 assetType: assetType,
@@ -80,7 +80,7 @@ extension FeatureFormView {
                                 form: form,
                                 source: source
                             )
-                            .featureFormToolbar(form)
+                            .featureFormToolbar()
                             .navigationTitle(assetType.name)
                         case let .utilityAssociationFeatureSourcesView(form, element, filter):
                             UtilityAssociationFeatureSourcesView(
@@ -88,7 +88,7 @@ extension FeatureFormView {
                                 filter: filter,
                                 form: form
                             )
-                            .featureFormToolbar(form)
+                            .featureFormToolbar()
                             .navigationTitle(networkDataSource)
                         case let .utilityAssociationFilterResultView(form, element, filter):
                             UtilityAssociationsFilterResultView(
@@ -96,7 +96,7 @@ extension FeatureFormView {
                                 filter: filter,
                                 form: form
                             )
-                            .featureFormToolbar(form)
+                            .featureFormToolbar()
                             .navigationTitle(filter.title, subtitle: stackViewModel.formModel?.title ?? "")
                         case let .utilityAssociationGroupResultView(form, element, filter, formSource):
                             UtilityAssociationGroupResultView(
@@ -105,7 +105,7 @@ extension FeatureFormView {
                                 filter: filter,
                                 form: form
                             )
-                            .featureFormToolbar(form)
+                            .featureFormToolbar()
                         }
                     }
             }

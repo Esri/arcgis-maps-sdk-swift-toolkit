@@ -16,8 +16,8 @@ import ArcGIS
 import SwiftUI
 
 extension View {
-    func featureFormToolbar(_ featureForm: FeatureForm) -> some View {
-        self.modifier(FeatureFormView.Toolbar(featureForm: featureForm))
+    func featureFormToolbar() -> some View {
+        self.modifier(FeatureFormView.Toolbar())
     }
 }
 
@@ -36,9 +36,6 @@ extension FeatureFormView {
         /// A Boolean value indicating whether the presented feature form has edits.
         @State private var hasEdits = false
         
-        /// The currently presented feature form.
-        let featureForm: FeatureForm
-        
         func body(content: Content) -> some View {
             content
                 .navigationBarBackButtonHidden()
@@ -47,8 +44,8 @@ extension FeatureFormView {
                     try? await Task.sleep(for: .seconds(0.1))
                     delayedFormCount = featureFormViewModel.activeFormCount
                 }
-                .task(id: featureForm.feature.globalID) {
-                    for await hasEdits in featureForm.$hasEdits {
+                .task(id: form.id) {
+                    for await hasEdits in form.$hasEdits {
                         withAnimation { self.hasEdits = hasEdits }
                     }
                 }
@@ -124,10 +121,10 @@ extension FeatureFormView {
                         } else if (featureFormViewModel.editingButtonsVisibility == .automatic)
                                     || (featureFormViewModel.editingButtonsVisibility == .visible) {
                             Button {
-                                if featureForm.elementValidationErrors.isEmpty {
+                                if form.elementValidationErrors.isEmpty {
                                     Task {
                                         do {
-                                            try await featureForm.finishEditing()
+                                            try await form.finishEditing()
                                             featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: false))
                                         } catch {
                                             stackViewModel.finishEditingError = error
@@ -157,6 +154,11 @@ extension FeatureFormView {
 }
 
 extension FeatureFormView.Toolbar {
+    /// The selected feature form.
+    var form: FeatureForm {
+        featureFormViewModel.selectedForm!
+    }
+    
     /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
     var isRootView: Bool {
         stackViewModel.navigationPath.isEmpty
