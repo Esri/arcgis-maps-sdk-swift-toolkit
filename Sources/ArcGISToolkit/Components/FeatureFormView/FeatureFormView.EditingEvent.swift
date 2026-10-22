@@ -41,7 +41,7 @@ public extension FeatureFormView {
         /// - Since: 300.2
         case willFinish
         
-        // MARK: Deprecated cases
+        // MARK: Deprecated case(s)
         
         /// Indicates that the user has discarded their edits.
         /// - Parameter willNavigate: A Boolean value indicating whether the view will

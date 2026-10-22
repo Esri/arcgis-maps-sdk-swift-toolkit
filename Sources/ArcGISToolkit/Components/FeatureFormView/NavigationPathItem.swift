@@ -18,7 +18,6 @@ extension FeatureFormView {
     /// Describes the items in feature form view's navigation stack.
     /// - Since: 300.0
     public enum NavigationPathItem: Hashable {
-        case form(FeatureForm)
         case utilityAssociationAssetTypesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource)
         case utilityAssociationCreationView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureCandidate)
         case utilityAssociationDetailsView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationResult)
@@ -26,6 +25,14 @@ extension FeatureFormView {
         case utilityAssociationFeatureSourcesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter)
         case utilityAssociationFilterResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter)
         case utilityAssociationGroupResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, FeatureFormSource)
+        
+        // MARK: Deprecated case(s)
+        
+        /// - Note: Deprecated at 300.2.
+        @available(*, deprecated, message: "Use 'FeatureFormView.Model.selected' for tracking the selected feature form.")
+        case form(FeatureForm)
+        
+        // MARK: Hashable conformance
         
         public static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
