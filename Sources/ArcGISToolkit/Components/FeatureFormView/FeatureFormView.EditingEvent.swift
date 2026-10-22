@@ -20,15 +20,12 @@ public extension FeatureFormView {
     /// - Since: 200.8
     enum EditingEvent {
         /// Indicates that edits failed to finish.
-#warning("TODO: Finalize since version.")
         /// - Since: 300.2
         case failed(any Error)
         /// Indicates that the user has discarded their edits.
-#warning("TODO: Finalize since version.")
         /// - Since: 300.2
         case finished
         /// Indicates that the user has discarded their edits.
-#warning("TODO: Finalize since version.")
         /// - Since: 300.2
         case discarded
         /// Indicates the active form or the navigation path for the active form has changed.
@@ -41,7 +38,6 @@ public extension FeatureFormView {
         /// - Since: 300.0
         case showOnMapRequested(ArcGISFeature)
         /// Indicates that the user has started an attempt to finish editing the form(s).
-#warning("TODO: Finalize since version.")
         /// - Since: 300.2
         case willFinish
         
@@ -50,7 +46,6 @@ public extension FeatureFormView {
         /// Indicates that the user has discarded their edits.
         /// - Parameter willNavigate: A Boolean value indicating whether the view will
         /// navigate after discarding.
-#warning("TODO: Finalize deprecation version.")
         /// - Note: Deprecated at 300.2 - discarding edits before navigation is no longer
         /// required. Replace this with 'discarded'.
         /// - Since: 200.8
@@ -59,7 +54,6 @@ public extension FeatureFormView {
         /// Indicates that the user has saved their edits.
         /// - Parameter willNavigate: A Boolean value indicating whether the view will
         /// navigate after saving.
-#warning("TODO: Finalize deprecation version.")
         /// - Note: Deprecated at 300.2 - finishing edits before navigation is no longer
         /// required. Replace this with 'finished'.
         /// - Since: 200.8

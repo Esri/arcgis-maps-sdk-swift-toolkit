@@ -95,7 +95,7 @@ extension FeatureFormView.GroupView /* Group views */ {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
                             if hasEdits {
-#warning("TODO: Warn before closing with edits.")
+                                // TODO: Warn before close.
                             }
                             featureFormViewModel.isPresented = false
                         } label: {
