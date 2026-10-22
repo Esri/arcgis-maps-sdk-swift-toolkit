@@ -116,8 +116,8 @@ extension FeatureFormView {
                 actions: {
                     if let (willNavigate, continuation) = stackViewModel.navigationAlertInfo {
                         Button(role: .destructive) {
-                            stackViewModel.formModel?.featureForm.discardEdits()
-                            stackViewModel.validationErrorVisibilityInternal = .automatic
+                            featureFormViewModel.discardEdits()
+                            featureFormViewModel.validationErrorVisibilityInternal = .automatic
                             featureFormViewModel.onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
                             continuation()
                         } label: {
@@ -125,7 +125,7 @@ extension FeatureFormView {
                         }
                         .onAppear {
                             if stackViewModel.presentedFormHasValidationErrors {
-                                stackViewModel.validationErrorVisibilityInternal = .visible
+                                featureFormViewModel.validationErrorVisibilityInternal = .visible
                             }
                         }
                         if !stackViewModel.presentedFormHasValidationErrors {

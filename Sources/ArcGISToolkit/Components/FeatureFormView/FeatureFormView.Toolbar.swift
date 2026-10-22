@@ -112,12 +112,20 @@ extension FeatureFormView {
                             } label: {
                                 Image(systemName: hasEdits ? "tray.badge" : "tray")
                                     .symbolEffect(.bounce, value: delayedMultiFormModeActive)
-                                    .symbolRenderingMode(hasErrors ? .multicolor : .monochrome)
+                                    .symbolRenderingMode(
+                                        hasErrors
+                                        && (
+                                            featureFormViewModel.validationErrorVisibilityExternal == .visible
+                                            || featureFormViewModel.validationErrorVisibilityInternal == .visible
+                                        )
+                                        ? .multicolor
+                                        : .monochrome
+                                    )
                             }
                         } else if (featureFormViewModel.editingButtonsVisibility == .automatic)
                                     || (featureFormViewModel.editingButtonsVisibility == .visible) {
                             Button {
-                                if hasErrors {
+                                if !hasErrors {
                                     Task {
                                         do {
                                             try await featureFormViewModel.finishEditing()
@@ -127,7 +135,7 @@ extension FeatureFormView {
                                         }
                                     }
                                 } else {
-                                    stackViewModel.validationErrorVisibilityInternal = .visible
+                                    featureFormViewModel.validationErrorVisibilityInternal = .visible
                                     stackViewModel.navigationAlertInfo = (false, {})
                                 }
                             } label: {

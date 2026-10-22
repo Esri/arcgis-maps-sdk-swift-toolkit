@@ -36,7 +36,7 @@ struct FormElementFooter: View {
     var body: some View {
         text
             .id(id)
-            .onChange(of: stackViewModel.validationErrorVisibilityInternal) { id = .init() }
+            .onChange(of: featureFormViewModel.validationErrorVisibilityInternal) { id = .init() }
             .onChange(of: featureFormViewModel.validationErrorVisibilityExternal) { id = .init() }
             .font(.footnote)
             .padding(.vertical, formElementPadding / 2)
@@ -64,7 +64,7 @@ struct FormElementFooter: View {
     var showsErrorsIfPresent: Bool {
         formViewModel.previouslyFocusedElements.contains(element) ||
         featureFormViewModel.validationErrorVisibilityExternal == .visible ||
-        stackViewModel.validationErrorVisibilityInternal == .visible
+        featureFormViewModel.validationErrorVisibilityInternal == .visible
     }
 }
 

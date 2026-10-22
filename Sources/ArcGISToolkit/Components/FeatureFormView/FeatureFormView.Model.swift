@@ -132,6 +132,9 @@ public extension FeatureFormView {
         /// Stack view models, keyed by feature global IDs.
         private var stackViewModels: [UUID: FeatureFormView.StackView.Model] = [:]
         
+        /// The internally managed validation error visibility.
+        var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
+        
         /// <#Description#>
         private var backStack = [UUID]()
         

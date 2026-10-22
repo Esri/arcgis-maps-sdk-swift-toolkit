@@ -33,9 +33,6 @@ extension FeatureFormView.StackView {
         /// The navigation path used by the navigation stack in the root feature form view.
         var navigationPath: [FeatureFormView.NavigationPathItem] = []
         
-        /// The internally managed validation error visibility.
-        var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
-        
         // MARK: Computed properties
         
         /// A Boolean value indicating if the form presented in the navigation stack has validation errors.
