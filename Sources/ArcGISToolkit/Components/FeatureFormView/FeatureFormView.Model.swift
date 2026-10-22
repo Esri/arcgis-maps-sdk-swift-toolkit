@@ -179,28 +179,6 @@ public extension FeatureFormView {
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
-        public func debugLog() {
-            print("Selected:", selectedID ?? "None")
-            print("Can Go Back:", canGoBack)
-            print("Back Stack \(backStack.count)")
-            backStack.forEach { item in
-                print("\t", item)
-            }
-            print("Forms With Errors \(formsWithErrors.count)")
-            formsWithErrors.forEach { id in
-                print("\t", id)
-            }
-            print("Browser Forms With Edits \(formsWithEdits.filter({$0.value}).count)")
-            formsWithEdits.forEach { id in
-                print("\t", id.key, id.value)
-            }
-            print("Browser Forms With Errors \(formsWithErrors.filter({$0.value > 0}).count)")
-            formsWithErrors.forEach { id in
-                print("\t", id, id.value)
-            }
-            print("--- End Debug Print ---")
-        }
-        
         /// <#Description#>
         func discardEdits() {
             Task {
