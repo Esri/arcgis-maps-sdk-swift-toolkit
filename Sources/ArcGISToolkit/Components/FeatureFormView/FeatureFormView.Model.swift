@@ -277,8 +277,10 @@ public extension FeatureFormView {
             selectedID = form.feature.globalID
         }
         
+        /// <#Description#>
         private(set) var formsWithEdits = [UUID: Bool]()
         
+        /// <#Description#>
         private(set) var formsWithErrors = [UUID: Int]()
         
         func monitorEdits() async {
