@@ -95,8 +95,8 @@ extension FeatureFormView {
                         !featureFormViewModel.multiFormModeIsActive {
                         ToolbarItem(placement: .topBarLeading) {
                             DismissButton(kind: .cancel) {
-                                if hasEdits {
-                                    stackViewModel.navigationAlertInfo = (false, {
+                                if featureFormViewModel.groupHasEdits {
+                                    featureFormViewModel.navigationAlertInfo = (false, {
                                         featureFormViewModel.isPresented = false
                                     })
                                 } else {
@@ -110,10 +110,10 @@ extension FeatureFormView {
                             Button {
                                 featureFormViewModel.clearSelection(clearBackStack: false)
                             } label: {
-                                Image(systemName: hasEdits ? "tray.badge" : "tray")
+                                Image(systemName: featureFormViewModel.groupHasEdits ? "tray.badge" : "tray")
                                     .symbolEffect(.bounce, value: delayedMultiFormModeActive)
                                     .symbolRenderingMode(
-                                        hasErrors
+                                        featureFormViewModel.groupHasErrors
                                         && (
                                             featureFormViewModel.validationErrorVisibilityExternal == .visible
                                             || featureFormViewModel.validationErrorVisibilityInternal == .visible
@@ -125,18 +125,18 @@ extension FeatureFormView {
                         } else if (featureFormViewModel.editingButtonsVisibility == .automatic)
                                     || (featureFormViewModel.editingButtonsVisibility == .visible) {
                             Button {
-                                if !hasErrors {
+                                if !featureFormViewModel.groupHasErrors {
                                     Task {
                                         do {
                                             try await featureFormViewModel.finishEditing()
                                             featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: false))
                                         } catch {
-                                            stackViewModel.finishEditingError = error
+                                            featureFormViewModel.finishEditingError = error
                                         }
                                     }
                                 } else {
                                     featureFormViewModel.validationErrorVisibilityInternal = .visible
-                                    stackViewModel.navigationAlertInfo = (false, {})
+                                    featureFormViewModel.navigationAlertInfo = (false, {})
                                 }
                             } label: {
                                 Label {
@@ -149,7 +149,7 @@ extension FeatureFormView {
                                     Image(systemName: "checkmark")
                                 }
                             }
-                            .disabled(!hasEdits)
+                            .disabled(!featureFormViewModel.groupHasEdits)
                         }
                     }
                 }
@@ -158,16 +158,6 @@ extension FeatureFormView {
 }
 
 extension FeatureFormView.Toolbar {
-    /// <#Description#>
-    var hasEdits: Bool {
-        featureFormViewModel.formsWithEdits.contains(where: { $0.value })
-    }
-    
-    /// <#Description#>
-    var hasErrors: Bool {
-        featureFormViewModel.formsWithErrors.contains(where: { $0.value > 0 })
-    }
-    
     /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
     var isRootView: Bool {
         stackViewModel.navigationPath.isEmpty

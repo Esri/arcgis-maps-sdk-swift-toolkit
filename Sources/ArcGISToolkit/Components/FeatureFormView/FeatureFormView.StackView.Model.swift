@@ -24,20 +24,7 @@ extension FeatureFormView.StackView {
         /// The model for the feature form at the root of the navigation path.
         var formModel: FeatureFormView.FormView.Model
         
-        /// An error thrown from finish editing.
-        var finishEditingError: (any Error)?
-        
-        /// Continuation information for the alert.
-        var navigationAlertInfo: (willNavigate: Bool, action: () -> Void)?
-        
         /// The navigation path used by the navigation stack in the root feature form view.
         var navigationPath: [FeatureFormView.NavigationPathItem] = []
-        
-        // MARK: Computed properties
-        
-        /// A Boolean value indicating if the form presented in the navigation stack has validation errors.
-        var presentedFormHasValidationErrors: Bool {
-            !formModel.featureForm.elementValidationErrors.isEmpty
-        }
     }
 }

@@ -129,6 +129,12 @@ public extension FeatureFormView {
             }
         }
         
+        /// An error thrown from finish editing.
+        var finishEditingError: (any Error)?
+        
+        /// <#Description#>
+        var navigationAlertInfo: (willNavigate: Bool, action: () -> Void)?
+        
         /// Stack view models, keyed by feature global IDs.
         private var stackViewModels: [UUID: FeatureFormView.StackView.Model] = [:]
         
@@ -185,14 +191,22 @@ public extension FeatureFormView {
         /// <#Description#>
         func discardEdits() {
             Task {
-                try? await group.discardEdits()
+                do {
+                    try await group.discardEdits()
+                } catch {
+                    finishEditingError = error
+                }
             }
         }
         
         /// <#Description#>
         func finishEditing() {
             Task {
-                try? await group.finishEditing()
+                do {
+                    try await group.finishEditing()
+                } catch {
+                    finishEditingError = error
+                }
             }
         }
         
@@ -282,6 +296,23 @@ public extension FeatureFormView {
         
         /// <#Description#>
         private(set) var formsWithErrors = [UUID: Int]()
+        
+        /// <#Description#>
+        var totalErrorCount: Int {
+            formsWithErrors.values.reduce(into: 0) { partialResult, errorCount in
+                partialResult += errorCount
+            }
+        }
+        
+        /// A Boolean value indicating if the group has any forms with edits.
+        var groupHasEdits: Bool {
+            formsWithEdits.contains(where: { $0.value })
+        }
+        
+        /// A Boolean value indicating if the group has any forms with validation errors.
+        var groupHasErrors: Bool {
+            formsWithErrors.contains(where: { $0.value > 0 })
+        }
         
         func monitorEdits() async {
             Logger.featureFormView.info("Starting edit monitoring.")
