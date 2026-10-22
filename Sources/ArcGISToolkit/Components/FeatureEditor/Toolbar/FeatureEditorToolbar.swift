@@ -165,6 +165,7 @@ struct FeatureEditorToolbar: View {
     }
 }
 
+@available(visionOS, unavailable)
 private extension FeatureEditorToolbar {
     /// Cancels geometry construction.
     ///
@@ -276,6 +277,7 @@ private struct SnapSettingsButton: View {
 
 // MARK: - Helper
 
+@available(visionOS, unavailable)
 private extension View {
     /// Applies the shared styling used by the feature editor toolbar and its
     /// controls.
