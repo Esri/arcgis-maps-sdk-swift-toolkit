@@ -51,8 +51,11 @@ private struct FeatureEditorModifier: ViewModifier {
             guard !newValue else { return }
             let featureAddingModel = model.featureAddingModel
             switch model.state {
-            case .adding where featureAddingModel.selectedLayerTemplate == nil && featureAddingModel.featureForm == nil: model.featureAddingModel.stop()
-            case .editing: model.stopEditing()
+            case .adding where featureAddingModel.selectedLayerTemplate == nil
+                && featureAddingModel.featureForm == nil:
+                model.featureAddingModel.stop()
+            case .editing:
+                model.stopEditing()
             default: break
             }
         }
