@@ -155,30 +155,11 @@ extension FeatureFormView {
         
         func mainButton(for result: UtilityAssociationResult) -> some View {
             Button {
-                // If the FeatureForm is in a FeatureFormGroup, add the
-                // associated form to it.
-                #warning("TODO: Clean this up.")
-                if true /*featureFormViewModel.group != nil*/ {
-                    featureFormViewModel.add(
-                        form: FeatureForm(feature: result.associatedFeature),
-                        select: true,
-                        recordAsBrowsed: true
-                    )
-                } else {
-//                    let navigationAction = {
-//                        stackViewModel.addModel(form)
-//                        stackViewModel.navigationPath.append(
-//                            FeatureFormView.NavigationPathItem.form(form)
-//                        )
-//                    }
-//                    if formViewModel?.featureForm.hasEdits ?? false {
-//                        stackViewModel.navigationAlertInfo = (true, {
-//                            navigationAction()
-//                        })
-//                    } else {
-//                        navigationAction()
-//                    }
-                }
+                featureFormViewModel.add(
+                    form: FeatureForm(feature: result.associatedFeature),
+                    select: true,
+                    recordAsBrowsed: true
+                )
             } label: {
                 HStack {
                     UtilityAssociationResultLabel(result: result)
