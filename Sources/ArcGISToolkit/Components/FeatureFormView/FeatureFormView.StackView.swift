@@ -34,9 +34,8 @@ extension FeatureFormView {
             self.stackViewModel = model
         }
         
-#warning("TODO: Set effective navigation path when reopening a form from the group menu.")
         public var body: some View {
-            NavigationStack(path: $activeNavigationPath) {
+            NavigationStack(path: $effectiveNavigationPath) {
                 FormView(form: stackViewModel.formModel!.featureForm)
                     // Refresh the navigation stack's root view when the root
                     // feature form changes.
@@ -224,14 +223,8 @@ extension FeatureFormView {
                 guard let formViewModel = $0?.object else { return }
                 formChangedAction(formViewModel.featureForm)
             }
-            .onChange(of: ObjectIdentifier(stackViewModel)) {
-                _ = Task {
-                    // Without a small delay, there seems to be a race
-                    // condition where the NavigationStack doesn't properly
-                    // respond to the effective path.
-                    try await Task.sleep(for: .milliseconds(100))
-                    effectiveNavigationPath = stackViewModel.navigationPath
-                }
+            .onChange(of: stackViewModel.formModel!.featureForm.id, initial: true) {
+                effectiveNavigationPath = stackViewModel.navigationPath
             }
             .onChange(of: stackViewModel.navigationPath) {
                 effectiveNavigationPath = stackViewModel.navigationPath
