@@ -21,7 +21,6 @@ extension FeatureFormView.StackView {
             self.formModel = .init(featureForm: featureForm)
         }
         
-        #warning("Optional no longer needed here.")
         /// The model for the feature form at the root of the navigation path.
         var formModel: FeatureFormView.FormView.Model?
         
