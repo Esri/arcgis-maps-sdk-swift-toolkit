@@ -37,9 +37,9 @@ extension FeatureFormView {
         
         public var body: some View {
             NavigationStack(path: $effectiveNavigationPath) {
-                FormView(form: stackViewModel.formModel!.featureForm)
+                FormView(form: stackViewModel.formModel.featureForm)
                     .featureFormToolbar()
-                    .navigationTitle(stackViewModel.formModel!.title)
+                    .navigationTitle(stackViewModel.formModel.title)
                     .navigationDestination(for: NavigationPathItem.self) { itemType in
                         switch itemType {
                         case .form(_):
@@ -97,7 +97,7 @@ extension FeatureFormView {
                                 form: form
                             )
                             .featureFormToolbar()
-                            .navigationTitle(filter.title, subtitle: stackViewModel.formModel?.title ?? "")
+                            .navigationTitle(filter.title, subtitle: stackViewModel.formModel.title)
                         case let .utilityAssociationGroupResultView(form, element, filter, formSource):
                             UtilityAssociationGroupResultView(
                                 element: element,
@@ -132,7 +132,7 @@ extension FeatureFormView {
                             Button {
                                 Task {
                                     do {
-                                        try await stackViewModel.formModel?.featureForm.finishEditing()
+                                        try await stackViewModel.formModel.featureForm.finishEditing()
                                         featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
                                         continuation()
                                     } catch {
@@ -153,7 +153,7 @@ extension FeatureFormView {
                 message: {
                     if stackViewModel.presentedFormHasValidationErrors {
                         Text(
-                            "You have ^[\(stackViewModel.formModel?.featureForm.elementValidationErrors.count ?? -1) error](inflect: true) that must be fixed before saving.",
+                            "You have ^[\(stackViewModel.formModel.featureForm.elementValidationErrors.count) error](inflect: true) that must be fixed before saving.",
                             bundle: .toolkitModule,
                             comment:
                                     """
@@ -208,7 +208,7 @@ extension FeatureFormView {
                     }
                 }
             )
-            .animation(.default, value: ObjectIdentifier(stackViewModel.formModel!.featureForm))
+            .animation(.default, value: ObjectIdentifier(stackViewModel.formModel.featureForm))
             .environment(stackViewModel)
             .onChange(of: stackViewModel.navigationPath) {
                 if let presentedItem = stackViewModel.navigationPath.last {
@@ -219,7 +219,7 @@ extension FeatureFormView {
                 guard let formViewModel = $0?.object else { return }
                 formChangedAction(formViewModel.featureForm)
             }
-            .onChange(of: stackViewModel.formModel!.featureForm.id, initial: true) {
+            .onChange(of: stackViewModel.formModel.featureForm.id, initial: true) {
                 effectiveNavigationPath = stackViewModel.navigationPath
             }
             .onChange(of: stackViewModel.navigationPath) {
@@ -262,7 +262,7 @@ extension FeatureFormView.StackView {
     /// the same ``FeatureForm`` make sure not to over-emit form handling events.
     var formChangedAction: (FeatureForm) -> Void {
         { featureForm in
-            if featureForm.feature.globalID != stackViewModel.formModel!.featureForm.feature.globalID {
+            if featureForm.feature.globalID != stackViewModel.formModel.featureForm.feature.globalID {
                 featureFormViewModel.onFeatureFormChanged?(featureForm)
             }
         }

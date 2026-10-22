@@ -73,7 +73,7 @@ extension FeatureFormView {
                 }
                 .navigationTitle(
                     utilityAssociationGroupResult?.name ?? "",
-                    subtitle: stackViewModel.formModel?.title ?? ""
+                    subtitle: stackViewModel.formModel.title
                 )
                 .onChange(of: associationResults.count) {
                     if associationResults.isEmpty, !stackViewModel.navigationPath.isEmpty {

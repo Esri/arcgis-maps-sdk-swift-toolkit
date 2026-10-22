@@ -22,7 +22,7 @@ extension FeatureFormView.StackView {
         }
         
         /// The model for the feature form at the root of the navigation path.
-        var formModel: FeatureFormView.FormView.Model?
+        var formModel: FeatureFormView.FormView.Model
         
         /// An error thrown from finish editing.
         var finishEditingError: (any Error)?
@@ -37,7 +37,7 @@ extension FeatureFormView.StackView {
         
         /// A Boolean value indicating if the form presented in the navigation stack has validation errors.
         var presentedFormHasValidationErrors: Bool {
-            !(formModel?.featureForm.elementValidationErrors.isEmpty ?? false)
+            !formModel.featureForm.elementValidationErrors.isEmpty
         }
     }
 }
