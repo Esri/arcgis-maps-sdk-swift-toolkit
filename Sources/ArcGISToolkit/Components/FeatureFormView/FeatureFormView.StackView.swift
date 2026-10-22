@@ -21,8 +21,11 @@ extension FeatureFormView {
     struct StackView: View {
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
-        /// <#Description#>
-        @State private var activeNavigationPath = [FeatureFormView.NavigationPathItem]()
+        /// The effective navigation path.
+        ///
+        /// This path acts as read-only mirror of the path stored in the provided stack view model
+        /// which prevents SwiftUI from emptying the stored path when the active form changes.
+        @State private var effectiveNavigationPath = [FeatureFormView.NavigationPathItem]()
         
         /// The model for the stack view for the root form.
         let stackViewModel: FeatureFormView.StackView.Model
@@ -31,6 +34,7 @@ extension FeatureFormView {
             self.stackViewModel = model
         }
         
+#warning("TODO: Set effective navigation path when reopening a form from the group menu.")
         public var body: some View {
             NavigationStack(path: $activeNavigationPath) {
                 FormView(form: stackViewModel.formModel!.featureForm)
@@ -222,12 +226,15 @@ extension FeatureFormView {
             }
             .onChange(of: ObjectIdentifier(stackViewModel)) {
                 _ = Task {
+                    // Without a small delay, there seems to be a race
+                    // condition where the NavigationStack doesn't properly
+                    // respond to the effective path.
                     try await Task.sleep(for: .milliseconds(100))
-                    activeNavigationPath = stackViewModel.navigationPath
+                    effectiveNavigationPath = stackViewModel.navigationPath
                 }
             }
             .onChange(of: stackViewModel.navigationPath) {
-                activeNavigationPath = stackViewModel.navigationPath
+                effectiveNavigationPath = stackViewModel.navigationPath
             }
         }
     }
