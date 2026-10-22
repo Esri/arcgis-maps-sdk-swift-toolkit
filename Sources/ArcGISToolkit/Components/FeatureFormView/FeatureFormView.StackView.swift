@@ -38,13 +38,15 @@ extension FeatureFormView {
         public var body: some View {
             NavigationStack(path: $effectiveNavigationPath) {
                 FormView(form: stackViewModel.formModel!.featureForm)
-                    // Refresh the navigation stack's root view when the root
-                    // feature form changes.
-                    .id(ObjectIdentifier(stackViewModel.formModel!.featureForm))
+                    .featureFormToolbar(stackViewModel.formModel!.featureForm)
+                    .navigationTitle(stackViewModel.formModel!.title)
                     .navigationDestination(for: NavigationPathItem.self) { itemType in
                         switch itemType {
-                        case let .form(form):
-                            FormView(form: form)
+                        case .form(_):
+                            // With the introduction of FeatureFormGroup, opened
+                            // associations are added to the group rather than
+                            // the stack of the current form.
+                            EmptyView()
                         case let .utilityAssociationAssetTypesView(form, element, filter, source):
                             UtilityAssociationAssetTypesView(
                                 element: element,
@@ -53,7 +55,6 @@ extension FeatureFormView {
                                 source: source
                             )
                             .featureFormToolbar(form)
-                            .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(source.name)
                         case let .utilityAssociationCreationView(form, element, filter, candidate):
                             UtilityAssociationCreationView(
@@ -63,7 +64,6 @@ extension FeatureFormView {
                                 form: form
                             )
                             .featureFormToolbar(form)
-                            .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(newAssociation)
                         case let .utilityAssociationDetailsView(form, element, associationResult):
                             UtilityAssociationDetailsView(
@@ -72,7 +72,6 @@ extension FeatureFormView {
                                 form: form
                             )
                             .featureFormToolbar(form)
-                            .navigationBarTitleDisplayMode(.inline)
                         case let .utilityAssociationFeatureCandidatesView(form, element, filter, source, assetType):
                             UtilityAssociationFeatureCandidatesView(
                                 assetType: assetType,
@@ -82,7 +81,6 @@ extension FeatureFormView {
                                 source: source
                             )
                             .featureFormToolbar(form)
-                            .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(assetType.name)
                         case let .utilityAssociationFeatureSourcesView(form, element, filter):
                             UtilityAssociationFeatureSourcesView(
@@ -91,7 +89,6 @@ extension FeatureFormView {
                                 form: form
                             )
                             .featureFormToolbar(form)
-                            .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(networkDataSource)
                         case let .utilityAssociationFilterResultView(form, element, filter):
                             UtilityAssociationsFilterResultView(
@@ -100,7 +97,6 @@ extension FeatureFormView {
                                 form: form
                             )
                             .featureFormToolbar(form)
-                            .navigationBarTitleDisplayMode(.inline)
                             .navigationTitle(filter.title, subtitle: stackViewModel.formModel?.title ?? "")
                         case let .utilityAssociationGroupResultView(form, element, filter, formSource):
                             UtilityAssociationGroupResultView(
@@ -110,7 +106,6 @@ extension FeatureFormView {
                                 form: form
                             )
                             .featureFormToolbar(form)
-                            .navigationBarTitleDisplayMode(.inline)
                         }
                     }
             }
@@ -268,7 +263,6 @@ extension FeatureFormView.StackView {
     var formChangedAction: (FeatureForm) -> Void {
         { featureForm in
             if featureForm.feature.globalID != stackViewModel.formModel!.featureForm.feature.globalID {
-//                stackViewModel.setPresentedForm(featureForm)
                 featureFormViewModel.onFeatureFormChanged?(featureForm)
             }
         }

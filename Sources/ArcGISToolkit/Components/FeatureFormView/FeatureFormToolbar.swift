@@ -16,14 +16,12 @@ import ArcGIS
 import SwiftUI
 
 extension View {
-    func featureFormToolbar(_ featureForm: FeatureForm, isAForm: Bool = false, onBackNavigation: (() -> Void)? = nil) -> some View {
-        self.modifier(FeatureFormToolbar(featureForm: featureForm, isAForm: isAForm, onBackNavigation: onBackNavigation))
+    func featureFormToolbar(_ featureForm: FeatureForm) -> some View {
+        self.modifier(FeatureFormToolbar(featureForm: featureForm))
     }
 }
 
-struct FeatureFormToolbar: ViewModifier {
-    @Environment(\.dismiss) var dismiss
-    
+private struct FeatureFormToolbar: ViewModifier {
     /// <#Description#>
     @Environment(FeatureFormView.Model.self) var featureFormViewModel
     
@@ -40,17 +38,10 @@ struct FeatureFormToolbar: ViewModifier {
     /// The currently presented feature form.
     let featureForm: FeatureForm
     
-    /// A Boolean value indicating whether the modified view is a feature form view or another
-    /// type of associated view such as a `UtilityAssociationsFilterResultView` or
-    /// `UtilityAssociationGroupResultView`.
-    let isAForm: Bool
-    
-    /// A closure to perform when back navigation completes.
-    let onBackNavigation: (() -> Void)?
-    
     func body(content: Content) -> some View {
         content
             .navigationBarBackButtonHidden()
+            .navigationBarTitleDisplayMode(.inline)
             .task(id: featureFormViewModel.activeFormCount) {
                 try? await Task.sleep(for: .seconds(0.1))
                 delayedFormCount = featureFormViewModel.activeFormCount
@@ -82,16 +73,7 @@ struct FeatureFormToolbar: ViewModifier {
                         }
                     } else if !isRootView {
                         Button {
-                            if alertBeforeDismissing {
-                                stackViewModel.navigationAlertInfo = (true, {
-                                    dismiss()
-                                    onBackNavigation?()
-                                })
-                            } else {
-                                #warning("TODO: This needs to operate on the model's stack. The dismiss action modifies the active stack.")
-                                dismiss()
-                                onBackNavigation?()
-                            }
+                            stackViewModel.navigationPath.removeLast()
                         } label: {
                             Label {
                                 Text(
@@ -173,11 +155,6 @@ struct FeatureFormToolbar: ViewModifier {
 }
 
 extension FeatureFormToolbar {
-    /// A Boolean value indicating whether to alert for unsaved edits before dismissing the current view.
-    var alertBeforeDismissing: Bool {
-        isAForm && hasEdits
-    }
-    
     /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
     var isRootView: Bool {
         stackViewModel.navigationPath.isEmpty

@@ -60,11 +60,6 @@ extension FeatureFormView {
                     }
                 }
                 .environment(formViewModel)
-                .featureFormToolbar(form, isAForm: true) {
-//                    stackViewModel.removeModel(form)
-                }
-                .navigationBarTitleDisplayMode(.inline)
-                .navigationTitle(formViewModel.title)
                 .onTitleChange(of: formViewModel.featureForm) { newTitle in
                     formViewModel.title = newTitle
                 }
