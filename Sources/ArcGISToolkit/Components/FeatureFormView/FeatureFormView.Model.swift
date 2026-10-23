@@ -299,9 +299,7 @@ public extension FeatureFormView {
         
         /// <#Description#>
         var totalErrorCount: Int {
-            formsWithErrors.values.reduce(into: 0) { partialResult, errorCount in
-                partialResult += errorCount
-            }
+            formsWithErrors.values.reduce(0, +)
         }
         
         /// A Boolean value indicating if the group has any forms with edits.
