@@ -100,9 +100,12 @@ struct GeometryConstructionView: View {
                         ),
                         systemImage: "exclamationmark.triangle",
                         description: Text(
-                            "Creating a geometry for this template is not supported.",
+                            "The selected template does not define any supported construction tools.",
                             bundle: .toolkitModule,
-                            comment: "A message explaining that geometry cannot be constructed for a feature template."
+                            comment: """
+                                A message displayed to the user when a selected template \
+                                does not have any supported construction tools.
+                                """
                         )
                     )
                 case .featureCreationFailed(let underlyingError):
