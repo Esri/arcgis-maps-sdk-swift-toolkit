@@ -35,7 +35,7 @@ extension LayerTemplate {
     
     /// Creates a set of features based on the specified geometry.
     /// - Parameter geometry: The geometry from which features are created.
-    func makeFeatures(geometry: Geometry? = nil) async throws -> SharedTemplateFeatureCreationSet {
+    func makeFeatures(geometry: Geometry?) async throws -> SharedTemplateFeatureCreationSet {
         return try await sharedTemplate.source
             .makeFeatures(sharedTemplate: sharedTemplate, geometry: geometry)
     }
