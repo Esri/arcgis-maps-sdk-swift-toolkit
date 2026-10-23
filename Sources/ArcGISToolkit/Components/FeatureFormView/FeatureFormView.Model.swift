@@ -114,11 +114,8 @@ public extension FeatureFormView {
         
         /// <#Description#>
         var selectedForm: FeatureForm? {
-            if let selectedID {
-                form(for: selectedID) ?? nil
-            } else {
-                nil
-            }
+            guard let selectedID else { return nil }
+            return form(for: selectedID) ?? nil
         }
         
         /// An error thrown from finish editing.

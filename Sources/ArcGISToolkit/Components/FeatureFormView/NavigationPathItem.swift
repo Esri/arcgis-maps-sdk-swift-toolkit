@@ -29,7 +29,7 @@ extension FeatureFormView {
         // MARK: Deprecated case(s)
         
         /// - Note: Deprecated at 300.2.
-        @available(*, deprecated, message: "Use 'FeatureFormView.Model.selected' for tracking the selected feature form.")
+        @available(*, deprecated, message: "Use 'FeatureFormView.Model.selectedForm' for tracking the selected feature form.")
         case form(FeatureForm)
         
         // MARK: Hashable conformance
