@@ -39,6 +39,9 @@ struct AttachmentImportMenu: View {
         self.onAdd = onAdd
     }
     
+    /// The feature for view customiztion options.
+    @Environment(\.customization) var customization
+    
     /// Performs camera authorization request handling.
     @State private var cameraRequester = CameraRequester()
     
@@ -186,6 +189,7 @@ struct AttachmentImportMenu: View {
             Image(systemName: "photo.on.rectangle")
         }
     }
+    
     private func attachFileButton() -> Button<some View> {
         Button {
             fileImporterIsPresented = true
@@ -259,45 +263,45 @@ struct AttachmentImportMenu: View {
                 attachFileButton()
             } else if let onlyInput = element.inputs.first {
                 switch onlyInput {
-                case let audioFormInput as AudioFormInput:
-                    switch audioFormInput.method {
-                    case .capture:
-                        EmptyView()
+                    case let audioFormInput as AudioFormInput:
+                        switch audioFormInput.method {
+                            case .capture:
+                                EmptyView()
+                            default:
+                                attachFileButton()
+                        }
+                    case is DocumentFormInput:
+                        attachFileButton()
+                    case let imageFormInput as ImageFormInput:
+                        switch imageFormInput.method {
+                            case .any:
+                                takePhotoButton(input: imageFormInput)
+                                choosePhotoButton()
+                                attachFileButton()
+                            case .capture:
+                                takePhotoButton(input: imageFormInput)
+                            case .upload:
+                                choosePhotoButton()
+                                attachFileButton()
+                            @unknown default:
+                                EmptyView()
+                        }
+                    case let videoFormInput as VideoFormInput:
+                        switch videoFormInput.method {
+                            case .any:
+                                takeVideoButton(input: videoFormInput)
+                                chooseVideoButton()
+                                attachFileButton()
+                            case .capture:
+                                takeVideoButton(input: videoFormInput)
+                            case .upload:
+                                chooseVideoButton()
+                                attachFileButton()
+                            @unknown default:
+                                EmptyView()
+                        }
                     default:
-                        attachFileButton()
-                    }
-                case is DocumentFormInput:
-                    attachFileButton()
-                case let imageFormInput as ImageFormInput:
-                    switch imageFormInput.method {
-                    case .any:
-                        takePhotoButton(input: imageFormInput)
-                        choosePhotoButton()
-                        attachFileButton()
-                    case .capture:
-                        takePhotoButton(input: imageFormInput)
-                    case .upload:
-                        choosePhotoButton()
-                        attachFileButton()
-                    @unknown default:
                         EmptyView()
-                    }
-                case let videoFormInput as VideoFormInput:
-                    switch videoFormInput.method {
-                    case .any:
-                        takeVideoButton(input: videoFormInput)
-                        chooseVideoButton()
-                        attachFileButton()
-                    case .capture:
-                        takeVideoButton(input: videoFormInput)
-                    case .upload:
-                        chooseVideoButton()
-                        attachFileButton()
-                    @unknown default:
-                        EmptyView()
-                    }
-                default:
-                    EmptyView()
                 }
             }
             // On iOS simulators there is no reliable way to programmatically
@@ -336,56 +340,111 @@ struct AttachmentImportMenu: View {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
             let uploadResult: Result<FormAttachment, Error>
             switch (newAttachmentImportData.fileName, newAttachmentImportData.data, newAttachmentImportData.filePath) {
-            case let (.some(name), .some(data), .none):
-                uploadResult = await Result {
-                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, data: data, name: name)
-                }
-            case let (.none, .some(data), .none):
-                uploadResult = await Result {
-                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, data: data)
-                }
-            case let (.some(name), .none, .some(path)):
-                _ = path.startAccessingSecurityScopedResource()
-                defer { path.stopAccessingSecurityScopedResource() }
-                uploadResult = await Result {
-                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: path, name: name)
-                }
-            case let (.none, .none, .some(path)):
-                _ = path.startAccessingSecurityScopedResource()
-                defer { path.stopAccessingSecurityScopedResource() }
-                uploadResult = await Result {
-                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: path)
-                }
-            default:
-                uploadResult = .failure(AttachmentImportError.creationFailed)
+                case let (.some(name), .some(data), .none):
+                    var customizedData: Data?
+                    if let customization,
+                        let result = customization.addAttachmentAction?(
+                            newAttachmentImportData.contentType,
+                            data,
+                            nil
+                        ) {
+                        if result.0 != nil {
+                            customizedData = result.0
+                        }
+                    }
+                    let newData = customizedData
+                    uploadResult = await Result {
+                        try await element.addAttachment(
+                            contentType: newAttachmentImportData.contentType,
+                            data: newData ?? data,
+                            name: name
+                        )
+                    }
+                case let (.none, .some(data), .none):
+                    var customizedData: Data?
+                    if let customization,
+                       let result = customization.addAttachmentAction?(
+                            newAttachmentImportData.contentType,
+                            data,
+                            nil
+                       ) {
+                        if result.0 != nil {
+                            customizedData = result.0
+                        }
+                    }
+                    let newData = customizedData
+                    uploadResult = await Result {
+                        try await element.addAttachment(
+                            contentType: newAttachmentImportData.contentType,
+                            data: newData ?? data
+                        )
+                    }
+                case let (.some(name), .none, .some(path)):
+                    _ = path.startAccessingSecurityScopedResource()
+                    defer { path.stopAccessingSecurityScopedResource() }
+                    var customizedPath: URL?
+                    if let customization,
+                       let result = customization.addAttachmentAction?(
+                            newAttachmentImportData.contentType,
+                            nil,
+                            path
+                       ) {
+                        if result.0 != nil {
+                            customizedPath = result.1
+                        }
+                    }
+                    let newPath = customizedPath ?? path
+                    uploadResult = await Result {
+                        try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: newPath, name: name)
+                    }
+                case let (.none, .none, .some(path)):
+                    _ = path.startAccessingSecurityScopedResource()
+                    defer { path.stopAccessingSecurityScopedResource() }
+                    var customizedPath: URL?
+                    if let customization,
+                       let result = customization.addAttachmentAction?(
+                            newAttachmentImportData.contentType,
+                            nil,
+                            path
+                       ) {
+                        if result.0 != nil {
+                            customizedPath = result.1
+                        }
+                    }
+                    let newPath = customizedPath ?? path
+                    uploadResult = await Result {
+                        try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: newPath)
+                    }
+                default:
+                    uploadResult = .failure(AttachmentImportError.creationFailed)
             }
             switch uploadResult {
-            case let .success(newAttachment):
-                onAdd?(newAttachment)
-                importState = .none
-            case let .failure(error):
-                if let featureFormError = error as? FeatureFormError {
-                    importState = .errored(.featureFormError(featureFormError))
-                } else {
-                    importState = .errored(.creationFailed)
-                }
+                case let .success(newAttachment):
+                    onAdd?(newAttachment)
+                    importState = .none
+                case let .failure(error):
+                    if let featureFormError = error as? FeatureFormError {
+                        importState = .errored(.featureFormError(featureFormError))
+                    } else {
+                        importState = .errored(.creationFailed)
+                    }
             }
         }
         .fileImporter(isPresented: $fileImporterIsPresented, allowedContentTypes: allowedFileImporterTypes) { result in
             importState = .importing
             switch result {
-            case .success(let url):
-                if url.startAccessingSecurityScopedResource(),
-                   let contentType = url.contentType {
-                    importState = .finalizing(
-                        .init(contentType: contentType, fileName: url.lastPathComponent, filePath: url)
-                    )
-                } else {
-                    importState = .errored(.dataInaccessible)
-                }
-                url.stopAccessingSecurityScopedResource()
-            case .failure(let error):
-                importState = .errored(.system(error.localizedDescription))
+                case .success(let url):
+                    if url.startAccessingSecurityScopedResource(),
+                       let contentType = url.contentType {
+                        importState = .finalizing(
+                            .init(contentType: contentType, fileName: url.lastPathComponent, filePath: url)
+                        )
+                    } else {
+                        importState = .errored(.dataInaccessible)
+                    }
+                    url.stopAccessingSecurityScopedResource()
+                case .failure(let error):
+                    importState = .errored(.system(error.localizedDescription))
             }
         }
 #if os(iOS)
@@ -447,25 +506,25 @@ private extension AttachmentImportMenu {
     var importFailureAlertMessage: Text? {
         guard case .errored(let attachmentImportError) = importState else { return nil }
         return switch attachmentImportError {
-        case .emptyFilesNotSupported:
-            emptyFilesNotSupportedAlertMessage
-        case .featureFormError(let featureFormError):
-            switch featureFormError {
-            case .exceedsMaximumAttachmentCount:
-                element.maxAttachmentCountMessage ?? genericImportFailureAlertMessage
-            case .exceedsMaximumAttachmentSize:
-                element.maxFileSizeMessage ?? genericImportFailureAlertMessage
-            case .incorrectAttachmentType:
-                element.incorrectAttachmentTypeMessage
-            case .exceedsMaximumAttachmentDuration:
-                element.exceedsMaximumAttachmentDurationMessage ?? genericImportFailureAlertMessage
+            case .emptyFilesNotSupported:
+                emptyFilesNotSupportedAlertMessage
+            case .featureFormError(let featureFormError):
+                switch featureFormError {
+                    case .exceedsMaximumAttachmentCount:
+                        element.maxAttachmentCountMessage ?? genericImportFailureAlertMessage
+                    case .exceedsMaximumAttachmentSize:
+                        element.maxFileSizeMessage ?? genericImportFailureAlertMessage
+                    case .incorrectAttachmentType:
+                        element.incorrectAttachmentTypeMessage
+                    case .exceedsMaximumAttachmentDuration:
+                        element.exceedsMaximumAttachmentDurationMessage ?? genericImportFailureAlertMessage
+                    default:
+                        genericImportFailureAlertMessage
+                }
+            case .sizeLimitExceeded:
+                sizeLimitExceededImportFailureAlertMessage
             default:
                 genericImportFailureAlertMessage
-            }
-        case .sizeLimitExceeded:
-            sizeLimitExceededImportFailureAlertMessage
-        default:
-            genericImportFailureAlertMessage
         }
     }
     

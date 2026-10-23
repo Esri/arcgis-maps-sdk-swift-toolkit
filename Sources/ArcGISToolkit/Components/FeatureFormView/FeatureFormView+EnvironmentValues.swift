@@ -16,6 +16,9 @@ import ArcGIS
 import SwiftUI
 
 extension EnvironmentValues /* FeatureFormView */ {
+    /// The feature form view customization options provided by the client.
+    @Entry var customization: FeatureFormViewCustomization?
+
     /// The visibility of the "save" and "discard" buttons.
     @Entry var editingButtonVisibility: Visibility = .automatic
     
