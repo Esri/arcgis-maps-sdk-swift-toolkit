@@ -175,7 +175,11 @@ extension FeatureFormView.GroupView /* Group views */ {
                                             Text(
                                                 "Unsaved Edits",
                                                 bundle: .toolkitModule,
-                                                comment: ""
+                                                comment: """
+                                                    A label indicating a \ 
+                                                    feature form has unsaved \
+                                                    edits.
+                                                    """
                                             )
                                         } icon: {
                                             Image(systemName: "pencil")
