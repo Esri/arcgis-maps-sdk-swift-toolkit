@@ -30,17 +30,17 @@ extension FeatureFormView {
         @State private var effectiveNavigationPath = [FeatureFormView.NavigationPathItem]()
         
         /// The model for the stack view for the root form.
-        let formViewModel: FeatureFormView.FormView.Model
+        let formModel: FeatureFormView.FormModel
         
-        init(model: FormView.Model) {
-            self.formViewModel = model
+        init(model: FormModel) {
+            self.formModel = model
         }
         
         public var body: some View {
             NavigationStack(path: $effectiveNavigationPath) {
-                FormView(form: formViewModel.featureForm)
+                FormView(form: formModel.featureForm)
                     .featureFormToolbar()
-                    .navigationTitle(formViewModel.title)
+                    .navigationTitle(formModel.title)
                     .navigationDestination(for: NavigationPathItem.self) { itemType in
                         switch itemType {
                         case .form(_):
@@ -98,7 +98,7 @@ extension FeatureFormView {
                                 form: form
                             )
                             .featureFormToolbar()
-                            .navigationTitle(filter.title, subtitle: formViewModel.title)
+                            .navigationTitle(filter.title, subtitle: formModel.title)
                         case let .utilityAssociationGroupResultView(form, element, filter, formSource):
                             UtilityAssociationGroupResultView(
                                 element: element,
@@ -110,22 +110,22 @@ extension FeatureFormView {
                         }
                     }
             }
-            .animation(.default, value: ObjectIdentifier(formViewModel.featureForm))
-            .environment(formViewModel)
-            .onChange(of: formViewModel.navigationPath) {
-                if let presentedItem = formViewModel.navigationPath.last {
+            .animation(.default, value: ObjectIdentifier(formModel.featureForm))
+            .environment(formModel)
+            .onChange(of: formModel.navigationPath) {
+                if let presentedItem = formModel.navigationPath.last {
                     featureFormViewModel.onFormEditingEventAction?(.navigationChanged(presentedItem))
                 }
             }
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
-                guard let formViewModel = $0?.object else { return }
-                formChangedAction(formViewModel.featureForm)
+                guard let formModel = $0?.object else { return }
+                formChangedAction(formModel.featureForm)
             }
-            .onChange(of: formViewModel.featureForm.id, initial: true) {
-                effectiveNavigationPath = formViewModel.navigationPath
+            .onChange(of: formModel.featureForm.id, initial: true) {
+                effectiveNavigationPath = formModel.navigationPath
             }
-            .onChange(of: formViewModel.navigationPath) {
-                effectiveNavigationPath = formViewModel.navigationPath
+            .onChange(of: formModel.navigationPath) {
+                effectiveNavigationPath = formModel.navigationPath
             }
         }
     }
@@ -142,7 +142,7 @@ extension FeatureFormView.StackView {
     /// the same ``FeatureForm`` make sure not to over-emit form handling events.
     var formChangedAction: (FeatureForm) -> Void {
         { featureForm in
-            if featureForm.feature.globalID != formViewModel.featureForm.feature.globalID {
+            if featureForm.feature.globalID != formModel.featureForm.feature.globalID {
                 featureFormViewModel.onFeatureFormChanged?(featureForm)
             }
         }

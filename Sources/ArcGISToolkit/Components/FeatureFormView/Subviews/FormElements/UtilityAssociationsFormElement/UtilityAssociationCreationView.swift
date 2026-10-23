@@ -21,7 +21,7 @@ extension FeatureFormView {
     /// A view to configure and add a utility network association.
     struct UtilityAssociationCreationView: View {
         /// The model for the feature form.
-        @Environment(FeatureFormView.FormView.Model.self) var formViewModel
+        @Environment(FeatureFormView.FormModel.self) var formModel
         
         /// The error to be presented when adding an association failed.
         @State private var addAssociationError: AddAssociationError?
@@ -137,7 +137,7 @@ extension FeatureFormView {
                 // views to avoid errors here. (FB20395585)
                 // https://developer.apple.com/forums/thread/802221#802221021
                 await MainActor.run {
-                    formViewModel.navigationPath.removeLast(4)
+                    formModel.navigationPath.removeLast(4)
                 }
             } catch let error as ArcGIS.InvalidArgumentError {
                 addAssociationError = .other(error.details)
@@ -221,7 +221,7 @@ extension FeatureFormView {
         var sectionForFromElement: some View {
             Section {
                 LabeledContent {
-                    Text(candidateIsToElement ? formViewModel.title : candidate.title)
+                    Text(candidateIsToElement ? formModel.title : candidate.title)
                 } label: {
                     Text.fromElement
                 }
@@ -243,7 +243,7 @@ extension FeatureFormView {
         var sectionForToElement: some View {
             Section {
                 LabeledContent {
-                    Text(candidateIsToElement ? candidate.title : formViewModel.title)
+                    Text(candidateIsToElement ? candidate.title : formModel.title)
                 } label: {
                     Text.toElement
                 }

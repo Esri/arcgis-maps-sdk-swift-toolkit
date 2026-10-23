@@ -20,7 +20,7 @@ import SwiftUI
 /// This is the preferable input type for long lists of coded value domains.
 struct ComboBoxInput: View {
     /// The model for the feature form.
-    @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
+    @Environment(FeatureFormView.FormModel.self) private var formModel
     
     /// The phrase to use when filtering by coded value name.
     @State private var filterPhrase = ""
@@ -75,7 +75,7 @@ struct ComboBoxInput: View {
     
     var body: some View {
         Button {
-            formViewModel.focusedElement = element
+            formModel.focusedElement = element
             isPresented = true
         } label: {
             HStack {
@@ -87,8 +87,8 @@ struct ComboBoxInput: View {
                     // and we're not required. (i.e., Don't show clear if
                     // the field is required.)
                     XButton(.clear) {
-                        formViewModel.focusedElement = element
-                        defer { formViewModel.focusedElement = nil }
+                        formModel.focusedElement = element
+                        defer { formModel.focusedElement = nil }
                         updateValueAndEvaluateExpressions(nil)
                     }
                     .accessibilityIdentifier("\(element.label) Clear Button")
@@ -215,7 +215,7 @@ extension ComboBoxInput {
     private func updateValueAndEvaluateExpressions(_ value: CodedValue?) {
         guard value?.name != element.formattedValue else { return }
         element.updateValue(value?.code)
-        formViewModel.evaluateExpressions()
+        formModel.evaluateExpressions()
     }
 }
 

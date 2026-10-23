@@ -20,7 +20,7 @@ struct FormElementFooter: View {
     /// The model for the feature form view.
     @Environment(FeatureFormView.Model.self) private var featureFormViewModel
     /// The model for the feature form.
-    @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
+    @Environment(FeatureFormView.FormModel.self) private var formModel
     /// A vertical amount of padding to use between form elements.
     @Environment(\.formElementPadding) var formElementPadding
     
@@ -59,7 +59,7 @@ struct FormElementFooter: View {
     /// A Boolean value which indicates whether or not the footer should show validation errors for the
     /// element, if any are present.
     var showsErrorsIfPresent: Bool {
-        formViewModel.previouslyFocusedElements.contains(element) ||
+        formModel.previouslyFocusedElements.contains(element) ||
         featureFormViewModel.allValidationErrorsAreVisible
     }
 }
@@ -114,7 +114,7 @@ extension FormElementFooter {
     
     struct FieldFormElementFooter: FormElementFooterProvider {
         /// The model for the feature form.
-        @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
+        @Environment(FeatureFormView.FormModel.self) private var formModel
         
         let element: FieldFormElement
         let showsErrorsIfPresent: Bool
@@ -126,7 +126,7 @@ extension FormElementFooter {
                         error
                     } else if !element.description.isEmpty {
                         Text(element.description)
-                    } else if formViewModel.focusedElement == element {
+                    } else if formModel.focusedElement == element {
                         if element.fieldType == .text, let lengthRange {
                             if lengthRange.lowerBound == lengthRange.upperBound {
                                 makeExactLengthMessage(lengthRange)
@@ -274,7 +274,7 @@ extension FormElementFooter {
         
         /// A Boolean value which indicates whether or not the character indicator is showing in the footer.
         var isShowingCharacterIndicator: Bool {
-            formViewModel.focusedElement == element
+            formModel.focusedElement == element
             && !(element.fieldType?.isNumeric ?? false)
             && (element.input is TextAreaFormInput || element.input is TextBoxFormInput)
             && (element.description.isEmpty || primaryError != nil)
@@ -320,7 +320,7 @@ extension FormElementFooter {
                 default:
                     return false
                 }
-            }), formViewModel.focusedElement != element {
+            }), formModel.focusedElement != element {
                 return requiredError
             } else {
                 return elementErrors?.first(where: {

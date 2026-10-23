@@ -20,7 +20,7 @@ import SwiftUI
 /// The switch represents two mutually exclusive values, such as: yes/no, on/off, true/false.
 struct SwitchInput: View {
     /// The model for the feature form.
-    @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
+    @Environment(FeatureFormView.FormModel.self) private var formModel
     
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
@@ -63,8 +63,8 @@ struct SwitchInput: View {
                 } set: { newValue in
                     isOn = newValue
                     element.updateValue(isOn ? input.onValue.code : input.offValue.code)
-                    formViewModel.focusedElement = element
-                    formViewModel.evaluateExpressions()
+                    formModel.focusedElement = element
+                    formModel.evaluateExpressions()
                 },
                 label: {
                     Text(isOn ? input.onValue.name : input.offValue.name)

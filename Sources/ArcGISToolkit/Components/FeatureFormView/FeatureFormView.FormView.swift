@@ -18,7 +18,7 @@ import SwiftUI
 extension FeatureFormView {
     struct FormView: View {
         /// The model for the stack view containing the form.
-        @Environment(FeatureFormView.FormView.Model.self) var formViewModel
+        @Environment(FeatureFormView.FormModel.self) var formModel
         
         /// The feature form defining the editing experience.
         let form: FeatureForm
@@ -31,7 +31,7 @@ extension FeatureFormView {
                     form
 #else
                     if CommandLine.arguments.contains("-testCase") {
-                        @Bindable var model = formViewModel
+                        @Bindable var model = formModel
                         form
                             .searchable(
                                 text: $model.elementFilterPhrase,
@@ -50,7 +50,7 @@ extension FeatureFormView {
                     }
 #endif
                 }
-                .onChange(of: formViewModel.focusedElement) { _, newFocusedElement in
+                .onChange(of: formModel.focusedElement) { _, newFocusedElement in
                     guard let newFocusedElement else { return }
                     // The navigation bar may obscure section headers (FB19740517).
                     withAnimation {
@@ -58,13 +58,13 @@ extension FeatureFormView {
                     }
                 }
             }
-            .environment(formViewModel)
-            .onTitleChange(of: formViewModel.featureForm) { newTitle in
-                formViewModel.title = newTitle
+            .environment(formModel)
+            .onTitleChange(of: formModel.featureForm) { newTitle in
+                formModel.title = newTitle
             }
             .preference(
                 key: PresentedFeatureFormPreferenceKey.self,
-                value: .init(object: formViewModel)
+                value: .init(object: formModel)
             )
 #if os(iOS)
             .scrollDismissesKeyboard(.immediately)
@@ -103,7 +103,7 @@ extension FeatureFormView.FormView {
         case let element as AttachmentsFormElement:
             AttachmentsFeatureElementView(
                 formElement: element,
-                formViewModel: formViewModel
+                formModel: formModel
             )
         case let element as FieldFormElement where !(element.input is UnsupportedFormInput):
             FieldFormElementView(element: element)
@@ -118,8 +118,8 @@ extension FeatureFormView.FormView {
     
     /// The sections for all visible form elements.
     @ViewBuilder var sections: some View {
-        if !formViewModel.visibleElements.isEmpty {
-            ForEach(formViewModel.visibleElements, id: \.self, content: section(for:))
+        if !formModel.visibleElements.isEmpty {
+            ForEach(formModel.visibleElements, id: \.self, content: section(for:))
         } else {
             ContentUnavailableView {
                 Label {

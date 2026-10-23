@@ -19,7 +19,7 @@ extension FeatureFormView {
     /// A view to inspect and delete a utility network association.
     struct UtilityAssociationDetailsView: View {
         /// The model for the feature form which presented this view.
-        @Environment(FeatureFormView.FormView.Model.self) var formViewModel
+        @Environment(FeatureFormView.FormModel.self) var formModel
         
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
@@ -64,7 +64,7 @@ extension FeatureFormView {
         
         /// The model containing the latest association filter results.
         var associationsFilterResultsModel: AssociationsFilterResultsModel? {
-            formViewModel.associationsFilterResultsModels[element]
+            formModel.associationsFilterResultsModels[element]
         }
         
         /// A section which contains the association type label.
@@ -82,7 +82,7 @@ extension FeatureFormView {
         var sectionForFromElement: some View {
             Section {
                 LabeledContent {
-                    Text(associationResult.associatedFeatureIsToElement ? formViewModel.title : associationResult.title)
+                    Text(associationResult.associatedFeatureIsToElement ? formModel.title : associationResult.title)
                 } label: {
                     Text.fromElement
                 }
@@ -109,7 +109,7 @@ extension FeatureFormView {
         var sectionForToElement: some View {
             Section {
                 LabeledContent {
-                    Text(associationResult.associatedFeatureIsToElement ? associationResult.title : formViewModel.title)
+                    Text(associationResult.associatedFeatureIsToElement ? associationResult.title : formModel.title)
                 } label: {
                     Text.toElement
                 }
@@ -134,10 +134,10 @@ extension FeatureFormView {
                         isPresented: $removalConfirmationIsPresented,
                         association: associationResult.association,
                         element: element,
-                        formViewModel: formViewModel
+                        formModel: formModel
                     ) {
                         associationsFilterResultsModel.fetchResults()
-                        formViewModel.navigationPath.removeLast()
+                        formModel.navigationPath.removeLast()
                     }
                 }
             }

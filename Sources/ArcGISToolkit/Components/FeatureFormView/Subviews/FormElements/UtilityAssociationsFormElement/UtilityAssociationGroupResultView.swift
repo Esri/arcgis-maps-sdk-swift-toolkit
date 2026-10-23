@@ -21,7 +21,7 @@ extension FeatureFormView {
         /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         /// The model for the feature form which presented this view.
-        @Environment(FeatureFormView.FormView.Model.self) var formViewModel
+        @Environment(FeatureFormView.FormModel.self) var formModel
         
         /// The association to be potentially removed.
         @State private var associationPendingRemoval: UtilityAssociation?
@@ -65,20 +65,20 @@ extension FeatureFormView {
                 isPresented: $removalConfirmationIsPresented,
                 association: associationPendingRemoval,
                 element: element,
-                formViewModel: formViewModel
+                formModel: formModel
             ) {
                 associationsFilterResultsModel?.fetchResults()
             }
             .navigationTitle(
                 utilityAssociationGroupResult?.name ?? "",
-                subtitle: formViewModel.title
+                subtitle: formModel.title
             )
             .onChange(of: associationResults.count) {
-                if associationResults.isEmpty, !formViewModel.navigationPath.isEmpty {
-                    formViewModel.navigationPath.removeLast()
+                if associationResults.isEmpty, !formModel.navigationPath.isEmpty {
+                    formModel.navigationPath.removeLast()
                 }
             }
-            .onChange(of: formViewModel.hasEdits) {
+            .onChange(of: formModel.hasEdits) {
                 associationsFilterResultsModel?.fetchResults()
             }
             .onIsEditableChange(of: element) { newIsEditable in
@@ -88,7 +88,7 @@ extension FeatureFormView {
         
         /// The model containing the latest association filter results.
         var associationsFilterResultsModel: AssociationsFilterResultsModel? {
-            formViewModel.associationsFilterResultsModels[element]
+            formModel.associationsFilterResultsModels[element]
         }
         
         @ViewBuilder func deleteButton(for association: UtilityAssociation) -> some View {
@@ -112,7 +112,7 @@ extension FeatureFormView {
             Menu {
                 ShowOnMapButton(feature: result.associatedFeature)
                 Button {
-                    formViewModel.navigationPath.append(
+                    formModel.navigationPath.append(
                         FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
                             form,
                             element,

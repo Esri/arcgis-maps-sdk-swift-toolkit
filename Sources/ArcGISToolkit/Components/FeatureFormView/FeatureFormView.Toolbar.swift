@@ -29,7 +29,7 @@ private extension FeatureFormView {
         /// The model for the feature form.
         ///
         /// Optional as this toolbar is used in the group menu when no feature form is selected.
-        @Environment(FeatureFormView.FormView.Model.self) var formViewModel: FeatureFormView.FormView.Model?
+        @Environment(FeatureFormView.FormModel.self) var formModel: FeatureFormView.FormModel?
         
         /// A Boolean value indicating whether multi-form mode is active.
         ///
@@ -74,7 +74,7 @@ private extension FeatureFormView {
                     }
                     ToolbarItem(placement: .bottomBar) {
                         if featureFormViewModel.allValidationErrorsAreVisible,
-                           let formViewModel, featureFormViewModel.geometryStatus[formViewModel.featureForm.feature.globalID!, default: .none] == .invalid {
+                           let formModel, featureFormViewModel.geometryStatus[formModel.featureForm.feature.globalID!, default: .none] == .invalid {
                             Label {
                                 Text("Invalid Geometry")
                             } icon: {

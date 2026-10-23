@@ -18,9 +18,9 @@ import Observation
 
 private import os
 
-extension FeatureFormView.FormView {
+extension FeatureFormView {
     @MainActor @Observable
-    final class Model {
+    final class FormModel {
         /// The models for fetching association filter results for each utility associations form element in the form.
         var associationsFilterResultsModels: [UtilityAssociationsFormElement: AssociationsFilterResultsModel] = [:]
         
