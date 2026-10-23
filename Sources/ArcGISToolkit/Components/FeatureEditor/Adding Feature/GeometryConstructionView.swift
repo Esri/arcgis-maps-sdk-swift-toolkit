@@ -123,8 +123,8 @@ struct GeometryConstructionView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
             switch model.geometryConstructionState {
-            case .cancelling:
-                model.finishCancellingConstruction()
+            case .cancelling, .failed:
+                model.stopConstruction()
             case .stopped where model.selectedLayerTemplate != nil:
                 model.selectedLayerTemplate = nil
             default:

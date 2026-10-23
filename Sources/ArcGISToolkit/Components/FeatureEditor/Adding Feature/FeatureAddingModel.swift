@@ -49,9 +49,7 @@ final class FeatureAddingModel {
     
     /// Stops adding features.
     func stop() {
-        if geometryConstructionState != .stopped {
-            geometryConstructionState = .stopped
-        }
+        stopConstruction()
         if featureForm != nil {
             featureForm = nil
         }
@@ -167,10 +165,9 @@ final class FeatureAddingModel {
         geometryConstructionState = .cancelling
     }
     
-    /// Returns the model to a stopped state..
-    /// - Precondition: `geometryConstructionState == .editing`
-    func finishCancellingConstruction() {
-        precondition(geometryConstructionState == .cancelling)
+    /// Returns the model to a stopped state.
+    func stopConstruction() {
+        guard geometryConstructionState != .stopped else { return }
         geometryConstructionState = .stopped
     }
 }
