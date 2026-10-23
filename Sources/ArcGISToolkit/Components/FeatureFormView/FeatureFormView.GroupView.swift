@@ -123,7 +123,6 @@ extension FeatureFormView.GroupView /* Group views */ {
     }
     
     /// <#Description#>
-    @ViewBuilder
     var menu: some View {
         NavigationStack {
             List {
@@ -169,6 +168,7 @@ extension FeatureFormView.GroupView /* Group views */ {
                                             )
                                         } icon: {
                                             Image(systemName: "pencil")
+                                                .foregroundStyle(.secondary)
                                         }
                                         .labelStyle(.iconOnly)
                                     }
