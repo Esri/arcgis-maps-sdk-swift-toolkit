@@ -48,9 +48,6 @@ struct FeatureFormExampleView: View {
                 }
                 .inspector(isPresented: .constant(true)) {
                     List {
-                        LabeledContent("Form Count") {
-                            Text(model.formCount, format: .number)
-                        }
                         Picker("Save Button", selection: $model.saveButtonVisibility) {
                             Text("Automatic")
                                 .tag(Visibility.automatic)
@@ -65,20 +62,25 @@ struct FeatureFormExampleView: View {
                             Text("Visible")
                                 .tag(FeatureFormView.ValidationErrorVisibility.visible)
                         }
-                        ForEach(model.ids, id: \.self) { featureID in
-                            if let form = model.form(for: featureID) {
-                                Text("\(form.title) - \(featureID.uuidString.suffix(4))")
-                                    .contextMenu {
-                                        Button("Report Geometry Invalid") {
-                                            model.setGeometryEditStatus(for: form.feature, status: .invalid)
-                                        }
-                                        Button("Report Geometry Valid") {
-                                            model.setGeometryEditStatus(for: form.feature, status: .valid)
-                                        }
-                                        Button("Report Geometry Unedited") {
-                                            model.setGeometryEditStatus(for: form.feature, status: nil)
+                        if model.formCount > 0 {
+                            Section("Forms \(model.formCount)") {
+                                ForEach(model.ids, id: \.self) { featureID in
+                                    if let form = model.form(for: featureID) {
+                                        Menu("\(form.title) - \(featureID.uuidString.suffix(4))") {
+                                            Section("Geometry Status") {
+                                                Button("Report Invalid", role: .destructive) {
+                                                    model.setGeometryEditStatus(for: form.feature, status: .invalid)
+                                                }
+                                                Button("Report Valid") {
+                                                    model.setGeometryEditStatus(for: form.feature, status: .valid)
+                                                }
+                                                Button("Clear") {
+                                                    model.setGeometryEditStatus(for: form.feature, status: nil)
+                                                }
+                                            }
                                         }
                                     }
+                                }
                             }
                         }
                     }
