@@ -30,7 +30,7 @@ struct GeometryConstructionView: View {
             case .stopped, .loading, .editing:
                 ProgressView {
                     Text(
-                        "Loading geometry construction tools",
+                        "Loading",
                         bundle: .toolkitModule,
                         comment: "A label shown while the construction tools for a template are loading."
                     )
