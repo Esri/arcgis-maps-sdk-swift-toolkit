@@ -17,6 +17,8 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FeatureFormExampleView: View {
+    /// The active form as reported by the Feature Form View
+    @State private var activeForm: FeatureForm?
     /// A Boolean value indicating whether general form workflow errors are presented.
     @State private var alertIsPresented = false
     /// Tables with local edits that need to be applied.
@@ -48,25 +50,16 @@ struct FeatureFormExampleView: View {
                 }
                 .inspector(isPresented: .constant(true)) {
                     List {
-                        Picker("Save Button", selection: $model.saveButtonVisibility) {
-                            Text("Automatic")
-                                .tag(Visibility.automatic)
-                            Text("Visible")
-                                .tag(Visibility.visible)
-                            Text("Hidden")
-                                .tag(Visibility.hidden)
-                        }
-                        Picker("Validation Errors", selection: $model.validationErrorVisibility) {
-                            Text("Automatic")
-                                .tag(FeatureFormView.ValidationErrorVisibility.automatic)
-                            Text("Visible")
-                                .tag(FeatureFormView.ValidationErrorVisibility.visible)
+                        if let activeForm {
+                            LabeledContent("Active Form") {
+                                Text("\(activeForm.title) - \(activeForm.id)")
+                            }
                         }
                         if model.formCount > 0 {
                             Section("^[\(model.formCount) Forms](inflect: true)") {
                                 ForEach(model.ids, id: \.self) { featureID in
                                     if let form = model.form(for: featureID) {
-                                        Menu("\(form.title) - \(featureID.uuidString.suffix(4))") {
+                                        Menu("\(form.title) - \(form.id)") {
                                             Section("Geometry Status") {
                                                 Button("Report Invalid", role: .destructive) {
                                                     model.setGeometryEditStatus(for: form.feature, status: .invalid)
@@ -82,6 +75,20 @@ struct FeatureFormExampleView: View {
                                     }
                                 }
                             }
+                        }
+                        Picker("Save Button", selection: $model.saveButtonVisibility) {
+                            Text("Automatic")
+                                .tag(Visibility.automatic)
+                            Text("Visible")
+                                .tag(Visibility.visible)
+                            Text("Hidden")
+                                .tag(Visibility.hidden)
+                        }
+                        Picker("Validation Errors", selection: $model.validationErrorVisibility) {
+                            Text("Automatic")
+                                .tag(FeatureFormView.ValidationErrorVisibility.automatic)
+                            Text("Visible")
+                                .tag(FeatureFormView.ValidationErrorVisibility.visible)
                         }
                     }
                 }
@@ -191,7 +198,10 @@ extension FeatureFormExampleView {
     /// The feature form view shown in the sheet over the map.
     private var featureFormView: some View {
         return FeatureFormView(model: model, isPresented: $featureFormViewIsPresented)
-            .onFormEditingEvent { editingEvent in
+            .onFeatureFormChanged { form in
+                activeForm = form
+            }
+            .onFormEditingEvent { _ in
 //                if case .savedEdits = editingEvent,
 //                   let table = featureForm.feature.table as? ServiceFeatureTable,
 //                   !editedTables.contains(where: { $0 === table }) {
@@ -259,5 +269,13 @@ private extension View {
         } else {
             self
         }
+    }
+}
+
+private extension FeatureForm {
+    var id: String {
+        var oid = String(describing: ObjectIdentifier(self))
+        oid.removeLast()
+        return String(oid.suffix(4))
     }
 }

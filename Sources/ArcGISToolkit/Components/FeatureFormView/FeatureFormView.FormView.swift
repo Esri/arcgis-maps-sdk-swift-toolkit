@@ -62,10 +62,6 @@ extension FeatureFormView {
             .onTitleChange(of: formModel.featureForm) { newTitle in
                 formModel.title = newTitle
             }
-            .preference(
-                key: PresentedFeatureFormPreferenceKey.self,
-                value: .init(object: formModel)
-            )
 #if os(iOS)
             .scrollDismissesKeyboard(.immediately)
 #endif

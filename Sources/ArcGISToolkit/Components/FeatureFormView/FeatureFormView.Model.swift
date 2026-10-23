@@ -82,7 +82,12 @@ public extension FeatureFormView {
         public var formCount: Int
         
         /// <#Description#>
-        private(set) var selectedID: UUID?
+        private(set) var selectedID: UUID? {
+            didSet {
+                guard let selectedForm else { return }
+                onFeatureFormChanged?(selectedForm)
+            }
+        }
         
         /// <#Description#>
         var activeForms: [FeatureForm] {

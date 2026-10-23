@@ -117,10 +117,6 @@ extension FeatureFormView {
                     featureFormViewModel.onFormEditingEventAction?(.navigationChanged(presentedItem))
                 }
             }
-            .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
-                guard let formModel = $0?.object else { return }
-                formChangedAction(formModel.featureForm)
-            }
             .onChange(of: formModel.featureForm.id, initial: true) {
                 effectiveNavigationPath = formModel.navigationPath
             }
@@ -132,22 +128,6 @@ extension FeatureFormView {
 }
 
 extension FeatureFormView.StackView {
-    /// The closure to perform when the presented feature form changes.
-    ///
-    /// - Note: This action has the potential to be called under four scenarios. Whenever an
-    /// ``EmbeddedFeatureFormView`` appears (which can happen during forward
-    /// or reverse navigation) and whenever a ``UtilityAssociationGroupResultView`` appears
-    /// (which can also happen during forward or reverse navigation). Because those two views (and the
-    /// intermediate ``UtilityAssociationsFilterResultView`` are all considered to be apart of
-    /// the same ``FeatureForm`` make sure not to over-emit form handling events.
-    var formChangedAction: (FeatureForm) -> Void {
-        { featureForm in
-            if featureForm.feature.globalID != formModel.featureForm.feature.globalID {
-                featureFormViewModel.onFeatureFormChanged?(featureForm)
-            }
-        }
-    }
-    
     var networkDataSource: Text {
         .init(
             "Network Data Source",
