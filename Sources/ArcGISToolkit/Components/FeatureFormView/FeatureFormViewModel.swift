@@ -37,20 +37,20 @@ import Observation
     /// Creates and adds a model for the provided form.
     /// - Parameter form: The form to create and add a model for.
     @MainActor func addModel(_ form: FeatureForm) {
-        formModels[ObjectIdentifier(form)] = EmbeddedFeatureFormViewModel(featureForm: form)
+        formModels[form.id] = EmbeddedFeatureFormViewModel(featureForm: form)
     }
     
     /// Gets the model for the specified form.
     /// - Parameter form: The form to get a model for.
     /// - Returns: The model for the provided form.
     func getModel(_ form: FeatureForm) -> EmbeddedFeatureFormViewModel? {
-        formModels[ObjectIdentifier(form)]
+        formModels[form.id]
     }
     
     /// Removes the model for the provided form.
     /// - Parameter form: The form to remove the model for.
     func removeModel(_ form: FeatureForm) {
-        formModels.removeValue(forKey: ObjectIdentifier(form))
+        formModels.removeValue(forKey: form.id)
     }
     
     
