@@ -63,8 +63,7 @@ struct FeatureEditorTemplatePicker: View {
         )
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: LayerTemplate.self) { layerTemplate in
-            GeometryConstructionView(layerTemplate: layerTemplate)
-                .environment(model)
+            GeometryConstructionView(layerTemplate: layerTemplate, model: model)
         }
         .searchable(
             text: $searchText,

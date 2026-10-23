@@ -19,9 +19,9 @@ import SwiftUI
 struct GeometryConstructionView: View {
     /// The selected layer template that will be used to construct the geometry.
     let layerTemplate: LayerTemplate
+    /// The model that manages the feature-adding workflow.
+    let model: FeatureAddingModel
     
-    /// The shared feature editor model.
-    @Environment(FeatureAddingModel.self) private var model
     /// An action that dismisses the current presentation.
     @Environment(\.dismiss) private var dismiss
     
