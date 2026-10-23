@@ -17,7 +17,7 @@ import SwiftUI
 
 extension FeatureFormView {
     struct ShowOnMapButton: View {
-        /// <#Description#>
+        /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
         let feature: ArcGISFeature

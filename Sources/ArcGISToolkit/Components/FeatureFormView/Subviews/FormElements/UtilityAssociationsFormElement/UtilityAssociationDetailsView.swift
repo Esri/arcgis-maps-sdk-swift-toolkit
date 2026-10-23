@@ -18,8 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view to inspect and delete a utility network association.
     struct UtilityAssociationDetailsView: View {
-        /// The model for the stack view containing the form.
-        @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
+        /// The model for the feature form which presented this view.
+        @Environment(FeatureFormView.FormView.Model.self) var formViewModel
         
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
@@ -64,12 +64,7 @@ extension FeatureFormView {
         
         /// The model containing the latest association filter results.
         var associationsFilterResultsModel: AssociationsFilterResultsModel? {
-            formViewModel?.associationsFilterResultsModels[element]
-        }
-        
-        /// The model for the form view containing the element with the association.
-        var formViewModel: FeatureFormView.FormView.Model? {
-            stackViewModel.formModel
+            formViewModel.associationsFilterResultsModels[element]
         }
         
         /// A section which contains the association type label.
@@ -86,12 +81,10 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the from side of the association.
         var sectionForFromElement: some View {
             Section {
-                if let formViewModel {
-                    LabeledContent {
-                        Text(associationResult.associatedFeatureIsToElement ? formViewModel.title : associationResult.title)
-                    } label: {
-                        Text.fromElement
-                    }
+                LabeledContent {
+                    Text(associationResult.associatedFeatureIsToElement ? formViewModel.title : associationResult.title)
+                } label: {
+                    Text.fromElement
                 }
                 if let fromElementTerminal = associationResult.association.fromElement.terminal {
                     row(for: fromElementTerminal)
@@ -115,12 +108,10 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the to side of the association.
         var sectionForToElement: some View {
             Section {
-                if let formViewModel {
-                    LabeledContent {
-                        Text(associationResult.associatedFeatureIsToElement ? associationResult.title : formViewModel.title)
-                    } label: {
-                        Text.toElement
-                    }
+                LabeledContent {
+                    Text(associationResult.associatedFeatureIsToElement ? associationResult.title : formViewModel.title)
+                } label: {
+                    Text.toElement
                 }
                 if let toElementTerminal = associationResult.association.toElement.terminal {
                     row(for: toElementTerminal)
@@ -131,7 +122,6 @@ extension FeatureFormView {
         /// A section with a button to remove the association.
         @ViewBuilder var sectionForRemoveButton: some View {
             if let associationsFilterResultsModel,
-               let formViewModel,
                isEditable {
                 Section {
                     Button(role: .destructive) {
@@ -147,7 +137,7 @@ extension FeatureFormView {
                         formViewModel: formViewModel
                     ) {
                         associationsFilterResultsModel.fetchResults()
-                        stackViewModel.navigationPath.removeLast()
+                        formViewModel.navigationPath.removeLast()
                     }
                 }
             }

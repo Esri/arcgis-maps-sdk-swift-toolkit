@@ -19,6 +19,7 @@ extension FeatureFormView {
     /// A stack view consists of sub-views for one form that a user will navigate through when
     /// browsing and editing utility network associations.
     struct StackView: View {
+        /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
         /// The effective navigation path.
@@ -29,17 +30,17 @@ extension FeatureFormView {
         @State private var effectiveNavigationPath = [FeatureFormView.NavigationPathItem]()
         
         /// The model for the stack view for the root form.
-        let stackViewModel: FeatureFormView.StackView.Model
+        let formViewModel: FeatureFormView.FormView.Model
         
-        init(model: StackView.Model) {
-            self.stackViewModel = model
+        init(model: FormView.Model) {
+            self.formViewModel = model
         }
         
         public var body: some View {
             NavigationStack(path: $effectiveNavigationPath) {
-                FormView(form: stackViewModel.formModel.featureForm)
+                FormView(form: formViewModel.featureForm)
                     .featureFormToolbar()
-                    .navigationTitle(stackViewModel.formModel.title)
+                    .navigationTitle(formViewModel.title)
                     .navigationDestination(for: NavigationPathItem.self) { itemType in
                         switch itemType {
                         case .form(_):
@@ -97,7 +98,7 @@ extension FeatureFormView {
                                 form: form
                             )
                             .featureFormToolbar()
-                            .navigationTitle(filter.title, subtitle: stackViewModel.formModel.title)
+                            .navigationTitle(filter.title, subtitle: formViewModel.title)
                         case let .utilityAssociationGroupResultView(form, element, filter, formSource):
                             UtilityAssociationGroupResultView(
                                 element: element,
@@ -109,10 +110,10 @@ extension FeatureFormView {
                         }
                     }
             }
-            .animation(.default, value: ObjectIdentifier(stackViewModel.formModel.featureForm))
-            .environment(stackViewModel)
-            .onChange(of: stackViewModel.navigationPath) {
-                if let presentedItem = stackViewModel.navigationPath.last {
+            .animation(.default, value: ObjectIdentifier(formViewModel.featureForm))
+            .environment(formViewModel)
+            .onChange(of: formViewModel.navigationPath) {
+                if let presentedItem = formViewModel.navigationPath.last {
                     featureFormViewModel.onFormEditingEventAction?(.navigationChanged(presentedItem))
                 }
             }
@@ -120,11 +121,11 @@ extension FeatureFormView {
                 guard let formViewModel = $0?.object else { return }
                 formChangedAction(formViewModel.featureForm)
             }
-            .onChange(of: stackViewModel.formModel.featureForm.id, initial: true) {
-                effectiveNavigationPath = stackViewModel.navigationPath
+            .onChange(of: formViewModel.featureForm.id, initial: true) {
+                effectiveNavigationPath = formViewModel.navigationPath
             }
-            .onChange(of: stackViewModel.navigationPath) {
-                effectiveNavigationPath = stackViewModel.navigationPath
+            .onChange(of: formViewModel.navigationPath) {
+                effectiveNavigationPath = formViewModel.navigationPath
             }
         }
     }
@@ -141,7 +142,7 @@ extension FeatureFormView.StackView {
     /// the same ``FeatureForm`` make sure not to over-emit form handling events.
     var formChangedAction: (FeatureForm) -> Void {
         { featureForm in
-            if featureForm.feature.globalID != stackViewModel.formModel.featureForm.feature.globalID {
+            if featureForm.feature.globalID != formViewModel.featureForm.feature.globalID {
                 featureFormViewModel.onFeatureFormChanged?(featureForm)
             }
         }

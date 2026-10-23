@@ -17,7 +17,7 @@ import SwiftUI
 
 /// A view for date/time input.
 struct DateTimeInput: View {
-    /// The view model for the form.
+    /// The model for the feature form.
     @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
     
     /// The current date selection.

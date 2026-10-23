@@ -18,64 +18,57 @@ import SwiftUI
 extension FeatureFormView {
     struct FormView: View {
         /// The model for the stack view containing the form.
-        @Environment(FeatureFormView.StackView.Model.self) var stackViewModel: FeatureFormView.StackView.Model
+        @Environment(FeatureFormView.FormView.Model.self) var formViewModel
         
         /// The feature form defining the editing experience.
         let form: FeatureForm
         
         var body: some View {
-            if let formViewModel {
-                ScrollViewReader { scrollView in
-                    Group {
-                        let form = Form { sections }
+            ScrollViewReader { scrollView in
+                Group {
+                    let form = Form { sections }
 #if RELEASE
-                        form
+                    form
 #else
-                        if CommandLine.arguments.contains("-testCase") {
-                            @Bindable var model = formViewModel
-                            form
-                                .searchable(
-                                    text: $model.elementFilterPhrase,
-                                    placement: .navigationBarDrawer(displayMode: .always),
-                                    prompt: Text(
-                                        "Filter Elements",
-                                        bundle: .toolkitModule,
-                                        comment: """
+                    if CommandLine.arguments.contains("-testCase") {
+                        @Bindable var model = formViewModel
+                        form
+                            .searchable(
+                                text: $model.elementFilterPhrase,
+                                placement: .navigationBarDrawer(displayMode: .always),
+                                prompt: Text(
+                                    "Filter Elements",
+                                    bundle: .toolkitModule,
+                                    comment: """
                                         Label for a text field used to \
                                         filter visible elements in a form.
                                         """
-                                    )
                                 )
-                        } else {
-                            form
-                        }
-#endif
+                            )
+                    } else {
+                        form
                     }
-                    .onChange(of: formViewModel.focusedElement) { _, newFocusedElement in
-                        guard let newFocusedElement else { return }
-                        // The navigation bar may obscure section headers (FB19740517).
-                        withAnimation {
-                            scrollView.scrollTo(newFocusedElement, anchor: .top)
-                        }
+#endif
+                }
+                .onChange(of: formViewModel.focusedElement) { _, newFocusedElement in
+                    guard let newFocusedElement else { return }
+                    // The navigation bar may obscure section headers (FB19740517).
+                    withAnimation {
+                        scrollView.scrollTo(newFocusedElement, anchor: .top)
                     }
                 }
-                .environment(formViewModel)
-                .onTitleChange(of: formViewModel.featureForm) { newTitle in
-                    formViewModel.title = newTitle
-                }
-                .preference(
-                    key: PresentedFeatureFormPreferenceKey.self,
-                    value: .init(object: formViewModel)
-                )
-#if os(iOS)
-                .scrollDismissesKeyboard(.immediately)
-#endif
             }
-        }
-        
-        /// The view model for the form.
-        var formViewModel: FeatureFormView.FormView.Model? {
-            stackViewModel.formModel
+            .environment(formViewModel)
+            .onTitleChange(of: formViewModel.featureForm) { newTitle in
+                formViewModel.title = newTitle
+            }
+            .preference(
+                key: PresentedFeatureFormPreferenceKey.self,
+                value: .init(object: formViewModel)
+            )
+#if os(iOS)
+            .scrollDismissesKeyboard(.immediately)
+#endif
         }
     }
 }
@@ -106,29 +99,27 @@ extension FeatureFormView.FormView {
     /// Returns content for the section of the given form element.
     /// - Parameter element: The element to generate the body for.
     @ViewBuilder func content(for element: FormElement) -> some View {
-        if let formViewModel {
-            switch element {
-            case let element as AttachmentsFormElement:
-                AttachmentsFeatureElementView(
-                    formElement: element,
-                    formViewModel: formViewModel
-                )
-            case let element as FieldFormElement where !(element.input is UnsupportedFormInput):
-                FieldFormElementView(element: element)
-            case let element as TextFormElement:
-                TextFormElementView(element: element)
-            case let element as UtilityAssociationsFormElement:
-                FeatureFormView.UtilityAssociationsFormElementView(element: element)
-            default:
-                EmptyView()
-            }
+        switch element {
+        case let element as AttachmentsFormElement:
+            AttachmentsFeatureElementView(
+                formElement: element,
+                formViewModel: formViewModel
+            )
+        case let element as FieldFormElement where !(element.input is UnsupportedFormInput):
+            FieldFormElementView(element: element)
+        case let element as TextFormElement:
+            TextFormElementView(element: element)
+        case let element as UtilityAssociationsFormElement:
+            FeatureFormView.UtilityAssociationsFormElementView(element: element)
+        default:
+            EmptyView()
         }
     }
     
     /// The sections for all visible form elements.
     @ViewBuilder var sections: some View {
-        if let visibleElements = formViewModel?.visibleElements {
-            ForEach(visibleElements, id: \.self, content: section(for:))
+        if !formViewModel.visibleElements.isEmpty {
+            ForEach(formViewModel.visibleElements, id: \.self, content: section(for:))
         } else {
             ContentUnavailableView {
                 Label {

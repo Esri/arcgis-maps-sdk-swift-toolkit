@@ -19,7 +19,7 @@ import SwiftUI
 ///
 /// This is the preferable input type for long lists of coded value domains.
 struct ComboBoxInput: View {
-    /// The view model for the form.
+    /// The model for the feature form.
     @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
     
     /// The phrase to use when filtering by coded value name.

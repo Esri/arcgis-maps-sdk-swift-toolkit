@@ -23,11 +23,11 @@ extension View {
 
 extension FeatureFormView {
     fileprivate struct Toolbar: ViewModifier {
-        /// <#Description#>
+        /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
-        /// The model for the stack view containing the form.
-        @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
+        /// The model for the feature form.
+        @Environment(FeatureFormView.FormView.Model.self) var formViewModel
         
         /// A Boolean value indicating whether multi-form mode is active.
         ///
@@ -69,7 +69,7 @@ extension FeatureFormView {
                             }
                         } else if !isRootView {
                             Button {
-                                stackViewModel.navigationPath.removeLast()
+                                formViewModel.navigationPath.removeLast()
                             } label: {
                                 Label {
                                     Text(
@@ -160,6 +160,6 @@ extension FeatureFormView {
 extension FeatureFormView.Toolbar {
     /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
     var isRootView: Bool {
-        stackViewModel.navigationPath.isEmpty
+        formViewModel.navigationPath.isEmpty
     }
 }

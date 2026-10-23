@@ -46,6 +46,9 @@ extension FeatureFormView.FormView {
             }
         }
         
+        /// The navigation path for the destinations this form can open.
+        var navigationPath: [FeatureFormView.NavigationPathItem] = []
+        
         /// The set of all elements which previously held focus.
         var previouslyFocusedElements = [FormElement]()
         

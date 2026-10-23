@@ -69,6 +69,16 @@ public extension FeatureFormView {
             backStack.count > 0
         }
         
+        /// The number of forms being edited in the view.
+        ///
+        /// This is the number of forms the model was initialized with,
+        /// plus/minus any added/removed programmatically via the model,
+        /// and plus any forms that have been interactively opened _and edited_ via
+        /// utility association elements.
+        var activeFormCount: Int {
+            activeForms.count
+        }
+        
         /// <#Description#>
         public var formCount: Int
         
@@ -86,16 +96,6 @@ public extension FeatureFormView {
                     return nil
                 }
             }
-        }
-        
-        /// The number of forms being edited in the view.
-        ///
-        /// This is the number of forms the model was initialized with,
-        /// plus/minus any added/removed programmatically via the model,
-        /// and plus any forms that have been interactively opened _and edited_ via
-        /// utility association elements.
-        var activeFormCount: Int {
-            activeForms.count
         }
         
         /// The global IDs of the underlying feature for forms that have been opened via utility
@@ -135,8 +135,8 @@ public extension FeatureFormView {
         /// <#Description#>
         var navigationAlertInfo: (willNavigate: Bool, action: () -> Void)?
         
-        /// Stack view models, keyed by feature global IDs.
-        private var stackViewModels: [UUID: FeatureFormView.StackView.Model] = [:]
+        /// Form view models, keyed by feature global IDs.
+        private var formViewModels: [UUID: FeatureFormView.FormView.Model] = [:]
         
         /// The internally managed validation error visibility.
         var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
@@ -264,12 +264,12 @@ public extension FeatureFormView {
             group.forms.first { $0.feature.globalID == id } ?? nil
         }
         
-        func stackModel(for globalID: UUID) -> FeatureFormView.StackView.Model? {
-            if let model = stackViewModels[globalID] {
+        func formModel(for globalID: UUID) -> FeatureFormView.FormView.Model? {
+            if let model = formViewModels[globalID] {
                 return model
             } else if let form = form(for: globalID) {
-                let newModel = FeatureFormView.StackView.Model(featureForm: form)
-                stackViewModels[globalID] = newModel
+                let newModel = FeatureFormView.FormView.Model(featureForm: form)
+                formViewModels[globalID] = newModel
                 return newModel
             } else {
                 return nil

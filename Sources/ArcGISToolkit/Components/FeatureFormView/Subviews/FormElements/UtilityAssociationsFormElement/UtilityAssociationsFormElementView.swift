@@ -18,7 +18,7 @@ import SwiftUI
 extension FeatureFormView {
     /// A view for a utility associations form element.
     struct UtilityAssociationsFormElementView: View {
-        /// The view model for the form.
+        /// The model for the feature form which presented this view.
         @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
         
         /// The form element.
@@ -41,8 +41,7 @@ extension FeatureFormView {
                         Row(
                             associationsFilterResultsModel: associationsFilterResultsModel,
                             element: element,
-                            filter: result.filter,
-                            form: formViewModel.featureForm
+                            filter: result.filter
                         )
                         .environment(formViewModel)
                     }
@@ -67,10 +66,8 @@ extension FeatureFormView {
     
     /// A view referencing a utility associations filter result.
     private struct Row: View {
-        /// The view model for the form.
+        /// The model for the feature form which presented this view.
         @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
-        /// The model for the stack view containing the form.
-        @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
         
         /// The model containing the latest association filter results.
         let associationsFilterResultsModel: AssociationsFilterResultsModel?
@@ -78,8 +75,6 @@ extension FeatureFormView {
         let element: UtilityAssociationsFormElement
         /// The referenced utility associations filter.
         let filter: UtilityAssociationsFilter
-        /// The feature form defining the editing experience.
-        let form: FeatureForm
         
         /// The referenced utility associations filter result.
         var result: UtilityAssociationsFilterResult? {
@@ -90,9 +85,9 @@ extension FeatureFormView {
         
         var body: some View {
             Button {
-                stackViewModel.navigationPath.append(
+                formViewModel.navigationPath.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFilterResultView(
-                        form,
+                        formViewModel.featureForm,
                         element,
                         filter
                     )

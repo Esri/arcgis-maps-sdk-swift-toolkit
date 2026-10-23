@@ -18,10 +18,8 @@ import SwiftUI
 
 /// A view for text input.
 struct TextInput: View {
-    /// The view model for the embedded feature form.
+    /// The model for the feature form.
     @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
-    /// The model for the stack view containing the form.
-    @Environment(FeatureFormView.StackView.Model.self) private var stackViewModel
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool

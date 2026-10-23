@@ -19,7 +19,7 @@ import SwiftUI
 ///
 /// This is the preferable input type for short lists of coded value domains.
 struct RadioButtonsInput: View {
-    /// The view model for the form.
+    /// The model for the feature form.
     @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
     
     /// A Boolean value indicating whether a ``ComboBoxInput`` should be used instead.

@@ -18,6 +18,7 @@ import SwiftUI
 extension FeatureFormView {
     /// <#Description#>
     public struct GroupView: View {
+        /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
         public var body: some View {
@@ -139,7 +140,7 @@ extension FeatureFormView.GroupView /* Group views */ {
     /// - Parameter id: <#id description#>
     @ViewBuilder
     func form(id: UUID) -> some View {
-        if let stackModel = featureFormViewModel.stackModel(for: id) {
+        if let stackModel = featureFormViewModel.formModel(for: id) {
             FeatureFormView.StackView(model: stackModel)
         }
     }
@@ -154,7 +155,10 @@ extension FeatureFormView.GroupView /* Group views */ {
                         Text(
                             "No forms",
                             bundle: .toolkitModule,
-                            comment: ""
+                            comment: """
+                                A label communicating that no feature forms \ 
+                                have been added to a feature form view.
+                                """
                         )
                     }
                 } else {

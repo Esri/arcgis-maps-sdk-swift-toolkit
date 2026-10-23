@@ -19,7 +19,7 @@ import SwiftUI
 ///
 /// The switch represents two mutually exclusive values, such as: yes/no, on/off, true/false.
 struct SwitchInput: View {
-    /// The view model for the form.
+    /// The model for the feature form.
     @Environment(FeatureFormView.FormView.Model.self) private var formViewModel
     
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.

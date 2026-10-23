@@ -18,10 +18,10 @@ import SwiftUI
 extension FeatureFormView {
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
-        /// <#Description#>
+        /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
-        /// The model for the stack view containing the form.
-        @Environment(FeatureFormView.StackView.Model.self) var stackViewModel
+        /// The model for the feature form which presented this view.
+        @Environment(FeatureFormView.FormView.Model.self) var formViewModel
         
         /// The association to be potentially removed.
         @State private var associationPendingRemoval: UtilityAssociation?
@@ -54,49 +54,42 @@ extension FeatureFormView {
         }
         
         var body: some View {
-            if let formViewModel {
-                List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
-                    mainButton(for: utilityAssociationResult)
-                        .disabled(featureFormViewModel.navigationIsDisabled)
-                        .swipeActions {
-                            deleteButton(for: utilityAssociationResult.association)
-                        }
-                        .tint(.primary)
-                }
-                .associationRemovalConfirmation(
-                    isPresented: $removalConfirmationIsPresented,
-                    association: associationPendingRemoval,
-                    element: element,
-                    formViewModel: formViewModel
-                ) {
-                    associationsFilterResultsModel?.fetchResults()
-                }
-                .navigationTitle(
-                    utilityAssociationGroupResult?.name ?? "",
-                    subtitle: stackViewModel.formModel.title
-                )
-                .onChange(of: associationResults.count) {
-                    if associationResults.isEmpty, !stackViewModel.navigationPath.isEmpty {
-                        stackViewModel.navigationPath.removeLast()
+            List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
+                mainButton(for: utilityAssociationResult)
+                    .disabled(featureFormViewModel.navigationIsDisabled)
+                    .swipeActions {
+                        deleteButton(for: utilityAssociationResult.association)
                     }
+                    .tint(.primary)
+            }
+            .associationRemovalConfirmation(
+                isPresented: $removalConfirmationIsPresented,
+                association: associationPendingRemoval,
+                element: element,
+                formViewModel: formViewModel
+            ) {
+                associationsFilterResultsModel?.fetchResults()
+            }
+            .navigationTitle(
+                utilityAssociationGroupResult?.name ?? "",
+                subtitle: formViewModel.title
+            )
+            .onChange(of: associationResults.count) {
+                if associationResults.isEmpty, !formViewModel.navigationPath.isEmpty {
+                    formViewModel.navigationPath.removeLast()
                 }
-                .onChange(of: formViewModel.hasEdits) {
-                    associationsFilterResultsModel?.fetchResults()
-                }
-                .onIsEditableChange(of: element) { newIsEditable in
-                    isEditable = newIsEditable
-                }
+            }
+            .onChange(of: formViewModel.hasEdits) {
+                associationsFilterResultsModel?.fetchResults()
+            }
+            .onIsEditableChange(of: element) { newIsEditable in
+                isEditable = newIsEditable
             }
         }
         
         /// The model containing the latest association filter results.
         var associationsFilterResultsModel: AssociationsFilterResultsModel? {
-            formViewModel?.associationsFilterResultsModels[element]
-        }
-        
-        /// The model for the parent form view.
-        var formViewModel: FeatureFormView.FormView.Model? {
-            stackViewModel.formModel
+            formViewModel.associationsFilterResultsModels[element]
         }
         
         @ViewBuilder func deleteButton(for association: UtilityAssociation) -> some View {
@@ -120,7 +113,7 @@ extension FeatureFormView {
             Menu {
                 ShowOnMapButton(feature: result.associatedFeature)
                 Button {
-                    stackViewModel.navigationPath.append(
+                    formViewModel.navigationPath.append(
                         FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
                             form,
                             element,
