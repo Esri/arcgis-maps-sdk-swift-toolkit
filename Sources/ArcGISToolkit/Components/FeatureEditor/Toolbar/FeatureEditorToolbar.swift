@@ -275,6 +275,18 @@ private struct SnapSettingsButton: View {
 // MARK: - Helper
 
 @available(visionOS, unavailable)
+private extension CGFloat {
+    /// The minimum toolbar size in any dimension.
+    static var minToolbarDiameter: Double {
+#if targetEnvironment(macCatalyst)
+        23
+#else
+        29
+#endif
+    }
+}
+
+@available(visionOS, unavailable)
 private extension View {
     /// Applies the shared styling used by the feature editor toolbar and its
     /// controls.
@@ -283,15 +295,14 @@ private extension View {
     func toolbarStyle(_ style: FeatureEditor.ToolbarStyle?) -> some View {
         // glassEffect is not used because it bases its background color on the content behind it,
         // but the ToolPicker does not, causing the color to jump when the picker menu closes.
-        let minDiameter = 29.0
         self.fixedSize()
             .frame(
-                width: style == .vertical ? minDiameter : nil,
-                height: style == .horizontal ? minDiameter : nil
+                width: style == .vertical ? .minToolbarDiameter : nil,
+                height: style == .horizontal ? .minToolbarDiameter : nil
             )
             .frame(
-                minWidth: style == .horizontal ? minDiameter : nil,
-                minHeight: style == .vertical ? minDiameter : nil
+                minWidth: style == .horizontal ? .minToolbarDiameter : nil,
+                minHeight: style == .vertical ? .minToolbarDiameter : nil
             )
             .labelStyle(.iconOnly)
             .font(.title2)
