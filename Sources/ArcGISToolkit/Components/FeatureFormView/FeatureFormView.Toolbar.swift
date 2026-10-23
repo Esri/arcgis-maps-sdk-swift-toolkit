@@ -76,10 +76,10 @@ extension FeatureFormView {
                                         "Back",
                                         bundle: .toolkitModule,
                                         comment: """
-                                        A generic label for navigating to the \
-                                        previous screen or returning to the \
-                                        previous context.
-                                        """
+                                            A generic label for navigating to \
+                                            the previous screen or returning \
+                                            to the previous context.
+                                            """
                                     )
                                 } icon: {
                                     Image(systemName: "chevron.backward")
