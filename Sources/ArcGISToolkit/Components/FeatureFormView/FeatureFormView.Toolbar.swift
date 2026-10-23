@@ -26,11 +26,6 @@ private extension FeatureFormView {
         /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
-        /// The model for the feature form.
-        ///
-        /// Optional as this toolbar is used in the group menu when no feature form is selected.
-        @Environment(FeatureFormView.FormModel.self) var formModel: FeatureFormView.FormModel?
-        
         /// A Boolean value indicating whether multi-form mode is active.
         ///
         /// Useful for animations to communicate that the component has transitioned to
@@ -73,16 +68,8 @@ private extension FeatureFormView {
                         }
                     }
                     ToolbarItem(placement: .bottomBar) {
-                        if featureFormViewModel.allValidationErrorsAreVisible,
-                           let formModel, featureFormViewModel.geometryStatus[formModel.featureForm.feature.globalID!, default: .none] == .invalid {
-                            Label {
-                                Text("Invalid Geometry")
-                            } icon: {
-                                Image(systemName: "move.3d")
-                                    .foregroundStyle(.red)
-                                    .symbolEffect(.breathe.pulse.wholeSymbol, options: .repeat(.continuous))
-                            }
-                            .labelStyle(.titleAndIcon)
+                        if featureFormViewModel.showInvalidGeometryBadge {
+                            invalidGeometryLabel
                         }
                     }
                 }
@@ -90,7 +77,11 @@ private extension FeatureFormView {
     }
 }
 
-private extension FeatureFormView.Toolbar /* Buttons */ {
+private extension FeatureFormView.Toolbar /* Items */ {
+    /// Navigates backward.
+    ///
+    /// This can either return a user to the previous view in the current form's
+    /// navigation path or return them to the previous form they were on in the group.
     var backButton: some View {
         Button {
             featureFormViewModel.goBack()
@@ -110,8 +101,10 @@ private extension FeatureFormView.Toolbar /* Buttons */ {
         }
     }
     
-    /// - Note: A plain image is used for the label so that symbol rendering mode
-    /// `.multicolor` is applied correctly.
+    /// Opens the group menu.
+    ///
+    /// - Important: A solo image is used for the label so that symbol rendering mode
+    /// `.multicolor` is applied consistently in a NavigationStack toolbar.
     var groupMenuButton: some View {
         Button {
             featureFormViewModel.clearSelection(clearBackStack: false)
@@ -123,10 +116,36 @@ private extension FeatureFormView.Toolbar /* Buttons */ {
                     ? .multicolor
                     : .monochrome
                 )
-            
         }
+        .accessibilityLabel(
+            Text(
+                "Group Menu",
+                bundle: .toolkitModule,
+                comment: "A label for a button to open a menu with a list of items."
+            )
+        )
     }
     
+    /// Indicates to the user that the current's feature geometry has been reported invalid.
+    var invalidGeometryLabel: some View {
+        Label {
+            Text(
+                "Invalid Geometry",
+                bundle: .toolkitModule,
+                comment: """
+                    A label indicating that the geometry for the current \
+                    feature has been reported invalid.
+                    """
+            )
+        } icon: {
+            Image(systemName: "move.3d")
+                .foregroundStyle(.red)
+                .symbolEffect(.breathe.pulse.wholeSymbol, options: .repeat(.continuous))
+        }
+        .labelStyle(.titleAndIcon)
+    }
+    
+    /// Starts the sequence of events for saving the form(s).
     var saveButton: some View {
         Button {
             featureFormViewModel.save()

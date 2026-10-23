@@ -371,6 +371,13 @@ public extension FeatureFormView {
             && selectedForm != nil
         }
         
+        /// A Boolean value indicating if the invalid geometry toolbar item should be shown.
+        var showInvalidGeometryBadge: Bool {
+            guard let selectedID else { return false }
+            return allValidationErrorsAreVisible &&
+            geometryStatus[selectedID, default: .none] == .invalid
+        }
+        
         /// A Boolean value indicating whether the Save button in the toolbar should be shown.
         var showSaveButton: Bool {
             saveButtonVisibility != .hidden
