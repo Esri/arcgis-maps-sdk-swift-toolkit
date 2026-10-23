@@ -147,7 +147,16 @@ extension FeatureFormView.GroupView /* Group views */ {
                                 HStack {
                                     Text(form.title)
                                     Spacer()
-                                    if featureFormViewModel.editStatusForForm(featureID: form.feature.globalID!) {
+                                    if featureFormViewModel.editStatusForForm(featureID: form.feature.globalID!)
+                                        &&
+                                        (
+                                            !featureFormViewModel.allValidationErrorsAreVisible
+                                            || (
+                                                featureFormViewModel.allValidationErrorsAreVisible
+                                                && featureFormViewModel.totalErrorCountForForm(featureID: form.feature.globalID!) == 0
+                                            )
+                                        )
+                                    {
                                         Label {
                                             Text(
                                                 "Unsaved Edits",
