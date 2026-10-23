@@ -72,6 +72,19 @@ private extension FeatureFormView {
                             saveButton
                         }
                     }
+                    ToolbarItem(placement: .bottomBar) {
+                        if featureFormViewModel.allValidationErrorsAreVisible,
+                           let formViewModel, featureFormViewModel.geometryStatus[formViewModel.featureForm.feature.globalID!, default: .none] == .invalid {
+                            Label {
+                                Text("Invalid Geometry")
+                            } icon: {
+                                Image(systemName: "move.3d")
+                                    .foregroundStyle(.red)
+                                    .symbolEffect(.breathe.pulse.wholeSymbol, options: .repeat(.continuous))
+                            }
+                            .labelStyle(.titleAndIcon)
+                        }
+                    }
                 }
         }
     }

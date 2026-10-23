@@ -18,6 +18,13 @@ import SwiftUI
 internal import os
 
 public extension FeatureFormView {
+    enum GeometryValidity {
+        case invalid
+        case valid
+    }
+}
+
+public extension FeatureFormView {
     /// A model for the ``FeatureFormView`` component.
     /// - Since: 300.2
     @MainActor @Observable
@@ -108,7 +115,7 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        var ids: [UUID] {
+        public var ids: [UUID] {
             group.forms.compactMap { $0.feature.globalID }
         }
         
@@ -175,6 +182,16 @@ public extension FeatureFormView {
         /// - Parameter select: <#select description#>
         public func add(form: FeatureForm, select: Bool = false) {
             add(form: form, select: select, recordAsBrowsed: false)
+        }
+        
+        var geometryStatus: [UUID : GeometryValidity?] = [:]
+        
+        public func setGeometryEditStatus(
+            for feature: ArcGISFeature,
+            status: GeometryValidity?
+        ) {
+            guard let id = feature.globalID else { return }
+            geometryStatus[id] = status
         }
         
         /// <#Description#>

@@ -46,13 +46,52 @@ struct FeatureFormExampleView: View {
                 .overlay {
                     submittingOverlay
                 }
+                .inspector(isPresented: .constant(true)) {
+                    List {
+                        LabeledContent("Form Count") {
+                            Text(model.formCount, format: .number)
+                        }
+                        Picker("Save Button", selection: $model.saveButtonVisibility) {
+                            Text("Automatic")
+                                .tag(Visibility.automatic)
+                            Text("Visible")
+                                .tag(Visibility.visible)
+                            Text("Hidden")
+                                .tag(Visibility.hidden)
+                        }
+                        Picker("Validation Errors", selection: $model.validationErrorVisibility) {
+                            Text("Automatic")
+                                .tag(FeatureFormView.ValidationErrorVisibility.automatic)
+                            Text("Visible")
+                                .tag(FeatureFormView.ValidationErrorVisibility.visible)
+                        }
+                        ForEach(model.ids, id: \.self) { featureID in
+                            if let form = model.form(for: featureID) {
+                                Text("\(form.title) - \(featureID.uuidString.suffix(4))")
+                                    .contextMenu {
+                                        Button("Report Geometry Invalid") {
+                                            model.setGeometryEditStatus(for: form.feature, status: .invalid)
+                                        }
+                                        Button("Report Geometry Valid") {
+                                            model.setGeometryEditStatus(for: form.feature, status: .valid)
+                                        }
+                                        Button("Report Geometry Unedited") {
+                                            model.setGeometryEditStatus(for: form.feature, status: nil)
+                                        }
+                                    }
+                            }
+                        }
+                    }
+                }
                 .sheet(isPresented: $featureFormViewIsPresented) {
 //                    model.reset()
                 } content: {
                     featureFormView
+                        .frame(idealWidth: 350)
                         .presentationBackgroundInteraction(.enabled(upThrough: .large))
                         .presentationDetents([.large, .medium])
-                        .trailingPresentationPlacement()
+                        .presentationSizing(.fitted)
+                        .presentationPlacement()
                 }
                 .task(id: identifyScreenPoint) {
                     guard !editsAreBeingApplied,
@@ -150,13 +189,13 @@ extension FeatureFormExampleView {
     /// The feature form view shown in the sheet over the map.
     private var featureFormView: some View {
         return FeatureFormView(model: model, isPresented: $featureFormViewIsPresented)
-//            .onFormEditingEvent { editingEvent in
+            .onFormEditingEvent { editingEvent in
 //                if case .savedEdits = editingEvent,
 //                   let table = featureForm.feature.table as? ServiceFeatureTable,
 //                   !editedTables.contains(where: { $0 === table }) {
 //                    editedTables.append(table)
 //                }
-//            }
+            }
     }
     
     /// The button used to dismiss the submission error alert.
@@ -212,9 +251,9 @@ private extension URL {
 
 private extension View {
     @ViewBuilder
-    func trailingPresentationPlacement() -> some View {
+    func presentationPlacement() -> some View {
         if #available(iOS 27.0, *) {
-            self.presentationPlacement(.trailing)
+            self.presentationPlacement(.leading)
         } else {
             self
         }
