@@ -122,12 +122,11 @@ struct FeatureEditorToolbar: View {
             LocalizedStringResource(
                 "Save",
                 bundle: .toolkitModule,
-                comment: "A button to save the new feature created from the selected template."
+                comment: "A button to save the new features created from the selected template."
             ),
-            systemImage: "checkmark"
-        ) {
-            model.featureAddingModel.saveConstructedGeometry()
-        }
+            systemImage: "checkmark",
+            action: model.featureAddingModel.saveConstructedGeometry
+        )
         .disabled(model.geometryEditorModel.geometry?.sketchIsValid == false)
         
         Group {
@@ -149,9 +148,7 @@ struct FeatureEditorToolbar: View {
             ),
             isPresented: $discardEditsAlertIsPresented
         ) {
-            Button.discard {
-                model.featureAddingModel.cancelConstruction()
-            }
+            Button.discard(action: model.featureAddingModel.cancelConstruction)
         } message: {
             Text(
                 "Geometry edits will be lost.",

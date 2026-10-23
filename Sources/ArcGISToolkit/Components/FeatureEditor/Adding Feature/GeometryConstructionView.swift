@@ -32,7 +32,7 @@ struct GeometryConstructionView: View {
                     Text(
                         "Loading geometry construction tools",
                         bundle: .toolkitModule,
-                        comment: "A label shown while the construction tools for a feature template are loading."
+                        comment: "A label shown while the construction tools for a template are loading."
                     )
                 }
                 .task {
@@ -132,12 +132,13 @@ struct GeometryConstructionView: View {
         .navigationTitle(layerTemplate.name)
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
-            if model.geometryConstructionState == .cancelling {
+            switch model.geometryConstructionState {
+            case .cancelling:
                 model.finishCancellingConstruction()
-            }
-            if model.geometryConstructionState == .stopped,
-               model.selectedLayerTemplate != nil {
+            case .stopped where model.selectedLayerTemplate != nil:
                 model.selectedLayerTemplate = nil
+            default:
+                break
             }
         }
     }

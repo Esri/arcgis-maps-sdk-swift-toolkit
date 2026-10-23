@@ -90,6 +90,7 @@ final class FeatureAddingModel {
     /// Starts geometry construction for a new feature using the given layer
     /// template.
     /// - Parameter layerTemplate: The template for the new feature.
+    /// - Precondition: `geometryConstructionState == .stopped`
     func startConstruction(using layerTemplate: LayerTemplate) async {
         precondition(geometryConstructionState == .stopped)
         do throws(GeometryConstructionError) {
@@ -121,10 +122,7 @@ final class FeatureAddingModel {
                 
                 geometryConstructionState = .editing
             } else {
-                let featureForm = try await makeFeatureForm(
-                    layerTemplate: layerTemplate
-                )
-                self.featureForm = featureForm
+                featureForm = try await makeFeatureForm(layerTemplate: layerTemplate)
             }
         } catch {
             geometryConstructionState = .failed(error)
@@ -152,11 +150,10 @@ final class FeatureAddingModel {
         layerTemplate: LayerTemplate
     ) async {
         do {
-            let featureForm = try await makeFeatureForm(
+            featureForm = try await makeFeatureForm(
                 layerTemplate: layerTemplate,
                 geometry: geometry
             )
-            self.featureForm = featureForm
             geometryConstructionState = .stopped
         } catch {
             geometryConstructionState = .failed(error)
@@ -221,6 +218,7 @@ private extension FeatureEditorGeometryTool {
         case .freehand: .freehand
         case .ellipse: .shape(kind: .ellipse)
         case .rectangle: .shape(kind: .rectangle)
+        case .line, .multipoint, .point, .polygon: .vertex
         default: nil
         }
         guard let tool else { return nil }

@@ -40,10 +40,7 @@ private struct FeatureEditorModifier: ViewModifier {
         Binding {
             switch model.state {
             case .adding:
-                switch model.featureAddingModel.geometryConstructionState {
-                case .editing: false
-                default: true
-                }
+                model.featureAddingModel.geometryConstructionState != .editing
             case .editing: true
             case .stopped: false
             }

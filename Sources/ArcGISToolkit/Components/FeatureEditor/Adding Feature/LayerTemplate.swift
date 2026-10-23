@@ -77,7 +77,6 @@ private extension GeometryConstructionTool.Kind {
     /// editor.
     static var supportedCases: [Self] {
         [
-            .circle,
             .ellipse,
             .freehand,
             .line,

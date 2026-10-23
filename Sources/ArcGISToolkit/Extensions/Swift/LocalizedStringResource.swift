@@ -41,7 +41,7 @@ extension LocalizedStringResource {
             "Discard",
             bundle: .toolkit,
             comment: """
-                A label for a button to that delete user data or performs an \ 
+                A label for a button that deletes user data or performs an \ 
                 irreversible operation"
                 """
         )
