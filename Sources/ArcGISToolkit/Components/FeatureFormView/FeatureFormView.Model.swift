@@ -392,11 +392,27 @@ public extension FeatureFormView {
         /// <#Description#>
         var totalErrorCount: Int {
             formsWithErrors.values.reduce(0, +)
+            +
+            geometryStatus.values.count(where: { $0 == .invalid })
+        }
+        
+        func editStatusForForm(featureID id: UUID) -> Bool {
+            formsWithEdits[id, default: false]
+            ||
+            (geometryStatus[id, default: .none] != .none)
+        }
+        
+        func totalErrorCountForForm(featureID id: UUID) -> Int {
+            formsWithErrors[id, default: 0]
+            +
+            (geometryStatus[id, default: .none] == .invalid ? 1 : 0)
         }
         
         /// A Boolean value indicating if the group has any forms with edits.
         var groupHasEdits: Bool {
             formsWithEdits.contains(where: { $0.value })
+            ||
+            geometryStatus.contains(where: { $0.value != .none })
         }
         
         /// A Boolean value indicating if the group has any forms with validation errors.

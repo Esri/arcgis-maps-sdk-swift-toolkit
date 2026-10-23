@@ -63,7 +63,7 @@ struct FeatureFormExampleView: View {
                                 .tag(FeatureFormView.ValidationErrorVisibility.visible)
                         }
                         if model.formCount > 0 {
-                            Section("Forms \(model.formCount)") {
+                            Section("^[\(model.formCount) Forms](inflect: true)") {
                                 ForEach(model.ids, id: \.self) { featureID in
                                     if let form = model.form(for: featureID) {
                                         Menu("\(form.title) - \(featureID.uuidString.suffix(4))") {
