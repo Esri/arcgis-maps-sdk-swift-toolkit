@@ -59,7 +59,6 @@ struct GeometryConstructionView: View {
                         geometry,
                         layerTemplate: layerTemplate
                     )
-                    dismiss()
                 }
             case .cancelling:
                 Text(
