@@ -18,29 +18,21 @@ import SwiftUI
 internal import os
 
 public extension FeatureFormView {
+    /// A model for the ``FeatureFormView`` component.
+    /// - Since: 300.2
     @MainActor @Observable
     final class Model {
-        #warning("TODO: Add API for reporting external geometry edits.")
+        /// The visibility of the Save button.
+        public var saveButtonVisibility: Visibility = .automatic
+        /// The visibility of validation errors in the form(s).
+        public var validationErrorVisibility = ValidationErrorVisibility.automatic
         
         /// A Boolean value that determines whether the view is presented.
         var isPresented: Bool?
-        
-        /// The visibility of the "save" and "discard" buttons.
-        var editingButtonsVisibility: Visibility = .automatic
-        /// A Boolean which declares whether navigation to forms for features associated via utility association
-        /// form elements is disabled.
-        var navigationIsDisabled = false
         /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
         var onFeatureFormChanged: ((FeatureForm) -> Void)?
         /// The user-provided closure to perform when a ``EditingEvent`` occurs.
         var onFormEditingEventAction: FormEditingEventAction?
-        /// The developer configurable validation error visibility.
-        var validationErrorVisibilityExternal = ValidationErrorVisibility.automatic
-        /// An action to run before finishing editing.
-        ///
-        /// If the action throws an error, `finishEditing` should not be
-        /// called.
-        var willFinishEditingAction: (() throws -> Void)?
         
         /// <#Description#>
         init(group: FeatureFormGroup) {
@@ -139,7 +131,7 @@ public extension FeatureFormView {
         private var formViewModels: [UUID: FeatureFormView.FormView.Model] = [:]
         
         /// The internally managed validation error visibility.
-        var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
+        private var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
         
         /// <#Description#>
         private var backStack = [UUID]()
@@ -189,24 +181,56 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        func discardEdits() {
-            Task {
-                do {
-                    try await group.discardEdits()
-                } catch {
-                    finishEditingError = error
+        @diagnose(DeprecatedDeclaration, as: ignored)
+        public func discard() {
+            let discard = {
+                Task {
+                    do {
+                        try await self.group.discardEdits()
+                        self.onFormEditingEventAction?(.discarded)
+                        self.onFormEditingEventAction?(.discardedEdits(willNavigate: false))
+                    } catch {
+                        self.finishEditingError = error
+                        self.onFormEditingEventAction?(.failed(error))
+                    }
+                    if self.isPresented != nil {
+                        self.isPresented = false
+                    }
                 }
+            }
+            
+            if groupHasErrors || groupHasEdits {
+                validationErrorVisibilityInternal = .visible
+                navigationAlertInfo = (false, {
+                    _ = discard()
+                })
+            } else {
+                _ = discard()
             }
         }
         
         /// <#Description#>
-        func finishEditing() {
-            Task {
-                do {
-                    try await group.finishEditing()
-                } catch {
-                    finishEditingError = error
+        @diagnose(DeprecatedDeclaration, as: ignored)
+        public func save() {
+            if !groupHasErrors {
+                Task {
+                    do {
+                        onFormEditingEventAction?(.willSave)
+                        let evaluationErrors = try await group.evaluateExpressions()
+                        if let firstEvaluationError = evaluationErrors.first?.error {
+                            throw firstEvaluationError
+                        }
+                        try await group.finishEditing()
+                        onFormEditingEventAction?(.saved)
+                        onFormEditingEventAction?(.savedEdits(willNavigate: false))
+                    } catch {
+                        finishEditingError = error
+                        onFormEditingEventAction?(.failed(error))
+                    }
                 }
+            } else {
+                validationErrorVisibilityInternal = .visible
+                navigationAlertInfo = (false, {})
             }
         }
         
@@ -297,6 +321,60 @@ public extension FeatureFormView {
         /// <#Description#>
         private(set) var formsWithErrors = [UUID: Int]()
         
+        var selectedModel: FormView.Model? {
+            guard let selectedID else { return nil }
+            return formModel(for: selectedID)
+        }
+        
+        /// <#Description#>
+        var allValidationErrorsAreVisible: Bool {
+            groupHasErrors
+            && (
+                validationErrorVisibility == .visible
+                || validationErrorVisibilityInternal == .visible
+            )
+            ? true
+            : false
+        }
+        
+        /// A Boolean value indicating whether the Back button in the toolbar should be shown.
+        var showBackButton: Bool {
+            guard let selectedModel else { return false }
+            let selectedFormsPathIsEmpty = selectedModel.navigationPath.isEmpty
+            return (selectedFormsPathIsEmpty && canGoBack)
+            || !selectedFormsPathIsEmpty
+        }
+        
+        /// A Boolean value indicating whether the Dismiss button in the toolbar should be shown.
+        var showDismissButton: Bool {
+            isPresented != nil
+            && (!multiFormModeIsActive || selectedForm == nil)
+        }
+        
+        /// A Boolean value indicating whether the Group Menu button in the toolbar should be shown.
+        var showGroupMenuButton: Bool {
+            multiFormModeIsActive
+            && selectedForm != nil
+        }
+        
+        /// A Boolean value indicating whether the Save button in the toolbar should be shown.
+        var showSaveButton: Bool {
+            saveButtonVisibility != .hidden
+            && (selectedForm == nil || !multiFormModeIsActive)
+        }
+        
+        /// <#Description#>
+        func goBack() {
+            guard let selectedModel else { return }
+            if selectedModel.navigationPath.isEmpty, canGoBack {
+                // Back into the previous visited form in the group.
+                navigateBack()
+            } else if !selectedModel.navigationPath.isEmpty {
+                // Back into the previous view in the current form's navigation path.
+                selectedModel.navigationPath.removeLast()
+            }
+        }
+        
         /// <#Description#>
         var totalErrorCount: Int {
             formsWithErrors.values.reduce(0, +)
@@ -309,9 +387,10 @@ public extension FeatureFormView {
         
         /// A Boolean value indicating if the group has any forms with validation errors.
         var groupHasErrors: Bool {
-            formsWithErrors.contains(where: { $0.value > 0 })
+            totalErrorCount > 0
         }
         
+        /// <#Description#>
         func monitorEdits() async {
             Logger.featureFormView.info("Starting edit monitoring.")
             await withTaskGroup { taskGroup in
@@ -329,6 +408,7 @@ public extension FeatureFormView {
             }
         }
         
+        /// <#Description#>
         func monitorErrors() async {
             Logger.featureFormView.info("Starting error monitoring.")
             await withTaskGroup { taskGroup in

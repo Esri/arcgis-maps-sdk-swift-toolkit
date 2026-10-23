@@ -76,19 +76,9 @@ public struct FeatureFormView: View {
     private let isPresented: Binding<Bool>?
     private let providedModel: FeatureFormView.Model?
     
-    /// A model created for the user if the 200.8 root form initializer is used.
+    /// A model created for the user when ``FeatureFormView.init(root:isPresented:)``
+    /// is used.
     @State private var legacyModel: FeatureFormView.Model?
-    
-    /// Initializes a form view.
-    /// - Parameters:
-    ///   - root: The feature form defining the editing experience.
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    /// - Since: 200.8
-    public init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
-        _legacyModel = .init(wrappedValue: .init(forms: [root]))
-        self.isPresented = isPresented
-        self.providedModel = nil
-    }
     
     /// Initializes a Feature Form View.
     /// - Parameters:
@@ -127,26 +117,6 @@ public struct FeatureFormView: View {
 }
 
 public extension FeatureFormView {
-    /// Sets the visibility of the save and discard buttons on the form.
-    /// - Parameter visibility: The visibility of the save and discard buttons.
-    /// - Since: 200.8
-    func editingButtons(_ visibility: Visibility) -> Self {
-        model.editingButtonsVisibility = visibility
-        return self
-    }
-    
-    /// Sets whether navigation to forms for features associated via utility association form
-    /// elements is disabled.
-    ///
-    /// Use this modifier to conditionally disable navigation into other forms.
-    /// - Parameter disabled: A Boolean value that determines whether navigation is disabled.
-    /// Pass `true` to disable navigation; otherwise, pass `false`.
-    /// - Since: 200.8
-    func navigationDisabled(_ disabled: Bool) -> Self {
-        model.navigationIsDisabled = disabled
-        return self
-    }
-    
     /// Sets a closure to perform when a new feature form is shown in the view.
     ///
     /// This can happen when navigating through the associations in a `UtilityAssociationsFormElement`.
@@ -178,19 +148,45 @@ public extension FeatureFormView {
     /// ``FeatureFormView/editingButtons(_:)``, use this modifier to make any validation
     /// errors visible when the user attempts to save the form with a custom save button.
     func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
-        model.validationErrorVisibilityExternal = visibility
+        model.validationErrorVisibility = visibility
+        return self
+    }
+}
+
+public extension FeatureFormView /* Deprecated */ {
+    /// Initializes a form view.
+    /// - Parameters:
+    ///   - root: The feature form defining the editing experience.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    /// - Since: 200.8
+    /// - Note: Deprecated at 300.2.
+    @available(*, deprecated, renamed: "FeatureFormView.init(model:isPresented:)")
+    init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
+        _legacyModel = .init(wrappedValue: .init(forms: [root]))
+        self.isPresented = isPresented
+        self.providedModel = nil
+    }
+    
+    /// Sets the visibility of the save and discard buttons on the form.
+    /// - Parameter visibility: The visibility of the save buttons.
+    /// - Since: 200.8
+    /// - Note: Deprecated at 300.2.
+    @available(*, deprecated, message: "Use 'FeatureFormView.Model.saveButtonVisibility' instead.")
+    func editingButtons(_ visibility: Visibility) -> Self {
+        model.saveButtonVisibility = visibility
         return self
     }
     
-    /// Sets an action to run before finishing edits.
+    /// Sets whether navigation to forms for features associated via utility association form
+    /// elements is disabled.
     ///
-    /// When an action is set, the view acts as if the forms in the view have edits, even if they do
-    /// not, and makes the finish editing button available.
-    ///
-    /// If the action throws an error, `finishEditing` will not be called.
-    /// - Parameter action: The closure to perform.
-    func willFinishEditing(perform action: (() throws -> Void)?) -> Self {
-        model.willFinishEditingAction = action
+    /// Use this modifier to conditionally disable navigation into other forms.
+    /// - Parameter disabled: A Boolean value that determines whether navigation is disabled.
+    /// Pass `true` to disable navigation; otherwise, pass `false`.
+    /// - Since: 200.8
+    /// - Note: Deprecated at 300.2.
+    @available(*, deprecated, message: "Disabling navigation is no longer supported.")
+    func navigationDisabled(_ disabled: Bool) -> Self {
         return self
     }
 }

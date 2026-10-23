@@ -56,7 +56,6 @@ extension FeatureFormView {
         var body: some View {
             List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
                 mainButton(for: utilityAssociationResult)
-                    .disabled(featureFormViewModel.navigationIsDisabled)
                     .swipeActions {
                         deleteButton(for: utilityAssociationResult.association)
                     }

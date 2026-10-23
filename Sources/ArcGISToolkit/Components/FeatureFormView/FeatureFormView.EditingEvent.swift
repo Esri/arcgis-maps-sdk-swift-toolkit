@@ -24,9 +24,6 @@ public extension FeatureFormView {
         case failed(any Error)
         /// Indicates that the user has discarded their edits.
         /// - Since: 300.2
-        case finished
-        /// Indicates that the user has discarded their edits.
-        /// - Since: 300.2
         case discarded
         /// Indicates the active form or the navigation path for the active form has changed.
         ///
@@ -34,12 +31,15 @@ public extension FeatureFormView {
         /// navigation destinations.
         /// - Since: 300.0
         case navigationChanged(NavigationPathItem)
+        /// Indicates that the user has saved their edits.
+        /// - Since: 300.2
+        case saved
         /// Indicates that the user has tapped on an option to visualize a feature on the map.
         /// - Since: 300.0
         case showOnMapRequested(ArcGISFeature)
-        /// Indicates that the user has started an attempt to finish editing the form(s).
+        /// Indicates that the user has started an attempt to save their edits.
         /// - Since: 300.2
-        case willFinish
+        case willSave
         
         // MARK: Deprecated case(s)
         

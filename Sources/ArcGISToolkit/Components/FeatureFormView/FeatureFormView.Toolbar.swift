@@ -21,14 +21,14 @@ extension View {
     }
 }
 
-extension FeatureFormView {
-    fileprivate struct Toolbar: ViewModifier {
+private extension FeatureFormView {
+    struct Toolbar: ViewModifier {
         /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
         /// The model for the feature form.
         ///
-        /// Nullable as this toolbar is used in the group menu when no feature form is selected.
+        /// Optional as this toolbar is used in the group menu when no feature form is selected.
         @Environment(FeatureFormView.FormView.Model.self) var formViewModel: FeatureFormView.FormView.Model?
         
         /// A Boolean value indicating whether multi-form mode is active.
@@ -51,120 +51,25 @@ extension FeatureFormView {
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        if isRootView, featureFormViewModel.canGoBack {
-                            Button {
-                                featureFormViewModel.navigateBack()
-                            } label: {
-                                Label {
-                                    Text(
-                                        "Back",
-                                        bundle: .toolkitModule,
-                                        comment: """
-                                        A generic label for navigating \
-                                        to the previous screen or returning to the \
-                                        previous context.
-                                        """
-                                    )
-                                } icon: {
-                                    Image(systemName: "chevron.backward")
-                                }
-                            }
-                        } else if !isRootView {
-                            Button {
-                                formViewModel?.navigationPath.removeLast()
-                            } label: {
-                                Label {
-                                    Text(
-                                        "Back",
-                                        bundle: .toolkitModule,
-                                        comment: """
-                                            A generic label for navigating to \
-                                            the previous screen or returning \
-                                            to the previous context.
-                                            """
-                                    )
-                                } icon: {
-                                    Image(systemName: "chevron.backward")
-                                }
-                            }
-                            .disabled(featureFormViewModel.navigationIsDisabled)
+                        if featureFormViewModel.showBackButton {
+                            backButton
                         }
                     }
                     if #available(iOS 26.0, *) {
                         ToolbarSpacer(.flexible, placement: .topBarLeading)
                     }
-                    if featureFormViewModel.isPresented != nil,
-                       (
-                        !featureFormViewModel.multiFormModeIsActive
-                        || featureFormViewModel.selectedForm == nil
-                       ) {
-                        // A presented binding is provided, and we're in
-                        // single-form mode or the group menu.
-                        ToolbarItem(placement: .topBarLeading) {
+                    ToolbarItem(placement: .topBarLeading) {
+                        if featureFormViewModel.showDismissButton {
                             DismissButton(kind: .cancel) {
-                                if featureFormViewModel.groupHasEdits {
-                                    featureFormViewModel.navigationAlertInfo = (false, {
-                                        featureFormViewModel.isPresented = false
-                                    })
-                                } else {
-                                    featureFormViewModel.isPresented = false
-                                }
+                                featureFormViewModel.discard()
                             }
                         }
                     }
                     ToolbarItemGroup(placement: .topBarTrailing) {
-                        if (
-                            featureFormViewModel.multiFormModeIsActive
-                            && featureFormViewModel.selectedForm != nil
-                        ) {
-                            Button {
-                                featureFormViewModel.clearSelection(clearBackStack: false)
-                            } label: {
-                                Image(systemName: featureFormViewModel.groupHasEdits ? "tray.badge" : "tray")
-                                    .symbolEffect(.bounce, value: delayedMultiFormModeActive)
-                                    .symbolRenderingMode(
-                                        featureFormViewModel.groupHasErrors
-                                        && (
-                                            featureFormViewModel.validationErrorVisibilityExternal == .visible
-                                            || featureFormViewModel.validationErrorVisibilityInternal == .visible
-                                        )
-                                        ? .multicolor
-                                        : .monochrome
-                                    )
-                            }
-                        } else if (
-                            featureFormViewModel.editingButtonsVisibility != .hidden
-                            && (
-                                featureFormViewModel.selectedForm == nil
-                                || !featureFormViewModel.multiFormModeIsActive
-                            )
-                        ) {
-                            Button {
-                                if !featureFormViewModel.groupHasErrors {
-                                    Task {
-                                        do {
-                                            try await featureFormViewModel.finishEditing()
-                                            featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: false))
-                                        } catch {
-                                            featureFormViewModel.finishEditingError = error
-                                        }
-                                    }
-                                } else {
-                                    featureFormViewModel.validationErrorVisibilityInternal = .visible
-                                    featureFormViewModel.navigationAlertInfo = (false, {})
-                                }
-                            } label: {
-                                Label {
-                                    Text(
-                                        "Save",
-                                        bundle: .toolkitModule,
-                                        comment: "Finish editing the feature form."
-                                    )
-                                } icon: {
-                                    Image(systemName: "checkmark")
-                                }
-                            }
-                            .disabled(!featureFormViewModel.groupHasEdits)
+                        if featureFormViewModel.showGroupMenuButton {
+                            groupMenuButton
+                        } else if featureFormViewModel.showSaveButton {
+                            saveButton
                         }
                     }
                 }
@@ -172,9 +77,57 @@ extension FeatureFormView {
     }
 }
 
-extension FeatureFormView.Toolbar {
-    /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
-    var isRootView: Bool {
-        formViewModel?.navigationPath.isEmpty ?? true
+private extension FeatureFormView.Toolbar /* Buttons */ {
+    var backButton: some View {
+        Button {
+            featureFormViewModel.goBack()
+        } label: {
+            Label {
+                Text(
+                    "Back",
+                    bundle: .toolkitModule,
+                    comment: """
+                        A generic label for a back button to returning to the \
+                        previous screen.
+                        """
+                )
+            } icon: {
+                Image(systemName: "chevron.backward")
+            }
+        }
+    }
+    
+    /// - Note: A plain image is used for the label so that symbol rendering mode
+    /// `.multicolor` is applied correctly.
+    var groupMenuButton: some View {
+        Button {
+            featureFormViewModel.clearSelection(clearBackStack: false)
+        } label: {
+            Image(systemName: featureFormViewModel.groupHasEdits ? "tray.badge" : "tray")
+                .symbolEffect(.bounce, value: delayedMultiFormModeActive)
+                .symbolRenderingMode(
+                    featureFormViewModel.allValidationErrorsAreVisible
+                    ? .multicolor
+                    : .monochrome
+                )
+            
+        }
+    }
+    
+    var saveButton: some View {
+        Button {
+            featureFormViewModel.save()
+        } label: {
+            Label {
+                Text(
+                    "Save",
+                    bundle: .toolkitModule,
+                    comment: "Finish editing the feature form."
+                )
+            } icon: {
+                Image(systemName: "checkmark")
+            }
+        }
+        .disabled(!featureFormViewModel.groupHasEdits)
     }
 }

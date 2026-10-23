@@ -36,32 +36,9 @@ extension FeatureFormView {
                 actions: {
                     if let (willNavigate, continuation) = featureFormViewModel.navigationAlertInfo {
                         Button(role: .destructive) {
-                            featureFormViewModel.discardEdits()
-                            featureFormViewModel.validationErrorVisibilityInternal = .automatic
-                            featureFormViewModel.onFormEditingEventAction?(.discardedEdits(willNavigate: willNavigate))
                             continuation()
                         } label: {
                             Text.discardEdits
-                        }
-                        .onAppear {
-                            if featureFormViewModel.groupHasErrors {
-                                featureFormViewModel.validationErrorVisibilityInternal = .visible
-                            }
-                        }
-                        if !featureFormViewModel.groupHasErrors {
-                            Button {
-                                Task {
-                                    do {
-                                        try await featureFormViewModel.finishEditing()
-                                        featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: willNavigate))
-                                        continuation()
-                                    } catch {
-                                        featureFormViewModel.finishEditingError = error
-                                    }
-                                }
-                            } label: {
-                                saveEdits
-                            }
                         }
                         Button(role: .cancel) {
                             alertForUnsavedEditsIsPresented.wrappedValue = false
@@ -188,7 +165,11 @@ extension FeatureFormView.GroupView /* Group views */ {
                                     }
                                 }
                             }
-                            .badge(form.elementValidationErrors.count)
+                            .badge(
+                                featureFormViewModel.allValidationErrorsAreVisible
+                                ? form.elementValidationErrors.count
+                                : 0
+                            )
                             .badgeProminence(.increased)
                             .foregroundStyle(.primary)
                         } label: {
