@@ -58,7 +58,6 @@ extension FeatureFormView {
                     }
                 }
             }
-            .environment(formModel)
             .onTitleChange(of: formModel.featureForm) { newTitle in
                 formModel.title = newTitle
             }
