@@ -27,7 +27,9 @@ extension FeatureFormView {
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
         /// The model for the feature form.
-        @Environment(FeatureFormView.FormView.Model.self) var formViewModel
+        ///
+        /// Nullable as this toolbar is used in the group menu when no feature form is selected.
+        @Environment(FeatureFormView.FormView.Model.self) var formViewModel: FeatureFormView.FormView.Model?
         
         /// A Boolean value indicating whether multi-form mode is active.
         ///
@@ -69,7 +71,7 @@ extension FeatureFormView {
                             }
                         } else if !isRootView {
                             Button {
-                                formViewModel.navigationPath.removeLast()
+                                formViewModel?.navigationPath.removeLast()
                             } label: {
                                 Label {
                                     Text(
@@ -92,7 +94,12 @@ extension FeatureFormView {
                         ToolbarSpacer(.flexible, placement: .topBarLeading)
                     }
                     if featureFormViewModel.isPresented != nil,
-                        !featureFormViewModel.multiFormModeIsActive {
+                       (
+                        !featureFormViewModel.multiFormModeIsActive
+                        || featureFormViewModel.selectedForm == nil
+                       ) {
+                        // A presented binding is provided, and we're in
+                        // single-form mode or the group menu.
                         ToolbarItem(placement: .topBarLeading) {
                             DismissButton(kind: .cancel) {
                                 if featureFormViewModel.groupHasEdits {
@@ -106,7 +113,10 @@ extension FeatureFormView {
                         }
                     }
                     ToolbarItemGroup(placement: .topBarTrailing) {
-                        if featureFormViewModel.multiFormModeIsActive {
+                        if (
+                            featureFormViewModel.multiFormModeIsActive
+                            && featureFormViewModel.selectedForm != nil
+                        ) {
                             Button {
                                 featureFormViewModel.clearSelection(clearBackStack: false)
                             } label: {
@@ -122,8 +132,13 @@ extension FeatureFormView {
                                         : .monochrome
                                     )
                             }
-                        } else if (featureFormViewModel.editingButtonsVisibility == .automatic)
-                                    || (featureFormViewModel.editingButtonsVisibility == .visible) {
+                        } else if (
+                            featureFormViewModel.editingButtonsVisibility != .hidden
+                            && (
+                                featureFormViewModel.selectedForm == nil
+                                || !featureFormViewModel.multiFormModeIsActive
+                            )
+                        ) {
                             Button {
                                 if !featureFormViewModel.groupHasErrors {
                                     Task {
@@ -160,6 +175,6 @@ extension FeatureFormView {
 extension FeatureFormView.Toolbar {
     /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
     var isRootView: Bool {
-        formViewModel.navigationPath.isEmpty
+        formViewModel?.navigationPath.isEmpty ?? true
     }
 }

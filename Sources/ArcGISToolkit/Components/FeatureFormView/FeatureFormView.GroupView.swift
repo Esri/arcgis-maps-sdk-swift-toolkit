@@ -201,42 +201,7 @@ extension FeatureFormView.GroupView /* Group views */ {
             .navigationTitle(
                 "Editing ^[\(featureFormViewModel.activeFormCount) features](inflect: true)"
             )
-            .toolbar {
-                let hasEdits = featureFormViewModel.formsWithEdits.contains(where: { $0.value })
-                let hasErrors = featureFormViewModel.formsWithErrors.contains(where: { $0.value > 0 })
-                if featureFormViewModel.isPresented != nil {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            if hasEdits {
-                                // TODO: Warn before close.
-                            }
-                            featureFormViewModel.isPresented = false
-                        } label: {
-                            Image(systemName: "xmark")
-                        }
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        if !hasErrors {
-                            Task {
-                                do {
-                                    try await featureFormViewModel.finishEditing()
-                                    featureFormViewModel.onFormEditingEventAction?(.savedEdits(willNavigate: false))
-                                } catch {
-//                                    stackViewModel.finishEditingError = error
-                                }
-                            }
-                        } else {
-                            featureFormViewModel.validationErrorVisibilityInternal = .visible
-//                            stackViewModel.navigationAlertInfo = (false, {})
-                        }
-                    } label: {
-                        Image(systemName: "checkmark")
-                    }
-                    .disabled(!hasEdits)
-                }
-            }
+            .featureFormToolbar()
         }
     }
 }
