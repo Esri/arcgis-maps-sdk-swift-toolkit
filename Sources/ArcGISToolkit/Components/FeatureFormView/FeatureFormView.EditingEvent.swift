@@ -19,12 +19,12 @@ public extension FeatureFormView {
     /// when the user has performed an action within the component.
     /// - Since: 200.8
     enum EditingEvent {
-        /// Indicates that edits failed to finish.
-        /// - Since: 300.2
-        case failed(any Error)
         /// Indicates that the user has discarded their edits.
         /// - Since: 300.2
         case discarded
+        /// Indicates that edits failed to finish.
+        /// - Since: 300.2
+        case failed(any Error)
         /// Indicates the active form or the navigation path for the active form has changed.
         ///
         /// Forms with `UtilityAssociationsFormElement`s have multiple possible
