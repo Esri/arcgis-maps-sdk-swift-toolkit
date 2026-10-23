@@ -117,15 +117,6 @@ struct GeometryConstructionView: View {
                         systemImage: "exclamationmark.triangle",
                         description: Text(underlyingError.localizedDescription)
                     )
-                case .noFeatureForm:
-                    ContentUnavailableView(
-                        LocalizedStringResource(
-                            "Feature Form Creation Failed",
-                            bundle: .toolkit,
-                            comment: "The title of a view shown when creating a feature form was unsuccessful."
-                        ),
-                        systemImage: "exclamationmark.triangle"
-                    )
                 }
             }
         }

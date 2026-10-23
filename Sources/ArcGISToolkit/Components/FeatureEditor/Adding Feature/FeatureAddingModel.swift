@@ -66,7 +66,6 @@ final class FeatureAddingModel {
         case templateUnavailable(any Error)
         case noSupportedTools
         case featureCreationFailed(any Error)
-        case noFeatureForm
     }
     
     /// The possible states of geometry construction for the selected template.
@@ -181,18 +180,17 @@ private extension FeatureAddingModel {
         layerTemplate: LayerTemplate,
         geometry: Geometry? = nil
     ) async throws(GeometryConstructionError) -> FeatureForm {
-        let source = layerTemplate.sharedTemplate.source
-        let featureSet: SharedTemplateFeatureCreationSet
         do {
-            featureSet = try await layerTemplate.makeFeatures(geometry: geometry)
-            try await source.addFeatures(using: featureSet)
+            let featureSet = try await layerTemplate
+                .makeFeatures(geometry: geometry)
+            try await layerTemplate.sharedTemplate.source
+                .addFeatures(using: featureSet)
+            return FeatureForm(
+                // A feature set will always have at least one feature.
+                feature: featureSet.features.first!
+            )
         } catch {
             throw .featureCreationFailed(error)
-        }
-        if let feature = featureSet.features.first {
-            return FeatureForm(feature: feature)
-        } else {
-            throw .noFeatureForm
         }
     }
 }
