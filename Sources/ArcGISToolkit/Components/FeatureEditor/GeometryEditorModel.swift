@@ -79,6 +79,7 @@ final class GeometryEditorModel {
         initialGeometry = geometry
         geometryType = nil
         geometryEditor.start(withInitial: geometry)
+        didStartGeometryEditor()
     }
     
     /// Starts the geometry editor with a geometry type.
@@ -87,6 +88,7 @@ final class GeometryEditorModel {
         initialGeometry = nil
         self.geometryType = geometryType
         geometryEditor.start(withType: geometryType)
+        didStartGeometryEditor()
     }
     
     /// Restarts the geometry editor if it is started.
@@ -100,6 +102,14 @@ final class GeometryEditorModel {
         }
     }
     
+    /// Called after the geometry editor has been started.
+    private func didStartGeometryEditor() {
+        let defaultTool = defaultConstructionTool ?? availableTools.first ?? .vertex
+        if selectedTool != defaultTool {
+            selectedTool = defaultTool
+        }
+    }
+    
     /// Stops the geometry editor and resets the session state.
     func stop() {
         geometryEditor.stop()
@@ -108,6 +118,12 @@ final class GeometryEditorModel {
         isStarted = false
         initialGeometry = nil
         geometryType = nil
+        if constructionTools != nil {
+            constructionTools = nil
+        }
+        if defaultConstructionTool != nil {
+            defaultConstructionTool = nil
+        }
         if snapRules != nil {
             snapRules = nil
         }
@@ -167,17 +183,19 @@ final class GeometryEditorModel {
     
     /// The tools to use when constructing a geometry.
     private var constructionTools: [FeatureEditorGeometryTool]?
+    /// The default tool when constructing a geometry.
+    private var defaultConstructionTool: FeatureEditorGeometryTool?
     
     /// Sets the construction tools and selected tool.
     /// - Parameters:
     ///   - constructionTools: The tools to use when constructing a geometry.
-    ///   - selection: The construction tool to be selected.
+    ///   - default: The default construction tool..
     func setConstructionTools(
         _ constructionTools: [FeatureEditorGeometryTool],
-        selection: FeatureEditorGeometryTool
+        default: FeatureEditorGeometryTool?
     ) {
         self.constructionTools = constructionTools
-        selectedTool = selection
+        self.defaultConstructionTool = `default`
     }
     
     /// The tools that are currently able to be selected.

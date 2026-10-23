@@ -109,12 +109,12 @@ final class FeatureAddingModel {
                 
                 let geometryEditorModel = featureEditorModel.geometryEditorModel
                 
-                let defaultConstructionTool = layerTemplate.defaultConstructionTool?.kind
                 let tools = constructionToolKinds.compactMap(FeatureEditorGeometryTool.init)
-                let selectedTool = defaultConstructionTool.flatMap(FeatureEditorGeometryTool.init)
+                let defaultConstructionTool = layerTemplate.defaultConstructionTool?.kind
                 geometryEditorModel.setConstructionTools(
                     tools,
-                    selection: selectedTool ?? tools.first ?? .vertex
+                    default: defaultConstructionTool
+                        .flatMap(FeatureEditorGeometryTool.init)
                 )
                 
                 geometryEditorModel.start(withType: layerTemplate.featureTable.geometryType!)
