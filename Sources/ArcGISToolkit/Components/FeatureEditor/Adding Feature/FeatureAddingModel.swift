@@ -200,7 +200,8 @@ extension FeatureAddingModel.GeometryConstructionError: Equatable {
         return switch (lhs, rhs) {
         case (.noSupportedTools, .noSupportedTools):
             true
-        case (.featureCreationFailed(let lhsError), .featureCreationFailed(let rhsError)):
+        case (.templateUnavailable(let lhsError), .templateUnavailable(let rhsError)),
+            (.featureCreationFailed(let lhsError), .featureCreationFailed(let rhsError)):
             // Not perfect, but good enough. The state shouldn't ever go from
             // 'featureCreationFailed' to 'featureCreationFailed'.
             String(describing: lhsError) == String(describing: rhsError)
