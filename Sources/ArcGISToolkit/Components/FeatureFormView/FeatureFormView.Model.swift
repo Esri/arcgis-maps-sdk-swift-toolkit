@@ -157,9 +157,7 @@ public extension FeatureFormView {
             defer {
                 formCount = group.forms.count
                 
-                // Select the form, if directed, or if not in list style and no
-                // form is already selected, regardless of whether it's already
-                // in the collection of managed forms.
+                // Select the form, if directed, or if no form is already selected.
                 if select || selectedID == nil {
                     self.select(form: form)
                 }
