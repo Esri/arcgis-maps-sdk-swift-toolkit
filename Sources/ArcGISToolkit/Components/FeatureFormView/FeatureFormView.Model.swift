@@ -204,6 +204,9 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
+        /// <#Description#>
+        /// - Parameter ignoreEdits: A Boolean value indicating if the user should be
+        /// warned of unsaved edits before discarding.
         @diagnose(DeprecatedDeclaration, as: ignored)
         public func discard(ignoreEdits: Bool = false) {
             let discard = {
