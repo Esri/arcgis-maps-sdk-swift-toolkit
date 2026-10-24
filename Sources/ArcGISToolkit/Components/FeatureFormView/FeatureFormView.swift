@@ -114,7 +114,7 @@ public struct FeatureFormView: View {
                 EmbeddedFeatureFormView(form: rootFeatureForm)
                     // Refresh the navigation stack's root view when the root
                     // feature form changes.
-                    .id(ObjectIdentifier(rootFeatureForm))
+                    .id(rootFeatureForm.id)
                     .navigationDestination(for: NavigationPathItem.self) { itemType in
                         switch itemType {
                         case let .form(form):
@@ -290,7 +290,7 @@ public struct FeatureFormView: View {
                     }
                 }
             )
-            .animation(.default, value: ObjectIdentifier(rootFeatureForm))
+            .animation(.default, value: rootFeatureForm.id)
             .environment(featureFormViewModel)
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.isPresented, isPresented)
@@ -302,7 +302,7 @@ public struct FeatureFormView: View {
                     onFormEditingEventAction?(.navigationChanged(presentedItem))
                 }
             }
-            .onChange(of: ObjectIdentifier(rootFeatureForm), initial: true) {
+            .onChange(of: rootFeatureForm.id, initial: true) {
                 featureFormViewModel.setRootForm(rootFeatureForm)
             }
             .onPreferenceChange(PresentedFeatureFormPreferenceKey.self) {
