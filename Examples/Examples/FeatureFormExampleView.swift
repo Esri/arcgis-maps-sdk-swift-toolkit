@@ -57,17 +57,19 @@ struct FeatureFormExampleView: View {
                         }
                         if model.formCount > 0 {
                             Section("^[\(model.formCount) Forms](inflect: true)") {
-                                ForEach(model.forms, id: \.id) { form in
-                                    Menu("\(form.title) - \(form.id)") {
-                                        Section("Geometry Status") {
-                                            Button("Report Invalid", role: .destructive) {
-                                                model.setGeometryEditStatus(for: form.feature, status: .invalid)
-                                            }
-                                            Button("Report Valid") {
-                                                model.setGeometryEditStatus(for: form.feature, status: .valid)
-                                            }
-                                            Button("Clear") {
-                                                model.setGeometryEditStatus(for: form.feature, status: nil)
+                                ForEach(model.ids, id: \.self) { featureID in
+                                    if let form = model.form(for: featureID) {
+                                        Menu("\(form.title) - \(form.id)") {
+                                            Section("Geometry Status") {
+                                                Button("Report Invalid", role: .destructive) {
+                                                    model.setGeometryEditStatus(for: form.feature, status: .invalid)
+                                                }
+                                                Button("Report Valid") {
+                                                    model.setGeometryEditStatus(for: form.feature, status: .valid)
+                                                }
+                                                Button("Clear") {
+                                                    model.setGeometryEditStatus(for: form.feature, status: nil)
+                                                }
                                             }
                                         }
                                     }
