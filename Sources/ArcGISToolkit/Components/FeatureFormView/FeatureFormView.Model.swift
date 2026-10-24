@@ -234,10 +234,17 @@ public extension FeatureFormView {
         /// <#Description#>
         var isSaving = false
         
+        
+        private var saveTask: Task<Void, Never>?
+        
+        isolated deinit {
+            saveTask?.cancel()
+        }
+        
         /// <#Description#>
         @diagnose(DeprecatedDeclaration, as: ignored)
         public func save() {
-            Task {
+            saveTask = Task {
                 guard !isSaving else { return }
                 isSaving = true
                 defer { isSaving = false }
@@ -249,6 +256,8 @@ public extension FeatureFormView {
                     if let firstEvaluationError = evaluationErrors.first?.error {
                         throw firstEvaluationError
                     }
+                    
+                    try Task.checkCancellation()
                     
                     guard !groupHasErrors else {
                         alertForValidationErrorsIsPresented = true
