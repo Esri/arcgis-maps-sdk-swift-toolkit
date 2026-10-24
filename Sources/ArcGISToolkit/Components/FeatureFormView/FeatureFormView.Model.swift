@@ -229,9 +229,16 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
+        var isSaving = false
+        
+        /// <#Description#>
         @diagnose(DeprecatedDeclaration, as: ignored)
         public func save() {
             Task {
+                guard !isSaving else { return }
+                isSaving = true
+                defer { isSaving = false }
+                
                 do {
                     onFormEditingEventAction?(.willSave)
                     

@@ -150,16 +150,22 @@ private extension FeatureFormView.Toolbar /* Items */ {
     /// Starts the sequence of events for saving the form(s).
     var saveButton: some View {
         Button {
-            featureFormViewModel.save()
+            withAnimation {
+                featureFormViewModel.save()
+            }
         } label: {
-            Label {
-                Text(
-                    "Save",
-                    bundle: .toolkitModule,
-                    comment: "Finish editing the feature form."
-                )
-            } icon: {
-                Image(systemName: "checkmark")
+            if featureFormViewModel.isSaving {
+                ProgressView()
+            } else {
+                Label {
+                    Text(
+                        "Save",
+                        bundle: .toolkitModule,
+                        comment: "Finish editing the feature form."
+                    )
+                } icon: {
+                    Image(systemName: "checkmark")
+                }
             }
         }
         .disabled(!featureFormViewModel.groupHasEdits)
