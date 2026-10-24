@@ -134,7 +134,10 @@ public extension FeatureFormView {
         var finishEditingError: (any Error)?
         
         /// <#Description#>
-        var navigationAlertInfo: (willNavigate: Bool, action: () -> Void)?
+        var alertForUnsavedEditsIsPresented = false
+        
+        /// <#Description#>
+        var alertForValidationErrorsIsPresented = false
         
         /// Form view models, keyed by feature global IDs.
         private var formViewModels: [UUID: FeatureFormView.FormModel] = [:]
@@ -201,7 +204,7 @@ public extension FeatureFormView {
         
         /// <#Description#>
         @diagnose(DeprecatedDeclaration, as: ignored)
-        public func discard() {
+        public func discard(ignoreEdits: Bool = false) {
             let discard = {
                 Task {
                     do {
@@ -217,12 +220,8 @@ public extension FeatureFormView {
                     }
                 }
             }
-            
-            if groupHasErrors || groupHasEdits {
-                validationErrorVisibilityInternal = .visible
-                navigationAlertInfo = (false, {
-                    _ = discard()
-                })
+            if groupHasEdits && !ignoreEdits {
+                alertForUnsavedEditsIsPresented = true
             } else {
                 _ = discard()
             }
@@ -231,7 +230,10 @@ public extension FeatureFormView {
         /// <#Description#>
         @diagnose(DeprecatedDeclaration, as: ignored)
         public func save() {
-            if !groupHasErrors {
+            if groupHasErrors {
+                alertForValidationErrorsIsPresented = true
+                validationErrorVisibilityInternal = .visible
+            } else {
                 Task {
                     do {
                         onFormEditingEventAction?(.willSave)
@@ -247,9 +249,6 @@ public extension FeatureFormView {
                         onFormEditingEventAction?(.failed(error))
                     }
                 }
-            } else {
-                validationErrorVisibilityInternal = .visible
-                navigationAlertInfo = (false, {})
             }
         }
         

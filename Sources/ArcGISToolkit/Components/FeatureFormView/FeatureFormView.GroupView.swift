@@ -29,85 +29,9 @@ extension FeatureFormView {
                     menu
                 }
             }
-            // Alert for abandoning unsaved edits
-            .alert(
-                !featureFormViewModel.groupHasErrors ? discardEditsQuestion : validationErrors,
-                isPresented: alertForUnsavedEditsIsPresented,
-                actions: {
-                    if let (willNavigate, continuation) = featureFormViewModel.navigationAlertInfo {
-                        Button(role: .destructive) {
-                            continuation()
-                        } label: {
-                            Text.discardEdits
-                        }
-                        Button(role: .cancel) {
-                            alertForUnsavedEditsIsPresented.wrappedValue = false
-                        } label: {
-                            continueEditing
-                        }
-                    }
-                },
-                message: {
-                    if featureFormViewModel.groupHasErrors {
-                        Text(
-                            """
-                            You have ^[\(featureFormViewModel.totalErrorCount) errors](inflect: true) \
-                            that must be fixed before saving.
-                            """,
-                            bundle: .toolkitModule,
-                            comment: """
-                                A message explaining that the indicated number \
-                                of validation errors must be resolved before \
-                                saving the feature form.
-                                """
-                        )
-                    } else {
-                        Text(
-                            "Updates to the form will be lost.",
-                            bundle: .toolkitModule,
-                            comment: """
-                                A message explaining that unsaved edits will \
-                                be lost if the user continues to dismiss the \
-                                form without saving.
-                                """
-                        )
-                    }
-                }
-            )
-            // Alert for finish editing errors
-            .alert(
-                Text(
-                    "The form wasn't submitted",
-                    bundle: .toolkitModule,
-                    comment: "The title shown when the feature form failed to save."
-                ),
-                isPresented: alertForFinishEditingErrorsIsPresented,
-                actions: {},
-                message: {
-                    if let error = featureFormViewModel.finishEditingError {
-                        Text(
-                                """
-                                Finish editing failed.
-                                \(String(describing: error))
-                                """,
-                                bundle: .toolkitModule,
-                                comment: """
-                                    The message shown when a form could not be \
-                                    submitted with additional details.
-                                    """
-                        )
-                    } else {
-                        Text(
-                            "Finish editing failed.",
-                            bundle: .toolkitModule,
-                            comment: """
-                                The message shown when a form could not be \
-                                submitted.
-                                """
-                        )
-                    }
-                }
-            )
+            .saveErrorAlert(featureFormViewModel)
+            .unsavedEditsAlert(featureFormViewModel)
+            .validationErrorsAlert(featureFormViewModel)
         }
     }
 }
@@ -196,60 +120,116 @@ extension FeatureFormView.GroupView /* Group views */ {
     }
 }
 
-extension FeatureFormView.GroupView /* Helpers */ {
-    /// A Boolean value indicating whether the finish editing error alert is presented.
-    var alertForFinishEditingErrorsIsPresented: Binding<Bool> {
-        Binding {
-            featureFormViewModel.finishEditingError != nil
-        } set: { newIsPresented in
-            if !newIsPresented {
-                featureFormViewModel.finishEditingError = nil
+private extension View /* Alerts */ {
+    /// An alert for save errors.
+    func saveErrorAlert(_ model: FeatureFormView.Model) -> some View {
+        @Bindable var model = model
+        return alert(
+            LocalizedStringResource(
+                "The form wasn't submitted",
+                bundle: .toolkit,
+                comment: "The title shown when the feature form failed to save."
+            ),
+            item: $model.finishEditingError,
+            actions: { _ in },
+            message: { error in
+                Text(
+                    """
+                    Finish editing failed.
+                    \(String(describing: error))
+                    """,
+                    bundle: .toolkitModule,
+                    comment: """
+                        The message shown when a form could not be \
+                        submitted with additional details.
+                        """
+                )
             }
-        }
+        )
     }
     
-    /// A Boolean value indicating whether the unsaved edits alert is presented.
-    var alertForUnsavedEditsIsPresented: Binding<Bool> {
-        Binding {
-            featureFormViewModel.navigationAlertInfo != nil
-        } set: { newIsPresented in
-            if !newIsPresented {
-                featureFormViewModel.navigationAlertInfo = nil
+    /// An alert for abandoning unsaved edits.
+    func unsavedEditsAlert(_ model: FeatureFormView.Model) -> some View {
+        @Bindable var model = model
+        return alert(
+            Text(
+                "Discard Edits?",
+                bundle: .toolkitModule,
+                comment: """
+                    A question asking if the user would like to discard their \
+                    unsaved edits.
+                    """
+            ),
+            isPresented: $model.alertForUnsavedEditsIsPresented,
+            actions: {
+                Button(role: .destructive) {
+                    model.discard(ignoreEdits: true)
+                } label: {
+                    Text.discardEdits
+                }
+                Button(role: .cancel) {
+                    model.alertForUnsavedEditsIsPresented = false
+                } label: {
+                    Text.continueEditing
+                }
+            },
+            message: {
+                Text(
+                    "Edits will be lost.",
+                    bundle: .toolkitModule,
+                    comment: """
+                        A message explaining that unsaved edits will be lost \
+                        if the user continues to dismiss the component without \
+                        saving.
+                        """
+                )
             }
-        }
+        )
     }
     
-    // MARK: Localized text
-    
-    var continueEditing: Text {
+    /// An alert for validation errors.
+    func validationErrorsAlert(_ model: FeatureFormView.Model) -> some View {
+        @Bindable var model = model
+        return alert(
+            Text(
+                "Validation Errors",
+                bundle: .toolkitModule,
+                comment: """
+                    A label indicating the feature form has validation errors.
+                    """
+            ),
+            isPresented: $model.alertForValidationErrorsIsPresented,
+            actions: {
+                Button(role: .cancel) {
+                    model.alertForUnsavedEditsIsPresented = false
+                } label: {
+                    Text.continueEditing
+                }
+            },
+            message: {
+                Text(
+                    """
+                    You have ^[\(model.totalErrorCount) errors](inflect: true) \
+                    that must be fixed before saving.
+                    """,
+                    bundle: .toolkitModule,
+                    comment: """
+                        A message explaining that the indicated number \
+                        of validation errors must be resolved before \
+                        saving the feature form.
+                        """
+                )
+            }
+        )
+    }
+}
+
+private extension Text {
+    static var continueEditing: Self {
         .init(
             "Continue Editing",
             bundle: .toolkitModule,
             comment: "A label for a button to continue editing the feature form."
-        )
-    }
-    
-    var discardEditsQuestion: Text {
-        .init(
-            "Discard Edits?",
-            bundle: .toolkitModule,
-            comment: "A question asking if the user would like to discard their unsaved edits."
-        )
-    }
-    
-    var saveEdits: Text {
-        .init(
-            "Save Edits",
-            bundle: .toolkitModule,
-            comment: "A label for a button to save edits."
-        )
-    }
-    
-    var validationErrors: Text {
-        .init(
-            "Validation Errors",
-            bundle: .toolkitModule,
-            comment: "A label indicating the feature form has validation errors."
         )
     }
 }
