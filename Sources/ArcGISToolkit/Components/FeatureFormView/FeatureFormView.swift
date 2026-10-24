@@ -103,10 +103,10 @@ public struct FeatureFormView: View {
                 }
             }
             .task(id: model.formCount) {
-                await model.monitorEdits()
-            }
-            .task(id: model.formCount) {
-                await model.monitorErrors()
+                await withTaskGroup { group in
+                    group.addTask { await model.monitorEdits() }
+                    group.addTask { await model.monitorErrors() }
+                }
             }
     }
     
