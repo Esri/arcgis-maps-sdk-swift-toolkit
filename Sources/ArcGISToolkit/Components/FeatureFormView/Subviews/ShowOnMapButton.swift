@@ -25,7 +25,7 @@ extension FeatureFormView {
         var body: some View {
             if feature.geometry != nil {
                 Button {
-                    featureFormViewModel.onFormEditingEventAction?(.showOnMapRequested(feature))
+                    featureFormViewModel.reportEditingEvent(.showOnMapRequested(feature))
                 } label: {
                     Label {
                         Text(

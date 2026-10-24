@@ -36,9 +36,15 @@ public extension FeatureFormView {
         
         /// A Boolean value that determines whether the view is presented.
         var isPresented: Bool?
+        
         /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
+        ///
+        /// Supports deprecated modifier ``FeatureFormView/onFeatureFormChanged(perform:)``.
         var onFeatureFormChanged: ((FeatureForm) -> Void)?
+        
         /// The user-provided closure to perform when a ``EditingEvent`` occurs.
+        ///
+        /// Supports deprecated modifier ``FeatureFormView/onFormEditingEvent(perform:)``.
         var onFormEditingEventAction: ((EditingEvent) -> Void)?
         
         /// <#Description#>
@@ -213,11 +219,10 @@ public extension FeatureFormView {
                 Task {
                     do {
                         try await self.group.discardEdits()
-                        self.onFormEditingEventAction?(.discarded)
-                        self.onFormEditingEventAction?(.discardedEdits(willNavigate: false))
+                        self.reportEditingEvent(.discarded)
                     } catch {
                         self.finishEditingError = error
-                        self.onFormEditingEventAction?(.failed(error))
+                        self.reportEditingEvent(.failed(error))
                     }
                     if self.isPresented != nil {
                         self.isPresented = false
@@ -234,6 +239,33 @@ public extension FeatureFormView {
         /// <#Description#>
         var isSaving = false
         
+        /// <#Description#>
+        private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
+        
+        /// <#Description#>
+        public var editingEvents: AsyncStream<EditingEvent> {
+            editingEventStream
+        }
+        
+        /// <#Description#>
+        func reportEditingEvent(_ event: EditingEvent) {
+            func notifyBothChannels(_ event: EditingEvent) {
+                onFormEditingEventAction?(event)
+                editingEventStreamContinuation.yield(event)
+            }
+            
+            func notifyCallbackOnly(_ event: EditingEvent) {
+                onFormEditingEventAction?(event)
+            }
+            
+            switch event {
+            case .discardedEdits, .savedEdits:
+                // Only deliver deprecated editing events to the callback.
+                notifyCallbackOnly(event)
+            default:
+                notifyBothChannels(event)
+            }
+        }
         
         private var saveTask: Task<Void, Never>?
         
@@ -250,7 +282,7 @@ public extension FeatureFormView {
                 defer { isSaving = false }
                 
                 do {
-                    onFormEditingEventAction?(.willSave)
+                    reportEditingEvent(.willSave)
                     
                     let evaluationErrors = try await group.evaluateExpressions()
                     if let firstEvaluationError = evaluationErrors.first?.error {
@@ -262,16 +294,15 @@ public extension FeatureFormView {
                     guard !groupHasErrors else {
                         alertForValidationErrorsIsPresented = true
                         validationErrorVisibilityInternal = .visible
-                        onFormEditingEventAction?(.failed(SaveError.validationErrors))
+                        reportEditingEvent(.failed(SaveError.validationErrors))
                         return
                     }
                     
                     try await group.finishEditing()
-                    onFormEditingEventAction?(.saved)
-                    onFormEditingEventAction?(.savedEdits(willNavigate: false))
+                    reportEditingEvent(.saved)
                 } catch {
                     finishEditingError = error
-                    onFormEditingEventAction?(.failed(error))
+                    reportEditingEvent(.failed(error))
                 }
             }
         }

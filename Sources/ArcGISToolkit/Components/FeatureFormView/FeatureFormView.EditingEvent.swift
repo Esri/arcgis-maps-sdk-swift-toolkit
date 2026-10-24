@@ -18,7 +18,7 @@ public extension FeatureFormView {
     /// Represents events that occur during the form editing lifecycle. These events notify you
     /// when the user has performed an action within the component.
     /// - Since: 200.8
-    enum EditingEvent {
+    enum EditingEvent: @unchecked Sendable {
         /// Indicates that the user has discarded their edits.
         /// - Since: 300.2
         case discarded

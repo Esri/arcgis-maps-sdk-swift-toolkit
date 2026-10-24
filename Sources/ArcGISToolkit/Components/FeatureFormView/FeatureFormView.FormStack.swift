@@ -114,7 +114,7 @@ extension FeatureFormView {
             .id(formModel.featureForm.id)
             .onChange(of: formModel.navigationPath) {
                 if let presentedItem = formModel.navigationPath.last {
-                    featureFormViewModel.onFormEditingEventAction?(.navigationChanged(presentedItem))
+                    featureFormViewModel.reportEditingEvent(.navigationChanged(presentedItem))
                 }
             }
             .onChange(of: formModel.featureForm.id, initial: true) {

@@ -126,18 +126,58 @@ public struct FeatureFormView: View {
         .validationErrorsAlert(model)
     }
     
-    /// Coalesces the provided model or the legacy model created for the user into one property.
+    /// Coalesces the provided or legacy model into one property.
     var model: FeatureFormView.Model! {
         providedModel ?? legacyModel
     }
 }
 
-public extension FeatureFormView /* Modifiers */ {
+public extension FeatureFormView /* Deprecated */ {
+    /// Initializes a form view.
+    /// - Parameters:
+    ///   - root: The feature form defining the editing experience.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    /// - Since: 200.8
+    /// - Note: Deprecated at 300.2. Use ``FeatureFormView/init(model:isPresented:)`` instead.
+    @available(*, deprecated, renamed: "FeatureFormView.init(model:isPresented:)")
+    init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
+        _legacyModel = .init(wrappedValue: .init(forms: [root]))
+        self.isPresented = isPresented
+        self.providedModel = nil
+    }
+    
+    /// Sets the visibility of the save and discard buttons on the form.
+    /// - Parameter visibility: The visibility of the save and discard buttons.
+    /// - Since: 200.8
+    /// - Note: Deprecated at 300.2. The component no longer has a Discard button.
+    /// Use ``FeatureFormView/Model/saveButtonVisibility``.
+    @available(*, deprecated, message: "Use 'FeatureFormView.Model.saveButtonVisibility' instead.")
+    func editingButtons(_ visibility: Visibility) -> Self {
+        model.saveButtonVisibility = visibility
+        return self
+    }
+    
+    /// Sets whether navigation to forms for features associated via utility association form
+    /// elements is disabled.
+    ///
+    /// Use this modifier to conditionally disable navigation into other forms.
+    /// - Parameter disabled: A Boolean value that determines whether navigation is disabled.
+    /// Pass `true` to disable navigation; otherwise, pass `false`.
+    /// - Since: 200.8
+    /// - Note: Deprecated at 300.2.
+    @available(*, deprecated, message: "Disabling navigation is no longer supported.")
+    func navigationDisabled(_ disabled: Bool) -> Self {
+        return self
+    }
+    
     /// Sets a closure to perform when a new feature form is shown in the view.
     ///
     /// This can happen when navigating through the associations in a `UtilityAssociationsFormElement`.
     /// - Parameter action: The closure to perform when the new feature form is shown.
     /// - Since: 200.8
+    /// - Note: Deprecated at 300.2. Use ``FeatureFormView/Model/selectedForm`` to
+    /// know when no form is selected (the group menu is visible).
+    @available(*, deprecated, message: "Use 'FeatureFormView.Model.selectedForm' instead.")
     func onFeatureFormChanged(perform action: @escaping (FeatureForm) -> Void) -> Self {
         model.onFeatureFormChanged = action
         return self
@@ -146,6 +186,9 @@ public extension FeatureFormView /* Modifiers */ {
     /// Sets a closure to perform when a form editing event occurs.
     /// - Parameter action: The closure to perform when the form editing event occurs.
     /// - Since: 200.8
+    /// - Note: Deprecated at 300.2. Use ``FeatureFormView/Model/editingEvents`` to
+    /// monitor editing events.
+    @available(*, deprecated, message: "Use 'FeatureFormView.Model.editingEvents' instead.")
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
         model.onFormEditingEventAction = action
         return self
@@ -163,46 +206,11 @@ public extension FeatureFormView /* Modifiers */ {
     /// If the built-in "Save" button in the form footer has been hidden with
     /// ``FeatureFormView/editingButtons(_:)``, use this modifier to make any validation
     /// errors visible when the user attempts to save the form with a custom save button.
+    /// - Note: Deprecated at 300.2. Use ``FeatureFormView/Model/validationErrorVisibility`` to
+    /// override validation error visibility.
+    @available(*, deprecated, message: "Use 'FeatureFormView.Model.validationErrorVisibility' instead.")
     func validationErrors(_ visibility: ValidationErrorVisibility) -> Self {
         model.validationErrorVisibility = visibility
-        return self
-    }
-}
-
-public extension FeatureFormView /* Deprecated */ {
-    /// Initializes a form view.
-    /// - Parameters:
-    ///   - root: The feature form defining the editing experience.
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    /// - Since: 200.8
-    /// - Note: Deprecated at 300.2.
-    @available(*, deprecated, renamed: "FeatureFormView.init(model:isPresented:)")
-    init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
-        _legacyModel = .init(wrappedValue: .init(forms: [root]))
-        self.isPresented = isPresented
-        self.providedModel = nil
-    }
-    
-    /// Sets the visibility of the save and discard buttons on the form.
-    /// - Parameter visibility: The visibility of the save buttons.
-    /// - Since: 200.8
-    /// - Note: Deprecated at 300.2.
-    @available(*, deprecated, message: "Use 'FeatureFormView.Model.saveButtonVisibility' instead.")
-    func editingButtons(_ visibility: Visibility) -> Self {
-        model.saveButtonVisibility = visibility
-        return self
-    }
-    
-    /// Sets whether navigation to forms for features associated via utility association form
-    /// elements is disabled.
-    ///
-    /// Use this modifier to conditionally disable navigation into other forms.
-    /// - Parameter disabled: A Boolean value that determines whether navigation is disabled.
-    /// Pass `true` to disable navigation; otherwise, pass `false`.
-    /// - Since: 200.8
-    /// - Note: Deprecated at 300.2.
-    @available(*, deprecated, message: "Disabling navigation is no longer supported.")
-    func navigationDisabled(_ disabled: Bool) -> Self {
         return self
     }
 }

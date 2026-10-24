@@ -17,8 +17,6 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FeatureFormExampleView: View {
-    /// The active form as reported by the Feature Form View
-    @State private var activeForm: FeatureForm?
     /// A Boolean value indicating whether general form workflow errors are presented.
     @State private var alertIsPresented = false
     /// Tables with local edits that need to be applied.
@@ -29,6 +27,8 @@ struct FeatureFormExampleView: View {
     @State private var featureFormViewIsPresented = false
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
+    /// <#Description#>
+    @State private var lastEditingEvent: FeatureFormView.EditingEvent?
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
     /// <#Description#>
@@ -55,6 +55,11 @@ struct FeatureFormExampleView: View {
                                 Text("\(selectedForm.title) - \(selectedForm.id)")
                             } else {
                                 Text("None")
+                            }
+                        }
+                        if let lastEditingEvent {
+                            LabeledContent("Status") {
+                                Text("\(lastEditingEvent)")
                             }
                         }
                         if model.formCount > 0 {
@@ -97,7 +102,7 @@ struct FeatureFormExampleView: View {
                 .sheet(isPresented: $featureFormViewIsPresented) {
 //                    model.reset()
                 } content: {
-                    featureFormView
+                    FeatureFormView(model: model, isPresented: $featureFormViewIsPresented)
                         .frame(idealWidth: 350)
                         .presentationBackgroundInteraction(.enabled(upThrough: .large))
                         .presentationDetents([.large, .medium])
@@ -108,6 +113,12 @@ struct FeatureFormExampleView: View {
                     guard !editsAreBeingApplied,
                           let identifyScreenPoint else { return }
                     await makeFeatureForm(point: identifyScreenPoint, mapView: mapView)
+                }
+                .task {
+                    for await event in model.editingEvents {
+                        lastEditingEvent = event
+                        print("Event stream:", event)
+                    }
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -196,22 +207,6 @@ extension FeatureFormExampleView {
     }
     
     // MARK: Properties
-    
-    /// The feature form view shown in the sheet over the map.
-    private var featureFormView: some View {
-        return FeatureFormView(model: model, isPresented: $featureFormViewIsPresented)
-            .onFeatureFormChanged { form in
-                activeForm = form
-            }
-            .onFormEditingEvent { newAction in
-                print(newAction)
-//                if case .savedEdits = editingEvent,
-//                   let table = featureForm.feature.table as? ServiceFeatureTable,
-//                   !editedTables.contains(where: { $0 === table }) {
-//                    editedTables.append(table)
-//                }
-            }
-    }
     
     /// The button used to dismiss the submission error alert.
     private var okButton: some View {
