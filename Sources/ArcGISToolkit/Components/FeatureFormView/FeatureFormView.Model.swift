@@ -146,7 +146,7 @@ public extension FeatureFormView {
         var alertForValidationErrorsIsPresented = false
         
         /// Form view models, keyed by feature global IDs.
-        private var formViewModels: [FormID: FeatureFormView.FormModel] = [:]
+        private var formModels: [FormID: FeatureFormView.FormModel] = [:]
         
         /// The internally managed validation error visibility.
         private var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
@@ -322,11 +322,11 @@ public extension FeatureFormView {
         }
         
         func formModel(for globalID: FormID) -> FeatureFormView.FormModel? {
-            if let model = formViewModels[globalID] {
+            if let model = formModels[globalID] {
                 return model
             } else if let form = form(for: globalID) {
                 let newModel = FeatureFormView.FormModel(featureForm: form)
-                formViewModels[globalID] = newModel
+                formModels[globalID] = newModel
                 return newModel
             } else {
                 return nil
