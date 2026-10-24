@@ -26,14 +26,16 @@ struct ToolPicker: View {
             bundle: .toolkit,
             comment: "A label for a control to pick a geometry editor tool."
         )
+        let availableTools = model.availableTools
         Menu(title, systemImage: model.selectedTool.systemImage) {
             Picker(title, selection: $model.selectedTool) {
-                ForEach(model.selectableTools, id: \.self) { tool in
+                ForEach(availableTools, id: \.self) { tool in
                     Label(tool.label, systemImage: tool.systemImage)
                 }
             }
         }
         .accessibilityIdentifier("Tool")
+        .disabled(availableTools.count < 2)
         .animation(.default, value: model.selectedTool)
     }
 }

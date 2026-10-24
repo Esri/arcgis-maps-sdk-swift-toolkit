@@ -39,15 +39,21 @@ private struct FeatureEditorModifier: ViewModifier {
     var inspectorIsPresented: Binding<Bool> {
         Binding {
             switch model.state {
-            case .adding, .editing: true
+            case .adding:
+                model.featureAddingModel.geometryConstructionState != .editing
+            case .editing: true
             case .stopped: false
             }
         } set: { newValue in
             guard !newValue else { return }
+            let featureAddingModel = model.featureAddingModel
             switch model.state {
-            case .adding: model.featureAddingModel.stop()
-            case .editing: model.stopEditing()
-            case .stopped: break
+            case .adding where featureAddingModel.selectedLayerTemplate == nil
+                && featureAddingModel.featureForm == nil:
+                model.featureAddingModel.stop()
+            case .editing:
+                model.stopEditing()
+            default: break
             }
         }
     }
@@ -60,10 +66,7 @@ private struct FeatureEditorModifier: ViewModifier {
                 VStack(spacing: 0) {
                     switch model.state {
                     case .adding:
-                        NavigationStack {
-                            FeatureEditorTemplatePicker()
-                                .environment(model.featureAddingModel)
-                        }
+                        FeatureAddingInspector(model: model.featureAddingModel)
                     case .editing:
                         switch model.loadResult {
                         case .success:

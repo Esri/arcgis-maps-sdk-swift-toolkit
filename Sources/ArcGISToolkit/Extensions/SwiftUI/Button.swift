@@ -45,6 +45,18 @@ extension Button<Text> {
         }
     }
     
+    /// Returns a button with the title "Discard" and the given action.
+    /// - Parameter action: The action to perform when the user triggers the
+    /// button.
+    /// - Returns: A button.
+    static nonisolated func discard(action: @escaping @MainActor () -> Void) -> Self {
+        return .init(
+            LocalizedStringResource.discard,
+            role: .destructive,
+            action: action
+        )
+    }
+    
     /// Returns a button with the title "Done" and the given action.
     /// - Parameter action: The action to perform when the user triggers the
     /// button.

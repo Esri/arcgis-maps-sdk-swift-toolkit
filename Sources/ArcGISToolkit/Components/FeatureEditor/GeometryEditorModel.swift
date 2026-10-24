@@ -31,17 +31,24 @@ final class GeometryEditorModel {
     /// undo.
     private(set) var canUndo = false
     /// The geometry editor's current geometry.
-    private(set) var geometry: Geometry? {
-        didSet {
-            updateSelectableTools()
-        }
-    }
+    private(set) var geometry: Geometry?
     /// A Boolean value indicating whether the geometry editor has started.
     private(set) var isStarted = false
     /// The geometry that was used to start the current editing session.
     private(set) var initialGeometry: Geometry?
     /// The geometry type that was used to start the current editing session.
     private var geometryType: Geometry.Type?
+    
+    /// A Boolean value indicating whether the geometry has edits.
+    var hasGeometryEdits: Bool {
+        guard isStarted,
+              let currentGeometry = geometry,
+              currentGeometry != initialGeometry,
+              initialGeometry != nil || !currentGeometry.isEmpty else {
+            return false
+        }
+        return true
+    }
     
     /// Monitors geometry editor streams and updates the corresponding
     /// properties.
@@ -72,6 +79,7 @@ final class GeometryEditorModel {
         initialGeometry = geometry
         geometryType = nil
         geometryEditor.start(withInitial: geometry)
+        didStartGeometryEditor()
     }
     
     /// Starts the geometry editor with a geometry type.
@@ -80,6 +88,7 @@ final class GeometryEditorModel {
         initialGeometry = nil
         self.geometryType = geometryType
         geometryEditor.start(withType: geometryType)
+        didStartGeometryEditor()
     }
     
     /// Restarts the geometry editor if it is started.
@@ -93,6 +102,14 @@ final class GeometryEditorModel {
         }
     }
     
+    /// Called after the geometry editor has been started.
+    private func didStartGeometryEditor() {
+        let defaultTool = defaultConstructionTool ?? availableTools.first ?? .vertex
+        if selectedTool != defaultTool {
+            selectedTool = defaultTool
+        }
+    }
+    
     /// Stops the geometry editor and resets the session state.
     func stop() {
         geometryEditor.stop()
@@ -101,6 +118,12 @@ final class GeometryEditorModel {
         isStarted = false
         initialGeometry = nil
         geometryType = nil
+        if constructionTools != nil {
+            constructionTools = nil
+        }
+        if defaultConstructionTool != nil {
+            defaultConstructionTool = nil
+        }
         if snapRules != nil {
             snapRules = nil
         }
@@ -151,8 +174,6 @@ final class GeometryEditorModel {
     
     // MARK: Tools
     
-    /// The tools that are currently able to be selected.
-    private(set) var selectableTools = FeatureEditorGeometryTool.allCases
     /// The currently selected tool.
     var selectedTool: FeatureEditorGeometryTool = .vertex {
         didSet {
@@ -160,22 +181,34 @@ final class GeometryEditorModel {
         }
     }
     
-    /// Updates the tools available for the current geometry.
-    private func updateSelectableTools() {
-        selectableTools = if let geometry, case let geometryType = type(of: geometry) {
-            FeatureEditorGeometryTool.allCases
-                .filter { tool in
-                    tool.supportedGeometryTypes.contains(where: { $0 == geometryType })
-                }
+    /// The tools to use when constructing a geometry.
+    private var constructionTools: [FeatureEditorGeometryTool]?
+    /// The default tool when constructing a geometry.
+    private var defaultConstructionTool: FeatureEditorGeometryTool?
+    
+    /// Sets the construction tools and selected tool.
+    /// - Parameters:
+    ///   - constructionTools: The tools to use when constructing a geometry.
+    ///   - default: The default construction tool..
+    func setConstructionTools(
+        _ constructionTools: [FeatureEditorGeometryTool],
+        default: FeatureEditorGeometryTool?
+    ) {
+        self.constructionTools = constructionTools
+        self.defaultConstructionTool = `default`
+    }
+    
+    /// The tools that are currently able to be selected.
+    var availableTools: [FeatureEditorGeometryTool] {
+        if let constructionTools {
+            constructionTools
+        } else if let geometry, case let geometryType = type(of: geometry) {
+            FeatureEditorGeometryTool.allCases.filter { tool in
+                tool.supportedGeometryTypes
+                    .contains(where: { $0 == geometryType })
+            }
         } else {
             FeatureEditorGeometryTool.allCases
         }
-        
-        guard !selectableTools.contains(selectedTool),
-              let firstValidTool = selectableTools.first else {
-            return
-        }
-        
-        selectedTool = firstValidTool
     }
 }

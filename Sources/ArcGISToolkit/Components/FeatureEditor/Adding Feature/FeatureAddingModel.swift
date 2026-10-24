@@ -21,6 +21,10 @@ import Observation
 final class FeatureAddingModel {
     /// The layer template groups from the map.
     private(set) var groups: [LayerTemplateGroup] = []
+    /// The currently selected layer template.
+    var selectedLayerTemplate: LayerTemplate?
+    /// The form for the newly added feature.
+    private(set) var featureForm: FeatureForm?
     /// The feature editor model that owns this model.
     private unowned let featureEditorModel: FeatureEditorModel
     
@@ -45,7 +49,176 @@ final class FeatureAddingModel {
     
     /// Stops adding features.
     func stop() {
+        stopConstruction()
+        if featureForm != nil {
+            featureForm = nil
+        }
         featureEditorModel.stopAddingFeatures()
+    }
+    
+    // MARK: Geometry Construction
+    
+    /// The kinds of errors that can be thrown when geometry
+    /// construction fails.
+    enum GeometryConstructionError: Error {
+        case templateUnavailable(any Error)
+        case noSupportedTools
+        case featureCreationFailed(any Error)
+    }
+    
+    /// The possible states of geometry construction for the selected template.
+    enum GeometryConstructionState: Equatable {
+        case stopped
+        case loading
+        case editing
+        case saving(Geometry)
+        case cancelling
+        case failed(GeometryConstructionError)
+    }
+    
+    /// The state of geometry construction.
+    private(set) var geometryConstructionState: GeometryConstructionState = .stopped
+    
+    /// The geometry editor model used for geometry editing.
+    private var geometryEditorModel: GeometryEditorModel {
+        featureEditorModel.geometryEditorModel
+    }
+    
+    /// Starts geometry construction for a new feature using the given layer
+    /// template.
+    /// - Parameter layerTemplate: The template for the new feature.
+    /// - Precondition: `geometryConstructionState == .stopped`
+    func startConstruction(using layerTemplate: LayerTemplate) async {
+        precondition(geometryConstructionState == .stopped)
+        do throws(GeometryConstructionError) {
+            if layerTemplate.featureTable.hasGeometry {
+                geometryConstructionState = .loading
+                
+                let constructionToolKinds: [GeometryConstructionTool.Kind]
+                do {
+                    constructionToolKinds = try await layerTemplate.constructionToolKinds
+                } catch {
+                    throw .templateUnavailable(error)
+                }
+                
+                if constructionToolKinds.isEmpty {
+                    throw .noSupportedTools
+                }
+                
+                let geometryEditorModel = featureEditorModel.geometryEditorModel
+                
+                let tools = constructionToolKinds.compactMap(FeatureEditorGeometryTool.init)
+                let defaultConstructionTool = layerTemplate.defaultConstructionTool?.kind
+                geometryEditorModel.setConstructionTools(
+                    tools,
+                    default: defaultConstructionTool
+                        .flatMap(FeatureEditorGeometryTool.init)
+                )
+                
+                geometryEditorModel.start(withType: layerTemplate.featureTable.geometryType!)
+                
+                geometryConstructionState = .editing
+            } else {
+                featureForm = try await makeFeatureForm(layerTemplate: layerTemplate)
+            }
+        } catch {
+            geometryConstructionState = .failed(error)
+        }
+    }
+    
+    /// Saves the constructed geometry.
+    /// - Precondition: `geometryConstructionState == .editing`
+    func saveConstructedGeometry() {
+        precondition(geometryConstructionState == .editing)
+        guard let geometry = geometryEditorModel.geometryEditor.geometry else {
+            preconditionFailure("No constructed geometry to save")
+        }
+        geometryEditorModel.stop()
+        geometryConstructionState = .saving(geometry)
+    }
+    
+    /// Saves the constructed geometry to a feature form with the given layer
+    /// template and returns the model to a stopped state.
+    /// - Parameters:
+    ///   - geometry: The geometry to save.
+    ///   - layerTemplate: The layer template for the new feature.
+    func finishSavingConstruction(
+        _ geometry: Geometry,
+        layerTemplate: LayerTemplate
+    ) async {
+        do {
+            featureForm = try await makeFeatureForm(
+                layerTemplate: layerTemplate,
+                geometry: geometry
+            )
+            geometryConstructionState = .stopped
+        } catch {
+            geometryConstructionState = .failed(error)
+        }
+    }
+    
+    /// Cancels constructing a geometry.
+    /// - Precondition: `geometryConstructionState == .editing`
+    func cancelConstruction() {
+        precondition(geometryConstructionState == .editing)
+        geometryEditorModel.stop()
+        geometryConstructionState = .cancelling
+    }
+    
+    /// Returns the model to a stopped state.
+    func stopConstruction() {
+        guard geometryConstructionState != .stopped else { return }
+        geometryConstructionState = .stopped
+    }
+}
+
+private extension FeatureAddingModel {
+    func makeFeatureForm(
+        layerTemplate: LayerTemplate,
+        geometry: Geometry? = nil
+    ) async throws(GeometryConstructionError) -> FeatureForm {
+        do {
+            let featureSet = try await layerTemplate
+                .makeFeatures(geometry: geometry)
+            try await layerTemplate.sharedTemplate.source
+                .addFeatures(using: featureSet)
+            return FeatureForm(
+                // A feature set will always have at least one feature.
+                feature: featureSet.features.first!
+            )
+        } catch {
+            throw .featureCreationFailed(error)
+        }
+    }
+}
+
+extension FeatureAddingModel.GeometryConstructionError: Equatable {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return switch (lhs, rhs) {
+        case (.noSupportedTools, .noSupportedTools):
+            true
+        case (.templateUnavailable(let lhsError), .templateUnavailable(let rhsError)),
+            (.featureCreationFailed(let lhsError), .featureCreationFailed(let rhsError)):
+            // Not perfect, but good enough. The state shouldn't ever go from
+            // 'featureCreationFailed' to 'featureCreationFailed'.
+            String(describing: lhsError) == String(describing: rhsError)
+        default:
+            false
+        }
+    }
+}
+
+private extension FeatureEditorGeometryTool {
+    init?(kind: GeometryConstructionTool.Kind) {
+        let tool: Self? = switch kind {
+        case .freehand: .freehand
+        case .ellipse: .shape(kind: .ellipse)
+        case .rectangle: .shape(kind: .rectangle)
+        case .line, .multipoint, .point, .polygon: .vertex
+        default: nil
+        }
+        guard let tool else { return nil }
+        self = tool
     }
 }
 
@@ -131,11 +304,11 @@ private extension Map {
                 let sharedTemplates = try await sharedTemplateSource
                     .querySharedTemplates(using: parameters)
                 for (layerID, sharedTemplates) in sharedTemplates {
-                    guard let table = featureTablesByLayerID[layerID] else { continue }
+                    guard let featureTable = featureTablesByLayerID[layerID] else { continue }
                     let group = LayerTemplateGroup(
-                        name: table.displayName,
+                        name: featureTable.displayName,
                         layerTemplates: sharedTemplates.lazy
-                            .map { .init(table: table, sharedTemplate: $0) }
+                            .map { .init(featureTable: featureTable, sharedTemplate: $0) }
                             .sorted(by: { $0.name < $1.name })
                     )
                     layerTemplateGroups.append(group)
