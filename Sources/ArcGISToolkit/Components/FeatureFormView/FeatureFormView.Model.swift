@@ -321,6 +321,9 @@ public extension FeatureFormView {
             group.forms.first { $0.id == id } ?? nil
         }
         
+        /// <#Description#>
+        /// - Parameter globalID: <#globalID description#>
+        /// - Returns: <#description#>
         func formModel(for globalID: FormID) -> FeatureFormView.FormModel? {
             if let model = formModels[globalID] {
                 return model
