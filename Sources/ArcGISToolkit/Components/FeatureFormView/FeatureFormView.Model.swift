@@ -125,7 +125,7 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        var selectedForm: FeatureForm? {
+        public var selectedForm: FeatureForm? {
             guard let selectedID else { return nil }
             return form(for: selectedID) ?? nil
         }

@@ -50,9 +50,11 @@ struct FeatureFormExampleView: View {
                 }
                 .inspector(isPresented: .constant(true)) {
                     List {
-                        if let activeForm {
-                            LabeledContent("Active Form") {
-                                Text("\(activeForm.title) - \(activeForm.id)")
+                        LabeledContent("Selected Form") {
+                            if let selectedForm = model.selectedForm {
+                                Text("\(selectedForm.title) - \(selectedForm.id)")
+                            } else {
+                                Text("None")
                             }
                         }
                         if model.formCount > 0 {
