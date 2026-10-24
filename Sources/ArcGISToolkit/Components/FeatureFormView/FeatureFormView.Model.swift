@@ -230,24 +230,27 @@ public extension FeatureFormView {
         /// <#Description#>
         @diagnose(DeprecatedDeclaration, as: ignored)
         public func save() {
-            if groupHasErrors {
-                alertForValidationErrorsIsPresented = true
-                validationErrorVisibilityInternal = .visible
-            } else {
-                Task {
-                    do {
-                        onFormEditingEventAction?(.willSave)
-                        let evaluationErrors = try await group.evaluateExpressions()
-                        if let firstEvaluationError = evaluationErrors.first?.error {
-                            throw firstEvaluationError
-                        }
-                        try await group.finishEditing()
-                        onFormEditingEventAction?(.saved)
-                        onFormEditingEventAction?(.savedEdits(willNavigate: false))
-                    } catch {
-                        finishEditingError = error
-                        onFormEditingEventAction?(.failed(error))
+            Task {
+                do {
+                    onFormEditingEventAction?(.willSave)
+                    
+                    let evaluationErrors = try await group.evaluateExpressions()
+                    if let firstEvaluationError = evaluationErrors.first?.error {
+                        throw firstEvaluationError
                     }
+                    
+                    guard !groupHasErrors else {
+                        alertForValidationErrorsIsPresented = true
+                        validationErrorVisibilityInternal = .visible
+                        return
+                    }
+                    
+                    try await group.finishEditing()
+                    onFormEditingEventAction?(.saved)
+                    onFormEditingEventAction?(.savedEdits(willNavigate: false))
+                } catch {
+                    finishEditingError = error
+                    onFormEditingEventAction?(.failed(error))
                 }
             }
         }
