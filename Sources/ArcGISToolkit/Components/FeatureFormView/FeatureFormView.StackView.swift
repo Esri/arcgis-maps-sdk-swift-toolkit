@@ -110,8 +110,8 @@ extension FeatureFormView {
                         }
                     }
             }
-            .animation(.default, value: ObjectIdentifier(formModel.featureForm))
             .environment(formModel)
+            .id(formModel.featureForm.id)
             .onChange(of: formModel.navigationPath) {
                 if let presentedItem = formModel.navigationPath.last {
                     featureFormViewModel.onFormEditingEventAction?(.navigationChanged(presentedItem))
