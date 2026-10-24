@@ -24,6 +24,8 @@ public extension FeatureFormView {
     }
 }
 
+typealias FormID = ObjectIdentifier
+
 public extension FeatureFormView {
     /// A model for the ``FeatureFormView`` component.
     /// - Since: 300.2
@@ -82,7 +84,7 @@ public extension FeatureFormView {
         public var formCount: Int
         
         /// <#Description#>
-        private(set) var selectedID: UUID? {
+        private(set) var selectedID: FormID? {
             didSet {
                 guard let selectedForm else { return }
                 onFeatureFormChanged?(selectedForm)
@@ -92,9 +94,8 @@ public extension FeatureFormView {
         /// <#Description#>
         var activeForms: [FeatureForm] {
             return ids.compactMap { id in
-                let form = form(for: id)
-                guard let globalID = form?.feature.globalID else { return nil }
-                if (!browsedIDs.contains(globalID) || formsWithEdits[globalID, default: false]) {
+                guard let form = form(for: id) else { return nil }
+                if (!browsedIDs.contains(id) || formsWithEdits[id, default: false]) {
                     return form
                 } else {
                     return nil
@@ -104,7 +105,7 @@ public extension FeatureFormView {
         
         /// The global IDs of the underlying feature for forms that have been opened via utility
         /// associations.
-        var browsedIDs = Set<UUID>()
+        var browsedIDs = Set<FormID>()
         
         /// <#Description#>
         var selectedIndex: Int {
@@ -120,8 +121,13 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        public var ids: [UUID] {
-            group.forms.compactMap { $0.feature.globalID }
+        var ids: [FormID] {
+            group.forms.compactMap { $0.id }
+        }
+        
+        /// <#Description#>
+        public var forms: [FeatureForm] {
+            group.forms
         }
         
         /// <#Description#>
@@ -140,13 +146,13 @@ public extension FeatureFormView {
         var alertForValidationErrorsIsPresented = false
         
         /// Form view models, keyed by feature global IDs.
-        private var formViewModels: [UUID: FeatureFormView.FormModel] = [:]
+        private var formViewModels: [FormID: FeatureFormView.FormModel] = [:]
         
         /// The internally managed validation error visibility.
         private var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
         
         /// <#Description#>
-        private var backStack = [UUID]()
+        private var backStack = [FormID]()
         
         /// <#Description#>
         /// - Parameters:
@@ -155,10 +161,7 @@ public extension FeatureFormView {
         ///   - recordAsBrowsed: <#recordAsBrowsed description#>
         func add(form: FeatureForm, select: Bool = false, recordAsBrowsed: Bool = false) {
             defer { formCount = group.forms.count }
-            guard let id = form.feature.globalID else {
-                Logger.featureFormView.warning("The feature cannot be added because the its global ID is not available.")
-                return
-            }
+            let id = form.id
             defer {
                 // Select the form, if directed, or if not in list style and no
                 // form is already selected, regardless of whether it's already
@@ -168,15 +171,7 @@ public extension FeatureFormView {
                 }
             }
             guard !ids.contains(id) else {
-                let id: any CustomStringConvertible
-                if let objectID = form.feature.objectID {
-                    id = objectID
-                } else if let globalID = form.feature.globalID {
-                    id = globalID
-                } else {
-                    id = "?"
-                }
-                Logger.featureFormView.info("Feature \(id.description) is already added.")
+                Logger.featureFormView.info("Feature \(id.debugDescription) is already added.")
                 return
             }
             try? group.addForm(form)
@@ -192,14 +187,30 @@ public extension FeatureFormView {
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
-        var geometryStatus: [UUID : GeometryValidity?] = [:]
+        /// <#Description#>
+        var geometryStatus: [FormID : GeometryValidity?] = [:]
         
+        /// <#Description#>
+        /// - Parameters:
+        ///   - feature: <#feature description#>
+        ///   - status: <#status description#>
         public func setGeometryEditStatus(
             for feature: ArcGISFeature,
             status: GeometryValidity?
         ) {
-            guard let id = feature.globalID else { return }
-            geometryStatus[id] = status
+            guard let form = group.forms.first(where: { form in
+                form.feature.globalID == feature.globalID
+                && form.feature.objectID == feature.objectID
+            }) else {
+                Logger.featureFormView.error("""
+                    The geometry status cannot be set for the provided feature \
+                    as it was not found in the component's form group.
+                    """
+                )
+                return
+            }
+            
+            geometryStatus[form.id] = status
         }
         
         /// <#Description#>
@@ -291,9 +302,9 @@ public extension FeatureFormView {
                 }
             }
             backStack.removeAll { id in
-                form.feature.globalID == id
+                form.id == id
             }
-            if selectedID == form.feature.globalID, canGoBack {
+            if selectedID == form.id, canGoBack {
                 let top = backStack.removeFirst()
                 if let form = self.form(for: top) {
                     select(form: form)
@@ -305,11 +316,11 @@ public extension FeatureFormView {
         /// <#Description#>
         /// - Parameter id: <#id description#>
         /// - Returns: <#description#>
-        public func form(for id: UUID) -> FeatureForm? {
-            group.forms.first { $0.feature.globalID == id } ?? nil
+        func form(for id: FormID) -> FeatureForm? {
+            group.forms.first { $0.id == id } ?? nil
         }
         
-        func formModel(for globalID: UUID) -> FeatureFormView.FormModel? {
+        func formModel(for globalID: FormID) -> FeatureFormView.FormModel? {
             if let model = formViewModels[globalID] {
                 return model
             } else if let form = form(for: globalID) {
@@ -326,21 +337,21 @@ public extension FeatureFormView {
         ///   - form: <#feature description#>
         ///   - recordNavigation: <#recordNavigation description#>
         public func select(form: FeatureForm, recordNavigation: Bool = true, clearHistory: Bool = false) {
-            guard form.feature.globalID != selectedID else { return }
+            guard form.id != selectedID else { return }
             if recordNavigation, let selectedID {
                 backStack.insert(selectedID, at: 0)
             }
             if clearHistory {
                 backStack.removeAll()
             }
-            selectedID = form.feature.globalID
+            selectedID = form.id
         }
         
         /// <#Description#>
-        private(set) var formsWithEdits = [UUID: Bool]()
+        private(set) var formsWithEdits = [FormID: Bool]()
         
         /// <#Description#>
-        private(set) var formsWithErrors = [UUID: Int]()
+        private(set) var formsWithErrors = [FormID: Int]()
         
         var selectedModel: FormModel? {
             guard let selectedID else { return nil }
@@ -410,13 +421,13 @@ public extension FeatureFormView {
             geometryStatus.values.count(where: { $0 == .invalid })
         }
         
-        func editStatusForForm(featureID id: UUID) -> Bool {
+        func editStatusForForm(featureID id: FormID) -> Bool {
             formsWithEdits[id, default: false]
             ||
             (geometryStatus[id, default: .none] != .none)
         }
         
-        func totalErrorCountForForm(featureID id: UUID) -> Int {
+        func totalErrorCountForForm(featureID id: FormID) -> Int {
             formsWithErrors[id, default: 0]
             +
             (geometryStatus[id, default: .none] == .invalid ? 1 : 0)
@@ -441,10 +452,8 @@ public extension FeatureFormView {
                 for form in group.forms {
                     taskGroup.addTask { @Sendable in
                         for await hasEdits in form.$hasEdits {
-                            if let globalID = form.feature.globalID {
-                                await MainActor.run {
-                                    self.formsWithEdits[globalID] = hasEdits
-                                }
+                            await MainActor.run {
+                                self.formsWithEdits[form.id] = hasEdits
                             }
                         }
                     }
@@ -459,10 +468,8 @@ public extension FeatureFormView {
                 for form in group.forms {
                     taskGroup.addTask { @Sendable in
                         for await errors in form.$elementValidationErrors {
-                            if let globalID = form.feature.globalID {
-                                await MainActor.run {
-                                    self.formsWithErrors[globalID] = errors.count
-                                }
+                            await MainActor.run {
+                                self.formsWithErrors[form.id] = errors.count
                             }
                         }
                     }

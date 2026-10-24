@@ -40,7 +40,7 @@ extension FeatureFormView.GroupView /* Group views */ {
     /// <#Description#>
     /// - Parameter id: <#id description#>
     @ViewBuilder
-    func form(id: UUID) -> some View {
+    func form(id: FormID) -> some View {
         if let stackModel = featureFormViewModel.formModel(for: id) {
             FeatureFormView.StackView(model: stackModel)
         }
@@ -70,13 +70,13 @@ extension FeatureFormView.GroupView /* Group views */ {
                                 HStack {
                                     Text(form.title)
                                     Spacer()
-                                    if featureFormViewModel.editStatusForForm(featureID: form.feature.globalID!)
+                                    if featureFormViewModel.editStatusForForm(featureID: form.id)
                                         &&
                                         (
                                             !featureFormViewModel.allValidationErrorsAreVisible
                                             || (
                                                 featureFormViewModel.allValidationErrorsAreVisible
-                                                && featureFormViewModel.totalErrorCountForForm(featureID: form.feature.globalID!) == 0
+                                                && featureFormViewModel.totalErrorCountForForm(featureID: form.id) == 0
                                             )
                                         )
                                     {
@@ -100,7 +100,7 @@ extension FeatureFormView.GroupView /* Group views */ {
                             }
                             .badge(
                                 featureFormViewModel.allValidationErrorsAreVisible
-                                ? featureFormViewModel.totalErrorCountForForm(featureID: form.feature.globalID!)
+                                ? featureFormViewModel.totalErrorCountForForm(featureID: form.id)
                                 : 0
                             )
                             .badgeProminence(.increased)
