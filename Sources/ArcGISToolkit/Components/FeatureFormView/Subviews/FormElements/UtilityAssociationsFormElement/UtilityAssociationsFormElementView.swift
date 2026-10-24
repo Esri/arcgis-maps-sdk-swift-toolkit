@@ -43,7 +43,6 @@ extension FeatureFormView {
                             element: element,
                             filter: result.filter
                         )
-                        .environment(formModel)
                     }
                 case .failure(let error):
                     Text.errorFetchingFilterResults(error)
