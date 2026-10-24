@@ -54,8 +54,3 @@ struct FeatureAddingInspector: View {
         .animation(.default, value: model.featureForm?.id)
     }
 }
-
-private extension FeatureForm {
-    /// The stable identifier of this feature form.
-    var id: ObjectIdentifier { .init(self) }
-}
