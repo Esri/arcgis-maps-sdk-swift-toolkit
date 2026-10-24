@@ -160,9 +160,9 @@ public extension FeatureFormView {
         ///   - select: <#select description#>
         ///   - recordAsBrowsed: <#recordAsBrowsed description#>
         func add(form: FeatureForm, select: Bool = false, recordAsBrowsed: Bool = false) {
-            defer { formCount = group.forms.count }
-            let id = form.id
             defer {
+                formCount = group.forms.count
+                
                 // Select the form, if directed, or if not in list style and no
                 // form is already selected, regardless of whether it's already
                 // in the collection of managed forms.
@@ -170,6 +170,7 @@ public extension FeatureFormView {
                     self.select(form: form)
                 }
             }
+            let id = form.id
             guard !ids.contains(id) else {
                 Logger.featureFormView.info("Feature \(id.debugDescription) is already added.")
                 return
