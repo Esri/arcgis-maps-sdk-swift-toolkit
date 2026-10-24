@@ -107,7 +107,9 @@ private extension FeatureFormView.Toolbar /* Items */ {
     /// `.multicolor` is applied consistently in a NavigationStack toolbar.
     var groupMenuButton: some View {
         Button {
-            featureFormViewModel.clearSelection(clearBackStack: false)
+            withAnimation {
+                featureFormViewModel.clearSelection(clearBackStack: false)
+            }
         } label: {
             Image(systemName: featureFormViewModel.groupHasEdits ? "tray.badge" : "tray")
                 .symbolEffect(.bounce, value: delayedMultiFormModeActive)

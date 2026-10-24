@@ -54,7 +54,9 @@ extension FeatureFormView.GroupMenu /* Group views */ {
             ForEach(featureFormViewModel.activeForms, id: \.feature.globalID) { form in
                 LabeledContent {
                     Button {
-                        featureFormViewModel.select(form: form, clearHistory: true)
+                        withAnimation {
+                            featureFormViewModel.select(form: form, clearHistory: true)
+                        }
                     } label: {
                         HStack {
                             Text(form.title)

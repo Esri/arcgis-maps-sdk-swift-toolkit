@@ -118,6 +118,7 @@ public struct FeatureFormView: View {
                 FormStack(model: stackModel)
             } else {
                 GroupMenu()
+                    .transition(.move(edge: .bottom))
             }
         }
         .saveErrorAlert(model)
