@@ -18,7 +18,7 @@ import SwiftUI
 extension FeatureFormView {
     /// A stack view consists of sub-views for one form that a user will navigate through when
     /// browsing and editing utility network associations.
-    struct StackView: View {
+    struct FormStack: View {
         /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var featureFormViewModel
         
@@ -127,7 +127,7 @@ extension FeatureFormView {
     }
 }
 
-extension FeatureFormView.StackView {
+extension FeatureFormView.FormStack {
     var networkDataSource: Text {
         .init(
             "Network Data Source",
