@@ -39,7 +39,7 @@ public extension FeatureFormView {
         /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
         var onFeatureFormChanged: ((FeatureForm) -> Void)?
         /// The user-provided closure to perform when a ``EditingEvent`` occurs.
-        var onFormEditingEventAction: FormEditingEventAction?
+        var onFormEditingEventAction: ((EditingEvent) -> Void)?
         
         /// <#Description#>
         init(group: FeatureFormGroup) {
@@ -243,6 +243,7 @@ public extension FeatureFormView {
                     guard !groupHasErrors else {
                         alertForValidationErrorsIsPresented = true
                         validationErrorVisibilityInternal = .visible
+                        onFormEditingEventAction?(.failed(SaveError.validationErrors))
                         return
                     }
                     

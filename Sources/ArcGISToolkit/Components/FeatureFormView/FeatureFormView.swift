@@ -147,7 +147,7 @@ public extension FeatureFormView /* Modifiers */ {
     /// - Parameter action: The closure to perform when the form editing event occurs.
     /// - Since: 200.8
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
-        model.onFormEditingEventAction = .init(action: action)
+        model.onFormEditingEventAction = action
         return self
     }
     

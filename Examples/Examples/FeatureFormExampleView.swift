@@ -201,7 +201,8 @@ extension FeatureFormExampleView {
             .onFeatureFormChanged { form in
                 activeForm = form
             }
-            .onFormEditingEvent { _ in
+            .onFormEditingEvent { newAction in
+                print(newAction)
 //                if case .savedEdits = editingEvent,
 //                   let table = featureForm.feature.table as? ServiceFeatureTable,
 //                   !editedTables.contains(where: { $0 === table }) {
