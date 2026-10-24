@@ -273,7 +273,7 @@ public extension FeatureFormView {
                 Logger.featureFormView.warning("Cannot navigate backwards without history.")
                 return
             }
-            let top = backStack.removeFirst()
+            let top = backStack.removeLast()
             guard let form = form(for: top) else {
                 Logger.featureFormView.warning("No ID for back navigation.")
                 return
@@ -286,7 +286,7 @@ public extension FeatureFormView {
         /// history should also be cleared.
         public func clearSelection(clearBackStack: Bool = true) {
             guard let selectedID else { return }
-            backStack.insert(selectedID, at: 0)
+            backStack.append(selectedID)
             self.selectedID = nil
             if clearBackStack {
                 backStack.removeAll()
@@ -306,12 +306,11 @@ public extension FeatureFormView {
                 form.feature.globalID == id
             }
             if selectedID == form.feature.globalID, canGoBack {
-                let top = backStack.removeFirst()
+                let top = backStack.removeLast()
                 if let form = self.form(for: top) {
                     select(form: form)
                 }
             }
-            selectedID = backStack.last
         }
         
         /// <#Description#>
@@ -343,7 +342,7 @@ public extension FeatureFormView {
         public func select(form: FeatureForm, recordNavigation: Bool = true, clearHistory: Bool = false) {
             guard form.feature.globalID != selectedID else { return }
             if recordNavigation, let selectedID {
-                backStack.insert(selectedID, at: 0)
+                backStack.append(selectedID)
             }
             if clearHistory {
                 backStack.removeAll()
