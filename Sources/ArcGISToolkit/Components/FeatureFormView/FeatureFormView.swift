@@ -102,12 +102,6 @@ public struct FeatureFormView: View {
                     isPresented.wrappedValue = newValue
                 }
             }
-            .task(id: model.formCount) {
-                await withTaskGroup { group in
-                    group.addTask { await model.monitorEdits() }
-                    group.addTask { await model.monitorErrors() }
-                }
-            }
     }
     
     /// <#Description#>

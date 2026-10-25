@@ -56,7 +56,21 @@ public extension FeatureFormView {
             if !multiFormModeIsActive, let first = group.forms.first {
                 select(form: first)
             }
+            
+            startMonitoringTasks()
         }
+        
+        func startMonitoringTasks() {
+            monitoringTask?.cancel()
+            monitoringTask = Task {
+                await withTaskGroup { group in
+                    group.addTask(operation: monitorEdits)
+                    group.addTask(operation: monitorErrors)
+                }
+            }
+        }
+        
+        var monitoringTask: Task<Void, Never>?
         
         /// Initializes a model for the view, creating a `FeatureFormGroup` with the provided
         /// forms.
@@ -85,7 +99,11 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        public var formCount: Int
+        public var formCount: Int {
+            didSet {
+                startMonitoringTasks()
+            }
+        }
         
         /// <#Description#>
         private(set) var selectedID: UUID? {
@@ -282,6 +300,7 @@ public extension FeatureFormView {
         
         isolated deinit {
             editingEventStreamContinuation.finish()
+            monitoringTask?.cancel()
             saveTask?.cancel()
         }
         
