@@ -281,6 +281,7 @@ public extension FeatureFormView {
         private var saveTask: Task<Void, Never>?
         
         isolated deinit {
+            editingEventStreamContinuation.finish()
             saveTask?.cancel()
         }
         
