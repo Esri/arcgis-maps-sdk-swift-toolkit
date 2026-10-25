@@ -46,6 +46,8 @@ extension FeatureFormView {
             }
         }
         
+        var elementErrorCount: Int = 0
+        
         /// The navigation path for the destinations this form can open.
         var navigationPath: [FeatureFormView.NavigationPathItem] = []
         
@@ -88,6 +90,10 @@ extension FeatureFormView {
         @ObservationIgnored
         private var monitorEditsTask: Task<Void, Never>?
         
+        /// A task to monitor whether the form's element validation error count.
+        @ObservationIgnored
+        private var monitorErrorsTask: Task<Void, Never>?
+        
         /// Initializes a form view model.
         /// - Parameter featureForm: The feature form defining the editing experience.
         public init(featureForm: FeatureForm) {
@@ -98,12 +104,14 @@ extension FeatureFormView {
             
             evaluateExpressions()
             monitorEdits()
+            monitorErrors()
             monitorVisibility()
         }
         
         deinit {
             evaluateTask?.cancel()
             monitorEditsTask?.cancel()
+            monitorErrorsTask?.cancel()
             visibilityTask?.cancel()
         }
         
@@ -128,6 +136,16 @@ extension FeatureFormView {
                 guard !Task.isCancelled, let featureForm = self?.featureForm else { return }
                 for await hasEdits in featureForm.$hasEdits.dropFirst() {
                     self?.hasEdits = hasEdits
+                }
+            }
+        }
+        
+        /// <#Description#>
+        private func monitorErrors() {
+            monitorErrorsTask?.cancel()
+            monitorErrorsTask = Task {
+                for await errors in featureForm.$elementValidationErrors {
+                    elementErrorCount = errors.count
                 }
             }
         }

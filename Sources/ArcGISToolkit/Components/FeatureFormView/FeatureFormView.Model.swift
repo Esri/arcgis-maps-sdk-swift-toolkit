@@ -56,20 +56,7 @@ public extension FeatureFormView {
             if !multiFormModeIsActive, let first = group.forms.first {
                 select(form: first)
             }
-            
-            startMonitoringTasks()
         }
-        
-        func startMonitoringTasks() {
-            monitoringTask?.cancel()
-            monitoringTask = Task {
-                await withTaskGroup { group in
-                    group.addTask(operation: monitorErrors)
-                }
-            }
-        }
-        
-        var monitoringTask: Task<Void, Never>?
         
         /// Initializes a model for the view, creating a `FeatureFormGroup` with the provided
         /// forms.
@@ -98,11 +85,7 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        public var formCount: Int {
-            didSet {
-                startMonitoringTasks()
-            }
-        }
+        public var formCount: Int
         
         /// <#Description#>
         private(set) var selectedID: UUID? {
@@ -299,7 +282,6 @@ public extension FeatureFormView {
         
         isolated deinit {
             editingEventStreamContinuation.finish()
-            monitoringTask?.cancel()
             saveTask?.cancel()
         }
         
@@ -419,9 +401,6 @@ public extension FeatureFormView {
             selectedID = form.feature.globalID
         }
         
-        /// <#Description#>
-        private(set) var formsWithErrors = [UUID: Int]()
-        
         var selectedModel: FormModel? {
             guard let selectedID else { return nil }
             return formModel(for: selectedID)
@@ -485,7 +464,7 @@ public extension FeatureFormView {
         
         /// <#Description#>
         var totalErrorCount: Int {
-            formsWithErrors.values.reduce(0, +)
+            formModels.values.map({ $0.elementErrorCount }).reduce(0, +)
             +
             geometryStatus.values.count(where: { $0 == .invalid })
         }
@@ -497,7 +476,7 @@ public extension FeatureFormView {
         }
         
         func totalErrorCountForForm(featureID id: UUID) -> Int {
-            formsWithErrors[id, default: 0]
+            formModel(for: id)?.elementErrorCount ?? 0
             +
             (geometryStatus[id, default: .none] == .invalid ? 1 : 0)
         }
@@ -512,24 +491,6 @@ public extension FeatureFormView {
         /// A Boolean value indicating if the group has any forms with validation errors.
         var groupHasErrors: Bool {
             totalErrorCount > 0
-        }
-        
-        /// <#Description#>
-        func monitorErrors() async {
-            Logger.featureFormView.info("Starting error monitoring.")
-            await withTaskGroup { taskGroup in
-                for form in group.forms {
-                    taskGroup.addTask { @Sendable in
-                        for await errors in form.$elementValidationErrors {
-                            if let globalID = form.feature.globalID {
-                                await MainActor.run {
-                                    self.formsWithErrors[globalID] = errors.count
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }
