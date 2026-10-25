@@ -144,7 +144,8 @@ extension FeatureFormView {
         /// Performs an evaluation of all form expressions.
         func evaluateExpressions() {
             evaluateTask?.cancel()
-            evaluateTask = Task {
+            evaluateTask = Task { [weak self] in
+                guard let featureForm = self?.featureForm else { return }
                 if let errors = try? await featureForm.evaluateExpressions(), !errors.isEmpty {
                     for evaluationError in errors {
                         Logger.featureFormView.error(
@@ -158,26 +159,31 @@ extension FeatureFormView {
         /// Monitors whether the form has edits.
         private func monitorEdits() {
             monitorEditsTask = Task { [weak self] in
-                guard !Task.isCancelled, let featureForm = self?.featureForm else { return }
+                guard let featureForm = self?.featureForm else { return }
                 for await hasEdits in featureForm.$hasEdits.dropFirst() {
-                    self?.hasEdits = hasEdits
+                    guard let self else { break }
+                    self.hasEdits = hasEdits
                 }
             }
         }
         
         /// Monitors the form's element validation errors.
         private func monitorErrors() {
-            monitorErrorsTask = Task {
+            monitorErrorsTask = Task { [weak self] in
+                guard let featureForm = self?.featureForm else { return }
                 for await errors in featureForm.$elementValidationErrors {
-                    elementErrorCount = errors.count
+                    guard let self else { break }
+                    self.elementErrorCount = errors.count
                 }
             }
         }
         
         /// Monitors the form's streamed title.
         private func monitorTitle() {
-            monitorTitleTask = Task {
+            monitorTitleTask = Task { [weak self] in
+                guard let featureForm = self?.featureForm else { return }
                 for await title in featureForm.$title {
+                    guard let self else { break }
                     self.title = title
                 }
             }
@@ -187,11 +193,12 @@ extension FeatureFormView {
         private func monitorVisibility() {
             visibilityTask = Task { [weak self] in
                 await withTaskGroup { group in
-                    for element in self?.featureForm.elements ?? [] {
+                    guard let featureForm = self?.featureForm else { return }
+                    for element in featureForm.elements {
                         group.addTask { @MainActor @Sendable [weak self] in
                             for await isVisible in element.$isVisible {
-                                guard !Task.isCancelled else { return }
-                                self?.elementVisibility[element] = isVisible
+                                guard let self else { break }
+                                self.elementVisibility[element] = isVisible
                             }
                         }
                     }
