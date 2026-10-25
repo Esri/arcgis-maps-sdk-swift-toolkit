@@ -46,7 +46,22 @@ extension FeatureFormView {
             }
         }
         
+        /// A Boolean value indicating whether the feature has either attribute or geometry edits.
+        var hasAttributeOrGeometryEdits: Bool {
+            hasEdits || geometryStatus != .none
+        }
+        
+        /// The number of element validation errors on the form.
         var elementErrorCount: Int = 0
+        
+        /// The status of underlying feature's geometry.
+        var geometryStatus: GeometryStatus?
+        
+        /// The combined error count of the form's element validation errors and geometry status.
+        var errorCount: Int {
+            elementErrorCount
+            + (geometryStatus == .invalid ? 1 : 0)
+        }
         
         /// The navigation path for the destinations this form can open.
         var navigationPath: [FeatureFormView.NavigationPathItem] = []
@@ -75,16 +90,16 @@ extension FeatureFormView {
         /// A dictionary of each form element and whether or not it is visible.
         private var elementVisibility: [FormElement: Bool] = [:]
         
-        /// The expression evaluation task.
-        @ObservationIgnored
-        private var evaluateTask: Task<Void, Never>?
-        
         /// The feature form.
         let featureForm: FeatureForm
         
         /// A Boolean value indicating whether the underlying form was added to the group as a
         /// result of browsing utility associations.
         let createdViaUtilityAssociation: Bool
+        
+        /// The expression evaluation task.
+        @ObservationIgnored
+        private var evaluateTask: Task<Void, Never>?
         
         /// The group of visibility tasks.
         @ObservationIgnored

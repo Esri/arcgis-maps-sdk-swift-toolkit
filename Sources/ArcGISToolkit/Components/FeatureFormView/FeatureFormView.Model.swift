@@ -18,13 +18,6 @@ import SwiftUI
 internal import os
 
 public extension FeatureFormView {
-    enum GeometryValidity {
-        case invalid
-        case valid
-    }
-}
-
-public extension FeatureFormView {
     /// A model for the ``FeatureFormView`` component.
     /// - Since: 300.2
     @MainActor @Observable
@@ -191,17 +184,24 @@ public extension FeatureFormView {
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
-        var geometryStatus: [UUID : GeometryValidity?] = [:]
-        
+        /// Sets the edit status for the geometry on the provided feature.
+        ///
+        /// When ``FeatureFormView/GeometryStatus/invalid`` or
+        /// ``FeatureFormView/GeometryStatus/valid`` are provided the component
+        /// considers the feature edited. If `.none` the component considers the feature
+        /// not-edited.
+        /// - Parameters:
+        ///   - feature: The feature to update the geometry edit status for.
+        ///   - status: The status of the in-memory feature's geometry.
+        /// - Since: 300.2
         public func setGeometryEditStatus(
             for feature: ArcGISFeature,
-            status: GeometryValidity?
+            status: GeometryStatus?
         ) {
             guard let id = feature.globalID else { return }
-            geometryStatus[id] = status
+            formModel(for: id)?.geometryStatus = status
         }
         
-        /// <#Description#>
         /// <#Description#>
         /// - Parameter ignoreEdits: A Boolean value indicating if the user should be
         /// warned of unsaved edits before discarding.
@@ -445,9 +445,11 @@ public extension FeatureFormView {
         
         /// A Boolean value indicating if the invalid geometry toolbar item should be shown.
         var showInvalidGeometryBadge: Bool {
-            guard let selectedID else { return false }
+            guard let selectedID,
+                  let formModel = formModel(for: selectedID) else { return false }
+            let hasInvalidGeometry = formModel.geometryStatus == .invalid
             return allValidationErrorsAreVisible &&
-            geometryStatus[selectedID, default: .none] == .invalid
+            hasInvalidGeometry
         }
         
         /// A Boolean value indicating whether the Save button in the toolbar should be shown.
@@ -470,28 +472,20 @@ public extension FeatureFormView {
         
         /// <#Description#>
         var totalErrorCount: Int {
-            formModels.values.map({ $0.elementErrorCount }).reduce(0, +)
-            +
-            geometryStatus.values.count(where: { $0 == .invalid })
+            formModels.values.map({ $0.errorCount }).reduce(0, +)
         }
         
         func editStatusForForm(featureID id: UUID) -> Bool {
-            formModel(for: id)?.hasEdits ?? false
-            ||
-            (geometryStatus[id, default: .none] != .none)
+            formModel(for: id)?.hasAttributeOrGeometryEdits ?? false
         }
         
         func totalErrorCountForForm(featureID id: UUID) -> Int {
-            formModel(for: id)?.elementErrorCount ?? 0
-            +
-            (geometryStatus[id, default: .none] == .invalid ? 1 : 0)
+            formModel(for: id)?.errorCount ?? 0
         }
         
         /// A Boolean value indicating if the group has any forms with edits.
         var groupHasEdits: Bool {
-            formModels.contains(where: { $0.value.hasEdits })
-            ||
-            geometryStatus.contains(where: { $0.value != .none })
+            formModels.contains(where: { $0.value.hasAttributeOrGeometryEdits })
         }
         
         /// A Boolean value indicating if the group has any forms with validation errors.
