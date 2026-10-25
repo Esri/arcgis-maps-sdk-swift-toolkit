@@ -249,22 +249,33 @@ public extension FeatureFormView {
         
         /// <#Description#>
         func reportEditingEvent(_ event: EditingEvent) {
-            func notifyBothChannels(_ event: EditingEvent) {
-                onFormEditingEventAction?(event)
-                editingEventStreamContinuation.yield(event)
+            /// Delivers editing events to the deprecated
+            /// ``FeatureFormView/onFormEditingEvent(perform:)`` modifier.
+            @diagnose(DeprecatedDeclaration, as: ignored)
+            func deliverToCallback() {
+                guard let callBack = onFormEditingEventAction else { return }
+                var effectiveEvent = event
+                switch event {
+                case .failed, .willSave:
+                    // New event types aren't delivered to a deprecated channel.
+                    return
+                case .navigationChanged, .showOnMapRequested:
+                    // Existing events are let through unchanged.
+                    break
+                case .discarded:
+                    // Discarded is converted to a deprecated equivalent.
+                    effectiveEvent = .discardedEdits(willNavigate: false)
+                case .saved:
+                    // Saved is converted to a deprecated equivalent.
+                    effectiveEvent = .savedEdits(willNavigate: false)
+                case .discardedEdits, .savedEdits:
+                    // Deprecated events won't be reported.
+                    fatalError("A deprecated event type was reported.")
+                }
+                callBack(effectiveEvent)
             }
-            
-            func notifyCallbackOnly(_ event: EditingEvent) {
-                onFormEditingEventAction?(event)
-            }
-            
-            switch event {
-            case .discardedEdits, .savedEdits:
-                // Only deliver deprecated editing events to the callback.
-                notifyCallbackOnly(event)
-            default:
-                notifyBothChannels(event)
-            }
+            deliverToCallback()
+            editingEventStreamContinuation.yield(event)
         }
         
         private var saveTask: Task<Void, Never>?
@@ -274,7 +285,6 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        @diagnose(DeprecatedDeclaration, as: ignored)
         public func save() {
             saveTask = Task {
                 guard !isSaving else { return }

@@ -117,7 +117,6 @@ struct FeatureFormExampleView: View {
                 .task {
                     for await event in model.editingEvents {
                         lastEditingEvent = event
-                        print("Event stream:", event)
                     }
                 }
                 .toolbar {
