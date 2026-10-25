@@ -82,6 +82,10 @@ extension FeatureFormView {
         /// The feature form.
         let featureForm: FeatureForm
         
+        /// A Boolean value indicating whether the underlying form was added to the group as a
+        /// result of browsing utility associations.
+        let createdViaUtilityAssociation: Bool
+        
         /// The group of visibility tasks.
         @ObservationIgnored
         private var visibilityTask: Task<Void, Never>?
@@ -96,11 +100,15 @@ extension FeatureFormView {
         
         /// Initializes a form view model.
         /// - Parameter featureForm: The feature form defining the editing experience.
-        public init(featureForm: FeatureForm) {
+        /// - Parameter createdViaUtilityAssociation: The model is created as a result
+        /// of browsing utility associations.
+        init(featureForm: FeatureForm, createdViaUtilityAssociation: Bool = false) {
             self.featureForm = featureForm
             // Prevents a bug where the view's navigation title won't always appear
             // when the view is shown in an inspector.
             self.title = featureForm.title
+            
+            self.createdViaUtilityAssociation = createdViaUtilityAssociation
             
             evaluateExpressions()
             monitorEdits()

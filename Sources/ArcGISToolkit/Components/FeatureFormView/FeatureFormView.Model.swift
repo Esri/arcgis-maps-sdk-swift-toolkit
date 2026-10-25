@@ -99,18 +99,15 @@ public extension FeatureFormView {
         var activeForms: [FeatureForm] {
             return ids.compactMap { id in
                 let form = form(for: id)
-                guard let globalID = form?.feature.globalID else { return nil }
-                if (!browsedIDs.contains(globalID) || formModel(for: globalID)?.hasEdits ?? false) {
+                guard let globalID = form?.feature.globalID,
+                      let formModel = formModel(for: globalID) else { return nil }
+                if (!formModel.createdViaUtilityAssociation || formModel.hasEdits) {
                     return form
                 } else {
                     return nil
                 }
             }
         }
-        
-        /// The global IDs of the underlying feature for forms that have been opened via utility
-        /// associations.
-        var browsedIDs = Set<UUID>()
         
         /// <#Description#>
         var selectedIndex: Int {
@@ -175,20 +172,15 @@ public extension FeatureFormView {
             }
             
             guard !ids.contains(id) else {
-                let id: any CustomStringConvertible
-                if let objectID = form.feature.objectID {
-                    id = objectID
-                } else if let globalID = form.feature.globalID {
-                    id = globalID
-                } else {
-                    id = "?"
-                }
                 Logger.featureFormView.info("Feature \(id.description) is already added.")
                 return
             }
-            try? group.addForm(form)
-            if recordAsBrowsed, !browsedIDs.contains(id) {
-                browsedIDs.insert(id)
+            
+            do {
+                try group.addForm(form)
+                _ = addFormModel(form, isAssociation: recordAsBrowsed)
+            } catch {
+                Logger.featureFormView.error("Error adding form. \(error.localizedDescription)")
             }
         }
         
@@ -378,12 +370,26 @@ public extension FeatureFormView {
             if let model = formModels[globalID] {
                 return model
             } else if let form = form(for: globalID) {
-                let newModel = FeatureFormView.FormModel(featureForm: form)
-                formModels[globalID] = newModel
+                let newModel = addFormModel(form)
                 return newModel
             } else {
                 return nil
             }
+        }
+        
+        /// Creates a new `FormModel` and adds it to the set of models.
+        /// - Parameters:
+        ///   - form: <#form description#>
+        ///   - isAssociation: <#isAssociation description#>
+        /// - Returns: The new model.
+        func addFormModel(_ form: FeatureForm, isAssociation: Bool = false) -> FormModel? {
+            guard let globalID = form.feature.globalID else {
+                Logger.featureFormView.error("Couldn't get GlobalID to make FormModel.")
+                return nil
+            }
+            let newModel = FeatureFormView.FormModel(featureForm: form, createdViaUtilityAssociation: isAssociation)
+            formModels[globalID] = newModel
+            return newModel
         }
         
         /// <#Description#>
