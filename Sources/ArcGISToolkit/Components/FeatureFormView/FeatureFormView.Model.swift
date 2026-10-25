@@ -64,7 +64,6 @@ public extension FeatureFormView {
             monitoringTask?.cancel()
             monitoringTask = Task {
                 await withTaskGroup { group in
-                    group.addTask(operation: monitorEdits)
                     group.addTask(operation: monitorErrors)
                 }
             }
@@ -118,7 +117,7 @@ public extension FeatureFormView {
             return ids.compactMap { id in
                 let form = form(for: id)
                 guard let globalID = form?.feature.globalID else { return nil }
-                if (!browsedIDs.contains(globalID) || formsWithEdits[globalID, default: false]) {
+                if (!browsedIDs.contains(globalID) || formModel(for: globalID)?.hasEdits ?? false) {
                     return form
                 } else {
                     return nil
@@ -421,9 +420,6 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        private(set) var formsWithEdits = [UUID: Bool]()
-        
-        /// <#Description#>
         private(set) var formsWithErrors = [UUID: Int]()
         
         var selectedModel: FormModel? {
@@ -495,7 +491,7 @@ public extension FeatureFormView {
         }
         
         func editStatusForForm(featureID id: UUID) -> Bool {
-            formsWithEdits[id, default: false]
+            formModel(for: id)?.hasEdits ?? false
             ||
             (geometryStatus[id, default: .none] != .none)
         }
@@ -508,7 +504,7 @@ public extension FeatureFormView {
         
         /// A Boolean value indicating if the group has any forms with edits.
         var groupHasEdits: Bool {
-            formsWithEdits.contains(where: { $0.value })
+            formModels.contains(where: { $0.value.hasEdits })
             ||
             geometryStatus.contains(where: { $0.value != .none })
         }
@@ -516,24 +512,6 @@ public extension FeatureFormView {
         /// A Boolean value indicating if the group has any forms with validation errors.
         var groupHasErrors: Bool {
             totalErrorCount > 0
-        }
-        
-        /// <#Description#>
-        func monitorEdits() async {
-            Logger.featureFormView.info("Starting edit monitoring.")
-            await withTaskGroup { taskGroup in
-                for form in group.forms {
-                    taskGroup.addTask { @Sendable in
-                        for await hasEdits in form.$hasEdits {
-                            if let globalID = form.feature.globalID {
-                                await MainActor.run {
-                                    self.formsWithEdits[globalID] = hasEdits
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
         
         /// <#Description#>
