@@ -58,9 +58,6 @@ extension FeatureFormView {
                     }
                 }
             }
-            .onTitleChange(of: formModel.featureForm) { newTitle in
-                formModel.title = newTitle
-            }
 #if os(iOS)
             .scrollDismissesKeyboard(.immediately)
 #endif

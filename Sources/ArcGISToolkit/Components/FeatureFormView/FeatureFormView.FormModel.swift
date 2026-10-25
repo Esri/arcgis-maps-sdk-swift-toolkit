@@ -69,7 +69,7 @@ extension FeatureFormView {
         /// The set of all elements which previously held focus.
         var previouslyFocusedElements = [FormElement]()
         
-        /// The title of the feature form view.
+        /// The underlying form's dynamic title.
         var title: String
         
         /// The list of visible form elements.
@@ -109,6 +109,10 @@ extension FeatureFormView {
         @ObservationIgnored
         private var monitorEditsTask: Task<Void, Never>?
         
+        /// A task to monitor the form's title.
+        @ObservationIgnored
+        private var monitorTitleTask: Task<Void, Never>?
+        
         /// A task to monitor whether the form's element validation error count.
         @ObservationIgnored
         private var monitorErrorsTask: Task<Void, Never>?
@@ -118,16 +122,14 @@ extension FeatureFormView {
         /// - Parameter createdViaUtilityAssociation: The model is created as a result
         /// of browsing utility associations.
         init(featureForm: FeatureForm, createdViaUtilityAssociation: Bool = false) {
-            self.featureForm = featureForm
-            // Prevents a bug where the view's navigation title won't always appear
-            // when the view is shown in an inspector.
-            self.title = featureForm.title
-            
             self.createdViaUtilityAssociation = createdViaUtilityAssociation
+            self.featureForm = featureForm
+            self.title = featureForm.title
             
             evaluateExpressions()
             monitorEdits()
             monitorErrors()
+            monitorTitle()
             monitorVisibility()
         }
         
@@ -135,6 +137,7 @@ extension FeatureFormView {
             evaluateTask?.cancel()
             monitorEditsTask?.cancel()
             monitorErrorsTask?.cancel()
+            monitorTitleTask?.cancel()
             visibilityTask?.cancel()
         }
         
@@ -152,9 +155,8 @@ extension FeatureFormView {
             }
         }
         
-        /// Starts a task to monitor whether the associated form has edits.
+        /// Monitors whether the form has edits.
         private func monitorEdits() {
-            monitorEditsTask?.cancel()
             monitorEditsTask = Task { [weak self] in
                 guard !Task.isCancelled, let featureForm = self?.featureForm else { return }
                 for await hasEdits in featureForm.$hasEdits.dropFirst() {
@@ -163,9 +165,8 @@ extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
+        /// Monitors the form's element validation errors.
         private func monitorErrors() {
-            monitorErrorsTask?.cancel()
             monitorErrorsTask = Task {
                 for await errors in featureForm.$elementValidationErrors {
                     elementErrorCount = errors.count
@@ -173,9 +174,17 @@ extension FeatureFormView {
             }
         }
         
-        /// Starts a task group which monitors the visibility of each form element.
+        /// Monitors the form's streamed title.
+        private func monitorTitle() {
+            monitorTitleTask = Task {
+                for await title in featureForm.$title {
+                    self.title = title
+                }
+            }
+        }
+        
+        /// Monitors the visibility of each element in the form.
         private func monitorVisibility() {
-            visibilityTask?.cancel()
             visibilityTask = Task { [weak self] in
                 await withTaskGroup { group in
                     for element in self?.featureForm.elements ?? [] {

@@ -80,7 +80,11 @@ extension FeatureFormView {
         
         func formButtonLabel(_ form: FeatureForm) -> some View {
             HStack {
-                Text(form.title)
+                Text(
+                    featureFormViewModel.formModel(
+                        for: form.feature.globalID!
+                    )?.title ?? ""
+                )
                 Spacer()
                 if unsavedEditsLabelIsVisible(form) {
                     Label {
