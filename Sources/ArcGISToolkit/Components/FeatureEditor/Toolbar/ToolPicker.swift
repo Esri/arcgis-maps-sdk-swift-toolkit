@@ -72,7 +72,7 @@ private extension FeatureEditorGeometryTool {
             LocalizedStringResource(
                 "Line",
                 bundle: .toolkit,
-                comment: "A label for a geometry construction tool that creates a line."
+                comment: "A label for a geometry construction tool that creates a polyline."
             )
         case .multipoint:
             LocalizedStringResource(
@@ -90,7 +90,7 @@ private extension FeatureEditorGeometryTool {
             LocalizedStringResource(
                 "Polygon",
                 bundle: .toolkit,
-                comment: "A label for a geometry construction tool that creates a polygon."
+                comment: "A label for a geometry construction tool that creates an irregular polygon."
             )
         case .shape(let shape, _):
             shape.label
@@ -167,7 +167,7 @@ private extension ShapeTool.Kind {
     var systemImage: String {
         switch self {
         case .arrow: "arrowshape.right"
-        case .ellipse: "circle"
+        case .ellipse: "oval"
         case .rectangle: "rectangle"
         case .triangle: "triangle"
         @unknown default:

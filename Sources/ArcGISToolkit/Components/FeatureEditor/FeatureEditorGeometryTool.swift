@@ -43,7 +43,7 @@ enum FeatureEditorGeometryTool: Hashable {
             tool = shapeTool
         case .streaming:
             tool = FreehandTool()
-            // Uses the Vertex Tool's style, so that vertex symbols are shown.
+            // Uses the `VertexTool`'s style so that vertex symbols are shown.
             tool.style = VertexTool().style
         case .line, .multipoint, .point, .polygon, .vertex:
             tool = VertexTool()
@@ -80,7 +80,7 @@ enum FeatureEditorGeometryTool: Hashable {
 }
 
 extension FeatureEditorGeometryTool {
-    /// The tools available when editing an existing geometry.
+    /// The tools for editing an existing geometry.
     static var editingTools: [Self] {
         [
             .freehand,
