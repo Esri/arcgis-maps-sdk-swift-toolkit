@@ -23,6 +23,7 @@ enum FeatureEditorGeometryTool: Hashable {
     case point
     case polygon
     case shape(kind: ShapeTool.Kind, allowsPartCreation: Bool = true)
+    case streaming
     case vertex
     case vertexReticle
     
@@ -40,6 +41,10 @@ enum FeatureEditorGeometryTool: Hashable {
             let shapeTool = ShapeTool(kind: kind)
             shapeTool.configuration.allowsPartCreation = allowsPartCreation
             tool = shapeTool
+        case .streaming:
+            tool = FreehandTool()
+            // Uses the Vertex Tool's style, so that vertex symbols are shown.
+            tool.style = VertexTool().style
         case .line, .multipoint, .point, .polygon, .vertex:
             tool = VertexTool()
         case .vertexReticle:
@@ -58,7 +63,7 @@ enum FeatureEditorGeometryTool: Hashable {
     /// The geometry types that the tool can be used with.
     var supportedGeometryTypes: [Geometry.Type] {
         switch self {
-        case .circle, .freehand, .shape:
+        case .circle, .freehand, .shape, .streaming:
             [Polygon.self, Polyline.self]
         case .line:
             [Polyline.self]

@@ -79,12 +79,13 @@ private extension GeometryConstructionTool.Kind {
         [
             .circle,
             .ellipse,
-            .freehand,
             .line,
             .multipoint,
             .point,
             .polygon,
-            .rectangle
+            .rectangle,
+            .streamingPolygon,
+            .streamingPolyline
         ]
     }
 }

@@ -94,6 +94,12 @@ private extension FeatureEditorGeometryTool {
             )
         case .shape(let shape, _):
             shape.label
+        case .streaming:
+            LocalizedStringResource(
+                "Streaming",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates a free-form sketch with automatically created vertices."
+            )
         case .vertex:
             LocalizedStringResource(
                 "Vertex",
@@ -113,7 +119,7 @@ private extension FeatureEditorGeometryTool {
     var systemImage: String {
         switch self {
         case .circle: "circle"
-        case .freehand: "scribble"
+        case .freehand, .streaming: "scribble"
         case .shape(let shape, _): shape.systemImage
         case .line: "point.topleft.down.to.point.bottomright.curvepath.fill"
         case .multipoint, .point: "dot.square"

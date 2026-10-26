@@ -212,13 +212,13 @@ private extension FeatureEditorGeometryTool {
     init?(kind: GeometryConstructionTool.Kind) {
         let tool: Self? = switch kind {
         case .circle: .circle
-        case .freehand: .freehand
         case .ellipse: .shape(kind: .ellipse, allowsPartCreation: false)
-        case .rectangle: .shape(kind: .rectangle, allowsPartCreation: false)
         case .line: .line
         case .multipoint: .multipoint
         case .point: .point
         case .polygon: .polygon
+        case .rectangle: .shape(kind: .rectangle, allowsPartCreation: false)
+        case .streamingPolygon, .streamingPolyline: .streaming
         default: nil
         }
         guard let tool else { return nil }
