@@ -24,9 +24,10 @@ extension FeatureFormView {
         
         /// The effective navigation path.
         ///
-        /// This path acts as read-only mirror of the path stored in the stack view model which
-        /// means the navigation stack won't empty the stored path when the active form
-        /// changes.
+        /// This path acts as read-only mirror of the path stored in the form model which stops
+        /// the navigation stack from mutating the stored path when the selected form changes
+        /// and allows the user to reopen this form from the group menu and resume at the same
+        /// they left from.
         @State private var effectiveNavigationPath = [FeatureFormView.NavigationPathItem]()
         
         /// The model for the underlying form.
