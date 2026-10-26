@@ -40,14 +40,14 @@ struct AttachmentsFeatureElementView: View {
     @State private var isExpanded = true
     /// The last locally added attachment.
     @State private var lastAttachmentAdded: AttachmentModel?
-    /// If `formViewModel` is set, this holds the last recorded value of
+    /// If `formModel` is set, this holds the last recorded value of
     /// `FeatureForm.hasEdits`. If the value changes from `true` to `false` edits were discarded
     /// and the attachments should be refreshed.
     @State private var previousHasEdits = false
     
     /// Creates a new `AttachmentsFeatureElementView` for a Feature Form.
     /// - Parameter formElement: The `AttachmentsFeatureElement`.
-    /// - Parameter formViewModel: The model for the feature form containing the element.
+    /// - Parameter formModel: The model for the feature form containing the element.
     init(formElement: AttachmentsFormElement, formModel: FeatureFormView.FormModel) {
         self.featureElement = formElement
         self.formModel = formModel
