@@ -22,7 +22,7 @@ enum FeatureEditorGeometryTool: Hashable {
     case multipoint
     case point
     case polygon
-    case shape(kind: ShapeTool.Kind)
+    case shape(kind: ShapeTool.Kind, allowsPartCreation: Bool = true)
     case vertex
     case vertexReticle
     
@@ -33,15 +33,12 @@ enum FeatureEditorGeometryTool: Hashable {
         case .circle:
             let shapeTool = ShapeTool(kind: .ellipse)
             shapeTool.configuration.scaleMode = .uniform
-            shapeTool.configuration.allowsPartCreation = true
             tool = shapeTool
         case .freehand:
             tool = FreehandTool()
-        case .shape(let kind):
+        case .shape(let kind, let allowsPartCreation):
             let shapeTool = ShapeTool(kind: kind)
-            // Allows the shape tool to be used when there is an existing
-            // geometry.
-            shapeTool.configuration.allowsPartCreation = true
+            shapeTool.configuration.allowsPartCreation = allowsPartCreation
             tool = shapeTool
         case .line, .multipoint, .point, .polygon, .vertex:
             tool = VertexTool()

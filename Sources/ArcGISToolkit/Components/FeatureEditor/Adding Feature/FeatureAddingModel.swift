@@ -213,8 +213,8 @@ private extension FeatureEditorGeometryTool {
         let tool: Self? = switch kind {
         case .circle: .circle
         case .freehand: .freehand
-        case .ellipse: .shape(kind: .ellipse)
-        case .rectangle: .shape(kind: .rectangle)
+        case .ellipse: .shape(kind: .ellipse, allowsPartCreation: false)
+        case .rectangle: .shape(kind: .rectangle, allowsPartCreation: false)
         case .line: .line
         case .multipoint: .multipoint
         case .point: .point

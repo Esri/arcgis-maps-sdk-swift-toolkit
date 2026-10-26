@@ -92,7 +92,7 @@ private extension FeatureEditorGeometryTool {
                 bundle: .toolkit,
                 comment: "A label for a geometry construction tool that creates a polygon."
             )
-        case .shape(let shape):
+        case .shape(let shape, _):
             shape.label
         case .vertex:
             LocalizedStringResource(
@@ -114,7 +114,7 @@ private extension FeatureEditorGeometryTool {
         switch self {
         case .circle: "circle"
         case .freehand: "scribble"
-        case .shape(let shape): shape.systemImage
+        case .shape(let shape, _): shape.systemImage
         case .line: "point.topleft.down.to.point.bottomright.curvepath.fill"
         case .multipoint, .point: "dot.square"
         case .polygon: "skew"
