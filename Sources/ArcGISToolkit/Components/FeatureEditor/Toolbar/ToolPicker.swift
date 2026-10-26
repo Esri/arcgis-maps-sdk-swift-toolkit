@@ -56,6 +56,12 @@ private extension FeatureEditorGeometryTool {
     /// A localized, user-friendly label for the tool.
     var label: LocalizedStringResource {
         switch self {
+        case .circle:
+            LocalizedStringResource(
+                "Circle",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates a circle."
+            )
         case .freehand:
             LocalizedStringResource(
                 "Freehand",
@@ -106,6 +112,7 @@ private extension FeatureEditorGeometryTool {
     /// The name of a system image that represents the tool.
     var systemImage: String {
         switch self {
+        case .circle: "circle"
         case .freehand: "scribble"
         case .shape(let shape): shape.systemImage
         case .line: "point.topleft.down.to.point.bottomright.curvepath.fill"

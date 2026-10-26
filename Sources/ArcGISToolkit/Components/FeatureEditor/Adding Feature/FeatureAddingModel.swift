@@ -211,6 +211,7 @@ extension FeatureAddingModel.GeometryConstructionError: Equatable {
 private extension FeatureEditorGeometryTool {
     init?(kind: GeometryConstructionTool.Kind) {
         let tool: Self? = switch kind {
+        case .circle: .circle
         case .freehand: .freehand
         case .ellipse: .shape(kind: .ellipse)
         case .rectangle: .shape(kind: .rectangle)

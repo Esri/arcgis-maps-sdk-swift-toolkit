@@ -16,6 +16,7 @@ import ArcGIS
 
 /// The tools supported by the feature editor.
 enum FeatureEditorGeometryTool: Hashable {
+    case circle
     case freehand
     case line
     case multipoint
@@ -29,6 +30,11 @@ enum FeatureEditorGeometryTool: Hashable {
     var geometryEditorTool: GeometryEditorTool {
         let tool: GeometryEditorTool
         switch self {
+        case .circle:
+            let shapeTool = ShapeTool(kind: .ellipse)
+            shapeTool.configuration.scaleMode = .uniform
+            shapeTool.configuration.allowsPartCreation = true
+            tool = shapeTool
         case .freehand:
             tool = FreehandTool()
         case .shape(let kind):
@@ -55,7 +61,7 @@ enum FeatureEditorGeometryTool: Hashable {
     /// The geometry types that the tool can be used with.
     var supportedGeometryTypes: [Geometry.Type] {
         switch self {
-        case .freehand, .shape:
+        case .circle, .freehand, .shape:
             [Polygon.self, Polyline.self]
         case .line:
             [Polyline.self]
