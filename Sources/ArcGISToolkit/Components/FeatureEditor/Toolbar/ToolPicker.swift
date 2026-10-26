@@ -62,6 +62,30 @@ private extension FeatureEditorGeometryTool {
                 bundle: .toolkit,
                 comment: "A label for a geometry editor tool that allows the user to edit using freehand gestures."
             )
+        case .line:
+            LocalizedStringResource(
+                "Line",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates a line."
+            )
+        case .multipoint:
+            LocalizedStringResource(
+                "Multipoint",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates a multipoint."
+            )
+        case .point:
+            LocalizedStringResource(
+                "Point",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates a point."
+            )
+        case .polygon:
+            LocalizedStringResource(
+                "Polygon",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates a polygon."
+            )
         case .shape(let shape):
             shape.label
         case .vertex:
@@ -84,6 +108,9 @@ private extension FeatureEditorGeometryTool {
         switch self {
         case .freehand: "scribble"
         case .shape(let shape): shape.systemImage
+        case .line: "point.topleft.down.to.point.bottomright.curvepath.fill"
+        case .multipoint, .point: "dot.square"
+        case .polygon: "skew"
         case .vertex: "point.3.connected.trianglepath.dotted"
         case .vertexReticle: "dot.viewfinder"
         }

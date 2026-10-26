@@ -203,12 +203,12 @@ final class GeometryEditorModel {
         if let constructionTools {
             constructionTools
         } else if let geometry, case let geometryType = type(of: geometry) {
-            FeatureEditorGeometryTool.allCases.filter { tool in
+            FeatureEditorGeometryTool.editingTools.filter { tool in
                 tool.supportedGeometryTypes
                     .contains(where: { $0 == geometryType })
             }
         } else {
-            FeatureEditorGeometryTool.allCases
+            FeatureEditorGeometryTool.editingTools
         }
     }
 }

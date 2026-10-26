@@ -214,7 +214,10 @@ private extension FeatureEditorGeometryTool {
         case .freehand: .freehand
         case .ellipse: .shape(kind: .ellipse)
         case .rectangle: .shape(kind: .rectangle)
-        case .line, .multipoint, .point, .polygon: .vertex
+        case .line: .line
+        case .multipoint: .multipoint
+        case .point: .point
+        case .polygon: .polygon
         default: nil
         }
         guard let tool else { return nil }

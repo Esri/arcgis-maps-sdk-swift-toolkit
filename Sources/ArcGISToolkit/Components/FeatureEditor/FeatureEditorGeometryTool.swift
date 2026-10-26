@@ -17,6 +17,10 @@ import ArcGIS
 /// The tools supported by the feature editor.
 enum FeatureEditorGeometryTool: Hashable {
     case freehand
+    case line
+    case multipoint
+    case point
+    case polygon
     case shape(kind: ShapeTool.Kind)
     case vertex
     case vertexReticle
@@ -33,7 +37,7 @@ enum FeatureEditorGeometryTool: Hashable {
             // geometry.
             shapeTool.configuration.allowsPartCreation = true
             tool = shapeTool
-        case .vertex:
+        case .line, .multipoint, .point, .polygon, .vertex:
             tool = VertexTool()
         case .vertexReticle:
             tool = ReticleVertexTool()
@@ -53,14 +57,23 @@ enum FeatureEditorGeometryTool: Hashable {
         switch self {
         case .freehand, .shape:
             [Polygon.self, Polyline.self]
+        case .line:
+            [Polyline.self]
+        case .multipoint:
+            [Multipoint.self]
+        case .point:
+            [Point.self]
+        case .polygon:
+            [Polygon.self]
         case .vertex, .vertexReticle:
             [Multipoint.self, Point.self, Polygon.self, Polyline.self]
         }
     }
 }
 
-extension FeatureEditorGeometryTool: CaseIterable {
-    static var allCases: [Self] {
+extension FeatureEditorGeometryTool {
+    /// The tools available when editing an existing geometry.
+    static var editingTools: [Self] {
         [
             .freehand,
             .vertex,
