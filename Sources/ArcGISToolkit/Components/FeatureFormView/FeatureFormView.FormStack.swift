@@ -29,12 +29,8 @@ extension FeatureFormView {
         /// changes.
         @State private var effectiveNavigationPath = [FeatureFormView.NavigationPathItem]()
         
-        /// The model for the stack view for the root form.
+        /// The model for the underlying form.
         let formModel: FeatureFormView.FormModel
-        
-        init(model: FormModel) {
-            self.formModel = model
-        }
         
         public var body: some View {
             NavigationStack(path: $effectiveNavigationPath) {

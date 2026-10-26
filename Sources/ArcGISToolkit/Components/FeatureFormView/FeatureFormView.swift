@@ -108,8 +108,8 @@ public struct FeatureFormView: View {
     var groupMenuOrFormStack: some View {
         Group {
             if let selectedID = model.selectedID,
-                let stackModel = model.formModel(for: selectedID) {
-                FormStack(model: stackModel)
+                let formModel = model.formModel(for: selectedID) {
+                FormStack(formModel: formModel)
             } else {
                 GroupMenu()
                     .transition(.move(edge: .bottom))
