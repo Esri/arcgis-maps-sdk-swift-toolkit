@@ -17,6 +17,8 @@ import ArcGIS
 
 /// A view displaying details for popup media.
 struct PopupMediaFooter: View {
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    
     /// The popup media to display.
     let popupMedia: PopupMedia
     
@@ -37,10 +39,12 @@ struct PopupMediaFooter: View {
                             .font(.body)
                     }
                     
-                    if !popupMedia.caption.isEmpty {
-                        Text(popupMedia.caption)
-                            .font(.subheadline)
-                            .foregroundStyle(Color(white: 0.75))
+                    if !dynamicTypeSize.isAccessibilitySize { // WCAG 1.4.4 Resize Text (Level AA)
+                        if !popupMedia.caption.isEmpty {
+                            Text(popupMedia.caption)
+                                .font(.subheadline)
+                                .foregroundStyle(Color(white: 0.75))
+                        }
                     }
                 }
                 .lineLimit(1)

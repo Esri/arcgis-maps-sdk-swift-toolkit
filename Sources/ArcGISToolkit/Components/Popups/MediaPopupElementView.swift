@@ -79,6 +79,8 @@ struct MediaPopupElementView: View {
                         }
                         .frame(width: mediaSize.width, height: mediaSize.height)
                         .contentShape(.rect(cornerRadius: 8))
+                        .accessibilityElement(children: .combine) // WCAG 1.3.2 Meaningful Sequence (Level A)
+                        .accessibilityLabel(media.title) // WCAG 2.4.6 Headings and Labels (Level AA)
                     }
                 }
             }
