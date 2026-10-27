@@ -92,7 +92,7 @@ private extension FeatureEditorGeometryTool {
                 bundle: .toolkit,
                 comment: "A label for a geometry construction tool that creates an irregular polygon."
             )
-        case .shape(let shape, _):
+        case .shape(let shape):
             shape.label
         case .streaming:
             LocalizedStringResource(
@@ -120,7 +120,7 @@ private extension FeatureEditorGeometryTool {
         switch self {
         case .circle: "circle"
         case .freehand, .streaming: "scribble"
-        case .shape(let shape, _): shape.systemImage
+        case .shape(let shape): shape.systemImage
         case .line: "point.topleft.down.to.point.bottomright.curvepath.fill"
         case .multipoint, .point: "dot.square"
         case .polygon: "skew"
