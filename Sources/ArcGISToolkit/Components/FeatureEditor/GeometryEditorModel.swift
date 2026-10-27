@@ -77,7 +77,7 @@ final class GeometryEditorModel {
     /// with.
     func start(withInitial geometry: Geometry) {
         initialGeometry = geometry
-        geometryType = nil
+        geometryType = type(of: geometry)
         geometryEditor.start(withInitial: geometry)
         didStartGeometryEditor()
     }
@@ -202,7 +202,7 @@ final class GeometryEditorModel {
     var availableTools: [FeatureEditorGeometryTool] {
         if let constructionTools {
             constructionTools
-        } else if let geometry, case let geometryType = type(of: geometry) {
+        } else if let geometryType {
             FeatureEditorGeometryTool.allCases.filter { tool in
                 tool.supportedGeometryTypes
                     .contains(where: { $0 == geometryType })
