@@ -77,7 +77,7 @@ final class GeometryEditorModel {
     /// with.
     func start(withInitial geometry: Geometry) {
         initialGeometry = geometry
-        geometryType = nil
+        geometryType = type(of: geometry)
         geometryEditor.start(withInitial: geometry)
         didStartGeometryEditor()
     }
@@ -104,7 +104,7 @@ final class GeometryEditorModel {
     
     /// Called after the geometry editor has been started.
     private func didStartGeometryEditor() {
-        let defaultTool = defaultConstructionTool ?? availableTools.first ?? .vertex
+        let defaultTool = defaultConstructionTool ?? availableTools.first!
         if selectedTool != defaultTool {
             selectedTool = defaultTool
         }
@@ -175,7 +175,7 @@ final class GeometryEditorModel {
     // MARK: Tools
     
     /// The currently selected tool.
-    var selectedTool: FeatureEditorGeometryTool = .vertex {
+    var selectedTool = FeatureEditorGeometryTool.editingTools.first! {
         didSet {
             geometryEditor.tool = selectedTool.geometryEditorTool
         }
@@ -189,7 +189,7 @@ final class GeometryEditorModel {
     /// Sets the construction tools and selected tool.
     /// - Parameters:
     ///   - constructionTools: The tools to use when constructing a geometry.
-    ///   - default: The default construction tool..
+    ///   - default: The default construction tool.
     func setConstructionTools(
         _ constructionTools: [FeatureEditorGeometryTool],
         default: FeatureEditorGeometryTool?
@@ -202,7 +202,7 @@ final class GeometryEditorModel {
     var availableTools: [FeatureEditorGeometryTool] {
         if let constructionTools {
             constructionTools
-        } else if let geometry, case let geometryType = type(of: geometry) {
+        } else if let geometryType {
             FeatureEditorGeometryTool.editingTools.filter { tool in
                 tool.supportedGeometryTypes
                     .contains(where: { $0 == geometryType })

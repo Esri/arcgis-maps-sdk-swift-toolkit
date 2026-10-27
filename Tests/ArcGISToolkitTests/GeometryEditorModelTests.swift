@@ -28,13 +28,13 @@ struct GeometryEditorModelTests {
         #expect(
             model.availableTools ==
             [
-                .freehand,
                 .vertex,
                 .vertexReticle,
                 .shape(kind: .arrow),
                 .shape(kind: .ellipse),
                 .shape(kind: .rectangle),
-                .shape(kind: .triangle)
+                .shape(kind: .triangle),
+                .freehand
             ]
         )
         #expect(model.selectedTool == .vertex)
