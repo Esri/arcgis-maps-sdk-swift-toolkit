@@ -189,7 +189,7 @@ final class GeometryEditorModel {
     /// Sets the construction tools and selected tool.
     /// - Parameters:
     ///   - constructionTools: The tools to use when constructing a geometry.
-    ///   - default: The default construction tool..
+    ///   - default: The default construction tool.
     func setConstructionTools(
         _ constructionTools: [FeatureEditorGeometryTool],
         default: FeatureEditorGeometryTool?

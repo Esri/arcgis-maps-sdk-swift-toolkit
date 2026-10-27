@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
 import SwiftUI
 
 /// An inspector that presents a template picker and feature form for adding a

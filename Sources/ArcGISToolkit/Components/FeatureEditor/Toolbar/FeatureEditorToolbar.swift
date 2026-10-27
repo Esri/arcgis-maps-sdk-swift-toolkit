@@ -274,7 +274,6 @@ private struct SnapSettingsButton: View {
 
 // MARK: - Helper
 
-@available(visionOS, unavailable)
 private extension CGFloat {
     /// The minimum toolbar size in any dimension.
     static var minToolbarDiameter: Double {
