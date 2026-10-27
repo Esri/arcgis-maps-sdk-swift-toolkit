@@ -104,7 +104,7 @@ final class GeometryEditorModel {
     
     /// Called after the geometry editor has been started.
     private func didStartGeometryEditor() {
-        let defaultTool = defaultConstructionTool ?? availableTools.first ?? .vertex
+        let defaultTool = defaultConstructionTool ?? availableTools.first!
         if selectedTool != defaultTool {
             selectedTool = defaultTool
         }
@@ -175,7 +175,7 @@ final class GeometryEditorModel {
     // MARK: Tools
     
     /// The currently selected tool.
-    var selectedTool: FeatureEditorGeometryTool = .vertex {
+    var selectedTool = FeatureEditorGeometryTool.allCases.first! {
         didSet {
             geometryEditor.tool = selectedTool.geometryEditorTool
         }
