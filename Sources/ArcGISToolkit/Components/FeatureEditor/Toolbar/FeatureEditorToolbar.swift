@@ -75,6 +75,8 @@ struct FeatureEditorToolbar: View {
             }
         }
         .animation(.default, value: model.geometryEditorModel.isStarted)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("Feature Editor Toolbar")
     }
     
     /// The control views for the toolbar.
