@@ -69,6 +69,11 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
+        public var editingEvents: AsyncStream<EditingEvent> {
+            editingEventStream
+        }
+        
+        /// <#Description#>
         public var selectedForm: FeatureForm? {
             guard let selectedID else { return nil }
             return form(for: selectedID) ?? nil
@@ -78,6 +83,13 @@ public extension FeatureFormView {
         public var validationErrorVisibility = ValidationErrorVisibility.automatic
         
         // MARK: Internal members
+        
+        isolated deinit {
+            editingEventStreamContinuation.finish()
+            taskForDiscarding?.cancel()
+            taskForInitialEvaluation?.cancel()
+            taskForSaving?.cancel()
+        }
         
         /// <#Description#>
         /// - Parameters:
@@ -117,8 +129,8 @@ public extension FeatureFormView {
         /// warned of unsaved edits before discarding.
         func discard(ignoreEdits: Bool = false) {
             let discard = { [weak self] in
-                self?.taskForDiscard?.cancel()
-                self?.taskForDiscard = Task {
+                self?.taskForDiscarding?.cancel()
+                self?.taskForDiscarding = Task {
                     do {
                         try await self?.group.discardEdits()
                         self?.reportEditingEvent(.discarded)
@@ -139,6 +151,67 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
+        func reportEditingEvent(_ event: EditingEvent) {
+            /// Delivers editing events to the deprecated
+            /// ``FeatureFormView/onFormEditingEvent(perform:)`` modifier.
+            @diagnose(DeprecatedDeclaration, as: ignored)
+            func deliverToCallback() {
+                guard let callBack = onFormEditingEventAction else { return }
+                var effectiveEvent = event
+                switch event {
+                case .failed, .willSave:
+                    // New event types aren't delivered to a deprecated channel.
+                    return
+                case .navigationChanged, .showOnMapRequested:
+                    // Existing events are let through unchanged.
+                    break
+                case .discarded:
+                    // Discarded is converted to a deprecated equivalent.
+                    effectiveEvent = .discardedEdits(willNavigate: false)
+                case .saved:
+                    // Saved is converted to a deprecated equivalent.
+                    effectiveEvent = .savedEdits(willNavigate: false)
+                case .discardedEdits, .savedEdits:
+                    // Deprecated events won't be reported.
+                    fatalError("A deprecated event type was reported.")
+                }
+                callBack(effectiveEvent)
+            }
+            deliverToCallback()
+            editingEventStreamContinuation.yield(event)
+        }
+        
+        /// <#Description#>
+        func save() {
+            taskForSaving = Task {
+                guard !isSaving else { return }
+                isSaving = true
+                defer { isSaving = false }
+                
+                do {
+                    reportEditingEvent(.willSave)
+                    
+                    await evaluateExpressions()
+                    
+                    try Task.checkCancellation()
+                    
+                    guard !groupHasErrors else {
+                        alertForValidationErrorsIsPresented = true
+                        validationErrorVisibilityInternal = .visible
+                        reportEditingEvent(.failed(SaveError.validationErrors))
+                        return
+                    }
+                    
+                    try await group.finishEditing()
+                    reportEditingEvent(.saved)
+                } catch {
+                    finishOrDiscardError = error
+                    reportEditingEvent(.failed(error))
+                }
+            }
+        }
+        
+        /// <#Description#>
         var alertForUnsavedEditsIsPresented = false
         
         /// <#Description#>
@@ -146,6 +219,9 @@ public extension FeatureFormView {
         
         /// A Boolean value that determines whether the view is presented.
         var isPresented: Bool?
+        
+        /// <#Description#>
+        private(set) var isSaving = false
         
         /// <#Description#>
         var multiFormModeIsActive: Bool {
@@ -174,7 +250,7 @@ public extension FeatureFormView {
                 select(form: first)
             }
             
-            initialEvaluationTask = Task {
+            taskForInitialEvaluation = Task {
                 await evaluateExpressions()
             }
         }
@@ -189,6 +265,9 @@ public extension FeatureFormView {
         
         /// <#Description#>
         private var backStack = [UUID]()
+        
+        /// <#Description#>
+        private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
         
         /// An error thrown when finishing or discarding edits.
         var finishOrDiscardError: (any Error)?
@@ -223,101 +302,22 @@ public extension FeatureFormView {
             }
         }
         
+        /// The task for discarding edits.
+        @ObservationIgnored
+        private var taskForDiscarding: Task<Void, Never>?
+        
+        /// The task for initial expression evaluation.
+        @ObservationIgnored
+        private var taskForInitialEvaluation: Task<Void, Never>?
+        
+        /// The task for saving.
+        @ObservationIgnored
+        private var taskForSaving: Task<Void, Never>?
+        
         /// The internally managed validation error visibility.
         private var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
         
         // MARK: Unevaluated
-        
-        /// <#Description#>
-        var isSaving = false
-        
-        /// <#Description#>
-        private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
-        
-        /// <#Description#>
-        public var editingEvents: AsyncStream<EditingEvent> {
-            editingEventStream
-        }
-        
-        /// <#Description#>
-        func reportEditingEvent(_ event: EditingEvent) {
-            /// Delivers editing events to the deprecated
-            /// ``FeatureFormView/onFormEditingEvent(perform:)`` modifier.
-            @diagnose(DeprecatedDeclaration, as: ignored)
-            func deliverToCallback() {
-                guard let callBack = onFormEditingEventAction else { return }
-                var effectiveEvent = event
-                switch event {
-                case .failed, .willSave:
-                    // New event types aren't delivered to a deprecated channel.
-                    return
-                case .navigationChanged, .showOnMapRequested:
-                    // Existing events are let through unchanged.
-                    break
-                case .discarded:
-                    // Discarded is converted to a deprecated equivalent.
-                    effectiveEvent = .discardedEdits(willNavigate: false)
-                case .saved:
-                    // Saved is converted to a deprecated equivalent.
-                    effectiveEvent = .savedEdits(willNavigate: false)
-                case .discardedEdits, .savedEdits:
-                    // Deprecated events won't be reported.
-                    fatalError("A deprecated event type was reported.")
-                }
-                callBack(effectiveEvent)
-            }
-            deliverToCallback()
-            editingEventStreamContinuation.yield(event)
-        }
-        
-        /// The initial expression evaluation task.
-        @ObservationIgnored
-        private var initialEvaluationTask: Task<Void, Never>?
-        
-        /// <#Description#>
-        @ObservationIgnored
-        private var saveTask: Task<Void, Never>?
-        
-        /// <#Description#>
-        @ObservationIgnored
-        private var taskForDiscard: Task<Void, Never>?
-        
-        isolated deinit {
-            editingEventStreamContinuation.finish()
-            initialEvaluationTask?.cancel()
-            saveTask?.cancel()
-            taskForDiscard?.cancel()
-        }
-        
-        /// <#Description#>
-        func save() {
-            saveTask = Task {
-                guard !isSaving else { return }
-                isSaving = true
-                defer { isSaving = false }
-                
-                do {
-                    reportEditingEvent(.willSave)
-                    
-                    await evaluateExpressions()
-                    
-                    try Task.checkCancellation()
-                    
-                    guard !groupHasErrors else {
-                        alertForValidationErrorsIsPresented = true
-                        validationErrorVisibilityInternal = .visible
-                        reportEditingEvent(.failed(SaveError.validationErrors))
-                        return
-                    }
-                    
-                    try await group.finishEditing()
-                    reportEditingEvent(.saved)
-                } catch {
-                    finishOrDiscardError = error
-                    reportEditingEvent(.failed(error))
-                }
-            }
-        }
         
         /// <#Description#>
         func navigateBack() {
