@@ -49,14 +49,30 @@ struct FeatureFormExampleView: View {
                 .sheet(isPresented: $featureFormViewIsPresented) {
                     model = nil
                 } content: {
-                    FeatureFormView(model: model!, isPresented: $featureFormViewIsPresented)
-                        .frame(idealWidth: 350)
-                        .presentationBackgroundInteraction(.enabled(upThrough: .large))
-                        .presentationDetents([.large, .medium])
-#if !targetEnvironment(macCatalyst)
-                        .presentationSizing(.fitted)
-#endif
-                        .presentationPlacement()
+                    if let model {
+                        FeatureFormView(model: model, isPresented: $featureFormViewIsPresented)
+                            .frame(idealWidth: 350)
+                            .presentationBackgroundInteraction(.enabled(upThrough: .large))
+                            .presentationDetents([.large, .medium])
+    #if !targetEnvironment(macCatalyst)
+                            .presentationSizing(.fitted)
+    #endif
+                            .presentationPlacement()
+                            .task {
+                                for await event in model.editingEvents {
+                                    if case .saved = event {
+                                        for formFeatureID in model.ids {
+                                            if let form = model.form(for: formFeatureID),
+                                               let table = form.feature.table as? ServiceFeatureTable {
+                                                if !editedTables.contains(where: { $0 === table }) {
+                                                    editedTables.append(table)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                    }
                 }
                 .task(id: identifyScreenPoint) {
                     guard !editsAreBeingApplied,
