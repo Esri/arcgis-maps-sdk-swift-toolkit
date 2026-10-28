@@ -175,7 +175,7 @@ final class GeometryEditorModel {
     // MARK: Tools
     
     /// The currently selected tool.
-    var selectedTool = FeatureEditorGeometryTool.allCases.first! {
+    var selectedTool = FeatureEditorGeometryTool.editingTools.first! {
         didSet {
             geometryEditor.tool = selectedTool.geometryEditorTool
         }
@@ -203,12 +203,12 @@ final class GeometryEditorModel {
         if let constructionTools {
             constructionTools
         } else if let geometryType {
-            FeatureEditorGeometryTool.allCases.filter { tool in
+            FeatureEditorGeometryTool.editingTools.filter { tool in
                 tool.supportedGeometryTypes
                     .contains(where: { $0 == geometryType })
             }
         } else {
-            FeatureEditorGeometryTool.allCases
+            FeatureEditorGeometryTool.editingTools
         }
     }
 }

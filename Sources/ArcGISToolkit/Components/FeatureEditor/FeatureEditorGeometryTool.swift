@@ -16,8 +16,14 @@ import ArcGIS
 
 /// The tools supported by the feature editor.
 enum FeatureEditorGeometryTool: Hashable {
+    case circle
     case freehand
+    case line
+    case multipoint
+    case point
+    case polygon
     case shape(kind: ShapeTool.Kind)
+    case streaming
     case vertex
     case vertexReticle
     
@@ -25,6 +31,13 @@ enum FeatureEditorGeometryTool: Hashable {
     var geometryEditorTool: GeometryEditorTool {
         let tool: GeometryEditorTool
         switch self {
+        case .circle:
+            let shapeTool = ShapeTool(kind: .ellipse)
+            shapeTool.configuration.scaleMode = .uniform
+            // Allows the shape tool to be used when there is an existing
+            // geometry.
+            shapeTool.configuration.allowsPartCreation = true
+            tool = shapeTool
         case .freehand:
             tool = FreehandTool()
         case .shape(let kind):
@@ -33,7 +46,11 @@ enum FeatureEditorGeometryTool: Hashable {
             // geometry.
             shapeTool.configuration.allowsPartCreation = true
             tool = shapeTool
-        case .vertex:
+        case .streaming:
+            tool = FreehandTool()
+            // Uses the `VertexTool`'s style so that vertex symbols are shown.
+            tool.style = VertexTool().style
+        case .line, .multipoint, .point, .polygon, .vertex:
             tool = VertexTool()
         case .vertexReticle:
             tool = ReticleVertexTool()
@@ -51,16 +68,25 @@ enum FeatureEditorGeometryTool: Hashable {
     /// The geometry types that the tool can be used with.
     var supportedGeometryTypes: [Geometry.Type] {
         switch self {
-        case .freehand, .shape:
+        case .circle, .freehand, .shape, .streaming:
             [Polygon.self, Polyline.self]
+        case .line:
+            [Polyline.self]
+        case .multipoint:
+            [Multipoint.self]
+        case .point:
+            [Point.self]
+        case .polygon:
+            [Polygon.self]
         case .vertex, .vertexReticle:
             [Multipoint.self, Point.self, Polygon.self, Polyline.self]
         }
     }
 }
 
-extension FeatureEditorGeometryTool: CaseIterable {
-    static var allCases: [Self] {
+extension FeatureEditorGeometryTool {
+    /// The tools for editing an existing geometry.
+    static var editingTools: [Self] {
         [
             .vertex,
             .vertexReticle,

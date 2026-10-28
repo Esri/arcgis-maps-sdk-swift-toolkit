@@ -211,10 +211,14 @@ extension FeatureAddingModel.GeometryConstructionError: Equatable {
 private extension FeatureEditorGeometryTool {
     init?(kind: GeometryConstructionTool.Kind) {
         let tool: Self? = switch kind {
-        case .freehand: .freehand
+        case .circle: .circle
         case .ellipse: .shape(kind: .ellipse)
+        case .line: .line
+        case .multipoint: .multipoint
+        case .point: .point
+        case .polygon: .polygon
         case .rectangle: .shape(kind: .rectangle)
-        case .line, .multipoint, .point, .polygon: .vertex
+        case .streamingPolygon, .streamingPolyline: .streaming
         default: nil
         }
         guard let tool else { return nil }

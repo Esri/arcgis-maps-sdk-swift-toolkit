@@ -56,14 +56,50 @@ private extension FeatureEditorGeometryTool {
     /// A localized, user-friendly label for the tool.
     var label: LocalizedStringResource {
         switch self {
+        case .circle:
+            LocalizedStringResource(
+                "Circle",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates a circle."
+            )
         case .freehand:
             LocalizedStringResource(
                 "Freehand",
                 bundle: .toolkit,
                 comment: "A label for a geometry editor tool that allows the user to edit using freehand gestures."
             )
+        case .line:
+            LocalizedStringResource(
+                "Line",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates a polyline."
+            )
+        case .multipoint:
+            LocalizedStringResource(
+                "Multipoint",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates a multipoint."
+            )
+        case .point:
+            LocalizedStringResource(
+                "Point",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates a point."
+            )
+        case .polygon:
+            LocalizedStringResource(
+                "Polygon",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates an irregular polygon."
+            )
         case .shape(let shape):
             shape.label
+        case .streaming:
+            LocalizedStringResource(
+                "Streaming",
+                bundle: .toolkit,
+                comment: "A label for a geometry construction tool that creates a free-form sketch with automatically created vertices."
+            )
         case .vertex:
             LocalizedStringResource(
                 "Vertex",
@@ -82,8 +118,12 @@ private extension FeatureEditorGeometryTool {
     /// The name of a system image that represents the tool.
     var systemImage: String {
         switch self {
-        case .freehand: "scribble"
+        case .circle: "circle"
+        case .freehand, .streaming: "scribble"
         case .shape(let shape): shape.systemImage
+        case .line: "point.topleft.down.to.point.bottomright.curvepath.fill"
+        case .multipoint, .point: "dot.square"
+        case .polygon: "skew"
         case .vertex: "point.3.connected.trianglepath.dotted"
         case .vertexReticle: "dot.viewfinder"
         }
@@ -127,7 +167,7 @@ private extension ShapeTool.Kind {
     var systemImage: String {
         switch self {
         case .arrow: "arrowshape.right"
-        case .ellipse: "circle"
+        case .ellipse: "oval"
         case .rectangle: "rectangle"
         case .triangle: "triangle"
         @unknown default:
