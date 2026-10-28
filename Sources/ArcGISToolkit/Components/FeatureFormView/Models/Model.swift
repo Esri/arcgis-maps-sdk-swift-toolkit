@@ -124,6 +124,18 @@ public extension FeatureFormView {
             }
         }
         
+        /// Unsets the active form.
+        /// - Parameter clearBackStack: A Boolean value indicating whether the navigation
+        /// history should also be cleared.
+        func clearSelection(clearBackStack: Bool = true) {
+            guard let selectedID else { return }
+            backStack.append(selectedID)
+            self.selectedID = nil
+            if clearBackStack {
+                backStack.removeAll()
+            }
+        }
+        
         /// <#Description#>
         /// - Parameter ignoreEdits: A Boolean value indicating if the user should be
         /// warned of unsaved edits before discarding.
@@ -147,6 +159,39 @@ public extension FeatureFormView {
                 alertForUnsavedEditsIsPresented = true
             } else {
                 _ = discard()
+            }
+        }
+        
+        /// <#Description#>
+        /// - Parameter id: <#id description#>
+        /// - Returns: <#description#>
+        func editStatusForForm(featureID id: UUID) -> Bool {
+            formModel(for: id)?.hasAttributeOrGeometryEdits ?? false
+        }
+        
+        /// <#Description#>
+        /// - Parameter globalID: <#globalID description#>
+        /// - Returns: <#description#>
+        func formModel(for globalID: UUID) -> FeatureFormView.FormModel? {
+            if let model = formModels[globalID] {
+                return model
+            } else if let form = form(for: globalID) {
+                let newModel = addFormModel(form)
+                return newModel
+            } else {
+                return nil
+            }
+        }
+        
+        /// <#Description#>
+        func navigateBack() {
+            guard let selectedModel else { return }
+            if selectedModel.navigationPath.isEmpty, canGoBack {
+                // Back into the previous visited form in the group.
+                popBackStack()
+            } else if !selectedModel.navigationPath.isEmpty {
+                // Back into the previous view in the current form's navigation path.
+                selectedModel.navigationPath.removeLast()
             }
         }
         
@@ -212,10 +257,38 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
+        /// - Parameter id: <#id description#>
+        /// - Returns: <#description#>
+        func totalErrorCountForForm(featureID id: UUID) -> Int {
+            formModel(for: id)?.errorCount ?? 0
+        }
+        
+        /// <#Description#>
         var alertForUnsavedEditsIsPresented = false
         
         /// <#Description#>
         var alertForValidationErrorsIsPresented = false
+        
+        /// <#Description#>
+        var allValidationErrorsAreVisible: Bool {
+            groupHasErrors
+            && (
+                validationErrorVisibility == .visible
+                || validationErrorVisibilityInternal == .visible
+            )
+            ? true
+            : false
+        }
+        
+        /// A Boolean value indicating if the group has any forms with edits.
+        var groupHasEdits: Bool {
+            formModels.contains(where: { $0.value.hasAttributeOrGeometryEdits })
+        }
+        
+        /// A Boolean value indicating if the group has any forms with validation errors.
+        var groupHasErrors: Bool {
+            totalErrorCount > 0
+        }
         
         /// A Boolean value that determines whether the view is presented.
         var isPresented: Bool?
@@ -238,198 +311,9 @@ public extension FeatureFormView {
         /// Supports deprecated modifier ``FeatureFormView/onFormEditingEvent(perform:)``.
         var onFormEditingEventAction: ((EditingEvent) -> Void)?
         
-        // MARK: Private members
-        
-        /// <#Description#>
-        private init(group: FeatureFormGroup) {
-            self.group = group
-            self.formCount = group.forms.count
-            
-            // If the group has a single form, select it.
-            if !multiFormModeIsActive, let first = group.forms.first {
-                select(form: first)
-            }
-            
-            taskForInitialEvaluation = Task {
-                await evaluateExpressions()
-            }
-        }
-        
-        /// <#Description#>
-        private func evaluateExpressions() async {
-            let expressionsEvaluationErrors = try? await group.evaluateExpressions()
-            if !(expressionsEvaluationErrors?.isEmpty ?? true) {
-                Logger.featureFormView.warning("Expression evaluation error: \(expressionsEvaluationErrors.debugDescription)")
-            }
-        }
-        
-        /// <#Description#>
-        private var backStack = [UUID]()
-        
-        /// <#Description#>
-        private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
-        
-        /// An error thrown when finishing or discarding edits.
-        var finishOrDiscardError: (any Error)?
-        
-        /// <#Description#>
-        private var formCount: Int
-        
-        /// Form view models, keyed by feature global IDs.
-        private var formModels: [UUID: FeatureFormView.FormModel] = [:]
-        
-        /// <#Description#>
-        private let group: FeatureFormGroup
-        
-        /// <#Description#>
-        private var canGoBack: Bool {
-            backStack.count > 0
-        }
-        
-        /// <#Description#>
-        private var ids: [UUID] {
-            group.forms.compactMap { $0.feature.globalID }
-        }
-        
-        /// <#Description#>
-        private var selectedID: UUID? {
-            didSet {
-                guard let selectedForm else { return }
-                onFeatureFormChanged?(selectedForm)
-                if let selectedModel {
-                    selectedModel.evaluateExpressions()
-                }
-            }
-        }
-        
-        /// The task for discarding edits.
-        @ObservationIgnored
-        private var taskForDiscarding: Task<Void, Never>?
-        
-        /// The task for initial expression evaluation.
-        @ObservationIgnored
-        private var taskForInitialEvaluation: Task<Void, Never>?
-        
-        /// The task for saving.
-        @ObservationIgnored
-        private var taskForSaving: Task<Void, Never>?
-        
-        /// The internally managed validation error visibility.
-        private var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
-        
-        // MARK: Unevaluated
-        
-        /// <#Description#>
-        func navigateBack() {
-            guard canGoBack else {
-                Logger.featureFormView.warning("Cannot navigate backwards without history.")
-                return
-            }
-            let top = backStack.removeLast()
-            guard let form = form(for: top) else {
-                Logger.featureFormView.warning("No ID for back navigation.")
-                return
-            }
-            select(form: form, recordNavigation: false)
-        }
-        
-        /// Unsets the active form.
-        /// - Parameter clearBackStack: A Boolean value indicating whether the navigation
-        /// history should also be cleared.
-        public func clearSelection(clearBackStack: Bool = true) {
-            guard let selectedID else { return }
-            backStack.append(selectedID)
-            self.selectedID = nil
-            if clearBackStack {
-                backStack.removeAll()
-            }
-        }
-        
-        /// <#Description#>
-        /// - Parameter form: <#form description#>
-        public func remove(form: FeatureForm) {
-            defer { formCount = group.forms.count }
-            group.forms.forEach { _form in
-                if form.feature.globalID == _form.feature.globalID {
-                    try? group.removeForm(_form)
-                }
-            }
-            backStack.removeAll { id in
-                form.feature.globalID == id
-            }
-            if selectedID == form.feature.globalID, canGoBack {
-                let top = backStack.removeLast()
-                if let form = self.form(for: top) {
-                    select(form: form)
-                }
-            }
-        }
-        
-        /// <#Description#>
-        /// - Parameter id: <#id description#>
-        /// - Returns: <#description#>
-        private func form(for id: UUID) -> FeatureForm? {
-            group.forms.first { $0.feature.globalID == id } ?? nil
-        }
-        
-        /// <#Description#>
-        /// - Parameter globalID: <#globalID description#>
-        /// - Returns: <#description#>
-        func formModel(for globalID: UUID) -> FeatureFormView.FormModel? {
-            if let model = formModels[globalID] {
-                return model
-            } else if let form = form(for: globalID) {
-                let newModel = addFormModel(form)
-                return newModel
-            } else {
-                return nil
-            }
-        }
-        
-        /// Creates a new `FormModel` and adds it to the set of models.
-        /// - Parameters:
-        ///   - form: <#form description#>
-        ///   - isAssociation: <#isAssociation description#>
-        /// - Returns: The new model.
-        func addFormModel(_ form: FeatureForm, isAssociation: Bool = false) -> FormModel? {
-            guard let globalID = form.feature.globalID else {
-                Logger.featureFormView.error("Couldn't get GlobalID to make FormModel.")
-                return nil
-            }
-            let newModel = FeatureFormView.FormModel(featureForm: form, createdViaUtilityAssociation: isAssociation)
-            formModels[globalID] = newModel
-            return newModel
-        }
-        
-        /// <#Description#>
-        /// - Parameters:
-        ///   - form: <#feature description#>
-        ///   - recordNavigation: <#recordNavigation description#>
-        public func select(form: FeatureForm, recordNavigation: Bool = true, clearHistory: Bool = false) {
-            guard form.feature.globalID != selectedID else { return }
-            if recordNavigation, let selectedID {
-                backStack.append(selectedID)
-            }
-            if clearHistory {
-                backStack.removeAll()
-            }
-            selectedID = form.feature.globalID
-        }
-        
         var selectedModel: FormModel? {
             guard let selectedID else { return nil }
             return formModel(for: selectedID)
-        }
-        
-        /// <#Description#>
-        var allValidationErrorsAreVisible: Bool {
-            groupHasErrors
-            && (
-                validationErrorVisibility == .visible
-                || validationErrorVisibilityInternal == .visible
-            )
-            ? true
-            : false
         }
         
         /// A Boolean value indicating whether the Back button in the toolbar should be shown.
@@ -467,38 +351,138 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        func goBack() {
-            guard let selectedModel else { return }
-            if selectedModel.navigationPath.isEmpty, canGoBack {
-                // Back into the previous visited form in the group.
-                navigateBack()
-            } else if !selectedModel.navigationPath.isEmpty {
-                // Back into the previous view in the current form's navigation path.
-                selectedModel.navigationPath.removeLast()
-            }
-        }
-        
-        /// <#Description#>
         var totalErrorCount: Int {
             formModels.values.map({ $0.errorCount }).reduce(0, +)
         }
         
-        func editStatusForForm(featureID id: UUID) -> Bool {
-            formModel(for: id)?.hasAttributeOrGeometryEdits ?? false
+        // MARK: Private members
+        
+        /// <#Description#>
+        private init(group: FeatureFormGroup) {
+            self.group = group
+            self.formCount = group.forms.count
+            
+            // If the group has a single form, select it.
+            if !multiFormModeIsActive, let first = group.forms.first {
+                select(form: first)
+            }
+            
+            taskForInitialEvaluation = Task {
+                await evaluateExpressions()
+            }
         }
         
-        func totalErrorCountForForm(featureID id: UUID) -> Int {
-            formModel(for: id)?.errorCount ?? 0
+        /// Creates a new `FormModel` and adds it to the set of models.
+        /// - Parameters:
+        ///   - form: <#form description#>
+        ///   - isAssociation: <#isAssociation description#>
+        /// - Returns: The new model.
+        private func addFormModel(_ form: FeatureForm, isAssociation: Bool = false) -> FormModel? {
+            guard let globalID = form.feature.globalID else {
+                Logger.featureFormView.error("Couldn't get GlobalID to make FormModel.")
+                return nil
+            }
+            let newModel = FeatureFormView.FormModel(featureForm: form, createdViaUtilityAssociation: isAssociation)
+            formModels[globalID] = newModel
+            return newModel
         }
         
-        /// A Boolean value indicating if the group has any forms with edits.
-        var groupHasEdits: Bool {
-            formModels.contains(where: { $0.value.hasAttributeOrGeometryEdits })
+        /// <#Description#>
+        private func evaluateExpressions() async {
+            let expressionsEvaluationErrors = try? await group.evaluateExpressions()
+            if !(expressionsEvaluationErrors?.isEmpty ?? true) {
+                Logger.featureFormView.warning("Expression evaluation error: \(expressionsEvaluationErrors.debugDescription)")
+            }
         }
         
-        /// A Boolean value indicating if the group has any forms with validation errors.
-        var groupHasErrors: Bool {
-            totalErrorCount > 0
+        /// <#Description#>
+        /// - Parameter id: <#id description#>
+        /// - Returns: <#description#>
+        private func form(for id: UUID) -> FeatureForm? {
+            group.forms.first { $0.feature.globalID == id } ?? nil
         }
+        
+        /// <#Description#>
+        private func popBackStack() {
+            guard canGoBack else {
+                Logger.featureFormView.warning("Cannot navigate backwards without history.")
+                return
+            }
+            let top = backStack.removeLast()
+            guard let form = form(for: top) else {
+                Logger.featureFormView.warning("No ID for back navigation.")
+                return
+            }
+            select(form: form, recordNavigation: false)
+        }
+        
+        /// <#Description#>
+        /// - Parameters:
+        ///   - form: <#feature description#>
+        ///   - recordNavigation: <#recordNavigation description#>
+        func select(form: FeatureForm, recordNavigation: Bool = true, clearHistory: Bool = false) {
+            guard form.feature.globalID != selectedID else { return }
+            if recordNavigation, let selectedID {
+                backStack.append(selectedID)
+            }
+            if clearHistory {
+                backStack.removeAll()
+            }
+            selectedID = form.feature.globalID
+        }
+        
+        /// <#Description#>
+        private var backStack = [UUID]()
+        
+        /// <#Description#>
+        private var canGoBack: Bool {
+            backStack.count > 0
+        }
+        
+        /// <#Description#>
+        private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
+        
+        /// An error thrown when finishing or discarding edits.
+        var finishOrDiscardError: (any Error)?
+        
+        /// <#Description#>
+        private var formCount: Int
+        
+        /// Form view models, keyed by feature global IDs.
+        private var formModels: [UUID: FeatureFormView.FormModel] = [:]
+        
+        /// <#Description#>
+        private let group: FeatureFormGroup
+        
+        /// <#Description#>
+        private var ids: [UUID] {
+            group.forms.compactMap { $0.feature.globalID }
+        }
+        
+        /// <#Description#>
+        private var selectedID: UUID? {
+            didSet {
+                guard let selectedForm else { return }
+                onFeatureFormChanged?(selectedForm)
+                if let selectedModel {
+                    selectedModel.evaluateExpressions()
+                }
+            }
+        }
+        
+        /// The task for discarding edits.
+        @ObservationIgnored
+        private var taskForDiscarding: Task<Void, Never>?
+        
+        /// The task for initial expression evaluation.
+        @ObservationIgnored
+        private var taskForInitialEvaluation: Task<Void, Never>?
+        
+        /// The task for saving.
+        @ObservationIgnored
+        private var taskForSaving: Task<Void, Never>?
+        
+        /// The internally managed validation error visibility.
+        private var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
     }
 }

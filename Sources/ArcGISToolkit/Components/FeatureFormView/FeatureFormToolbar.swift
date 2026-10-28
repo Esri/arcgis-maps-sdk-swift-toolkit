@@ -84,7 +84,7 @@ private extension FeatureFormView.Toolbar /* Items */ {
     /// navigation path or return them to the previous form they were on in the group.
     var backButton: some View {
         Button {
-            groupModel.goBack()
+            groupModel.navigateBack()
         } label: {
             Label {
                 Text(

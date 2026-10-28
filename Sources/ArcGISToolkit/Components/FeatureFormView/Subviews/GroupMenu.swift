@@ -45,6 +45,7 @@ extension FeatureFormView {
             }
         }
         
+        /// <#Description#>
         var noFormsView: some View {
             ContentUnavailableView {
                 Text(
@@ -58,6 +59,7 @@ extension FeatureFormView {
             }
         }
         
+        /// <#Description#>
         var formButtons: some View {
             ForEach(groupModel.activeForms, id: \.feature.globalID) { form in
                 formButton(form)
@@ -65,6 +67,9 @@ extension FeatureFormView {
             .id(groupModel.selectedForm?.feature.globalID)
         }
         
+        /// <#Description#>
+        /// - Parameter form: <#form description#>
+        /// - Returns: <#description#>
         func formButton(_ form: FeatureForm) -> some View {
             LabeledContent {
                 Button {
@@ -86,6 +91,9 @@ extension FeatureFormView {
             }
         }
         
+        /// <#Description#>
+        /// - Parameter form: <#form description#>
+        /// - Returns: <#description#>
         func formButtonLabel(_ form: FeatureForm) -> some View {
             HStack {
                 Text(
@@ -114,6 +122,9 @@ extension FeatureFormView {
             }
         }
         
+        /// <#Description#>
+        /// - Parameter form: <#form description#>
+        /// - Returns: <#description#>
         func unsavedEditsLabelIsVisible(_ form: FeatureForm) -> Bool {
             let hasEdits = groupModel.editStatusForForm(featureID: form.feature.globalID!)
             let hasNoErrors = groupModel.totalErrorCountForForm(featureID: form.feature.globalID!) == 0
