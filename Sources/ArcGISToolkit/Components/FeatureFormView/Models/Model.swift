@@ -68,8 +68,11 @@ public extension FeatureFormView {
             }
         }
         
-        /// The visibility of the Save button.
-        public var saveButtonVisibility: Visibility = .automatic
+        /// <#Description#>
+        public var selectedForm: FeatureForm? {
+            guard let selectedID else { return nil }
+            return form(for: selectedID) ?? nil
+        }
         
         /// The visibility of validation errors in the form(s).
         public var validationErrorVisibility = ValidationErrorVisibility.automatic
@@ -111,6 +114,9 @@ public extension FeatureFormView {
             }
         }
         
+        /// An error thrown when finishing or discarding edits.
+        var finishOrDiscardError: (any Error)?
+        
         /// <#Description#>
         private var formCount: Int
         
@@ -139,15 +145,6 @@ public extension FeatureFormView {
         }
         
         // MARK: Unevaluated
-        
-        /// <#Description#>
-        public var selectedForm: FeatureForm? {
-            guard let selectedID else { return nil }
-            return form(for: selectedID) ?? nil
-        }
-        
-        /// An error thrown from finish editing.
-        var finishEditingError: (any Error)?
         
         /// <#Description#>
         var alertForUnsavedEditsIsPresented = false
@@ -216,7 +213,7 @@ public extension FeatureFormView {
                         try await self.group.discardEdits()
                         self.reportEditingEvent(.discarded)
                     } catch {
-                        self.finishEditingError = error
+                        self.finishOrDiscardError = error
                         self.reportEditingEvent(.failed(error))
                     }
                     if self.isPresented != nil {
@@ -288,7 +285,7 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        public func save() {
+        func save() {
             saveTask = Task {
                 guard !isSaving else { return }
                 isSaving = true
@@ -311,7 +308,7 @@ public extension FeatureFormView {
                     try await group.finishEditing()
                     reportEditingEvent(.saved)
                 } catch {
-                    finishEditingError = error
+                    finishOrDiscardError = error
                     reportEditingEvent(.failed(error))
                 }
             }
@@ -461,8 +458,7 @@ public extension FeatureFormView {
         
         /// A Boolean value indicating whether the Save button in the toolbar should be shown.
         var showSaveButton: Bool {
-            saveButtonVisibility != .hidden
-            && (selectedForm == nil || !multiFormModeIsActive)
+            selectedForm == nil || !multiFormModeIsActive
         }
         
         /// <#Description#>

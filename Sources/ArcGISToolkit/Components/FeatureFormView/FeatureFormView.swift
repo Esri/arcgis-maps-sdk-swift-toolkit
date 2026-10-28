@@ -143,10 +143,8 @@ public extension FeatureFormView /* Deprecated */ {
     /// - Parameter visibility: The visibility of the save and discard buttons.
     /// - Since: 200.8
     /// - Note: Deprecated at 300.3. The component no longer has a Discard button.
-    /// Use ``FeatureFormView/Model/saveButtonVisibility``.
-    @available(*, deprecated, message: "Use 'FeatureFormView.Model.saveButtonVisibility' instead.")
+    @available(*, deprecated, message: "Hiding the save button is no longer supported.")
     func editingButtons(_ visibility: Visibility) -> Self {
-        model.saveButtonVisibility = visibility
         return self
     }
     
@@ -218,7 +216,7 @@ private extension View /* Alerts */ {
                 bundle: .toolkit,
                 comment: "The title shown when the feature form failed to save."
             ),
-            item: $model.finishEditingError,
+            item: $model.finishOrDiscardError,
             actions: { _ in },
             message: { error in
                 Text(
