@@ -79,96 +79,6 @@ public extension FeatureFormView {
         
         // MARK: Internal members
         
-        /// A Boolean value that determines whether the view is presented.
-        var isPresented: Bool?
-        
-        /// <#Description#>
-        var multiFormModeIsActive: Bool {
-            activeForms.count > 1
-        }
-        
-        /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
-        ///
-        /// Supports deprecated modifier ``FeatureFormView/onFeatureFormChanged(perform:)``.
-        var onFeatureFormChanged: ((FeatureForm) -> Void)?
-        
-        /// The user-provided closure to perform when a ``EditingEvent`` occurs.
-        ///
-        /// Supports deprecated modifier ``FeatureFormView/onFormEditingEvent(perform:)``.
-        var onFormEditingEventAction: ((EditingEvent) -> Void)?
-        
-        // MARK: Private members
-        
-        /// <#Description#>
-        private init(group: FeatureFormGroup) {
-            self.group = group
-            self.formCount = group.forms.count
-            
-            // If the group has a single form, select it.
-            if !multiFormModeIsActive, let first = group.forms.first {
-                select(form: first)
-            }
-            
-            initialEvaluationTask = Task {
-                await evaluateExpressions()
-            }
-        }
-        
-        /// An error thrown when finishing or discarding edits.
-        var finishOrDiscardError: (any Error)?
-        
-        /// <#Description#>
-        private var formCount: Int
-        
-        /// <#Description#>
-        private let group: FeatureFormGroup
-        
-        /// <#Description#>
-        private var canGoBack: Bool {
-            backStack.count > 0
-        }
-        
-        /// <#Description#>
-        private var ids: [UUID] {
-            group.forms.compactMap { $0.feature.globalID }
-        }
-        
-        /// <#Description#>
-        private var selectedID: UUID? {
-            didSet {
-                guard let selectedForm else { return }
-                onFeatureFormChanged?(selectedForm)
-                if let selectedModel {
-                    selectedModel.evaluateExpressions()
-                }
-            }
-        }
-        
-        // MARK: Unevaluated
-        
-        /// <#Description#>
-        var alertForUnsavedEditsIsPresented = false
-        
-        /// <#Description#>
-        var alertForValidationErrorsIsPresented = false
-        
-        /// Form view models, keyed by feature global IDs.
-        private var formModels: [UUID: FeatureFormView.FormModel] = [:]
-        
-        /// The internally managed validation error visibility.
-        private var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
-        
-        /// <#Description#>
-        private var backStack = [UUID]()
-        
-        /// <#Description#>
-        private func evaluateExpressions() async {
-            let expressionsEvaluationErrors = try? await group.evaluateExpressions()
-            if !(expressionsEvaluationErrors?.isEmpty ?? true) {
-                Logger.featureFormView.warning("Expression evaluation error: \(expressionsEvaluationErrors.debugDescription)")
-            }
-        }
-        
         /// <#Description#>
         /// - Parameters:
         ///   - form: <#form description#>
@@ -205,19 +115,19 @@ public extension FeatureFormView {
         /// <#Description#>
         /// - Parameter ignoreEdits: A Boolean value indicating if the user should be
         /// warned of unsaved edits before discarding.
-        @diagnose(DeprecatedDeclaration, as: ignored)
-        public func discard(ignoreEdits: Bool = false) {
-            let discard = {
-                Task {
+        func discard(ignoreEdits: Bool = false) {
+            let discard = { [weak self] in
+                self?.taskForDiscard?.cancel()
+                self?.taskForDiscard = Task {
                     do {
-                        try await self.group.discardEdits()
-                        self.reportEditingEvent(.discarded)
+                        try await self?.group.discardEdits()
+                        self?.reportEditingEvent(.discarded)
                     } catch {
-                        self.finishOrDiscardError = error
-                        self.reportEditingEvent(.failed(error))
+                        self?.finishOrDiscardError = error
+                        self?.reportEditingEvent(.failed(error))
                     }
-                    if self.isPresented != nil {
-                        self.isPresented = false
+                    if self?.isPresented != nil {
+                        self?.isPresented = false
                     }
                 }
             }
@@ -227,6 +137,96 @@ public extension FeatureFormView {
                 _ = discard()
             }
         }
+        
+        /// <#Description#>
+        var alertForUnsavedEditsIsPresented = false
+        
+        /// <#Description#>
+        var alertForValidationErrorsIsPresented = false
+        
+        /// A Boolean value that determines whether the view is presented.
+        var isPresented: Bool?
+        
+        /// <#Description#>
+        var multiFormModeIsActive: Bool {
+            activeForms.count > 1
+        }
+        
+        /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
+        ///
+        /// Supports deprecated modifier ``FeatureFormView/onFeatureFormChanged(perform:)``.
+        var onFeatureFormChanged: ((FeatureForm) -> Void)?
+        
+        /// The user-provided closure to perform when a ``EditingEvent`` occurs.
+        ///
+        /// Supports deprecated modifier ``FeatureFormView/onFormEditingEvent(perform:)``.
+        var onFormEditingEventAction: ((EditingEvent) -> Void)?
+        
+        // MARK: Private members
+        
+        /// <#Description#>
+        private init(group: FeatureFormGroup) {
+            self.group = group
+            self.formCount = group.forms.count
+            
+            // If the group has a single form, select it.
+            if !multiFormModeIsActive, let first = group.forms.first {
+                select(form: first)
+            }
+            
+            initialEvaluationTask = Task {
+                await evaluateExpressions()
+            }
+        }
+        
+        /// <#Description#>
+        private func evaluateExpressions() async {
+            let expressionsEvaluationErrors = try? await group.evaluateExpressions()
+            if !(expressionsEvaluationErrors?.isEmpty ?? true) {
+                Logger.featureFormView.warning("Expression evaluation error: \(expressionsEvaluationErrors.debugDescription)")
+            }
+        }
+        
+        /// <#Description#>
+        private var backStack = [UUID]()
+        
+        /// An error thrown when finishing or discarding edits.
+        var finishOrDiscardError: (any Error)?
+        
+        /// <#Description#>
+        private var formCount: Int
+        
+        /// Form view models, keyed by feature global IDs.
+        private var formModels: [UUID: FeatureFormView.FormModel] = [:]
+        
+        /// <#Description#>
+        private let group: FeatureFormGroup
+        
+        /// <#Description#>
+        private var canGoBack: Bool {
+            backStack.count > 0
+        }
+        
+        /// <#Description#>
+        private var ids: [UUID] {
+            group.forms.compactMap { $0.feature.globalID }
+        }
+        
+        /// <#Description#>
+        private var selectedID: UUID? {
+            didSet {
+                guard let selectedForm else { return }
+                onFeatureFormChanged?(selectedForm)
+                if let selectedModel {
+                    selectedModel.evaluateExpressions()
+                }
+            }
+        }
+        
+        /// The internally managed validation error visibility.
+        private var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
+        
+        // MARK: Unevaluated
         
         /// <#Description#>
         var isSaving = false
@@ -278,10 +278,15 @@ public extension FeatureFormView {
         @ObservationIgnored
         private var saveTask: Task<Void, Never>?
         
+        /// <#Description#>
+        @ObservationIgnored
+        private var taskForDiscard: Task<Void, Never>?
+        
         isolated deinit {
             editingEventStreamContinuation.finish()
             initialEvaluationTask?.cancel()
             saveTask?.cancel()
+            taskForDiscard?.cancel()
         }
         
         /// <#Description#>
