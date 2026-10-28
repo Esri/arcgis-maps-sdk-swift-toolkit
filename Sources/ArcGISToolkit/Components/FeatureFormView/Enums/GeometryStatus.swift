@@ -14,7 +14,7 @@
 
 public extension FeatureFormView {
     /// Describes the status of the geometry on a `FeatureForms`'s underlying feature.
-    /// - Since: 300.2
+    /// - Since: 300.3
     enum GeometryStatus {
         case invalid
         case valid

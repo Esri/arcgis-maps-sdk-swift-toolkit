@@ -19,7 +19,7 @@ internal import os
 
 public extension FeatureFormView {
     /// A model for the ``FeatureFormView`` component.
-    /// - Since: 300.2
+    /// - Since: 300.3
     @MainActor @Observable
     final class Model {
         /// The visibility of the Save button.
@@ -193,7 +193,7 @@ public extension FeatureFormView {
         /// - Parameters:
         ///   - feature: The feature to update the geometry edit status for.
         ///   - status: The status of the in-memory feature's geometry.
-        /// - Since: 300.2
+        /// - Since: 300.3
         public func setGeometryEditStatus(
             for feature: ArcGISFeature,
             status: GeometryStatus?

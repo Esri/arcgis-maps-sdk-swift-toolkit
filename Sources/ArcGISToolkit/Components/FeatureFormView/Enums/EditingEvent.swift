@@ -20,10 +20,10 @@ public extension FeatureFormView {
     /// - Since: 200.8
     enum EditingEvent: @unchecked Sendable {
         /// Indicates that the user has discarded their edits.
-        /// - Since: 300.2
+        /// - Since: 300.3
         case discarded
         /// Indicates that edits failed to finish.
-        /// - Since: 300.2
+        /// - Since: 300.3
         case failed(any Error)
         /// Indicates the active form or the navigation path for the active form has changed.
         ///
@@ -32,13 +32,13 @@ public extension FeatureFormView {
         /// - Since: 300.0
         case navigationChanged(NavigationPathItem)
         /// Indicates that the user has saved their edits.
-        /// - Since: 300.2
+        /// - Since: 300.3
         case saved
         /// Indicates that the user has tapped on an option to visualize a feature on the map.
         /// - Since: 300.0
         case showOnMapRequested(ArcGISFeature)
         /// Indicates that the user has started an attempt to save their edits.
-        /// - Since: 300.2
+        /// - Since: 300.3
         case willSave
         
         // MARK: Deprecated case(s)
@@ -46,7 +46,7 @@ public extension FeatureFormView {
         /// Indicates that the user has discarded their edits.
         /// - Parameter willNavigate: A Boolean value indicating whether the view will
         /// navigate after discarding.
-        /// - Note: Deprecated at 300.2 - discarding edits before navigation is no longer
+        /// - Note: Deprecated at 300.3 - discarding edits before navigation is no longer
         /// required. Replace this with 'discarded'.
         /// - Since: 200.8
         @available(*, deprecated, renamed: "FeatureFormView.EditingEvent.discarded")
@@ -54,7 +54,7 @@ public extension FeatureFormView {
         /// Indicates that the user has saved their edits.
         /// - Parameter willNavigate: A Boolean value indicating whether the view will
         /// navigate after saving.
-        /// - Note: Deprecated at 300.2 - finishing edits before navigation is no longer
+        /// - Note: Deprecated at 300.3 - finishing edits before navigation is no longer
         /// required. Replace this with 'finished'.
         /// - Since: 200.8
         @available(*, deprecated, renamed: "FeatureFormView.EditingEvent.finished")
