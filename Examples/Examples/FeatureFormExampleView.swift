@@ -27,8 +27,6 @@ struct FeatureFormExampleView: View {
     @State private var featureFormViewIsPresented = false
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
-    /// <#Description#>
-    @State private var lastEditingEvent: FeatureFormView.EditingEvent?
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
     /// <#Description#>
@@ -48,60 +46,7 @@ struct FeatureFormExampleView: View {
                 .overlay {
                     submittingOverlay
                 }
-                .inspector(isPresented: .constant(true)) {
-                    List {
-                        LabeledContent("Selected Form") {
-                            if let selectedForm = model.selectedForm {
-                                Text("\(selectedForm.title) - \(selectedForm.id)")
-                            } else {
-                                Text("None")
-                            }
-                        }
-                        if let lastEditingEvent {
-                            LabeledContent("Status") {
-                                Text("\(lastEditingEvent)")
-                            }
-                        }
-                        if model.formCount > 0 {
-                            Section("^[\(model.formCount) Forms](inflect: true)") {
-                                ForEach(model.ids, id: \.self) { featureID in
-                                    if let form = model.form(for: featureID) {
-                                        Menu("\(form.title) - \(form.id)") {
-                                            Section("Geometry Status") {
-                                                Button("Report Invalid", role: .destructive) {
-                                                    model.setGeometryEditStatus(for: form.feature, status: .invalid)
-                                                }
-                                                Button("Report Valid") {
-                                                    model.setGeometryEditStatus(for: form.feature, status: .valid)
-                                                }
-                                                Button("Clear") {
-                                                    model.setGeometryEditStatus(for: form.feature, status: nil)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        Picker("Save Button", selection: $model.saveButtonVisibility) {
-                            Text("Automatic")
-                                .tag(Visibility.automatic)
-                            Text("Visible")
-                                .tag(Visibility.visible)
-                            Text("Hidden")
-                                .tag(Visibility.hidden)
-                        }
-                        Picker("Validation Errors", selection: $model.validationErrorVisibility) {
-                            Text("Automatic")
-                                .tag(FeatureFormView.ValidationErrorVisibility.automatic)
-                            Text("Visible")
-                                .tag(FeatureFormView.ValidationErrorVisibility.visible)
-                        }
-                    }
-                }
                 .sheet(isPresented: $featureFormViewIsPresented) {
-//                    model.reset()
-                } content: {
                     FeatureFormView(model: model, isPresented: $featureFormViewIsPresented)
                         .frame(idealWidth: 350)
                         .presentationBackgroundInteraction(.enabled(upThrough: .large))
@@ -113,11 +58,6 @@ struct FeatureFormExampleView: View {
                     guard !editsAreBeingApplied,
                           let identifyScreenPoint else { return }
                     await makeFeatureForm(point: identifyScreenPoint, mapView: mapView)
-                }
-                .task {
-                    for await event in model.editingEvents {
-                        lastEditingEvent = event
-                    }
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
