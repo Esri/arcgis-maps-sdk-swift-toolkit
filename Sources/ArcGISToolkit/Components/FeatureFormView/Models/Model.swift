@@ -49,6 +49,10 @@ public extension FeatureFormView {
             if !multiFormModeIsActive, let first = group.forms.first {
                 select(form: first)
             }
+            
+            initialEvaluationTask = Task {
+                await evaluateExpressions()
+            }
         }
         
         /// Initializes a model for the view, creating a `FeatureFormGroup` with the provided
@@ -85,6 +89,9 @@ public extension FeatureFormView {
             didSet {
                 guard let selectedForm else { return }
                 onFeatureFormChanged?(selectedForm)
+                if let selectedModel {
+                    selectedModel.evaluateExpressions()
+                }
             }
         }
         
@@ -140,6 +147,14 @@ public extension FeatureFormView {
         
         /// <#Description#>
         private var backStack = [UUID]()
+        
+        /// <#Description#>
+        private func evaluateExpressions() async {
+            let expressionsEvaluationErrors = try? await group.evaluateExpressions()
+            if !(expressionsEvaluationErrors?.isEmpty ?? true) {
+                Logger.featureFormView.warning("Expression evaluation error: \(expressionsEvaluationErrors.debugDescription)")
+            }
+        }
         
         /// <#Description#>
         /// - Parameters:
@@ -267,10 +282,17 @@ public extension FeatureFormView {
             editingEventStreamContinuation.yield(event)
         }
         
+        /// The initial expression evaluation task.
+        @ObservationIgnored
+        private var initialEvaluationTask: Task<Void, Never>?
+        
+        /// <#Description#>
+        @ObservationIgnored
         private var saveTask: Task<Void, Never>?
         
         isolated deinit {
             editingEventStreamContinuation.finish()
+            initialEvaluationTask?.cancel()
             saveTask?.cancel()
         }
         
@@ -284,10 +306,7 @@ public extension FeatureFormView {
                 do {
                     reportEditingEvent(.willSave)
                     
-                    let evaluationErrors = try await group.evaluateExpressions()
-                    if let firstEvaluationError = evaluationErrors.first?.error {
-                        throw firstEvaluationError
-                    }
+                    await evaluateExpressions()
                     
                     try Task.checkCancellation()
                     
