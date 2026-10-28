@@ -14,7 +14,50 @@
 
 import XCTest
 
+/// Asserts that an element exists and becomes disabled within an amount of time.
+/// - Parameters:
+///   - element: The element to assert.
+///   - timeout: The time, in seconds, the test allows for the element to exist and become disabled.
+///   The default timeout is five seconds.
+@MainActor func assertExistsAndIsDisabled(
+    _ element: XCUIElement,
+    timeout: TimeInterval = .standard,
+    file: StaticString = #filePath,
+    line: UInt = #line
+) {
+    XCTAssertTrue(
+        element.wait(for: \.existsAndIsDisabled, toEqual: true, timeout: timeout),
+        "The \(element.description) was not disabled after \(timeout.formattedDescription).",
+        file: file,
+        line: line
+    )
+}
+
+/// Asserts that an element exists and becomes enabled within an amount of time.
+/// - Parameters:
+///   - element: The element to assert.
+///   - timeout: The time, in seconds, the test allows for the element to exist and become enabled.
+///   The default timeout is five seconds.
+@MainActor func assertExistsAndIsEnabled(
+    _ element: XCUIElement,
+    timeout: TimeInterval = .standard,
+    file: StaticString = #filePath,
+    line: UInt = #line
+) {
+    XCTAssertTrue(
+        element.wait(for: \.existsAndIsEnabled, toEqual: true, timeout: timeout),
+        "The \(element.description) was not enabled after \(timeout.formattedDescription).",
+        file: file,
+        line: line
+    )
+}
+
 extension XCUIElement {
+    /// A Boolean value indicating whether the element exists and is disabled.
+    var existsAndIsDisabled: Bool { exists && !isEnabled }
+    /// A Boolean value indicating whether the element exists and is enabled.
+    var existsAndIsEnabled: Bool { exists && isEnabled }
+    
     /// Manipulates a picker wheel element to change the value, based on a normalized position.
     /// - Parameters:
     ///   - index: The element index to use.
@@ -124,4 +167,10 @@ extension XCUIElement {
 private extension TimeInterval {
     /// A 5 second time interval.
     static var standard: TimeInterval { 5 }
+    
+    /// The human-readable description of the time interval.
+    var formattedDescription: String {
+        let measurement = Measurement<UnitDuration>(value: self, unit: .seconds)
+        return measurement.formatted(.measurement(width: .wide))
+    }
 }
