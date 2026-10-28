@@ -30,7 +30,7 @@ struct FeatureFormExampleView: View {
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
     /// The model for the component.
-    @State private var model = FeatureFormView.Model()!
+    @State private var model: FeatureFormView.Model?
     /// The error to be presented in the alert.
     @State private var submissionError: SubmissionError?
     
@@ -47,11 +47,15 @@ struct FeatureFormExampleView: View {
                     submittingOverlay
                 }
                 .sheet(isPresented: $featureFormViewIsPresented) {
-                    FeatureFormView(model: model, isPresented: $featureFormViewIsPresented)
+                    model = nil
+                } content: {
+                    FeatureFormView(model: model!, isPresented: $featureFormViewIsPresented)
                         .frame(idealWidth: 350)
                         .presentationBackgroundInteraction(.enabled(upThrough: .large))
                         .presentationDetents([.large, .medium])
+#if !targetEnvironment(macCatalyst)
                         .presentationSizing(.fitted)
+#endif
                         .presentationPlacement()
                 }
                 .task(id: identifyScreenPoint) {
@@ -139,8 +143,12 @@ extension FeatureFormExampleView {
         )
         if let geoElements = identifyLayerResults?.first?.geoElements,
            let feature = geoElements.first as? ArcGISFeature {
-            let newForm = FeatureForm(feature: feature)
-            model.add(form: newForm)
+            let form = FeatureForm(feature: feature)
+            if let currentModel = model {
+                currentModel.add(form: form)
+            } else if let newModel = FeatureFormView.Model(forms: [form]) {
+                self.model = newModel
+            }
             featureFormViewIsPresented = true
         }
     }
