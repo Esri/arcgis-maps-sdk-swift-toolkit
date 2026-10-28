@@ -31,7 +31,15 @@ extension FeatureFormView {
                     }
                 }
                 .navigationTitle(
-                    "Editing ^[\(groupModel.activeFormCount) features](inflect: true)"
+                    Text(
+                        "Editing ^[\(groupModel.activeFormCount) features](inflect: true)",
+                        bundle: .toolkitModule,
+                        comment: """
+                            A navigation title indicating the number of \ 
+                            features being edited in the feature form toolkit \
+                            component.
+                            """
+                    )
                 )
                 .featureFormToolbar()
             }
