@@ -114,9 +114,6 @@ extension FeatureFormView {
                     }
             }
             .environment(formModel)
-            // Re-evaluate the stack when the selected form changes and the
-            // toolbars when the form count changes.
-            .id(formModel.featureForm.id.hashValue + groupModel.formCount)
             .onChange(of: formModel.navigationPath) {
                 if let presentedItem = formModel.navigationPath.last {
                     groupModel.reportEditingEvent(.navigationChanged(presentedItem))
