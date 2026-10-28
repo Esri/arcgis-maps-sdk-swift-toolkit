@@ -62,13 +62,13 @@ enum FeatureEditorGeometryTool: Hashable {
 extension FeatureEditorGeometryTool: CaseIterable {
     static var allCases: [Self] {
         [
-            .freehand,
             .vertex,
             .vertexReticle,
             .shape(kind: .arrow),
             .shape(kind: .ellipse),
             .shape(kind: .rectangle),
-            .shape(kind: .triangle)
+            .shape(kind: .triangle),
+            .freehand
         ]
     }
 }
