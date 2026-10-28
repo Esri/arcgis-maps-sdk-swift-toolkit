@@ -18,14 +18,14 @@ import SwiftUI
 extension FeatureFormView {
     struct ShowOnMapButton: View {
         /// The model for the feature form view.
-        @Environment(FeatureFormView.Model.self) var featureFormViewModel
+        @Environment(FeatureFormView.Model.self) var groupModel
         
         let feature: ArcGISFeature
         
         var body: some View {
             if feature.geometry != nil {
                 Button {
-                    featureFormViewModel.reportEditingEvent(.showOnMapRequested(feature))
+                    groupModel.reportEditingEvent(.showOnMapRequested(feature))
                 } label: {
                     Label {
                         Text(

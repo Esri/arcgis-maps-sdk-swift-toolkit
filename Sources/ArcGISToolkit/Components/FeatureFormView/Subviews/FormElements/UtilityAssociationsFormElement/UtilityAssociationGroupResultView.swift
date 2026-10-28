@@ -19,7 +19,7 @@ extension FeatureFormView {
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
         /// The model for the feature form view.
-        @Environment(FeatureFormView.Model.self) var featureFormViewModel
+        @Environment(FeatureFormView.Model.self) var groupModel
         /// The model for the feature form which presented this view.
         @Environment(FeatureFormView.FormModel.self) var formModel
         
@@ -147,7 +147,7 @@ extension FeatureFormView {
         
         func mainButton(for result: UtilityAssociationResult) -> some View {
             Button {
-                featureFormViewModel.add(
+                groupModel.add(
                     form: FeatureForm(feature: result.associatedFeature),
                     select: true,
                     recordAsBrowsed: true

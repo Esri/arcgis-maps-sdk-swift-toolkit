@@ -19,19 +19,19 @@ extension FeatureFormView {
     /// <#Description#>
     struct GroupMenu: View {
         /// The model for the feature form view.
-        @Environment(FeatureFormView.Model.self) var featureFormViewModel
+        @Environment(FeatureFormView.Model.self) var groupModel
         
         public var body: some View {
             NavigationStack {
                 List {
-                    if featureFormViewModel.formCount == 0 {
+                    if groupModel.formCount == 0 {
                         noFormsView
                     } else {
                         formButtons
                     }
                 }
                 .navigationTitle(
-                    "Editing ^[\(featureFormViewModel.activeFormCount) features](inflect: true)"
+                    "Editing ^[\(groupModel.activeFormCount) features](inflect: true)"
                 )
                 .featureFormToolbar()
             }
@@ -51,24 +51,24 @@ extension FeatureFormView {
         }
         
         var formButtons: some View {
-            ForEach(featureFormViewModel.activeForms, id: \.feature.globalID) { form in
+            ForEach(groupModel.activeForms, id: \.feature.globalID) { form in
                 formButton(form)
             }
-            .id(featureFormViewModel.selectedID)
+            .id(groupModel.selectedID)
         }
         
         func formButton(_ form: FeatureForm) -> some View {
             LabeledContent {
                 Button {
                     withAnimation {
-                        featureFormViewModel.select(form: form, clearHistory: true)
+                        groupModel.select(form: form, clearHistory: true)
                     }
                 } label: {
                     formButtonLabel(form)
                 }
                 .badge(
-                    featureFormViewModel.allValidationErrorsAreVisible
-                    ? featureFormViewModel.totalErrorCountForForm(featureID: form.feature.globalID!)
+                    groupModel.allValidationErrorsAreVisible
+                    ? groupModel.totalErrorCountForForm(featureID: form.feature.globalID!)
                     : 0
                 )
                 .badgeProminence(.increased)
@@ -81,7 +81,7 @@ extension FeatureFormView {
         func formButtonLabel(_ form: FeatureForm) -> some View {
             HStack {
                 Text(
-                    featureFormViewModel.formModel(
+                    groupModel.formModel(
                         for: form.feature.globalID!
                     )?.title ?? ""
                 )
@@ -107,9 +107,9 @@ extension FeatureFormView {
         }
         
         func unsavedEditsLabelIsVisible(_ form: FeatureForm) -> Bool {
-            let hasEdits = featureFormViewModel.editStatusForForm(featureID: form.feature.globalID!)
-            let hasNoErrors = featureFormViewModel.totalErrorCountForForm(featureID: form.feature.globalID!) == 0
-            let validationErrorsAreVisible = featureFormViewModel.allValidationErrorsAreVisible
+            let hasEdits = groupModel.editStatusForForm(featureID: form.feature.globalID!)
+            let hasNoErrors = groupModel.totalErrorCountForForm(featureID: form.feature.globalID!) == 0
+            let validationErrorsAreVisible = groupModel.allValidationErrorsAreVisible
             return hasEdits
             && (!validationErrorsAreVisible
             || (validationErrorsAreVisible && hasNoErrors))

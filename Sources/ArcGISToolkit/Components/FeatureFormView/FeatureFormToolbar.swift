@@ -24,7 +24,7 @@ extension View {
 private extension FeatureFormView {
     struct Toolbar: ViewModifier {
         /// The model for the feature form view.
-        @Environment(FeatureFormView.Model.self) var featureFormViewModel
+        @Environment(FeatureFormView.Model.self) var groupModel
         
         /// A Boolean value indicating whether multi-form mode is active.
         ///
@@ -36,17 +36,17 @@ private extension FeatureFormView {
             content
                 .navigationBarBackButtonHidden()
                 .navigationBarTitleDisplayMode(.inline)
-                .onChange(of: featureFormViewModel.activeFormCount, initial: false) {
+                .onChange(of: groupModel.activeFormCount, initial: false) {
                     Task {
                         // A small delay allows the group icon to come into view
                         // before we animate it.
                         try? await Task.sleep(for: .seconds(0.1))
-                        delayedMultiFormModeActive = featureFormViewModel.multiFormModeIsActive
+                        delayedMultiFormModeActive = groupModel.multiFormModeIsActive
                     }
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        if featureFormViewModel.showBackButton {
+                        if groupModel.showBackButton {
                             backButton
                         }
                     }
@@ -54,21 +54,21 @@ private extension FeatureFormView {
                         ToolbarSpacer(.flexible, placement: .topBarLeading)
                     }
                     ToolbarItem(placement: .topBarLeading) {
-                        if featureFormViewModel.showDismissButton {
+                        if groupModel.showDismissButton {
                             DismissButton(kind: .cancel) {
-                                featureFormViewModel.discard()
+                                groupModel.discard()
                             }
                         }
                     }
                     ToolbarItemGroup(placement: .topBarTrailing) {
-                        if featureFormViewModel.showGroupMenuButton {
+                        if groupModel.showGroupMenuButton {
                             groupMenuButton
-                        } else if featureFormViewModel.showSaveButton {
+                        } else if groupModel.showSaveButton {
                             saveButton
                         }
                     }
                     ToolbarItem(placement: .bottomBar) {
-                        if featureFormViewModel.showInvalidGeometryBadge {
+                        if groupModel.showInvalidGeometryBadge {
                             invalidGeometryLabel
                         }
                     }
@@ -84,7 +84,7 @@ private extension FeatureFormView.Toolbar /* Items */ {
     /// navigation path or return them to the previous form they were on in the group.
     var backButton: some View {
         Button {
-            featureFormViewModel.goBack()
+            groupModel.goBack()
         } label: {
             Label {
                 Text(
@@ -108,13 +108,13 @@ private extension FeatureFormView.Toolbar /* Items */ {
     var groupMenuButton: some View {
         Button {
             withAnimation {
-                featureFormViewModel.clearSelection(clearBackStack: false)
+                groupModel.clearSelection(clearBackStack: false)
             }
         } label: {
-            Image(systemName: featureFormViewModel.groupHasEdits ? "tray.badge" : "tray")
+            Image(systemName: groupModel.groupHasEdits ? "tray.badge" : "tray")
                 .symbolEffect(.bounce, value: delayedMultiFormModeActive)
                 .symbolRenderingMode(
-                    featureFormViewModel.allValidationErrorsAreVisible
+                    groupModel.allValidationErrorsAreVisible
                     ? .multicolor
                     : .monochrome
                 )
@@ -151,10 +151,10 @@ private extension FeatureFormView.Toolbar /* Items */ {
     var saveButton: some View {
         Button {
             withAnimation {
-                featureFormViewModel.save()
+                groupModel.save()
             }
         } label: {
-            if featureFormViewModel.isSaving {
+            if groupModel.isSaving {
                 ProgressView()
             } else {
                 Label {
@@ -168,6 +168,6 @@ private extension FeatureFormView.Toolbar /* Items */ {
                 }
             }
         }
-        .disabled(!featureFormViewModel.groupHasEdits)
+        .disabled(!groupModel.groupHasEdits)
     }
 }

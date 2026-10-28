@@ -26,7 +26,7 @@ extension FeatureFormView {
     /// path of the current form for when (and if) the user returns.
     struct FormStack: View {
         /// The model for the feature form view.
-        @Environment(FeatureFormView.Model.self) var featureFormViewModel
+        @Environment(FeatureFormView.Model.self) var groupModel
         
         /// The effective navigation path.
         ///
@@ -116,10 +116,10 @@ extension FeatureFormView {
             .environment(formModel)
             // Re-evaluate the stack when the selected form changes and the
             // toolbars when the form count changes.
-            .id(formModel.featureForm.id.hashValue + featureFormViewModel.formCount)
+            .id(formModel.featureForm.id.hashValue + groupModel.formCount)
             .onChange(of: formModel.navigationPath) {
                 if let presentedItem = formModel.navigationPath.last {
-                    featureFormViewModel.reportEditingEvent(.navigationChanged(presentedItem))
+                    groupModel.reportEditingEvent(.navigationChanged(presentedItem))
                 }
             }
             .onChange(of: formModel.featureForm.id, initial: true) {

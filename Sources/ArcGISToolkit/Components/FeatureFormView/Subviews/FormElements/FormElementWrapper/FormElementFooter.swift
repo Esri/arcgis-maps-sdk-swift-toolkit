@@ -18,7 +18,7 @@ import SwiftUI
 /// A footer for elements in a feature form.
 struct FormElementFooter: View {
     /// The model for the feature form view.
-    @Environment(FeatureFormView.Model.self) private var featureFormViewModel
+    @Environment(FeatureFormView.Model.self) private var groupModel
     /// The model for the feature form.
     @Environment(FeatureFormView.FormModel.self) private var formModel
     /// A vertical amount of padding to use between form elements.
@@ -34,7 +34,7 @@ struct FormElementFooter: View {
     var body: some View {
         text
             .id(id)
-            .onChange(of: featureFormViewModel.allValidationErrorsAreVisible) { id = .init() }
+            .onChange(of: groupModel.allValidationErrorsAreVisible) { id = .init() }
             .font(.footnote)
             .padding(.vertical, formElementPadding / 2)
     }
@@ -56,11 +56,11 @@ struct FormElementFooter: View {
         }
     }
     
-    /// A Boolean value which indicates whether or not the footer should show validation errors for the
-    /// element, if any are present.
+    /// A Boolean value which indicates whether or not the footer should show validation errors for
+    /// the element, if any are present.
     var showsErrorsIfPresent: Bool {
         formModel.previouslyFocusedElements.contains(element) ||
-        featureFormViewModel.allValidationErrorsAreVisible
+        groupModel.allValidationErrorsAreVisible
     }
 }
 
