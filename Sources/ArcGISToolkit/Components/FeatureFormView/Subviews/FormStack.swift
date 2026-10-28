@@ -119,7 +119,7 @@ extension FeatureFormView {
                     groupModel.reportEditingEvent(.navigationChanged(presentedItem))
                 }
             }
-            .onChange(of: formModel.featureForm.id, initial: true) {
+            .onChange(of: formModel.featureForm.feature.globalID, initial: true) {
                 effectiveNavigationPath = formModel.navigationPath
             }
             .onChange(of: formModel.navigationPath) {
