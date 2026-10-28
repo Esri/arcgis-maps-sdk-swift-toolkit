@@ -115,6 +115,8 @@ final class FeatureAddingModel {
                         .flatMap(FeatureEditorGeometryTool.init)
                 )
                 
+                let snapRules = try? await layerTemplate.featureTable.snapRules
+                geometryEditorModel.setSnapRules(snapRules)
                 geometryEditorModel.start(withType: layerTemplate.featureTable.geometryType!)
                 
                 geometryConstructionState = .editing
@@ -329,6 +331,14 @@ private extension ArcGISFeatureTable {
             serviceFeatureTable.serviceGeodatabase
         default:
             nil
+        }
+    }
+    
+    /// The snap rules for this feature table.
+    var snapRules: SnapRules? {
+        get async throws {
+            guard let utilityNetwork = try await utilityNetwork else { return nil }
+            return try await .rules(for: utilityNetwork, featureTable: self )
         }
     }
 }

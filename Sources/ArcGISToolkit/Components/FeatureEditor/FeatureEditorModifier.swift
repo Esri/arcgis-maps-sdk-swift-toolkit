@@ -127,9 +127,6 @@ private struct FeatureEditorModifier: ViewModifier {
                 .inspectorColumnWidth(ideal: 320)
 #endif
                 .interactiveDismissDisabled()
-                .sheet(isPresented: $geometryEditorModel.snapSettingsAreBeingModified) {
-                    SnapSettingsView(settings: model.geometryEditorModel.geometryEditor.snapSettings)
-                }
             }
             .environment(model)
             .onChange(of: model.state) {
@@ -141,6 +138,9 @@ private struct FeatureEditorModifier: ViewModifier {
                 case .stopped:
                     break
                 }
+            }
+            .sheet(isPresented: $geometryEditorModel.snapSettingsAreBeingModified) {
+                SnapSettingsView(settings: geometryEditorModel.geometryEditor.snapSettings)
             }
     }
     
