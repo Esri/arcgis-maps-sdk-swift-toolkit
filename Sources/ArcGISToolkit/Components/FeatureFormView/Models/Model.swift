@@ -90,12 +90,9 @@ public extension FeatureFormView {
         
         /// <#Description#>
         var activeForms: [FeatureForm] {
-            return ids.compactMap { id in
-                let form = form(for: id)
-                guard let globalID = form?.feature.globalID,
-                      let formModel = formModel(for: globalID) else { return nil }
+            formModels.values.compactMap { formModel in
                 if (!formModel.createdViaUtilityAssociation || formModel.hasEdits) {
-                    return form
+                    return formModel.featureForm
                 } else {
                     return nil
                 }
