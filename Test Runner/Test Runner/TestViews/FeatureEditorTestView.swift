@@ -47,8 +47,7 @@ struct FeatureEditorTestView: View {
                 do {
                     if let objectID = UserDefaults.standard.objectID,
                        let layerName = UserDefaults.standard.layerName,
-                       let groupLayer = map.operationalLayers.first as? GroupLayer,
-                       let layer = groupLayer.layers.first(where: { $0.name == layerName }),
+                       let layer = map.operationalLayers.first(where: { $0.name == layerName }),
                        let featureLayer = layer as? FeatureLayer {
                         try await startEditingFeature(withIdentifier: objectID, on: featureLayer)
                     }
@@ -106,11 +105,8 @@ private extension FeatureEditorTestView {
     
     /// Makes a map from a portal item.
     func makeMap() async throws -> Map {
-        let napervilleElectricUtilityNetwork = PortalItem(
-            portal: .arcGISOnline(connection: .anonymous),
-            id: PortalItem.ID("471eb0bf37074b1fbb972b1da70fb310")!
-        )
-        let map = Map(item: napervilleElectricUtilityNetwork)
+        let url = URL(string: "https://sampleserver7.arcgisonline.com/portal/home/item.html?id=b4565e0a4e4c4a4382914128f10864cd")!
+        let map = Map(url: url)!
         // Enables full resolution to allow snapping on all layers.
         map.loadSettings.featureTilingMode = .enabledWithFullResolutionWhenSupported
         try await ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(.publicSample)
