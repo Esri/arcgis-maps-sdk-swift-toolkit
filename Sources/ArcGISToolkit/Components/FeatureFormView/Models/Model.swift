@@ -91,7 +91,7 @@ public extension FeatureFormView {
         /// <#Description#>
         var activeForms: [FeatureForm] {
             formModels.values.compactMap { formModel in
-                if (!formModel.createdViaUtilityAssociation || formModel.hasEdits) {
+                if (!formModel.createdViaUtilityAssociation || formModel.hasAttributeOrGeometryEdits) {
                     return formModel.featureForm
                 } else {
                     return nil
