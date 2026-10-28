@@ -107,8 +107,7 @@ public struct FeatureFormView: View {
     /// <#Description#>
     var groupMenuOrFormStack: some View {
         Group {
-            if let selectedID = model.selectedID,
-                let formModel = model.formModel(for: selectedID) {
+            if let formModel = model.selectedModel {
                 FormStack(formModel: formModel)
             } else {
                 GroupMenu()

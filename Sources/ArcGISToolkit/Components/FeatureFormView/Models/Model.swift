@@ -24,12 +24,6 @@ public extension FeatureFormView {
     final class Model {
         // MARK: Public members
         
-        /// The visibility of the Save button.
-        public var saveButtonVisibility: Visibility = .automatic
-        
-        /// The visibility of validation errors in the form(s).
-        public var validationErrorVisibility = ValidationErrorVisibility.automatic
-        
         /// Initializes a model for the view, creating a `FeatureFormGroup` with the provided
         /// forms.
         /// - Parameter forms: The initial set of forms to be edited in the view.
@@ -63,10 +57,32 @@ public extension FeatureFormView {
             formModel(for: id)?.geometryStatus = status
         }
         
+        /// <#Description#>
+        public var activeForms: [FeatureForm] {
+            formModels.values.compactMap { formModel in
+                if (!formModel.createdViaUtilityAssociation || formModel.hasAttributeOrGeometryEdits) {
+                    return formModel.featureForm
+                } else {
+                    return nil
+                }
+            }
+        }
+        
+        /// The visibility of the Save button.
+        public var saveButtonVisibility: Visibility = .automatic
+        
+        /// The visibility of validation errors in the form(s).
+        public var validationErrorVisibility = ValidationErrorVisibility.automatic
+        
         // MARK: Internal members
         
         /// A Boolean value that determines whether the view is presented.
         var isPresented: Bool?
+        
+        /// <#Description#>
+        var multiFormModeIsActive: Bool {
+            activeForms.count > 1
+        }
         
         /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
         ///
@@ -78,8 +94,10 @@ public extension FeatureFormView {
         /// Supports deprecated modifier ``FeatureFormView/onFormEditingEvent(perform:)``.
         var onFormEditingEventAction: ((EditingEvent) -> Void)?
         
+        // MARK: Private members
+        
         /// <#Description#>
-        init(group: FeatureFormGroup) {
+        private init(group: FeatureFormGroup) {
             self.group = group
             self.formCount = group.forms.count
             
@@ -94,28 +112,23 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
+        private var formCount: Int
+        
+        /// <#Description#>
         private let group: FeatureFormGroup
         
         /// <#Description#>
-        var canGoBack: Bool {
+        private var canGoBack: Bool {
             backStack.count > 0
         }
         
-        /// The number of forms being edited in the view.
-        ///
-        /// This is the number of forms the model was initialized with,
-        /// plus/minus any added/removed programmatically via the model,
-        /// and plus any forms that have been interactively opened _and edited_ via
-        /// utility association elements.
-        var activeFormCount: Int {
-            activeForms.count
+        /// <#Description#>
+        private var ids: [UUID] {
+            group.forms.compactMap { $0.feature.globalID }
         }
         
         /// <#Description#>
-        public var formCount: Int
-        
-        /// <#Description#>
-        private(set) var selectedID: UUID? {
+        private var selectedID: UUID? {
             didSet {
                 guard let selectedForm else { return }
                 onFeatureFormChanged?(selectedForm)
@@ -125,34 +138,7 @@ public extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
-        var activeForms: [FeatureForm] {
-            formModels.values.compactMap { formModel in
-                if (!formModel.createdViaUtilityAssociation || formModel.hasAttributeOrGeometryEdits) {
-                    return formModel.featureForm
-                } else {
-                    return nil
-                }
-            }
-        }
-        
-        /// <#Description#>
-        var selectedIndex: Int {
-            if let selectedID {
-                ids.firstIndex(of: selectedID) ?? -1
-            } else {
-                -1
-            }
-        }
-        
-        var multiFormModeIsActive: Bool {
-            activeFormCount > 1
-        }
-        
-        /// <#Description#>
-        public var ids: [UUID] {
-            group.forms.compactMap { $0.feature.globalID }
-        }
+        // MARK: Unevaluated
         
         /// <#Description#>
         public var selectedForm: FeatureForm? {
@@ -380,7 +366,7 @@ public extension FeatureFormView {
         /// <#Description#>
         /// - Parameter id: <#id description#>
         /// - Returns: <#description#>
-        public func form(for id: UUID) -> FeatureForm? {
+        private func form(for id: UUID) -> FeatureForm? {
             group.forms.first { $0.feature.globalID == id } ?? nil
         }
         

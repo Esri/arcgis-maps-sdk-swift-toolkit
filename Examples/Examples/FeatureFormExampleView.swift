@@ -61,9 +61,8 @@ struct FeatureFormExampleView: View {
                             .task {
                                 for await event in model.editingEvents {
                                     if case .saved = event {
-                                        for formFeatureID in model.ids {
-                                            if let form = model.form(for: formFeatureID),
-                                               let table = form.feature.table as? ServiceFeatureTable {
+                                        for form in model.activeForms {
+                                            if let table = form.feature.table as? ServiceFeatureTable {
                                                 if !editedTables.contains(where: { $0 === table }) {
                                                     editedTables.append(table)
                                                 }
