@@ -111,7 +111,6 @@ private extension TextInput {
                             .padding()
 #if targetEnvironment(macCatalyst)
                             .environment(formModel)
-                            .environment(featureFormViewModel)
 #endif
                     }
                 } else {
