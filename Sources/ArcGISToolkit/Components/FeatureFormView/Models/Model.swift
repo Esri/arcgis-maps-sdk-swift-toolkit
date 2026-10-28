@@ -22,10 +22,48 @@ public extension FeatureFormView {
     /// - Since: 300.3
     @MainActor @Observable
     final class Model {
+        // MARK: Public members
+        
         /// The visibility of the Save button.
         public var saveButtonVisibility: Visibility = .automatic
+        
         /// The visibility of validation errors in the form(s).
         public var validationErrorVisibility = ValidationErrorVisibility.automatic
+        
+        /// Initializes a model for the view, creating a `FeatureFormGroup` with the provided
+        /// forms.
+        /// - Parameter forms: The initial set of forms to be edited in the view.
+        public convenience init?(forms: [FeatureForm] = []) {
+            guard let group = FeatureFormGroup(forms: forms) else { return nil }
+            self.init(group: group)
+        }
+        
+        /// <#Description#>
+        /// - Parameter form: <#form description#>
+        /// - Parameter select: <#select description#>
+        public func add(form: FeatureForm, select: Bool = false) {
+            add(form: form, select: select, recordAsBrowsed: false)
+        }
+        
+        /// Sets the edit status for the geometry on the provided feature.
+        ///
+        /// When ``FeatureFormView/GeometryStatus/invalid`` or
+        /// ``FeatureFormView/GeometryStatus/valid`` are provided the component
+        /// considers the feature edited. If `.none` the component considers the feature
+        /// not-edited.
+        /// - Parameters:
+        ///   - feature: The feature to update the geometry edit status for.
+        ///   - status: The status of the in-memory feature's geometry.
+        /// - Since: 300.3
+        public func setGeometryEditStatus(
+            for feature: ArcGISFeature,
+            status: GeometryStatus?
+        ) {
+            guard let id = feature.globalID else { return }
+            formModel(for: id)?.geometryStatus = status
+        }
+        
+        // MARK: Internal members
         
         /// A Boolean value that determines whether the view is presented.
         var isPresented: Bool?
@@ -53,14 +91,6 @@ public extension FeatureFormView {
             initialEvaluationTask = Task {
                 await evaluateExpressions()
             }
-        }
-        
-        /// Initializes a model for the view, creating a `FeatureFormGroup` with the provided
-        /// forms.
-        /// - Parameter forms: The initial set of forms to be edited in the view.
-        public convenience init?(forms: [FeatureForm] = []) {
-            guard let group = FeatureFormGroup(forms: forms) else { return nil }
-            self.init(group: group)
         }
         
         /// <#Description#>
@@ -187,31 +217,6 @@ public extension FeatureFormView {
             } catch {
                 Logger.featureFormView.error("Error adding form. \(error.localizedDescription)")
             }
-        }
-        
-        /// <#Description#>
-        /// - Parameter form: <#form description#>
-        /// - Parameter select: <#select description#>
-        public func add(form: FeatureForm, select: Bool = false) {
-            add(form: form, select: select, recordAsBrowsed: false)
-        }
-        
-        /// Sets the edit status for the geometry on the provided feature.
-        ///
-        /// When ``FeatureFormView/GeometryStatus/invalid`` or
-        /// ``FeatureFormView/GeometryStatus/valid`` are provided the component
-        /// considers the feature edited. If `.none` the component considers the feature
-        /// not-edited.
-        /// - Parameters:
-        ///   - feature: The feature to update the geometry edit status for.
-        ///   - status: The status of the in-memory feature's geometry.
-        /// - Since: 300.3
-        public func setGeometryEditStatus(
-            for feature: ArcGISFeature,
-            status: GeometryStatus?
-        ) {
-            guard let id = feature.globalID else { return }
-            formModel(for: id)?.geometryStatus = status
         }
         
         /// <#Description#>
