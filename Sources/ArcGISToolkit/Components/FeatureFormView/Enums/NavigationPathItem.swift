@@ -15,9 +15,14 @@
 import ArcGIS
 
 public extension FeatureFormView {
-    /// Describes the items in a feature form's navigation stack.
+    /// Describes the destinations a user will visit while browsing utility associations in a feature
+    /// form.
+    ///
+    /// This information can be used to do things such as keeping visualizations in a map
+    /// synchronized with what's happening in the component.
     /// - Since: 300.0
     enum NavigationPathItem: Hashable {
+        case form(FeatureForm)
         case utilityAssociationAssetTypesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource)
         case utilityAssociationCreationView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureCandidate)
         case utilityAssociationDetailsView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationResult)
@@ -25,12 +30,6 @@ public extension FeatureFormView {
         case utilityAssociationFeatureSourcesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter)
         case utilityAssociationFilterResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter)
         case utilityAssociationGroupResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, FeatureFormSource)
-        
-        // MARK: Deprecated case(s)
-        
-        /// - Note: Deprecated at 300.3.
-        @available(*, deprecated, message: "Use 'FeatureFormView.Model.selectedForm' for tracking the selected feature form.")
-        case form(FeatureForm)
         
         // MARK: Hashable conformance
         
