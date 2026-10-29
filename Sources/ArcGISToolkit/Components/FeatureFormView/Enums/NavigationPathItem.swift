@@ -31,8 +31,6 @@ public extension FeatureFormView {
         case utilityAssociationFilterResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter)
         case utilityAssociationGroupResultView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, FeatureFormSource)
         
-        // MARK: Hashable conformance
-        
         public static func == (lhs: Self, rhs: Self) -> Bool {
             switch (lhs, rhs) {
             case let (.form(a), .form(b)):
