@@ -49,9 +49,10 @@ public extension FeatureFormView {
 //            self.init(group: group)
         }
         
-        /// <#Description#>
-        /// - Parameter form: <#form description#>
-        /// - Parameter select: <#select description#>
+        /// Adds a `FeatureForm` to the underlying `FeatureFormGroup`
+        /// - Parameter form: The new form to be added to the group.
+        /// - Parameter select: A Boolean value indicating whether the added form should
+        /// become the ``FeatureFormView/Model/selectedForm``.
         public func add(form: FeatureForm, select: Bool = false) {
             guard isEditable else { return }
             add(form: form, select: select, recordAsBrowsed: false)
@@ -78,7 +79,10 @@ public extension FeatureFormView {
         /// <#Description#>
         public var activeForms: [FeatureForm] {
             formModels.values.compactMap { formModel in
-                if (!formModel.createdViaUtilityAssociation || formModel.hasAttributeOrGeometryEdits) {
+                if (
+                    !formModel.createdViaUtilityAssociation
+                    || formModel.hasAttributeOrGeometryEdits
+                ) {
                     return formModel.featureForm
                 } else {
                     return nil
