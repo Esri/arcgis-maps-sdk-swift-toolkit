@@ -233,25 +233,26 @@ public extension FeatureFormView {
                 isSaving = true
                 defer { isSaving = false }
                 
+                reportEditingEvent(.willSave)
+                
+                await evaluateExpressions()
+                
+                guard !Task.isCancelled else { return }
+                
+                guard !groupHasErrors else {
+                    alertForValidationErrorsIsPresented = true
+                    validationErrorVisibilityInternal = .visible
+                    reportEditingEvent(.failed(SaveError.validationErrors))
+                    return
+                }
+                
                 do {
-                    reportEditingEvent(.willSave)
-                    
-                    await evaluateExpressions()
-                    
-                    try Task.checkCancellation()
-                    
-                    guard !groupHasErrors else {
-                        alertForValidationErrorsIsPresented = true
-                        validationErrorVisibilityInternal = .visible
-                        reportEditingEvent(.failed(SaveError.validationErrors))
-                        return
-                    }
-                    
                     try await group.finishEditing()
                     reportEditingEvent(.saved)
                 } catch {
                     finishOrDiscardError = error
-                    reportEditingEvent(.failed(error))
+                    reportEditingEvent(.failed(SaveError.finishEditing))
+                    return
                 }
             }
         }
