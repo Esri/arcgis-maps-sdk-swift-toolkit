@@ -281,6 +281,11 @@ public extension FeatureFormView {
             : false
         }
         
+        /// <#Description#>
+        var canGoBack: Bool {
+            backStack.count > 0
+        }
+        
         /// A Boolean value indicating if the group has any forms with edits.
         var groupHasEdits: Bool {
             formModels.contains(where: { $0.value.hasAttributeOrGeometryEdits })
@@ -315,40 +320,6 @@ public extension FeatureFormView {
         var selectedModel: FormModel? {
             guard let selectedID else { return nil }
             return formModel(for: selectedID)
-        }
-        
-        /// A Boolean value indicating whether the Back button in the toolbar should be shown.
-        var showBackButton: Bool {
-            guard let selectedModel else { return false }
-            let selectedFormsPathIsEmpty = selectedModel.navigationPath.isEmpty
-            return (selectedFormsPathIsEmpty && canGoBack)
-            || !selectedFormsPathIsEmpty
-        }
-        
-        /// A Boolean value indicating whether the Dismiss button in the toolbar should be shown.
-        var showDismissButton: Bool {
-            isPresented != nil
-            && (!multiFormModeIsActive || selectedForm == nil)
-        }
-        
-        /// A Boolean value indicating whether the Group Menu button in the toolbar should be shown.
-        var showGroupMenuButton: Bool {
-            multiFormModeIsActive
-            && selectedForm != nil
-        }
-        
-        /// A Boolean value indicating if the invalid geometry toolbar item should be shown.
-        var showInvalidGeometryBadge: Bool {
-            guard let selectedID,
-                  let formModel = formModel(for: selectedID) else { return false }
-            let hasInvalidGeometry = formModel.geometryStatus == .invalid
-            return allValidationErrorsAreVisible &&
-            hasInvalidGeometry
-        }
-        
-        /// A Boolean value indicating whether the Save button in the toolbar should be shown.
-        var showSaveButton: Bool {
-            selectedForm == nil || !multiFormModeIsActive
         }
         
         /// <#Description#>
@@ -434,11 +405,6 @@ public extension FeatureFormView {
         
         /// <#Description#>
         private var backStack = [UUID]()
-        
-        /// <#Description#>
-        private var canGoBack: Bool {
-            backStack.count > 0
-        }
         
         /// <#Description#>
         private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
