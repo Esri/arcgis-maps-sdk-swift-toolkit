@@ -32,10 +32,28 @@ public extension FeatureFormView {
             self.init(group: group)
         }
         
+        /// Initializes a model for the view, creating a a `FeatureFormGroup` with a shared
+        /// template feature set.
+        ///
+        /// The members of a `FeatureFormGroup` are not editable when it is created with a
+        /// shared template feature creation set.
+        /// - Parameter featureCreationSet: The set to create the underlying
+        /// `FeatureFormGroup` with.
+        public convenience init?(
+            featureCreationSet: SharedTemplateFeatureCreationSet
+        ) {
+            fatalError("Not implemented.")
+//            guard let group = FeatureFormGroup(
+//                featureCreationSet: featureCreationSet
+//            ) else { return nil }
+//            self.init(group: group)
+        }
+        
         /// <#Description#>
         /// - Parameter form: <#form description#>
         /// - Parameter select: <#select description#>
         public func add(form: FeatureForm, select: Bool = false) {
+            guard isEditable else { return }
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
@@ -424,6 +442,13 @@ public extension FeatureFormView {
         /// <#Description#>
         private var ids: [UUID] {
             group.forms.compactMap { $0.feature.globalID }
+        }
+        
+        /// A Boolean value indicating whether forms cam be added or removed from the
+        /// underlying `FeatureFormGroup`.
+        private var isEditable: Bool {
+            return true
+//            group.isEditable
         }
         
         /// <#Description#>
