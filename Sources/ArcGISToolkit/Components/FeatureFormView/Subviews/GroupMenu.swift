@@ -16,7 +16,8 @@ import ArcGIS
 import SwiftUI
 
 extension FeatureFormView {
-    /// <#Description#>
+    /// A central view for a `FeatureFormGroup` with buttons for each member and a toolbar
+    /// that allows saving or discarding the entire group.
     struct GroupMenu: View {
         /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var groupModel

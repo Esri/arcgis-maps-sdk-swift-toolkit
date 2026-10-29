@@ -104,7 +104,8 @@ public struct FeatureFormView: View {
             }
     }
     
-    /// <#Description#>
+    /// Either the navigation stack for the ``FeatureFormView/Model/selectedForm`` or the
+    /// group menu if no form is selected.
     var groupMenuOrFormStack: some View {
         Group {
             if let formModel = model.selectedModel {
