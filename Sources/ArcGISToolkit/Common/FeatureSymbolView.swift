@@ -17,28 +17,28 @@ import SwiftUI
 
 /// A view that makes and shows a feature's symbol.
 struct FeatureSymbolView: View {
-    @ScaledMetric private var maxImageSize: CGFloat
-    @State private var image: UIImage?
     let feature: ArcGISFeature
     
+    @ScaledMetric private var maxImageSize: CGFloat
+    
+    @State private var image: UIImage?
+    
     init(feature: ArcGISFeature, maxImageSize: Double = 24) {
-        _maxImageSize = .init(wrappedValue: maxImageSize, relativeTo: .body)
         self.feature = feature
+        _maxImageSize = .init(wrappedValue: maxImageSize, relativeTo: .body)
     }
     
     var body: some View {
-        Group {
-            if let image {
-                let size = image.size(max: maxImageSize)
-                Image(uiImage: image)
-                    .resizable()
-                    .frame(width: size.width, height: size.height)
-            } else {
-                ProgressView()
-                    .task {
-                        await image = feature.symbol ?? UIImage(systemName: "questionmark.circle")
-                    }
-            }
+        if let image {
+            let size = image.size(max: maxImageSize)
+            Image(uiImage: image)
+                .resizable()
+                .frame(width: size.width, height: size.height)
+        } else {
+            ProgressView()
+                .task {
+                    await image = feature.symbol ?? UIImage(systemName: "questionmark.circle")
+                }
         }
     }
 }
