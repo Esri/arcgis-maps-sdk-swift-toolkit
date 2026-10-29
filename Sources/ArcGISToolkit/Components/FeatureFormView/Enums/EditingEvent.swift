@@ -55,9 +55,9 @@ public extension FeatureFormView {
         /// - Parameter willNavigate: A Boolean value indicating whether the view will
         /// navigate after saving.
         /// - Note: Deprecated at 300.3 - finishing edits before navigation is no longer
-        /// required. Replace this with 'finished'.
+        /// required. Replace this with 'saved'.
         /// - Since: 200.8
-        @available(*, deprecated, renamed: "FeatureFormView.EditingEvent.finished")
+        @available(*, deprecated, renamed: "FeatureFormView.EditingEvent.saved")
         case savedEdits(willNavigate: Bool)
     }
 }
