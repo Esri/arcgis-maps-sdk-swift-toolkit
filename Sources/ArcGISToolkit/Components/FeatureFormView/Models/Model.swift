@@ -32,10 +32,29 @@ public extension FeatureFormView {
             self.init(group: group)
         }
         
-        /// <#Description#>
-        /// - Parameter form: <#form description#>
-        /// - Parameter select: <#select description#>
+        /// Initializes a model for the view, creating a a `FeatureFormGroup` with a shared
+        /// template feature set.
+        ///
+        /// The members of a `FeatureFormGroup` are not editable when it is created with a
+        /// shared template feature creation set.
+        /// - Parameter featureCreationSet: The set to create the underlying
+        /// `FeatureFormGroup` with.
+        public convenience init?(
+            featureCreationSet: SharedTemplateFeatureCreationSet
+        ) {
+            fatalError("Not implemented.")
+//            guard let group = FeatureFormGroup(
+//                featureCreationSet: featureCreationSet
+//            ) else { return nil }
+//            self.init(group: group)
+        }
+        
+        /// Adds a `FeatureForm` to the underlying `FeatureFormGroup`
+        /// - Parameter form: The new form to be added to the group.
+        /// - Parameter select: A Boolean value indicating whether the added form should
+        /// become the ``FeatureFormView/Model/selectedForm``.
         public func add(form: FeatureForm, select: Bool = false) {
+            guard isEditable else { return }
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
@@ -57,10 +76,18 @@ public extension FeatureFormView {
             formModel(for: id)?.geometryStatus = status
         }
         
-        /// <#Description#>
-        public var activeForms: [FeatureForm] {
+        /// A stream of ``FeatureFormView/EditingEvent``s.
+        public var editingEvents: AsyncStream<EditingEvent> {
+            editingEventStream
+        }
+        
+        /// The forms being edited in the underlying `FeatureFormGroup`.
+        public var forms: [FeatureForm] {
             formModels.values.compactMap { formModel in
-                if (!formModel.createdViaUtilityAssociation || formModel.hasAttributeOrGeometryEdits) {
+                if (
+                    !formModel.createdViaUtilityAssociation
+                    || formModel.hasAttributeOrGeometryEdits
+                ) {
                     return formModel.featureForm
                 } else {
                     return nil
@@ -68,12 +95,9 @@ public extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
-        public var editingEvents: AsyncStream<EditingEvent> {
-            editingEventStream
-        }
-        
-        /// <#Description#>
+        /// The form selected in the component.
+        ///
+        /// `nil` when no form is selected and the group menu is showing.
         public var selectedForm: FeatureForm? {
             guard let selectedID else { return nil }
             return form(for: selectedID) ?? nil
@@ -91,11 +115,13 @@ public extension FeatureFormView {
             taskForSaving?.cancel()
         }
         
-        /// <#Description#>
+        /// Adds a `FeatureForm` to the group.
         /// - Parameters:
-        ///   - form: <#form description#>
-        ///   - select: <#select description#>
-        ///   - recordAsBrowsed: <#recordAsBrowsed description#>
+        ///   - form: The new form to be added to the group.
+        ///   - select: A Boolean value indicating whether the added form should become the
+        ///   ``FeatureFormView/Model/selectedForm``.
+        ///   - recordAsBrowsed: A Boolean value indicating whether the add is happening as
+        ///   a result of browsing utility associations in a form.
         func add(form: FeatureForm, select: Bool = false, recordAsBrowsed: Bool = false) {
             defer {
                 formCount = group.forms.count
@@ -136,7 +162,8 @@ public extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
+        /// Discards the edits on all forms in underlying group and closes the component is a
+        /// presentation binding was provided.
         /// - Parameter ignoreEdits: A Boolean value indicating if the user should be
         /// warned of unsaved edits before discarding.
         func discard(ignoreEdits: Bool = false) {
@@ -162,16 +189,12 @@ public extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
-        /// - Parameter id: <#id description#>
-        /// - Returns: <#description#>
-        func editStatusForForm(featureID id: UUID) -> Bool {
-            formModel(for: id)?.hasAttributeOrGeometryEdits ?? false
-        }
-        
-        /// <#Description#>
-        /// - Parameter globalID: <#globalID description#>
-        /// - Returns: <#description#>
+        /// Returns a  form model for a form in the group with a feature with a matching global ID.
+        ///
+        /// If no such model exists in the set of form models but the form is in the group a new
+        /// model created and added to the set before being returned.
+        /// - Parameter globalID: The global ID of a feature.
+        /// - Returns: The matching form model.
         func formModel(for globalID: UUID) -> FeatureFormView.FormModel? {
             if let model = formModels[globalID] {
                 return model
@@ -183,7 +206,9 @@ public extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
+        /// Returns the user to the previous ``FeatureFormView/Model/selectedForm>`` if
+        /// they are at the root of the current form's navigation stack, otherwise removes the top
+        /// item from the current form's navigation stack.
         func navigateBack() {
             guard let selectedModel else { return }
             if selectedModel.navigationPath.isEmpty, canGoBack {
@@ -195,7 +220,9 @@ public extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
+        /// Multiplexes ``FeatureFormView/EditingEvent``s to
+        /// ``FeatureFormView/Model/editingEvents`` and
+        /// ``FeatureFormView/onFormEditingEvent(perform:)``.
         func reportEditingEvent(_ event: EditingEvent) {
             /// Delivers editing events to the deprecated
             /// ``FeatureFormView/onFormEditingEvent(perform:)`` modifier.
@@ -226,7 +253,8 @@ public extension FeatureFormView {
             editingEventStreamContinuation.yield(event)
         }
         
-        /// <#Description#>
+        /// Finishes editing the underlying group of feature forms after first evaluating
+        /// expressions and confirming there are no attribute errors or invalid geometries.
         func save() {
             taskForSaving = Task {
                 guard !isSaving else { return }
@@ -257,20 +285,25 @@ public extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
-        /// - Parameter id: <#id description#>
-        /// - Returns: <#description#>
+        /// Reports the total error count for a feature form with a underlying feature with a
+        /// matching global ID.
+        ///
+        /// The count is the number of element validation errors on the matching form plus one if
+        /// the underlying feature's geometry has been reported invalid.
+        /// - Parameter id: The global ID of a feature.
+        /// - Returns: The error count for the indicated form.
         func totalErrorCountForForm(featureID id: UUID) -> Int {
             formModel(for: id)?.errorCount ?? 0
         }
         
-        /// <#Description#>
+        /// A Boolean value indicating whether the alert for unsaved edits is presented.
         var alertForUnsavedEditsIsPresented = false
         
-        /// <#Description#>
+        /// A Boolean value indicating whether the alert for validation errors is presented.
         var alertForValidationErrorsIsPresented = false
         
-        /// <#Description#>
+        /// A Boolean value indicating whether all validation errors on all forms in the group are
+        /// visible.
         var allValidationErrorsAreVisible: Bool {
             groupHasErrors
             && (
@@ -281,7 +314,8 @@ public extension FeatureFormView {
             : false
         }
         
-        /// <#Description#>
+        /// A Boolean value indicating whether the back stack is empty and there is a previous
+        /// selected form to re-select.
         var canGoBack: Bool {
             backStack.count > 0
         }
@@ -299,22 +333,26 @@ public extension FeatureFormView {
         /// A Boolean value that determines whether the view is presented.
         var isPresented: Bool?
         
-        /// <#Description#>
+        /// A Boolean value indicating whether a save is in progress.
         private(set) var isSaving = false
         
-        /// <#Description#>
+        /// A Boolean value indicating whether the underlying group has multiple forms with
+        /// edits.
         var multiFormModeIsActive: Bool {
-            activeForms.count > 1
+            forms.count > 1
         }
         
-        /// The user-provided closure to perform when a new feature form is shown in the navigation stack.
+        /// The user-provided closure to perform when a new feature form is shown in the
+        /// navigation stack.
         ///
-        /// Supports deprecated modifier ``FeatureFormView/onFeatureFormChanged(perform:)``.
+        /// Supports deprecated modifier
+        /// ``FeatureFormView/onFeatureFormChanged(perform:)``.
         var onFeatureFormChanged: ((FeatureForm) -> Void)?
         
         /// The user-provided closure to perform when a ``EditingEvent`` occurs.
         ///
-        /// Supports deprecated modifier ``FeatureFormView/onFormEditingEvent(perform:)``.
+        /// Supports deprecated modifier
+        /// ``FeatureFormView/onFormEditingEvent(perform:)``.
         var onFormEditingEventAction: ((EditingEvent) -> Void)?
         
         var selectedModel: FormModel? {
@@ -322,14 +360,15 @@ public extension FeatureFormView {
             return formModel(for: selectedID)
         }
         
-        /// <#Description#>
+        /// The total error count of all forms within the group factoring in the
+        /// ``FeatureFormView/GeometryStatus`` of each underlying feature.
         var totalErrorCount: Int {
             formModels.values.map({ $0.errorCount }).reduce(0, +)
         }
         
         // MARK: Private members
         
-        /// <#Description#>
+        /// Creates a new instance of this model and performs initial expression evaluation.
         private init(group: FeatureFormGroup) {
             self.group = group
             self.formCount = group.forms.count
@@ -346,20 +385,27 @@ public extension FeatureFormView {
         
         /// Creates a new `FormModel` and adds it to the set of models.
         /// - Parameters:
-        ///   - form: <#form description#>
-        ///   - isAssociation: <#isAssociation description#>
+        ///   - form: The form to create a new model for.
+        ///   - isAssociation: A Boolean value indicating if the form is being added as a
+        ///   result of browsing utility associations.
         /// - Returns: The new model.
-        private func addFormModel(_ form: FeatureForm, isAssociation: Bool = false) -> FormModel? {
+        private func addFormModel(
+            _ form: FeatureForm,
+            isAssociation: Bool = false
+        ) -> FormModel? {
             guard let globalID = form.feature.globalID else {
                 Logger.featureFormView.error("Couldn't get GlobalID to make FormModel.")
                 return nil
             }
-            let newModel = FeatureFormView.FormModel(featureForm: form, createdViaUtilityAssociation: isAssociation)
+            let newModel = FeatureFormView.FormModel(
+                featureForm: form,
+                createdViaUtilityAssociation: isAssociation
+            )
             formModels[globalID] = newModel
             return newModel
         }
         
-        /// <#Description#>
+        /// Asynchronously evaluates all form expressions in all the feature forms in the group.
         private func evaluateExpressions() async {
             let expressionsEvaluationErrors = try? await group.evaluateExpressions()
             if !(expressionsEvaluationErrors?.isEmpty ?? true) {
@@ -367,14 +413,14 @@ public extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
-        /// - Parameter id: <#id description#>
-        /// - Returns: <#description#>
+        /// Returns a form in the underlying with a feature with a matching global ID.
+        /// - Parameter id: The global ID of the feature.
+        /// - Returns: The matching form if it exists.
         private func form(for id: UUID) -> FeatureForm? {
             group.forms.first { $0.feature.globalID == id } ?? nil
         }
         
-        /// <#Description#>
+        /// Removes the top of `backStack` and selects it.
         private func popBackStack() {
             guard canGoBack else {
                 Logger.featureFormView.warning("Cannot navigate backwards without history.")
@@ -388,11 +434,18 @@ public extension FeatureFormView {
             select(form: form, recordNavigation: false)
         }
         
-        /// <#Description#>
+        /// Selects the provided form.
         /// - Parameters:
-        ///   - form: <#feature description#>
-        ///   - recordNavigation: <#recordNavigation description#>
-        func select(form: FeatureForm, recordNavigation: Bool = true, clearHistory: Bool = false) {
+        ///   - form: The form to select.
+        ///   - recordNavigation: A Boolean value indicating whether the selection should
+        ///   be tracked in the back stack.
+        ///   - clearHistory: A Boolean value indicating whether the selection should reset
+        ///   the back stack.
+        func select(
+            form: FeatureForm,
+            recordNavigation: Bool = true,
+            clearHistory: Bool = false
+        ) {
             guard form.feature.globalID != selectedID else { return }
             if recordNavigation, let selectedID {
                 backStack.append(selectedID)
@@ -403,30 +456,44 @@ public extension FeatureFormView {
             selectedID = form.feature.globalID
         }
         
-        /// <#Description#>
+        /// The navigation history of forms in the underlying group.
+        ///
+        /// As utility associations are browsed and new forms are added to the group this
+        /// maintains the order allowing the user to back all the way to the original form if
+        /// desired.
         private var backStack = [UUID]()
         
-        /// <#Description#>
+        /// The async stream of editing events.
         private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
         
         /// An error thrown when finishing or discarding edits.
         var finishOrDiscardError: (any Error)?
         
-        /// <#Description#>
+        /// The count of forms in the underlying group. This includes forms in the group added
+        /// during association browsing irrespective of whether they've been edited or not.
         private var formCount: Int
         
         /// Form view models, keyed by feature global IDs.
         private var formModels: [UUID: FeatureFormView.FormModel] = [:]
         
-        /// <#Description#>
+        /// The underlying feature form group.
         private let group: FeatureFormGroup
         
-        /// <#Description#>
+        /// The list of of global IDs for the underlying feature for every form in the group.
         private var ids: [UUID] {
             group.forms.compactMap { $0.feature.globalID }
         }
         
-        /// <#Description#>
+        /// A Boolean value indicating whether forms cam be added or removed from the
+        /// underlying `FeatureFormGroup`.
+        private var isEditable: Bool {
+            return true
+//            group.isEditable
+        }
+        
+        /// The global ID of the selected form.
+        ///
+        /// `nil` when no form is selected and the group menu is showing.
         private var selectedID: UUID? {
             didSet {
                 guard let selectedForm else { return }

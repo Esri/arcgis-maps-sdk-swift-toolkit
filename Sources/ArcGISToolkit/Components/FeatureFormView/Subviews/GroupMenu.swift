@@ -16,7 +16,8 @@ import ArcGIS
 import SwiftUI
 
 extension FeatureFormView {
-    /// <#Description#>
+    /// A central view for a `FeatureFormGroup` with buttons for each member and a toolbar
+    /// that allows saving or discarding the entire group.
     struct GroupMenu: View {
         /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var groupModel
@@ -24,7 +25,7 @@ extension FeatureFormView {
         public var body: some View {
             NavigationStack {
                 List {
-                    if groupModel.activeForms.isEmpty {
+                    if groupModel.forms.isEmpty {
                         noFormsView
                     } else {
                         formButtons
@@ -32,7 +33,7 @@ extension FeatureFormView {
                 }
                 .navigationTitle(
                     Text(
-                        "Editing ^[\(groupModel.activeForms.count) features](inflect: true)",
+                        "Editing ^[\(groupModel.forms.count) features](inflect: true)",
                         bundle: .toolkitModule,
                         comment: """
                             A navigation title indicating the number of \ 
@@ -45,7 +46,7 @@ extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
+        /// A view shown when no forms are in the underlying `FeatureFormGroup`.
         var noFormsView: some View {
             ContentUnavailableView {
                 Text(
@@ -59,17 +60,16 @@ extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
+        /// The buttons in the group menu for each form.
         var formButtons: some View {
-            ForEach(groupModel.activeForms, id: \.feature.globalID) { form in
+            ForEach(groupModel.forms, id: \.feature.globalID) { form in
                 formButton(form)
             }
             .id(groupModel.selectedForm?.feature.globalID)
         }
         
-        /// <#Description#>
-        /// - Parameter form: <#form description#>
-        /// - Returns: <#description#>
+        /// Returns a button for a form in the group.
+        /// - Parameter form: The underlying form.
         func formButton(_ form: FeatureForm) -> some View {
             LabeledContent {
                 Button {
@@ -91,9 +91,8 @@ extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
-        /// - Parameter form: <#form description#>
-        /// - Returns: <#description#>
+        /// Returns a label for a button for a form in the group.
+        /// - Parameter form: The underlying form.
         func formButtonLabel(_ form: FeatureForm) -> some View {
             HStack {
                 Text(
@@ -102,7 +101,7 @@ extension FeatureFormView {
                     )?.title ?? ""
                 )
                 Spacer()
-                if unsavedEditsLabelIsVisible(form) {
+                if groupModel.unsavedEditsLabelIsVisible(form) {
                     Label {
                         Text(
                             "Unsaved Edits",
@@ -121,17 +120,20 @@ extension FeatureFormView {
                 }
             }
         }
-        
-        /// <#Description#>
-        /// - Parameter form: <#form description#>
-        /// - Returns: <#description#>
-        func unsavedEditsLabelIsVisible(_ form: FeatureForm) -> Bool {
-            let hasEdits = groupModel.editStatusForForm(featureID: form.feature.globalID!)
-            let hasNoErrors = groupModel.totalErrorCountForForm(featureID: form.feature.globalID!) == 0
-            let validationErrorsAreVisible = groupModel.allValidationErrorsAreVisible
-            return hasEdits
-            && (!validationErrorsAreVisible
-            || (validationErrorsAreVisible && hasNoErrors))
-        }
+    }
+}
+
+private extension FeatureFormView.Model {
+    /// A Boolean value indicating whether the provided form should be represented as having
+    /// unsaved edits.
+    /// - Parameter form: The form to evaluate the edit status for.
+    func unsavedEditsLabelIsVisible(_ form: FeatureForm) -> Bool {
+        guard let id = form.feature.globalID else { return false }
+        let hasEdits = formModel(for: id)?.hasAttributeOrGeometryEdits ?? false
+        let hasNoErrors = totalErrorCountForForm(featureID: form.feature.globalID!) == 0
+        let validationErrorsAreVisible = allValidationErrorsAreVisible
+        return hasEdits
+        && (!validationErrorsAreVisible
+        || (validationErrorsAreVisible && hasNoErrors))
     }
 }
