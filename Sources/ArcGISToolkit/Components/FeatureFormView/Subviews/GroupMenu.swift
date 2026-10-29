@@ -102,7 +102,7 @@ extension FeatureFormView {
                     )?.title ?? ""
                 )
                 Spacer()
-                if unsavedEditsLabelIsVisible(form) {
+                if groupModel.unsavedEditsLabelIsVisible(form) {
                     Label {
                         Text(
                             "Unsaved Edits",
@@ -121,17 +121,20 @@ extension FeatureFormView {
                 }
             }
         }
-        
-        /// <#Description#>
-        /// - Parameter form: <#form description#>
-        /// - Returns: <#description#>
-        func unsavedEditsLabelIsVisible(_ form: FeatureForm) -> Bool {
-            let hasEdits = groupModel.editStatusForForm(featureID: form.feature.globalID!)
-            let hasNoErrors = groupModel.totalErrorCountForForm(featureID: form.feature.globalID!) == 0
-            let validationErrorsAreVisible = groupModel.allValidationErrorsAreVisible
-            return hasEdits
-            && (!validationErrorsAreVisible
-            || (validationErrorsAreVisible && hasNoErrors))
-        }
+    }
+}
+
+private extension FeatureFormView.Model {
+    /// A Boolean value indicating whether the provided form should be represented as having
+    /// unsaved edits.
+    /// - Parameter form: The form to evaluate the edit status for.
+    func unsavedEditsLabelIsVisible(_ form: FeatureForm) -> Bool {
+        guard let id = form.feature.globalID else { return false }
+        let hasEdits = formModel(for: id)?.hasAttributeOrGeometryEdits ?? false
+        let hasNoErrors = totalErrorCountForForm(featureID: form.feature.globalID!) == 0
+        let validationErrorsAreVisible = allValidationErrorsAreVisible
+        return hasEdits
+        && (!validationErrorsAreVisible
+        || (validationErrorsAreVisible && hasNoErrors))
     }
 }

@@ -190,13 +190,6 @@ public extension FeatureFormView {
         }
         
         /// <#Description#>
-        /// - Parameter id: <#id description#>
-        /// - Returns: <#description#>
-        func editStatusForForm(featureID id: UUID) -> Bool {
-            formModel(for: id)?.hasAttributeOrGeometryEdits ?? false
-        }
-        
-        /// <#Description#>
         /// - Parameter globalID: <#globalID description#>
         /// - Returns: <#description#>
         func formModel(for globalID: UUID) -> FeatureFormView.FormModel? {
