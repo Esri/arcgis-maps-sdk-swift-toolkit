@@ -171,3 +171,38 @@ private extension FeatureFormView.Toolbar /* Items */ {
         .disabled(!groupModel.groupHasEdits)
     }
 }
+
+private extension FeatureFormView.Model {
+    /// A Boolean value indicating whether the Back button in the toolbar should be shown.
+    var showBackButton: Bool {
+        guard let selectedModel else { return false }
+        let selectedFormsPathIsEmpty = selectedModel.navigationPath.isEmpty
+        return (selectedFormsPathIsEmpty && canGoBack)
+        || !selectedFormsPathIsEmpty
+    }
+    
+    /// A Boolean value indicating whether the Dismiss button in the toolbar should be shown.
+    var showDismissButton: Bool {
+        isPresented != nil
+        && (!multiFormModeIsActive || selectedForm == nil)
+    }
+    
+    /// A Boolean value indicating whether the Group Menu button in the toolbar should be shown.
+    var showGroupMenuButton: Bool {
+        multiFormModeIsActive
+        && selectedForm != nil
+    }
+    
+    /// A Boolean value indicating if the invalid geometry toolbar item should be shown.
+    var showInvalidGeometryBadge: Bool {
+        guard let selectedModel else { return false }
+        let hasInvalidGeometry = selectedModel.geometryStatus == .invalid
+        return allValidationErrorsAreVisible &&
+        hasInvalidGeometry
+    }
+    
+    /// A Boolean value indicating whether the Save button in the toolbar should be shown.
+    var showSaveButton: Bool {
+        selectedForm == nil || !multiFormModeIsActive
+    }
+}
