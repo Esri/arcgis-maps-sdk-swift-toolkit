@@ -45,7 +45,7 @@ extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
+        /// A view shown when no forms are in the underlying `FeatureFormGroup`.
         var noFormsView: some View {
             ContentUnavailableView {
                 Text(
@@ -59,7 +59,7 @@ extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
+        /// The buttons in the group menu for each form.
         var formButtons: some View {
             ForEach(groupModel.forms, id: \.feature.globalID) { form in
                 formButton(form)
@@ -67,9 +67,8 @@ extension FeatureFormView {
             .id(groupModel.selectedForm?.feature.globalID)
         }
         
-        /// <#Description#>
-        /// - Parameter form: <#form description#>
-        /// - Returns: <#description#>
+        /// Returns a button for a form in the group.
+        /// - Parameter form: The underlying form.
         func formButton(_ form: FeatureForm) -> some View {
             LabeledContent {
                 Button {
@@ -91,9 +90,8 @@ extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
-        /// - Parameter form: <#form description#>
-        /// - Returns: <#description#>
+        /// Returns a label for a button for a form in the group.
+        /// - Parameter form: The underlying form.
         func formButtonLabel(_ form: FeatureForm) -> some View {
             HStack {
                 Text(
