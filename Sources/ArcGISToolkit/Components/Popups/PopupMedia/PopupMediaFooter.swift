@@ -18,6 +18,7 @@ import ArcGIS
 /// A view displaying details for popup media.
 struct PopupMediaFooter: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.accessibilityReduceTransparency) var reduceTransparency
     
     /// The popup media to display.
     let popupMedia: PopupMedia
@@ -27,10 +28,16 @@ struct PopupMediaFooter: View {
     
     var body: some View {
         ZStack {
-            let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
-            Rectangle()
-                .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
-                .frame(height: mediaSize.height * 0.25)
+            let gradient = Gradient(colors: [.black, .black.opacity(0.25)])
+            if reduceTransparency { // WCAG 1.4.3 Contrast (Level AA)
+                Rectangle()
+                    .fill(.black)
+                    .frame(height: mediaSize.height * 0.25)
+            } else {
+                Rectangle()
+                    .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
+                    .frame(height: mediaSize.height * 0.25)
+            }
             HStack {
                 VStack(alignment: .leading) {
                     if !popupMedia.title.isEmpty {
