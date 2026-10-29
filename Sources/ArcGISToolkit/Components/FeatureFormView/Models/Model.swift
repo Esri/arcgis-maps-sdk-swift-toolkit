@@ -76,8 +76,13 @@ public extension FeatureFormView {
             formModel(for: id)?.geometryStatus = status
         }
         
-        /// <#Description#>
-        public var activeForms: [FeatureForm] {
+        /// A stream of ``FeatureFormView/EditingEvent``s.
+        public var editingEvents: AsyncStream<EditingEvent> {
+            editingEventStream
+        }
+        
+        /// The forms being edited in the underlying `FeatureFormGroup`.
+        public var forms: [FeatureForm] {
             formModels.values.compactMap { formModel in
                 if (
                     !formModel.createdViaUtilityAssociation
@@ -90,12 +95,9 @@ public extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
-        public var editingEvents: AsyncStream<EditingEvent> {
-            editingEventStream
-        }
-        
-        /// <#Description#>
+        /// The form selected in the component.
+        ///
+        /// `nil` when no form is selected and the group menu is showing.
         public var selectedForm: FeatureForm? {
             guard let selectedID else { return nil }
             return form(for: selectedID) ?? nil
@@ -113,11 +115,13 @@ public extension FeatureFormView {
             taskForSaving?.cancel()
         }
         
-        /// <#Description#>
+        /// Adds a `FeatureForm` to the group.
         /// - Parameters:
-        ///   - form: <#form description#>
-        ///   - select: <#select description#>
-        ///   - recordAsBrowsed: <#recordAsBrowsed description#>
+        ///   - form: The new form to be added to the group.
+        ///   - select: A Boolean value indicating whether the added form should become the
+        ///   ``FeatureFormView/Model/selectedForm``.
+        ///   - recordAsBrowsed: A Boolean value indicating whether the add is happening as
+        ///   a result of browsing utility associations in a form.
         func add(form: FeatureForm, select: Bool = false, recordAsBrowsed: Bool = false) {
             defer {
                 formCount = group.forms.count
@@ -158,7 +162,8 @@ public extension FeatureFormView {
             }
         }
         
-        /// <#Description#>
+        /// Discards the edits on all forms in underlying group and closes the component is a
+        /// presentation binding was provided.
         /// - Parameter ignoreEdits: A Boolean value indicating if the user should be
         /// warned of unsaved edits before discarding.
         func discard(ignoreEdits: Bool = false) {
@@ -326,7 +331,7 @@ public extension FeatureFormView {
         
         /// <#Description#>
         var multiFormModeIsActive: Bool {
-            activeForms.count > 1
+            forms.count > 1
         }
         
         /// The user-provided closure to perform when a new feature form is shown in the navigation stack.

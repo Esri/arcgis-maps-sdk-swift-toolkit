@@ -36,7 +36,7 @@ private extension FeatureFormView {
             content
                 .navigationBarBackButtonHidden()
                 .navigationBarTitleDisplayMode(.inline)
-                .onChange(of: groupModel.activeForms.count, initial: false) {
+                .onChange(of: groupModel.forms.count, initial: false) {
                     Task {
                         // A small delay allows the group icon to come into view
                         // before we animate it.

@@ -24,7 +24,7 @@ extension FeatureFormView {
         public var body: some View {
             NavigationStack {
                 List {
-                    if groupModel.activeForms.isEmpty {
+                    if groupModel.forms.isEmpty {
                         noFormsView
                     } else {
                         formButtons
@@ -32,7 +32,7 @@ extension FeatureFormView {
                 }
                 .navigationTitle(
                     Text(
-                        "Editing ^[\(groupModel.activeForms.count) features](inflect: true)",
+                        "Editing ^[\(groupModel.forms.count) features](inflect: true)",
                         bundle: .toolkitModule,
                         comment: """
                             A navigation title indicating the number of \ 
@@ -61,7 +61,7 @@ extension FeatureFormView {
         
         /// <#Description#>
         var formButtons: some View {
-            ForEach(groupModel.activeForms, id: \.feature.globalID) { form in
+            ForEach(groupModel.forms, id: \.feature.globalID) { form in
                 formButton(form)
             }
             .id(groupModel.selectedForm?.feature.globalID)
