@@ -22,7 +22,7 @@ public extension FeatureFormView {
         /// Indicates that the user has discarded their edits.
         /// - Since: 300.3
         case discarded
-        /// Indicates that edits failed to finish.
+        /// Indicates that saving failed.
         /// - Since: 300.3
         case failed(any Error)
         /// Indicates the active form or the navigation path for the active form has changed.
