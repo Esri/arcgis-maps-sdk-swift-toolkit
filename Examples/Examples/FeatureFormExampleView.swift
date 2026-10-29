@@ -23,14 +23,14 @@ struct FeatureFormExampleView: View {
     @State private var editedTables = [ServiceFeatureTable]()
     /// A Boolean value indicating whether edits are being applied.
     @State private var editsAreBeingApplied = false
+    /// The presented feature form.
+    @State private var featureForm: FeatureForm?
     /// A Boolean value indicating whether the form is presented.
     @State private var featureFormViewIsPresented = false
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
-    /// The model for the component.
-    @State private var model: FeatureFormView.Model?
     /// The error to be presented in the alert.
     @State private var submissionError: SubmissionError?
     
@@ -47,31 +47,9 @@ struct FeatureFormExampleView: View {
                     submittingOverlay
                 }
                 .sheet(isPresented: $featureFormViewIsPresented) {
-                    model = nil
+                    featureForm = nil
                 } content: {
-                    if let model {
-                        FeatureFormView(model: model, isPresented: $featureFormViewIsPresented)
-                            .frame(idealWidth: 350)
-                            .presentationBackgroundInteraction(.enabled(upThrough: .large))
-                            .presentationDetents([.large, .medium])
-    #if !targetEnvironment(macCatalyst)
-                            .presentationSizing(.fitted)
-    #endif
-                            .presentationPlacement()
-                            .task {
-                                for await event in model.editingEvents {
-                                    if case .saved = event {
-                                        for form in model.activeForms {
-                                            if let table = form.feature.table as? ServiceFeatureTable {
-                                                if !editedTables.contains(where: { $0 === table }) {
-                                                    editedTables.append(table)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                    }
+                    featureFormView
                 }
                 .task(id: identifyScreenPoint) {
                     guard !editsAreBeingApplied,
@@ -158,17 +136,25 @@ extension FeatureFormExampleView {
         )
         if let geoElements = identifyLayerResults?.first?.geoElements,
            let feature = geoElements.first as? ArcGISFeature {
-            let form = FeatureForm(feature: feature)
-            if let currentModel = model {
-                currentModel.add(form: form)
-            } else if let newModel = FeatureFormView.Model(forms: [form]) {
-                self.model = newModel
-            }
+            featureForm = FeatureForm(feature: feature)
             featureFormViewIsPresented = true
         }
     }
     
     // MARK: Properties
+    
+    /// The feature form view shown in the sheet over the map.
+    private var featureFormView: some View {
+        let featureForm = featureForm!
+        return FeatureFormView(root: featureForm, isPresented: $featureFormViewIsPresented)
+            .onFormEditingEvent { editingEvent in
+                if case .savedEdits = editingEvent,
+                   let table = featureForm.feature.table as? ServiceFeatureTable,
+                   !editedTables.contains(where: { $0 === table }) {
+                    editedTables.append(table)
+                }
+            }
+    }
     
     /// The button used to dismiss the submission error alert.
     private var okButton: some View {
@@ -218,24 +204,5 @@ private extension Array where Element == FeatureEditResult {
 private extension URL {
     static var sampleData: Self {
         .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
-    }
-}
-
-private extension View {
-    @ViewBuilder
-    func presentationPlacement() -> some View {
-        if #available(iOS 27.0, *) {
-            self.presentationPlacement(.leading)
-        } else {
-            self
-        }
-    }
-}
-
-private extension FeatureForm {
-    var id: String {
-        var oid = String(describing: ObjectIdentifier(self))
-        oid.removeLast()
-        return String(oid.suffix(4))
     }
 }
