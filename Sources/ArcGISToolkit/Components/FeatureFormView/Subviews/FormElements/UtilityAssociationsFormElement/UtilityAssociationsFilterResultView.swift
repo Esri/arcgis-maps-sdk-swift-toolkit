@@ -18,8 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view for a utility associations filter result.
     struct UtilityAssociationsFilterResultView: View {
-        /// The model for the FeatureFormView containing the view.
-        @Environment(FeatureFormViewModel.self) var featureFormViewModel
+        /// The model for the feature form which presented this view.
+        @Environment(FeatureFormView.FormModel.self) var formModel
         
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
@@ -33,12 +33,7 @@ extension FeatureFormView {
         
         /// The model containing the latest association filter results.
         var associationsFilterResultsModel: AssociationsFilterResultsModel? {
-            embeddedFeatureFormViewModel?.associationsFilterResultsModels[element]
-        }
-        
-        /// The view model for the form.
-        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
-            featureFormViewModel.getModel(form)
+            formModel.associationsFilterResultsModels[element]
         }
         
         /// The set of group results within the filter result.
@@ -69,7 +64,7 @@ extension FeatureFormView {
                     Section {
                         ForEach(groupResults, id: \.name) { groupResult in
                             Button {
-                                featureFormViewModel.navigationPath.append(
+                                formModel.navigationPath.append(
                                     FeatureFormView.NavigationPathItem.utilityAssociationGroupResultView(
                                         form,
                                         element,
@@ -93,7 +88,7 @@ extension FeatureFormView {
                     }
                 }
             }
-            .onChange(of: embeddedFeatureFormViewModel?.hasEdits) {
+            .onChange(of: formModel.hasEdits) {
                 associationsFilterResultsModel?.fetchResults()
             }
             .overlay(alignment: .bottomLeading) {
@@ -104,7 +99,7 @@ extension FeatureFormView {
         
         var addAssociationButton: some View {
             Button {
-                featureFormViewModel.navigationPath.append(
+                formModel.navigationPath.append(
                     FeatureFormView.NavigationPathItem.utilityAssociationFeatureSourcesView(
                         form,
                         element,
