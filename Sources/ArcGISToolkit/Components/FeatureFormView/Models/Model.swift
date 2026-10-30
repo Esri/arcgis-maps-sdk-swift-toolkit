@@ -58,17 +58,6 @@ public extension FeatureFormView {
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
-        /// Sets the provided form as the ``FeatureFormView/Model/selectedForm``.
-        /// - Parameter form: The form to select.
-        /// - Parameter clearHistory: A Boolean value indicating whether the selection
-        /// should reset   the back stack.
-        public func select(form: FeatureForm, clearHistory: Bool = false) {
-            guard let globalID = form.feature.globalID else { return }
-            if let model = formModel(id: globalID) {
-                self.select(model: model, clearHistory: clearHistory)
-            }
-        }
-        
         /// Sets the edit status for the geometry on the provided feature.
         ///
         /// When ``FeatureFormView/GeometryStatus/invalid`` or
@@ -298,6 +287,17 @@ public extension FeatureFormView {
             }
         }
         
+        /// Sets the provided form as the ``FeatureFormView/Model/selectedForm``.
+        /// - Parameter form: The form to select.
+        /// - Parameter clearHistory: A Boolean value indicating whether the selection
+        /// should reset   the back stack.
+        func select(form: FeatureForm, clearHistory: Bool = false) {
+            guard let globalID = form.feature.globalID else { return }
+            if let model = formModel(id: globalID) {
+                self.select(model: model, clearHistory: clearHistory)
+            }
+        }
+        
         /// Reports the total error count for a feature form with a underlying feature with a
         /// matching global ID.
         ///
@@ -332,6 +332,9 @@ public extension FeatureFormView {
         var canGoBack: Bool {
             backStack.count > 0
         }
+        
+        /// An error thrown when finishing or discarding edits.
+        var finishOrDiscardError: (any Error)?
         
         /// A Boolean value indicating if the group has any forms with edits.
         var groupHasEdits: Bool {
@@ -447,7 +450,7 @@ public extension FeatureFormView {
         ///   be tracked in the back stack.
         ///   - clearHistory: A Boolean value indicating whether the selection should reset
         ///   the back stack.
-        func select(
+        private func select(
             model: FormModel,
             recordNavigation: Bool = true,
             clearHistory: Bool = false
@@ -471,9 +474,6 @@ public extension FeatureFormView {
         
         /// The async stream of editing events.
         private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
-        
-        /// An error thrown when finishing or discarding edits.
-        var finishOrDiscardError: (any Error)?
         
         /// The count of forms in the underlying group. This includes forms in the group added
         /// during association browsing irrespective of whether they've been edited or not.
