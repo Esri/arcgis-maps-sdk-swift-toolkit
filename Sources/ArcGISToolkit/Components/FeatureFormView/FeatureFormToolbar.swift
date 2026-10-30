@@ -183,8 +183,7 @@ private extension FeatureFormView.Model {
     
     /// A Boolean value indicating whether the Dismiss button in the toolbar should be shown.
     var showDismissButton: Bool {
-        isPresented != nil
-        && (!multiFormModeIsActive || selectedForm == nil)
+        !multiFormModeIsActive || selectedForm == nil
     }
     
     /// A Boolean value indicating whether the Group Menu button in the toolbar should be shown.
