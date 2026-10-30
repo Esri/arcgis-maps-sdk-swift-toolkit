@@ -86,9 +86,9 @@ public struct FeatureFormView: View {
     ///   - isPresented: A Boolean value indicating if the view is presented.
     /// - Since: 300.3
     public init(model: Model, isPresented: Binding<Bool>? = nil) {
-        _legacyModel = nil
         self.isPresented = isPresented
         self.providedModel = model
+        _legacyModel = nil
     }
     
     public var body: some View {
@@ -135,9 +135,9 @@ public extension FeatureFormView /* Deprecated */ {
     /// - Note: Deprecated at 300.3. Use ``FeatureFormView/init(model:isPresented:)`` instead.
     @available(*, deprecated, renamed: "FeatureFormView.init(model:isPresented:)")
     init(root: FeatureForm, isPresented: Binding<Bool>? = nil) {
-        _legacyModel = .init(wrappedValue: .init(forms: [root]))
         self.isPresented = isPresented
         self.providedModel = nil
+        _legacyModel = .init(wrappedValue: .init(forms: [root]))
     }
     
     /// Sets the visibility of the save and discard buttons on the form.

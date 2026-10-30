@@ -54,8 +54,19 @@ public extension FeatureFormView {
         /// - Parameter select: A Boolean value indicating whether the added form should
         /// become the ``FeatureFormView/Model/selectedForm``.
         public func add(form: FeatureForm, select: Bool = false) {
-            guard isEditable else { return }
+            guard group.isEditable else { return }
             add(form: form, select: select, recordAsBrowsed: false)
+        }
+        
+        /// Sets the provided form as the ``FeatureFormView/Model/selectedForm``.
+        /// - Parameter form: The form to select.
+        /// - Parameter clearHistory: A Boolean value indicating whether the selection
+        /// should reset   the back stack.
+        public func select(form: FeatureForm, clearHistory: Bool = false) {
+            guard let globalID = form.feature.globalID else { return }
+            if let model = formModel(for: globalID) {
+                self.select(model: model, clearHistory: clearHistory)
+            }
         }
         
         /// Sets the edit status for the geometry on the provided feature.
@@ -99,8 +110,8 @@ public extension FeatureFormView {
         ///
         /// `nil` when no form is selected and the group menu is showing.
         public var selectedForm: FeatureForm? {
-            guard let selectedID else { return nil }
-            return form(for: selectedID) ?? nil
+            guard let selectedModel else { return nil }
+            return selectedModel.featureForm
         }
         
         /// The visibility of validation errors in the form(s).
@@ -127,7 +138,7 @@ public extension FeatureFormView {
                 formCount = group.forms.count
                 
                 // Select the form, if directed, or if no form is already selected.
-                if select || selectedID == nil {
+                if select || selectedModel == nil {
                     self.select(form: form)
                 }
             }
@@ -137,7 +148,7 @@ public extension FeatureFormView {
                 return
             }
             
-            guard !ids.contains(id) else {
+            guard !formModels.keys.contains(id) else {
                 Logger.featureFormView.info("Feature \(id.description) is already added.")
                 return
             }
@@ -154,9 +165,9 @@ public extension FeatureFormView {
         /// - Parameter clearBackStack: A Boolean value indicating whether the navigation
         /// history should also be cleared.
         func clearSelection(clearBackStack: Bool = true) {
-            guard let selectedID else { return }
-            backStack.append(selectedID)
-            self.selectedID = nil
+            guard let selectedModel else { return }
+            backStack.append(selectedModel)
+            self.selectedModel = nil
             if clearBackStack {
                 backStack.removeAll()
             }
@@ -198,8 +209,10 @@ public extension FeatureFormView {
         func formModel(for globalID: UUID) -> FeatureFormView.FormModel? {
             if let model = formModels[globalID] {
                 return model
-            } else if let form = form(for: globalID) {
-                let newModel = addFormModel(form)
+            } else if let groupMember = group.forms.first(
+                where: { $0.feature.globalID == globalID }
+            ) {
+                let newModel = addFormModel(groupMember)
                 return newModel
             } else {
                 return nil
@@ -355,9 +368,13 @@ public extension FeatureFormView {
         /// ``FeatureFormView/onFormEditingEvent(perform:)``.
         var onFormEditingEventAction: ((EditingEvent) -> Void)?
         
+        /// The model for the selected form.
         var selectedModel: FormModel? {
-            guard let selectedID else { return nil }
-            return formModel(for: selectedID)
+            didSet {
+                guard let selectedModel else { return }
+                onFeatureFormChanged?(selectedModel.featureForm)
+                selectedModel.evaluateExpressions()
+            }
         }
         
         /// The total error count of all forms within the group factoring in the
@@ -374,8 +391,8 @@ public extension FeatureFormView {
             self.formCount = group.forms.count
             
             // If the group has a single form, select it.
-            if !multiFormModeIsActive, let first = group.forms.first {
-                select(form: first)
+            if group.forms.count == 1, let onlyForm = group.forms.first {
+                select(form: onlyForm)
             }
             
             taskForInitialEvaluation = Task {
@@ -413,13 +430,6 @@ public extension FeatureFormView {
             }
         }
         
-        /// Returns a form in the underlying with a feature with a matching global ID.
-        /// - Parameter id: The global ID of the feature.
-        /// - Returns: The matching form if it exists.
-        private func form(for id: UUID) -> FeatureForm? {
-            group.forms.first { $0.feature.globalID == id } ?? nil
-        }
-        
         /// Removes the top of `backStack` and selects it.
         private func popBackStack() {
             guard canGoBack else {
@@ -427,11 +437,7 @@ public extension FeatureFormView {
                 return
             }
             let top = backStack.removeLast()
-            guard let form = form(for: top) else {
-                Logger.featureFormView.warning("No ID for back navigation.")
-                return
-            }
-            select(form: form, recordNavigation: false)
+            select(model: top, recordNavigation: false)
         }
         
         /// Selects the provided form.
@@ -442,18 +448,18 @@ public extension FeatureFormView {
         ///   - clearHistory: A Boolean value indicating whether the selection should reset
         ///   the back stack.
         func select(
-            form: FeatureForm,
+            model: FormModel,
             recordNavigation: Bool = true,
             clearHistory: Bool = false
         ) {
-            guard form.feature.globalID != selectedID else { return }
-            if recordNavigation, let selectedID {
-                backStack.append(selectedID)
+            guard model.featureGlobalID != selectedModel?.featureGlobalID else { return }
+            if recordNavigation, let selectedModel {
+                backStack.append(selectedModel)
             }
             if clearHistory {
                 backStack.removeAll()
             }
-            selectedID = form.feature.globalID
+            selectedModel = model
         }
         
         /// The navigation history of forms in the underlying group.
@@ -461,7 +467,7 @@ public extension FeatureFormView {
         /// As utility associations are browsed and new forms are added to the group this
         /// maintains the order allowing the user to back all the way to the original form if
         /// desired.
-        private var backStack = [UUID]()
+        private var backStack = [FormModel]()
         
         /// The async stream of editing events.
         private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
@@ -479,31 +485,6 @@ public extension FeatureFormView {
         /// The underlying feature form group.
         private let group: FeatureFormGroup
         
-        /// The list of of global IDs for the underlying feature for every form in the group.
-        private var ids: [UUID] {
-            group.forms.compactMap { $0.feature.globalID }
-        }
-        
-        /// A Boolean value indicating whether forms cam be added or removed from the
-        /// underlying `FeatureFormGroup`.
-        private var isEditable: Bool {
-            return true
-//            group.isEditable
-        }
-        
-        /// The global ID of the selected form.
-        ///
-        /// `nil` when no form is selected and the group menu is showing.
-        private var selectedID: UUID? {
-            didSet {
-                guard let selectedForm else { return }
-                onFeatureFormChanged?(selectedForm)
-                if let selectedModel {
-                    selectedModel.evaluateExpressions()
-                }
-            }
-        }
-        
         /// The task for discarding edits.
         @ObservationIgnored
         private var taskForDiscarding: Task<Void, Never>?
@@ -518,5 +499,15 @@ public extension FeatureFormView {
         
         /// The internally managed validation error visibility.
         private var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
+    }
+}
+
+private extension FeatureFormGroup {
+    /// A Boolean value indicating whether forms cam be added or removed from the underlying
+    /// `FeatureFormGroup`.
+    ///
+    /// - Warning: This property is for prototype purposes only and will be provided by the SDK.
+    var isEditable: Bool {
+        true
     }
 }

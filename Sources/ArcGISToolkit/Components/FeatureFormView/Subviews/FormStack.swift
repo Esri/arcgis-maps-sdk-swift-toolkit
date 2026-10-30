@@ -25,6 +25,9 @@ extension FeatureFormView {
     /// `FeatureFormGroup` and the form is shown in its own new form stack, preserving the
     /// path of the current form for when (and if) the user returns.
     struct FormStack: View {
+        /// The model for the underlying form.
+        let formModel: FeatureFormView.FormModel
+        
         /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var groupModel
         
@@ -35,9 +38,6 @@ extension FeatureFormView {
         /// and allows the user to reopen this form from the group menu and resume at the same
         /// they left from.
         @State private var effectiveNavigationPath = [FeatureFormView.NavigationPathItem]()
-        
-        /// The model for the underlying form.
-        let formModel: FeatureFormView.FormModel
         
         public var body: some View {
             NavigationStack(path: $effectiveNavigationPath) {

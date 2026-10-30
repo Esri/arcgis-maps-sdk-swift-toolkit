@@ -17,11 +17,11 @@ import SwiftUI
 
 extension FeatureFormView {
     struct FormView: View {
-        /// The model for the stack view containing the form.
-        @Environment(FeatureFormView.FormModel.self) var formModel
-        
         /// The feature form defining the editing experience.
         let form: FeatureForm
+        
+        /// The model for the stack view containing the form.
+        @Environment(FeatureFormView.FormModel.self) var formModel
         
         var body: some View {
             ScrollViewReader { scrollView in
