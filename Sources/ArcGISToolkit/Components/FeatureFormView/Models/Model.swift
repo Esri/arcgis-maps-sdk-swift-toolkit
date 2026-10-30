@@ -58,6 +58,17 @@ public extension FeatureFormView {
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
+        /// Sets the provided form as the ``FeatureFormView/Model/selectedForm``.
+        /// - Parameter form: The form to select.
+        /// - Parameter clearHistory: A Boolean value indicating whether the selection
+        /// should reset   the back stack.
+        public func select(form: FeatureForm, clearHistory: Bool = false) {
+            guard let globalID = form.feature.globalID else { return }
+            if let model = formModel(for: globalID) {
+                self.select(model: model, clearHistory: clearHistory)
+            }
+        }
+        
         /// Sets the edit status for the geometry on the provided feature.
         ///
         /// When ``FeatureFormView/GeometryStatus/invalid`` or
@@ -198,8 +209,10 @@ public extension FeatureFormView {
         func formModel(for globalID: UUID) -> FeatureFormView.FormModel? {
             if let model = formModels[globalID] {
                 return model
-            } else if let form = formModels[globalID]?.featureForm {
-                let newModel = addFormModel(form)
+            } else if let groupMember = group.forms.first(
+                where: { $0.feature.globalID == globalID }
+            ) {
+                let newModel = addFormModel(groupMember)
                 return newModel
             } else {
                 return nil
@@ -378,8 +391,8 @@ public extension FeatureFormView {
             self.formCount = group.forms.count
             
             // If the group has a single form, select it.
-            if !multiFormModeIsActive, let first = group.forms.first {
-                select(form: first)
+            if group.forms.count == 1, let onlyForm = group.forms.first {
+                select(form: onlyForm)
             }
             
             taskForInitialEvaluation = Task {
@@ -424,12 +437,7 @@ public extension FeatureFormView {
                 return
             }
             let top = backStack.removeLast()
-            guard let topID = top.featureGlobalID,
-                  let form = formModels[topID]?.featureForm else {
-                Logger.featureFormView.warning("No ID for back navigation.")
-                return
-            }
-            select(form: form, recordNavigation: false)
+            select(model: top, recordNavigation: false)
         }
         
         /// Selects the provided form.
@@ -440,21 +448,18 @@ public extension FeatureFormView {
         ///   - clearHistory: A Boolean value indicating whether the selection should reset
         ///   the back stack.
         func select(
-            form: FeatureForm,
+            model: FormModel,
             recordNavigation: Bool = true,
             clearHistory: Bool = false
         ) {
-            guard let newSelectedID = form.feature.globalID else { return }
-            let currentSelectedModel = selectedModel
-            let currentSelectedID = currentSelectedModel?.featureGlobalID
-            guard newSelectedID != currentSelectedID else { return }
-            if recordNavigation, let currentSelectedModel {
-                backStack.append(currentSelectedModel)
+            guard model.featureGlobalID != selectedModel?.featureGlobalID else { return }
+            if recordNavigation, let selectedModel {
+                backStack.append(selectedModel)
             }
             if clearHistory {
                 backStack.removeAll()
             }
-            selectedModel = formModel(for: newSelectedID)
+            selectedModel = model
         }
         
         /// The navigation history of forms in the underlying group.
