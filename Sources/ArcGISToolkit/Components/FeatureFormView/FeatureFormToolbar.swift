@@ -91,7 +91,7 @@ private extension FeatureFormView.Toolbar /* Items */ {
                     "Back",
                     bundle: .toolkitModule,
                     comment: """
-                        A generic label for a back button to returning to the \
+                        A generic label for a back button to return to the \
                         previous screen.
                         """
                 )
