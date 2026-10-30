@@ -16,112 +16,192 @@ import ArcGIS
 import SwiftUI
 
 extension View {
-    func featureFormToolbar(_ featureForm: FeatureForm, isAForm: Bool = false, onBackNavigation: (() -> Void)? = nil) -> some View {
-        self.modifier(FeatureFormToolbar(featureForm: featureForm, isAForm: isAForm, onBackNavigation: onBackNavigation))
+    func featureFormToolbar() -> some View {
+        self.modifier(FeatureFormView.Toolbar())
     }
 }
 
-struct FeatureFormToolbar: ViewModifier {
-    @Environment(\.dismiss) var dismiss
-    
-    /// The visibility of the "save" and "discard" buttons.
-    @Environment(\.editingButtonVisibility) var editingButtonsVisibility
-    
-    /// The model for the FeatureFormView containing the view.
-    @Environment(FeatureFormViewModel.self) var featureFormViewModel
-    
-    /// A binding to a Boolean value controlling whether the FeatureFormView is presented.
-    @Environment(\.isPresented) var isPresented
-    
-    /// The environment value which declares whether navigation to forms for features associated via utility association form elements is disabled.
-    @Environment(\.navigationIsDisabled) var navigationIsDisabled
-    
-    /// The closure to perform when a ``EditingEvent`` occurs.
-    @Environment(\.onFormEditingEventAction) var onFormEditingEventAction
-    
-    /// A Boolean value indicating whether the presented feature form has edits.
-    @State private var hasEdits = false
-    
-    /// The currently presented feature form.
-    let featureForm: FeatureForm
-    
-    /// A Boolean value indicating whether the modified view is a feature form view or another type of
-    /// associated view such as a `UtilityAssociationsFilterResultView` or
-    /// `UtilityAssociationGroupResultView`.
-    let isAForm: Bool
-    
-    /// A closure to perform when back navigation completes.
-    let onBackNavigation: (() -> Void)?
-    
-    func body(content: Content) -> some View {
-        content
-            .navigationBarBackButtonHidden()
-            .task(id: featureForm.feature.globalID) {
-                for await hasEdits in featureForm.$hasEdits {
-                    withAnimation { self.hasEdits = hasEdits }
+private extension FeatureFormView {
+    struct Toolbar: ViewModifier {
+        /// The model for the feature form view.
+        @Environment(FeatureFormView.Model.self) var groupModel
+        
+        /// A Boolean value indicating whether multi-form mode is active.
+        ///
+        /// Useful for animations to communicate that the component has transitioned to
+        /// multi-form mode.
+        @State private var delayedMultiFormModeActive = false
+        
+        func body(content: Content) -> some View {
+            content
+                .navigationBarBackButtonHidden()
+                .navigationBarTitleDisplayMode(.inline)
+                .onChange(of: groupModel.forms.count, initial: false) {
+                    Task {
+                        // A small delay allows the group icon to come into view
+                        // before we animate it.
+                        try? await Task.sleep(for: .seconds(0.1))
+                        delayedMultiFormModeActive = groupModel.multiFormModeIsActive
+                    }
                 }
-            }
-            .toolbar {
-                if !isRootView {
+                .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            if alertBeforeDismissing {
-                                featureFormViewModel.navigationAlertInfo = (true, {
-                                    dismiss()
-                                    onBackNavigation?()
-                                })
-                            } else {
-                                dismiss()
-                                onBackNavigation?()
-                            }
-                        } label: {
-                            Label {
-                                Text(
-                                    "Back",
-                                    bundle: .toolkitModule,
-                                    comment: "A generic label for navigating to the previous screen or returning to the previous context."
-                                )
-                            } icon: {
-                                Image(systemName: "chevron.backward")
-                            }
+                        if groupModel.showBackButton {
+                            backButton
                         }
-                        .disabled(navigationIsDisabled)
                     }
-                }
-                if let isPresented {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        DismissButton(kind: .cancel) {
-                            if hasEdits {
-                                featureFormViewModel.navigationAlertInfo = (false, {
-                                    isPresented.wrappedValue = false
-                                })
-                            } else {
-                                isPresented.wrappedValue = false
+                    if #available(iOS 26.0, *) {
+                        ToolbarSpacer(.flexible, placement: .topBarLeading)
+                    }
+                    ToolbarItem(placement: .topBarLeading) {
+                        if groupModel.showDismissButton {
+                            DismissButton(kind: .cancel) {
+                                groupModel.discard()
                             }
                         }
                     }
-                }
-                if (hasEdits && editingButtonsVisibility == .automatic)
-                    || (editingButtonsVisibility == .visible) {
+                    ToolbarItemGroup(placement: .topBarTrailing) {
+                        if groupModel.showGroupMenuButton {
+                            groupMenuButton
+                        } else if groupModel.showSaveButton {
+                            saveButton
+                        }
+                    }
                     ToolbarItem(placement: .bottomBar) {
-                        FormFooter(
-                            featureForm: featureForm,
-                            formHandlingEventAction: onFormEditingEventAction
-                        )
+                        if groupModel.showInvalidGeometryBadge {
+                            invalidGeometryLabel
+                        }
                     }
                 }
-            }
+        }
     }
 }
 
-extension FeatureFormToolbar {
-    /// A Boolean value indicating whether to alert for unsaved edits before dismissing the current view.
-    var alertBeforeDismissing: Bool {
-        isAForm && hasEdits
+private extension FeatureFormView.Toolbar /* Items */ {
+    /// Navigates backward.
+    ///
+    /// This can either return a user to the previous view in the current form's
+    /// navigation path or return them to the previous form they were on in the group.
+    var backButton: some View {
+        Button {
+            groupModel.navigateBack()
+        } label: {
+            Label {
+                Text(
+                    "Back",
+                    bundle: .toolkitModule,
+                    comment: """
+                        A generic label for a back button to return to the \
+                        previous screen.
+                        """
+                )
+            } icon: {
+                Image(systemName: "chevron.backward")
+            }
+        }
     }
     
-    /// A Boolean value indicating if this toolbar is applied to the NavigationStack's root view.
-    var isRootView: Bool {
-        featureFormViewModel.navigationPath.isEmpty
+    /// Opens the group menu.
+    ///
+    /// - Important: A solo image is used for the label so that symbol rendering mode
+    /// `.multicolor` is applied consistently in a NavigationStack toolbar.
+    var groupMenuButton: some View {
+        Button {
+            withAnimation {
+                groupModel.clearSelection(clearBackStack: false)
+            }
+        } label: {
+            Image(systemName: groupModel.groupHasEdits ? "tray.badge" : "tray")
+                .symbolEffect(.bounce, value: delayedMultiFormModeActive)
+                .symbolRenderingMode(
+                    groupModel.allValidationErrorsAreVisible
+                    ? .multicolor
+                    : .monochrome
+                )
+        }
+        .accessibilityLabel(
+            Text(
+                "Group Menu",
+                bundle: .toolkitModule,
+                comment: "A label for a button to open a menu with a list of items."
+            )
+        )
+    }
+    
+    /// Indicates to the user that the current's feature geometry has been reported invalid.
+    var invalidGeometryLabel: some View {
+        Label {
+            Text(
+                "Invalid Geometry",
+                bundle: .toolkitModule,
+                comment: """
+                    A label indicating that the geometry for the current \
+                    feature has been reported invalid.
+                    """
+            )
+        } icon: {
+            Image(systemName: "move.3d")
+                .foregroundStyle(.red)
+                .symbolEffect(.breathe.pulse.wholeSymbol, options: .repeat(.continuous))
+        }
+        .labelStyle(.titleAndIcon)
+    }
+    
+    /// Starts the sequence of events for saving the form(s).
+    var saveButton: some View {
+        Button {
+            withAnimation {
+                groupModel.save()
+            }
+        } label: {
+            if groupModel.isSaving {
+                ProgressView()
+            } else {
+                Label {
+                    Text(
+                        "Save",
+                        bundle: .toolkitModule,
+                        comment: "Finish editing the feature form."
+                    )
+                } icon: {
+                    Image(systemName: "checkmark")
+                }
+            }
+        }
+        .disabled(!groupModel.groupHasEdits)
+    }
+}
+
+private extension FeatureFormView.Model {
+    /// A Boolean value indicating whether the Back button in the toolbar should be shown.
+    var showBackButton: Bool {
+        guard let selectedModel else { return false }
+        let selectedFormsPathIsEmpty = selectedModel.navigationPath.isEmpty
+        return (selectedFormsPathIsEmpty && canGoBack)
+        || !selectedFormsPathIsEmpty
+    }
+    
+    /// A Boolean value indicating whether the Dismiss button in the toolbar should be shown.
+    var showDismissButton: Bool {
+        !multiFormModeIsActive || selectedForm == nil
+    }
+    
+    /// A Boolean value indicating whether the Group Menu button in the toolbar should be shown.
+    var showGroupMenuButton: Bool {
+        multiFormModeIsActive
+        && selectedForm != nil
+    }
+    
+    /// A Boolean value indicating if the invalid geometry toolbar item should be shown.
+    var showInvalidGeometryBadge: Bool {
+        guard let selectedModel else { return false }
+        let hasInvalidGeometry = selectedModel.geometryStatus == .invalid
+        return allValidationErrorsAreVisible &&
+        hasInvalidGeometry
+    }
+    
+    /// A Boolean value indicating whether the Save button in the toolbar should be shown.
+    var showSaveButton: Bool {
+        selectedForm == nil || !multiFormModeIsActive
     }
 }

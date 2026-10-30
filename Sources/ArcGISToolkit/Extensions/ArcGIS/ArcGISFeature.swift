@@ -25,7 +25,14 @@ extension ArcGISFeature {
     ///
     /// This property is `nil` if there is no global ID.
     var globalID: UUID? {
-        attributes.valueIgnoringCase(for: "globalid") as? UUID
+        guard let table = table as? ArcGISFeatureTable else { return nil }
+        return attributeValue(forKey: table.globalIDField) as? UUID
+    }
+    
+    /// The object ID of the feature.
+    var objectID: Int64? {
+        guard let table = table as? ArcGISFeatureTable else { return nil }
+        return attributeValue(forKey: table.objectIDField) as? Int64
     }
     
     /// The symbol for the feature from its layer.
