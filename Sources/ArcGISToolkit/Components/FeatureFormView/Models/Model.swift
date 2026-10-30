@@ -137,7 +137,7 @@ public extension FeatureFormView {
                 return
             }
             
-            guard !ids.contains(id) else {
+            guard !formModels.keys.contains(id) else {
                 Logger.featureFormView.info("Feature \(id.description) is already added.")
                 return
             }
@@ -486,11 +486,6 @@ public extension FeatureFormView {
         
         /// The underlying feature form group.
         private let group: FeatureFormGroup
-        
-        /// The list of of global IDs for the underlying feature for every form in the group.
-        private var ids: [UUID] {
-            formModels.keys.map { $0 }
-        }
         
         /// A Boolean value indicating whether forms cam be added or removed from the
         /// underlying `FeatureFormGroup`.
