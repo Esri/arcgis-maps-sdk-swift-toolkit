@@ -503,7 +503,7 @@ public extension FeatureFormView {
 }
 
 private extension FeatureFormGroup {
-    /// A Boolean value indicating whether forms cam be added or removed from the underlying
+    /// A Boolean value indicating whether forms can be added or removed from the underlying
     /// `FeatureFormGroup`.
     ///
     /// - Warning: This property is for prototype purposes only and will be provided by the SDK.
