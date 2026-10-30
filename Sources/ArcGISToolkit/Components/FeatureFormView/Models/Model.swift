@@ -154,9 +154,8 @@ public extension FeatureFormView {
         /// - Parameter clearBackStack: A Boolean value indicating whether the navigation
         /// history should also be cleared.
         func clearSelection(clearBackStack: Bool = true) {
-            guard let selectedModel,
-                  let featureGlobalID = selectedModel.featureGlobalID else { return }
-            backStack.append(featureGlobalID)
+            guard let selectedModel else { return }
+            backStack.append(selectedModel)
             self.selectedModel = nil
             if clearBackStack {
                 backStack.removeAll()
@@ -432,7 +431,8 @@ public extension FeatureFormView {
                 return
             }
             let top = backStack.removeLast()
-            guard let form = form(for: top) else {
+            guard let topID = top.featureGlobalID,
+                  let form = form(for: topID) else {
                 Logger.featureFormView.warning("No ID for back navigation.")
                 return
             }
@@ -452,10 +452,11 @@ public extension FeatureFormView {
             clearHistory: Bool = false
         ) {
             guard let newSelectedID = form.feature.globalID else { return }
-            let currentSelectedID = selectedModel?.featureGlobalID
+            let currentSelectedModel = selectedModel
+            let currentSelectedID = currentSelectedModel?.featureGlobalID
             guard newSelectedID != currentSelectedID else { return }
-            if recordNavigation, let currentSelectedID {
-                backStack.append(currentSelectedID)
+            if recordNavigation, let currentSelectedModel {
+                backStack.append(currentSelectedModel)
             }
             if clearHistory {
                 backStack.removeAll()
@@ -468,7 +469,7 @@ public extension FeatureFormView {
         /// As utility associations are browsed and new forms are added to the group this
         /// maintains the order allowing the user to back all the way to the original form if
         /// desired.
-        private var backStack = [UUID]()
+        private var backStack = [FormModel]()
         
         /// The async stream of editing events.
         private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
