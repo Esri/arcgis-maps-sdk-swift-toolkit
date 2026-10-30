@@ -54,6 +54,11 @@ extension FeatureFormView {
         /// The number of element validation errors on the form.
         var elementErrorCount: Int = 0
         
+        /// The Global ID of the underlying form's feature.
+        var featureGlobalID: UUID? {
+            featureForm.feature.globalID
+        }
+        
         /// The status of underlying feature's geometry.
         var geometryStatus: GeometryStatus?
         

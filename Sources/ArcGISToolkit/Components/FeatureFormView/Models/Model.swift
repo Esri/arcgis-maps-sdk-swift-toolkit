@@ -99,8 +99,8 @@ public extension FeatureFormView {
         ///
         /// `nil` when no form is selected and the group menu is showing.
         public var selectedForm: FeatureForm? {
-            guard let selectedID else { return nil }
-            return form(for: selectedID) ?? nil
+            guard let selectedModel else { return nil }
+            return selectedModel.featureForm
         }
         
         /// The visibility of validation errors in the form(s).
@@ -127,7 +127,7 @@ public extension FeatureFormView {
                 formCount = group.forms.count
                 
                 // Select the form, if directed, or if no form is already selected.
-                if select || selectedID == nil {
+                if select || selectedModel == nil {
                     self.select(form: form)
                 }
             }
@@ -154,9 +154,10 @@ public extension FeatureFormView {
         /// - Parameter clearBackStack: A Boolean value indicating whether the navigation
         /// history should also be cleared.
         func clearSelection(clearBackStack: Bool = true) {
-            guard let selectedID else { return }
-            backStack.append(selectedID)
-            self.selectedID = nil
+            guard let selectedModel,
+                  let featureGlobalID = selectedModel.featureGlobalID else { return }
+            backStack.append(featureGlobalID)
+            self.selectedModel = nil
             if clearBackStack {
                 backStack.removeAll()
             }
@@ -355,9 +356,13 @@ public extension FeatureFormView {
         /// ``FeatureFormView/onFormEditingEvent(perform:)``.
         var onFormEditingEventAction: ((EditingEvent) -> Void)?
         
+        /// The model for the selected form.
         var selectedModel: FormModel? {
-            guard let selectedID else { return nil }
-            return formModel(for: selectedID)
+            didSet {
+                guard let selectedModel else { return }
+                onFeatureFormChanged?(selectedModel.featureForm)
+                selectedModel.evaluateExpressions()
+            }
         }
         
         /// The total error count of all forms within the group factoring in the
@@ -446,14 +451,16 @@ public extension FeatureFormView {
             recordNavigation: Bool = true,
             clearHistory: Bool = false
         ) {
-            guard form.feature.globalID != selectedID else { return }
-            if recordNavigation, let selectedID {
-                backStack.append(selectedID)
+            guard let newSelectedID = form.feature.globalID else { return }
+            let currentSelectedID = selectedModel?.featureGlobalID
+            guard newSelectedID != currentSelectedID else { return }
+            if recordNavigation, let currentSelectedID {
+                backStack.append(currentSelectedID)
             }
             if clearHistory {
                 backStack.removeAll()
             }
-            selectedID = form.feature.globalID
+            selectedModel = formModel(for: newSelectedID)
         }
         
         /// The navigation history of forms in the underlying group.
@@ -481,7 +488,7 @@ public extension FeatureFormView {
         
         /// The list of of global IDs for the underlying feature for every form in the group.
         private var ids: [UUID] {
-            group.forms.compactMap { $0.feature.globalID }
+            formModels.keys.map { $0 }
         }
         
         /// A Boolean value indicating whether forms cam be added or removed from the
@@ -489,19 +496,6 @@ public extension FeatureFormView {
         private var isEditable: Bool {
             return true
 //            group.isEditable
-        }
-        
-        /// The global ID of the selected form.
-        ///
-        /// `nil` when no form is selected and the group menu is showing.
-        private var selectedID: UUID? {
-            didSet {
-                guard let selectedForm else { return }
-                onFeatureFormChanged?(selectedForm)
-                if let selectedModel {
-                    selectedModel.evaluateExpressions()
-                }
-            }
         }
         
         /// The task for discarding edits.
