@@ -54,7 +54,7 @@ public extension FeatureFormView {
         /// - Parameter select: A Boolean value indicating whether the added form should
         /// become the ``FeatureFormView/Model/selectedForm``.
         public func add(form: FeatureForm, select: Bool = false) {
-            guard isEditable else { return }
+            guard group.isEditable else { return }
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
@@ -485,13 +485,6 @@ public extension FeatureFormView {
         /// The underlying feature form group.
         private let group: FeatureFormGroup
         
-        /// A Boolean value indicating whether forms cam be added or removed from the
-        /// underlying `FeatureFormGroup`.
-        private var isEditable: Bool {
-            return true
-//            group.isEditable
-        }
-        
         /// The task for discarding edits.
         @ObservationIgnored
         private var taskForDiscarding: Task<Void, Never>?
@@ -506,5 +499,15 @@ public extension FeatureFormView {
         
         /// The internally managed validation error visibility.
         private var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
+    }
+}
+
+private extension FeatureFormGroup {
+    /// A Boolean value indicating whether forms cam be added or removed from the underlying
+    /// `FeatureFormGroup`.
+    ///
+    /// - Warning: This property is for prototype purposes only and will be provided by the SDK.
+    var isEditable: Bool {
+        true
     }
 }
