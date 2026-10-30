@@ -261,65 +261,18 @@ final class FeatureEditorModel {
 }
 
 private extension ArcGISFeature {
-    /// The snap rules for the feature, created from the feature's utility network, if applicable.
+    /// The snap rules for the feature, created from the feature's utility
+    /// network, if applicable.
     var snapRules: SnapRules? {
         get async throws {
-            guard let table else { return nil }
-            
-            let utilityNetworks = try await table.utilityNetworks
-            await utilityNetworks.load()
-            
-            // Tries to find the feature's utility network by creating a
-            // utility element and then uses both to create snap rules.
-            for utilityNetwork in utilityNetworks {
-                if let element = utilityNetwork.makeElement(arcGISFeature: self) {
-                    return try await .rules(for: utilityNetwork, assetType: element.assetType)
-                }
+            guard let table = table as? ArcGISFeatureTable,
+                  let utilityNetwork = try await table.utilityNetwork else {
+                return nil
             }
-            
-            // If a utility element cannot be created, tries to find the
-            // utility network that contains the feature's table and then
-            // uses it and the feature's attributes to create snap rules.
-            for utilityNetwork in utilityNetworks {
-                if let definition = utilityNetwork.definition,
-                   definition.networkSources.contains(where: { $0.featureTable === table }) {
-                    return try await .rules(
-                        for: utilityNetwork,
-                        featureTable: table,
-                        attributes: attributes
-                    )
-                }
-            }
-            
-            return nil
-        }
-    }
-}
-
-private extension FeatureTable {
-    /// The utility networks of the table's geodatabase, if applicable.
-    var utilityNetworks: [UtilityNetwork] {
-        get async throws {
-            switch self {
-            case let serviceFeatureTable as ServiceFeatureTable:
-                guard let serviceGeodatabase = serviceFeatureTable.serviceGeodatabase else {
-                    return []
-                }
-                try await serviceGeodatabase.retryLoad()
-                
-                guard let utilityNetwork = serviceGeodatabase.utilityNetwork else {
-                    return []
-                }
-                return [utilityNetwork]
-            case let geodatabaseFeatureTable as GeodatabaseFeatureTable:
-                guard let geodatabase = geodatabaseFeatureTable.geodatabase else {
-                    return []
-                }
-                try await geodatabase.retryLoad()
-                
-                return geodatabase.utilityNetworks
-            default:
-                return []
+            return if let element = utilityNetwork.makeElement(arcGISFeature: self) {
+                try await .rules(for: utilityNetwork, assetType: element.assetType)
+            } else {
+                try await .rules(for: utilityNetwork, featureTable: table, attributes: attributes)
             }
         }
     }
