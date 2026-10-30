@@ -81,7 +81,7 @@ extension FeatureFormView {
                 }
                 .badge(
                     groupModel.allValidationErrorsAreVisible
-                    ? groupModel.totalErrorCountForForm(featureID: form.feature.globalID!)
+                    ? groupModel.totalErrorCountForForm(id: form.feature.globalID!)
                     : 0
                 )
                 .badgeProminence(.increased)
@@ -97,7 +97,7 @@ extension FeatureFormView {
             HStack {
                 Text(
                     groupModel.formModel(
-                        for: form.feature.globalID!
+                        id: form.feature.globalID!
                     )?.title ?? ""
                 )
                 Spacer()
@@ -129,8 +129,8 @@ private extension FeatureFormView.Model {
     /// - Parameter form: The form to evaluate the edit status for.
     func unsavedEditsLabelIsVisible(_ form: FeatureForm) -> Bool {
         guard let id = form.feature.globalID else { return false }
-        let hasEdits = formModel(for: id)?.hasAttributeOrGeometryEdits ?? false
-        let hasNoErrors = totalErrorCountForForm(featureID: form.feature.globalID!) == 0
+        let hasEdits = formModel(id: id)?.hasAttributeOrGeometryEdits ?? false
+        let hasNoErrors = totalErrorCountForForm(id: id) == 0
         let validationErrorsAreVisible = allValidationErrorsAreVisible
         return hasEdits
         && (!validationErrorsAreVisible

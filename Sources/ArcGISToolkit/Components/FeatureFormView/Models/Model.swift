@@ -64,7 +64,7 @@ public extension FeatureFormView {
         /// should reset   the back stack.
         public func select(form: FeatureForm, clearHistory: Bool = false) {
             guard let globalID = form.feature.globalID else { return }
-            if let model = formModel(for: globalID) {
+            if let model = formModel(id: globalID) {
                 self.select(model: model, clearHistory: clearHistory)
             }
         }
@@ -84,7 +84,7 @@ public extension FeatureFormView {
             status: GeometryStatus?
         ) {
             guard let id = feature.globalID else { return }
-            formModel(for: id)?.geometryStatus = status
+            formModel(id: id)?.geometryStatus = status
         }
         
         /// A stream of ``FeatureFormView/EditingEvent``s.
@@ -206,7 +206,7 @@ public extension FeatureFormView {
         /// model created and added to the set before being returned.
         /// - Parameter globalID: The global ID of a feature.
         /// - Returns: The matching form model.
-        func formModel(for globalID: UUID) -> FeatureFormView.FormModel? {
+        func formModel(id globalID: UUID) -> FeatureFormView.FormModel? {
             if let model = formModels[globalID] {
                 return model
             } else if let groupMember = group.forms.first(
@@ -303,10 +303,10 @@ public extension FeatureFormView {
         ///
         /// The count is the number of element validation errors on the matching form plus one if
         /// the underlying feature's geometry has been reported invalid.
-        /// - Parameter id: The global ID of a feature.
+        /// - Parameter globalID: The global ID of a feature.
         /// - Returns: The error count for the indicated form.
-        func totalErrorCountForForm(featureID id: UUID) -> Int {
-            formModel(for: id)?.errorCount ?? 0
+        func totalErrorCountForForm(id globalID: UUID) -> Int {
+            formModel(id: globalID)?.errorCount ?? 0
         }
         
         /// A Boolean value indicating whether the alert for unsaved edits is presented.
