@@ -198,7 +198,7 @@ public extension FeatureFormView {
         func formModel(for globalID: UUID) -> FeatureFormView.FormModel? {
             if let model = formModels[globalID] {
                 return model
-            } else if let form = form(for: globalID) {
+            } else if let form = formModels[globalID]?.featureForm {
                 let newModel = addFormModel(form)
                 return newModel
             } else {
@@ -417,13 +417,6 @@ public extension FeatureFormView {
             }
         }
         
-        /// Returns a form in the underlying with a feature with a matching global ID.
-        /// - Parameter id: The global ID of the feature.
-        /// - Returns: The matching form if it exists.
-        private func form(for id: UUID) -> FeatureForm? {
-            group.forms.first { $0.feature.globalID == id } ?? nil
-        }
-        
         /// Removes the top of `backStack` and selects it.
         private func popBackStack() {
             guard canGoBack else {
@@ -432,7 +425,7 @@ public extension FeatureFormView {
             }
             let top = backStack.removeLast()
             guard let topID = top.featureGlobalID,
-                  let form = form(for: topID) else {
+                  let form = formModels[topID]?.featureForm else {
                 Logger.featureFormView.warning("No ID for back navigation.")
                 return
             }
