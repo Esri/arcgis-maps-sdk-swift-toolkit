@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
-import Observation
+import Foundation
 
 internal import os
 

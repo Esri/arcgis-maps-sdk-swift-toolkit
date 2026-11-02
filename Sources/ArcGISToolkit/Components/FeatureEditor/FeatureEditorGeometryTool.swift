@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import UIKit
 
 /// The tools supported by the feature editor.
 enum FeatureEditorGeometryTool: Hashable {

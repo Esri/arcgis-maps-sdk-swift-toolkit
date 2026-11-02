@@ -13,7 +13,8 @@
 // limitations under the License.
 
 import ArcGIS
-import Observation
+import Foundation
+
 internal import os
 
 /// A data model that contains various properties that are needed for the
