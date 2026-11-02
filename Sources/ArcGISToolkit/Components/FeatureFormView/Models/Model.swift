@@ -272,7 +272,7 @@ public extension FeatureFormView {
                 guard !groupHasErrors else {
                     alertForValidationErrorsIsPresented = true
                     validationErrorVisibilityInternal = .visible
-                    reportEditingEvent(.failed(SaveError.validationErrors))
+                    reportEditingEvent(.failed(SaveError.validationFailed))
                     return
                 }
                 
@@ -281,7 +281,7 @@ public extension FeatureFormView {
                     reportEditingEvent(.saved)
                 } catch {
                     finishOrDiscardError = error
-                    reportEditingEvent(.failed(SaveError.finishEditing))
+                    reportEditingEvent(.failed(SaveError.failedToFinish))
                     return
                 }
             }
