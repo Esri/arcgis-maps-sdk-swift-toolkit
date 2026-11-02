@@ -54,7 +54,7 @@ public extension FeatureFormView {
         /// - Parameter select: A Boolean value indicating whether the added form should
         /// become the ``FeatureFormView/Model/selectedForm``.
         public func add(form: FeatureForm, select: Bool = false) {
-            guard group.isEditable else { return }
+            guard group.canAddOrRemoveForms else { return }
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
@@ -507,7 +507,7 @@ private extension FeatureFormGroup {
     /// `FeatureFormGroup`.
     ///
     /// - Warning: This property is for prototype purposes only and will be provided by the SDK.
-    var isEditable: Bool {
+    var canAddOrRemoveForms: Bool {
         true
     }
 }
