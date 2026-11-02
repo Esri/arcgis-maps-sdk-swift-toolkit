@@ -288,7 +288,12 @@ extension PreplannedMapModel {
         
         /// A Boolean value indicating whether the preplanned map area is downloaded.
         var isDownloaded: Bool {
-            if case .downloaded = self { true } else { false }
+            switch self {
+            case .downloaded, .mmpkLoadFailure:
+                true
+            default:
+                false
+            }
         }
     }
 }

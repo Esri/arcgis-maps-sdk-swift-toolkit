@@ -68,13 +68,4 @@ extension String {
             comment: "A string indicating that no value has been set for a form field."
         )
     }
-    
-    /// A label for a button to take the user to a contextually inferred settings page.
-    static var settings: String {
-        .init(
-            localized: "Settings",
-            bundle: .toolkitModule,
-            comment: "A label for a button to take the user to a contextually inferred settings page."
-        )
-    }
 }

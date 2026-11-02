@@ -175,7 +175,7 @@ extension SwiftUIARView.Coordinator: ARSessionDelegate {
     }
     
     public func sessionInterruptionEnded(_ session: ARSession) {
-        view.onSessionWasInterruptedAction?(session)
+        view.onSessionInterruptionEndedAction?(session)
     }
     
     public func sessionShouldAttemptRelocalization(_ session: ARSession) -> Bool {
