@@ -257,7 +257,7 @@ private struct UndoButton: View {
 /// A button for presenting a settings view for configuring snapping.
 private struct SnapSettingsButton: View {
     /// The geometry editor model used by this button.
-    let model: GeometryEditorModel
+    @Bindable var model: GeometryEditorModel
     
     var body: some View {
         Button(
@@ -270,6 +270,10 @@ private struct SnapSettingsButton: View {
         ) {
             model.syncSnapSourceSettings()
             model.snapSettingsAreBeingModified = true
+        }
+        
+        .sheet(isPresented: $model.snapSettingsAreBeingModified) {
+            SnapSettingsView(settings: model.geometryEditor.snapSettings)
         }
     }
 }

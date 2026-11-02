@@ -139,9 +139,6 @@ private struct FeatureEditorModifier: ViewModifier {
                     break
                 }
             }
-            .sheet(isPresented: $geometryEditorModel.snapSettingsAreBeingModified) {
-                SnapSettingsView(settings: geometryEditorModel.geometryEditor.snapSettings)
-            }
     }
     
     /// Creates a view for start editing failure.
