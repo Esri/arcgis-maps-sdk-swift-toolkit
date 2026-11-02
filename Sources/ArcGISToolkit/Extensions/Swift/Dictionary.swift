@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import Foundation
+
 extension Dictionary where Key == String {
     /// Performs a case-insensitive key lookup on the dictionary.
     /// - Parameter lookupKey: The key to lookup.

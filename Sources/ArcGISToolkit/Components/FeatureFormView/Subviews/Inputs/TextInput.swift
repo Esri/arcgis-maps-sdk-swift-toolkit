@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import AVFoundation
 import SwiftUI
 
 /// A view for text input.

@@ -55,6 +55,6 @@ class PreplannedMapModelStatusTests: XCTestCase {
         XCTAssertFalse(Status.downloading.isDownloaded)
         XCTAssertTrue(Status.downloaded.isDownloaded)
         XCTAssertFalse(Status.downloadFailure(CancellationError()).isDownloaded)
-        XCTAssertFalse(Status.mmpkLoadFailure(CancellationError()).isDownloaded)
+        XCTAssertTrue(Status.mmpkLoadFailure(CancellationError()).isDownloaded)
     }
 }

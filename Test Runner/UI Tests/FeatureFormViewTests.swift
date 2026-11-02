@@ -2430,19 +2430,17 @@ private extension XCUIApplication {
     /// - Parameter text: The title of the form element to filter with.
     func filterElements(_ text: String) {
         filterElementsField.assertExistenceAndTap()
-        
 #if targetEnvironment(macCatalyst)
         let hasCurrentValue = !(filterElementsField.stringValue?.isEmpty ?? true)
 #else
         let hasCurrentValue = filterElementsField.stringValue != filterElementsField.placeholderValue
 #endif
-        
         if hasCurrentValue {
             clearElementFilter()
             filterElementsField.assertExistenceAndTap()
         }
-        
         filterElementsField.typeText(text)
+        filterElementsField.typeText("\n")
     }
 }
 
