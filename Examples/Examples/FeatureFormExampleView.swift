@@ -47,7 +47,7 @@ struct FeatureFormExampleView: View {
                     submittingOverlay
                 }
                 .sheet(isPresented: $featureFormViewIsPresented) {
-                    model = nil
+                    model?.reset()
                 } content: {
                     if let model {
                         FeatureFormView(model: model, isPresented: $featureFormViewIsPresented)
