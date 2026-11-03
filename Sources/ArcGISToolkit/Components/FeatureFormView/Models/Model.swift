@@ -69,6 +69,7 @@ public extension FeatureFormView {
         /// considered final.
         public func reset() {
             guard group.canAddOrRemoveForms else { return }
+            clearSelection()
             backStack.removeAll()
             formCount = 0
             formModels.removeAll()
