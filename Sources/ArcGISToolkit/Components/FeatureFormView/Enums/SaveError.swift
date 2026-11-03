@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
+import Foundation
 
 extension FeatureFormView {
     /// Represents errors that occur during saving.
     /// - Since: 300.3
-    enum SaveError: Error {
-        case finishEditing
-        case validationErrors
+    enum SaveError: LocalizedError {
+        case failedToFinish
+        case validationFailed
     }
 }

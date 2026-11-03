@@ -53,19 +53,32 @@ public extension FeatureFormView {
         /// - Parameter form: The new form to be added to the group.
         /// - Parameter select: A Boolean value indicating whether the added form should
         /// become the ``FeatureFormView/Model/selectedForm``.
+        ///
+        /// - Note: This can not be used when the model was created with a
+        /// `SharedTemplateFeatureCreationSet`. When it was, the underlying group is
+        /// considered final.
         public func add(form: FeatureForm, select: Bool = false) {
-            guard group.isEditable else { return }
+            guard group.canAddOrRemoveForms else { return }
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
-        /// Sets the provided form as the ``FeatureFormView/Model/selectedForm``.
-        /// - Parameter form: The form to select.
-        /// - Parameter clearHistory: A Boolean value indicating whether the selection
-        /// should reset   the back stack.
-        public func select(form: FeatureForm, clearHistory: Bool = false) {
-            guard let globalID = form.feature.globalID else { return }
-            if let model = formModel(id: globalID) {
-                self.select(model: model, clearHistory: clearHistory)
+        /// Resets the model, clearing all added forms.
+        ///
+        /// - Note: This can not be used when the model was created with a
+        /// `SharedTemplateFeatureCreationSet`. When it was, the underlying group is
+        /// considered final.
+        public func reset() {
+            guard group.canAddOrRemoveForms else { return }
+            backStack.removeAll()
+            formCount = 0
+            formModels.removeAll()
+            validationErrorVisibilityInternal = .automatic
+            while let first = group.forms.first {
+                do {
+                    try group.removeForm(first)
+                } catch {
+                    Logger.featureFormView.error("\(error.localizedDescription)")
+                }
             }
         }
         
@@ -283,7 +296,7 @@ public extension FeatureFormView {
                 guard !groupHasErrors else {
                     alertForValidationErrorsIsPresented = true
                     validationErrorVisibilityInternal = .visible
-                    reportEditingEvent(.failed(SaveError.validationErrors))
+                    reportEditingEvent(.failed(SaveError.validationFailed))
                     return
                 }
                 
@@ -292,9 +305,20 @@ public extension FeatureFormView {
                     reportEditingEvent(.saved)
                 } catch {
                     finishOrDiscardError = error
-                    reportEditingEvent(.failed(SaveError.finishEditing))
+                    reportEditingEvent(.failed(SaveError.failedToFinish))
                     return
                 }
+            }
+        }
+        
+        /// Sets the provided form as the ``FeatureFormView/Model/selectedForm``.
+        /// - Parameter form: The form to select.
+        /// - Parameter clearHistory: A Boolean value indicating whether the selection
+        /// should reset   the back stack.
+        func select(form: FeatureForm, clearHistory: Bool = false) {
+            guard let globalID = form.feature.globalID else { return }
+            if let model = formModel(id: globalID) {
+                self.select(model: model, clearHistory: clearHistory)
             }
         }
         
@@ -332,6 +356,9 @@ public extension FeatureFormView {
         var canGoBack: Bool {
             backStack.count > 0
         }
+        
+        /// An error thrown when finishing or discarding edits.
+        var finishOrDiscardError: (any Error)?
         
         /// A Boolean value indicating if the group has any forms with edits.
         var groupHasEdits: Bool {
@@ -447,7 +474,7 @@ public extension FeatureFormView {
         ///   be tracked in the back stack.
         ///   - clearHistory: A Boolean value indicating whether the selection should reset
         ///   the back stack.
-        func select(
+        private func select(
             model: FormModel,
             recordNavigation: Bool = true,
             clearHistory: Bool = false
@@ -471,9 +498,6 @@ public extension FeatureFormView {
         
         /// The async stream of editing events.
         private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
-        
-        /// An error thrown when finishing or discarding edits.
-        var finishOrDiscardError: (any Error)?
         
         /// The count of forms in the underlying group. This includes forms in the group added
         /// during association browsing irrespective of whether they've been edited or not.
@@ -507,7 +531,7 @@ private extension FeatureFormGroup {
     /// `FeatureFormGroup`.
     ///
     /// - Warning: This property is for prototype purposes only and will be provided by the SDK.
-    var isEditable: Bool {
+    var canAddOrRemoveForms: Bool {
         true
     }
 }
