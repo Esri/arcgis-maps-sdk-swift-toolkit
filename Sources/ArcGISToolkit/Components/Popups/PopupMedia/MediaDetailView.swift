@@ -39,9 +39,13 @@ struct MediaDetailView : View {
                             }
                         }
                         .hoverEffect()
-                        .accessibilityLabel(!popupMedia.alternativeText.isEmpty ? popupMedia.alternativeText :
-                                                popupMedia.title) // WCAG 1.1.1 Non-text Content (Level A)
                         .accessibilityAddTraits(.isButton) // WCAG 1.1.1 Non-text Content (Level A)
+                        .accessibilityLabel(
+                            // WCAG 1.1.1 Non-text Content (Level A)
+                            !popupMedia.alternativeText.isEmpty
+                            ? popupMedia.alternativeText
+                            : popupMedia.title
+                        )
                         .accessibilityRespondsToUserInteraction(true) // WCAG 2.1.1 Keyboard (Level A)
                         
                         if popupMedia.value?.linkURL != nil {

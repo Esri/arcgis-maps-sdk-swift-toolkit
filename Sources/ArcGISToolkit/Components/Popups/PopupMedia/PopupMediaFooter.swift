@@ -28,14 +28,17 @@ struct PopupMediaFooter: View {
     
     var body: some View {
         ZStack {
-            let gradient = Gradient(colors: [.black, .black.opacity(0.25)])
             if reduceTransparency { // WCAG 1.4.3 Contrast (Level AA)
                 Rectangle()
                     .fill(.black)
                     .frame(height: mediaSize.height * 0.25)
             } else {
                 Rectangle()
-                    .fill(.linearGradient(gradient, startPoint: .bottom, endPoint: .top))
+                    .fill(
+                        .linearGradient(
+                            .init(colors: [.black, .black.opacity(0.25)]),
+                            startPoint: .bottom, endPoint: .top)
+                    )
                     .frame(height: mediaSize.height * 0.25)
             }
             HStack {
@@ -46,7 +49,8 @@ struct PopupMediaFooter: View {
                             .font(.body)
                     }
                     
-                    if !dynamicTypeSize.isAccessibilitySize { // WCAG 1.4.4 Resize Text (Level AA)
+                    // Hide caption when using larger accessibility font sizes, WCAG 1.4.4 Resize Text (Level AA)
+                    if !dynamicTypeSize.isAccessibilitySize {
                         if !popupMedia.caption.isEmpty {
                             Text(popupMedia.caption)
                                 .font(.subheadline)
