@@ -53,6 +53,10 @@ public extension FeatureFormView {
         /// - Parameter form: The new form to be added to the group.
         /// - Parameter select: A Boolean value indicating whether the added form should
         /// become the ``FeatureFormView/Model/selectedForm``.
+        ///
+        /// - Note: This can not be used when the model was created with a
+        /// `SharedTemplateFeatureCreationSet`. When it was, the underlying group is
+        /// considered final.
         public func add(form: FeatureForm, select: Bool = false) {
             guard group.canAddOrRemoveForms else { return }
             add(form: form, select: select, recordAsBrowsed: false)
