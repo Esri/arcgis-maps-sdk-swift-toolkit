@@ -32,6 +32,7 @@ extension ArcGISFeatureTable {
 
 private extension GeodatabaseFeatureTable {
     /// The utility network to which this geodatabase feature table belongs.
+    /// The returned utility network will be loaded.
     var _utilityNetwork: UtilityNetwork? {
         get async throws {
             guard let geodatabase else { return nil }
