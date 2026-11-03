@@ -165,12 +165,6 @@ Cancel your current action to close/hide a sheet or pop-up. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose Photo or Video" = "Fotoğraf veya Video Seç";
 
-/* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Fotoğraf Seç";
-
-/* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Fotoğraf veya Video Seç";
-
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Eklemeyi seç";
@@ -828,9 +822,6 @@ candidates to use in a new utility association. */
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Arama Sorgusu";
 
-/* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "Bir yer işareti seç";
-
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Bir tesis seç";
@@ -843,6 +834,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for button to select a utility network trace configuration. */
 "Select Trace Configuration" = "İz Yapılandırması Seç";
+
+/* The accessibility announcement when a bookmark is selected. */
+"Setting viewpoint to %@" = "ı_Setting viewpoint to %@________________________İ";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "Ayarlar";

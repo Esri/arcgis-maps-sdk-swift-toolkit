@@ -165,12 +165,6 @@ Cancel your current action to close/hide a sheet or pop-up. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose Photo or Video" = "사진 또는 비디오 선택";
 
-/* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "사진 선택";
-
-/* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "사진 또는 비디오 선택";
-
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "추가하려면 선택";
@@ -828,9 +822,6 @@ candidates to use in a new utility association. */
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "검색 쿼리";
 
-/* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "북마크 선택";
-
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "시설 선택";
@@ -843,6 +834,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for button to select a utility network trace configuration. */
 "Select Trace Configuration" = "추적 구성 선택";
+
+/* The accessibility announcement when a bookmark is selected. */
+"Setting viewpoint to %@" = "한_Setting viewpoint to %@________________________빠";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "설정";
