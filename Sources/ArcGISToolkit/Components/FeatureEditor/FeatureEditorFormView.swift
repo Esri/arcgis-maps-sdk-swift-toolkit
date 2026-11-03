@@ -119,6 +119,8 @@ struct FeatureEditorFormView: View {
     /// - Parameter event: The form editing event to handle.
     private func handleEditingEvent(_ event: FeatureFormView.EditingEvent) async {
         switch event {
+        case .discarded:
+            await model.restartGeometryEditor()
         case .discardedEdits(let willNavigate):
             // Restarts the geometry editor when the form footer discard button is pressed.
             guard !willNavigate else { break }
@@ -131,12 +133,16 @@ struct FeatureEditorFormView: View {
                 // Clears selection when the user navigates away from the current view.
                 clearSelectedFeature()
             }
+        case .saved:
+            model.isPresented = false
         case .savedEdits(let willNavigate):
             // Closes the inspector when the form footer save button is pressed.
             guard !willNavigate else { break }
             model.isPresented = false
         case .showOnMapRequested(let feature):
             await showFeature(feature)
+        case .failed, .willSave:
+            break
         }
     }
     

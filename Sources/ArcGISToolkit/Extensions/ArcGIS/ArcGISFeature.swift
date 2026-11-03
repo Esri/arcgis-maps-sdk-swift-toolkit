@@ -25,19 +25,27 @@ extension ArcGISFeature {
     ///
     /// This property is `nil` if there is no global ID.
     var globalID: UUID? {
-        attributes.valueIgnoringCase(for: "globalid") as? UUID
+        guard let table = table as? ArcGISFeatureTable else { return nil }
+        return attributeValue(forKey: table.globalIDField) as? UUID
+    }
+    
+    /// The object ID of the feature.
+    var objectID: Int64? {
+        guard let table = table as? ArcGISFeatureTable else { return nil }
+        return attributeValue(forKey: table.objectIDField) as? Int64
     }
     
     /// The symbol for the feature from its layer.
-    var symbol: Image? {
+    var symbol: UIImage? {
         get async {
             guard let swatch = try? await featureLayer?
                 .renderer?
                 .symbol(for: self)?
-                .makeSwatch(scale: 1.0) else {
+                .makeSwatch(scale: 1.0)
+                .croppingTransparentPixels() else {
                 return nil
             }
-            return Image(uiImage: swatch)
+            return swatch
         }
     }
 }
