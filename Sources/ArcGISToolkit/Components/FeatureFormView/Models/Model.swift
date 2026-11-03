@@ -58,6 +58,26 @@ public extension FeatureFormView {
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
+        /// Resets the model, clearing all added forms.
+        ///
+        /// - Note: This can not be used when the model was created with a
+        /// `SharedTemplateFeatureCreationSet`. When it was, the underlying group is
+        /// considered final.
+        public func reset() {
+            guard group.canAddOrRemoveForms else { return }
+            backStack.removeAll()
+            formCount = 0
+            formModels.removeAll()
+            validationErrorVisibilityInternal = .automatic
+            while let first = group.forms.first {
+                do {
+                    try group.removeForm(first)
+                } catch {
+                    Logger.featureFormView.error("\(error.localizedDescription)")
+                }
+            }
+        }
+        
         /// Sets the edit status for the geometry on the provided feature.
         ///
         /// When ``FeatureFormView/GeometryStatus/invalid`` or
