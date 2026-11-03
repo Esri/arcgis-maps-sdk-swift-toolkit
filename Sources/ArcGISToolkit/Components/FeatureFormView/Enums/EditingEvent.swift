@@ -47,17 +47,17 @@ public extension FeatureFormView {
         /// - Parameter willNavigate: A Boolean value indicating whether the view will
         /// navigate after discarding.
         /// - Note: Deprecated at 300.3 - discarding edits before navigation is no longer
-        /// required. Replace this with 'discarded'.
+        /// required.
         /// - Since: 200.8
-        @available(*, deprecated, renamed: "FeatureFormView.EditingEvent.discarded")
+        @available(*, deprecated, message: "Use 'discarded' instead")
         case discardedEdits(willNavigate: Bool)
         /// Indicates that the user has saved their edits.
         /// - Parameter willNavigate: A Boolean value indicating whether the view will
         /// navigate after saving.
         /// - Note: Deprecated at 300.3 - finishing edits before navigation is no longer
-        /// required. Replace this with 'saved'.
+        /// required.
         /// - Since: 200.8
-        @available(*, deprecated, renamed: "FeatureFormView.EditingEvent.saved")
+        @available(*, deprecated, message: "Use 'saved' instead")
         case savedEdits(willNavigate: Bool)
     }
 }
