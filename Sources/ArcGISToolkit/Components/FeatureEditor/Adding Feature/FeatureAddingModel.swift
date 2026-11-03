@@ -15,6 +15,8 @@
 import ArcGIS
 import Observation
 
+internal import os
+
 /// A view model for adding features using shared templates.
 @MainActor
 @Observable
