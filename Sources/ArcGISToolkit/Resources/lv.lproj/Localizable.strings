@@ -165,12 +165,6 @@ Cancel your current action to close/hide a sheet or pop-up. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose Photo or Video" = "Izvēlēties fotoattēlu vai video";
 
-/* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Izvēlēties fotoattēlu";
-
-/* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Izvēlēties fotoattēlu vai video";
-
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Izvēlēties, lai pievienotu";
@@ -828,9 +822,6 @@ candidates to use in a new utility association. */
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Meklēšanas vaicājums";
 
-/* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "Izvēlēties grāmatzīmi";
-
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Izvēlieties infrastruktūras objektu";
@@ -843,6 +834,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for button to select a utility network trace configuration. */
 "Select Trace Configuration" = "Izvēlēties trasēšanas konfigurāciju";
+
+/* The accessibility announcement when a bookmark is selected. */
+"Setting viewpoint to %@" = "ķ_Setting viewpoint to %@________________________ū";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "Iestatījumi";

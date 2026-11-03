@@ -165,12 +165,6 @@ Cancel your current action to close/hide a sheet or pop-up. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose Photo or Video" = "Izaberi fotografiju ili videozapis";
 
-/* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "Izaberi fotografiju";
-
-/* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "Izaberi fotografiju ili videozapis";
-
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "Odaberite za dodavanje";
@@ -828,9 +822,6 @@ candidates to use in a new utility association. */
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "Upit za pretraživanje";
 
-/* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "Odaberi knjižnu oznaku";
-
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "Odaberi mjesto usluge";
@@ -843,6 +834,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for button to select a utility network trace configuration. */
 "Select Trace Configuration" = "Odaberi konfiguraciju praćenja";
+
+/* The accessibility announcement when a bookmark is selected. */
+"Setting viewpoint to %@" = "Č_Setting viewpoint to %@________________________ž";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "Postavke";

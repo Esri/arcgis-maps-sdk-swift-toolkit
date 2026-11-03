@@ -165,12 +165,6 @@ Cancel your current action to close/hide a sheet or pop-up. */
 /* A label for a button to choose a photo or video from the user's photo library. */
 "Choose Photo or Video" = "选择照片或视频";
 
-/* A label for a button to choose a photo from the user's photo library. */
-"Choose Photo" = "选择照片";
-
-/* A label for a button to choose a photo or video from the user's photo library. */
-"Choose Photo or Video" = "选择照片或视频";
-
 /* Instructional text for the user to choose a feature
 candidate to add as a utility association. */
 "Choose to add" = "选择以添加";
@@ -828,9 +822,6 @@ candidates to use in a new utility association. */
 /* A label in reference to a search query entered by the user. */
 "Search Query" = "搜索查询";
 
-/* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "选择书签";
-
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
 "Select a facility" = "选择设施点";
@@ -843,6 +834,9 @@ or more levels in a floor-aware map or scene. */
 
 /* A label for button to select a utility network trace configuration. */
 "Select Trace Configuration" = "选择追踪配置";
+
+/* The accessibility announcement when a bookmark is selected. */
+"Setting viewpoint to %@" = "试_Setting viewpoint to %@________________________验";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "设置";
