@@ -35,9 +35,9 @@ private extension GeodatabaseFeatureTable {
     var _utilityNetwork: UtilityNetwork? {
         get async throws {
             guard let geodatabase else { return nil }
-            try await geodatabase.load()
+            try await geodatabase.retryLoad()
             for utilityNetwork in geodatabase.utilityNetworks {
-                try await utilityNetwork.load()
+                try await utilityNetwork.retryLoad()
                 if let definition = utilityNetwork.definition,
                    definition.networkSources.contains(where: { $0.featureTable === self }) {
                     return utilityNetwork
@@ -53,7 +53,7 @@ private extension ServiceFeatureTable {
     var _utilityNetwork: UtilityNetwork? {
         get async throws {
             guard let serviceGeodatabase else { return nil }
-            try await serviceGeodatabase.load()
+            try await serviceGeodatabase.retryLoad()
             return serviceGeodatabase.utilityNetwork
         }
     }
