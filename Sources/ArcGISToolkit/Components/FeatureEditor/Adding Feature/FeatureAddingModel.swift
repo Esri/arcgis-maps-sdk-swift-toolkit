@@ -115,7 +115,15 @@ final class FeatureAddingModel {
                         .flatMap(FeatureEditorGeometryTool.init)
                 )
                 
-                let snapRules = try? await layerTemplate.featureTable.snapRules
+                let snapRules: SnapRules?
+                do {
+                    snapRules = try await layerTemplate.featureTable.snapRules
+                } catch {
+                    snapRules = nil
+                    Logger.featureEditor.error(
+                        "Failed to create template snap rules: \(error.localizedDescription)"
+                    )
+                }
                 geometryEditorModel.setSnapRules(snapRules)
                 geometryEditorModel.start(withType: layerTemplate.featureTable.geometryType!)
                 
