@@ -271,7 +271,6 @@ private struct SnapSettingsButton: View {
             model.syncSnapSourceSettings()
             model.snapSettingsAreBeingModified = true
         }
-        
         .sheet(isPresented: $model.snapSettingsAreBeingModified) {
             SnapSettingsView(settings: model.geometryEditor.snapSettings)
         }
