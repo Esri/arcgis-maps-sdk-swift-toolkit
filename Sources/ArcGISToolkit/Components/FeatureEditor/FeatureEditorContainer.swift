@@ -24,13 +24,13 @@ public struct FeatureEditorContainer<Content: View>: View {
     }
     
     public var body: some View {
-        content.modifier(FeatureEditorModifier())
+        content.modifier(FeatureEditorInspectorModifier())
     }
 }
 
 /// A view modifier that presents a `FeatureEditorFormView` in an inspector.
 @available(visionOS, unavailable)
-private struct FeatureEditorModifier: ViewModifier {
+private struct FeatureEditorInspectorModifier: ViewModifier {
     /// The feature editor model shared by the toolbar and inspector.
     @State private var model = FeatureEditorModel()
     /// The inspector's currently selected presentation detent.

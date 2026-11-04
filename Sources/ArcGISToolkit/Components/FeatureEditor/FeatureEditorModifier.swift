@@ -16,6 +16,27 @@ import ArcGIS
 internal import os
 import SwiftUI
 
+@available(visionOS, unavailable)
+public extension MapView {
+    func featureEditor(
+        _ feature: Binding<ArcGISFeature?>,
+        geometryEditor: GeometryEditor,
+        map: Map,
+        mapView: MapViewProxy,
+        toolbarStyle: FeatureEditorModifier.ToolbarStyle? = .vertical
+    ) -> some View {
+        modifier(
+            FeatureEditorModifier(
+                feature,
+                geometryEditor: geometryEditor,
+                map: map,
+                mapView: mapView,
+                toolbarStyle: toolbarStyle
+            )
+        )
+    }
+}
+
 /// A feature editing component that provides both the geometry editing via a
 /// toolbar and the feature form used to edit attributes and save/discard edits
 /// via the `featureEditorInspector()` modifier.
@@ -52,7 +73,7 @@ import SwiftUI
 ///
 /// - Since: 300.1
 @available(visionOS, unavailable)
-public struct FeatureEditor: View {
+public struct FeatureEditorModifier: ViewModifier {
     /// A binding to the feature to edit.
     @Binding private var feature: ArcGISFeature?
     /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
@@ -93,7 +114,7 @@ public struct FeatureEditor: View {
     ///   layout. A `nil` value displays the toolbar's controls without
     ///   built-in layout or styling.
     /// - Since: 300.1
-    public init(
+    init(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
         map: Map,
@@ -107,8 +128,12 @@ public struct FeatureEditor: View {
         self.toolbarStyle = toolbarStyle
     }
     
-    public var body: some View {
-        FeatureEditorToolbar(style: effectiveToolbarStyle)
+    public func body(content: Content) -> some View {
+        content
+            .overlay(alignment: .topTrailing) {
+                FeatureEditorToolbar(style: effectiveToolbarStyle)
+                    .padding()
+            }
             .task(id: ObjectIdentifier(geometryEditor)) {
                 model.geometryEditorModel.geometryEditor = geometryEditor
                 await model.restartGeometryEditor()
@@ -157,7 +182,7 @@ public struct FeatureEditor: View {
 }
 
 @available(visionOS, unavailable)
-extension FeatureEditor {
+extension FeatureEditorModifier {
     /// A style that determines the appearance and layout of a feature editor's toolbar.
     /// - Since: 300.1
     public enum ToolbarStyle {

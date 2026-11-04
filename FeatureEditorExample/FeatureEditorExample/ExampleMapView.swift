@@ -50,6 +50,12 @@ struct ExampleMapView: View {
                         guard tapPoint == nil else { return }
                         tapPoint = screenPoint
                     }
+                    .featureEditor(
+                        $featureToEdit,
+                        geometryEditor: geometryEditor,
+                        map: map,
+                        mapView: mapView
+                    )
                     .task(id: tapPoint) {
                         // Identifies the feature at the tapped screen point and
                         // uses it to display the feature editor.
@@ -67,17 +73,6 @@ struct ExampleMapView: View {
                         } catch {
                             print("Identify error:", error)
                         }
-                    }
-                    .overlay(alignment: .topTrailing) {
-                        // The feature editor needs to be placed below the
-                        // `featureEditorInspector` modifier in the view hierarchy.
-                        FeatureEditor(
-                            $featureToEdit,
-                            geometryEditor: geometryEditor,
-                            map: map,
-                            mapView: mapView
-                        )
-                        .padding()
                     }
             }
         case .failure(let error):
