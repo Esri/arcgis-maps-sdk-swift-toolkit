@@ -18,20 +18,28 @@ import SwiftUI
 
 @available(visionOS, unavailable)
 public extension MapView {
+    /// Creates a feature editor.
+    /// - Parameters:
+    ///   - feature: A binding to the feature to edit.
+    ///   The Feature Editor is displayed when the value is non-`nil`.
+    ///   - geometryEditor: A geometry editor used to edit the feature's
+    ///   geometry on an associated `MapView`.
+    ///   - map: The map used to query the shared templates shown in the
+    ///   template picker.
+    ///   - mapView: A proxy used to set the viewpoint on an associated
+    ///   `MapView`.
     func featureEditor(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
         map: Map,
-        mapView: MapViewProxy,
-        toolbarStyle: FeatureEditorModifier.ToolbarStyle? = .vertical
+        mapView: MapViewProxy
     ) -> some View {
         modifier(
             FeatureEditorModifier(
-                feature,
+                feature: feature,
                 geometryEditor: geometryEditor,
                 map: map,
-                mapView: mapView,
-                toolbarStyle: toolbarStyle
+                mapView: mapView
             )
         )
     }
@@ -72,66 +80,31 @@ public extension MapView {
 /// - ``ToolbarStyle``
 ///
 /// - Since: 300.1
-@available(visionOS, unavailable)
-public struct FeatureEditorModifier: ViewModifier {
+private struct FeatureEditorModifier: ViewModifier {
     /// A binding to the feature to edit.
-    @Binding private var feature: ArcGISFeature?
+    @Binding var feature: ArcGISFeature?
     /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
-    private let geometryEditor: GeometryEditor
+    let geometryEditor: GeometryEditor
     /// The map used to populate shared templates.
-    private let map: Map
+    let map: Map
     /// A proxy for performing map view operations.
-    private let mapView: MapViewProxy
-    /// The style to apply to the toolbar's controls.
-    private let toolbarStyle: ToolbarStyle?
+    let mapView: MapViewProxy
     
     /// The shared feature editor model from the environment.
     @Environment(FeatureEditorModel.self) private var model
     /// The vertical size class of the environment.
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
-    /// The style to use for the feature editor, taking into account the current
+    /// The style to use for the toolbar, taking into account the current
     /// environment.
-    var effectiveToolbarStyle: ToolbarStyle? {
-        guard let toolbarStyle else { return nil }
-        return switch verticalSizeClass {
-        case .compact: .horizontal
-        default: toolbarStyle
-        }
-    }
-    
-    /// Creates a feature editor.
-    /// - Parameters:
-    ///   - feature: A binding to the feature to edit.
-    ///   The Feature Editor is displayed when the value is non-`nil`.
-    ///   - geometryEditor: A geometry editor used to edit the feature's
-    ///   geometry on an associated `MapView`.
-    ///   - map: The map used to query the shared templates shown in the
-    ///   template picker.
-    ///   - mapView: A proxy used to set the viewpoint on an associated
-    ///   `MapView`.
-    ///   - toolbarStyle: The style that determines the toolbar's appearance and
-    ///   layout. A `nil` value displays the toolbar's controls without
-    ///   built-in layout or styling.
-    /// - Since: 300.1
-    init(
-        _ feature: Binding<ArcGISFeature?>,
-        geometryEditor: GeometryEditor,
-        map: Map,
-        mapView: MapViewProxy,
-        toolbarStyle: ToolbarStyle? = .vertical
-    ) {
-        self._feature = feature
-        self.geometryEditor = geometryEditor
-        self.map = map
-        self.mapView = mapView
-        self.toolbarStyle = toolbarStyle
+    var toolbarStyle: FeatureEditorToolbar.Style {
+        verticalSizeClass == .compact ? .horizontal : .vertical
     }
     
     public func body(content: Content) -> some View {
         content
             .overlay(alignment: .topTrailing) {
-                FeatureEditorToolbar(style: effectiveToolbarStyle)
+                FeatureEditorToolbar(style: toolbarStyle)
                     .padding()
             }
             .task(id: ObjectIdentifier(geometryEditor)) {
@@ -178,18 +151,6 @@ public struct FeatureEditorModifier: ViewModifier {
         if !Task.isCancelled {
             model.viewpointGeometry = nil
         }
-    }
-}
-
-@available(visionOS, unavailable)
-extension FeatureEditorModifier {
-    /// A style that determines the appearance and layout of a feature editor's toolbar.
-    /// - Since: 300.1
-    public enum ToolbarStyle {
-        /// Displays the toolbar in a styled horizontal layout.
-        case horizontal
-        /// Displays the toolbar in a styled vertical layout.
-        case vertical
     }
 }
 
