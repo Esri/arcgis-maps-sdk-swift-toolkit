@@ -37,7 +37,9 @@ struct PopupMediaFooter: View {
                     .fill(
                         .linearGradient(
                             .init(colors: [.black, .black.opacity(0.25)]),
-                            startPoint: .bottom, endPoint: .top)
+                            startPoint: .bottom,
+                            endPoint: .top
+                        )
                     )
                     .frame(height: mediaSize.height * 0.25)
             }
