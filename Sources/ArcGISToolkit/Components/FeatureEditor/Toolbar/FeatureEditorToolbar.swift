@@ -115,7 +115,10 @@ struct FeatureEditorToolbar: View {
         DeleteButton(geometryEditor: geometryEditor)
         UndoButton(model: geometryEditorModel)
         RedoButton(geometryEditor: geometryEditor)
-        SnapSettingsButton(model: geometryEditorModel)
+        SnapSettingsButton(
+            model: geometryEditorModel,
+            shouldPresentSnapSettings: model.state == .adding
+        )
     }
     
     /// The controls for completing or cancelling feature addition.
@@ -258,9 +261,12 @@ private struct UndoButton: View {
 private struct SnapSettingsButton: View {
     /// The geometry editor model used by this button.
     @Bindable var model: GeometryEditorModel
+    /// A Boolean value indicating whether this button is
+    /// responsible for presenting snap settings.
+    let shouldPresentSnapSettings: Bool
     
     var body: some View {
-        Button(
+        let button = Button(
             LocalizedStringResource(
                 "Snap Settings",
                 bundle: .toolkit,
@@ -271,8 +277,15 @@ private struct SnapSettingsButton: View {
             model.syncSnapSourceSettings()
             model.snapSettingsAreBeingModified = true
         }
-        .sheet(isPresented: $model.snapSettingsAreBeingModified) {
-            SnapSettingsView(settings: model.geometryEditor.snapSettings)
+        if shouldPresentSnapSettings {
+            button
+                /// This sheet modifier only applies to the feature adding
+                /// workflow.
+                .sheet(isPresented: $model.snapSettingsAreBeingModified) {
+                    SnapSettingsView(settings: model.geometryEditor.snapSettings)
+                }
+        } else {
+            button
         }
     }
 }
