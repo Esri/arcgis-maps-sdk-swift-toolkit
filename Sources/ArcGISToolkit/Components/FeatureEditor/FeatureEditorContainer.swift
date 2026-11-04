@@ -15,13 +15,16 @@
 import ArcGIS
 import SwiftUI
 
-public extension View {
-    /// Presents a Feature Editor view that edits a given feature. Only works
-    /// when the `FeatureEditor` view is also created.
-    /// - Since: 300.1
-    @available(visionOS, unavailable)
-    func featureEditorInspector() -> some View {
-        modifier(FeatureEditorModifier())
+@available(visionOS, unavailable)
+public struct FeatureEditorContainer<Content: View>: View {
+    private let content: Content
+    
+    public init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+    
+    public var body: some View {
+        content.modifier(FeatureEditorModifier())
     }
 }
 
