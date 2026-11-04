@@ -27,68 +27,80 @@ struct FeatureEditorFormView: View {
     /// the geometry editor.
     @Environment(FeatureEditorModel.self) private var model
     
-    /// The current editing event from the form view. This is non-`nil` while
-    /// the event is being processed by this view.
+    /// The model for the feature form view.
+    @State private var formViewModel: FeatureFormView.Model
+    /// The editing event currently being handled asynchronously.
     @State private var editingEvent: FeatureFormView.EditingEvent?
     /// The opacity of the geometry editor tool's symbology. This is used to
     /// animate changes to the geometry editor's opacity.
     @State private var geometryEditorOpacity: Float = 1
-    /// The form currently presented in the `FeatureFormView`.
-    @State private var presentedFeatureForm: FeatureForm?
     /// The feature currently selected on the map. This is non-`nil` when
     /// adding an association or "Show on Map" is pressed in the form view.
     @State private var selectedFeature: ArcGISFeature?
     
-    /// A closure that saves geometry edits to the form's feature. This is
-    /// non-`nil` only when there are edits, so the `FeatureFormView`
-    /// knows when to show the editing buttons and block navigation.
-    private var saveGeometryEditsAction: (() throws -> Void)? {
+    /// The edit and validation status of the geometry editor's geometry.
+    private var geometryEditStatus: FeatureFormView.GeometryStatus? {
         let geometryEditorModel = model.geometryEditorModel
-        let initialGeometry = geometryEditorModel.initialGeometry
-        guard geometryEditorModel.isStarted,
-              let currentGeometry = geometryEditorModel.geometry,
-              currentGeometry != initialGeometry,
-              initialGeometry != nil || !currentGeometry.isEmpty else {
+        guard geometryEditorModel.hasGeometryEdits,
+              let geometry = geometryEditorModel.geometry else {
             return nil
         }
         
-        return {
-            guard currentGeometry.sketchIsValid else {
-                throw GeometryEditorError.invalidGeometry
-            }
-            model.feature?.geometry = currentGeometry
+        return geometry.sketchIsValid ? .valid : .invalid
+    }
+    
+    init(rootFeatureForm: FeatureForm, isMinimized: Bool) {
+        self.rootFeatureForm = rootFeatureForm
+        self.isMinimized = isMinimized
+        guard let formViewModel = FeatureFormView.Model(forms: [rootFeatureForm]) else {
+            preconditionFailure("Cannot create a feature form group for the root feature form.")
         }
+        _formViewModel = State(initialValue: formViewModel)
     }
     
     var body: some View {
         @Bindable var model = model
         
-        FeatureFormView(root: rootFeatureForm, isPresented: $model.isPresented)
+        FeatureFormView(model: formViewModel, isPresented: $model.isPresented)
             .editingButtons(isMinimized ? .hidden : .automatic)
-            .onFeatureFormChanged { presentedFeatureForm = $0 }
-            .onFormEditingEvent { editingEvent = $0 }
-            .environment(\.externalSaveAction, saveGeometryEditsAction)
             .onAnimationChange(of: geometryEditorOpacity) { newOpacity in
                 model.geometryEditorModel.geometryEditor.tool.style.opacity = newOpacity
             }
             .animation(.default, value: geometryEditorOpacity)
+            .task {
+                for await event in formViewModel.editingEvents {
+                    guard !Task.isCancelled else { return }
+                    if case .willSave = event {
+                        if model.geometryEditorModel.hasGeometryEdits {
+                            model.feature?.geometry = model.geometryEditorModel.geometry
+                        }
+                        updateGeometryEditStatus()
+                    } else {
+                        editingEvent = event
+                    }
+                }
+            }
             .task(id: editingEvent) {
                 guard let editingEvent else { return }
                 await handleEditingEvent(editingEvent)
                 
-                // Prevents clearing editingEvent if it was set while this
-                // task was running.
+                // Prevents clearing an event received while this task was running.
                 guard !Task.isCancelled else { return }
                 self.editingEvent = nil
             }
-            .task(id: presentedFeatureForm?.id) {
-                guard let presentedFeatureForm else { return }
+            .task(id: formViewModel.selectedForm?.id) {
+                guard let presentedFeatureForm = formViewModel.selectedForm else { return }
                 await model.startEditingFeatureForm(presentedFeatureForm)
-                
-                // Prevents clearing presentedFeatureForm if it was set
-                // while this task was running.
-                guard !Task.isCancelled else { return }
-                self.presentedFeatureForm = nil
+            }
+            .onChange(of: rootFeatureForm.id) {
+                formViewModel.reset()
+                formViewModel.add(form: rootFeatureForm, select: true)
+            }
+            .onChange(of: geometryEditStatus, initial: true) {
+                updateGeometryEditStatus()
+            }
+            .onChange(of: model.feature?.globalID) {
+                updateGeometryEditStatus()
             }
             .task(id: model.geometryEditorModel.geometry) {
                 do {
@@ -103,6 +115,12 @@ struct FeatureEditorFormView: View {
                 clearSelectedFeature()
                 model.geometryEditorModel.geometryEditor.tool.style.opacity = 1
             }
+    }
+    
+    /// Reports geometry edits and validation errors to the form view model.
+    private func updateGeometryEditStatus() {
+        guard let feature = model.feature else { return }
+        formViewModel.setGeometryEditStatus(for: feature, status: geometryEditStatus)
     }
     
     /// Clears `selectedFeature` and unselects it on its layer.
@@ -226,19 +244,11 @@ private extension Duration {
 
 /// An error relating to the geometry editor.
 private enum GeometryEditorError: LocalizedError {
-    /// The geometry editor's geometry is invalid and must be corrected before saving.
-    case invalidGeometry
     /// The geometry editor was not hidden when selecting a feature.
     case notHidden
     
     var errorDescription: String? {
         switch self {
-        case .invalidGeometry:
-            String(
-                localized: "The geometry is invalid. It must be corrected before saving.",
-                bundle: .toolkitModule,
-                comment: "An error message shown when trying to save an invalid geometry."
-            )
         case .notHidden:
             nil
         }

@@ -282,9 +282,7 @@ public extension FeatureFormView {
         
         /// Finishes editing the underlying group of feature forms after first evaluating
         /// expressions and confirming there are no attribute errors or invalid geometries.
-        /// - Parameter externalSaveAction: A closure that saves external edits before
-        /// finishing the group. Throwing blocks saving and presents the error.
-        func save(externalSaveAction: (() throws -> Void)? = nil) {
+        func save() {
             taskForSaving = Task {
                 guard !isSaving else { return }
                 isSaving = true
@@ -304,7 +302,6 @@ public extension FeatureFormView {
                 }
                 
                 do {
-                    try externalSaveAction?()
                     try await group.finishEditing()
                     reportEditingEvent(.saved)
                 } catch {
@@ -366,12 +363,8 @@ public extension FeatureFormView {
         
         /// A Boolean value indicating if the group has any forms with edits.
         var groupHasEdits: Bool {
-            hasExternalEdits
-            || formModels.contains(where: { $0.value.hasAttributeOrGeometryEdits })
+            formModels.contains(where: { $0.value.hasAttributeOrGeometryEdits })
         }
-        
-        /// A Boolean value indicating whether the feature editor has external edits.
-        var hasExternalEdits = false
         
         /// A Boolean value indicating if the group has any forms with validation errors.
         var groupHasErrors: Bool {

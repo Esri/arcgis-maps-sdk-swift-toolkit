@@ -26,9 +26,6 @@ private extension FeatureFormView {
         /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var groupModel
         
-        /// A closure that saves external edits. This will throw when saving should be blocked.
-        @Environment(\.externalSaveAction) private var externalSaveAction
-        
         /// A Boolean value indicating whether multi-form mode is active.
         ///
         /// Useful for animations to communicate that the component has transitioned to
@@ -154,7 +151,7 @@ private extension FeatureFormView.Toolbar /* Items */ {
     var saveButton: some View {
         Button {
             withAnimation {
-                groupModel.save(externalSaveAction: externalSaveAction)
+                groupModel.save()
             }
         } label: {
             if groupModel.isSaving {

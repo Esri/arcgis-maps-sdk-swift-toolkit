@@ -73,9 +73,6 @@ import SwiftUI
 ///
 /// - Since: 200.4
 public struct FeatureFormView: View {
-    /// A closure that saves external edits. This will throw when saving should be blocked.
-    @Environment(\.externalSaveAction) private var externalSaveAction
-    
     private let isPresented: Binding<Bool>?
     private let providedModel: FeatureFormView.Model?
     
@@ -99,9 +96,6 @@ public struct FeatureFormView: View {
             .environment(model)
             .onAppear {
                 model.isPresented = isPresented?.wrappedValue
-            }
-            .onChange(of: externalSaveAction != nil, initial: true) {
-                model.hasExternalEdits = externalSaveAction != nil
             }
             .onChange(of: model.isPresented) { _, newValue in
                 if let newValue, let isPresented, newValue != isPresented.wrappedValue {
@@ -327,14 +321,4 @@ private extension Text {
             comment: "A label for a button to continue editing the feature form."
         )
     }
-}
-
-extension EnvironmentValues /* FeatureFormView + FeatureEditor */ {
-    /// A closure that saves edits external to a `FeatureFormView`. This is non-`nil` when
-    /// there are external edits.
-    ///
-    /// This is needed to allow the `FeatureEditorModifier` to use the `FeatureFormView`
-    /// for saving. The closure will throw if the Feature Editor needs to block saving, so this
-    /// should be called before performing any other save actions.
-    @Entry var externalSaveAction: (() throws -> Void)?
 }
