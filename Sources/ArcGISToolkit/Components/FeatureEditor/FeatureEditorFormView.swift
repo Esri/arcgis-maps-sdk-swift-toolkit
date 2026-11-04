@@ -62,7 +62,6 @@ struct FeatureEditorFormView: View {
         @Bindable var model = model
         
         FeatureFormView(model: formViewModel, isPresented: $model.isPresented)
-            .editingButtons(isMinimized ? .hidden : .automatic)
             .onAnimationChange(of: geometryEditorOpacity) { newOpacity in
                 model.geometryEditorModel.geometryEditor.tool.style.opacity = newOpacity
             }
