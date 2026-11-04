@@ -56,7 +56,7 @@ private extension ServiceFeatureTable {
             guard let serviceGeodatabase else { return nil }
             try await serviceGeodatabase.retryLoad()
             let utilityNetwork = serviceGeodatabase.utilityNetwork
-            try await utilityNetwork?.load()
+            try await utilityNetwork?.retryLoad()
             return utilityNetwork
         }
     }
