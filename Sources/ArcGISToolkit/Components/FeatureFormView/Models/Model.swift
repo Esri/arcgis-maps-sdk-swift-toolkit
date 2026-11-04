@@ -58,7 +58,7 @@ public extension FeatureFormView {
         /// `SharedTemplateFeatureCreationSet`. When it was, the underlying group is
         /// considered final.
         public func add(form: FeatureForm, select: Bool = false) {
-            guard group.canAddOrRemoveForms else { return }
+            guard group.featureCreationSet == nil else { return }
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
@@ -68,7 +68,7 @@ public extension FeatureFormView {
         /// `SharedTemplateFeatureCreationSet`. When it was, the underlying group is
         /// considered final.
         public func reset() {
-            guard group.canAddOrRemoveForms else { return }
+            guard group.featureCreationSet == nil else { return }
             clearSelection()
             backStack.removeAll()
             formCount = 0
@@ -528,11 +528,12 @@ public extension FeatureFormView {
 }
 
 private extension FeatureFormGroup {
-    /// A Boolean value indicating whether forms can be added or removed from the underlying
-    /// `FeatureFormGroup`.
+    /// Indicates the `SharedTemplateFeatureCreationSet` used to create the
+    /// `FeatureFormGroup`. If the group was created using a list of `FeatureForm`s, this will
+    /// be `nil`. When not `nil`, the list of feature forms cannot be modified.
     ///
     /// - Warning: This property is for prototype purposes only and will be provided by the SDK.
-    var canAddOrRemoveForms: Bool {
-        true
+    var featureCreationSet: SharedTemplateFeatureCreationSet? {
+        return nil
     }
 }
