@@ -119,7 +119,7 @@ final class FeatureAddingModel {
                 
                 let snapRules: SnapRules?
                 do {
-                    snapRules = try await layerTemplate.featureTable.snapRules
+                    snapRules = try await layerTemplate.snapRules
                 } catch {
                     snapRules = nil
                     Logger.featureEditor.error(
@@ -343,12 +343,43 @@ private extension ArcGISFeatureTable {
             nil
         }
     }
-    
-    /// The snap rules for this feature table.
+}
+
+private extension LayerTemplate {
+    /// The snap rules for this layer template.
     var snapRules: SnapRules? {
         get async throws {
-            guard let utilityNetwork = try await utilityNetwork else { return nil }
-            return try await .rules(for: utilityNetwork, featureTable: self )
+            async let defaultValues = try await sharedTemplate.defaultValues
+            async let utilityNetwork = try await featureTable.utilityNetwork
+            
+            guard let defaultValues = try await defaultValues,
+                  let utilityNetwork = try await utilityNetwork else {
+                return nil
+            }
+            
+            return try await .rules(
+                for: utilityNetwork,
+                featureTable: featureTable,
+                attributes: defaultValues
+            )
+        }
+    }
+}
+
+private extension SharedTemplate {
+    /// The default values for this shared template.
+    var defaultValues: [String: any Sendable]? {
+        get async throws {
+            try await load()
+            
+            return switch definition {
+            case let featureDefinition as FeatureTemplateDefinition:
+                featureDefinition.defaultValues
+            case let groupDefinition as GroupTemplateDefinition:
+                try await groupDefinition.parts.first?.template.defaultValues
+            default:
+                nil
+            }
         }
     }
 }
