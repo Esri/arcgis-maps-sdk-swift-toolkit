@@ -283,6 +283,7 @@ private struct SnapSettingsButton: View {
                 /// workflow.
                 .sheet(isPresented: $model.snapSettingsAreBeingModified) {
                     SnapSettingsView(settings: model.geometryEditor.snapSettings)
+                        .environment(\.font, nil)
                 }
         } else {
             button
