@@ -23,8 +23,8 @@ final class FeatureAddingModel {
     private(set) var groups: [LayerTemplateGroup] = []
     /// The currently selected layer template.
     var selectedLayerTemplate: LayerTemplate?
-    /// The form for the newly added feature.
-    private(set) var featureForm: FeatureForm?
+    /// The forms for the newly added features.
+    private(set) var featureFormViewModel: FeatureFormView.Model?
     /// The feature editor model that owns this model.
     private unowned let featureEditorModel: FeatureEditorModel
     
@@ -42,6 +42,60 @@ final class FeatureAddingModel {
         if let map {
             try await map.load()
             groups = try await map.layerTemplateGroups
+            
+            // FIXME: DEBUG
+//            let layerTemplateGroups = try await map.layerTemplateGroups
+//            func collectSnapSources(from layers: [Layer]) -> [any SnapSource] {
+//                layers.flatMap { layer -> [any SnapSource] in
+//                    if let groupLayer = layer as? GroupLayer {
+//                        return collectSnapSources(from: groupLayer.layers)
+//                    } else if let snapSource = layer as? any SnapSource {
+//                        return [snapSource]
+//                    } else {
+//                        return []
+//                    }
+//                }
+//            }
+//            let snapSources = collectSnapSources(from: map.operationalLayers)
+//            var filteredGroups: [LayerTemplateGroup] = []
+//            for group in layerTemplateGroups {
+//                var filteredLayerTemplates: [LayerTemplate] = []
+//                for layerTemplate in group.layerTemplates {
+//                    do {
+//                        guard let snapRules = try await layerTemplate.snapRules else { continue }
+//                        let limitingSnapSources = snapSources.filter {
+//                            snapRules.ruleBehavior(for: $0) == .rulesLimitSnapping
+//                        }
+//                        guard !limitingSnapSources.isEmpty else { continue }
+//                        filteredLayerTemplates.append(layerTemplate)
+//                        filteredLayerTemplates.append(layerTemplate)
+//                        print("\(group.name):")
+//                        for snapSource in limitingSnapSources {
+//                            let sourceName = (snapSource as? any LayerContent)?.name
+//                                ?? String(describing: snapSource)
+//                            print(" - \(layerTemplate.name)")
+//                            print("\t -", sourceName)
+//                        }
+//                    } catch {
+//                        Logger.featureEditor.error(
+//                            """
+//                            Failed to create template snap rules for \(layerTemplate.name): \
+//                            \(error.localizedDescription)
+//                            """
+//                        )
+//                    }
+//                }
+//                if !filteredLayerTemplates.isEmpty {
+//                    filteredGroups.append(
+//                        LayerTemplateGroup(
+//                            id: group.id,
+//                            name: group.name,
+//                            layerTemplates: filteredLayerTemplates
+//                        )
+//                    )
+//                }
+//            }
+//            groups = filteredGroups
         } else {
             groups = []
         }
@@ -50,12 +104,26 @@ final class FeatureAddingModel {
     /// Stops adding features.
     func stop() {
         stopConstruction()
-        if featureForm != nil {
-            featureForm = nil
-        }
+        featureFormViewModel = nil
+        featureEditorModel.viewpointGeometry = nil
         featureEditorModel.stopAddingFeatures()
     }
     
+    /// Centers the map on the feature currently shown in the form.
+    /// - Parameter feature: The feature to show.
+    func showFeature(_ feature: ArcGISFeature?) {
+        featureEditorModel.viewpointGeometry = feature?.geometry
+    }
+
+    /// Centers the map on the combined extent of the provided features.
+    /// - Parameter features: The features to show.
+    func showFeatures(_ features: [ArcGISFeature]) {
+        let geometries = features
+            .compactMap(\.geometry)
+            .filter { !$0.isEmpty }
+        featureEditorModel.viewpointGeometry = GeometryEngine.combineExtents(of: geometries)
+    }
+
     // MARK: Geometry Construction
     
     /// The kinds of errors that can be thrown when geometry
@@ -119,7 +187,9 @@ final class FeatureAddingModel {
                 
                 geometryConstructionState = .editing
             } else {
-                featureForm = try await makeFeatureForm(layerTemplate: layerTemplate)
+                featureFormViewModel = try await makeFeatureFormViewModel(
+                    layerTemplate: layerTemplate
+                )
             }
         } catch {
             geometryConstructionState = .failed(error)
@@ -147,7 +217,7 @@ final class FeatureAddingModel {
         layerTemplate: LayerTemplate
     ) async {
         do {
-            featureForm = try await makeFeatureForm(
+            featureFormViewModel = try await makeFeatureFormViewModel(
                 layerTemplate: layerTemplate,
                 geometry: geometry
             )
@@ -173,19 +243,23 @@ final class FeatureAddingModel {
 }
 
 private extension FeatureAddingModel {
-    func makeFeatureForm(
+    func makeFeatureFormViewModel(
         layerTemplate: LayerTemplate,
         geometry: Geometry? = nil
-    ) async throws(GeometryConstructionError) -> FeatureForm {
+    ) async throws(GeometryConstructionError) -> FeatureFormView.Model {
         do {
             let featureSet = try await layerTemplate
                 .makeFeatures(geometry: geometry)
             try await layerTemplate.sharedTemplate.source
                 .addFeatures(using: featureSet)
-            return FeatureForm(
-                // A feature set will always have at least one feature.
-                feature: featureSet.features.first!
-            )
+            let forms = featureSet.features.map(FeatureForm.init(feature:))
+            let firstForm = forms.first!
+            let formViewModel = FeatureFormView.Model(forms: [firstForm])!
+            for form in forms.dropFirst() {
+                formViewModel.add(form: form)
+            }
+            showFeatures(featureSet.features)
+            return formViewModel
         } catch {
             throw .featureCreationFailed(error)
         }
