@@ -231,11 +231,3 @@ private extension View {
         }
     }
 }
-
-private extension FeatureForm {
-    var id: String {
-        var oid = String(describing: ObjectIdentifier(self))
-        oid.removeLast()
-        return String(oid.suffix(4))
-    }
-}
