@@ -53,8 +53,7 @@ struct ExampleMapView: View {
                     .featureEditor(
                         $featureToEdit,
                         geometryEditor: geometryEditor,
-                        map: map,
-                        mapView: mapView
+                        map: map
                     )
                     .task(id: tapPoint) {
                         // Identifies the feature at the tapped screen point and

@@ -26,20 +26,16 @@ public extension MapView {
     ///   geometry on an associated `MapView`.
     ///   - map: The map used to query the shared templates shown in the
     ///   template picker.
-    ///   - mapView: A proxy used to set the viewpoint on an associated
-    ///   `MapView`.
     func featureEditor(
         _ feature: Binding<ArcGISFeature?>,
         geometryEditor: GeometryEditor,
-        map: Map,
-        mapView: MapViewProxy
+        map: Map
     ) -> some View {
         modifier(
             FeatureEditorModifier(
                 feature: feature,
                 geometryEditor: geometryEditor,
-                map: map,
-                mapView: mapView
+                map: map
             )
         )
     }
@@ -87,8 +83,6 @@ private struct FeatureEditorModifier: ViewModifier {
     let geometryEditor: GeometryEditor
     /// The map used to populate shared templates.
     let map: Map
-    /// A proxy for performing map view operations.
-    let mapView: MapViewProxy
     
     /// The shared feature editor model from the environment.
     @Environment(FeatureEditorModel.self) private var model
@@ -102,50 +96,55 @@ private struct FeatureEditorModifier: ViewModifier {
     }
     
     public func body(content: Content) -> some View {
-        content
-            .overlay(alignment: .topTrailing) {
-                FeatureEditorToolbar(style: toolbarStyle)
-                    .padding()
-            }
-            .task(id: ObjectIdentifier(geometryEditor)) {
-                model.geometryEditorModel.geometryEditor = geometryEditor
-                await model.restartGeometryEditor()
-                await model.geometryEditorModel.monitorStreams()
-            }
-            .task(id: feature.map(ObjectIdentifier.init)) {
-                if let feature {
-                    await model.startEditingFeature(feature)
-                } else {
-                    model.stopEditing()
+        MapViewReader { mapViewProxy in
+            content
+                .task(id: model.viewpointGeometry) {
+                    await setViewpoint(mapViewProxy: mapViewProxy)
                 }
+        }
+        .overlay(alignment: .topTrailing) {
+            FeatureEditorToolbar(style: toolbarStyle)
+                .padding()
+        }
+        .task(id: ObjectIdentifier(geometryEditor)) {
+            model.geometryEditorModel.geometryEditor = geometryEditor
+            await model.restartGeometryEditor()
+            await model.geometryEditorModel.monitorStreams()
+        }
+        .task(id: feature.map(ObjectIdentifier.init)) {
+            if let feature {
+                await model.startEditingFeature(feature)
+            } else {
+                model.stopEditing()
             }
-            .onChange(of: model.state) { oldState, newState in
-                guard oldState == .editing, newState == .stopped else { return }
-                feature = nil
+        }
+        .onChange(of: model.state) { oldState, newState in
+            guard oldState == .editing, newState == .stopped else { return }
+            feature = nil
+        }
+        .onChange(of: ObjectIdentifier(model.geometryEditorModel.geometryEditor.snapSettings)) {
+            model.geometryEditorModel.syncSnapSourceSettings()
+        }
+        .task(id: map) {
+            do {
+                try await model.populateSharedTemplates(from: map)
+            } catch {
+                Logger.featureEditor.error(
+                    "Error populating shared templates: \(error.localizedDescription)"
+                )
             }
-            .onChange(of: ObjectIdentifier(model.geometryEditorModel.geometryEditor.snapSettings)) {
-                model.geometryEditorModel.syncSnapSourceSettings()
-            }
-            .task(id: map) {
-                do {
-                    try await model.populateSharedTemplates(from: map)
-                } catch {
-                    Logger.featureEditor.error(
-                        "Error populating shared templates: \(error.localizedDescription)"
-                    )
-                }
-            }
-            .task(id: model.viewpointGeometry, setViewpoint)
-            .onDisappear(perform: model.stopEditing)
+        }
+        .onDisappear(perform: model.stopEditing)
     }
     
-    /// Sets the viewpoint using `model.viewpointGeometry` and the `mapView`.
-    private func setViewpoint() async {
+    /// Sets the viewpoint using `model.viewpointGeometry`.
+    /// - Parameter mapViewProxy: The map view proxy used to set the viewpoint.
+    private func setViewpoint(mapViewProxy: MapViewProxy) async {
         guard let viewpointGeometry = model.viewpointGeometry else { return }
         
         let expandedGeometry = viewpointGeometry.extent.withBuilder { $0.expand(by: 2) }
         let viewpoint = Viewpoint(boundingGeometry: expandedGeometry)
-        await mapView.setViewpoint(viewpoint, duration: 0.5)
+        await mapViewProxy.setViewpoint(viewpoint, duration: 0.5)
         
         // Prevents canceling an animation started while this task was running.
         if !Task.isCancelled {
