@@ -108,16 +108,13 @@ public extension FeatureFormView {
         
         /// The forms being edited in the underlying `FeatureFormGroup`.
         public var forms: [FeatureForm] {
-            formModels.values.compactMap { formModel in
-                if (
-                    !formModel.createdViaUtilityAssociation
-                    || formModel.hasAttributeOrGeometryEdits
-                ) {
-                    return formModel.featureForm
-                } else {
-                    return nil
+            formModels
+                .values
+                .filter { model in
+                    !model.createdViaUtilityAssociation
+                    || model.hasAttributeOrGeometryEdits
                 }
-            }
+                .map { $0.featureForm }
         }
         
         /// The form selected in the component.
