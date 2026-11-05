@@ -188,7 +188,7 @@ public extension FeatureFormView {
             }
         }
         
-        /// Discards the edits on all forms in underlying group and closes the component if a
+        /// Discards edits on all forms in the underlying group and closes the component if a
         /// presentation binding was provided.
         /// - Parameter ignoreEdits: A Boolean value indicating if the user should be
         /// warned of unsaved edits before discarding.
