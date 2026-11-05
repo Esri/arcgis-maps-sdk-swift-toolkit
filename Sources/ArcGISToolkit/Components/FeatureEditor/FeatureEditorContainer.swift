@@ -127,8 +127,14 @@ public struct FeatureEditorContainer<Content: View>: View {
                 .inspectorColumnWidth(ideal: 320)
 #endif
                 .interactiveDismissDisabled()
-                .sheet(isPresented: $geometryEditorModel.snapSettingsAreBeingModified) {
-                    SnapSettingsView(settings: model.geometryEditorModel.geometryEditor.snapSettings)
+                .sheet(
+                    isPresented: Binding {
+                        geometryEditorModel.snapSettingsAreBeingModified && model.state == .editing
+                    } set: { newValue in
+                        geometryEditorModel.snapSettingsAreBeingModified = newValue
+                    }
+                ) {
+                    SnapSettingsView(settings: geometryEditorModel.geometryEditor.snapSettings)
                 }
             }
             .environment(model)

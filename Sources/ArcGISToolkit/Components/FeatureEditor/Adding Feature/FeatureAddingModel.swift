@@ -13,7 +13,10 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
 import Observation
+
+internal import os
 
 /// A view model for adding features using shared templates.
 @MainActor
@@ -115,6 +118,16 @@ final class FeatureAddingModel {
                         .flatMap(FeatureEditorGeometryTool.init)
                 )
                 
+                let snapRules: SnapRules?
+                do {
+                    snapRules = try await layerTemplate.snapRules
+                } catch {
+                    snapRules = nil
+                    Logger.featureEditor.error(
+                        "Failed to create template snap rules: \(error.localizedDescription)"
+                    )
+                }
+                geometryEditorModel.setSnapRules(snapRules)
                 geometryEditorModel.start(withType: layerTemplate.featureTable.geometryType!)
                 
                 geometryConstructionState = .editing
@@ -333,6 +346,45 @@ private extension ArcGISFeatureTable {
             serviceFeatureTable.serviceGeodatabase
         default:
             nil
+        }
+    }
+}
+
+private extension LayerTemplate {
+    /// The snap rules for this layer template.
+    var snapRules: SnapRules? {
+        get async throws {
+            async let defaultValues = try await sharedTemplate.defaultValues
+            async let utilityNetwork = try await featureTable.utilityNetwork
+            
+            guard let defaultValues = try await defaultValues,
+                  let utilityNetwork = try await utilityNetwork else {
+                return nil
+            }
+            
+            return try await .rules(
+                for: utilityNetwork,
+                featureTable: featureTable,
+                attributes: defaultValues
+            )
+        }
+    }
+}
+
+private extension SharedTemplate {
+    /// The default values for this shared template.
+    var defaultValues: [String: any Sendable]? {
+        get async throws {
+            try await load()
+            
+            return switch definition {
+            case let featureDefinition as FeatureTemplateDefinition:
+                featureDefinition.defaultValues
+            case let groupDefinition as GroupTemplateDefinition:
+                try await groupDefinition.parts.first?.template.defaultValues
+            default:
+                nil
+            }
         }
     }
 }
