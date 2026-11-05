@@ -71,7 +71,6 @@ public extension FeatureFormView {
             guard group.featureCreationSet == nil else { return }
             clearSelection()
             backStack.removeAll()
-            formCount = 0
             formModels.removeAll()
             validationErrorVisibilityInternal = .automatic
             while let first = group.forms.first {
@@ -108,16 +107,13 @@ public extension FeatureFormView {
         
         /// The forms being edited in the underlying `FeatureFormGroup`.
         public var forms: [FeatureForm] {
-            formModels.values.compactMap { formModel in
-                if (
-                    !formModel.createdViaUtilityAssociation
-                    || formModel.hasAttributeOrGeometryEdits
-                ) {
-                    return formModel.featureForm
-                } else {
-                    return nil
+            formModels
+                .values
+                .filter { model in
+                    !model.createdViaUtilityAssociation
+                    || model.hasAttributeOrGeometryEdits
                 }
-            }
+                .map { $0.featureForm }
         }
         
         /// The form selected in the component.
@@ -149,8 +145,6 @@ public extension FeatureFormView {
         ///   a result of browsing utility associations in a form.
         func add(form: FeatureForm, select: Bool = false, recordAsBrowsed: Bool = false) {
             defer {
-                formCount = group.forms.count
-                
                 // Select the form, if directed, or if no form is already selected.
                 if select || selectedModel == nil {
                     self.select(form: form)
@@ -180,14 +174,15 @@ public extension FeatureFormView {
         /// history should also be cleared.
         func clearSelection(clearBackStack: Bool = true) {
             guard let selectedModel else { return }
-            backStack.append(selectedModel)
             self.selectedModel = nil
             if clearBackStack {
                 backStack.removeAll()
+            } else {
+                backStack.append(selectedModel)
             }
         }
         
-        /// Discards the edits on all forms in underlying group and closes the component is a
+        /// Discards edits on all forms in the underlying group and closes the component if a
         /// presentation binding was provided.
         /// - Parameter ignoreEdits: A Boolean value indicating if the user should be
         /// warned of unsaved edits before discarding.
@@ -214,10 +209,10 @@ public extension FeatureFormView {
             }
         }
         
-        /// Returns a  form model for a form in the group with a feature with a matching global ID.
+        /// Returns a form model for a form in the group with a feature with a matching global ID.
         ///
         /// If no such model exists in the set of form models but the form is in the group a new
-        /// model created and added to the set before being returned.
+        /// model is created and added to the set before being returned.
         /// - Parameter globalID: The global ID of a feature.
         /// - Returns: The matching form model.
         func formModel(id globalID: UUID) -> FeatureFormView.FormModel? {
@@ -315,7 +310,7 @@ public extension FeatureFormView {
         /// Sets the provided form as the ``FeatureFormView/Model/selectedForm``.
         /// - Parameter form: The form to select.
         /// - Parameter clearHistory: A Boolean value indicating whether the selection
-        /// should reset   the back stack.
+        /// should reset the back stack.
         func select(form: FeatureForm, clearHistory: Bool = false) {
             guard let globalID = form.feature.globalID else { return }
             if let model = formModel(id: globalID) {
@@ -416,7 +411,6 @@ public extension FeatureFormView {
         /// Creates a new instance of this model and performs initial expression evaluation.
         private init(group: FeatureFormGroup) {
             self.group = group
-            self.formCount = group.forms.count
             
             // If the group has a single form, select it.
             if group.forms.count == 1, let onlyForm = group.forms.first {
@@ -499,10 +493,6 @@ public extension FeatureFormView {
         
         /// The async stream of editing events.
         private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
-        
-        /// The count of forms in the underlying group. This includes forms in the group added
-        /// during association browsing irrespective of whether they've been edited or not.
-        private var formCount: Int
         
         /// Form view models, keyed by feature global IDs.
         private var formModels: [UUID: FeatureFormView.FormModel] = [:]
