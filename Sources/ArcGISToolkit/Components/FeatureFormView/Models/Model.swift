@@ -215,7 +215,7 @@ public extension FeatureFormView {
             }
         }
         
-        /// Returns a  form model for a form in the group with a feature with a matching global ID.
+        /// Returns a form model for a form in the group with a feature with a matching global ID.
         ///
         /// If no such model exists in the set of form models but the form is in the group a new
         /// model created and added to the set before being returned.
