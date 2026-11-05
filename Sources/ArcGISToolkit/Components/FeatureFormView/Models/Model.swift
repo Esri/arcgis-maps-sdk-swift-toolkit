@@ -313,7 +313,7 @@ public extension FeatureFormView {
         /// Sets the provided form as the ``FeatureFormView/Model/selectedForm``.
         /// - Parameter form: The form to select.
         /// - Parameter clearHistory: A Boolean value indicating whether the selection
-        /// should reset   the back stack.
+        /// should reset the back stack.
         func select(form: FeatureForm, clearHistory: Bool = false) {
             guard let globalID = form.feature.globalID else { return }
             if let model = formModel(id: globalID) {
