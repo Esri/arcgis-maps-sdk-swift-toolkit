@@ -57,7 +57,7 @@ struct FeatureFormExampleView: View {
     #if !targetEnvironment(macCatalyst)
                             .presentationSizing(.fitted)
     #endif
-                            .presentationPlacement()
+                            .leadingPresentationPlacement()
                             .task {
                                 for await event in model.editingEvents {
                                     if case .saved = event {
@@ -223,7 +223,7 @@ private extension URL {
 
 private extension View {
     @ViewBuilder
-    func presentationPlacement() -> some View {
+    func leadingPresentationPlacement() -> some View {
         if #available(iOS 27.0, *) {
             self.presentationPlacement(.leading)
         } else {
