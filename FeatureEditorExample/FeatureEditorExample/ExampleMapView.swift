@@ -20,9 +20,6 @@ import SwiftUI
 struct ExampleMapView: View {
     /// The feature to edit with the feature editor.
     @State private var featureToEdit: ArcGISFeature?
-    /// The geometry editor that the feature editor will use to edit geometries
-    /// on the `MapView`.
-    @State private var geometryEditor = GeometryEditor()
     /// The result of loading the map used by the example. When the operation
     /// succeeds, this will contain a map with features to edit.
     @State private var mapLoadResult: Result<Map, (any Error)>?
@@ -45,16 +42,11 @@ struct ExampleMapView: View {
             MapViewReader { mapView in
                 MapView(map: map)
                     .contentInsets(contentInsets)
-                    .geometryEditor(geometryEditor)
                     .onSingleTapGesture { screenPoint, _ in
                         guard tapPoint == nil else { return }
                         tapPoint = screenPoint
                     }
-                    .featureEditor(
-                        $featureToEdit,
-                        geometryEditor: geometryEditor,
-                        map: map
-                    )
+                    .featureEditor($featureToEdit, map: map)
                     .task(id: tapPoint) {
                         // Identifies the feature at the tapped screen point and
                         // uses it to display the feature editor.

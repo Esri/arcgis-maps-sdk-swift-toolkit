@@ -22,22 +22,10 @@ public extension MapView {
     /// - Parameters:
     ///   - feature: A binding to the feature to edit.
     ///   The Feature Editor is displayed when the value is non-`nil`.
-    ///   - geometryEditor: A geometry editor used to edit the feature's
-    ///   geometry on an associated `MapView`.
     ///   - map: The map used to query the shared templates shown in the
     ///   template picker.
-    func featureEditor(
-        _ feature: Binding<ArcGISFeature?>,
-        geometryEditor: GeometryEditor,
-        map: Map
-    ) -> some View {
-        modifier(
-            FeatureEditorModifier(
-                feature: feature,
-                geometryEditor: geometryEditor,
-                map: map
-            )
-        )
+    func featureEditor(_ feature: Binding<ArcGISFeature?>, map: Map) -> some View {
+        FeatureEditorModifier(feature: feature, map: map, mapView: self)
     }
 }
 
@@ -76,13 +64,13 @@ public extension MapView {
 /// - ``ToolbarStyle``
 ///
 /// - Since: 300.1
-private struct FeatureEditorModifier: ViewModifier {
+private struct FeatureEditorModifier: View {
     /// A binding to the feature to edit.
     @Binding var feature: ArcGISFeature?
-    /// A geometry editor used to edit the feature's geometry on an associated `MapView`.
-    let geometryEditor: GeometryEditor
     /// The map used to populate shared templates.
     let map: Map
+    /// The map view this modifier is applied to.
+    let mapView: MapView
     
     /// The shared feature editor model from the environment.
     @Environment(FeatureEditorModel.self) private var model
@@ -95,9 +83,10 @@ private struct FeatureEditorModifier: ViewModifier {
         verticalSizeClass == .compact ? .horizontal : .vertical
     }
     
-    public func body(content: Content) -> some View {
+    var body: some View {
         MapViewReader { mapViewProxy in
-            content
+            mapView
+                .geometryEditor(model.geometryEditorModel.geometryEditor)
                 .task(id: model.viewpointGeometry) {
                     await setViewpoint(mapViewProxy: mapViewProxy)
                 }
@@ -106,11 +95,7 @@ private struct FeatureEditorModifier: ViewModifier {
             FeatureEditorToolbar(style: toolbarStyle)
                 .padding()
         }
-        .task(id: ObjectIdentifier(geometryEditor)) {
-            model.geometryEditorModel.geometryEditor = geometryEditor
-            await model.restartGeometryEditor()
-            await model.geometryEditorModel.monitorStreams()
-        }
+        .task(model.geometryEditorModel.monitorStreams)
         .task(id: feature.map(ObjectIdentifier.init)) {
             if let feature {
                 await model.startEditingFeature(feature)
@@ -121,9 +106,6 @@ private struct FeatureEditorModifier: ViewModifier {
         .onChange(of: model.state) { oldState, newState in
             guard oldState == .editing, newState == .stopped else { return }
             feature = nil
-        }
-        .onChange(of: ObjectIdentifier(model.geometryEditorModel.geometryEditor.snapSettings)) {
-            model.geometryEditorModel.syncSnapSourceSettings()
         }
         .task(id: map) {
             do {
