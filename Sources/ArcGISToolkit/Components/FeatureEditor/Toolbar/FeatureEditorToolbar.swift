@@ -327,26 +327,3 @@ private extension View {
             .allowsHitTesting(true)
     }
 }
-
-#Preview {
-    @Previewable @State var model = FeatureEditorModel()
-    
-    NavigationStack {
-        MapView(map: Map(spatialReference: .wgs84))
-            .geometryEditor(model.geometryEditorModel.geometryEditor)
-            .overlay(alignment: .topTrailing) {
-                FeatureEditorToolbar(style: .vertical)
-                    .padding()
-            }
-            .overlay(alignment: .topLeading) {
-                FeatureEditorToolbar(style: .horizontal)
-                    .environment(\.colorScheme, .dark)
-                    .padding()
-            }
-            .environment(model)
-            .task {
-                model.geometryEditorModel.start(withType: Polygon.self)
-                await model.geometryEditorModel.monitorStreams()
-            }
-    }
-}
