@@ -13,15 +13,22 @@
 // limitations under the License.
 
 import ArcGIS
-internal import os
 import SwiftUI
+
+internal import os
 
 @available(visionOS, unavailable)
 public extension MapView {
-    /// Creates a feature editor.
+    /// Adds a feature editor component for editing and adding features to this
+    /// `MapView`'s map.
+    ///
+    /// For usage and more information, see <doc:FeatureEditor>.
+    ///
     /// - Parameters:
-    ///   - feature: A binding to the feature to edit.
-    ///   The Feature Editor is displayed when the value is non-`nil`.
+    ///   - feature: A binding to the feature to edit. The feature editor is
+    ///   displayed and edits the feature the value is non-`nil`. When the value
+    ///   is `nil` and the map has shared templates, the add button is displayed
+    ///   on the `MapView`.
     ///   - map: The map used to query the shared templates shown in the
     ///   template picker.
     func featureEditor(_ feature: Binding<ArcGISFeature?>, map: Map) -> some View {
@@ -29,47 +36,13 @@ public extension MapView {
     }
 }
 
-/// A feature editing component that provides both the geometry editing via a
-/// toolbar and the feature form used to edit attributes and save/discard edits
-/// via the `featureEditorInspector()` modifier.
-///
-/// **Toolbar**
-///
-/// `FeatureEditor` provides a toolbar for common geometry editing operations,
-/// including:
-///
-/// - Changing the tool.
-/// - Deleting the selected element.
-/// - Undoing the last action on the geometry.
-/// - Redoing the last undone action.
-/// - Configuring snap settings.
-///
-/// The toolbar can be shown with a built-in vertical or horizontal style, or
-/// without built-in layout when `toolbarStyle` is `nil`.
-///
-/// **Feature Form Presentation**
-///
-/// The inspector form UI is presented by applying `featureEditorInspector()` to
-/// an ancestor view. `FeatureEditor` and the inspector share states internally,
-/// so updates to the bound feature and geometry editor are reflected in both
-/// the toolbar and the feature form.
-///
-/// **Behavior**
-///
-/// When no feature is selected, the toolbar includes a button to add features.
-/// When a feature is selected, the toolbar includes feature editing controls.
-///
-/// **Associated Types**
-///
-/// - ``ToolbarStyle``
-///
-/// - Since: 300.1
+/// A view that adds the feature editor component to a `MapView`.
 private struct FeatureEditorModifier: View {
     /// A binding to the feature to edit.
     @Binding var feature: ArcGISFeature?
     /// The map used to populate shared templates.
     let map: Map
-    /// The map view this modifier is applied to.
+    /// The map view to add the feature editor to.
     let mapView: MapView
     
     /// The shared feature editor model from the environment.

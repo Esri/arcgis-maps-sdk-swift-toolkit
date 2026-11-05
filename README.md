@@ -16,6 +16,7 @@ To use Toolkit in your project:
 * **[Building Explorer](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/buildingexplorer)** - Allows you to explore a building model in a `BuildingSceneLayer`.
 * **[Compass](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map points north.
 * **[FeatureFormView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/featureformview)** - Enables users to edit field values of a feature using pre-configured forms.
+* **[FeatureEditor](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/featureeditor)** - Enables users to edit existing features and add new ones from shared templates.
 * **[FloatingPanel](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floatingpanel)** - Allows display of view-related content in a "bottom sheet".
 * **[FloorFilter](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floorfilter)** - Allows filtering of floor plan data in a geo view by a site, a building in the site, or a floor in the building.
 * **[FlyoverSceneView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/flyoversceneview)** - Allows you to explore a scene using your device as a window into the virtual world.

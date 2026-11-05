@@ -15,10 +15,17 @@
 import ArcGIS
 import SwiftUI
 
-/// A view that provides context for the feature editor component to its content.
+/// A view that provides context for feature editor component to its content.
+///
+/// For usage and more information, see <doc:FeatureEditor>.
+///
+/// - Note: If the hierarchy that contains this view has a navigation view, such
+/// as a `NavigationStack` or `NavigationSplitView`, the
+/// `FeatureEditorContainer` must be placed above it to support the feature
+/// editor's navigation.
 @available(visionOS, unavailable)
 public struct FeatureEditorContainer<Content: View>: View {
-    ///
+    /// The content to add the feature editor to.
     private let content: Content
     
     /// The feature editor model shared by the toolbar and inspector.
@@ -53,7 +60,7 @@ public struct FeatureEditorContainer<Content: View>: View {
     }
     
     /// Creates a feature editor container view.
-    /// - Parameter content: <#content description#>
+    /// - Parameter content: The content to display within the container.
     public init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
