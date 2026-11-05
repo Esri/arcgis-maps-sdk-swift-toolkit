@@ -54,9 +54,9 @@ struct FeatureFormExampleView: View {
                             .frame(idealWidth: 350)
                             .presentationBackgroundInteraction(.enabled(upThrough: .large))
                             .presentationDetents([.large, .medium])
-    #if !targetEnvironment(macCatalyst)
+#if !targetEnvironment(macCatalyst)
                             .presentationSizing(.fitted)
-    #endif
+#endif
                             .leadingPresentationPlacement()
                             .task {
                                 for await event in model.editingEvents {
