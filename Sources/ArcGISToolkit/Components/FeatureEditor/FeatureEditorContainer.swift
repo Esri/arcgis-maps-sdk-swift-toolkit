@@ -15,22 +15,12 @@
 import ArcGIS
 import SwiftUI
 
+/// A view that provides context for the feature editor component to its content.
 @available(visionOS, unavailable)
 public struct FeatureEditorContainer<Content: View>: View {
+    ///
     private let content: Content
     
-    public init(@ViewBuilder content: () -> Content) {
-        self.content = content()
-    }
-    
-    public var body: some View {
-        content.modifier(FeatureEditorInspectorModifier())
-    }
-}
-
-/// A view modifier that presents a `FeatureEditorFormView` in an inspector.
-@available(visionOS, unavailable)
-private struct FeatureEditorInspectorModifier: ViewModifier {
     /// The feature editor model shared by the toolbar and inspector.
     @State private var model = FeatureEditorModel()
     /// The inspector's currently selected presentation detent.
@@ -62,7 +52,13 @@ private struct FeatureEditorInspectorModifier: ViewModifier {
         }
     }
     
-    func body(content: Content) -> some View {
+    /// Creates a feature editor container view.
+    /// - Parameter content: <#content description#>
+    public init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+    
+    public var body: some View {
         @Bindable var geometryEditorModel = model.geometryEditorModel
         content
             .safeInspector(isPresented: inspectorIsPresented) {
