@@ -128,8 +128,16 @@ private struct FeatureEditorModifier: ViewModifier {
                 .inspectorColumnWidth(ideal: 320)
 #endif
                 .interactiveDismissDisabled()
-                .sheet(isPresented: $geometryEditorModel.snapSettingsAreBeingModified) {
-                    SnapSettingsView(settings: model.geometryEditorModel.geometryEditor.snapSettings)
+                /// This sheet modifier only applies to the feature editing
+                /// workflow.
+                .sheet(
+                    isPresented: Binding {
+                        geometryEditorModel.snapSettingsAreBeingModified && model.state == .editing
+                    } set: { newValue in
+                        geometryEditorModel.snapSettingsAreBeingModified = newValue
+                    }
+                ) {
+                    SnapSettingsView(settings: geometryEditorModel.geometryEditor.snapSettings)
                 }
             }
             .environment(model)
