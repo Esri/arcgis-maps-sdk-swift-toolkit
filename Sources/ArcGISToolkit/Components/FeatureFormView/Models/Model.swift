@@ -180,10 +180,11 @@ public extension FeatureFormView {
         /// history should also be cleared.
         func clearSelection(clearBackStack: Bool = true) {
             guard let selectedModel else { return }
-            backStack.append(selectedModel)
             self.selectedModel = nil
             if clearBackStack {
                 backStack.removeAll()
+            } else {
+                backStack.append(selectedModel)
             }
         }
         
