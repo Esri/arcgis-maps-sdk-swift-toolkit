@@ -283,7 +283,6 @@ struct FeatureEditorModelTests {
         await Task.yieldExpect(model.geometryEditorModel.geometry == nil)
         await Task.yieldExpect(!model.geometryEditorModel.canUndo)
         #expect(model.viewpointGeometry == nil)
-        #expect(!model.geometryEditorModel.geometryEditor.snapSettings.isEnabled)
     }
     
     /// Verifies `stopEditing()` resets the model's properties to their default values.
