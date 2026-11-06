@@ -59,7 +59,7 @@ struct FeatureFormExampleView: View {
 #endif
                             .leadingPresentationPlacement()
                             .task {
-                                for await event in model.editingEvents {
+                                for await event in model.events {
                                     if case .saved = event {
                                         for form in model.forms {
                                             if let table = form.feature.table as? ServiceFeatureTable {
