@@ -24,15 +24,12 @@ public extension MapView {
     ///
     /// For usage and more information, see <doc:FeatureEditor>.
     ///
-    /// - Parameters:
-    ///   - feature: A binding to the feature to edit. The feature editor is
-    ///   displayed and edits the feature the value is non-`nil`. When the value
-    ///   is `nil` and the map has shared templates, the add button is displayed
-    ///   on the `MapView`.
-    ///   - map: The map used to query the shared templates shown in the
-    ///   template picker.
-    func featureEditor(_ feature: Binding<ArcGISFeature?>, map: Map) -> some View {
-        FeatureEditorModifier(feature: feature, map: map, mapView: self)
+    /// - Parameter feature: A binding to the feature to edit. The feature
+    /// editor starts editing when the value is non-`nil`. When the value is
+    /// `nil` and the `MapView`'s map has shared templates, the button to
+    /// start adding features from templates is shown on the `MapView`.
+    func featureEditor(_ feature: Binding<ArcGISFeature?>) -> some View {
+        FeatureEditorModifier(feature: feature, mapView: self)
     }
 }
 
@@ -40,8 +37,6 @@ public extension MapView {
 private struct FeatureEditorModifier: View {
     /// A binding to the feature to edit.
     @Binding var feature: ArcGISFeature?
-    /// The map used to populate shared templates.
-    let map: Map
     /// The map view to add the feature editor to.
     let mapView: MapView
     
@@ -80,9 +75,9 @@ private struct FeatureEditorModifier: View {
             guard oldState == .editing, newState == .stopped else { return }
             feature = nil
         }
-        .task(id: map) {
+        .task(id: mapView.map) {
             do {
-                try await model.populateSharedTemplates(from: map)
+                try await model.populateSharedTemplates(from: mapView.map)
             } catch {
                 Logger.featureEditor.error(
                     "Error populating shared templates: \(error.localizedDescription)"

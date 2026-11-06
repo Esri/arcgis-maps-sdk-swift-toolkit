@@ -46,7 +46,7 @@ struct ExampleMapView: View {
                         guard tapPoint == nil else { return }
                         tapPoint = screenPoint
                     }
-                    .featureEditor($featureToEdit, map: map)
+                    .featureEditor($featureToEdit)
                     .task(id: tapPoint) {
                         // Identifies the feature at the tapped screen point and
                         // uses it to display the feature editor.
