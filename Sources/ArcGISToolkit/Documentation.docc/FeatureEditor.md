@@ -6,16 +6,15 @@ features from shared templates to a `MapView`'s map.
 ## Usage
 
 To use the feature editor:
-- Add ``ArcGIS/MapView/featureEditor(_:map:)`` to a `MapView` and provide a
-binding to an optional `ArcGISFeature` to edit and a `Map` to query for shared
-templates. 
-- Add ``FeatureEditorContainer`` above the `featureEditor(_:map:)` modifier in
+- Add ``ArcGIS/MapView/featureEditor(_:)`` to a `MapView` and provide a binding 
+to an optional `ArcGISFeature` to edit. 
+- Add ``FeatureEditorContainer`` above the `featureEditor(_:)` modifier in
 the view hierarchy. If the hierarchy that contains this view has a navigation
 view, such as a `NavigationStack` or `NavigationSplitView`, the
 `FeatureEditorContainer` must be placed above it to support the feature editor's
 navigation.
-- To edit a feature, set the `feature` binding passed to the
-`featureEditor(_:map:)` modifier.
+- To edit a feature, set the `feature` binding passed to the `featureEditor(_:)` 
+modifier.
 - To add features from shared templates, press the add button that is displayed 
 on the `MapView`. The button is shown when the `feature` binding is `nil`, and 
 there are shared templates in the `MapView`'s map.
@@ -24,7 +23,7 @@ there are shared templates in the `MapView`'s map.
 FeatureEditorContainer {
     NavigationStack {
         MapView(map: map)
-            .featureEditor($feature, map: map)
+            .featureEditor($feature)
     }
 }
 ```
@@ -63,8 +62,8 @@ Supports editing existing and new features, with the following capabilities:
 ### Adding Features
 
 Supports creating and adding features from shared templates:
-- Selecting feature, group, and preset templates queried from the map's 
-operational layers and feature tables.
+- Selecting feature, group, and preset templates queried from the operational 
+layers and feature tables on the map displayed in the `MapView`.
 - Creating a geometry for the selected template using the following 
 `GeometryConstructionTool.Kind`s:
     - `circle`
