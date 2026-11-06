@@ -46,6 +46,8 @@ struct ExampleMapView: View {
                         guard tapPoint == nil else { return }
                         tapPoint = screenPoint
                     }
+                    // Adds the feature editor to the map view. This needs to
+                    // be placed inside a `FeatureEditorContainer`.
                     .featureEditor($featureToEdit)
                     .task(id: tapPoint) {
                         // Identifies the feature at the tapped screen point and

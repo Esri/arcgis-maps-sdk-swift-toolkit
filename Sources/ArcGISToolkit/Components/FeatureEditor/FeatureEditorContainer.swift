@@ -15,14 +15,14 @@
 import ArcGIS
 import SwiftUI
 
-/// A view that provides context for feature editor component to its content.
+/// A view that adds the feature editor component to its content.
 ///
 /// For usage and more information, see <doc:FeatureEditor>.
 ///
-/// - Note: If the hierarchy that contains this view has a navigation view, such
-/// as a `NavigationStack` or `NavigationSplitView`, the
-/// `FeatureEditorContainer` must be placed above it to support the feature
-/// editor's navigation.
+/// - Note: This is needed to use the ``ArcGIS/MapView/featureEditor(_:)``
+/// modifier. If the view hierarchy containing the feature editor has a
+/// navigation view, such as a `NavigationStack` or `NavigationSplitView`, the
+/// `FeatureEditorContainer` must be placed above it to work properly.
 @available(visionOS, unavailable)
 public struct FeatureEditorContainer<Content: View>: View {
     /// The content to add the feature editor to.
@@ -60,7 +60,8 @@ public struct FeatureEditorContainer<Content: View>: View {
     }
     
     /// Creates a feature editor container view.
-    /// - Parameter content: The content to display within the container.
+    /// - Parameter content: The content to display within the container and add
+    /// the feature editor to.
     public init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
@@ -134,6 +135,8 @@ public struct FeatureEditorContainer<Content: View>: View {
                 .inspectorColumnWidth(ideal: 320)
 #endif
                 .interactiveDismissDisabled()
+                /// This sheet modifier only applies to the feature editing
+                /// workflow.
                 .sheet(
                     isPresented: Binding {
                         geometryEditorModel.snapSettingsAreBeingModified && model.state == .editing

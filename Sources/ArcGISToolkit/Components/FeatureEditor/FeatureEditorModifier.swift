@@ -24,10 +24,13 @@ public extension MapView {
     ///
     /// For usage and more information, see <doc:FeatureEditor>.
     ///
+    /// - Note: This needs to be used within a ``FeatureEditorContainer`` view
+    /// to work.
+    ///
     /// - Parameter feature: A binding to the feature to edit. The feature
     /// editor starts editing when the value is non-`nil`. When the value is
-    /// `nil` and the `MapView`'s map has shared templates, the button to
-    /// start adding features from templates is shown on the `MapView`.
+    /// `nil` and the `MapView`'s map has shared templates, the add features
+    /// button is shown on the `MapView`.
     func featureEditor(_ feature: Binding<ArcGISFeature?>) -> some View {
         FeatureEditorModifier(feature: feature, mapView: self)
     }

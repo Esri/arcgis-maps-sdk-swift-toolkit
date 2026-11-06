@@ -18,8 +18,12 @@ import SwiftUI
 /// The top-level view for the example app.
 struct ContentView: View {
     var body: some View {
+        // Adds the feature editor component to the view hierarchy. This is
+        // needed for the `MapView.featureEditor(_:)` modifier to work and has
+        // to be placed above any navigation views.
         FeatureEditorContainer {
-            // This NavigationStack is used to simulate the structure of a real-world application.
+            // This NavigationStack is used to simulate the structure of a
+            // real-world application.
             NavigationStack {
                 NavigationLink("Open Map View") {
                     ExampleMapView()

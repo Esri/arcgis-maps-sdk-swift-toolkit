@@ -7,12 +7,12 @@ features from shared templates to a `MapView`'s map.
 
 To use the feature editor:
 - Add ``ArcGIS/MapView/featureEditor(_:)`` to a `MapView` and provide a binding 
-to an optional `ArcGISFeature` to edit. 
+to an optional `ArcGISFeature` to edit. The modifier returns `some View`, which 
+means it needs to be placed below any other `MapView` modifiers.
 - Add ``FeatureEditorContainer`` above the `featureEditor(_:)` modifier in
-the view hierarchy. If the hierarchy that contains this view has a navigation
-view, such as a `NavigationStack` or `NavigationSplitView`, the
-`FeatureEditorContainer` must be placed above it to support the feature editor's
-navigation.
+the view hierarchy. If the hierarchy that contains the feature editor has a 
+navigation view, such as a `NavigationStack` or `NavigationSplitView`, the 
+container view must be placed above it to work properly.
 - To edit a feature, set the `feature` binding passed to the `featureEditor(_:)` 
 modifier.
 - To add features from shared templates, press the add button that is displayed 
