@@ -100,7 +100,7 @@ types available to use when querying for utility
 association feature candidates. */
 "Available Asset Types" = "Available Asset Types";
 
-/* A generic label for navigating to the previous screen or returning to the previous context. */
+/* A generic label for a back button to return to the previous screen. */
 "Back" = "Back";
 
 /* A label in reference to bookmarks contained in a map or scene. */
@@ -282,9 +282,6 @@ A label for a button used to continue the authentication operation. */
 /* A label for the description of the map area. */
 "Description" = "Description";
 
-/* Discard edits on the feature form. */
-"Discard" = "Discard";
-
 /* A label for a button to discard unsaved edits. */
 "Discard Edits" = "Discard Edits";
 
@@ -327,6 +324,12 @@ network element for more than one trace starting point. */
 
 /* The cardinal direction East. */
 "East" = "East";
+
+/* A navigation title indicating the number of features being edited in the feature form toolkit component. */
+"Editing ^[%lld features](inflect: true)" = "Editing ^[%lld features](inflect: true)";
+
+/* A message explaining that unsaved edits will be lost if the user continues to dismiss the component without saving. */
+"Edits will be lost." = "Edits will be lost.";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
@@ -432,8 +435,7 @@ asset types by name. */
 association candidate features by name. */
 "Filter candidates by name" = "Filter candidates by name";
 
-/* Label for a text field used to 
-filter visible elements in a form. */
+/* Label for a text field used to filter visible elements in a form. */
 "Filter Elements" = "Filter Elements";
 
 /* A field allowing the user to filter a list of facilities by name. A
@@ -454,11 +456,7 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Find a place or address";
 
-/* The message shown when a form could not be submitted. */
-"Finish editing failed." = "Finish editing failed.";
-
-/* The message shown when a form could not be 
-submitted with additional details. */
+/* The message shown when a form could not be submitted with additional details. */
 "Finish editing failed.\n%@" = "Finish editing failed.\n%@";
 
 /* A label in reference to a fractional distance along an 
@@ -474,6 +472,9 @@ trace operation. */
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
 "Global scenes aren't supported in the Building Explorer." = "Global scenes aren't supported in the Building Explorer.";
+
+/* A label for a button to open a menu with a list of items. */
+"Group Menu" = "Group Menu";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
@@ -498,6 +499,9 @@ variable is a cardinal or intercardinal direction. */
 
 /* A label indicating that a challenge should be ignored. */
 "Ignore" = "Ignore";
+
+/* A label indicating that the geometry for the current feature has been reported invalid. */
+"Invalid Geometry" = "Invalid Geometry";
 
 /* A label for the "is" attribute query condition. */
 "is" = "is";
@@ -660,6 +664,9 @@ feature sources were found. */
 filter results were found. */
 "No Filter Results Found" = "No Filter Results Found";
 
+/* A label communicating that no feature forms have been added to a feature form view. */
+"No forms" = "No forms";
+
 /* An error message explaining that there is no internet connection. */
 "No Internet Connection" = "No Internet Connection";
 
@@ -807,9 +814,6 @@ current visible extent of the map or scene. */
 
 /* Finish editing the feature form. */
 "Save" = "Save";
-
-/* A label for a button to save edits. */
-"Save Edits" = "Save Edits";
 
 /* A generic prompt for a search field where a more
 specific prompt has not been provided. */
@@ -1034,13 +1038,11 @@ to be imported as an attachment. */
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Unnamed Asset Type";
 
+/* A label indicating a feature form has unsaved edits. */
+"Unsaved Edits" = "Unsaved Edits";
+
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
 "Unsupported Value" = "Unsupported Value";
-
-/* A message explaining that unsaved edits will be
-lost if the user continues to dismiss the form
-without saving. */
-"Updates to the form will be lost." = "Updates to the form will be lost.";
 
 /* A label in reference to a credential username. */
 "Username" = "Username";
@@ -1101,10 +1103,8 @@ containment is visible. */
 /* World (Small) (Level of Detail) */
 "World (Small)" = "World (Small)";
 
-/* A message explaining that the indicated number
-of validation errors must be resolved before
-saving the feature form. */
-"You have ^[%lld error](inflect: true) that must be fixed before saving." = "You have ^[%lld error](inflect: true) that must be fixed before saving.";
+/* A message explaining that the indicated number of validation errors must be resolved before saving the feature form. */
+"You have ^[%lld errors](inflect: true) that must be fixed before saving." = "You have ^[%lld errors](inflect: true) that must be fixed before saving.";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
