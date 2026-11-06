@@ -217,7 +217,7 @@ private extension View /* Alerts */ {
                 bundle: .toolkit,
                 comment: "The title shown when the feature form failed to save."
             ),
-            item: $model.finishOrDiscardError,
+            item: $model.finishEditsError,
             actions: { _ in },
             message: { error in
                 Text(
