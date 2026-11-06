@@ -18,13 +18,12 @@ public extension FeatureFormView {
     /// Represents events that occur during the form editing lifecycle. These events notify you
     /// when the user has performed an action within the component.
     /// - Since: 200.8
+    @available(*, deprecated, message: "Deprecated at 300.3, use 'FeatureFormView.Event' instead.")
     enum EditingEvent: @unchecked Sendable {
         /// Indicates that the user has discarded their edits.
-        /// - Since: 300.3
-        case discarded
-        /// Indicates that saving failed.
-        /// - Since: 300.3
-        case failed(any Error)
+        /// - Parameter willNavigate: A Boolean value indicating whether the view will
+        /// navigate after discarding.
+        case discardedEdits(willNavigate: Bool)
         /// Indicates the active form or the navigation path for the active form has changed.
         ///
         /// Forms with `UtilityAssociationsFormElement`s have multiple possible
@@ -32,32 +31,11 @@ public extension FeatureFormView {
         /// - Since: 300.0
         case navigationChanged(NavigationPathItem)
         /// Indicates that the user has saved their edits.
-        /// - Since: 300.3
-        case saved
+        /// - Parameter willNavigate: A Boolean value indicating whether the view will
+        /// navigate after saving.
+        case savedEdits(willNavigate: Bool)
         /// Indicates that the user has tapped on an option to visualize a feature on the map.
         /// - Since: 300.0
         case showOnMapRequested(ArcGISFeature)
-        /// Indicates that the user has started an attempt to save their edits.
-        /// - Since: 300.3
-        case willSave
-        
-        // MARK: Deprecated case(s)
-        
-        /// Indicates that the user has discarded their edits.
-        /// - Parameter willNavigate: A Boolean value indicating whether the view will
-        /// navigate after discarding.
-        /// - Note: Deprecated at 300.3 - discarding edits before navigation is no longer
-        /// required.
-        /// - Since: 200.8
-        @available(*, deprecated, message: "Use 'discarded' instead")
-        case discardedEdits(willNavigate: Bool)
-        /// Indicates that the user has saved their edits.
-        /// - Parameter willNavigate: A Boolean value indicating whether the view will
-        /// navigate after saving.
-        /// - Note: Deprecated at 300.3 - finishing edits before navigation is no longer
-        /// required.
-        /// - Since: 200.8
-        @available(*, deprecated, message: "Use 'saved' instead")
-        case savedEdits(willNavigate: Bool)
     }
 }
