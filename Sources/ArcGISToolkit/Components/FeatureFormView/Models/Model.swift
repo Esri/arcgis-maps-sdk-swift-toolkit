@@ -190,13 +190,8 @@ public extension FeatureFormView {
             let discard = { [weak self] in
                 self?.taskForDiscarding?.cancel()
                 self?.taskForDiscarding = Task {
-                    do {
-                        try await self?.group.discardEdits()
-                        self?.reportEditingEvent(.discarded)
-                    } catch {
-                        self?.finishOrDiscardError = error
-                        self?.reportEditingEvent(.saveFailed(error))
-                    }
+                    try? await self?.group.discardEdits()
+                    self?.reportEditingEvent(.discarded)
                     if self?.isPresented != nil {
                         self?.isPresented = false
                     }
@@ -297,7 +292,7 @@ public extension FeatureFormView {
                     try await group.finishEditing()
                     reportEditingEvent(.saved)
                 } catch {
-                    finishOrDiscardError = error
+                    finishEditsError = error
                     reportEditingEvent(.saveFailed(SaveError.failedToFinish))
                     return
                 }
@@ -350,8 +345,8 @@ public extension FeatureFormView {
             backStack.count > 0
         }
         
-        /// An error thrown when finishing or discarding edits.
-        var finishOrDiscardError: (any Error)?
+        /// An error thrown when finishing edits.
+        var finishEditsError: (any Error)?
         
         /// A Boolean value indicating if the group has any forms with edits.
         var groupHasEdits: Bool {
