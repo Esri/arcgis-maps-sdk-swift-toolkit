@@ -15,15 +15,15 @@
 import ArcGIS
 import SwiftUI
 
-struct EmbeddedFeatureFormView: View {
-    /// The model for the FeatureFormView containing the view.
-    @Environment(FeatureFormViewModel.self) var featureFormViewModel: FeatureFormViewModel
-    
-    /// The feature form defining the editing experience.
-    let form: FeatureForm
-    
-    var body: some View {
-        if let embeddedFeatureFormViewModel {
+extension FeatureFormView {
+    struct FormView: View {
+        /// The feature form defining the editing experience.
+        let form: FeatureForm
+        
+        /// The model for the stack view containing the form.
+        @Environment(FeatureFormView.FormModel.self) var formModel
+        
+        var body: some View {
             ScrollViewReader { scrollView in
                 Group {
                     let form = Form { sections }
@@ -31,7 +31,7 @@ struct EmbeddedFeatureFormView: View {
                     form
 #else
                     if CommandLine.arguments.contains("-testCase") {
-                        @Bindable var model = embeddedFeatureFormViewModel
+                        @Bindable var model = formModel
                         form
                             .searchable(
                                 text: $model.elementFilterPhrase,
@@ -40,7 +40,7 @@ struct EmbeddedFeatureFormView: View {
                                     "Filter Elements",
                                     bundle: .toolkitModule,
                                     comment: """
-                                        Label for a text field used to 
+                                        Label for a text field used to \
                                         filter visible elements in a form.
                                         """
                                 )
@@ -50,7 +50,7 @@ struct EmbeddedFeatureFormView: View {
                     }
 #endif
                 }
-                .onChange(of: embeddedFeatureFormViewModel.focusedElement) { _, newFocusedElement in
+                .onChange(of: formModel.focusedElement) { _, newFocusedElement in
                     guard let newFocusedElement else { return }
                     // The navigation bar may obscure section headers (FB19740517).
                     withAnimation {
@@ -58,32 +58,14 @@ struct EmbeddedFeatureFormView: View {
                     }
                 }
             }
-            .environment(embeddedFeatureFormViewModel)
-            .featureFormToolbar(form, isAForm: true) {
-                featureFormViewModel.removeModel(form)
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle(embeddedFeatureFormViewModel.title)
-            .onTitleChange(of: embeddedFeatureFormViewModel.featureForm) { newTitle in
-                embeddedFeatureFormViewModel.title = newTitle
-            }
-            .preference(
-                key: PresentedFeatureFormPreferenceKey.self,
-                value: .init(object: embeddedFeatureFormViewModel)
-            )
 #if os(iOS)
             .scrollDismissesKeyboard(.immediately)
 #endif
         }
     }
-    
-    /// The view model for the form.
-    var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
-        featureFormViewModel.getModel(form)
-    }
 }
 
-extension EmbeddedFeatureFormView {
+extension FeatureFormView.FormView {
     /// Returns the section for the given form element.
     ///
     /// Padding is added to each footer to provide visual separation between
@@ -109,29 +91,27 @@ extension EmbeddedFeatureFormView {
     /// Returns content for the section of the given form element.
     /// - Parameter element: The element to generate the body for.
     @ViewBuilder func content(for element: FormElement) -> some View {
-        if let embeddedFeatureFormViewModel {
-            switch element {
-            case let element as AttachmentsFormElement:
-                AttachmentsFeatureElementView(
-                    formElement: element,
-                    formViewModel: embeddedFeatureFormViewModel
-                )
-            case let element as FieldFormElement where !(element.input is UnsupportedFormInput):
-                FieldFormElementView(element: element)
-            case let element as TextFormElement:
-                TextFormElementView(element: element)
-            case let element as UtilityAssociationsFormElement:
-                FeatureFormView.UtilityAssociationsFormElementView(element: element)
-            default:
-                EmptyView()
-            }
+        switch element {
+        case let element as AttachmentsFormElement:
+            AttachmentsFeatureElementView(
+                formElement: element,
+                formModel: formModel
+            )
+        case let element as FieldFormElement where !(element.input is UnsupportedFormInput):
+            FieldFormElementView(element: element)
+        case let element as TextFormElement:
+            TextFormElementView(element: element)
+        case let element as UtilityAssociationsFormElement:
+            FeatureFormView.UtilityAssociationsFormElementView(element: element)
+        default:
+            EmptyView()
         }
     }
     
     /// The sections for all visible form elements.
     @ViewBuilder var sections: some View {
-        if let visibleElements = embeddedFeatureFormViewModel?.visibleElements {
-            ForEach(visibleElements, id: \.self, content: section(for:))
+        if !formModel.visibleElements.isEmpty {
+            ForEach(formModel.visibleElements, id: \.self, content: section(for:))
         } else {
             ContentUnavailableView {
                 Label {
