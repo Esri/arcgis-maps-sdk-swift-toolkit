@@ -38,9 +38,8 @@ final class GeometryEditorModel {
     init() {
         geometryEditor.tool = selectedTool.geometryEditorTool
         
-        let snapSettings = geometryEditor.snapSettings
-        snapSettings.isEnabled = true
-        snapSettings.snapsToGeometryGuides = true
+        // Snapping is enabled by default to simplify the `SnapSettingsView` UI.
+        geometryEditor.snapSettings.isEnabled = true
     }
     
     /// A Boolean value indicating whether the geometry has edits.

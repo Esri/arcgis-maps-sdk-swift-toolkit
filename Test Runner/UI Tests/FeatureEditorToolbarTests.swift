@@ -294,8 +294,9 @@ final class FeatureEditorToolbarTests: XCTestCase {
         geometryGuidesToggle.assertExistence()
         featuresToggle.assertExistence()
         
-        // The geometry guides and snap to features toggles should be on by default.
-        XCTAssertEqual(geometryGuidesToggle.boolValue, true)
+        // By default, the geometry guides toggle should be off, and the
+        // snap to features toggle should be on.
+        XCTAssertEqual(geometryGuidesToggle.boolValue, false)
         XCTAssertEqual(featuresToggle.boolValue, true)
         
         // Snap sources should have been synced with snap rules and source
@@ -314,7 +315,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         // are disabled by default.
         XCTAssertEqual(electricDistributionLineToggle.boolValue, false)
         
-        // Change some toggles and verify their states are preserved when the
+        // Turn on some toggles and verify their states are preserved when the
         // settings view is reopened.
         geometryGuidesToggle.tapResolvedToggleControl()
         electricDistributionLineToggle.tapResolvedToggleControl()
@@ -322,7 +323,7 @@ final class FeatureEditorToolbarTests: XCTestCase {
         app.buttons["Close"].assertExistenceAndTap()
         // Reopen the settings view and verify the toggles states are preserved.
         snapSettingsButton.assertExistenceAndTap()
-        XCTAssertEqual(geometryGuidesToggle.boolValue, false)
+        XCTAssertEqual(geometryGuidesToggle.boolValue, true)
         XCTAssertEqual(electricDistributionLineToggle.boolValue, true)
     }
 }

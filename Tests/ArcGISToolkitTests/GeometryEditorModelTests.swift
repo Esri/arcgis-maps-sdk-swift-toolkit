@@ -40,7 +40,6 @@ struct GeometryEditorModelTests {
         #expect(model.selectedTool == .vertex)
         #expect(model.geometryEditor.tool is VertexTool)
         #expect(model.geometryEditor.snapSettings.isEnabled)
-        #expect(model.geometryEditor.snapSettings.snapsToGeometryGuides)
     }
     
     /// Verifies `monitorStreams()` updates model properties when the geometry
