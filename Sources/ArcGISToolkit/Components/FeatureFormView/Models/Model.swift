@@ -100,9 +100,9 @@ public extension FeatureFormView {
             formModel(id: id)?.geometryStatus = status
         }
         
-        /// A stream of ``FeatureFormView/EditingEvent``s.
-        public var editingEvents: AsyncStream<EditingEvent> {
-            editingEventStream
+        /// A stream of ``FeatureFormView/Event``s.
+        public var events: AsyncStream<Event> {
+            eventStream
         }
         
         /// The forms being edited in the underlying `FeatureFormGroup`.
@@ -130,7 +130,7 @@ public extension FeatureFormView {
         // MARK: Internal members
         
         isolated deinit {
-            editingEventStreamContinuation.finish()
+            eventStreamContinuation.finish()
             taskForDiscarding?.cancel()
             taskForInitialEvaluation?.cancel()
             taskForSaving?.cancel()
@@ -195,7 +195,7 @@ public extension FeatureFormView {
                         self?.reportEditingEvent(.discarded)
                     } catch {
                         self?.finishOrDiscardError = error
-                        self?.reportEditingEvent(.failed(error))
+                        self?.reportEditingEvent(.saveFailed(error))
                     }
                     if self?.isPresented != nil {
                         self?.isPresented = false
@@ -242,37 +242,34 @@ public extension FeatureFormView {
             }
         }
         
-        /// Multiplexes ``FeatureFormView/EditingEvent``s to
-        /// ``FeatureFormView/Model/editingEvents`` and
+        /// Multiplexes ``FeatureFormView/Event``s to
+        /// ``FeatureFormView/Model/events`` and
         /// ``FeatureFormView/onFormEditingEvent(perform:)``.
-        func reportEditingEvent(_ event: EditingEvent) {
+        func reportEditingEvent(_ event: Event) {
             /// Delivers editing events to the deprecated
             /// ``FeatureFormView/onFormEditingEvent(perform:)`` modifier.
             @diagnose(DeprecatedDeclaration, as: ignored)
             func deliverToCallback() {
                 guard let callBack = onFormEditingEventAction else { return }
-                var effectiveEvent = event
+                let editingEventEquivalent: EditingEvent
                 switch event {
-                case .failed, .willSave:
-                    // New event types aren't delivered to a deprecated channel.
+                case .saveFailed, .willSave:
+                    // There are no deprecated EditingEvent counterparts for
+                    // these new Event cases.
                     return
-                case .navigationChanged, .showOnMapRequested:
-                    // Existing events are let through unchanged.
-                    break
+                case .navigationChanged(let pathItem):
+                    editingEventEquivalent = .navigationChanged(pathItem)
+                case .showOnMapRequested(let feature):
+                    editingEventEquivalent = .showOnMapRequested(feature)
                 case .discarded:
-                    // Discarded is converted to a deprecated equivalent.
-                    effectiveEvent = .discardedEdits(willNavigate: false)
+                    editingEventEquivalent = .discardedEdits(willNavigate: false)
                 case .saved:
-                    // Saved is converted to a deprecated equivalent.
-                    effectiveEvent = .savedEdits(willNavigate: false)
-                case .discardedEdits, .savedEdits:
-                    // Deprecated events won't be reported.
-                    fatalError("A deprecated event type was reported.")
+                    editingEventEquivalent = .savedEdits(willNavigate: false)
                 }
-                callBack(effectiveEvent)
+                callBack(editingEventEquivalent)
             }
             deliverToCallback()
-            editingEventStreamContinuation.yield(event)
+            eventStreamContinuation.yield(event)
         }
         
         /// Finishes editing the underlying group of feature forms after first evaluating
@@ -292,7 +289,7 @@ public extension FeatureFormView {
                 guard !groupHasErrors else {
                     alertForValidationErrorsIsPresented = true
                     validationErrorVisibilityInternal = .visible
-                    reportEditingEvent(.failed(SaveError.validationFailed))
+                    reportEditingEvent(.saveFailed(SaveError.validationFailed))
                     return
                 }
                 
@@ -301,7 +298,7 @@ public extension FeatureFormView {
                     reportEditingEvent(.saved)
                 } catch {
                     finishOrDiscardError = error
-                    reportEditingEvent(.failed(SaveError.failedToFinish))
+                    reportEditingEvent(.saveFailed(SaveError.failedToFinish))
                     return
                 }
             }
@@ -491,8 +488,8 @@ public extension FeatureFormView {
         /// desired.
         private var backStack = [FormModel]()
         
-        /// The async stream of editing events.
-        private let (editingEventStream, editingEventStreamContinuation) = AsyncStream.makeStream(of: EditingEvent.self)
+        /// The async stream of events.
+        private let (eventStream, eventStreamContinuation) = AsyncStream.makeStream(of: Event.self)
         
         /// Form view models, keyed by feature global IDs.
         private var formModels: [UUID: FeatureFormView.FormModel] = [:]
