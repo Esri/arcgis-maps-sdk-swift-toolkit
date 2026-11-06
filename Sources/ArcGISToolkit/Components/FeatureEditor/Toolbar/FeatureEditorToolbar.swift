@@ -17,10 +17,16 @@ import SwiftUI
 
 /// A toolbar for the feature editor containing controls for performing common
 /// geometry editor actions.
-@available(visionOS, unavailable)
 struct FeatureEditorToolbar: View {
+    /// A style that determines the appearance and layout of the toolbar.
+    enum Style {
+        /// Displays the toolbar in a styled horizontal layout.
+        case horizontal
+        /// Displays the toolbar in a styled vertical layout.
+        case vertical
+    }
     /// The style to apply to the toolbar's controls.
-    let style: FeatureEditor.ToolbarStyle?
+    let style: Style
     
     /// The spacing to apply between the controls in the stacks.
     /// This is hardcoded to match the system styling for toolbar groups on iOS.
@@ -73,14 +79,9 @@ struct FeatureEditorToolbar: View {
                             .toolbarStyle(style)
                         }
                     }
-                case .none:
-                    controls
-                    if model.state == .adding {
-                        addingControls
-                    }
                 }
             case .stopped where model.supportsAddingFeatures:
-                let addButton = Button(
+                Button(
                     LocalizedStringResource(
                         "Add Features",
                         bundle: .toolkitModule,
@@ -89,12 +90,7 @@ struct FeatureEditorToolbar: View {
                     systemImage: "plus",
                     action: model.startAddingFeatures
                 )
-                if style != nil {
-                    addButton
-                        .toolbarStyle(style)
-                } else {
-                    addButton
-                }
+                .toolbarStyle(style)
             default:
                 // No controls.
                 EmptyView()
@@ -135,7 +131,7 @@ struct FeatureEditorToolbar: View {
         .disabled(model.geometryEditorModel.geometry?.sketchIsValid == false)
         
         Group {
-            if #available(iOS 26, *) {
+            if #available(anyAppleOS 26, *) {
                 Button(role: .cancel, action: cancelConstruction)
             } else {
                 Button(
@@ -167,7 +163,6 @@ struct FeatureEditorToolbar: View {
     }
 }
 
-@available(visionOS, unavailable)
 private extension FeatureEditorToolbar {
     /// Cancels geometry construction.
     ///
@@ -304,13 +299,12 @@ private extension CGFloat {
     }
 }
 
-@available(visionOS, unavailable)
 private extension View {
     /// Applies the shared styling used by the feature editor toolbar and its
     /// controls.
     /// - Parameter style: The style of the toolbar.
     @ViewBuilder
-    func toolbarStyle(_ style: FeatureEditor.ToolbarStyle?) -> some View {
+    func toolbarStyle(_ style: FeatureEditorToolbar.Style) -> some View {
         // glassEffect is not used because it bases its background color on the content behind it,
         // but the ToolPicker does not, causing the color to jump when the picker menu closes.
         self.fixedSize()
@@ -331,34 +325,5 @@ private extension View {
             .clipShape(.capsule)
             .shadow(radius: 1)
             .allowsHitTesting(true)
-    }
-}
-
-@available(visionOS, unavailable)
-#Preview {
-    @Previewable @State var model = FeatureEditorModel()
-    
-    NavigationStack {
-        MapView(map: Map(spatialReference: .wgs84))
-            .geometryEditor(model.geometryEditorModel.geometryEditor)
-            .overlay(alignment: .topTrailing) {
-                FeatureEditorToolbar(style: .vertical)
-                    .padding()
-            }
-            .overlay(alignment: .topLeading) {
-                FeatureEditorToolbar(style: .horizontal)
-                    .environment(\.colorScheme, .dark)
-                    .padding()
-            }
-            .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    FeatureEditorToolbar(style: nil)
-                }
-            }
-            .environment(model)
-            .task {
-                model.geometryEditorModel.start(withType: Polygon.self)
-                await model.geometryEditorModel.monitorStreams()
-            }
     }
 }

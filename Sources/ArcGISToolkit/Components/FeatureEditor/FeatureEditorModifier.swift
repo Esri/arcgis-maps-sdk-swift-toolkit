@@ -15,211 +15,100 @@
 import ArcGIS
 import SwiftUI
 
-public extension View {
-    /// Presents a Feature Editor view that edits a given feature. Only works
-    /// when the `FeatureEditor` view is also created.
-    /// - Since: 300.1
-    @available(visionOS, unavailable)
-    func featureEditorInspector() -> some View {
-        modifier(FeatureEditorModifier())
-    }
-}
+internal import os
 
-/// A view modifier that presents a `FeatureEditorFormView` in an inspector.
 @available(visionOS, unavailable)
-private struct FeatureEditorModifier: ViewModifier {
-    /// The feature editor model shared by the toolbar and inspector.
-    @State private var model = FeatureEditorModel()
-    /// The inspector's currently selected presentation detent.
-    @State private var selectedPresentationDetent = PresentationDetent.medium
-    /// A Boolean value indicating whether the feature editor is retrying to start editing.
-    @State private var isRetrying = false
-    
-    /// The binding that controls the inspector without stopping feature
-    /// addition when it is temporarily dismissed for geometry construction.
-    var inspectorIsPresented: Binding<Bool> {
-        Binding {
-            switch model.state {
-            case .adding:
-                model.featureAddingModel.geometryConstructionState != .editing
-            case .editing: true
-            case .stopped: false
-            }
-        } set: { newValue in
-            guard !newValue else { return }
-            let featureAddingModel = model.featureAddingModel
-            switch model.state {
-            case .adding where featureAddingModel.selectedLayerTemplate == nil
-                && featureAddingModel.featureForm == nil:
-                model.featureAddingModel.stop()
-            case .editing:
-                model.stopEditing()
-            default: break
-            }
-        }
-    }
-    
-    func body(content: Content) -> some View {
-        @Bindable var geometryEditorModel = model.geometryEditorModel
-        content
-            .safeInspector(isPresented: inspectorIsPresented) {
-                // VStack is needed for presentation modifiers to be applied.
-                VStack(spacing: 0) {
-                    switch model.state {
-                    case .adding:
-                        FeatureAddingInspector(model: model.featureAddingModel)
-                    case .editing:
-                        switch model.loadResult {
-                        case .success:
-                            if let rootFeatureForm = model.rootFeatureForm {
-                                FeatureEditorFormView(
-                                    rootFeatureForm: rootFeatureForm,
-                                    isMinimized: selectedPresentationDetent == .bar
-                                )
-                            }
-                        case .failure(let error):
-                            NavigationStack {
-                                makeContentUnavailableView(error: error)
-                                    .toolbar {
-                                        ToolbarItem(placement: .topBarTrailing) {
-                                            DismissButton(kind: .close) {
-                                                model.isPresented = false
-                                            }
-                                        }
-                                    }
-                            }
-                        case .none:
-                            NavigationStack {
-                                ProgressView()
-                                    .toolbar {
-                                        ToolbarItem(placement: .topBarTrailing) {
-                                            DismissButton(kind: .close) {
-                                                model.isPresented = false
-                                            }
-                                        }
-                                    }
-                            }
-                        }
-                    case .stopped:
-                        EmptyView()
-                    }
-                }
-                .task(id: isRetrying) {
-                    // The task modifier is attached to the VStack so it is
-                    // not canceled when the ContentUnavailableView disappears.
-                    guard isRetrying else { return }
-                    defer {
-                        // Avoids state updates from cancelled tasks.
-                        if !Task.isCancelled {
-                            isRetrying = false
-                        }
-                    }
-                    await model.retryStartEditing()
-                }
-                .presentationBackgroundInteraction(.enabled)
-                .presentationContentInteraction(.scrolls)
-                .presentationDetents(
-                    [.bar, .medium, .large],
-                    selection: $selectedPresentationDetent
-                )
-#if !targetEnvironment(macCatalyst)
-                // Needed to ensure the inspector presents at full width on iPad.
-                // This is not done on Mac Catalyst because 320 is smaller than its default.
-                .inspectorColumnWidth(ideal: 320)
-#endif
-                .interactiveDismissDisabled()
-                /// This sheet modifier only applies to the feature editing
-                /// workflow.
-                .sheet(
-                    isPresented: Binding {
-                        geometryEditorModel.snapSettingsAreBeingModified && model.state == .editing
-                    } set: { newValue in
-                        geometryEditorModel.snapSettingsAreBeingModified = newValue
-                    }
-                ) {
-                    SnapSettingsView(settings: geometryEditorModel.geometryEditor.snapSettings)
-                }
-            }
-            .environment(model)
-            .onChange(of: model.state) {
-                switch model.state {
-                case .adding:
-                    selectedPresentationDetent = .large
-                case .editing:
-                    selectedPresentationDetent = .medium
-                case .stopped:
-                    break
-                }
-            }
-    }
-    
-    /// Creates a view for start editing failure.
-    /// - Parameter error: The error that caused the failure.
-    /// - Returns: A `ContentUnavailableView` with failure reason and actions.
-    private func makeContentUnavailableView(error: Error) -> some View {
-        ContentUnavailableView {
-            Label {
-                Text(
-                    "Failed to start editing",
-                    bundle: .toolkitModule,
-                    comment: "A title shown when feature editing could not start."
-                )
-            } icon: {
-                Image(systemName: "exclamationmark.triangle")
-            }
-        } description: {
-            Text(error.localizedDescription)
-        } actions: {
-            Button {
-                isRetrying = true
-            } label: {
-                Text.tryAgain
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(isRetrying)
-        }
-    }
-}
-
-// MARK: - Helper Types
-
-/// A custom presentation detent that sizes to the approximate height of a top system toolbar.
-private struct BarDetent: CustomPresentationDetent {
-    static func height(in context: Context) -> CGFloat? {
-        // Implementation copied from:
-        // https://developer.apple.com/documentation/swiftui/custompresentationdetent#overview
-        return max(44, context.maxDetentValue * 0.1)
-    }
-}
-
-// MARK: - Extensions
-
-private extension PresentationDetent {
-    /// A custom presentation detent that sizes to the approximate height of a top system toolbar.
-    static let bar = Self.custom(BarDetent.self)
-}
-
-private extension View {
-    /// Presents content in a sheet on iPhone and in an inspector on all other devices.
+public extension MapView {
+    /// Adds a feature editor component for editing and adding features to this
+    /// `MapView`'s map.
     ///
-    /// This is needed because the `View.presentationDetents(_:selection:)`
-    /// selection value does not update with inspectors.
-    /// - Parameters:
-    ///   - isPresented: A Boolean value indicating whether the inspector is presented.
-    ///   - content: The content to display in the inspector.
-    @available(visionOS, unavailable)
-    @ViewBuilder
-    func safeInspector<Content>(
-        isPresented: Binding<Bool>,
-        @ViewBuilder content: @escaping () -> Content
-    ) -> some View where Content: View {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            sheet(isPresented: isPresented, content: content)
-        } else {
-            // The inspector is given a constant to prevent it from setting isPresented to false
-            // when the window is minimized in iPad Stage Manager. Otherwise, the feature editor
-            // will stop editing and show an empty inspector when the window is re-expanded.
-            inspector(isPresented: .constant(isPresented.wrappedValue), content: content)
+    /// For usage and more information, see <doc:FeatureEditor>.
+    ///
+    /// - Note: This needs to be used within a ``FeatureEditorContainer`` view
+    /// to work.
+    ///
+    /// - Parameter feature: A binding to the feature to edit. The feature
+    /// editor starts editing when the value is non-`nil`. When the value is
+    /// `nil` and the `MapView`'s map has shared templates, the add features
+    /// button is shown on the `MapView`.
+    func featureEditor(_ feature: Binding<ArcGISFeature?>) -> some View {
+        FeatureEditorModifier(feature: feature, mapView: self)
+    }
+}
+
+/// A view that adds the feature editor component to a `MapView`.
+private struct FeatureEditorModifier: View {
+    /// A binding to the feature to edit.
+    @Binding var feature: ArcGISFeature?
+    /// The map view to add the feature editor to.
+    let mapView: MapView
+    
+    /// The shared feature editor model from the environment.
+    @Environment(FeatureEditorModel.self) private var model
+    /// The vertical size class of the environment.
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    
+    /// The style to use for the toolbar, taking into account the current
+    /// environment.
+    var toolbarStyle: FeatureEditorToolbar.Style {
+        verticalSizeClass == .compact ? .horizontal : .vertical
+    }
+    
+    var body: some View {
+        MapViewReader { mapViewProxy in
+            mapView
+                .geometryEditor(model.geometryEditorModel.geometryEditor)
+                .task(id: model.viewpointGeometry) {
+                    await setViewpoint(mapViewProxy: mapViewProxy)
+                }
         }
+        .overlay(alignment: .topTrailing) {
+            FeatureEditorToolbar(style: toolbarStyle)
+                .padding()
+        }
+        .task(model.geometryEditorModel.monitorStreams)
+        .task(id: feature.map(ObjectIdentifier.init)) {
+            if let feature {
+                await model.startEditingFeature(feature)
+            } else {
+                model.stopEditing()
+            }
+        }
+        .onChange(of: model.state) { oldState, newState in
+            guard oldState == .editing, newState == .stopped else { return }
+            feature = nil
+        }
+        .task(id: mapView.map) {
+            do {
+                try await model.populateSharedTemplates(from: mapView.map)
+            } catch {
+                Logger.featureEditor.error(
+                    "Error populating shared templates: \(error.localizedDescription)"
+                )
+            }
+        }
+        .onDisappear(perform: model.stopEditing)
+    }
+    
+    /// Sets the viewpoint using `model.viewpointGeometry`.
+    /// - Parameter mapViewProxy: The map view proxy used to set the viewpoint.
+    private func setViewpoint(mapViewProxy: MapViewProxy) async {
+        guard let viewpointGeometry = model.viewpointGeometry else { return }
+        
+        let expandedGeometry = viewpointGeometry.extent.withBuilder { $0.expand(by: 2) }
+        let viewpoint = Viewpoint(boundingGeometry: expandedGeometry)
+        await mapViewProxy.setViewpoint(viewpoint, duration: 0.5)
+        
+        // Prevents canceling an animation started while this task was running.
+        if !Task.isCancelled {
+            model.viewpointGeometry = nil
+        }
+    }
+}
+
+extension Logger {
+    /// A logger for the feature editor component.
+    static var featureEditor: Logger {
+        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureEditor")
     }
 }

@@ -20,9 +20,6 @@ import SwiftUI
 struct ExampleMapView: View {
     /// The feature to edit with the feature editor.
     @State private var featureToEdit: ArcGISFeature?
-    /// The geometry editor that the feature editor will use to edit geometries
-    /// on the `MapView`.
-    @State private var geometryEditor = GeometryEditor()
     /// The result of loading the map used by the example. When the operation
     /// succeeds, this will contain a map with features to edit.
     @State private var mapLoadResult: Result<Map, (any Error)>?
@@ -45,11 +42,13 @@ struct ExampleMapView: View {
             MapViewReader { mapView in
                 MapView(map: map)
                     .contentInsets(contentInsets)
-                    .geometryEditor(geometryEditor)
                     .onSingleTapGesture { screenPoint, _ in
                         guard tapPoint == nil else { return }
                         tapPoint = screenPoint
                     }
+                    // Adds the feature editor to the map view. This needs to
+                    // be placed inside a `FeatureEditorContainer`.
+                    .featureEditor($featureToEdit)
                     .task(id: tapPoint) {
                         // Identifies the feature at the tapped screen point and
                         // uses it to display the feature editor.
@@ -67,17 +66,6 @@ struct ExampleMapView: View {
                         } catch {
                             print("Identify error:", error)
                         }
-                    }
-                    .overlay(alignment: .topTrailing) {
-                        // The feature editor needs to be placed below the
-                        // `featureEditorInspector` modifier in the view hierarchy.
-                        FeatureEditor(
-                            $featureToEdit,
-                            geometryEditor: geometryEditor,
-                            map: map,
-                            mapView: mapView
-                        )
-                        .padding()
                     }
             }
         case .failure(let error):

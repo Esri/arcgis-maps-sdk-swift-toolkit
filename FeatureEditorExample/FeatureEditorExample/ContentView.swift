@@ -18,20 +18,22 @@ import SwiftUI
 /// The top-level view for the example app.
 struct ContentView: View {
     var body: some View {
-        // This NavigationStack is used to simulate the structure of a real-world application.
-        NavigationStack {
-            NavigationLink("Open Map View") {
-                ExampleMapView()
-                    .navigationTitle("Map View")
-                    .navigationBarTitleDisplayMode(.inline)
+        // Adds the feature editor component to the view hierarchy. This is
+        // needed for the `MapView.featureEditor(_:)` modifier to work and has
+        // to be placed above any navigation views.
+        FeatureEditorContainer {
+            // This NavigationStack is used to simulate the structure of a
+            // real-world application.
+            NavigationStack {
+                NavigationLink("Open Map View") {
+                    ExampleMapView()
+                        .navigationTitle("Map View")
+                        .navigationBarTitleDisplayMode(.inline)
+                }
+                .buttonStyle(.borderedProminent)
+                .navigationTitle("Feature Editor Example")
+                .navigationBarTitleDisplayMode(.inline)
             }
-            .buttonStyle(.borderedProminent)
-            .navigationTitle("Feature Editor Example")
-            .navigationBarTitleDisplayMode(.inline)
         }
-        // The modifier that presents the feature editor inspector.
-        // Note that because the feature editor uses a NavigationStack for internal
-        // navigation, the modifier must be placed outside of the app's NavigationStack.
-        .featureEditorInspector()
     }
 }
