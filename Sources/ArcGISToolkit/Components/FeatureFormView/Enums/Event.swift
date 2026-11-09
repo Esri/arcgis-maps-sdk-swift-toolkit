@@ -35,21 +35,21 @@ public extension FeatureFormView {
         /// Indicates that the user has started an attempt to save their edits.
         case willSave
     }
+}
 
-    extension FeatureFormView.Event: Equatable {
-        public static func == (lhs: Self, rhs: Self) -> Bool {
-            return switch (lhs, rhs) {
-            case (.discarded, .discarded), (.saved, .saved), (.willSave, .willSave):
-                true
-            case let (.saveFailed(lhsError), .saveFailed(rhsError)):
-                (lhsError as NSError).isEqual(rhsError as NSError)
-            case let (.navigationChanged(lhsPathItem), .navigationChanged(rhsPathItem)):
-                lhsPathItem == rhsPathItem
-            case let (.showOnMapRequested(lhsFeature), .showOnMapRequested(rhsFeature)):
-                lhsFeature === rhsFeature
-            default:
-                false
-            }
+extension FeatureFormView.Event: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        return switch (lhs, rhs) {
+        case (.discarded, .discarded), (.saved, .saved), (.willSave, .willSave):
+            true
+        case let (.saveFailed(lhsError), .saveFailed(rhsError)):
+            (lhsError as NSError).isEqual(rhsError as NSError)
+        case let (.navigationChanged(lhsPathItem), .navigationChanged(rhsPathItem)):
+            lhsPathItem == rhsPathItem
+        case let (.showOnMapRequested(lhsFeature), .showOnMapRequested(rhsFeature)):
+            lhsFeature === rhsFeature
+        default:
+            false
         }
     }
 }
