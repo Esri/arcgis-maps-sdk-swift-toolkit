@@ -39,20 +39,3 @@ public extension FeatureFormView {
         case showOnMapRequested(ArcGISFeature)
     }
 }
-
-@available(*, deprecated, message: "Deprecated at 300.3, use 'FeatureFormView.Event' instead.")
-extension FeatureFormView.EditingEvent: Equatable {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        return switch (lhs, rhs) {
-        case let (.discardedEdits(lhsWillNavigate), .discardedEdits(rhsWillNavigate)),
-            let (.savedEdits(lhsWillNavigate), .savedEdits(rhsWillNavigate)):
-            lhsWillNavigate == rhsWillNavigate
-        case let (.navigationChanged(lhsPathItem), .navigationChanged(rhsPathItem)):
-            lhsPathItem == rhsPathItem
-        case let (.showOnMapRequested(lhsFeature), .showOnMapRequested(rhsFeature)):
-            lhsFeature === rhsFeature
-        default:
-            false
-        }
-    }
-}

@@ -36,7 +36,7 @@ struct GeometryConstructionView: View {
                     )
                 }
                 .task {
-                    guard model.featureFormViewModel == nil else { return }
+                    guard model.featureForm == nil else { return }
                     await model.startConstruction(using: layerTemplate)
                 }
             case .saving(let geometry):

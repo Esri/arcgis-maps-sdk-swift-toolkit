@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
 import SwiftUI
 
 /// An inspector that presents a template picker and feature form for adding a
@@ -20,9 +19,6 @@ import SwiftUI
 struct FeatureAddingInspector: View {
     /// The model that manages the feature-adding workflow.
     let model: FeatureAddingModel
-    
-    /// The features currently selected on their layers.
-    @State private var selectedFeatures = [ArcGISFeature]()
     
     /// The navigation path through the template picker.
     var templatePickerNavigationPath: Binding<[LayerTemplate]> {
@@ -36,7 +32,7 @@ struct FeatureAddingInspector: View {
     /// A Boolean value indicating whether the feature form view is presented.
     var featureFormViewIsPresented: Binding<Bool> {
         .init {
-            model.featureFormViewModel != nil
+            model.featureForm != nil
         } set: { newValue in
             guard !newValue else { return }
             model.stop()
@@ -45,72 +41,15 @@ struct FeatureAddingInspector: View {
     
     var body: some View {
         Group {
-            if let featureFormViewModel = model.featureFormViewModel {
-                FeatureFormView(
-                    model: featureFormViewModel,
-                    isPresented: featureFormViewIsPresented
-                )
-                .onChange(of: featureFormViewModel.selectedForm?.id, initial: true) {
-                    updateSelectedFeatures(featureFormViewModel)
-                }
-                .onDisappear {
-                    clearSelectedFeatures()
-                    model.stop()
-                }
+            if let featureForm = model.featureForm {
+                FeatureFormView(root: featureForm, isPresented: featureFormViewIsPresented)
+                    .onDisappear { model.stop() }
             } else {
                 NavigationStack(path: templatePickerNavigationPath) {
                     FeatureEditorTemplatePicker(model: model)
                 }
             }
         }
-        .animation(
-            .default,
-            value: model.featureFormViewModel?.forms.map(\.id)
-        )
-    }
-    
-    /// Selects the features shown by the active form or in the form picker.
-    private func updateSelectedFeatures(_ formViewModel: FeatureFormView.Model) {
-        clearSelectedFeatures()
-        
-        let features: [ArcGISFeature]
-        if let selectedForm = formViewModel.selectedForm {
-            features = [selectedForm.feature]
-            model.showFeature(selectedForm.feature)
-        } else {
-            features = formViewModel.forms.map(\.feature)
-            model.showFeatures(features)
-        }
-        
-        var featuresByLayer: [ObjectIdentifier: (
-            layer: any FeatureSelectableLayer,
-            features: [Feature]
-        )] = [:]
-        var selectableFeatures = [ArcGISFeature]()
-        for feature in features {
-            guard let layer = feature.table?.layer as? FeatureSelectableLayer else { continue }
-            let id = ObjectIdentifier(layer)
-            if var selection = featuresByLayer[id] {
-                selection.features.append(feature)
-                featuresByLayer[id] = selection
-            } else {
-                featuresByLayer[id] = (layer, [feature])
-            }
-            selectableFeatures.append(feature)
-        }
-        
-        for selection in featuresByLayer.values {
-            selection.layer.selectFeatures(selection.features)
-        }
-        selectedFeatures = selectableFeatures
-    }
-    
-    /// Clears the selected features from their layers.
-    private func clearSelectedFeatures() {
-        for feature in selectedFeatures {
-            guard let layer = feature.table?.layer as? FeatureSelectableLayer else { continue }
-            layer.unselectFeature(feature)
-        }
-        selectedFeatures.removeAll()
+        .animation(.default, value: model.featureForm?.id)
     }
 }

@@ -50,7 +50,7 @@ private struct FeatureEditorModifier: ViewModifier {
             let featureAddingModel = model.featureAddingModel
             switch model.state {
             case .adding where featureAddingModel.selectedLayerTemplate == nil
-                && featureAddingModel.featureFormViewModel == nil:
+                && featureAddingModel.featureForm == nil:
                 model.featureAddingModel.stop()
             case .editing:
                 model.stopEditing()
