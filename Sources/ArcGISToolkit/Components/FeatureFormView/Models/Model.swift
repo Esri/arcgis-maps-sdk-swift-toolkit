@@ -388,6 +388,7 @@ public extension FeatureFormView {
         ///
         /// Supports deprecated modifier
         /// ``FeatureFormView/onFormEditingEvent(perform:)``.
+        @diagnose(DeprecatedDeclaration, as: ignored)
         var onFormEditingEventAction: ((EditingEvent) -> Void)?
         
         /// The model for the selected form.
