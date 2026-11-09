@@ -63,6 +63,8 @@ struct FieldsPopupElementView: View {
             }
             .background(Color.clear)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityElement(children: .combine) // WCAG 1.3.2 Meaningful Sequence (Level A)
+            .accessibilityRespondsToUserInteraction(true) // WCAG 2.1.1 Keyboard (Level A)
         }
         
         /// Makes text with clickable links.

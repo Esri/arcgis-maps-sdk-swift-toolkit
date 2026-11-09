@@ -30,7 +30,7 @@ struct FeatureEditorFormView: View {
     /// The model for the feature form view.
     @State private var formViewModel: FeatureFormView.Model
     /// The editing event currently being handled asynchronously.
-    @State private var editingEvent: FeatureFormView.EditingEvent?
+    @State private var editingEvent: FeatureFormView.Event?
     /// The opacity of the geometry editor tool's symbology. This is used to
     /// animate changes to the geometry editor's opacity.
     @State private var geometryEditorOpacity: Float = 1
@@ -67,7 +67,7 @@ struct FeatureEditorFormView: View {
             }
             .animation(.default, value: geometryEditorOpacity)
             .task {
-                for await event in formViewModel.editingEvents {
+                for await event in formViewModel.events {
                     guard !Task.isCancelled else { return }
                     if case .willSave = event {
                         if model.geometryEditorModel.hasGeometryEdits {
@@ -134,13 +134,9 @@ struct FeatureEditorFormView: View {
     
     /// Performs an action associated with a form editing event.
     /// - Parameter event: The form editing event to handle.
-    private func handleEditingEvent(_ event: FeatureFormView.EditingEvent) async {
+    private func handleEditingEvent(_ event: FeatureFormView.Event) async {
         switch event {
         case .discarded:
-            await model.restartGeometryEditor()
-        case .discardedEdits(let willNavigate):
-            // Restarts the geometry editor when the form footer discard button is pressed.
-            guard !willNavigate else { break }
             await model.restartGeometryEditor()
         case .navigationChanged(let view):
             switch view {
@@ -152,13 +148,9 @@ struct FeatureEditorFormView: View {
             }
         case .saved:
             model.isPresented = false
-        case .savedEdits(let willNavigate):
-            // Closes the inspector when the form footer save button is pressed.
-            guard !willNavigate else { break }
-            model.isPresented = false
         case .showOnMapRequested(let feature):
             await showFeature(feature)
-        case .failed, .willSave:
+        case .saveFailed, .willSave:
             break
         }
     }

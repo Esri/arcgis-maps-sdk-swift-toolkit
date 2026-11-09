@@ -178,9 +178,9 @@ public extension FeatureFormView /* Deprecated */ {
     /// Sets a closure to perform when a form editing event occurs.
     /// - Parameter action: The closure to perform when the form editing event occurs.
     /// - Since: 200.8
-    /// - Note: Deprecated at 300.3. Use ``FeatureFormView/Model/editingEvents`` to
+    /// - Note: Deprecated at 300.3. Use ``FeatureFormView/Model/events`` to
     /// monitor editing events.
-    @available(*, deprecated, message: "Use 'FeatureFormView.Model.editingEvents' instead.")
+    @available(*, deprecated, message: "Use 'FeatureFormView.Model.events' instead.")
     func onFormEditingEvent(perform action: @escaping (EditingEvent) -> Void) -> Self {
         model.onFormEditingEventAction = action
         return self
@@ -217,7 +217,7 @@ private extension View /* Alerts */ {
                 bundle: .toolkit,
                 comment: "The title shown when the feature form failed to save."
             ),
-            item: $model.finishOrDiscardError,
+            item: $model.finishEditsError,
             actions: { _ in },
             message: { error in
                 let errorDescription = (error as? LocalizedError)?.errorDescription
