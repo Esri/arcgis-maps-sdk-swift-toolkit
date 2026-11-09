@@ -15,16 +15,16 @@
 import ArcGIS
 import SwiftUI
 
-/// The `FeatureFormView` component enables users to edit field values of a feature using
-/// pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
+/// The `FeatureFormView` component enables users to edit attributes and attachments of one or
+/// more features using pre-configured forms.
 ///
 /// ![An image of the FeatureFormView component](FeatureFormView)
 ///
-/// Forms are currently only supported in maps. The form definition is stored
-/// in the web map itself and contains a title, description, and a list of "form elements".
+/// A form is configured either in the ArcGIS Online Map Viewer or Field Maps Designer. The
+/// configured form definition stored in a web map contains a title, description, and form elements.
+/// Forms are currently only supported in maps.
 ///
-/// `FeatureFormView` supports the display of form elements created by
-/// the Map Viewer or Field Maps Designer, including:
+/// `FeatureFormView` supports the display of the following form elements:
 ///
 /// - Attachments Element - used to display and edit attachments.
 /// - Field Element - used to edit a single field of a feature with a specific "input type".
@@ -46,22 +46,20 @@ import SwiftUI
 ///
 /// **Features**
 ///
-/// - Display a form editing view for a feature based on the feature form definition defined in a web map and obtained from either an `ArcGISFeature`, `ArcGISFeatureTable`, `FeatureLayer` or `SubtypeSublayer`.
-/// - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
-/// - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
+/// - Display a form for one or more features based on feature form definitions stored in a web map
+/// and obtained from either an `ArcGISFeature`, `ArcGISFeatureTable`, `FeatureLayer` or
+/// `SubtypeSublayer`.
+/// - Uses native SwiftUI components, such as `TextEditor`, `TextField`, and `DatePicker`
+/// for consistent platform styling.
+/// - Supports elements containing Arcade expressions and automatically evaluates these
+/// expressions that can be used to control visibility, editability, values, and "required" state.
 /// - Add, delete, or rename feature attachments.
-/// - Fully supports dark mode, as do all Toolkit components.
 ///
-/// **Behavior**
+/// **Integration**
 ///
-/// As of 200.8, FeatureFormView uses a NavigationStack internally to support browsing utility network
-/// associations. As a result, a FeatureFormView requires a navigation context isolated from any app-level
-/// navigation. Basic apps without navigation can continue to place a FeatureFormView where desired.
-/// More complex apps using NavigationStack or NavigationSplitView will need to relocate the FeatureFormView
-/// outside of that navigation context. If the FeatureFormView can be presented modally (no background
-/// interaction with the map is needed), consider using a Sheet. If a non-modal presentation is needed,
-/// consider placing the FeatureFormView in a Floating Panel or Inspector, on the app-level navigation container.
-/// On supported platforms, WindowGroups are another alternative to consider as a FeatureFormView container.
+/// The component uses a `NavigationStack` to provide toolbar items and support utility
+/// association elements and therefore requires an isolated navigation context. Consider presenting it
+/// within a SwiftUI Sheet, Inspector, or `WindowGroup`.
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FeatureFormExampleView.swift)
