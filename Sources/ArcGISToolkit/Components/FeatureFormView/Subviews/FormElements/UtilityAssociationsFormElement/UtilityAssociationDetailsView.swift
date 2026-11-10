@@ -20,6 +20,8 @@ extension FeatureFormView {
     struct UtilityAssociationDetailsView: View {
         /// The model for the feature form which presented this view.
         @Environment(FeatureFormView.FormModel.self) var formModel
+        /// The model for the feature form view.
+        @Environment(FeatureFormView.Model.self) private var groupModel
         
         /// A Boolean value indicating whether the element is editable.
         @State private var isEditable = false
@@ -137,7 +139,7 @@ extension FeatureFormView {
                         formModel: formModel
                     ) {
                         associationsFilterResultsModel.fetchResults()
-                        formModel.navigationPath.removeLast()
+                        groupModel.navigationPath.removeLast()
                     }
                 }
             }

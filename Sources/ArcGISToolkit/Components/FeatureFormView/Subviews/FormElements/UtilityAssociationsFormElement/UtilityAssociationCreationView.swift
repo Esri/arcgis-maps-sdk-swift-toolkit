@@ -22,6 +22,8 @@ extension FeatureFormView {
     struct UtilityAssociationCreationView: View {
         /// The model for the feature form.
         @Environment(FeatureFormView.FormModel.self) var formModel
+        /// The model for the feature form view.
+        @Environment(FeatureFormView.Model.self) private var groupModel
         
         /// The error to be presented when adding an association failed.
         @State private var addAssociationError: AddAssociationError?
@@ -137,7 +139,7 @@ extension FeatureFormView {
                 // views to avoid errors here. (FB20395585)
                 // https://developer.apple.com/forums/thread/802221#802221021
                 await MainActor.run {
-                    formModel.navigationPath.removeLast(4)
+                    groupModel.navigationPath.removeLast(4)
                 }
             } catch let error as ArcGIS.InvalidArgumentError {
                 addAssociationError = .other(error.details)

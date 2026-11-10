@@ -26,44 +26,19 @@ private extension FeatureFormView {
         /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var groupModel
         
-        /// A Boolean value indicating whether multi-form mode is active.
-        ///
-        /// Useful for animations to communicate that the component has transitioned to
-        /// multi-form mode.
-        @State private var delayedMultiFormModeActive = false
-        
         func body(content: Content) -> some View {
             content
-                .navigationBarBackButtonHidden()
                 .navigationBarTitleDisplayMode(.inline)
-                .onChange(of: groupModel.forms.count, initial: false) {
-                    Task {
-                        // A small delay allows the group icon to come into view
-                        // before we animate it.
-                        try? await Task.sleep(for: .seconds(0.1))
-                        delayedMultiFormModeActive = groupModel.multiFormModeIsActive
-                    }
-                }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        if groupModel.showBackButton {
-                            backButton
-                        }
-                    }
-                    if #available(iOS 26.0, *) {
-                        ToolbarSpacer(.flexible, placement: .topBarLeading)
-                    }
-                    ToolbarItem(placement: .topBarLeading) {
-                        if groupModel.showDismissButton {
+                        if groupModel.showSaveAndDiscardButtons {
                             DismissButton(kind: .cancel) {
                                 groupModel.discard()
                             }
                         }
                     }
                     ToolbarItemGroup(placement: .topBarTrailing) {
-                        if groupModel.showGroupMenuButton {
-                            groupMenuButton
-                        } else if groupModel.showSaveButton {
+                        if groupModel.showSaveAndDiscardButtons {
                             saveButton
                         }
                     }
@@ -78,54 +53,6 @@ private extension FeatureFormView {
 }
 
 private extension FeatureFormView.Toolbar /* Items */ {
-    /// Navigates backward.
-    ///
-    /// This can either return a user to the previous view in the current form's
-    /// navigation path or return them to the previous form they were on in the group.
-    var backButton: some View {
-        Button {
-            groupModel.navigateBack()
-        } label: {
-            Label {
-                Text(
-                    "Back",
-                    bundle: .toolkitModule,
-                    comment: """
-                        A generic label for a back button to return to the \
-                        previous screen.
-                        """
-                )
-            } icon: {
-                Image(systemName: "chevron.backward")
-            }
-        }
-    }
-    
-    /// Opens the group menu.
-    ///
-    /// - Important: A solo image is used for the label so that symbol rendering mode
-    /// `.multicolor` is applied consistently in a NavigationStack toolbar.
-    var groupMenuButton: some View {
-        Button {
-            withAnimation {
-                groupModel.clearSelection(clearBackStack: false)
-            }
-        } label: {
-            Image(systemName: groupModel.groupHasEdits ? "tray.badge" : "tray")
-                .symbolEffect(.bounce, value: delayedMultiFormModeActive)
-                .symbolRenderingMode(
-                    groupModel.showErrorIndicator ? .multicolor : .monochrome
-                )
-        }
-        .accessibilityLabel(
-            Text(
-                "Group Menu",
-                bundle: .toolkitModule,
-                comment: "A label for a button to open a menu with a list of items."
-            )
-        )
-    }
-    
     /// Indicates to the user that the current's feature geometry has been reported invalid.
     var invalidGeometryLabel: some View {
         Label {
@@ -173,32 +100,6 @@ private extension FeatureFormView.Toolbar /* Items */ {
 }
 
 private extension FeatureFormView.Model {
-    /// A Boolean value indicating whether the Back button in the toolbar should be shown.
-    var showBackButton: Bool {
-        guard let selectedModel else { return false }
-        let selectedFormsPathIsEmpty = selectedModel.navigationPath.isEmpty
-        return (selectedFormsPathIsEmpty && canGoBack)
-        || !selectedFormsPathIsEmpty
-    }
-    
-    /// A Boolean value indicating whether the Dismiss button in the toolbar should be shown.
-    var showDismissButton: Bool {
-        !multiFormModeIsActive || selectedForm == nil
-    }
-    
-    /// A Boolean value indicating whether the group icon should indicate that there are errors in the
-    /// group.
-    var showErrorIndicator: Bool {
-        allValidationErrorsAreVisible
-        || groupHasFormsWithVisitedElementsWithErrors
-    }
-    
-    /// A Boolean value indicating whether the Group Menu button in the toolbar should be shown.
-    var showGroupMenuButton: Bool {
-        multiFormModeIsActive
-        && selectedForm != nil
-    }
-    
     /// A Boolean value indicating if the invalid geometry toolbar item should be shown.
     var showInvalidGeometryBadge: Bool {
         guard let selectedModel else { return false }
@@ -206,8 +107,10 @@ private extension FeatureFormView.Model {
         && (selectedModel.geometryStatus == .invalid)
     }
     
-    /// A Boolean value indicating whether the Save button in the toolbar should be shown.
-    var showSaveButton: Bool {
-        selectedForm == nil || !multiFormModeIsActive
+    /// A Boolean value indicating whether the Save and Discard buttons in the toolbar should be
+    /// shown.
+    var showSaveAndDiscardButtons: Bool {
+        multiFormModeIsActive && selectedForm == nil
+        || !multiFormModeIsActive
     }
 }

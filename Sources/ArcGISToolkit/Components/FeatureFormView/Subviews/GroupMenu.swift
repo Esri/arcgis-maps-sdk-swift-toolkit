@@ -23,7 +23,8 @@ extension FeatureFormView {
         @Environment(FeatureFormView.Model.self) var groupModel
         
         public var body: some View {
-            NavigationStack {
+            @Bindable var groupModel = groupModel
+            NavigationStack(path: $groupModel.navigationPath) {
                 List {
                     if groupModel.forms.isEmpty {
                         noFormsView
@@ -70,16 +71,15 @@ extension FeatureFormView {
             LabeledContent {
                 if let globalID = form.feature.globalID,
                    let model = groupModel.formModel(id: globalID) {
-                    Button {
-                        withAnimation {
-                            groupModel.select(form: form, clearHistory: true)
-                        }
+                    
+                    NavigationLink {
+                        FormStack(formModel: model)
                     } label: {
                         formButtonLabel(model)
+                            .badge(formButtonBadgeCount(model))
+                            .badgeProminence(.increased)
+                            .foregroundStyle(.primary)
                     }
-                    .badge(formButtonBadgeCount(model))
-                    .badgeProminence(.increased)
-                    .foregroundStyle(.primary)
                 }
             } label: {
                 FeatureSymbolView(feature: form.feature)

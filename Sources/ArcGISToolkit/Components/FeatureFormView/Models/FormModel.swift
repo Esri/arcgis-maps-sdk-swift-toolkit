@@ -69,9 +69,6 @@ extension FeatureFormView {
             + (geometryStatus == .invalid ? 1 : 0)
         }
         
-        /// The navigation path for the destinations this form can open.
-        var navigationPath: [FeatureFormView.NavigationPathItem] = []
-        
         /// The set of all elements which previously held focus.
         var previouslyFocusedElements = Set<FormElement>()
         

@@ -17,10 +17,10 @@ import SwiftUI
 
 /// A footer for elements in a feature form.
 struct FormElementFooter: View {
-    /// The model for the feature form view.
-    @Environment(FeatureFormView.Model.self) private var groupModel
     /// The model for the feature form.
     @Environment(FeatureFormView.FormModel.self) private var formModel
+    /// The model for the feature form view.
+    @Environment(FeatureFormView.Model.self) private var groupModel
     /// A vertical amount of padding to use between form elements.
     @Environment(\.formElementPadding) var formElementPadding
     

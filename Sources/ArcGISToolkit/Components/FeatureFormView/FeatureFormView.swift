@@ -105,17 +105,10 @@ public struct FeatureFormView: View {
     /// Either the navigation stack for the ``FeatureFormView/Model/selectedForm`` or the
     /// group menu if no form is selected.
     var groupMenuOrFormStack: some View {
-        Group {
-            if let formModel = model.selectedModel {
-                FormStack(formModel: formModel)
-            } else {
-                GroupMenu()
-                    .transition(.move(edge: .bottom))
-            }
-        }
-        .saveErrorAlert(model)
-        .unsavedEditsAlert(model)
-        .validationErrorsAlert(model)
+        GroupMenu()
+            .saveErrorAlert(model)
+            .unsavedEditsAlert(model)
+            .validationErrorsAlert(model)
     }
     
     /// Coalesces the provided or legacy model into one property.

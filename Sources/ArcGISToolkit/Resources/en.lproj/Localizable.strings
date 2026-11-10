@@ -104,9 +104,6 @@ types available to use when querying for utility
 association feature candidates. */
 "Available Asset Types" = "Available Asset Types";
 
-/* A generic label for a back button to return to the previous screen. */
-"Back" = "Back";
-
 /* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Bookmarks";
 
@@ -476,9 +473,6 @@ trace operation. */
 
 /* Description of error thrown when a global scene is being provided to the Building Explorer. */
 "Global scenes aren't supported in the Building Explorer." = "Global scenes aren't supported in the Building Explorer.";
-
-/* A label for a button to open a menu with a list of items. */
-"Group Menu" = "Group Menu";
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */

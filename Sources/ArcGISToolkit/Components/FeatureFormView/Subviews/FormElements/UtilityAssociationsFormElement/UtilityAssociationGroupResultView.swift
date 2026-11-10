@@ -18,10 +18,10 @@ import SwiftUI
 extension FeatureFormView {
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
-        /// The model for the feature form view.
-        @Environment(FeatureFormView.Model.self) var groupModel
         /// The model for the feature form which presented this view.
         @Environment(FeatureFormView.FormModel.self) var formModel
+        /// The model for the feature form view.
+        @Environment(FeatureFormView.Model.self) private var groupModel
         
         /// The association to be potentially removed.
         @State private var associationPendingRemoval: UtilityAssociation?
@@ -75,8 +75,8 @@ extension FeatureFormView {
                 subtitle: formModel.title
             )
             .onChange(of: associationResults.count) {
-                if associationResults.isEmpty, !formModel.navigationPath.isEmpty {
-                    formModel.navigationPath.removeLast()
+                if associationResults.isEmpty, !groupModel.navigationPath.isEmpty {
+                    groupModel.navigationPath.removeLast()
                 }
             }
             .onChange(of: formModel.hasEdits) {
@@ -113,7 +113,7 @@ extension FeatureFormView {
             Menu {
                 ShowOnMapButton(feature: result.associatedFeature)
                 Button {
-                    formModel.navigationPath.append(
+                    groupModel.navigationPath.append(
                         FeatureFormView.NavigationPathItem.utilityAssociationDetailsView(
                             form,
                             element,

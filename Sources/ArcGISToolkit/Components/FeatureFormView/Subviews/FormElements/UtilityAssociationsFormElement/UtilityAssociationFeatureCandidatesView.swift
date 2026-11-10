@@ -20,6 +20,8 @@ extension FeatureFormView {
     struct UtilityAssociationFeatureCandidatesView: View {
         /// The model for the feature form which presented this view.
         @Environment(FeatureFormView.FormModel.self) var formModel
+        /// The model for the feature form view.
+        @Environment(FeatureFormView.Model.self) private var groupModel
         
         /// The candidates that can be used to create an association.
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
@@ -129,7 +131,7 @@ extension FeatureFormView {
             Section {
                 ForEach(filteredCandidates, id: \.feature.globalID) { candidate in
                     Button {
-                        formModel.navigationPath.append(
+                        groupModel.navigationPath.append(
                             FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
                                 form,
                                 element,

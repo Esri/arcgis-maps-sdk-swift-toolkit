@@ -225,20 +225,6 @@ public extension FeatureFormView {
             }
         }
         
-        /// Returns the user to the previous ``FeatureFormView/Model/selectedForm>`` if
-        /// they are at the root of the current form's navigation stack, otherwise removes the top
-        /// item from the current form's navigation stack.
-        func navigateBack() {
-            guard let selectedModel else { return }
-            if selectedModel.navigationPath.isEmpty, canGoBack {
-                // Back into the previous visited form in the group.
-                popBackStack()
-            } else if !selectedModel.navigationPath.isEmpty {
-                // Back into the previous view in the current form's navigation path.
-                selectedModel.navigationPath.removeLast()
-            }
-        }
-        
         /// Multiplexes ``FeatureFormView/Event``s to
         /// ``FeatureFormView/Model/events`` and
         /// ``FeatureFormView/onFormEditingEvent(perform:)``.
@@ -349,12 +335,6 @@ public extension FeatureFormView {
             totalErrorCount > 0
         }
         
-        /// A Boolean value indicating whether the group has forms that have visited elements with
-        /// validation errors or an invalid geometry.
-        var groupHasFormsWithVisitedElementsWithErrors: Bool {
-            formModels.values.contains { $0.visitedElementErrorCount > 0 }
-        }
-        
         /// A Boolean value indicating whether the group is final and cannot be added to or removed
         /// from.
         var groupIsFinal: Bool {
@@ -371,6 +351,15 @@ public extension FeatureFormView {
         /// edits.
         var multiFormModeIsActive: Bool {
             forms.count > 1
+        }
+        
+        /// The navigation path for the component.
+        var navigationPath: [FeatureFormView.NavigationPathItem] = [] {
+            didSet {
+                if let presentedItem = navigationPath.last {
+                    reportEditingEvent(.navigationChanged(presentedItem))
+                }
+            }
         }
         
         /// The user-provided closure to perform when a new feature form is shown in the
