@@ -32,12 +32,12 @@ public extension MapView {
     /// `nil` and the `MapView`'s map has shared templates, the add features
     /// button is shown on the `MapView`.
     func featureEditor(_ feature: Binding<ArcGISFeature?>) -> some View {
-        FeatureEditorModifier(feature: feature, mapView: self)
+        FeatureEditorMapView(feature: feature, mapView: self)
     }
 }
 
 /// A view that adds the feature editor component to a `MapView`.
-private struct FeatureEditorModifier: View {
+private struct FeatureEditorMapView: View {
     /// A binding to the feature to edit.
     @Binding var feature: ArcGISFeature?
     /// The map view to add the feature editor to.
