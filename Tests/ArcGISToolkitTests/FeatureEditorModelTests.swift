@@ -14,6 +14,7 @@
 
 import ArcGIS
 @testable import ArcGISToolkit
+import CoreGraphics
 import Foundation
 import Testing
 
@@ -357,6 +358,7 @@ private extension FeatureEditorModel {
         #expect(loadResult == nil, sourceLocation: sourceLocation)
         #expect(!geometryEditorModel.snapSettingsAreBeingModified, sourceLocation: sourceLocation)
         #expect(viewpointGeometry == nil, sourceLocation: sourceLocation)
+        #expect(inspectorFrame == .zero, sourceLocation: sourceLocation)
         
         // Yields to ensure geometry editor properties are updated by monitorGeometryEditorStreams().
         await Task.yieldExpect(!self.geometryEditorModel.canUndo, sourceLocation: sourceLocation)
