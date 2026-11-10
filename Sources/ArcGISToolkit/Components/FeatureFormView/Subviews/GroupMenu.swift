@@ -73,11 +73,7 @@ extension FeatureFormView {
                         groupModel.select(form: form, clearHistory: true)
                     }
                 } label: {
-                    Text(
-                        groupModel.formModel(
-                            id: form.feature.globalID!
-                        )?.title ?? form.title
-                    )
+                    formButtonLabel(form)
                 }
                 .badge(
                     groupModel.allValidationErrorsAreVisible
@@ -88,6 +84,28 @@ extension FeatureFormView {
                 .foregroundStyle(.primary)
             } label: {
                 FeatureSymbolView(feature: form.feature)
+            }
+        }
+        
+        /// Returns a label for a button for a form in the group.
+        /// - Parameter form: The underlying form.
+        @ViewBuilder
+        func formButtonLabel(_ form: FeatureForm) -> some View {
+            if let globalID = form.feature.globalID,
+               let model = groupModel.formModel(id: globalID) {
+                Text(model.title)
+                    .accessibilityLabel(
+                        Text(
+                            "\(model.title), Visited",
+                            bundle: .toolkitModule,
+                            comment: """
+                                A label for a feature who's form has been
+                                visited.
+                                """
+                        ),
+                        isEnabled: model.visited
+                    )
+                    .bold(!model.visited)
             }
         }
     }

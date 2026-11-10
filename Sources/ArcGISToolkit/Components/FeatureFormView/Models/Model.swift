@@ -482,6 +482,7 @@ public extension FeatureFormView {
             if clearHistory {
                 backStack.removeAll()
             }
+            model.visited = true
             selectedModel = model
         }
         

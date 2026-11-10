@@ -92,6 +92,9 @@ extension FeatureFormView {
             }
         }
         
+        /// A Boolean value indicating if the form has been visited or not.
+        var visited = false
+        
         /// A dictionary of each form element and whether or not it is visible.
         private var elementVisibility: [FormElement: Bool] = [:]
         
