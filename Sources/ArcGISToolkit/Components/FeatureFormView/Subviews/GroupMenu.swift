@@ -73,7 +73,11 @@ extension FeatureFormView {
                         groupModel.select(form: form, clearHistory: true)
                     }
                 } label: {
-                    formButtonLabel(form)
+                    Text(
+                        groupModel.formModel(
+                            id: form.feature.globalID!
+                        )?.title ?? form.title
+                    )
                 }
                 .badge(
                     groupModel.allValidationErrorsAreVisible
@@ -86,50 +90,5 @@ extension FeatureFormView {
                 FeatureSymbolView(feature: form.feature)
             }
         }
-        
-        /// Returns a label for a button for a form in the group.
-        /// - Parameter form: The underlying form.
-        func formButtonLabel(_ form: FeatureForm) -> some View {
-            HStack {
-                Text(
-                    groupModel.formModel(
-                        id: form.feature.globalID!
-                    )?.title ?? ""
-                )
-                Spacer()
-                if groupModel.unsavedEditsLabelIsVisible(form) {
-                    Label {
-                        Text(
-                            "Unsaved Edits",
-                            bundle: .toolkitModule,
-                            comment: """
-                                A label indicating a \ 
-                                feature form has unsaved \
-                                edits.
-                                """
-                        )
-                    } icon: {
-                        Image(systemName: "pencil")
-                            .foregroundStyle(.secondary)
-                    }
-                    .labelStyle(.iconOnly)
-                }
-            }
-        }
-    }
-}
-
-private extension FeatureFormView.Model {
-    /// A Boolean value indicating whether the provided form should be represented as having
-    /// unsaved edits.
-    /// - Parameter form: The form to evaluate the edit status for.
-    func unsavedEditsLabelIsVisible(_ form: FeatureForm) -> Bool {
-        guard let id = form.feature.globalID else { return false }
-        let hasEdits = formModel(id: id)?.hasAttributeOrGeometryEdits ?? false
-        let hasNoErrors = totalErrorCountForForm(id: id) == 0
-        let validationErrorsAreVisible = allValidationErrorsAreVisible
-        return hasEdits
-        && (!validationErrorsAreVisible
-        || (validationErrorsAreVisible && hasNoErrors))
     }
 }
