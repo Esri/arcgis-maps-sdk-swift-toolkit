@@ -50,8 +50,6 @@ private struct FeatureEditorModifier: View {
     
     /// The horizontal size class of the environment.
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    /// The vertical size class of the environment.
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     /// The height of the map view's attribution bar, used to calculate content
     /// insets that avoid the inspector.
@@ -59,6 +57,8 @@ private struct FeatureEditorModifier: View {
     /// The global frame of the map view, used to calculate content insets that
     /// avoid the inspector and toolbar.
     @State private var mapFrame = CGRect.zero
+    /// The orientation of the feature editor toolbar.
+    @State private var toolbarOrientation: Axis = .vertical
     /// The global frame of the feature editor toolbar, used to calculate
     /// content insets that avoid the toolbar.
     @State private var toolbarFrame = CGRect.zero
@@ -86,7 +86,7 @@ private struct FeatureEditorModifier: View {
         }
         if toolbarIsPresented {
             let mapToolbarIntersection = mapFrame.intersection(toolbarFrame)
-            switch toolbarStyle {
+            switch toolbarOrientation {
             case .horizontal:
                 insets.top = mapToolbarIntersection.height
             case .vertical:
@@ -95,12 +95,6 @@ private struct FeatureEditorModifier: View {
         }
         
         return insets
-    }
-    
-    /// The style to use for the toolbar, taking into account the current
-    /// environment.
-    var toolbarStyle: FeatureEditorToolbar.Style {
-        verticalSizeClass == .compact ? .horizontal : .vertical
     }
     
     var body: some View {
@@ -119,7 +113,10 @@ private struct FeatureEditorModifier: View {
             mapFrame = newFrame
         }
         .overlay(alignment: .topTrailing) {
-            FeatureEditorToolbar(style: toolbarStyle)
+            FeatureEditorToolbar()
+                .onPreferenceChange(FeatureEditorToolbar.OrientationPreferenceKey.self) {
+                    toolbarOrientation = $0
+                }
                 .padding()
                 .onGeometryChange(for: CGRect.self) { geometry in
                     geometry.frame(in: .global)

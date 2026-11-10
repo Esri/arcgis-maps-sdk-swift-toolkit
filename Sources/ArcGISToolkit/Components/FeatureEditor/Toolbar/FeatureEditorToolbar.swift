@@ -18,16 +18,6 @@ import SwiftUI
 /// A toolbar for the feature editor containing controls for performing common
 /// geometry editor actions.
 struct FeatureEditorToolbar: View {
-    /// A style that determines the appearance and layout of the toolbar.
-    enum Style {
-        /// Displays the toolbar in a styled horizontal layout.
-        case horizontal
-        /// Displays the toolbar in a styled vertical layout.
-        case vertical
-    }
-    /// The style to apply to the toolbar's controls.
-    let style: Style
-    
     /// The spacing to apply between the controls in the stacks.
     /// This is hardcoded to match the system styling for toolbar groups on iOS.
     private var stackSpacing: Double { 30 }
@@ -46,39 +36,40 @@ struct FeatureEditorToolbar: View {
             switch model.state {
             case .adding where model.geometryEditorModel.isStarted,
                     .editing where model.geometryEditorModel.isStarted:
-                switch style {
-                case .vertical:
+                ViewThatFits(in: .vertical) {
                     VStack {
                         if model.state == .adding {
                             VStack(spacing: stackSpacing) {
                                 addingControls
                             }
                             .padding(.vertical, stackEdgePadding)
-                            .toolbarStyle(style)
+                            .toolbarStyle(.vertical)
                         }
                         
                         VStack(spacing: stackSpacing) {
                             controls
                         }
                         .padding(.vertical, stackEdgePadding)
-                        .toolbarStyle(style)
+                        .toolbarStyle(.vertical)
                     }
-                case .horizontal:
+                    .preference(key: OrientationPreferenceKey.self, value: .vertical)
+                    
                     HStack {
                         HStack(spacing: stackSpacing) {
                             controls
                         }
                         .padding(.horizontal, stackEdgePadding)
-                        .toolbarStyle(style)
+                        .toolbarStyle(.horizontal)
                         
                         if model.state == .adding {
                             HStack(spacing: stackSpacing) {
                                 addingControls
                             }
                             .padding(.horizontal, stackEdgePadding)
-                            .toolbarStyle(style)
+                            .toolbarStyle(.horizontal)
                         }
                     }
+                    .preference(key: OrientationPreferenceKey.self, value: .horizontal)
                 }
             case .stopped where model.supportsAddingFeatures:
                 Button(
@@ -90,7 +81,7 @@ struct FeatureEditorToolbar: View {
                     systemImage: "plus",
                     action: model.startAddingFeatures
                 )
-                .toolbarStyle(style)
+                .toolbarStyle()
             default:
                 // No controls.
                 EmptyView()
@@ -288,6 +279,17 @@ private struct SnapSettingsButton: View {
 
 // MARK: - Helper
 
+extension FeatureEditorToolbar {
+    /// The orientation of the feature editor toolbar.
+    struct OrientationPreferenceKey: PreferenceKey {
+        static let defaultValue: Axis = .vertical
+        
+        static func reduce(value: inout Axis, nextValue: () -> Axis) {
+            value = nextValue()
+        }
+    }
+}
+
 private extension CGFloat {
     /// The minimum toolbar size in any dimension.
     static var minToolbarDiameter: Double {
@@ -302,19 +304,19 @@ private extension CGFloat {
 private extension View {
     /// Applies the shared styling used by the feature editor toolbar and its
     /// controls.
-    /// - Parameter style: The style of the toolbar.
+    /// - Parameter orientation: The orientation of the toolbar.
     @ViewBuilder
-    func toolbarStyle(_ style: FeatureEditorToolbar.Style) -> some View {
+    func toolbarStyle(_ orientation: Axis? = nil) -> some View {
         // glassEffect is not used because it bases its background color on the content behind it,
         // but the ToolPicker does not, causing the color to jump when the picker menu closes.
         self.fixedSize()
             .frame(
-                width: style == .vertical ? .minToolbarDiameter : nil,
-                height: style == .horizontal ? .minToolbarDiameter : nil
+                width: orientation == .vertical ? .minToolbarDiameter : nil,
+                height: orientation == .horizontal ? .minToolbarDiameter : nil
             )
             .frame(
-                minWidth: style == .horizontal ? .minToolbarDiameter : nil,
-                minHeight: style == .vertical ? .minToolbarDiameter : nil
+                minWidth: orientation == .horizontal ? .minToolbarDiameter : nil,
+                minHeight: orientation == .vertical ? .minToolbarDiameter : nil
             )
             .labelStyle(.iconOnly)
             .font(.title2)
