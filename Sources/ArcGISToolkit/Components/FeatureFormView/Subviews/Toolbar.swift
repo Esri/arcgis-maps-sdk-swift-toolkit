@@ -110,7 +110,7 @@ private extension FeatureFormView.Model {
     /// A Boolean value indicating whether the Save and Discard buttons in the toolbar should be
     /// shown.
     var showSaveAndDiscardButtons: Bool {
-        multiFormModeIsActive && selectedForm == nil
+        multiFormModeIsActive && navigationPath.isEmpty
         || !multiFormModeIsActive
     }
 }

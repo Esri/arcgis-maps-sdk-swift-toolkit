@@ -23,24 +23,21 @@ extension FeatureFormView {
         @Environment(FeatureFormView.Model.self) var groupModel
         
         public var body: some View {
-            @Bindable var groupModel = groupModel
-            NavigationStack(path: $groupModel.navigationPath) {
-                List {
-                    if groupModel.forms.isEmpty {
-                        noFormsView
-                    } else {
-                        formButtons
-                    }
+            List {
+                if groupModel.forms.isEmpty {
+                    noFormsView
+                } else {
+                    formButtons
                 }
-                .navigationTitle(
-                    Text(
-                        "Features",
-                        bundle: .toolkitModule,
-                        comment: "A navigation title for a list of features."
-                    )
-                )
-                .featureFormToolbar()
             }
+            .navigationTitle(
+                Text(
+                    "Features",
+                    bundle: .toolkitModule,
+                    comment: "A navigation title for a list of features."
+                )
+            )
+            .featureFormToolbar()
         }
         
         /// A view shown when no forms are in the underlying `FeatureFormGroup`.
@@ -50,8 +47,8 @@ extension FeatureFormView {
                     "No forms",
                     bundle: .toolkitModule,
                     comment: """
-                        A label communicating that no feature forms \
-                        have been added to a feature form view.
+                        A label communicating that no feature forms have been \
+                        added to a feature form view.
                         """
                 )
             }
@@ -71,10 +68,7 @@ extension FeatureFormView {
             LabeledContent {
                 if let globalID = form.feature.globalID,
                    let model = groupModel.formModel(id: globalID) {
-                    
-                    NavigationLink {
-                        FormStack(formModel: model)
-                    } label: {
+                    NavigationLink(value: NavigationPathItem.form(form)) {
                         formButtonLabel(model)
                             .badge(formButtonBadgeCount(model))
                             .badgeProminence(.increased)
@@ -107,9 +101,9 @@ extension FeatureFormView {
                         "\(formModel.title), Visited",
                         bundle: .toolkitModule,
                         comment: """
-                                A label for a feature who's form has been
-                                visited.
-                                """
+                            A label for a feature who's form has been \
+                            visited.
+                            """
                     ),
                     isEnabled: formModel.visited
                 )

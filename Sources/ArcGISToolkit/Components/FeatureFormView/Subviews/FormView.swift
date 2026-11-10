@@ -22,6 +22,8 @@ extension FeatureFormView {
         
         /// The model for the stack view containing the form.
         @Environment(FeatureFormView.FormModel.self) var formModel
+        /// The model for the feature form view.
+        @Environment(FeatureFormView.Model.self) private var groupModel
         
         var body: some View {
             ScrollViewReader { scrollView in
@@ -58,6 +60,8 @@ extension FeatureFormView {
                     }
                 }
             }
+            .navigationBarBackButtonHidden(!groupModel.multiFormModeIsActive)
+            .navigationTitle(formModel.title)
 #if os(iOS)
             .scrollDismissesKeyboard(.immediately)
 #endif

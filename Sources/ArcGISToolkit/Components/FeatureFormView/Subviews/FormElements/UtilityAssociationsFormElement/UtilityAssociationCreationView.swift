@@ -61,6 +61,13 @@ extension FeatureFormView {
                 sectionForAddButton
             }
             .alert(isPresented: $alertIsPresented, error: addAssociationError) {}
+            .navigationTitle(
+                Text(
+                    "New Association",
+                    bundle: .toolkitModule,
+                    comment: "A navigation title for a view to create a new association in."
+                )
+            )
             .task {
                 options = try? await element.options(forAssociationCandidate: candidate.feature)
                 if supportsTerminalSelection {

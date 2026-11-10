@@ -90,6 +90,7 @@ extension FeatureFormView {
                     }
                 }
             }
+            .navigationTitle(filter.title, subtitle: formModel.title)
             .onChange(of: formModel.hasEdits) {
                 associationsFilterResultsModel?.fetchResults()
             }

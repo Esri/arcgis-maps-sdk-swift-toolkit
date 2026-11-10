@@ -98,6 +98,7 @@ extension FeatureFormView {
                     .textCase(nil)
                 }
             }
+            .navigationTitle(source.name)
         }
     }
 }

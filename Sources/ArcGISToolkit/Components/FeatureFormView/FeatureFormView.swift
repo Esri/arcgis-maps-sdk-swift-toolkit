@@ -90,7 +90,7 @@ public struct FeatureFormView: View {
     }
     
     public var body: some View {
-        groupMenuOrFormStack
+        navigationStack
             .environment(model)
             .onAppear {
                 model.isPresented = isPresented?.wrappedValue
@@ -102,13 +102,18 @@ public struct FeatureFormView: View {
             }
     }
     
-    /// Either the navigation stack for the ``FeatureFormView/Model/selectedForm`` or the
-    /// group menu if no form is selected.
-    var groupMenuOrFormStack: some View {
-        GroupMenu()
-            .saveErrorAlert(model)
-            .unsavedEditsAlert(model)
-            .validationErrorsAlert(model)
+    /// The navigation stack for the component.
+    var navigationStack: some View {
+        @Bindable var model = model
+        return NavigationStack(path: $model.navigationPath) {
+            GroupMenu()
+                .navigationDestination(for: NavigationPathItem.self) { item in
+                    NavigationDestination(item: item)
+                }
+        }
+        .saveErrorAlert(model)
+        .unsavedEditsAlert(model)
+        .validationErrorsAlert(model)
     }
     
     /// Coalesces the provided or legacy model into one property.

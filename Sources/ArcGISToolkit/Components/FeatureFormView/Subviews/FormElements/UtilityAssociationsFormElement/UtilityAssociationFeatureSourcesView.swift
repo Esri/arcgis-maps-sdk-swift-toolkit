@@ -89,6 +89,16 @@ extension FeatureFormView {
                     }
                 }
             }
+            .navigationTitle(
+                Text(
+                    "Network Data Source",
+                    bundle: .toolkitModule,
+                    comment: """
+                        A navigation title for a page listing data sources in \
+                        utility network.
+                        """
+                )
+            )
             .task {
                 featureQueryIsRunning = true
                 defer { featureQueryIsRunning = false }

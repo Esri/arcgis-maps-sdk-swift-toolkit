@@ -78,6 +78,7 @@ extension FeatureFormView {
                     }
                 }
             }
+            .navigationTitle(assetType.name)
             .onAppear {
                 setFilterableFields()
             }
