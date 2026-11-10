@@ -325,9 +325,6 @@ network element for more than one trace starting point. */
 /* The cardinal direction East. */
 "East" = "East";
 
-/* A navigation title indicating the number of features being edited in the feature form toolkit component. */
-"Editing ^[%lld features](inflect: true)" = "Editing ^[%lld features](inflect: true)";
-
 /* A message explaining that unsaved edits will be lost if the user continues to dismiss the component without saving. */
 "Edits will be lost." = "Edits will be lost.";
 
@@ -414,6 +411,9 @@ to be used as a trace starting point. */
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
 "Feature Results" = "Feature Results";
+
+/* A navigation title for a list of features. */
+"Features" = "Features";
 
 /* A field in a dataset. */
 "Field" = "Field";
