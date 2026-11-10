@@ -111,6 +111,11 @@ public struct FeatureEditorContainer<Content: View>: View {
                         EmptyView()
                     }
                 }
+                .onGeometryChange(for: CGRect.self) { geometry in
+                    geometry.frame(in: .global)
+                } action: { newFrame in
+                    model.inspectorFrame = inspectorIsPresented.wrappedValue ? newFrame : .zero
+                }
                 .task(id: isRetrying) {
                     // The task modifier is attached to the VStack so it is
                     // not canceled when the ContentUnavailableView disappears.
@@ -157,6 +162,10 @@ public struct FeatureEditorContainer<Content: View>: View {
                 case .stopped:
                     break
                 }
+            }
+            .onChange(of: inspectorIsPresented.wrappedValue) {
+                guard !inspectorIsPresented.wrappedValue else { return }
+                model.inspectorFrame = .zero
             }
     }
     

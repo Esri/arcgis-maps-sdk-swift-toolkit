@@ -45,8 +45,57 @@ private struct FeatureEditorModifier: View {
     
     /// The shared feature editor model from the environment.
     @Environment(FeatureEditorModel.self) private var model
+    
+    // MARK: Layout
+    
+    /// The horizontal size class of the environment.
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     /// The vertical size class of the environment.
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    
+    /// The height of the map view's attribution bar, used to calculate content
+    /// insets that avoid the inspector.
+    @State private var attributionBarHeight = 0.0
+    /// The global frame of the map view, used to calculate content insets that
+    /// avoid the inspector and toolbar.
+    @State private var mapFrame = CGRect.zero
+    /// The global frame of the feature editor toolbar, used to calculate
+    /// content insets that avoid the toolbar.
+    @State private var toolbarFrame = CGRect.zero
+    
+    /// The insets to apply to the map view's content to avoid the inspector
+    /// and toolbar.
+    var contentInsets: EdgeInsets {
+        var insets = EdgeInsets()
+        
+        // Sets the bottom inset to avoid the inspector when it is shown as a
+        // sheet (horizontally compact).
+        if horizontalSizeClass == .compact {
+            let mapInspectorIntersection = mapFrame.intersection(model.inspectorFrame)
+            let coveredMapHeight = mapInspectorIntersection.height - attributionBarHeight
+            insets.bottom = max(0, coveredMapHeight)
+        }
+        
+        // Sets the insets to avoid the toolbar based on its orientation when
+        // it is presented.
+        let toolbarIsPresented = switch model.state {
+        case .adding, .editing:
+            model.geometryEditorModel.isStarted
+        case .stopped:
+            model.supportsAddingFeatures
+        }
+        if toolbarIsPresented {
+            let mapToolbarIntersection = mapFrame.intersection(toolbarFrame)
+            switch toolbarStyle {
+            case .horizontal:
+                insets.top = mapToolbarIntersection.height
+            case .vertical:
+                insets.trailing = mapToolbarIntersection.width
+            }
+        }
+        
+        return insets
+    }
     
     /// The style to use for the toolbar, taking into account the current
     /// environment.
@@ -57,14 +106,26 @@ private struct FeatureEditorModifier: View {
     var body: some View {
         MapViewReader { mapViewProxy in
             mapView
+                .onAttributionBarHeightChanged { attributionBarHeight = $0 }
+                .contentInsets(contentInsets)
                 .geometryEditor(model.geometryEditorModel.geometryEditor)
                 .task(id: model.viewpointGeometry) {
                     await setViewpoint(mapViewProxy: mapViewProxy)
                 }
         }
+        .onGeometryChange(for: CGRect.self) { geometry in
+            geometry.frame(in: .global)
+        } action: { newFrame in
+            mapFrame = newFrame
+        }
         .overlay(alignment: .topTrailing) {
             FeatureEditorToolbar(style: toolbarStyle)
                 .padding()
+                .onGeometryChange(for: CGRect.self) { geometry in
+                    geometry.frame(in: .global)
+                } action: { newFrame in
+                    toolbarFrame = newFrame
+                }
         }
         .task(model.geometryEditorModel.monitorStreams)
         .task(id: feature.map(ObjectIdentifier.init)) {

@@ -26,22 +26,11 @@ struct ExampleMapView: View {
     /// The point on the screen where the user tapped.
     @State private var tapPoint: CGPoint?
     
-    /// Insets that indicate the area obscured by the feature editor's UI to the map view.
-    private var contentInsets: EdgeInsets {
-        if UIDevice.current.userInterfaceIdiom == .phone, featureToEdit != nil {
-            // Accounts for the feature editor inspector and view on iPhone.
-            EdgeInsets(top: 0, leading: 0, bottom: 400, trailing: 75)
-        } else {
-            EdgeInsets()
-        }
-    }
-    
     var body: some View {
         switch mapLoadResult {
         case .success(let map):
             MapViewReader { mapView in
                 MapView(map: map)
-                    .contentInsets(contentInsets)
                     .onSingleTapGesture { screenPoint, _ in
                         guard tapPoint == nil else { return }
                         tapPoint = screenPoint
