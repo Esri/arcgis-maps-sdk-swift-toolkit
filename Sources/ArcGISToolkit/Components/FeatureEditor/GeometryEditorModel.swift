@@ -38,7 +38,7 @@ final class GeometryEditorModel {
     init() {
         geometryEditor.tool = selectedTool.geometryEditorTool
         
-        // Snapping is enabled by default to simplify the `SnapSettingsView` UI.
+        // Snapping is enabled by default.
         geometryEditor.snapSettings.isEnabled = true
     }
     
