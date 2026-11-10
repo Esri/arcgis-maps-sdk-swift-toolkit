@@ -70,7 +70,6 @@ public extension FeatureFormView {
         public func reset() {
             guard !groupIsFinal else { return }
             clearSelection()
-            backStack.removeAll()
             formModels.removeAll()
             validationErrorVisibilityInternal = .automatic
             while let first = group.forms.first {
@@ -168,19 +167,6 @@ public extension FeatureFormView {
                 _ = addFormModel(form, isAssociation: recordAsBrowsed)
             } catch {
                 Logger.featureFormView.error("Error adding form. \(error.localizedDescription)")
-            }
-        }
-        
-        /// Unsets the active form.
-        /// - Parameter clearBackStack: A Boolean value indicating whether the navigation
-        /// history should also be cleared.
-        func clearSelection(clearBackStack: Bool = true) {
-            guard let selectedModel else { return }
-            self.selectedModel = nil
-            if clearBackStack {
-                backStack.removeAll()
-            } else {
-                backStack.append(selectedModel)
             }
         }
         
@@ -289,12 +275,10 @@ public extension FeatureFormView {
         
         /// Sets the provided form as the ``FeatureFormView/Model/selectedForm``.
         /// - Parameter form: The form to select.
-        /// - Parameter clearHistory: A Boolean value indicating whether the selection
-        /// should reset the back stack.
-        func select(form: FeatureForm, clearHistory: Bool = false) {
+        func select(form: FeatureForm) {
             guard let globalID = form.feature.globalID else { return }
             if let model = formModel(id: globalID) {
-                self.select(model: model, clearHistory: clearHistory)
+                self.select(model: model)
             }
         }
         
@@ -314,12 +298,6 @@ public extension FeatureFormView {
             )
             ? true
             : false
-        }
-        
-        /// A Boolean value indicating whether the back stack is empty and there is a previous
-        /// selected form to re-select.
-        var canGoBack: Bool {
-            backStack.count > 0
         }
         
         /// An error thrown when finishing edits.
@@ -355,10 +333,15 @@ public extension FeatureFormView {
         
         /// The navigation path for the component.
         var navigationPath: [FeatureFormView.NavigationPathItem] = [] {
-            didSet {
+            didSet { oldValue
                 if let presentedItem = navigationPath.last {
                     reportEditingEvent(.navigationChanged(presentedItem))
+                    if presentedItem.form.feature.globalID != oldValue.last?.form.feature.globalID {
+                        onFeatureFormChanged?(presentedItem.form)
+                    }
                 }
+                selectedModel?.visited = true
+                selectedModel?.evaluateExpressions()
             }
         }
         
@@ -378,10 +361,11 @@ public extension FeatureFormView {
         
         /// The model for the selected form.
         var selectedModel: FormModel? {
-            didSet {
-                guard let selectedModel else { return }
-                onFeatureFormChanged?(selectedModel.featureForm)
-                selectedModel.evaluateExpressions()
+            if let presentedForm = navigationPath.last?.form,
+               let globalID = presentedForm.feature.globalID {
+                return formModel(id: globalID)
+            } else {
+                return nil
             }
         }
         
@@ -429,6 +413,11 @@ public extension FeatureFormView {
             return newModel
         }
         
+        /// Unsets the active form.
+        private func clearSelection() {
+            navigationPath.removeAll()
+        }
+        
         /// Asynchronously evaluates all form expressions in all the feature forms in the group.
         private func evaluateExpressions() async {
             let expressionsEvaluationErrors = try? await group.evaluateExpressions()
@@ -437,45 +426,12 @@ public extension FeatureFormView {
             }
         }
         
-        /// Removes the top of `backStack` and selects it.
-        private func popBackStack() {
-            guard canGoBack else {
-                Logger.featureFormView.warning("Cannot navigate backwards without history.")
-                return
-            }
-            let top = backStack.removeLast()
-            select(model: top, recordNavigation: false)
-        }
-        
-        /// Selects the provided form.
-        /// - Parameters:
-        ///   - form: The form to select.
-        ///   - recordNavigation: A Boolean value indicating whether the selection should
-        ///   be tracked in the back stack.
-        ///   - clearHistory: A Boolean value indicating whether the selection should reset
-        ///   the back stack.
-        private func select(
-            model: FormModel,
-            recordNavigation: Bool = true,
-            clearHistory: Bool = false
-        ) {
+        /// Selects the provided form model.
+        /// - Parameter model: The model for the form to select.
+        private func select(model: FormModel) {
             guard model.featureGlobalID != selectedModel?.featureGlobalID else { return }
-            if recordNavigation, let selectedModel {
-                backStack.append(selectedModel)
-            }
-            if clearHistory {
-                backStack.removeAll()
-            }
-            model.visited = true
-            selectedModel = model
+            navigationPath.append(NavigationPathItem.form(model.featureForm))
         }
-        
-        /// The navigation history of forms in the underlying group.
-        ///
-        /// As utility associations are browsed and new forms are added to the group this
-        /// maintains the order allowing the user to back all the way to the original form if
-        /// desired.
-        private var backStack = [FormModel]()
         
         /// The async stream of events.
         private let (eventStream, eventStreamContinuation) = AsyncStream.makeStream(of: Event.self)

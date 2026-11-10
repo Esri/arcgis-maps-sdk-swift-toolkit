@@ -121,3 +121,27 @@ public extension FeatureFormView {
         }
     }
 }
+
+extension FeatureFormView.NavigationPathItem {
+    /// The underlying form for this item.
+    var form: FeatureForm {
+        switch self {
+        case .form(let form):
+            return form
+        case .utilityAssociationAssetTypesView(let form, _, _, _):
+            return form
+        case .utilityAssociationCreationView(let form, _, _, _):
+            return form
+        case .utilityAssociationDetailsView(let form, _, _):
+            return form
+        case .utilityAssociationFeatureCandidatesView(let form, _, _, _, _):
+            return form
+        case .utilityAssociationFeatureSourcesView(let form, _, _):
+            return form
+        case .utilityAssociationFilterResultView(let form, _, _):
+            return form
+        case .utilityAssociationGroupResultView(let form, _, _, _):
+            return form
+        }
+    }
+}
