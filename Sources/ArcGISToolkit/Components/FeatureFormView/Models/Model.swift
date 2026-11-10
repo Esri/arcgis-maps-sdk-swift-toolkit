@@ -312,17 +312,6 @@ public extension FeatureFormView {
             }
         }
         
-        /// Reports the total error count for a feature form with a underlying feature with a
-        /// matching global ID.
-        ///
-        /// The count is the number of element validation errors on the matching form plus one if
-        /// the underlying feature's geometry has been reported invalid.
-        /// - Parameter globalID: The global ID of a feature.
-        /// - Returns: The error count for the indicated form.
-        func totalErrorCountForForm(id globalID: UUID) -> Int {
-            formModel(id: globalID)?.errorCount ?? 0
-        }
-        
         /// A Boolean value indicating whether the alert for unsaved edits is presented.
         var alertForUnsavedEditsIsPresented = false
         
@@ -358,6 +347,12 @@ public extension FeatureFormView {
         /// A Boolean value indicating if the group has any forms with validation errors.
         var groupHasErrors: Bool {
             totalErrorCount > 0
+        }
+        
+        /// A Boolean value indicating whether the group has forms that have visited elements with
+        /// validation errors or an invalid geometry.
+        var groupHasFormsWithVisitedElementsWithErrors: Bool {
+            formModels.values.contains { $0.visitedElementErrorCount > 0 }
         }
         
         /// A Boolean value indicating whether the group is final and cannot be added to or removed

@@ -68,45 +68,52 @@ extension FeatureFormView {
         /// - Parameter form: The underlying form.
         func formButton(_ form: FeatureForm) -> some View {
             LabeledContent {
-                Button {
-                    withAnimation {
-                        groupModel.select(form: form, clearHistory: true)
+                if let globalID = form.feature.globalID,
+                   let model = groupModel.formModel(id: globalID) {
+                    Button {
+                        withAnimation {
+                            groupModel.select(form: form, clearHistory: true)
+                        }
+                    } label: {
+                        formButtonLabel(model)
                     }
-                } label: {
-                    formButtonLabel(form)
+                    .badge(formButtonBadgeCount(model))
+                    .badgeProminence(.increased)
+                    .foregroundStyle(.primary)
                 }
-                .badge(
-                    groupModel.allValidationErrorsAreVisible
-                    ? groupModel.totalErrorCountForForm(id: form.feature.globalID!)
-                    : 0
-                )
-                .badgeProminence(.increased)
-                .foregroundStyle(.primary)
             } label: {
                 FeatureSymbolView(feature: form.feature)
             }
         }
         
+        /// Returns the appropriate badge count for a form in the group taking into account
+        /// whether all validation errors are visible and elements that have been visited.
+        /// - Parameter formModel: The model for the underlying form.
+        func formButtonBadgeCount(_ formModel: FormModel) -> Int {
+            if groupModel.allValidationErrorsAreVisible {
+                formModel.errorCount
+            } else {
+                formModel.visitedElementErrorCount
+            }
+        }
+        
         /// Returns a label for a button for a form in the group.
-        /// - Parameter form: The underlying form.
+        /// - Parameter formModel: The model for the underlying form.
         @ViewBuilder
-        func formButtonLabel(_ form: FeatureForm) -> some View {
-            if let globalID = form.feature.globalID,
-               let model = groupModel.formModel(id: globalID) {
-                Text(model.title)
-                    .accessibilityLabel(
-                        Text(
-                            "\(model.title), Visited",
-                            bundle: .toolkitModule,
-                            comment: """
+        func formButtonLabel(_ formModel: FormModel) -> some View {
+            Text(formModel.title)
+                .accessibilityLabel(
+                    Text(
+                        "\(formModel.title), Visited",
+                        bundle: .toolkitModule,
+                        comment: """
                                 A label for a feature who's form has been
                                 visited.
                                 """
-                        ),
-                        isEnabled: model.visited
-                    )
-                    .bold(!model.visited)
-            }
+                    ),
+                    isEnabled: formModel.visited
+                )
+                .bold(!formModel.visited)
         }
     }
 }
