@@ -274,11 +274,14 @@ public extension FeatureFormView {
         }
         
         /// Sets the provided form as the ``FeatureFormView/Model/selectedForm``.
-        /// - Parameter form: The form to select.
-        func select(form: FeatureForm) {
+        /// - Parameters:
+        ///   - form: The form to select.
+        ///   - clearHistory: A Boolean value indicating whether the selection should reset
+        ///   the navigation path.
+        func select(form: FeatureForm, clearHistory: Bool = false) {
             guard let globalID = form.feature.globalID else { return }
             if let model = formModel(id: globalID) {
-                self.select(model: model)
+                self.select(model: model, clearHistory: clearHistory)
             }
         }
         
@@ -427,10 +430,18 @@ public extension FeatureFormView {
         }
         
         /// Selects the provided form model.
-        /// - Parameter model: The model for the form to select.
-        private func select(model: FormModel) {
+        /// - Parameters:
+        ///   - model: The model for the form to select.
+        ///   - clearHistory: A Boolean value indicating whether the selection should reset
+        ///   the back stack.
+        private func select(model: FormModel, clearHistory: Bool = false) {
             guard model.featureGlobalID != selectedModel?.featureGlobalID else { return }
-            navigationPath.append(NavigationPathItem.form(model.featureForm))
+            let newItem = NavigationPathItem.form(model.featureForm)
+            if clearHistory {
+                navigationPath = [newItem]
+            } else {
+                navigationPath.append(newItem)
+            }
         }
         
         /// The async stream of events.
