@@ -20,6 +20,11 @@ struct ToolPicker: View {
     /// The geometry editor model used by this toolbar.
     @Bindable var model: GeometryEditorModel
     
+    /// The currently selected tool.
+    @State private var selectedTool: FeatureEditorGeometryTool = .editingTools.first!
+    /// A Boolean value indicating whether a tool change is being confirmed.
+    @State private(set) var isConfirmingToolChange = false
+    
     var body: some View {
         let title = LocalizedStringResource(
             "Tool",
@@ -27,8 +32,8 @@ struct ToolPicker: View {
             comment: "A label for a control to pick a geometry editor tool."
         )
         let availableTools = model.availableTools
-        Menu(title, systemImage: model.selectedTool.systemImage) {
-            Picker(title, selection: $model.selectedTool) {
+        Menu(title, systemImage: selectedTool.systemImage) {
+            Picker(title, selection: $selectedTool) {
                 ForEach(availableTools, id: \.self) { tool in
                     Label(tool.label, systemImage: tool.systemImage)
                 }
@@ -37,6 +42,47 @@ struct ToolPicker: View {
         .accessibilityIdentifier("Tool")
         .disabled(availableTools.count < 2)
         .animation(.default, value: model.selectedTool)
+        .onAppear {
+            selectedTool = model.selectedTool
+        }
+        .onChange(of: selectedTool) {
+            let succeeded = model.setSelectedTool(selectedTool)
+            if !succeeded {
+                isConfirmingToolChange = true
+            }
+        }
+        .confirmationDialog(
+            LocalizedStringResource(
+                "Change tool?",
+                bundle: .toolkit,
+                comment: """
+                    The title of a confirmation dialog asking the user if they \
+                    would like to discard their unsaved edits.
+                    """
+            ),
+            isPresented: $isConfirmingToolChange,
+            titleVisibility: .visible
+        ) {
+            Button(
+                LocalizedStringResource(
+                    "Change",
+                    bundle: .toolkit,
+                    comment: """
+                        A label for a button that confirms that the user wants \
+                        to change the currently selected tool.
+                        """
+                ),
+                role: .destructive
+            ) {
+                model.geometryEditor.clearGeometry()
+                model.setSelectedTool(selectedTool)
+            }
+            Button.cancel {
+                selectedTool = model.selectedTool
+            }
+        } message: {
+            Text.geometryEditsWillBeLostMessage
+        }
     }
 }
 

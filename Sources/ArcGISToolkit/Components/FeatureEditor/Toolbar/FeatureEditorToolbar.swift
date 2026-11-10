@@ -151,18 +151,12 @@ struct FeatureEditorToolbar: View {
                 bundle: .toolkitModule,
                 comment: "A question asking if the user would like to discard their unsaved edits."
             ),
-            isPresented: $discardEditsAlertIsPresented
+            isPresented: $discardEditsAlertIsPresented,
+            titleVisibility: .visible
         ) {
             Button.discard(action: model.featureAddingModel.cancelConstruction)
         } message: {
-            Text(
-                "Geometry edits will be lost.",
-                bundle: .toolkitModule,
-                comment: """
-                    A message explaining that unsaved geometry edits will be \ 
-                    lost if the user dismisses geometry construction.
-                    """
-            )
+            Text.geometryEditsWillBeLostMessage
         }
     }
 }

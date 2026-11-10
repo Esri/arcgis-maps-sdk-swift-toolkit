@@ -175,7 +175,7 @@ final class GeometryEditorModel {
     // MARK: Tools
     
     /// The currently selected tool.
-    var selectedTool = FeatureEditorGeometryTool.editingTools.first! {
+    private(set) var selectedTool = FeatureEditorGeometryTool.editingTools.first! {
         didSet {
             geometryEditor.tool = selectedTool.geometryEditorTool
         }
@@ -210,5 +210,27 @@ final class GeometryEditorModel {
         } else {
             FeatureEditorGeometryTool.editingTools
         }
+    }
+    
+    /// Sets the selected tool to the given tool.
+    ///
+    /// If this method returns `false`, it means that the new tool is
+    /// incompatible with the current geometry.
+    /// - Parameter newTool: The new tool.
+    /// - Returns: `true` if the selected tool was set successfully, otherwise
+    /// `false`.
+    @discardableResult
+    func setSelectedTool(_ newTool: FeatureEditorGeometryTool) -> Bool {
+        guard newTool != selectedTool else { return true }
+        let isToolCompatible = if let geometry = geometryEditor.geometry,
+                                  !geometry.isEmpty {
+            false
+        } else {
+            true
+        }
+        if isToolCompatible {
+            selectedTool = newTool
+        }
+        return isToolCompatible
     }
 }
