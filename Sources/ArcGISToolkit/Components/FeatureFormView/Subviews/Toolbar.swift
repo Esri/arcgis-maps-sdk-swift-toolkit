@@ -148,6 +148,8 @@ private extension FeatureFormView.Toolbar /* Items */ {
     }
     
     /// Starts the sequence of events for saving the form(s).
+    ///
+    /// Disabled when the group has no edits and was not created with a feature creation set.
     var saveButton: some View {
         Button {
             withAnimation {
@@ -168,7 +170,7 @@ private extension FeatureFormView.Toolbar /* Items */ {
                 }
             }
         }
-        .disabled(!groupModel.groupHasEdits)
+        .disabled(!groupModel.groupHasEdits && !groupModel.groupIsFinal)
     }
 }
 

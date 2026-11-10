@@ -36,7 +36,8 @@ public extension FeatureFormView {
         /// template feature set.
         ///
         /// The members of a `FeatureFormGroup` are not editable when it is created with a
-        /// shared template feature creation set.
+        /// shared template feature creation set. The component allows saving when a shared
+        /// template feature creation set is provided, even if no other edits have been made.
         /// - Parameter featureCreationSet: The set to create the underlying
         /// `FeatureFormGroup` with.
         public convenience init?(
