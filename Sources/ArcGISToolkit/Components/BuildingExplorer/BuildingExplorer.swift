@@ -93,16 +93,17 @@ public struct BuildingExplorer: View {
         Group {
             switch setUpResult {
             case .success(_):
-                BuildingExplorerForm(
+                if let form = BuildingExplorerForm(
                     items: items,
                     selection: $selection,
                     localSceneViewProxy: localSceneViewProxy
-                )
+                ) {
+                    form
+                } else {
+                    makeContentUnavailableView(error: SetUpError.noBuildingSceneLayers)
+                }
             case .failure(let failure):
-                ContentUnavailableView(
-                    failure.localizedDescription,
-                    systemImage: "exclamationmark.triangle"
-                )
+                makeContentUnavailableView(error: failure)
             case nil:
                 ProgressView()
             }
@@ -167,6 +168,15 @@ public struct BuildingExplorer: View {
         }
         
         return buildingSceneLayers
+    }
+    
+    /// Creates a content unavailable view for the given error.
+    /// - Parameter error: The error with the message that will be shown in the view.
+    private func makeContentUnavailableView(error: any Error) -> some View {
+        ContentUnavailableView(
+            error.localizedDescription,
+            systemImage: "exclamationmark.triangle"
+        )
     }
 }
 
