@@ -63,4 +63,29 @@ struct GeometryEditorModelTests {
         #expect(model.geometry == nil)
         #expect(!model.canUndo)
     }
+    
+    @Test func `setSelectedTool(_:)`() {
+        let model = GeometryEditorModel()
+        model.start(withType: Polyline.self)
+        
+        // Setting the selected tool when the geometry is empty should always
+        // succeed.
+        
+        #expect(model.setSelectedTool(.circle))
+        #expect(model.selectedTool == .circle)
+        
+        // Setting the selected tool when the geometry is not empty should
+        // always fail.
+        
+        model.geometryEditor.insertVertex(at: Point(x: 1, y: 2))
+        #expect(!model.setSelectedTool(.freehand))
+        #expect(model.selectedTool == .circle)
+        
+        // Setting the selected tool when the geometry is empty should always
+        // succeed.
+        
+        model.geometryEditor.clearGeometry()
+        #expect(model.setSelectedTool(.vertex))
+        #expect(model.selectedTool == .vertex)
+    }
 }

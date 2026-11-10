@@ -35,20 +35,17 @@ enum FeatureEditorGeometryTool: Hashable {
         case .circle:
             let shapeTool = ShapeTool(kind: .ellipse)
             shapeTool.configuration.scaleMode = .uniform
-            // Allows the shape tool to be used when there is an existing
-            // geometry.
-            shapeTool.configuration.allowsPartCreation = true
             tool = shapeTool
         case .freehand:
-            tool = FreehandTool()
+            let freehandTool = FreehandTool()
+            freehandTool.configuration.allowsPartCreation = false
+            tool = freehandTool
         case .shape(let kind):
-            let shapeTool = ShapeTool(kind: kind)
-            // Allows the shape tool to be used when there is an existing
-            // geometry.
-            shapeTool.configuration.allowsPartCreation = true
-            tool = shapeTool
+            tool = ShapeTool(kind: kind)
         case .streaming:
-            tool = FreehandTool()
+            let freehandTool = FreehandTool()
+            freehandTool.configuration.allowsPartCreation = false
+            tool = freehandTool
             // Uses the `VertexTool`'s style so that vertex symbols are shown.
             tool.style = VertexTool().style
         case .line, .multipoint, .point, .polygon, .vertex:
