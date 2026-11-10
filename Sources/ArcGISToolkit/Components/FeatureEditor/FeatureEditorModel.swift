@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import CoreGraphics
 import Foundation
 
 internal import os
@@ -47,6 +48,9 @@ final class FeatureEditorModel {
     /// This is used to show the feature after geometry editing stops.
     @ObservationIgnored
     private var hiddenFeature: ArcGISFeature?
+    /// The global frame of the inspector's content, used to calculate content
+    /// insets that avoid the inspector.
+    var inspectorFrame = CGRect.zero
     /// A Boolean value that indicates whether the Feature Editor inspector is presented.
     var isPresented: Bool {
         get { state != .stopped }
