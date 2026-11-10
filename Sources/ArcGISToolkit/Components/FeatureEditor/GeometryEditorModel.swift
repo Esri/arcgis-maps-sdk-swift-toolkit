@@ -22,11 +22,7 @@ internal import os
 @Observable
 final class GeometryEditorModel {
     /// The geometry editor used to edit geometries.
-    var geometryEditor = GeometryEditor() {
-        didSet {
-            geometryEditor.tool = selectedTool.geometryEditorTool
-        }
-    }
+    let geometryEditor = GeometryEditor()
     /// A Boolean value indicating whether the geometry editor has edits to
     /// undo.
     private(set) var canUndo = false
@@ -38,6 +34,13 @@ final class GeometryEditorModel {
     private(set) var initialGeometry: Geometry?
     /// The geometry type that was used to start the current editing session.
     private var geometryType: Geometry.Type?
+    
+    init() {
+        geometryEditor.tool = selectedTool.geometryEditorTool
+        
+        // Snapping is enabled by default.
+        geometryEditor.snapSettings.isEnabled = true
+    }
     
     /// A Boolean value indicating whether the geometry has edits.
     var hasGeometryEdits: Bool {
@@ -161,10 +164,6 @@ final class GeometryEditorModel {
             } else {
                 try snapSettings.syncSourceSettings()
             }
-            
-            // Snapping is enabled by default to simplify the `SnapSettingsView`
-            // UI.
-            snapSettings.isEnabled = true
         } catch {
             Logger.featureEditor.error(
                 "Error syncing snap source settings: \(error.localizedDescription)"
