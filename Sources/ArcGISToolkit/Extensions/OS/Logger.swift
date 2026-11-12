@@ -32,6 +32,11 @@ extension Logger {
         Logger(subsystem: Bundle.toolkitIdentifier, category: "BasemapGallery")
     }
     
+    /// A logger for the `ClassificationView` component.
+    static var classificationView: Logger {
+        Logger(subsystem: Bundle.toolkitIdentifier, category: "ClassificationView")
+    }
+
     /// A logger for the `FloorFilter` component.
     static var floorFilter: Logger {
         Logger(subsystem: Bundle.toolkitIdentifier, category: "FloorFilter")
