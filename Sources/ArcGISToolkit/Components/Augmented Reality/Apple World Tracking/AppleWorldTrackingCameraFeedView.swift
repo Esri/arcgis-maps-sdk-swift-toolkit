@@ -52,7 +52,7 @@ public struct AppleWorldTrackingCameraFeedView: View {
     /// The current device heading in degrees.
     @State private var currentHeading: Double?
     /// The latest location waiting for a world-tracking pose to re-anchor.
-    @State private var pendingWorldTrackingLocation: Location?
+    @State private var pendingWorldTrackingReanchorLocation: Location?
     /// Whether GeoTracking is localized and ready to establish a camera baseline.
     @State private var geoTrackingIsLocalized = false
     /// The offset that rebases camera poses at localization.
@@ -64,11 +64,11 @@ public struct AppleWorldTrackingCameraFeedView: View {
                 let camera = frame.camera
 
                 if context.provider.mode == .worldTracking,
-                   let pendingWorldTrackingLocation {
-                    self.pendingWorldTrackingLocation = nil
-                    updateWorldTrackingSceneView(
-                        for: pendingWorldTrackingLocation,
-                        camera: camera
+                   let pendingWorldTrackingReanchorLocation {
+                    self.pendingWorldTrackingReanchorLocation = nil
+                    reanchorWorldTrackingSceneView(
+                        to: pendingWorldTrackingReanchorLocation,
+                        using: camera
                     )
                 }
 
@@ -112,9 +112,8 @@ public struct AppleWorldTrackingCameraFeedView: View {
                     lastLocationTimestamp = location.timestamp
                     currentLocation = location
                     if context.provider.mode == .worldTracking {
-                        // Call the method to check if world tracking session
-                        // needs to be updated.
-                        updateWorldTrackingSceneView(for: location)
+                        // Queue a possible re-anchor for the next AR frame.
+                        queueWorldTrackingLocation(location)
                     }
                 }
             }
@@ -288,7 +287,7 @@ private extension AppleWorldTrackingCameraFeedView /* World Tracking */ {
     
     /// Queues a camera re-anchor when the location changes significantly.
     /// - Parameter location: The location data source location.
-    func updateWorldTrackingSceneView(for location: Location) {
+    func queueWorldTrackingLocation(_ location: Location) {
         // Do not update the scene view when the coaching overlay is in place.
         guard !context.isCoaching else { return }
         
@@ -303,14 +302,14 @@ private extension AppleWorldTrackingCameraFeedView /* World Tracking */ {
         guard !context.isLocalized || shouldUpdateCamera(for: location) else { return }
         
         guard !context.isLocalized || !context.isCalibrating else { return }
-        pendingWorldTrackingLocation = location
+        pendingWorldTrackingReanchorLocation = location
     }
 
     /// Re-anchors the scene to a location using the current AR camera pose.
     /// - Parameters:
     ///   - location: The location data source location.
     ///   - camera: The AR camera pose for the current frame.
-    func updateWorldTrackingSceneView(for location: Location, camera: ARCamera) {
+    func reanchorWorldTrackingSceneView(to location: Location, using camera: ARCamera) {
         guard !context.isCoaching,
               abs(location.timestamp.timeIntervalSinceNow) < timeThreshold,
               location.horizontalAccuracy >= .zero,
