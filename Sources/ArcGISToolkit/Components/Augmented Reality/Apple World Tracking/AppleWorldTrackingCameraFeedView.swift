@@ -37,14 +37,14 @@ public struct AppleWorldTrackingCameraFeedView: View {
     private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
 
     public var body: some View {
-        if context.provider.mode == .worldTracking {
-            WorldTrackingCameraFeedView(
+        if context.provider.isGeoTrackingActive {
+            GeoTrackingCameraFeedView(
                 context: context,
                 onCameraTrackingStateChangedAction: onCameraTrackingStateChangedAction,
                 onGeoTrackingStatusChangedAction: onGeoTrackingStatusChangedAction
             )
         } else {
-            GeoTrackingCameraFeedView(
+            WorldTrackingCameraFeedView(
                 context: context,
                 onCameraTrackingStateChangedAction: onCameraTrackingStateChangedAction,
                 onGeoTrackingStatusChangedAction: onGeoTrackingStatusChangedAction
