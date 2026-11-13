@@ -50,29 +50,29 @@ struct GeoTrackingCameraFeedView: View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
                 let camera = frame.camera
+                guard let interfaceOrientation else { return }
+
                 if geoTrackingIsLocalized,
                    !context.isLocalized,
                    let currentLocation,
                    let currentHeading {
-                    localizationOffset = context.cameraController.reanchor(
+                    localizationOffset = context.reanchor(
                         to: currentLocation,
                         heading: currentHeading,
-                        calibration: context.calibration,
-                        camera: camera
+                        camera: camera,
+                        orientation: interfaceOrientation
                     )
                     context.isLocalized = true
+                } else if context.isLocalized {
+                    context.updateCamera(
+                        from: camera,
+                        orientation: interfaceOrientation,
+                        initialTransformation: localizationOffset ?? .identity
+                    )
                 }
-
-                guard let interfaceOrientation, context.isLocalized else { return }
-                context.sceneView.updateCameraAndFieldOfView(
-                    from: camera,
-                    using: context.cameraController,
-                    orientation: interfaceOrientation,
-                    initialTransformation: localizationOffset ?? .identity
-                )
             }
-            .onDidChangeGeoTrackingStatus { session, status in
-                handleGeoTrackingStatusChange(status, camera: session.currentFrame?.camera)
+            .onDidChangeGeoTrackingStatus { _, status in
+                handleGeoTrackingStatusChange(status)
                 onGeoTrackingStatusChangedAction?(status)
             }
             .onCameraDidChangeTrackingState { _, newTrackingState in
@@ -91,14 +91,9 @@ struct GeoTrackingCameraFeedView: View {
             }
     }
 
-    /// Updates localization state and camera setup when GeoTracking status changes.
-    /// - Parameters:
-    ///   - status: The latest GeoTracking status from ARKit.
-    ///   - camera: The current AR camera pose, if a frame is available.
-    private func handleGeoTrackingStatusChange(
-        _ status: ARGeoTrackingStatus,
-        camera: ARCamera?
-    ) {
+    /// Updates localization state when GeoTracking status changes.
+    /// - Parameter status: The latest GeoTracking status from ARKit.
+    private func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus) {
         switch status.state {
         case .notAvailable, .initializing, .localizing:
             geoTrackingIsLocalized = false
@@ -106,19 +101,6 @@ struct GeoTrackingCameraFeedView: View {
             context.isLocalized = false
         case .localized:
             geoTrackingIsLocalized = true
-            guard !context.isLocalized,
-                  let camera,
-                  let currentLocation,
-                  let currentHeading else {
-                return
-            }
-            localizationOffset = context.cameraController.reanchor(
-                to: currentLocation,
-                heading: currentHeading,
-                calibration: context.calibration,
-                camera: camera
-            )
-            context.isLocalized = true
         @unknown default:
             fatalError("Unknown ARGeoTrackingStatus.State")
         }

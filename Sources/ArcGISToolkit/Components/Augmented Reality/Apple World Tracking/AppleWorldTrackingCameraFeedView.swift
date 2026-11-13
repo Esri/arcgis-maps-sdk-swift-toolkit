@@ -83,27 +83,46 @@ public extension AppleWorldTrackingCameraFeedView {
 
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
-extension TransformationMatrixCameraController {
-    /// Sets the camera controller's geographic origin and resets its transformation
-    /// matrix using a location and AR camera pose. Call
-    /// `SceneViewProxy.updateCameraAndFieldOfView(from:using:orientation:initialTransformation:)`
-    /// immediately after to apply the current AR camera pose.
+extension WorldScaleSceneView<AppleWorldTracking>.Context {
+    /// Updates the scene camera and field of view using an AR camera frame.
+    /// - Parameters:
+    ///   - camera: The AR camera providing the pose and lens intrinsics.
+    ///   - orientation: The current interface orientation.
+    ///   - initialTransformation: The transform offset established at localization.
+    func updateCamera(
+        from camera: ARCamera,
+        orientation: InterfaceOrientation,
+        initialTransformation: TransformationMatrix
+    ) {
+        sceneView.updateCamera(
+            camera: camera,
+            cameraController: cameraController,
+            orientation: orientation,
+            initialTransformation: initialTransformation
+        )
+        sceneView.setFieldOfView(
+            for: camera,
+            orientation: orientation
+        )
+    }
+
+    /// Reanchors the camera controller and immediately applies the AR camera pose.
     /// - Parameters:
     ///   - location: The geographic location for the new origin.
     ///   - heading: The geographic heading, in degrees, for the new origin.
-    ///   - calibration: The elevation and heading corrections to apply.
-    ///   - camera: The AR camera pose used to calculate the localization offset.
+    ///   - camera: The AR camera pose used to calculate and apply the localization offset.
+    ///   - orientation: The current interface orientation.
     /// - Returns: The offset that rebases subsequent camera poses to the localization pose.
     func reanchor(
         to location: Location,
         heading: Double,
-        calibration: Calibration,
-        camera: ARCamera
+        camera: ARCamera,
+        orientation: InterfaceOrientation
     ) -> TransformationMatrix {
         let correctedAltitude = (location.position.z ?? 0) + calibration.totalElevationCorrection
         let correctedHeading = heading + calibration.totalHeadingCorrection
 
-        originCamera = Camera(
+        cameraController.originCamera = Camera(
             latitude: location.position.y,
             longitude: location.position.x,
             altitude: correctedAltitude,
@@ -111,39 +130,13 @@ extension TransformationMatrixCameraController {
             pitch: 90,
             roll: 0
         )
-        // Identity is only a reset value; it may not be the correct scene pose if
-        // the scene draws before updateCameraAndFieldOfView applies the current AR pose.
-        transformationMatrix = .identity
-
-        return camera.localizationOffset
-    }
-}
-
-@available(macCatalyst, unavailable)
-@available(visionOS, unavailable)
-extension SceneViewProxy {
-    /// Updates the scene camera and field of view using an AR camera frame.
-    /// - Parameters:
-    ///   - camera: The AR camera providing the pose and lens intrinsics.
-    ///   - cameraController: The controller used to position the scene camera.
-    ///   - orientation: The current interface orientation.
-    ///   - initialTransformation: The transform offset established at localization.
-    func updateCameraAndFieldOfView(
-        from camera: ARCamera,
-        using cameraController: TransformationMatrixCameraController,
-        orientation: InterfaceOrientation,
-        initialTransformation: TransformationMatrix
-    ) {
+        let localizationOffset = camera.localizationOffset
         updateCamera(
-            camera: camera,
-            cameraController: cameraController,
+            from: camera,
             orientation: orientation,
-            initialTransformation: initialTransformation
+            initialTransformation: localizationOffset
         )
-        setFieldOfView(
-            for: camera,
-            orientation: orientation
-        )
+        return localizationOffset
     }
 }
 

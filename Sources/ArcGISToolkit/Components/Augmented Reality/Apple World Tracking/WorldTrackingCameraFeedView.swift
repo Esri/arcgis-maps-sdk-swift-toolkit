@@ -60,23 +60,23 @@ struct WorldTrackingCameraFeedView: View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
                 let camera = frame.camera
+                guard let interfaceOrientation else { return }
+
                 if let location = pendingReanchorLocation.take() {
-                    localizationOffset = context.cameraController.reanchor(
+                    localizationOffset = context.reanchor(
                         to: location,
                         heading: camera.geographicHeading,
-                        calibration: context.calibration,
-                        camera: camera
+                        camera: camera,
+                        orientation: interfaceOrientation
                     )
                     context.isLocalized = true
+                } else if context.isLocalized {
+                    context.updateCamera(
+                        from: camera,
+                        orientation: interfaceOrientation,
+                        initialTransformation: localizationOffset ?? .identity
+                    )
                 }
-
-                guard let interfaceOrientation, context.isLocalized else { return }
-                context.sceneView.updateCameraAndFieldOfView(
-                    from: camera,
-                    using: context.cameraController,
-                    orientation: interfaceOrientation,
-                    initialTransformation: localizationOffset ?? .identity
-                )
             }
             .onDidChangeGeoTrackingStatus { _, status in
                 onGeoTrackingStatusChangedAction?(status)
