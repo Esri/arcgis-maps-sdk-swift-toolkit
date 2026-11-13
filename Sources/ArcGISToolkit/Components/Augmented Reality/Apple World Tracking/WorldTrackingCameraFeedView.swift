@@ -90,7 +90,7 @@ struct WorldTrackingCameraFeedView: View {
               abs(location.timestamp.timeIntervalSinceNow) < maxLocationAge,
               location.horizontalAccuracy >= .zero,
               location.verticalAccuracy >= .zero,
-              !context.isLocalized || shouldUpdateCamera(),
+              !context.isLocalized || shouldReanchor(),
               !context.isLocalized || !context.isCalibrating else {
             return
         }
@@ -99,7 +99,7 @@ struct WorldTrackingCameraFeedView: View {
     }
 
     /// Determines whether the scene camera has deviated far enough to re-anchor.
-    private func shouldUpdateCamera() -> Bool {
+    private func shouldReanchor() -> Bool {
         guard let currentSceneCamera, let currentLocation,
               let result = GeometryEngine.geodeticDistance(
                 from: currentSceneCamera.location,
