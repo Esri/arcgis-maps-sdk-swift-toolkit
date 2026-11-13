@@ -43,8 +43,7 @@ struct CustomWorldTrackingCameraFeedView: View {
     var body: some View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
-                guard let interfaceOrientation = context.interfaceOrientation,
-                      let garFrame = try? context.provider.garSession.update(frame),
+                guard let garFrame = try? context.provider.garSession.update(frame),
                       let earth = garFrame.earth else {
                     return
                 }
@@ -52,8 +51,7 @@ struct CustomWorldTrackingCameraFeedView: View {
                 let camera = frame.camera
                 guard let pose = makeCameraPose(
                     camera: camera,
-                    geospatialTransform: earth.cameraGeospatialTransform,
-                    interfaceOrientation: interfaceOrientation
+                    geospatialTransform: earth.cameraGeospatialTransform
                 ) else {
                     return
                 }
@@ -106,20 +104,17 @@ private extension CustomWorldTrackingCameraFeedView {
     /// - Parameters:
     ///   - camera: The current ARKit camera.
     ///   - geospatialTransform: The ARCore frame geospatial transform data.
-    ///   - interfaceOrientation: The current interface orientation.
     /// - Returns: The resolved camera pose, or `nil` if projection fails.
     func makeCameraPose(
         camera: ARCamera,
-        geospatialTransform: GARGeospatialTransform?,
-        interfaceOrientation: InterfaceOrientation
+        geospatialTransform: GARGeospatialTransform?
     ) -> WorldScaleCameraPose? {
-        guard let geospatialTransform else {
+        guard let geospatialTransform,
+              let (pitch, roll) = context.cameraPitchAndRoll(from: camera) else {
             return nil
         }
         
         let orientation = geospatialTransform.eastUpSouthQTarget
-        let transform = camera.transform(for: interfaceOrientation)
-        let (pitch, roll) = transform.pitchAndRoll
         let heading = CLLocation.headingFromEastUpSouthQTarget(orientation)
 
         let fromSpatialReference = SpatialReference(wkid: WKID(4326)!, verticalWKID: WKID(115700)!)!
@@ -192,49 +187,6 @@ private extension CustomWorldTrackingCameraFeedView {
         } else {
             context.provider.removeStreetscapeGeometry()
         }
-    }
-}
-
-private extension ARCamera {
-    /// Returns the transform rotated for the given interface orientation.
-    /// - Parameter orientation: The current interface orientation.
-    func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
-        let rotation: SCNMatrix4? = switch orientation {
-        case .landscapeLeft:
-            // Rotate -90° around Z axis
-            SCNMatrix4MakeRotation(-.pi / 2, 0, 0, 1)
-        case .landscapeRight:
-            // Rotate +90° around Z axis
-            SCNMatrix4MakeRotation(.pi / 2, 0, 0, 1)
-        case .portraitUpsideDown:
-            // Rotate 180° around Z axis
-            SCNMatrix4MakeRotation(.pi, 0, 0, 1)
-        default:
-            nil
-        }
-        return if let rotation {
-            simd_mul(transform, simd_float4x4(rotation))
-        } else {
-            transform
-        }
-    }
-}
-
-private extension simd_float4x4 {
-    /// The pitch and roll (degrees) derived from this transform matrix.
-    var pitchAndRoll: (pitch: Double, roll: Double) {
-        // Forward vector in camera space is -z axis.
-        let forward = SIMD3<Double>(
-            x: -Double(columns.2.x),
-            y: -Double(columns.2.y),
-            z: -Double(columns.2.z)
-        )
-        
-        // Pitch: angle between forward vector and horizontal plane (x-z).
-        let pitch = atan2(forward.y, hypot(forward.x, forward.z)) * 180.0 / .pi
-        // Roll: angle between up vector and vertical plane (y-z).
-        let roll = atan2(Double(columns.0.y), Double(columns.1.y)) * 180.0 / .pi
-        return (pitch, roll)
     }
 }
 

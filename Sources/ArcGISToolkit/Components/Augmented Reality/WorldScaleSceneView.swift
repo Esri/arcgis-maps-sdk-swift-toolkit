@@ -103,6 +103,34 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
             return true
         }
 
+        /// Returns the camera's pitch and roll adjusted for the current
+        /// interface orientation.
+        /// - Parameter camera: The AR camera providing the pose.
+        /// - Returns: The pitch and roll in degrees, or `nil` until interface
+        ///   orientation is available.
+        public func cameraPitchAndRoll(
+            from camera: ARCamera
+        ) -> (pitch: Double, roll: Double)? {
+            guard let interfaceOrientation else { return nil }
+            let transform = camera.interfaceOrientedTransform(
+                for: interfaceOrientation
+            )
+            let forward = SIMD3<Double>(
+                x: -Double(transform.columns.2.x),
+                y: -Double(transform.columns.2.y),
+                z: -Double(transform.columns.2.z)
+            )
+            let pitch = atan2(
+                forward.y,
+                hypot(forward.x, forward.z)
+            ) * 180 / .pi
+            let roll = atan2(
+                Double(transform.columns.0.y),
+                Double(transform.columns.1.y)
+            ) * 180 / .pi
+            return (pitch, roll)
+        }
+
         /// Applies the current AR camera pose relative to the localized origin.
         /// - Parameter camera: The AR camera frame providing the pose and lens
         ///   intrinsics.
@@ -521,6 +549,30 @@ private extension WorldScaleSceneView {
         let scenePointMatrix = originTransformationMatrix.adding(localOffsetMatrix)
         // Create a camera from transformationMatrix and return its location.
         return Camera(transformationMatrix: scenePointMatrix).location
+    }
+}
+
+private extension ARCamera {
+    /// Returns the camera transform adjusted for the current interface orientation.
+    func interfaceOrientedTransform(
+        for orientation: InterfaceOrientation
+    ) -> simd_float4x4 {
+        let angle: Float? = switch orientation {
+        case .landscapeLeft:
+            -.pi / 2
+        case .landscapeRight:
+            .pi / 2
+        case .portraitUpsideDown:
+            .pi
+        default:
+            nil
+        }
+        guard let angle else { return transform }
+        let rotation = simd_quatf(
+            angle: angle,
+            axis: SIMD3<Float>(0, 0, 1)
+        )
+        return simd_mul(transform, simd_float4x4(rotation))
     }
 }
 
