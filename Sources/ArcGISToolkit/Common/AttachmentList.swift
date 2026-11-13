@@ -104,6 +104,13 @@ struct AttachmentLoadButton: View  {
                 case .notLoaded:
                     Image(systemName: "square.and.arrow.down")
                         .resizable()
+                        .accessibilityLabel(
+                            LocalizedStringResource(
+                                "Download \(attachmentModel.name)",
+                                bundle: .toolkitModule,
+                                comment: "An accessibility label for a button that downloads a file."
+                            )
+                        )
                         .aspectRatio(contentMode: .fit)
 #if !os(visionOS)
                         .foregroundStyle(Color.accentColor)
