@@ -33,13 +33,9 @@ extension FeatureFormView {
                 }
                 .navigationTitle(
                     Text(
-                        "Editing ^[\(groupModel.forms.count) features](inflect: true)",
+                        "Features",
                         bundle: .toolkitModule,
-                        comment: """
-                            A navigation title indicating the number of \ 
-                            features being edited in the feature form toolkit \
-                            component.
-                            """
+                        comment: "A navigation title for a list of features."
                     )
                 )
                 .featureFormToolbar()
@@ -72,68 +68,52 @@ extension FeatureFormView {
         /// - Parameter form: The underlying form.
         func formButton(_ form: FeatureForm) -> some View {
             LabeledContent {
-                Button {
-                    withAnimation {
-                        groupModel.select(form: form, clearHistory: true)
+                if let globalID = form.feature.globalID,
+                   let model = groupModel.formModel(id: globalID) {
+                    Button {
+                        withAnimation {
+                            groupModel.select(form: form, clearHistory: true)
+                        }
+                    } label: {
+                        formButtonLabel(model)
                     }
-                } label: {
-                    formButtonLabel(form)
+                    .badge(formButtonBadgeCount(model))
+                    .badgeProminence(.increased)
+                    .foregroundStyle(.primary)
                 }
-                .badge(
-                    groupModel.allValidationErrorsAreVisible
-                    ? groupModel.totalErrorCountForForm(id: form.feature.globalID!)
-                    : 0
-                )
-                .badgeProminence(.increased)
-                .foregroundStyle(.primary)
             } label: {
                 FeatureSymbolView(feature: form.feature)
             }
         }
         
-        /// Returns a label for a button for a form in the group.
-        /// - Parameter form: The underlying form.
-        func formButtonLabel(_ form: FeatureForm) -> some View {
-            HStack {
-                Text(
-                    groupModel.formModel(
-                        id: form.feature.globalID!
-                    )?.title ?? ""
-                )
-                Spacer()
-                if groupModel.unsavedEditsLabelIsVisible(form) {
-                    Label {
-                        Text(
-                            "Unsaved Edits",
-                            bundle: .toolkitModule,
-                            comment: """
-                                A label indicating a \ 
-                                feature form has unsaved \
-                                edits.
-                                """
-                        )
-                    } icon: {
-                        Image(systemName: "pencil")
-                            .foregroundStyle(.secondary)
-                    }
-                    .labelStyle(.iconOnly)
-                }
+        /// Returns the appropriate badge count for a form in the group taking into account
+        /// whether all validation errors are visible and elements that have been visited.
+        /// - Parameter formModel: The model for the underlying form.
+        func formButtonBadgeCount(_ formModel: FormModel) -> Int {
+            if groupModel.allValidationErrorsAreVisible {
+                formModel.errorCount
+            } else {
+                formModel.visitedElementErrorCount
             }
         }
-    }
-}
-
-private extension FeatureFormView.Model {
-    /// A Boolean value indicating whether the provided form should be represented as having
-    /// unsaved edits.
-    /// - Parameter form: The form to evaluate the edit status for.
-    func unsavedEditsLabelIsVisible(_ form: FeatureForm) -> Bool {
-        guard let id = form.feature.globalID else { return false }
-        let hasEdits = formModel(id: id)?.hasAttributeOrGeometryEdits ?? false
-        let hasNoErrors = totalErrorCountForForm(id: id) == 0
-        let validationErrorsAreVisible = allValidationErrorsAreVisible
-        return hasEdits
-        && (!validationErrorsAreVisible
-        || (validationErrorsAreVisible && hasNoErrors))
+        
+        /// Returns a label for a button for a form in the group.
+        /// - Parameter formModel: The model for the underlying form.
+        @ViewBuilder
+        func formButtonLabel(_ formModel: FormModel) -> some View {
+            Text(formModel.title)
+                .accessibilityLabel(
+                    Text(
+                        "\(formModel.title), Visited",
+                        bundle: .toolkitModule,
+                        comment: """
+                                A label for a feature who's form has been
+                                visited.
+                                """
+                    ),
+                    isEnabled: formModel.visited
+                )
+                .bold(!formModel.visited)
+        }
     }
 }

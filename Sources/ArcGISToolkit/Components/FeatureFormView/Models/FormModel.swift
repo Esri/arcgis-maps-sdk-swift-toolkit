@@ -30,8 +30,8 @@ extension FeatureFormView {
         /// The current focused element, if one exists.
         var focusedElement: FormElement? {
             didSet {
-                if let focusedElement, !previouslyFocusedElements.contains(focusedElement) {
-                    previouslyFocusedElements.append(focusedElement)
+                if let focusedElement {
+                    previouslyFocusedElements.insert(focusedElement)
                 }
             }
         }
@@ -62,7 +62,8 @@ extension FeatureFormView {
         /// The status of underlying feature's geometry.
         var geometryStatus: GeometryStatus?
         
-        /// The combined error count of the form's element validation errors and geometry status.
+        /// The combined count of all element validation errors and the geometry status.
+        /// - SeeAlso: `visitedElementErrorCount`
         var errorCount: Int {
             elementErrorCount
             + (geometryStatus == .invalid ? 1 : 0)
@@ -72,7 +73,7 @@ extension FeatureFormView {
         var navigationPath: [FeatureFormView.NavigationPathItem] = []
         
         /// The set of all elements which previously held focus.
-        var previouslyFocusedElements = [FormElement]()
+        var previouslyFocusedElements = Set<FormElement>()
         
         /// The underlying form's dynamic title.
         var title: String
@@ -90,6 +91,22 @@ extension FeatureFormView {
             : elements.filter {
                 $0.label.localizedCaseInsensitiveContains(elementFilterPhrase)
             }
+        }
+        
+        /// A Boolean value indicating if the form has been visited or not.
+        ///
+        /// Once a form is opened in the group menu it is considered visited, even if no elements
+        /// are given focus before the user leaves again.
+        var visited = false
+        
+        /// The combined count of validation errors on visited elements and the geometry status.
+        /// - SeeAlso: `errorCount`
+        var visitedElementErrorCount: Int {
+            previouslyFocusedElements
+                .compactMap { $0 as? FieldFormElement }
+                .filter { !$0.validationErrors.isEmpty }
+                .count
+            + (geometryStatus == .invalid ? 1 : 0)
         }
         
         /// A dictionary of each form element and whether or not it is visible.

@@ -36,17 +36,17 @@ public extension FeatureFormView {
         /// template feature set.
         ///
         /// The members of a `FeatureFormGroup` are not editable when it is created with a
-        /// shared template feature creation set.
+        /// shared template feature creation set. The component allows saving when a shared
+        /// template feature creation set is provided, even if no other edits have been made.
         /// - Parameter featureCreationSet: The set to create the underlying
         /// `FeatureFormGroup` with.
         public convenience init?(
             featureCreationSet: SharedTemplateFeatureCreationSet
         ) {
-            fatalError("Not implemented.")
-//            guard let group = FeatureFormGroup(
-//                featureCreationSet: featureCreationSet
-//            ) else { return nil }
-//            self.init(group: group)
+            guard let group = FeatureFormGroup(
+                featureCreationSet: featureCreationSet
+            ) else { return nil }
+            self.init(group: group)
         }
         
         /// Adds a `FeatureForm` to the underlying `FeatureFormGroup`
@@ -58,7 +58,7 @@ public extension FeatureFormView {
         /// `SharedTemplateFeatureCreationSet`. When it was, the underlying group is
         /// considered final.
         public func add(form: FeatureForm, select: Bool = false) {
-            guard group.featureCreationSet == nil else { return }
+            guard !groupIsFinal else { return }
             add(form: form, select: select, recordAsBrowsed: false)
         }
         
@@ -68,7 +68,7 @@ public extension FeatureFormView {
         /// `SharedTemplateFeatureCreationSet`. When it was, the underlying group is
         /// considered final.
         public func reset() {
-            guard group.featureCreationSet == nil else { return }
+            guard !groupIsFinal else { return }
             clearSelection()
             backStack.removeAll()
             formModels.removeAll()
@@ -150,6 +150,8 @@ public extension FeatureFormView {
                     self.select(form: form)
                 }
             }
+            
+            guard !groupIsFinal else { return }
             
             guard let id = form.feature.globalID else {
                 Logger.featureFormView.warning("The feature cannot be added because the its global ID is not available.")
@@ -310,17 +312,6 @@ public extension FeatureFormView {
             }
         }
         
-        /// Reports the total error count for a feature form with a underlying feature with a
-        /// matching global ID.
-        ///
-        /// The count is the number of element validation errors on the matching form plus one if
-        /// the underlying feature's geometry has been reported invalid.
-        /// - Parameter globalID: The global ID of a feature.
-        /// - Returns: The error count for the indicated form.
-        func totalErrorCountForForm(id globalID: UUID) -> Int {
-            formModel(id: globalID)?.errorCount ?? 0
-        }
-        
         /// A Boolean value indicating whether the alert for unsaved edits is presented.
         var alertForUnsavedEditsIsPresented = false
         
@@ -356,6 +347,18 @@ public extension FeatureFormView {
         /// A Boolean value indicating if the group has any forms with validation errors.
         var groupHasErrors: Bool {
             totalErrorCount > 0
+        }
+        
+        /// A Boolean value indicating whether the group has forms that have visited elements with
+        /// validation errors or an invalid geometry.
+        var groupHasFormsWithVisitedElementsWithErrors: Bool {
+            formModels.values.contains { $0.visitedElementErrorCount > 0 }
+        }
+        
+        /// A Boolean value indicating whether the group is final and cannot be added to or removed
+        /// from.
+        var groupIsFinal: Bool {
+            group.featureCreationSet != nil
         }
         
         /// A Boolean value that determines whether the view is presented.
@@ -474,6 +477,7 @@ public extension FeatureFormView {
             if clearHistory {
                 backStack.removeAll()
             }
+            model.visited = true
             selectedModel = model
         }
         
@@ -507,16 +511,5 @@ public extension FeatureFormView {
         
         /// The internally managed validation error visibility.
         private var validationErrorVisibilityInternal = FeatureFormView.ValidationErrorVisibility.automatic
-    }
-}
-
-private extension FeatureFormGroup {
-    /// Indicates the `SharedTemplateFeatureCreationSet` used to create the
-    /// `FeatureFormGroup`. If the group was created using a list of `FeatureForm`s, this will
-    /// be `nil`. When not `nil`, the list of feature forms cannot be modified.
-    ///
-    /// - Warning: This property is for prototype purposes only and will be provided by the SDK.
-    var featureCreationSet: SharedTemplateFeatureCreationSet? {
-        return nil
     }
 }

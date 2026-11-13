@@ -114,9 +114,7 @@ private extension FeatureFormView.Toolbar /* Items */ {
             Image(systemName: groupModel.groupHasEdits ? "tray.badge" : "tray")
                 .symbolEffect(.bounce, value: delayedMultiFormModeActive)
                 .symbolRenderingMode(
-                    groupModel.allValidationErrorsAreVisible
-                    ? .multicolor
-                    : .monochrome
+                    groupModel.showErrorIndicator ? .multicolor : .monochrome
                 )
         }
         .accessibilityLabel(
@@ -148,6 +146,8 @@ private extension FeatureFormView.Toolbar /* Items */ {
     }
     
     /// Starts the sequence of events for saving the form(s).
+    ///
+    /// Disabled when the group has no edits and was not created with a feature creation set.
     var saveButton: some View {
         Button {
             withAnimation {
@@ -168,7 +168,7 @@ private extension FeatureFormView.Toolbar /* Items */ {
                 }
             }
         }
-        .disabled(!groupModel.groupHasEdits)
+        .disabled(!groupModel.groupHasEdits && !groupModel.groupIsFinal)
     }
 }
 
@@ -186,6 +186,13 @@ private extension FeatureFormView.Model {
         !multiFormModeIsActive || selectedForm == nil
     }
     
+    /// A Boolean value indicating whether the group icon should indicate that there are errors in the
+    /// group.
+    var showErrorIndicator: Bool {
+        allValidationErrorsAreVisible
+        || groupHasFormsWithVisitedElementsWithErrors
+    }
+    
     /// A Boolean value indicating whether the Group Menu button in the toolbar should be shown.
     var showGroupMenuButton: Bool {
         multiFormModeIsActive
@@ -195,9 +202,8 @@ private extension FeatureFormView.Model {
     /// A Boolean value indicating if the invalid geometry toolbar item should be shown.
     var showInvalidGeometryBadge: Bool {
         guard let selectedModel else { return false }
-        let hasInvalidGeometry = selectedModel.geometryStatus == .invalid
-        return allValidationErrorsAreVisible &&
-        hasInvalidGeometry
+        return (allValidationErrorsAreVisible || selectedModel.visited)
+        && (selectedModel.geometryStatus == .invalid)
     }
     
     /// A Boolean value indicating whether the Save button in the toolbar should be shown.
