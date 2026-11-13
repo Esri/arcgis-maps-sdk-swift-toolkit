@@ -212,6 +212,11 @@ class OnDemandMapModelTests: XCTestCase {
     
     @MainActor
     func testLoadMobileMapPackage() async throws {
+        // This test can take over 2 minutes to finish so it will timeout in
+        // in the automated test run. This should be an integration test that
+        // is using mocked network calls.
+        try XCTSkipIf(true, "KNOWN ISSUE -- swift/8379")
+        
         ArcGISEnvironment.backgroundURLSession = .init(configurationProvider: { .default })
         
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("3da658f2492f4cfd8494970ef489d2c5")!)
