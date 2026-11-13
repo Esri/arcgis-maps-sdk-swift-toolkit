@@ -27,15 +27,15 @@ struct WorldTrackingCameraFeedView: View {
     let onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
 
     /// The maximum age in seconds for a location used to re-anchor the scene.
-    private var timeThreshold: Double { 10 }
+    private var maxLocationAge: Double { 10 }
     /// The distance in meters that triggers a new camera anchor.
-    private var distanceThreshold: Double { 2 }
+    private var reanchorDistanceThreshold: Double { 2 }
 
     /// The latest ArcGIS scene camera, used to measure location deviation.
     @Environment(CameraWrapper.self) private var currentCameraWrapper
 
     /// The current camera derived from the latest scene view camera wrapper.
-    private var currentCamera: Camera? { currentCameraWrapper.camera }
+    private var currentSceneCamera: Camera? { currentCameraWrapper.camera }
 
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
@@ -97,7 +97,7 @@ struct WorldTrackingCameraFeedView: View {
     /// - Parameter location: The location data source update to consider.
     private func queueReanchorIfNeeded(for location: Location) {
         guard !context.isCoaching,
-              abs(location.timestamp.timeIntervalSinceNow) < timeThreshold,
+              abs(location.timestamp.timeIntervalSinceNow) < maxLocationAge,
               location.horizontalAccuracy >= .zero,
               location.verticalAccuracy >= .zero,
               !context.isLocalized || shouldUpdateCamera(),
@@ -110,9 +110,9 @@ struct WorldTrackingCameraFeedView: View {
 
     /// Determines whether the scene camera has deviated far enough to re-anchor.
     private func shouldUpdateCamera() -> Bool {
-        guard let currentCamera, let currentLocation,
+        guard let currentSceneCamera, let currentLocation,
               let result = GeometryEngine.geodeticDistance(
-                from: currentCamera.location,
+                from: currentSceneCamera.location,
                 to: currentLocation.position,
                 distanceUnit: .meters,
                 azimuthUnit: nil,
@@ -120,7 +120,7 @@ struct WorldTrackingCameraFeedView: View {
               ) else {
             return false
         }
-        return result.distance.value > distanceThreshold
+        return result.distance.value > reanchorDistanceThreshold
     }
 }
 #endif
