@@ -31,9 +31,6 @@ struct GeoTrackingCameraFeedView: View {
     @State private var currentHeading: Double?
     /// Whether GeoTracking is localized and ready to establish a camera baseline.
     @State private var geoTrackingIsLocalized = false
-    /// The offset that rebases camera poses at localization.
-    @State private var localizationOffset: TransformationMatrix?
-
     init(
         context: WorldScaleSceneView<AppleWorldTracking>.Context,
         onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?,
@@ -55,18 +52,13 @@ struct GeoTrackingCameraFeedView: View {
                    !context.isLocalized,
                    let currentLocation,
                    let currentHeading {
-                    let newLocalizationOffset = context.reanchor(
+                    context.reanchor(
                         to: currentLocation,
                         heading: currentHeading,
                         camera: camera
                     )
-                    localizationOffset = newLocalizationOffset
-                    context.isLocalized = true
                 } else if context.isLocalized {
-                    context.updateCamera(
-                        from: camera,
-                        initialTransformation: localizationOffset ?? .identity
-                    )
+                    context.updateCamera(from: camera)
                 }
             }
             .onDidChangeGeoTrackingStatus { _, status in
@@ -94,8 +86,7 @@ struct GeoTrackingCameraFeedView: View {
         switch status.state {
         case .notAvailable, .initializing, .localizing:
             geoTrackingIsLocalized = false
-            localizationOffset = nil
-            context.isLocalized = false
+            context.resetLocalization()
         case .localized:
             geoTrackingIsLocalized = true
         @unknown default:

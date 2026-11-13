@@ -41,8 +41,6 @@ struct WorldTrackingCameraFeedView: View {
     @State private var currentLocation: Location?
     /// The latest location waiting to be paired with an AR frame for re-anchoring.
     @State private var pendingReanchorLocation: Location?
-    /// The offset that rebases camera poses at the current anchor.
-    @State private var localizationOffset: TransformationMatrix?
 
     init(
         context: WorldScaleSceneView<AppleWorldTracking>.Context,
@@ -62,18 +60,13 @@ struct WorldTrackingCameraFeedView: View {
                 let camera = frame.camera
 
                 if let location = pendingReanchorLocation.take() {
-                    let newLocalizationOffset = context.reanchor(
+                    context.reanchor(
                         to: location,
                         heading: camera.geographicHeading,
                         camera: camera
                     )
-                    localizationOffset = newLocalizationOffset
-                    context.isLocalized = true
                 } else if context.isLocalized {
-                    context.updateCamera(
-                        from: camera,
-                        initialTransformation: localizationOffset ?? .identity
-                    )
+                    context.updateCamera(from: camera)
                 }
             }
             .onDidChangeGeoTrackingStatus { _, status in

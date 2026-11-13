@@ -46,6 +46,8 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         public let isCoaching: Bool
         /// A Boolean value indicating whether world tracking is localized.
         @Binding public var isLocalized: Bool
+        /// The transform offset established at the current localization.
+        @Binding var localizationOffset: TransformationMatrix?
     }
     
     /// The various ways that a world-tracking provider and camera feed can be
@@ -98,7 +100,8 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
                 cameraController: cameraController,
                 isCalibrating: isCalibrating,
                 isCoaching: isCoaching,
-                isLocalized: $isLocalized
+                isLocalized: $isLocalized,
+                localizationOffset: $localizationOffset
             )
             return cameraFeedView(context)
         } else {
@@ -110,7 +113,8 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
                 cameraController: cameraController,
                 isCalibrating: isCalibrating,
                 isCoaching: isCoaching,
-                isLocalized: $isLocalized
+                isLocalized: $isLocalized,
+                localizationOffset: $localizationOffset
             )
             return AppleWorldTrackingCameraFeedView(context: context)
                 .onCameraTrackingStateChanged { newTrackingState in
@@ -151,6 +155,8 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
     @State private var currentCamera: Camera?
     /// The current interface orientation used by the camera feed.
     @State private var interfaceOrientation: InterfaceOrientation?
+    /// The offset that rebases camera poses at the current localization.
+    @State private var localizationOffset: TransformationMatrix?
     /// The camera controller for this scene view.
     @State private var cameraController = TransformationMatrixCameraController()
     

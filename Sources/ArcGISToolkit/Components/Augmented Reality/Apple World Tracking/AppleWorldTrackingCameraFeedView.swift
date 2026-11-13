@@ -84,12 +84,65 @@ public extension AppleWorldTrackingCameraFeedView {
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 extension WorldScaleSceneView<AppleWorldTracking>.Context {
+    /// Resets the localization offset and marks the scene as not localized.
+    func resetLocalization() {
+        localizationOffset = nil
+        isLocalized = false
+    }
+
     /// Updates the scene camera and field of view using an AR camera frame.
+    /// - Parameters:
+    ///   - camera: The AR camera providing the pose and lens intrinsics.
+    /// - Precondition: The interface orientation is available.
+    func updateCamera(from camera: ARCamera) {
+        applyCamera(
+            from: camera,
+            initialTransformation: localizationOffset ?? .identity
+        )
+    }
+
+    /// Reanchors the camera controller, applies the AR camera pose, and marks
+    /// the scene as localized.
+    /// - Parameters:
+    ///   - location: The geographic location for the new origin.
+    ///   - heading: The geographic heading, in degrees, for the new origin.
+    ///   - camera: The AR camera pose used to calculate and apply the localization offset.
+    /// - Precondition: The interface orientation is available.
+    func reanchor(
+        to location: Location,
+        heading: Double,
+        camera: ARCamera
+    ) {
+        guard interfaceOrientation != nil else {
+            preconditionFailure("Re-anchoring requires an available interface orientation.")
+        }
+
+        let correctedAltitude = (location.position.z ?? 0) + calibration.totalElevationCorrection
+        let correctedHeading = heading + calibration.totalHeadingCorrection
+
+        cameraController.originCamera = Camera(
+            latitude: location.position.y,
+            longitude: location.position.x,
+            altitude: correctedAltitude,
+            heading: correctedHeading,
+            pitch: 90,
+            roll: 0
+        )
+        let newLocalizationOffset = camera.localizationOffset
+        localizationOffset = newLocalizationOffset
+        applyCamera(
+            from: camera,
+            initialTransformation: newLocalizationOffset
+        )
+        isLocalized = true
+    }
+
+    /// Applies an AR camera frame and its field of view to the scene.
     /// - Parameters:
     ///   - camera: The AR camera providing the pose and lens intrinsics.
     ///   - initialTransformation: The transform offset established at localization.
     /// - Precondition: The interface orientation is available.
-    func updateCamera(
+    private func applyCamera(
         from camera: ARCamera,
         initialTransformation: TransformationMatrix
     ) {
@@ -106,42 +159,6 @@ extension WorldScaleSceneView<AppleWorldTracking>.Context {
             for: camera,
             orientation: interfaceOrientation
         )
-    }
-
-    /// Reanchors the camera controller and immediately applies the AR camera pose.
-    /// - Parameters:
-    ///   - location: The geographic location for the new origin.
-    ///   - heading: The geographic heading, in degrees, for the new origin.
-    ///   - camera: The AR camera pose used to calculate and apply the localization offset.
-    /// - Returns: The offset that rebases subsequent camera poses.
-    /// - Precondition: The interface orientation is available.
-    func reanchor(
-        to location: Location,
-        heading: Double,
-        camera: ARCamera
-    ) -> TransformationMatrix {
-        precondition(
-            interfaceOrientation != nil,
-            "Re-anchoring requires an available interface orientation."
-        )
-
-        let correctedAltitude = (location.position.z ?? 0) + calibration.totalElevationCorrection
-        let correctedHeading = heading + calibration.totalHeadingCorrection
-
-        cameraController.originCamera = Camera(
-            latitude: location.position.y,
-            longitude: location.position.x,
-            altitude: correctedAltitude,
-            heading: correctedHeading,
-            pitch: 90,
-            roll: 0
-        )
-        let localizationOffset = camera.localizationOffset
-        updateCamera(
-            from: camera,
-            initialTransformation: localizationOffset
-        )
-        return localizationOffset
     }
 }
 
