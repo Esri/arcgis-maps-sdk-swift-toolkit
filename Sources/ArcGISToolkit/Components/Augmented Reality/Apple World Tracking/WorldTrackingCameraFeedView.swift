@@ -60,7 +60,7 @@ struct WorldTrackingCameraFeedView: View {
                 let camera = frame.camera
 
                 if let location = pendingReanchorLocation.take() {
-                    context.reanchor(
+                    context.localize(
                         to: location,
                         heading: camera.geographicHeading,
                         camera: camera

@@ -47,7 +47,127 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         /// A Boolean value indicating whether world tracking is localized.
         @Binding public var isLocalized: Bool
         /// The transform offset established at the current localization.
-        @Binding var localizationOffset: TransformationMatrix?
+        @Binding private var localizationOffset: TransformationMatrix?
+
+        /// Creates a context for the current world-scale scene state.
+        /// - Parameters:
+        ///   - calibration: The calibration applied to the AR experience.
+        ///   - sceneView: The proxy for interacting with the scene view.
+        ///   - interfaceOrientation: The current interface orientation, if known.
+        ///   - provider: The active world-tracking provider.
+        ///   - cameraController: The controller used to position the scene camera.
+        ///   - isCalibrating: Whether calibration UI is shown.
+        ///   - isCoaching: Whether coaching UI is active.
+        ///   - isLocalized: The binding for localization state.
+        ///   - localizationOffset: The binding for the localization transform.
+        init(
+            calibration: Calibration,
+            sceneView: SceneViewProxy,
+            interfaceOrientation: InterfaceOrientation?,
+            provider: Provider,
+            cameraController: TransformationMatrixCameraController,
+            isCalibrating: Bool,
+            isCoaching: Bool,
+            isLocalized: Binding<Bool>,
+            localizationOffset: Binding<TransformationMatrix?>
+        ) {
+            self.calibration = calibration
+            self.sceneView = sceneView
+            self.interfaceOrientation = interfaceOrientation
+            self.provider = provider
+            self.cameraController = cameraController
+            self.isCalibrating = isCalibrating
+            self.isCoaching = isCoaching
+            _isLocalized = isLocalized
+            _localizationOffset = localizationOffset
+        }
+
+        /// Applies a provider-resolved camera pose and updates the field of view.
+        /// - Parameters:
+        ///   - pose: The resolved camera pose to apply.
+        ///   - camera: The AR camera frame providing lens intrinsics.
+        /// - Returns: Whether the pose was applied; `false` until interface
+        ///   orientation is available.
+        @discardableResult
+        public func updateCamera(
+            to pose: WorldScaleCameraPose,
+            from camera: ARCamera
+        ) -> Bool {
+            guard let interfaceOrientation else { return false }
+            cameraController.originCamera = pose.originCamera
+            cameraController.transformationMatrix = pose.transformationMatrix
+            sceneView.setFieldOfView(
+                for: camera,
+                orientation: interfaceOrientation
+            )
+            return true
+        }
+
+        /// Applies the current AR camera pose relative to the localized origin.
+        /// - Parameter camera: The AR camera frame providing the pose and lens
+        ///   intrinsics.
+        /// - Returns: Whether the pose was applied; `false` until interface
+        ///   orientation is available.
+        @discardableResult
+        public func updateCamera(from camera: ARCamera) -> Bool {
+            guard let interfaceOrientation else { return false }
+            cameraController.transformationMatrix = camera.transformationMatrix(
+                for: interfaceOrientation,
+                initialTransformation: localizationOffset
+            )
+            sceneView.setFieldOfView(
+                for: camera,
+                orientation: interfaceOrientation
+            )
+            return true
+        }
+
+        /// Applies a camera pose and marks the scene as localized.
+        /// - Parameters:
+        ///   - pose: The resolved camera pose to apply.
+        ///   - camera: The AR camera frame providing lens intrinsics.
+        /// - Returns: Whether the pose was applied; `false` until interface
+        ///   orientation is available.
+        @discardableResult
+        public func localize(
+            to pose: WorldScaleCameraPose,
+            from camera: ARCamera
+        ) -> Bool {
+            guard updateCamera(to: pose, from: camera) else { return false }
+            localizationOffset = nil
+            isLocalized = true
+            return true
+        }
+
+        /// Establishes a geographic origin and applies the current AR camera
+        /// pose relative to it.
+        /// - Parameters:
+        ///   - originCamera: The geographic camera at the localization origin.
+        ///   - camera: The AR camera frame providing the current pose and lens
+        ///     intrinsics.
+        ///   - localizationTransformation: A provider-computed transform to apply
+        ///     before subsequent AR camera poses.
+        /// - Returns: Whether the pose was applied; `false` until interface
+        ///   orientation is available.
+        @discardableResult
+        public func localize(
+            to originCamera: Camera,
+            from camera: ARCamera,
+            localizationTransformation: TransformationMatrix? = nil
+        ) -> Bool {
+            guard interfaceOrientation != nil else { return false }
+            self.localizationOffset = localizationTransformation
+            cameraController.originCamera = originCamera
+            guard updateCamera(from: camera) else { return false }
+            isLocalized = true
+            return true
+        }
+
+        /// Clears the localization offset and marks the scene as not localized.
+        public func resetLocalization() {
+            localizationOffset = nil
+            isLocalized = false
+        }
     }
     
     /// The various ways that a world-tracking provider and camera feed can be

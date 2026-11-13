@@ -50,24 +50,22 @@ struct CustomWorldTrackingCameraFeedView: View {
                 }
                 
                 let camera = frame.camera
+                guard let pose = makeCameraPose(
+                    camera: camera,
+                    geospatialTransform: earth.cameraGeospatialTransform,
+                    interfaceOrientation: interfaceOrientation
+                ) else {
+                    return
+                }
                 
                 if context.isLocalized {
-                    updateCameraController(
-                        camera: camera,
-                        geospatialTransform: earth.cameraGeospatialTransform,
-                        interfaceOrientation: interfaceOrientation
-                    )
-                    
-                    context.sceneView.setFieldOfView(
-                        for: camera,
-                        orientation: interfaceOrientation
-                    )
-                    
-                    if streetscapeGeometryEnabled {
-                        updateStreetscapeGeometry(using: garFrame.streetscapeGeometries ?? [])
-                    }
-                } else {
-                    updateLocalizationState(for: earth.trackingState)
+                    context.updateCamera(to: pose, from: camera)
+                } else if earth.trackingState == .tracking {
+                    context.localize(to: pose, from: camera)
+                }
+
+                if context.isLocalized && streetscapeGeometryEnabled {
+                    updateStreetscapeGeometry(using: garFrame.streetscapeGeometries ?? [])
                 }
             }
             .onCameraDidChangeTrackingState { _, trackingState in
@@ -77,13 +75,6 @@ struct CustomWorldTrackingCameraFeedView: View {
                 guard !newEnabled else { return }
                 context.provider.removeStreetscapeGeometry()
             }
-    }
-    
-    /// Updates the localization based on the given tracking state.
-    /// - Parameter trackingState: The ARCore frame tracking state.
-    func updateLocalizationState(for trackingState: GARTrackingState?) {
-        guard trackingState == .tracking else { return }
-        context.isLocalized = true
     }
 }
 
@@ -111,19 +102,19 @@ extension CustomWorldTrackingCameraFeedView {
 }
 
 private extension CustomWorldTrackingCameraFeedView {
-    /// Updates the scene's camera controller based on the given AR camera and
-    /// ARCore frame geospatial transform.
+    /// Resolves the scene camera pose from an ARCore geospatial transform.
     /// - Parameters:
     ///   - camera: The current ARKit camera.
     ///   - geospatialTransform: The ARCore frame geospatial transform data.
     ///   - interfaceOrientation: The current interface orientation.
-    func updateCameraController(
+    /// - Returns: The resolved camera pose, or `nil` if projection fails.
+    func makeCameraPose(
         camera: ARCamera,
         geospatialTransform: GARGeospatialTransform?,
         interfaceOrientation: InterfaceOrientation
-    ) {
+    ) -> WorldScaleCameraPose? {
         guard let geospatialTransform else {
-            return
+            return nil
         }
         
         let orientation = geospatialTransform.eastUpSouthQTarget
@@ -145,13 +136,13 @@ private extension CustomWorldTrackingCameraFeedView {
             pointToProject,
             into: toSpatialReference
         ) else {
-            return
+            return nil
         }
         
         let correctedAltitude = (projectedLocation.z ?? 0) + context.calibration.totalElevationCorrection
         let correctedHeading = heading + context.calibration.totalHeadingCorrection
         
-        context.cameraController.originCamera = Camera(
+        let originCamera = Camera(
             latitude: projectedLocation.y,
             longitude: projectedLocation.x,
             altitude: correctedAltitude,
@@ -159,9 +150,7 @@ private extension CustomWorldTrackingCameraFeedView {
             pitch: 90 + pitch,
             roll: 90 + roll
         )
-        
-        // We have to do this or the error gets bigger and bigger.
-        context.cameraController.transformationMatrix = .identity
+        return WorldScaleCameraPose(originCamera: originCamera)
     }
     
     /// Synchronizes the provider's streetscape geometry models with the latest

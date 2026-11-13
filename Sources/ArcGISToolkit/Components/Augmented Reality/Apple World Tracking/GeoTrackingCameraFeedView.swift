@@ -52,7 +52,7 @@ struct GeoTrackingCameraFeedView: View {
                    !context.isLocalized,
                    let currentLocation,
                    let currentHeading {
-                    context.reanchor(
+                    context.localize(
                         to: currentLocation,
                         heading: currentHeading,
                         camera: camera
