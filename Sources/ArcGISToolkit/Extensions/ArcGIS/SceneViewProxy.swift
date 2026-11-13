@@ -35,13 +35,12 @@ public extension SceneViewProxy {
         let transform = camera.transform(for: orientation)
         let quaternion = simd_quatf(transform)
         let transformationMatrix = TransformationMatrix.normalized(
-            quaternionX: Double(quaternion.vector.x),
-            quaternionY: Double(quaternion.vector.y),
-            quaternionZ: Double(quaternion.vector.z),
-            quaternionW: Double(quaternion.vector.w),
-            translationX: Double(transform.columns.3.x),
-            translationY: Double(transform.columns.3.y),
-            translationZ: Double(transform.columns.3.z)
+            quaternion: quaternion,
+            translation: SIMD3<Float>(
+                transform.columns.3.x,
+                transform.columns.3.y,
+                transform.columns.3.z
+            )
         )
         
         // Set the matrix on the camera controller.
@@ -69,6 +68,27 @@ public extension SceneViewProxy {
             xImageSize: Float(imageResolution.width),
             yImageSize: Float(imageResolution.height),
             interfaceOrientation: orientation
+        )
+    }
+}
+
+extension TransformationMatrix {
+    /// Creates a normalized transformation matrix from a quaternion and translation.
+    /// - Parameters:
+    ///   - quaternion: The rotation to apply.
+    ///   - translation: The translation in meters.
+    static func normalized(
+        quaternion: simd_quatf,
+        translation: SIMD3<Float>
+    ) -> TransformationMatrix {
+        normalized(
+            quaternionX: Double(quaternion.vector.x),
+            quaternionY: Double(quaternion.vector.y),
+            quaternionZ: Double(quaternion.vector.z),
+            quaternionW: Double(quaternion.real),
+            translationX: Double(translation.x),
+            translationY: Double(translation.y),
+            translationZ: Double(translation.z)
         )
     }
 }
