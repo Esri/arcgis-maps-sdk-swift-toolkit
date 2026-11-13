@@ -26,6 +26,11 @@ struct WorldTrackingCameraFeedView: View {
     let onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     let onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
 
+    /// The maximum age in seconds for a location used to re-anchor the scene.
+    private var timeThreshold: Double { 10 }
+    /// The distance in meters that triggers a new camera anchor.
+    private var distanceThreshold: Double { 2 }
+
     /// The latest ArcGIS scene camera, used to measure location deviation.
     @Environment(CameraWrapper.self) private var currentCameraWrapper
 
@@ -34,8 +39,6 @@ struct WorldTrackingCameraFeedView: View {
 
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
-    /// The timestamp of the last received location.
-    @State private var lastLocationTimestamp: Date?
     /// The current device location.
     @State private var currentLocation: Location?
     /// The latest location waiting to be paired with an AR frame for re-anchoring.
@@ -57,7 +60,7 @@ struct WorldTrackingCameraFeedView: View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
                 let camera = frame.camera
-                if let location = takePendingReanchorLocation() {
+                if let location = pendingReanchorLocation.take() {
                     localizationOffset = context.cameraController.reanchor(
                         to: location,
                         heading: camera.geographicHeading,
@@ -84,23 +87,17 @@ struct WorldTrackingCameraFeedView: View {
             .observingInterfaceOrientation($interfaceOrientation)
             .task {
                 for await location in context.provider.dataSource.locations {
-                    lastLocationTimestamp = location.timestamp
                     currentLocation = location
                     queueReanchorIfNeeded(for: location)
                 }
             }
     }
 
-    /// The maximum age in seconds for a location used to re-anchor the scene.
-    private var timeThreshold: Double { 10 }
-    /// The distance in meters that triggers a new camera anchor.
-    private var distanceThreshold: Double { 2 }
-
     /// Queues a camera re-anchor when the location changes significantly.
     /// - Parameter location: The location data source update to consider.
     private func queueReanchorIfNeeded(for location: Location) {
         guard !context.isCoaching,
-              abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < timeThreshold,
+              abs(location.timestamp.timeIntervalSinceNow) < timeThreshold,
               location.horizontalAccuracy >= .zero,
               location.verticalAccuracy >= .zero,
               !context.isLocalized || shouldUpdateCamera(),
@@ -109,22 +106,6 @@ struct WorldTrackingCameraFeedView: View {
         }
 
         pendingReanchorLocation = location
-    }
-
-    /// Returns the pending location if it remains valid for the current AR frame.
-    private func takePendingReanchorLocation() -> Location? {
-        guard let location = pendingReanchorLocation else { return nil }
-        pendingReanchorLocation = nil
-
-        guard !context.isCoaching,
-              abs(location.timestamp.timeIntervalSinceNow) < timeThreshold,
-              location.horizontalAccuracy >= .zero,
-              location.verticalAccuracy >= .zero,
-              !context.isLocalized || !context.isCalibrating else {
-            return nil
-        }
-
-        return location
     }
 
     /// Determines whether the scene camera has deviated far enough to re-anchor.
