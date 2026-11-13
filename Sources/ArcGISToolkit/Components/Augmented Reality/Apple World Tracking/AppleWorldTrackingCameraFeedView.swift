@@ -109,7 +109,7 @@ extension TransformationMatrixCameraController {
             pitch: 90,
             roll: 0
         )
-        // We have to do this or the error gets bigger and bigger.
+        // Clear the previous frame's transform.
         transformationMatrix = .identity
 
         return camera.localizationOffset
