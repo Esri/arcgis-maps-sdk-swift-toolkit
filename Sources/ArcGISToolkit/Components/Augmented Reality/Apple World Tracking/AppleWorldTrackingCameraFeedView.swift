@@ -51,10 +51,8 @@ public struct AppleWorldTrackingCameraFeedView: View {
     @State private var currentLocation: Location?
     /// The current device heading in degrees.
     @State private var currentHeading: Double?
-    /// The latest location waiting for a world-tracking pose to re-anchor.
-    @State private var pendingWorldTrackingReanchorLocation: Location?
-    /// Whether GeoTracking is localized and ready to establish a camera baseline.
-    @State private var geoTrackingIsLocalized = false
+    @State private var geoTrackingCoordinator = GeoTrackingCoordinator()
+    @State private var worldTrackingCoordinator = WorldTrackingCoordinator()
     /// The offset that rebases camera poses at localization.
     @State private var localizationOffset: TransformationMatrix?
     
@@ -64,24 +62,32 @@ public struct AppleWorldTrackingCameraFeedView: View {
                 let camera = frame.camera
 
                 if context.provider.mode == .worldTracking,
-                   let pendingWorldTrackingReanchorLocation {
-                    self.pendingWorldTrackingReanchorLocation = nil
-                    reanchorWorldTrackingSceneView(
-                        to: pendingWorldTrackingReanchorLocation,
-                        using: camera
+                   let location = worldTrackingCoordinator.takePendingLocation(
+                    isCoaching: context.isCoaching,
+                    isLocalized: context.isLocalized,
+                    isCalibrating: context.isCalibrating
+                   ) {
+                    updateCameraController(
+                        location: location,
+                        heading: geographicHeading(for: camera.transform),
+                        altitude: location.position.z ?? 0,
+                        camera: camera
                     )
+                    context.isLocalized = true
                 }
 
                 if context.provider.mode != .worldTracking,
-                   geoTrackingIsLocalized,
-                   !context.isLocalized,
-                   let currentLocation,
-                   let currentHeading {
+                   let baseline = geoTrackingCoordinator.cameraBaselineIfReady(
+                    sceneIsLocalized: context.isLocalized,
+                    location: currentLocation,
+                    heading: currentHeading,
+                    camera: camera
+                   ) {
                     updateCameraController(
-                        location: currentLocation,
-                        heading: currentHeading,
-                        altitude: currentLocation.position.z ?? 0,
-                        camera: camera
+                        location: baseline.location,
+                        heading: baseline.heading,
+                        altitude: baseline.location.position.z ?? 0,
+                        camera: baseline.camera
                     )
                     context.isLocalized = true
                 }
@@ -112,8 +118,15 @@ public struct AppleWorldTrackingCameraFeedView: View {
                     lastLocationTimestamp = location.timestamp
                     currentLocation = location
                     if context.provider.mode == .worldTracking {
-                        // Queue a possible re-anchor for the next AR frame.
-                        queueWorldTrackingLocation(location)
+                        worldTrackingCoordinator.queueLocation(
+                            location,
+                            lastLocationTimestamp: lastLocationTimestamp,
+                            currentCamera: currentCamera,
+                            currentLocation: currentLocation,
+                            isCoaching: context.isCoaching,
+                            isLocalized: context.isLocalized,
+                            isCalibrating: context.isCalibrating
+                        )
                     }
                 }
             }
@@ -162,28 +175,28 @@ private extension AppleWorldTrackingCameraFeedView /* Geo Tracking */ {
     ///   - status: The latest geo-tracking status from ARKit.
     ///   - camera: The current AR camera pose, if a frame is available.
     func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus, camera: ARCamera?) {
-        switch status.state {
-        case .notAvailable, .initializing, .localizing:
-            geoTrackingIsLocalized = false
+        guard geoTrackingCoordinator.updateLocalizationStatus(status) else {
             localizationOffset = nil
             context.isLocalized = false
-        case .localized:
-            geoTrackingIsLocalized = true
-            if !context.isLocalized,
-               let camera,
-               let currentLocation,
-               let currentHeading {
-                updateCameraController(
-                    location: currentLocation,
-                    heading: currentHeading,
-                    altitude: currentLocation.position.z ?? 0,
-                    camera: camera
-                )
-                context.isLocalized = true
-            }
-        @unknown default:
-            fatalError("Unknown ARGeoTrackingStatus.State")
+            return
         }
+
+        guard let baseline = geoTrackingCoordinator.cameraBaselineIfReady(
+            sceneIsLocalized: context.isLocalized,
+            location: currentLocation,
+            heading: currentHeading,
+            camera: camera
+        ) else {
+            return
+        }
+
+        updateCameraController(
+            location: baseline.location,
+            heading: baseline.heading,
+            altitude: baseline.location.position.z ?? 0,
+            camera: baseline.camera
+        )
+        context.isLocalized = true
     }
 }
 
@@ -281,79 +294,104 @@ private extension TransformationMatrix {
 
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
-private extension AppleWorldTrackingCameraFeedView /* World Tracking */ {
-    /// The maximum age in seconds for a location used to re-anchor the scene.
-    var timeThreshold: Double { 10 }
-    
-    /// Queues a camera re-anchor when the location changes significantly.
-    /// - Parameter location: The location data source location.
-    func queueWorldTrackingLocation(_ location: Location) {
-        // Do not update the scene view when the coaching overlay is in place.
-        guard !context.isCoaching else { return }
-        
-        // Do not use cached location more than 10 seconds old.
-        guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < timeThreshold else { return }
-        
-        // Make sure that horizontal and vertical accuracy are valid.
-        guard location.horizontalAccuracy >= .zero,
-              location.verticalAccuracy >= .zero else { return }
-        
-        // Make sure we need to update the camera based on distance deviation.
-        guard !context.isLocalized || shouldUpdateCamera(for: location) else { return }
-        
-        guard !context.isLocalized || !context.isCalibrating else { return }
-        pendingWorldTrackingReanchorLocation = location
+private struct GeoTrackingCoordinator {
+    private(set) var isLocalized = false
+
+    mutating func updateLocalizationStatus(_ status: ARGeoTrackingStatus) -> Bool {
+        switch status.state {
+        case .notAvailable, .initializing, .localizing:
+            isLocalized = false
+        case .localized:
+            isLocalized = true
+        @unknown default:
+            fatalError("Unknown ARGeoTrackingStatus.State")
+        }
+        return isLocalized
     }
 
-    /// Re-anchors the scene to a location using the current AR camera pose.
-    /// - Parameters:
-    ///   - location: The location data source location.
-    ///   - camera: The AR camera pose for the current frame.
-    func reanchorWorldTrackingSceneView(to location: Location, using camera: ARCamera) {
-        guard !context.isCoaching,
-              abs(location.timestamp.timeIntervalSinceNow) < timeThreshold,
+    func cameraBaselineIfReady(
+        sceneIsLocalized: Bool,
+        location: Location?,
+        heading: Double?,
+        camera: ARCamera?
+    ) -> (location: Location, heading: Double, camera: ARCamera)? {
+        guard isLocalized,
+              !sceneIsLocalized,
+              let location,
+              let heading,
+              let camera else {
+            return nil
+        }
+        return (location, heading, camera)
+    }
+}
+
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
+private struct WorldTrackingCoordinator {
+    private(set) var pendingLocation: Location?
+
+    private let timeThreshold: Double = 10
+    private let distanceThreshold: Double = 2
+
+    mutating func queueLocation(
+        _ location: Location,
+        lastLocationTimestamp: Date?,
+        currentCamera: Camera?,
+        currentLocation: Location?,
+        isCoaching: Bool,
+        isLocalized: Bool,
+        isCalibrating: Bool
+    ) {
+        guard !isCoaching,
+              abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < timeThreshold,
               location.horizontalAccuracy >= .zero,
               location.verticalAccuracy >= .zero,
-              !context.isLocalized || !context.isCalibrating else {
+              !isLocalized || shouldUpdateCamera(
+                currentCamera: currentCamera,
+                currentLocation: currentLocation
+              ),
+              !isLocalized || !isCalibrating else {
             return
         }
 
-        updateCameraController(
-            location: location,
-            heading: geographicHeading(for: camera.transform),
-            altitude: location.position.z ?? 0,
-            camera: camera
-        )
-        context.isLocalized = true
+        pendingLocation = location
     }
-    
-    /// The distance threshold in meters between camera and device location to
-    /// request a new anchor.
-    var distanceThreshold: Double { 2 }
-    
-    /// Returns a Boolean value indicating if the camera should be updated for a
-    /// location coming in from the location data source based on current camera
-    /// deviation.
-    /// - Parameter location: The location data source location.
-    /// - Returns: A Boolean value indicating if the camera should be updated.
-    func shouldUpdateCamera(for location: Location) -> Bool {
-        guard let currentCamera, let currentLocation else { return false }
-        
-        // Measure the distance between the location datasource's reported
-        // location and the camera's current location.
-        guard let result = GeometryEngine.geodeticDistance(
-            from: currentCamera.location,
-            to: currentLocation.position,
-            distanceUnit: .meters,
-            azimuthUnit: nil,
-            curveType: .geodesic
-        ) else {
+
+    mutating func takePendingLocation(
+        isCoaching: Bool,
+        isLocalized: Bool,
+        isCalibrating: Bool
+    ) -> Location? {
+        guard let location = pendingLocation else { return nil }
+        pendingLocation = nil
+
+        guard !isCoaching,
+              abs(location.timestamp.timeIntervalSinceNow) < timeThreshold,
+              location.horizontalAccuracy >= .zero,
+              location.verticalAccuracy >= .zero,
+              !isLocalized || !isCalibrating else {
+            return nil
+        }
+
+        return location
+    }
+
+    private func shouldUpdateCamera(
+        currentCamera: Camera?,
+        currentLocation: Location?
+    ) -> Bool {
+        guard let currentCamera, let currentLocation,
+              let result = GeometryEngine.geodeticDistance(
+                from: currentCamera.location,
+                to: currentLocation.position,
+                distanceUnit: .meters,
+                azimuthUnit: nil,
+                curveType: .geodesic
+              ) else {
             return false
         }
-        
-        // If the location becomes off by over a certain threshold, then update
-        // the camera location.
-        return result.distance.value > distanceThreshold ? true : false
+        return result.distance.value > distanceThreshold
     }
 }
 #endif
