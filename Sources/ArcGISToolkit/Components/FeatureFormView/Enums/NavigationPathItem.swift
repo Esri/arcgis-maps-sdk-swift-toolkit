@@ -14,10 +14,14 @@
 
 import ArcGIS
 
-extension FeatureFormView {
-    /// Describes the items in feature form view's navigation stack.
+public extension FeatureFormView {
+    /// Describes the destinations a user will visit while browsing utility associations in a feature
+    /// form.
+    ///
+    /// This information can be used to do things such as keeping visualizations in a map
+    /// synchronized with what's happening in the component.
     /// - Since: 300.0
-    public enum NavigationPathItem: Hashable {
+    enum NavigationPathItem: Hashable {
         case form(FeatureForm)
         case utilityAssociationAssetTypesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource)
         case utilityAssociationCreationView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureCandidate)
