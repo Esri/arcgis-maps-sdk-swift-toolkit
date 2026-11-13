@@ -16,6 +16,11 @@
 import ArcGIS
 
 /// A provider-resolved camera pose for a world-scale scene.
+///
+/// - Note: The pose is treated as fully resolved; the toolkit does not apply
+///   interface-orientation corrections to it. Use the context's
+///   `cameraPitchAndRoll(from:)` helper when deriving pitch and roll from an
+///   `ARCamera`.
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public struct WorldScaleCameraPose {
