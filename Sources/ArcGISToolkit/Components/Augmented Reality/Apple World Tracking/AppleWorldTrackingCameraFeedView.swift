@@ -15,7 +15,6 @@
 #if os(iOS)
 import ArcGIS
 import ARKit
-import CoreLocation
 import SwiftUI
 
 /// The camera scene view corresponding to `AppleWorldTracking`.
@@ -25,116 +24,32 @@ public struct AppleWorldTrackingCameraFeedView: View {
     /// Shared world-scale context used to read provider state and update the
     /// scene.
     let context: WorldScaleSceneView<AppleWorldTracking>.Context
-    
+
     /// Creates an instance using the provided world-scale scene context.
     /// - Parameter context: The world-scale scene context backing this view.
     public init(context: WorldScaleSceneView<AppleWorldTracking>.Context) {
         self.context = context
     }
-    
+
     /// The closure to perform when the camera tracking state changes.
     private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     /// The closure to perform when the geo tracking status changes.
     private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
-    
-    /// The current camera of the scene view.
-    @Environment(CameraWrapper.self) private var currentCameraWrapper
-    
-    /// The current camera derived from the latest scene view camera wrapper.
-    var currentCamera: Camera? { currentCameraWrapper.camera }
-    
-    /// The current interface orientation.
-    @State private var interfaceOrientation: InterfaceOrientation?
-    /// The timestamp of the last received location.
-    @State private var lastLocationTimestamp: Date?
-    /// The current device location.
-    @State private var currentLocation: Location?
-    /// The current device heading in degrees.
-    @State private var currentHeading: Double?
-    @State private var geoTrackingCoordinator = GeoTrackingCoordinator()
-    @State private var worldTrackingCoordinator = WorldTrackingCoordinator()
-    /// The offset that rebases camera poses at localization.
-    @State private var localizationOffset: TransformationMatrix?
-    
+
     public var body: some View {
-        SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
-            .onDidUpdateFrame { _, frame in
-                let camera = frame.camera
-
-                if context.provider.mode == .worldTracking,
-                   let location = worldTrackingCoordinator.takePendingLocation(
-                    isCoaching: context.isCoaching,
-                    isLocalized: context.isLocalized,
-                    isCalibrating: context.isCalibrating
-                   ) {
-                    updateCameraController(
-                        location: location,
-                        heading: geographicHeading(for: camera.transform),
-                        altitude: location.position.z ?? 0,
-                        camera: camera
-                    )
-                    context.isLocalized = true
-                }
-
-                if context.provider.mode != .worldTracking,
-                   let baseline = geoTrackingCoordinator.cameraBaselineIfReady(
-                    sceneIsLocalized: context.isLocalized,
-                    location: currentLocation,
-                    heading: currentHeading,
-                    camera: camera
-                   ) {
-                    updateCameraController(
-                        location: baseline.location,
-                        heading: baseline.heading,
-                        altitude: baseline.location.position.z ?? 0,
-                        camera: baseline.camera
-                    )
-                    context.isLocalized = true
-                }
-
-                guard let interfaceOrientation, context.isLocalized else { return }
-                
-                context.sceneView.updateCamera(
-                    camera: camera,
-                    cameraController: context.cameraController,
-                    orientation: interfaceOrientation,
-                    initialTransformation: localizationOffset ?? .identity
-                )
-                context.sceneView.setFieldOfView(
-                    for: camera,
-                    orientation: interfaceOrientation
-                )
-            }
-            .onDidChangeGeoTrackingStatus { session, status in
-                handleGeoTrackingStatusChange(status, camera: session.currentFrame?.camera)
-                onGeoTrackingStatusChangedAction?(status)
-            }
-            .onCameraDidChangeTrackingState { _, newTrackingState in
-                onCameraTrackingStateChangedAction?(newTrackingState)
-            }
-            .observingInterfaceOrientation($interfaceOrientation)
-            .task {
-                for await location in context.provider.dataSource.locations {
-                    lastLocationTimestamp = location.timestamp
-                    currentLocation = location
-                    if context.provider.mode == .worldTracking {
-                        worldTrackingCoordinator.queueLocation(
-                            location,
-                            lastLocationTimestamp: lastLocationTimestamp,
-                            currentCamera: currentCamera,
-                            currentLocation: currentLocation,
-                            isCoaching: context.isCoaching,
-                            isLocalized: context.isLocalized,
-                            isCalibrating: context.isCalibrating
-                        )
-                    }
-                }
-            }
-            .task {
-                for await heading in context.provider.dataSource.headings {
-                    currentHeading = heading
-                }
-            }
+        if context.provider.mode == .worldTracking {
+            WorldTrackingCameraFeedView(
+                context: context,
+                onCameraTrackingStateChangedAction: onCameraTrackingStateChangedAction,
+                onGeoTrackingStatusChangedAction: onGeoTrackingStatusChangedAction
+            )
+        } else {
+            GeoTrackingCameraFeedView(
+                context: context,
+                onCameraTrackingStateChangedAction: onCameraTrackingStateChangedAction,
+                onGeoTrackingStatusChangedAction: onGeoTrackingStatusChangedAction
+            )
+        }
     }
 }
 
@@ -151,7 +66,7 @@ public extension AppleWorldTrackingCameraFeedView {
         copy.onCameraTrackingStateChangedAction = action
         return copy
     }
-    
+
     /// Sets a closure to perform when the geo tracking status changes.
     /// - Parameter action: The closure to perform when the geo tracking status
     /// has changed.
@@ -168,57 +83,25 @@ public extension AppleWorldTrackingCameraFeedView {
 
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
-private extension AppleWorldTrackingCameraFeedView /* Geo Tracking */ {
-    /// Updates localization state and initial camera setup when geo-tracking
-    /// status changes.
+extension TransformationMatrixCameraController {
+    /// Sets the camera controller's geographic origin and resets its transformation
+    /// matrix using a location and AR camera pose.
     /// - Parameters:
-    ///   - status: The latest geo-tracking status from ARKit.
-    ///   - camera: The current AR camera pose, if a frame is available.
-    func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus, camera: ARCamera?) {
-        guard geoTrackingCoordinator.updateLocalizationStatus(status) else {
-            localizationOffset = nil
-            context.isLocalized = false
-            return
-        }
-
-        guard let baseline = geoTrackingCoordinator.cameraBaselineIfReady(
-            sceneIsLocalized: context.isLocalized,
-            location: currentLocation,
-            heading: currentHeading,
-            camera: camera
-        ) else {
-            return
-        }
-
-        updateCameraController(
-            location: baseline.location,
-            heading: baseline.heading,
-            altitude: baseline.location.position.z ?? 0,
-            camera: baseline.camera
-        )
-        context.isLocalized = true
-    }
-}
-
-@available(macCatalyst, unavailable)
-@available(visionOS, unavailable)
-private extension AppleWorldTrackingCameraFeedView /* Localization */ {
-    /// Updates the camera controller with a geographic anchor and its AR pose.
-    /// - Parameters:
-    ///   - location: The location for the camera.
-    ///   - heading: The geographic heading for the camera.
-    ///   - altitude: The altitude for the camera.
-    ///   - camera: The AR camera pose at localization.
-    func updateCameraController(
-        location: Location,
+    ///   - location: The geographic location for the new origin.
+    ///   - heading: The geographic heading, in degrees, for the new origin.
+    ///   - calibration: The elevation and heading corrections to apply.
+    ///   - camera: The AR camera pose used to calculate the localization offset.
+    /// - Returns: The offset that rebases subsequent camera poses to the localization pose.
+    func reanchor(
+        to location: Location,
         heading: Double,
-        altitude: Double,
+        calibration: Calibration,
         camera: ARCamera
-    ) {
-        let correctedAltitude = altitude + context.calibration.totalElevationCorrection
-        let correctedHeading = heading + context.calibration.totalHeadingCorrection
-        localizationOffset = makeLocalizationOffset(for: camera.transform)
-        context.cameraController.originCamera = Camera(
+    ) -> TransformationMatrix {
+        let correctedAltitude = (location.position.z ?? 0) + calibration.totalElevationCorrection
+        let correctedHeading = heading + calibration.totalHeadingCorrection
+
+        originCamera = Camera(
             latitude: location.position.y,
             longitude: location.position.x,
             altitude: correctedAltitude,
@@ -227,21 +110,62 @@ private extension AppleWorldTrackingCameraFeedView /* Localization */ {
             roll: 0
         )
         // We have to do this or the error gets bigger and bigger.
-        context.cameraController.transformationMatrix = .identity
+        transformationMatrix = .identity
+
+        return camera.localizationOffset
+    }
+}
+
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
+extension SceneViewProxy {
+    /// Updates the scene camera and field of view using an AR camera frame.
+    /// - Parameters:
+    ///   - camera: The AR camera providing the pose and lens intrinsics.
+    ///   - cameraController: The controller used to position the scene camera.
+    ///   - orientation: The current interface orientation.
+    ///   - initialTransformation: The transform offset established at localization.
+    func updateCameraAndFieldOfView(
+        from camera: ARCamera,
+        using cameraController: TransformationMatrixCameraController,
+        orientation: InterfaceOrientation,
+        initialTransformation: TransformationMatrix
+    ) {
+        updateCamera(
+            camera: camera,
+            cameraController: cameraController,
+            orientation: orientation,
+            initialTransformation: initialTransformation
+        )
+        setFieldOfView(
+            for: camera,
+            orientation: orientation
+        )
+    }
+}
+
+@available(macCatalyst, unavailable)
+@available(visionOS, unavailable)
+extension ARCamera {
+    /// The compass heading represented by this camera pose.
+    /// - Returns: The camera heading in degrees in the range [0, 360).
+    var geographicHeading: Double {
+        let degrees = geographicYaw * 180 / .pi
+        let normalized = degrees.truncatingRemainder(dividingBy: 360)
+        return normalized < 0 ? normalized + 360 : normalized
     }
 
     /// Rebases the camera pose to the AR world position and yaw at localization.
-    /// - Parameter cameraTransform: The camera transform in AR world space.
     /// - Returns: An offset that removes the localization position and yaw.
-    func makeLocalizationOffset(for cameraTransform: simd_float4x4) -> TransformationMatrix {
+    var localizationOffset: TransformationMatrix {
         let inverseYaw = simd_quatf(
-            angle: Float(-cameraYaw(for: cameraTransform)),
+            angle: Float(-geographicYaw),
             axis: SIMD3<Float>(0, 1, 0)
         )
         let cameraPosition = SIMD3<Float>(
-            cameraTransform.columns.3.x,
-            cameraTransform.columns.3.y,
-            cameraTransform.columns.3.z
+            transform.columns.3.x,
+            transform.columns.3.y,
+            transform.columns.3.z
         )
         let localizationTransform = TransformationMatrix.normalized(
             quaternion: inverseYaw,
@@ -251,21 +175,12 @@ private extension AppleWorldTrackingCameraFeedView /* Localization */ {
         return .identity.subtracting(localizationTransform)
     }
 
-    /// The compass heading represented by an AR camera pose.
-    /// - Parameter cameraTransform: The camera transform in compass-aligned AR world space.
-    /// - Returns: The camera heading in degrees in the range [0, 360).
-    func geographicHeading(for cameraTransform: simd_float4x4) -> Double {
-        let degrees = cameraYaw(for: cameraTransform) * 180 / .pi
-        let normalized = degrees.truncatingRemainder(dividingBy: 360)
-        return normalized < 0 ? normalized + 360 : normalized
-    }
-
-    /// Returns the camera yaw in radians in compass-aligned AR world space.
-    func cameraYaw(for cameraTransform: simd_float4x4) -> Double {
+    /// The camera yaw in radians in compass-aligned AR world space.
+    private var geographicYaw: Double {
         let cameraForward = SIMD3<Float>(
-            -cameraTransform.columns.2.x,
-            -cameraTransform.columns.2.y,
-            -cameraTransform.columns.2.z
+            -transform.columns.2.x,
+            -transform.columns.2.y,
+            -transform.columns.2.z
         )
         return atan2(Double(cameraForward.x), Double(-cameraForward.z))
     }
@@ -273,9 +188,6 @@ private extension AppleWorldTrackingCameraFeedView /* Localization */ {
 
 private extension TransformationMatrix {
     /// Creates a normalized transformation matrix from a quaternion and translation.
-    /// - Parameters:
-    ///   - quaternion: The rotation to apply.
-    ///   - translation: The translation in meters.
     static func normalized(
         quaternion: simd_quatf,
         translation: SIMD3<Float>
@@ -289,109 +201,6 @@ private extension TransformationMatrix {
             translationY: Double(translation.y),
             translationZ: Double(translation.z)
         )
-    }
-}
-
-@available(macCatalyst, unavailable)
-@available(visionOS, unavailable)
-private struct GeoTrackingCoordinator {
-    private(set) var isLocalized = false
-
-    mutating func updateLocalizationStatus(_ status: ARGeoTrackingStatus) -> Bool {
-        switch status.state {
-        case .notAvailable, .initializing, .localizing:
-            isLocalized = false
-        case .localized:
-            isLocalized = true
-        @unknown default:
-            fatalError("Unknown ARGeoTrackingStatus.State")
-        }
-        return isLocalized
-    }
-
-    func cameraBaselineIfReady(
-        sceneIsLocalized: Bool,
-        location: Location?,
-        heading: Double?,
-        camera: ARCamera?
-    ) -> (location: Location, heading: Double, camera: ARCamera)? {
-        guard isLocalized,
-              !sceneIsLocalized,
-              let location,
-              let heading,
-              let camera else {
-            return nil
-        }
-        return (location, heading, camera)
-    }
-}
-
-@available(macCatalyst, unavailable)
-@available(visionOS, unavailable)
-private struct WorldTrackingCoordinator {
-    private(set) var pendingLocation: Location?
-
-    private let timeThreshold: Double = 10
-    private let distanceThreshold: Double = 2
-
-    mutating func queueLocation(
-        _ location: Location,
-        lastLocationTimestamp: Date?,
-        currentCamera: Camera?,
-        currentLocation: Location?,
-        isCoaching: Bool,
-        isLocalized: Bool,
-        isCalibrating: Bool
-    ) {
-        guard !isCoaching,
-              abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < timeThreshold,
-              location.horizontalAccuracy >= .zero,
-              location.verticalAccuracy >= .zero,
-              !isLocalized || shouldUpdateCamera(
-                currentCamera: currentCamera,
-                currentLocation: currentLocation
-              ),
-              !isLocalized || !isCalibrating else {
-            return
-        }
-
-        pendingLocation = location
-    }
-
-    mutating func takePendingLocation(
-        isCoaching: Bool,
-        isLocalized: Bool,
-        isCalibrating: Bool
-    ) -> Location? {
-        guard let location = pendingLocation else { return nil }
-        pendingLocation = nil
-
-        guard !isCoaching,
-              abs(location.timestamp.timeIntervalSinceNow) < timeThreshold,
-              location.horizontalAccuracy >= .zero,
-              location.verticalAccuracy >= .zero,
-              !isLocalized || !isCalibrating else {
-            return nil
-        }
-
-        return location
-    }
-
-    private func shouldUpdateCamera(
-        currentCamera: Camera?,
-        currentLocation: Location?
-    ) -> Bool {
-        guard let currentCamera, let currentLocation,
-              let result = GeometryEngine.geodeticDistance(
-                from: currentCamera.location,
-                to: currentLocation.position,
-                distanceUnit: .meters,
-                azimuthUnit: nil,
-                curveType: .geodesic
-              ) else {
-            return false
-        }
-        return result.distance.value > distanceThreshold
     }
 }
 #endif
