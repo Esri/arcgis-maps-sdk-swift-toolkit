@@ -32,6 +32,11 @@ extension Logger {
         Logger(subsystem: Bundle.toolkitIdentifier, category: "BasemapGallery")
     }
     
+    /// A logger for ``FeatureFormView``.
+    static var featureFormView: Logger {
+        Logger(subsystem: "com.esri.ArcGISToolkit", category: "FeatureFormView")
+    }
+    
     /// A logger for the `FloorFilter` component.
     static var floorFilter: Logger {
         Logger(subsystem: Bundle.toolkitIdentifier, category: "FloorFilter")
