@@ -25,8 +25,6 @@ struct GeoTrackingCameraFeedView: View {
     let onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     let onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
 
-    /// The current interface orientation.
-    @State private var interfaceOrientation: InterfaceOrientation?
     /// The current device location.
     @State private var currentLocation: Location?
     /// The current device heading in degrees.
@@ -49,24 +47,24 @@ struct GeoTrackingCameraFeedView: View {
     var body: some View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
+                guard context.interfaceOrientation != nil else { return }
+
                 let camera = frame.camera
-                guard let interfaceOrientation else { return }
 
                 if geoTrackingIsLocalized,
                    !context.isLocalized,
                    let currentLocation,
                    let currentHeading {
-                    localizationOffset = context.reanchor(
+                    let newLocalizationOffset = context.reanchor(
                         to: currentLocation,
                         heading: currentHeading,
-                        camera: camera,
-                        orientation: interfaceOrientation
+                        camera: camera
                     )
+                    localizationOffset = newLocalizationOffset
                     context.isLocalized = true
                 } else if context.isLocalized {
                     context.updateCamera(
                         from: camera,
-                        orientation: interfaceOrientation,
                         initialTransformation: localizationOffset ?? .identity
                     )
                 }
@@ -78,7 +76,6 @@ struct GeoTrackingCameraFeedView: View {
             .onCameraDidChangeTrackingState { _, newTrackingState in
                 onCameraTrackingStateChangedAction?(newTrackingState)
             }
-            .observingInterfaceOrientation($interfaceOrientation)
             .task {
                 for await location in context.provider.dataSource.locations {
                     currentLocation = location

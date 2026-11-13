@@ -37,8 +37,6 @@ struct WorldTrackingCameraFeedView: View {
     /// The current camera derived from the latest scene view camera wrapper.
     private var currentSceneCamera: Camera? { currentCameraWrapper.camera }
 
-    /// The current interface orientation.
-    @State private var interfaceOrientation: InterfaceOrientation?
     /// The current device location.
     @State private var currentLocation: Location?
     /// The latest location waiting to be paired with an AR frame for re-anchoring.
@@ -59,21 +57,21 @@ struct WorldTrackingCameraFeedView: View {
     var body: some View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
+                guard context.interfaceOrientation != nil else { return }
+
                 let camera = frame.camera
-                guard let interfaceOrientation else { return }
 
                 if let location = pendingReanchorLocation.take() {
-                    localizationOffset = context.reanchor(
+                    let newLocalizationOffset = context.reanchor(
                         to: location,
                         heading: camera.geographicHeading,
-                        camera: camera,
-                        orientation: interfaceOrientation
+                        camera: camera
                     )
+                    localizationOffset = newLocalizationOffset
                     context.isLocalized = true
                 } else if context.isLocalized {
                     context.updateCamera(
                         from: camera,
-                        orientation: interfaceOrientation,
                         initialTransformation: localizationOffset ?? .identity
                     )
                 }
@@ -84,7 +82,6 @@ struct WorldTrackingCameraFeedView: View {
             .onCameraDidChangeTrackingState { _, newTrackingState in
                 onCameraTrackingStateChangedAction?(newTrackingState)
             }
-            .observingInterfaceOrientation($interfaceOrientation)
             .task {
                 for await location in context.provider.dataSource.locations {
                     currentLocation = location

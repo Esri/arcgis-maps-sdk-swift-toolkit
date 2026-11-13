@@ -87,22 +87,24 @@ extension WorldScaleSceneView<AppleWorldTracking>.Context {
     /// Updates the scene camera and field of view using an AR camera frame.
     /// - Parameters:
     ///   - camera: The AR camera providing the pose and lens intrinsics.
-    ///   - orientation: The current interface orientation.
     ///   - initialTransformation: The transform offset established at localization.
+    /// - Precondition: The interface orientation is available.
     func updateCamera(
         from camera: ARCamera,
-        orientation: InterfaceOrientation,
         initialTransformation: TransformationMatrix
     ) {
+        guard let interfaceOrientation else {
+            preconditionFailure("Camera updates require an available interface orientation.")
+        }
         sceneView.updateCamera(
             camera: camera,
             cameraController: cameraController,
-            orientation: orientation,
+            orientation: interfaceOrientation,
             initialTransformation: initialTransformation
         )
         sceneView.setFieldOfView(
             for: camera,
-            orientation: orientation
+            orientation: interfaceOrientation
         )
     }
 
@@ -111,14 +113,18 @@ extension WorldScaleSceneView<AppleWorldTracking>.Context {
     ///   - location: The geographic location for the new origin.
     ///   - heading: The geographic heading, in degrees, for the new origin.
     ///   - camera: The AR camera pose used to calculate and apply the localization offset.
-    ///   - orientation: The current interface orientation.
-    /// - Returns: The offset that rebases subsequent camera poses to the localization pose.
+    /// - Returns: The offset that rebases subsequent camera poses.
+    /// - Precondition: The interface orientation is available.
     func reanchor(
         to location: Location,
         heading: Double,
-        camera: ARCamera,
-        orientation: InterfaceOrientation
+        camera: ARCamera
     ) -> TransformationMatrix {
+        precondition(
+            interfaceOrientation != nil,
+            "Re-anchoring requires an available interface orientation."
+        )
+
         let correctedAltitude = (location.position.z ?? 0) + calibration.totalElevationCorrection
         let correctedHeading = heading + calibration.totalHeadingCorrection
 
@@ -133,7 +139,6 @@ extension WorldScaleSceneView<AppleWorldTracking>.Context {
         let localizationOffset = camera.localizationOffset
         updateCamera(
             from: camera,
-            orientation: orientation,
             initialTransformation: localizationOffset
         )
         return localizationOffset
