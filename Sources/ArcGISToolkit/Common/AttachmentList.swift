@@ -38,24 +38,41 @@ struct AttachmentRow: View  {
     
     var body: some View {
         HStack {
-            HStack {
-                ThumbnailView(attachmentModel: attachmentModel)
-                    .padding(2)
-                VStack(alignment: .leading) {
-                    Text(attachmentModel.attachment.name)
-                        .lineLimit(1)
-                        .truncationMode(.middle)
-                    Text(attachmentModel.attachment.measuredSize, format: .byteCount(style: .file))
-                        .foregroundStyle(.secondary)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .onTapGesture {
+            // The attachment name, size, and thumbnail is tappable when the file is downloaded so it is wrapped in a button
+            // to make it accessible to the keyboard and other accessibility controls
+            // WCAG 2.1.1 Keyboard (Level A)
+            Button {
                 if attachmentModel.loadStatus == .loaded {
                     // Set the url to trigger `.quickLookPreview`.
                     url = attachmentModel.attachment.fileURL
                 }
+            } label: {
+                HStack {
+                    ThumbnailView(attachmentModel: attachmentModel)
+                        .padding(2)
+                    VStack(alignment: .leading) {
+                        Text(attachmentModel.attachment.name)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                        Text(attachmentModel.attachment.measuredSize, format: .byteCount(style: .file))
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
+            // Button is only tappable when the file is downloaded so update the accessibility labels to accurately reflect that
+            // WCAG 2.4.6 Headings and Labels (Level AA)
+            .accessibilityAddTraits(
+                attachmentModel.loadStatus != .loaded
+                ? .isStaticText
+                : .isButton
+            )
+            .accessibilityRemoveTraits(
+                attachmentModel.loadStatus != .loaded
+                ? .isButton
+                : .isStaticText
+            )
+            
             if attachmentModel.loadStatus != .loaded {
                 AttachmentLoadButton(attachmentModel: attachmentModel)
             }
@@ -87,6 +104,13 @@ struct AttachmentLoadButton: View  {
                 case .notLoaded:
                     Image(systemName: "square.and.arrow.down")
                         .resizable()
+                        .accessibilityLabel(
+                            LocalizedStringResource(
+                                "Download \(attachmentModel.name)",
+                                bundle: .toolkitModule,
+                                comment: "An accessibility label for a button that downloads a file."
+                            )
+                        )
                         .aspectRatio(contentMode: .fit)
 #if !os(visionOS)
                         .foregroundStyle(Color.accentColor)
