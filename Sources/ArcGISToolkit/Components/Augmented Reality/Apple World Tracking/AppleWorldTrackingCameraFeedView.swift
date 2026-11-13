@@ -227,6 +227,27 @@ private extension AppleWorldTrackingCameraFeedView /* Geo Tracking */ {
     }
 }
 
+private extension TransformationMatrix {
+    /// Creates a normalized transformation matrix from a quaternion and translation.
+    /// - Parameters:
+    ///   - quaternion: The rotation to apply.
+    ///   - translation: The translation in meters.
+    static func normalized(
+        quaternion: simd_quatf,
+        translation: SIMD3<Float>
+    ) -> TransformationMatrix {
+        normalized(
+            quaternionX: Double(quaternion.vector.x),
+            quaternionY: Double(quaternion.vector.y),
+            quaternionZ: Double(quaternion.vector.z),
+            quaternionW: Double(quaternion.real),
+            translationX: Double(translation.x),
+            translationY: Double(translation.y),
+            translationZ: Double(translation.z)
+        )
+    }
+}
+
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 private extension AppleWorldTrackingCameraFeedView /* World Tracking */ {
