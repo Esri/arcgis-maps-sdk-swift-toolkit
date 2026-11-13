@@ -85,7 +85,9 @@ public extension AppleWorldTrackingCameraFeedView {
 @available(visionOS, unavailable)
 extension TransformationMatrixCameraController {
     /// Sets the camera controller's geographic origin and resets its transformation
-    /// matrix using a location and AR camera pose.
+    /// matrix using a location and AR camera pose. Call
+    /// `SceneViewProxy.updateCameraAndFieldOfView(from:using:orientation:initialTransformation:)`
+    /// immediately after to apply the current AR camera pose.
     /// - Parameters:
     ///   - location: The geographic location for the new origin.
     ///   - heading: The geographic heading, in degrees, for the new origin.
@@ -109,7 +111,8 @@ extension TransformationMatrixCameraController {
             pitch: 90,
             roll: 0
         )
-        // Clear the previous frame's transform.
+        // Identity is only a reset value; it may not be the correct scene pose if
+        // the scene draws before updateCameraAndFieldOfView applies the current AR pose.
         transformationMatrix = .identity
 
         return camera.localizationOffset
