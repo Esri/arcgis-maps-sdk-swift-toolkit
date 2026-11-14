@@ -48,7 +48,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         @Binding public var isLocalized: Bool
         /// The transform offset established at the current localization.
         @Binding private var localizationOffset: TransformationMatrix?
-
+        
         /// Creates a context for the current world-scale scene state.
         /// - Parameters:
         ///   - calibration: The calibration applied to the AR experience.
@@ -81,7 +81,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
             _isLocalized = isLocalized
             _localizationOffset = localizationOffset
         }
-
+        
         /// Applies a provider-resolved camera pose and updates the field of view.
         /// - Parameters:
         ///   - pose: The resolved camera pose to apply.
@@ -97,7 +97,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
                 orientation: interfaceOrientation
             )
         }
-
+        
         /// Returns the camera's pitch and roll adjusted for the current
         /// interface orientation.
         /// - Parameter camera: The AR camera providing the pose.
@@ -122,7 +122,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
             ) * 180 / .pi
             return (pitch, roll)
         }
-
+        
         /// Applies the current AR camera pose relative to the localized origin.
         /// - Parameter camera: The AR camera frame providing the pose and lens
         ///   intrinsics.
@@ -136,7 +136,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
                 orientation: interfaceOrientation
             )
         }
-
+        
         /// Applies a camera pose and marks the scene as localized.
         /// - Parameters:
         ///   - pose: The resolved camera pose to apply.
@@ -149,7 +149,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
             localizationOffset = nil
             isLocalized = true
         }
-
+        
         /// Establishes a geographic origin and applies the current AR camera
         /// pose relative to it.
         /// - Parameters:
@@ -168,7 +168,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
             updateCamera(from: camera)
             isLocalized = true
         }
-
+        
         /// Clears the localization offset and marks the scene as not localized.
         public func resetLocalization() {
             localizationOffset = nil
@@ -539,9 +539,9 @@ private extension ARCamera {
         case .landscapeLeft:
             -.pi / 2
         case .landscapeRight:
-            .pi / 2
+                .pi / 2
         case .portraitUpsideDown:
-            .pi
+                .pi
         default:
             nil
         }

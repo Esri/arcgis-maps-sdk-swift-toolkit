@@ -61,7 +61,7 @@ struct CustomWorldTrackingCameraFeedView: View {
                 } else if earth.trackingState == .tracking {
                     context.localize(to: pose, from: camera)
                 }
-
+                
                 if context.isLocalized && streetscapeGeometryEnabled {
                     updateStreetscapeGeometry(using: garFrame.streetscapeGeometries ?? [])
                 }
@@ -116,7 +116,7 @@ private extension CustomWorldTrackingCameraFeedView {
         
         let orientation = geospatialTransform.eastUpSouthQTarget
         let heading = CLLocation.headingFromEastUpSouthQTarget(orientation)
-
+        
         let fromSpatialReference = SpatialReference(wkid: WKID(4326)!, verticalWKID: WKID(115700)!)!
         let toSpatialReference = SpatialReference(wkid: WKID(4326)!, verticalWKID: WKID(5773)!)!
         

@@ -82,9 +82,9 @@ extension ARCamera {
             translationZ: Double(transform.columns.3.z)
         )
         return initialTransformation.map { $0.adding(cameraTransformation) }
-            ?? cameraTransformation
+        ?? cameraTransformation
     }
-
+    
     /// The transform rotated for a particular interface orientation.
     /// - Parameter orientation: The interface orientation that the transform is
     /// appropriate for.
@@ -105,17 +105,17 @@ extension ARCamera {
             // Rotate 180.
             return simd_float4x4(
                 -transform.columns.0,
-                -transform.columns.1,
-                transform.columns.2,
-                transform.columns.3
+                 -transform.columns.1,
+                 transform.columns.2,
+                 transform.columns.3
             )
         case .portraitUpsideDown:
             // Rotate 90 counter clockwise.
             return simd_float4x4(
                 -transform.columns.1,
-                transform.columns.0,
-                transform.columns.2,
-                transform.columns.3
+                 transform.columns.0,
+                 transform.columns.2,
+                 transform.columns.3
             )
         default:
             assertionFailure("Unrecognized interface orientation")

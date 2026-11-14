@@ -24,7 +24,7 @@ struct GeoTrackingCameraFeedView: View {
     let context: WorldScaleSceneView<AppleWorldTracking>.Context
     let onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     let onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
-
+    
     /// The current device location.
     @State private var currentLocation: Location?
     /// The current device heading in degrees.
@@ -40,12 +40,12 @@ struct GeoTrackingCameraFeedView: View {
         self.onCameraTrackingStateChangedAction = onCameraTrackingStateChangedAction
         self.onGeoTrackingStatusChangedAction = onGeoTrackingStatusChangedAction
     }
-
+    
     var body: some View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
                 let camera = frame.camera
-
+                
                 if geoTrackingIsLocalized,
                    !context.isLocalized,
                    let currentLocation,
@@ -77,7 +77,7 @@ struct GeoTrackingCameraFeedView: View {
                 }
             }
     }
-
+    
     /// Updates localization state when GeoTracking status changes.
     /// - Parameter status: The latest GeoTracking status from ARKit.
     private func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus) {

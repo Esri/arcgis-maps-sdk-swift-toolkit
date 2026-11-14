@@ -25,23 +25,23 @@ struct WorldTrackingCameraFeedView: View {
     let context: WorldScaleSceneView<AppleWorldTracking>.Context
     let onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     let onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
-
+    
     /// The maximum age in seconds for a location used to re-anchor the scene.
     private var maxLocationAge: Double { 10 }
     /// The distance in meters that triggers a new camera anchor.
     private var reanchorDistanceThreshold: Double { 2 }
-
+    
     /// The latest ArcGIS scene camera, used to measure location deviation.
     @Environment(CameraWrapper.self) private var currentCameraWrapper
-
+    
     /// The current camera derived from the latest scene view camera wrapper.
     private var currentSceneCamera: Camera? { currentCameraWrapper.camera }
-
+    
     /// The current device location.
     @State private var currentLocation: Location?
     /// The latest location waiting to be paired with an AR frame for re-anchoring.
     @State private var pendingReanchorLocation: Location?
-
+    
     init(
         context: WorldScaleSceneView<AppleWorldTracking>.Context,
         onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?,
@@ -51,12 +51,12 @@ struct WorldTrackingCameraFeedView: View {
         self.onCameraTrackingStateChangedAction = onCameraTrackingStateChangedAction
         self.onGeoTrackingStatusChangedAction = onGeoTrackingStatusChangedAction
     }
-
+    
     var body: some View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
                 let camera = frame.camera
-
+                
                 if let location = pendingReanchorLocation.take() {
                     context.localize(
                         to: location,
@@ -80,7 +80,7 @@ struct WorldTrackingCameraFeedView: View {
                 }
             }
     }
-
+    
     /// Queues a camera re-anchor when the location changes significantly.
     /// - Parameter location: The location data source update to consider.
     private func queueReanchorIfNeeded(for location: Location) {
@@ -92,10 +92,10 @@ struct WorldTrackingCameraFeedView: View {
               !context.isLocalized || !context.isCalibrating else {
             return
         }
-
+        
         pendingReanchorLocation = location
     }
-
+    
     /// Determines whether the scene camera has deviated far enough to re-anchor.
     private func shouldReanchor() -> Bool {
         guard let currentSceneCamera, let currentLocation,
