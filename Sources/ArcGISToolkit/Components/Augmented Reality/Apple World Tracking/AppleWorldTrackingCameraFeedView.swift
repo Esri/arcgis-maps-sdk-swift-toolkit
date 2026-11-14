@@ -107,13 +107,11 @@ extension WorldScaleSceneView<AppleWorldTracking>.Context {
             pitch: 90,
             roll: 0
         )
-        guard localize(
+        localize(
             to: originCamera,
             from: camera,
             localizationTransformation: camera.localizationOffset
-        ) else {
-            preconditionFailure("Localization requires an available interface orientation.")
-        }
+        )
     }
 }
 
