@@ -836,7 +836,7 @@ or more levels in a floor-aware map or scene. */
 "Select Trace Configuration" = "Seleccioneu la configuració del traçat";
 
 /* The accessibility announcement when a bookmark is selected. */
-"Setting viewpoint to %@" = "ó_Setting viewpoint to %@________________________à";
+"Setting viewpoint to %@" = "S'està establint el punt de visualització a %@";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "Configuració";

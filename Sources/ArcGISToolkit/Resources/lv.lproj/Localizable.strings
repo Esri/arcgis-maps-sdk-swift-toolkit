@@ -836,7 +836,7 @@ or more levels in a floor-aware map or scene. */
 "Select Trace Configuration" = "Izvēlēties trasēšanas konfigurāciju";
 
 /* The accessibility announcement when a bookmark is selected. */
-"Setting viewpoint to %@" = "ķ_Setting viewpoint to %@________________________ū";
+"Setting viewpoint to %@" = "Skatpunkta iestatīšana uz %@";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "Iestatījumi";
