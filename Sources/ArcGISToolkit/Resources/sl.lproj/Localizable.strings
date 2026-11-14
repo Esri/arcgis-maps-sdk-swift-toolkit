@@ -836,7 +836,7 @@ or more levels in a floor-aware map or scene. */
 "Select Trace Configuration" = "Izberi konfiguracijo sledenja";
 
 /* The accessibility announcement when a bookmark is selected. */
-"Setting viewpoint to %@" = "Š_Setting viewpoint to %@________________________č";
+"Setting viewpoint to %@" = "Nastavljanje točke pogleda na %@";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "Nastavitve";
