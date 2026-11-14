@@ -37,56 +37,42 @@ struct CustomWorldTrackingCameraFeedView: View {
     /// The closure to perform when the camera tracking state changes.
     private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     
-    /// The current interface orientation.
-    @State private var interfaceOrientation: InterfaceOrientation?
-    
     /// A Boolean value indicating whether streetscape geometry is enabled.
     private var streetscapeGeometryEnabled = false
     
     var body: some View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
-                guard let interfaceOrientation,
-                      let garFrame = try? context.provider.garSession.update(frame),
+                guard let garFrame = try? context.provider.garSession.update(frame),
                       let earth = garFrame.earth else {
                     return
                 }
                 
                 let camera = frame.camera
+                guard let pose = makeCameraPose(
+                    camera: camera,
+                    geospatialTransform: earth.cameraGeospatialTransform
+                ) else {
+                    return
+                }
                 
                 if context.isLocalized {
-                    updateCameraController(
-                        camera: camera,
-                        geospatialTransform: earth.cameraGeospatialTransform
-                    )
-                    
-                    context.sceneView.setFieldOfView(
-                        for: camera,
-                        orientation: interfaceOrientation
-                    )
-                    
-                    if streetscapeGeometryEnabled {
-                        updateStreetscapeGeometry(using: garFrame.streetscapeGeometries ?? [])
-                    }
-                } else {
-                    updateLocalizationState(for: earth.trackingState)
+                    context.updateCamera(to: pose, from: camera)
+                } else if earth.trackingState == .tracking {
+                    context.localize(to: pose, from: camera)
+                }
+                
+                if context.isLocalized && streetscapeGeometryEnabled {
+                    updateStreetscapeGeometry(using: garFrame.streetscapeGeometries ?? [])
                 }
             }
             .onCameraDidChangeTrackingState { _, trackingState in
                 onCameraTrackingStateChangedAction?(trackingState)
             }
-            .observingInterfaceOrientation($interfaceOrientation)
             .onChange(of: streetscapeGeometryEnabled) { _, newEnabled in
                 guard !newEnabled else { return }
                 context.provider.removeStreetscapeGeometry()
             }
-    }
-    
-    /// Updates the localization based on the given tracking state.
-    /// - Parameter trackingState: The ARCore frame tracking state.
-    func updateLocalizationState(for trackingState: GARTrackingState?) {
-        guard trackingState == .tracking else { return }
-        context.isLocalized = true
     }
 }
 
@@ -114,22 +100,23 @@ extension CustomWorldTrackingCameraFeedView {
 }
 
 private extension CustomWorldTrackingCameraFeedView {
-    /// Updates the scene's camera controller based on the given AR camera and
-    /// ARCore frame geospatial transform.
+    /// Resolves the scene camera pose from an ARCore geospatial transform.
     /// - Parameters:
     ///   - camera: The current ARKit camera.
     ///   - geospatialTransform: The ARCore frame geospatial transform data.
-    func updateCameraController(camera: ARCamera, geospatialTransform: GARGeospatialTransform?) {
-        guard let interfaceOrientation,
-              let geospatialTransform else {
-            return
+    /// - Returns: The resolved camera pose, or `nil` if projection fails.
+    func makeCameraPose(
+        camera: ARCamera,
+        geospatialTransform: GARGeospatialTransform?
+    ) -> WorldScaleCameraPose? {
+        guard let geospatialTransform else {
+            return nil
         }
+        let (pitch, roll) = context.cameraPitchAndRoll(from: camera)
         
         let orientation = geospatialTransform.eastUpSouthQTarget
-        let transform = camera.transform(for: interfaceOrientation)
-        let (pitch, roll) = transform.pitchAndRoll
         let heading = CLLocation.headingFromEastUpSouthQTarget(orientation)
-
+        
         let fromSpatialReference = SpatialReference(wkid: WKID(4326)!, verticalWKID: WKID(115700)!)!
         let toSpatialReference = SpatialReference(wkid: WKID(4326)!, verticalWKID: WKID(5773)!)!
         
@@ -144,13 +131,13 @@ private extension CustomWorldTrackingCameraFeedView {
             pointToProject,
             into: toSpatialReference
         ) else {
-            return
+            return nil
         }
         
         let correctedAltitude = (projectedLocation.z ?? 0) + context.calibration.totalElevationCorrection
         let correctedHeading = heading + context.calibration.totalHeadingCorrection
         
-        context.cameraController.originCamera = Camera(
+        let originCamera = Camera(
             latitude: projectedLocation.y,
             longitude: projectedLocation.x,
             altitude: correctedAltitude,
@@ -158,9 +145,7 @@ private extension CustomWorldTrackingCameraFeedView {
             pitch: 90 + pitch,
             roll: 90 + roll
         )
-        
-        // We have to do this or the error gets bigger and bigger.
-        context.cameraController.transformationMatrix = .identity
+        return WorldScaleCameraPose(originCamera: originCamera)
     }
     
     /// Synchronizes the provider's streetscape geometry models with the latest
@@ -202,49 +187,6 @@ private extension CustomWorldTrackingCameraFeedView {
         } else {
             context.provider.removeStreetscapeGeometry()
         }
-    }
-}
-
-private extension ARCamera {
-    /// Returns the transform rotated for the given interface orientation.
-    /// - Parameter orientation: The current interface orientation.
-    func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
-        let rotation: SCNMatrix4? = switch orientation {
-        case .landscapeLeft:
-            // Rotate -90° around Z axis
-            SCNMatrix4MakeRotation(-.pi / 2, 0, 0, 1)
-        case .landscapeRight:
-            // Rotate +90° around Z axis
-            SCNMatrix4MakeRotation(.pi / 2, 0, 0, 1)
-        case .portraitUpsideDown:
-            // Rotate 180° around Z axis
-            SCNMatrix4MakeRotation(.pi, 0, 0, 1)
-        default:
-            nil
-        }
-        return if let rotation {
-            simd_mul(transform, simd_float4x4(rotation))
-        } else {
-            transform
-        }
-    }
-}
-
-private extension simd_float4x4 {
-    /// The pitch and roll (degrees) derived from this transform matrix.
-    var pitchAndRoll: (pitch: Double, roll: Double) {
-        // Forward vector in camera space is -z axis.
-        let forward = SIMD3<Double>(
-            x: -Double(columns.2.x),
-            y: -Double(columns.2.y),
-            z: -Double(columns.2.z)
-        )
-        
-        // Pitch: angle between forward vector and horizontal plane (x-z).
-        let pitch = atan2(forward.y, hypot(forward.x, forward.z)) * 180.0 / .pi
-        // Roll: angle between up vector and vertical plane (y-z).
-        let roll = atan2(Double(columns.0.y), Double(columns.1.y)) * 180.0 / .pi
-        return (pitch, roll)
     }
 }
 

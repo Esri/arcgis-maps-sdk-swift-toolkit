@@ -45,6 +45,18 @@ import ARKit
     /// A Boolean value indicating whether geo-tracking is currently available
     /// on this device and location.
     private var geoTrackingIsAvailable = false
+
+    /// Whether the selected tracking mode uses GeoTracking.
+    var isGeoTrackingActive: Bool {
+        switch mode {
+        case .preferGeoTracking:
+            geoTrackingIsAvailable
+        case .geoTracking:
+            true
+        case .worldTracking:
+            false
+        }
+    }
     
     /// Creates an instance with the given tracking mode.
     /// - Parameter mode: The preferred tracking mode.
@@ -59,36 +71,23 @@ extension AppleWorldTracking: WorldTrackingProvider {
     public typealias CameraFeedView = AppleWorldTrackingCameraFeedView
     
     public var arConfiguration: ARConfiguration {
-        var geoTrackingConfiguration: ARConfiguration {
-            ARGeoTrackingConfiguration()
+        if isGeoTrackingActive {
+            return ARGeoTrackingConfiguration()
         }
-        var worldTrackingConfiguration: ARConfiguration {
-            let configuration = ARWorldTrackingConfiguration()
-            // Set world alignment to 'gravityAndHeading' so the world-tracking
-            // configuration uses geographic location from the device. Geo-
-            // tracking uses it by default.
-            configuration.worldAlignment = .gravityAndHeading
-            return configuration
-        }
-        return switch mode {
-        case .preferGeoTracking:
-            if geoTrackingIsAvailable {
-                geoTrackingConfiguration
-            } else {
-                worldTrackingConfiguration
-            }
-        case .geoTracking:
-            geoTrackingConfiguration
-        case .worldTracking:
-            worldTrackingConfiguration
-        }
+
+        let configuration = ARWorldTrackingConfiguration()
+        // Set world alignment to 'gravityAndHeading' so the world-tracking
+        // configuration uses geographic location from the device. Geo-
+        // tracking uses it by default.
+        configuration.worldAlignment = .gravityAndHeading
+        return configuration
     }
     
     public func start() async {
-        runARSession()
-        if let geoTrackingIsAvailable = try? await ARGeoTrackingConfiguration.isGeoTrackingAvailable {
-            self.geoTrackingIsAvailable = geoTrackingIsAvailable
+        if mode == .preferGeoTracking {
+            geoTrackingIsAvailable = (try? await ARGeoTrackingConfiguration.isGeoTrackingAvailable) ?? false
         }
+        runARSession()
         
         let locationManager = CLLocationManager()
         if locationManager.authorizationStatus == .notDetermined {
