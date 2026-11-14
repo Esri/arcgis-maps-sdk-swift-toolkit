@@ -109,10 +109,10 @@ private extension CustomWorldTrackingCameraFeedView {
         camera: ARCamera,
         geospatialTransform: GARGeospatialTransform?
     ) -> WorldScaleCameraPose? {
-        guard let geospatialTransform,
-              let (pitch, roll) = context.cameraPitchAndRoll(from: camera) else {
+        guard let geospatialTransform else {
             return nil
         }
+        let (pitch, roll) = context.cameraPitchAndRoll(from: camera)
         
         let orientation = geospatialTransform.eastUpSouthQTarget
         let heading = CLLocation.headingFromEastUpSouthQTarget(orientation)

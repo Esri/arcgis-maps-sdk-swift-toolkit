@@ -90,7 +90,6 @@ extension WorldScaleSceneView<AppleWorldTracking>.Context {
     ///   - location: The geographic location for the new origin.
     ///   - heading: The geographic heading, in degrees, for the new origin.
     ///   - camera: The AR camera pose used to calculate and apply the localization offset.
-    /// - Precondition: The interface orientation is available.
     func localize(
         to location: Location,
         heading: Double,

@@ -15,6 +15,24 @@
 import SwiftUI
 
 public extension View {
+    /// Observes known interface orientation changes for a given view.
+    /// - Parameters:
+    ///   - interfaceOrientation: A binding to an interface orientation that will be updated
+    ///   when a known interface orientation change is detected. If the orientation is unknown,
+    ///   the current value is preserved.
+    func observingInterfaceOrientation(_ interfaceOrientation: Binding<InterfaceOrientation>) -> some View {
+        let optionalOrientation = Binding<InterfaceOrientation?>(
+            get: { Optional(interfaceOrientation.wrappedValue) },
+            set: { newValue in
+                guard let newValue else { return }
+                interfaceOrientation.wrappedValue = newValue
+            }
+        )
+        return background {
+            InterfaceOrientationObserverView(interfaceOrientation: optionalOrientation)
+        }
+    }
+
     /// Observes interface orientation changes for a given view.
     /// - Parameters:
     ///   - interfaceOrientation: A binding to an interface orientation that will be updated

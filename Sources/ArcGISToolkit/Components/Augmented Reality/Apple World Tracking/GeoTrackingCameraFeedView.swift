@@ -44,8 +44,6 @@ struct GeoTrackingCameraFeedView: View {
     var body: some View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
-                guard context.interfaceOrientation != nil else { return }
-
                 let camera = frame.camera
 
                 if geoTrackingIsLocalized,
