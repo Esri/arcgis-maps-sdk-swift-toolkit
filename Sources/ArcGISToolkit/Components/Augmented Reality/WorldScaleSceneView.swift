@@ -86,6 +86,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         /// - Parameters:
         ///   - pose: The resolved camera pose to apply.
         ///   - camera: The AR camera frame providing lens intrinsics.
+        /// - Since: 300.3
         public func updateCamera(
             to pose: WorldScaleCameraPose,
             from camera: ARCamera
@@ -101,6 +102,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         /// Returns the camera's pitch and roll adjusted for the current
         /// interface orientation.
         /// - Parameter camera: The AR camera providing the pose.
+        /// - Since: 300.3
         public func cameraPitchAndRoll(
             from camera: ARCamera
         ) -> (pitch: Double, roll: Double) {
@@ -126,6 +128,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         /// Applies the current AR camera pose relative to the localized origin.
         /// - Parameter camera: The AR camera frame providing the pose and lens
         ///   intrinsics.
+        /// - Since: 300.3
         public func updateCamera(from camera: ARCamera) {
             cameraController.transformationMatrix = camera.transformationMatrix(
                 for: interfaceOrientation,
@@ -141,6 +144,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         /// - Parameters:
         ///   - pose: The resolved camera pose to apply.
         ///   - camera: The AR camera frame providing lens intrinsics.
+        /// - Since: 300.3
         public func localize(
             to pose: WorldScaleCameraPose,
             from camera: ARCamera
@@ -158,6 +162,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         ///     intrinsics.
         ///   - localizationTransformation: A provider-computed transform to apply
         ///     before subsequent AR camera poses.
+        /// - Since: 300.3
         public func localize(
             to originCamera: Camera,
             from camera: ARCamera,
@@ -170,6 +175,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         }
         
         /// Clears the localization offset and marks the scene as not localized.
+        /// - Since: 300.3
         public func resetLocalization() {
             localizationOffset = nil
             isLocalized = false

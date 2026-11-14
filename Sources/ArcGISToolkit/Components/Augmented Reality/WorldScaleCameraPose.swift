@@ -21,6 +21,7 @@ import ArcGIS
 ///   interface-orientation corrections to it. Use the context's
 ///   `cameraPitchAndRoll(from:)` helper when deriving pitch and roll from an
 ///   `ARCamera`.
+/// - Since: 300.3
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 public struct WorldScaleCameraPose {
@@ -34,6 +35,7 @@ public struct WorldScaleCameraPose {
     ///   - originCamera: The geographic camera at the pose's origin.
     ///   - transformationMatrix: The transformation from the origin camera
     ///     to the current camera. Defaults to the identity transformation.
+    /// - Since: 300.3
     public init(
         originCamera: Camera,
         transformationMatrix: TransformationMatrix = .identity

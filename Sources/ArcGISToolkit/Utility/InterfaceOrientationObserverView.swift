@@ -20,6 +20,7 @@ public extension View {
     ///   - interfaceOrientation: A binding to an interface orientation that will be updated
     ///   when a known interface orientation change is detected. If the orientation is unknown,
     ///   the current value is preserved.
+    /// - Since: 300.3
     func observingInterfaceOrientation(_ interfaceOrientation: Binding<InterfaceOrientation>) -> some View {
         let optionalOrientation = Binding<InterfaceOrientation?>(
             get: { Optional(interfaceOrientation.wrappedValue) },
