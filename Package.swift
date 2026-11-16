@@ -31,7 +31,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", from: "300.1.0"),
+        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", from: "300.2.0"),
         .package(url: "https://github.com/swiftlang/swift-markdown.git", from: "0.4.0")
     ],
     targets: [
