@@ -1,4 +1,4 @@
-# OfflineMapAreas Example App
+# Offline Map Areas Example App
 
 This is an application that shows how to use the Offline Map Areas toolkit component.
 
