@@ -836,7 +836,7 @@ or more levels in a floor-aware map or scene. */
 "Select Trace Configuration" = "トレース構成の選択";
 
 /* The accessibility announcement when a bookmark is selected. */
-"Setting viewpoint to %@" = "須_Setting viewpoint to %@________________________鷗";
+"Setting viewpoint to %@" = "視点を %@ に設定";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "設定";

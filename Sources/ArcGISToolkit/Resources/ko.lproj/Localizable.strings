@@ -836,7 +836,7 @@ or more levels in a floor-aware map or scene. */
 "Select Trace Configuration" = "추적 구성 선택";
 
 /* The accessibility announcement when a bookmark is selected. */
-"Setting viewpoint to %@" = "한_Setting viewpoint to %@________________________빠";
+"Setting viewpoint to %@" = "뷰 포인트를 %@(으)로 설정";
 
 /* A label for a button to take the user to a contextually inferred settings page. */
 "Settings" = "설정";
