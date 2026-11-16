@@ -2079,7 +2079,7 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertEqual(streetLightCandidates.count, 1)
     }
     
-    func testCase_13_6() throws {
+    func testCase_13_6() async throws {
         let app = XCUIApplication()
         let addAssociationButton = app.staticTexts["Add Association"]
         let addButton = app.buttons["Add"]
@@ -2132,7 +2132,14 @@ final class FeatureFormViewTests: XCTestCase {
         
         streetLightCandidates.firstMatch.assertExistence()
         
-        XCTAssertEqual(streetLightCandidates.count, 1)
+        await fulfillment(
+            of: [expectation(
+                that: \.count,
+                on: streetLightCandidates,
+                willEqual: 1
+            )],
+            timeout: 5
+        )
         
         streetLightButton.assertExistenceAndTap()
         
