@@ -108,7 +108,10 @@ struct AttachmentLoadButton: View  {
                             LocalizedStringResource(
                                 "Download \(attachmentModel.name)",
                                 bundle: .toolkitModule,
-                                comment: "An accessibility label for a button that downloads a file."
+                                comment: """
+                                    An accessibility label for a button that downloads an attachment. 
+                                    The parameter is the name of the attachment.
+                                    """
                             )
                         )
                         .aspectRatio(contentMode: .fit)
