@@ -2093,7 +2093,6 @@ final class FeatureFormViewTests: XCTestCase {
         let filterButton = app.buttons["Filter Candidates"]
         let formTitle = app.staticTexts["Structure Junction"]
         let municipalButton = app.buttons["Municipal, Street Light"]
-        let popoverDismissRegion = app.otherElements["PopoverDismissRegion"].firstMatch
         let streetLightButton = app.buttons["Street Light"]
         let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
         
@@ -2122,29 +2121,9 @@ final class FeatureFormViewTests: XCTestCase {
         
         textField.assertExistenceAndTap()
         
-        textField.typeText("449")
-        
-        if popoverDismissRegion.exists {
-            popoverDismissRegion.tap()
-        }
+        textField.typeText("449\n")
         
         app.doneButton.assertExistenceAndTap()
-        
-        XCTExpectFailure(
-            """
-            Toolbar menu items have become unreliable as of iOS 27.
-            
-            Pressing the done button above may fail and cause the filter to
-            never be applied, leaving the filter view and the unfiltered set of
-            street light candidates in the results view underneath it present.
-            
-            The bug may not reproduce when the test is ran in isolation but does
-            so fairly reliably after multiple (25+) iterations and during the
-            daily test run which currently runs on an iPad Air 11-inch (M3) with
-            iOS 27.0.1.
-            """,
-            strict: false
-        )
         
         streetLightCandidates.firstMatch.assertExistence()
         
