@@ -109,7 +109,7 @@ struct AttachmentLoadButton: View  {
                                 "Download \(attachmentModel.name)",
                                 bundle: .toolkitModule,
                                 comment: """
-                                    An accessibility label for a button that downloads an attachment. 
+                                    An accessibility label for a button that downloads an attachment. \
                                     The parameter is the name of the attachment.
                                     """
                             )
