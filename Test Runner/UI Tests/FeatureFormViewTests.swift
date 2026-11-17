@@ -2079,7 +2079,7 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertEqual(streetLightCandidates.count, 1)
     }
     
-    func testCase_13_6() async throws {
+    func testCase_13_6() throws {
         let app = XCUIApplication()
         let addAssociationButton = app.staticTexts["Add Association"]
         let addButton = app.buttons["Add"]
@@ -2130,16 +2130,23 @@ final class FeatureFormViewTests: XCTestCase {
         
         app.doneButton.assertExistenceAndTap()
         
+        XCTExpectFailure(
+            """
+            Toolbar menu items have become unreliable as of iOS 27.
+            
+            Pressing the done button above may fail and cause the filter to
+            never be applied, leaving the filter view and the unfiltered set of
+            street light candidates in the results view underneath it present.
+            
+            The bug may not reproduce when the test is ran in isolation but
+            presents fairly reliably when the entire suite is ran.
+            """,
+            strict: false
+        )
+        
         streetLightCandidates.firstMatch.assertExistence()
         
-        await fulfillment(
-            of: [expectation(
-                that: \.count,
-                on: streetLightCandidates,
-                willEqual: 1
-            )],
-            timeout: 5
-        )
+        XCTAssertEqual(streetLightCandidates.count, 1)
         
         streetLightButton.assertExistenceAndTap()
         
