@@ -7,5 +7,5 @@ Documentation for the Offline Map Areas toolkit component is [here](https://deve
 ## Instructions
 
  1. Clone or download this repo
- 2. Open the `OfflineMapAreas` project in Xcode by double clicking on the `OfflineMapAreasExample.xcodeproj` file
+ 2. Open the `OfflineMapAreas` project in Xcode by double-clicking the `OfflineMapAreasExample.xcodeproj` file
  3. Build and run the project
