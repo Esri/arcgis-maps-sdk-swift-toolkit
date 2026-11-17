@@ -2138,8 +2138,10 @@ final class FeatureFormViewTests: XCTestCase {
             never be applied, leaving the filter view and the unfiltered set of
             street light candidates in the results view underneath it present.
             
-            The bug may not reproduce when the test is ran in isolation but
-            presents fairly reliably when the entire suite is ran.
+            The bug may not reproduce when the test is ran in isolation but does
+            so fairly reliably after multiple (25+) iterations and during the
+            daily test run which currently runs on an iPad Air 11-inch (M3) with
+            iOS 27.0.1.
             """,
             strict: false
         )
