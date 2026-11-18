@@ -14,6 +14,7 @@ To use Toolkit in your project:
 * **[BasemapGallery](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/basemapgallery)** - Displays a collection of basemaps.
 * **[Bookmarks](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/bookmarks)** - Shows bookmarks, from a map, scene, or a list.
 * **[Building Explorer](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/buildingexplorer)** - Allows you to explore a building model in a `BuildingSceneLayer`.
+* **[ClassificationView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/classificationview)** - Frames portal item content with its classification marking.
 * **[Compass](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map points north.
 * **[FeatureFormView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/featureformview)** - Enables users to edit field values of a feature using pre-configured forms.
 * **[FloatingPanel](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floatingpanel)** - Allows display of view-related content in a "bottom sheet".
