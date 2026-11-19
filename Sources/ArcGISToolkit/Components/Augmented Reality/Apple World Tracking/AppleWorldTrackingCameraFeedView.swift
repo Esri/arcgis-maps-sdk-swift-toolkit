@@ -24,18 +24,18 @@ public struct AppleWorldTrackingCameraFeedView: View {
     /// Shared world-scale context used to read provider state and update the
     /// scene.
     let context: WorldScaleSceneView<AppleWorldTracking>.Context
-
+    
     /// Creates an instance using the provided world-scale scene context.
     /// - Parameter context: The world-scale scene context backing this view.
     public init(context: WorldScaleSceneView<AppleWorldTracking>.Context) {
         self.context = context
     }
-
+    
     /// The closure to perform when the camera tracking state changes.
     private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     /// The closure to perform when the geo tracking status changes.
     private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
-
+    
     public var body: some View {
         if context.provider.isGeoTrackingActive {
             GeoTrackingCameraFeedView(
@@ -66,7 +66,7 @@ public extension AppleWorldTrackingCameraFeedView {
         copy.onCameraTrackingStateChangedAction = action
         return copy
     }
-
+    
     /// Sets a closure to perform when the geo tracking status changes.
     /// - Parameter action: The closure to perform when the geo tracking status
     /// has changed.
@@ -90,7 +90,6 @@ extension WorldScaleSceneView<AppleWorldTracking>.Context {
     ///   - location: The geographic location for the new origin.
     ///   - heading: The geographic heading, in degrees, for the new origin.
     ///   - camera: The AR camera pose used to calculate and apply the localization offset.
-    /// - Precondition: The interface orientation is available.
     func localize(
         to location: Location,
         heading: Double,
@@ -98,7 +97,7 @@ extension WorldScaleSceneView<AppleWorldTracking>.Context {
     ) {
         let correctedAltitude = (location.position.z ?? 0) + calibration.totalElevationCorrection
         let correctedHeading = heading + calibration.totalHeadingCorrection
-
+        
         let originCamera = Camera(
             latitude: location.position.y,
             longitude: location.position.x,
@@ -107,13 +106,11 @@ extension WorldScaleSceneView<AppleWorldTracking>.Context {
             pitch: 90,
             roll: 0
         )
-        guard localize(
+        localize(
             to: originCamera,
             from: camera,
             localizationTransformation: camera.localizationOffset
-        ) else {
-            preconditionFailure("Localization requires an available interface orientation.")
-        }
+        )
     }
 }
 
@@ -127,7 +124,7 @@ extension ARCamera {
         let normalized = degrees.truncatingRemainder(dividingBy: 360)
         return normalized < 0 ? normalized + 360 : normalized
     }
-
+    
     /// Rebases the camera pose to the AR world position and yaw at localization.
     /// - Returns: An offset that removes the localization position and yaw.
     var localizationOffset: TransformationMatrix {
@@ -144,16 +141,16 @@ extension ARCamera {
             quaternion: inverseYaw,
             translation: cameraPosition
         )
-
+        
         return .identity.subtracting(localizationTransform)
     }
-
+    
     /// The camera yaw in radians in compass-aligned AR world space.
     private var geographicYaw: Double {
         let cameraForward = SIMD3<Float>(
             -transform.columns.2.x,
-            -transform.columns.2.y,
-            -transform.columns.2.z
+             -transform.columns.2.y,
+             -transform.columns.2.z
         )
         return atan2(Double(cameraForward.x), Double(-cameraForward.z))
     }

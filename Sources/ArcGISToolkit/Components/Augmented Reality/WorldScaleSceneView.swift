@@ -32,8 +32,8 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         public let calibration: Calibration
         /// A proxy for interacting with the underlying scene view.
         public let sceneView: SceneViewProxy
-        /// The current interface orientation, if it has been determined.
-        public let interfaceOrientation: InterfaceOrientation?
+        /// The current interface orientation, initially defaulting to portrait.
+        public let interfaceOrientation: InterfaceOrientation
         /// The active world tracking provider.
         public let provider: Provider
         /// The camera controller used to position the scene camera.
@@ -48,12 +48,12 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         @Binding public var isLocalized: Bool
         /// The transform offset established at the current localization.
         @Binding private var localizationOffset: TransformationMatrix?
-
+        
         /// Creates a context for the current world-scale scene state.
         /// - Parameters:
         ///   - calibration: The calibration applied to the AR experience.
         ///   - sceneView: The proxy for interacting with the scene view.
-        ///   - interfaceOrientation: The current interface orientation, if known.
+        ///   - interfaceOrientation: The current interface orientation.
         ///   - provider: The active world-tracking provider.
         ///   - cameraController: The controller used to position the scene camera.
         ///   - isCalibrating: Whether calibration UI is shown.
@@ -63,7 +63,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         init(
             calibration: Calibration,
             sceneView: SceneViewProxy,
-            interfaceOrientation: InterfaceOrientation?,
+            interfaceOrientation: InterfaceOrientation,
             provider: Provider,
             cameraController: TransformationMatrixCameraController,
             isCalibrating: Bool,
@@ -81,92 +81,53 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
             _isLocalized = isLocalized
             _localizationOffset = localizationOffset
         }
-
+        
         /// Applies a provider-resolved camera pose and updates the field of view.
         /// - Parameters:
         ///   - pose: The resolved camera pose to apply.
         ///   - camera: The AR camera frame providing lens intrinsics.
-        /// - Returns: Whether the pose was applied; `false` until interface
-        ///   orientation is available.
-        @discardableResult
+        /// - Since: 300.3
         public func updateCamera(
             to pose: WorldScaleCameraPose,
             from camera: ARCamera
-        ) -> Bool {
-            guard let interfaceOrientation else { return false }
+        ) {
             cameraController.originCamera = pose.originCamera
             cameraController.transformationMatrix = pose.transformationMatrix
             sceneView.setFieldOfView(
                 for: camera,
                 orientation: interfaceOrientation
             )
-            return true
         }
-
-        /// Returns the camera's pitch and roll adjusted for the current
-        /// interface orientation.
-        /// - Parameter camera: The AR camera providing the pose.
-        /// - Returns: The pitch and roll in degrees, or `nil` until interface
-        ///   orientation is available.
-        public func cameraPitchAndRoll(
-            from camera: ARCamera
-        ) -> (pitch: Double, roll: Double)? {
-            guard let interfaceOrientation else { return nil }
-            let transform = camera.interfaceOrientedTransform(
-                for: interfaceOrientation
-            )
-            let forward = SIMD3<Double>(
-                x: -Double(transform.columns.2.x),
-                y: -Double(transform.columns.2.y),
-                z: -Double(transform.columns.2.z)
-            )
-            let pitch = atan2(
-                forward.y,
-                hypot(forward.x, forward.z)
-            ) * 180 / .pi
-            let roll = atan2(
-                Double(transform.columns.0.y),
-                Double(transform.columns.1.y)
-            ) * 180 / .pi
-            return (pitch, roll)
-        }
-
+        
         /// Applies the current AR camera pose relative to the localized origin.
         /// - Parameter camera: The AR camera frame providing the pose and lens
         ///   intrinsics.
-        /// - Returns: Whether the pose was applied; `false` until interface
-        ///   orientation is available.
-        @discardableResult
-        public func updateCamera(from camera: ARCamera) -> Bool {
-            guard let interfaceOrientation else { return false }
+        /// - Since: 300.3
+        public func updateCamera(from camera: ARCamera) {
             cameraController.transformationMatrix = camera.transformationMatrix(
                 for: interfaceOrientation,
-                initialTransformation: localizationOffset
+                originOffset: localizationOffset
             )
             sceneView.setFieldOfView(
                 for: camera,
                 orientation: interfaceOrientation
             )
-            return true
         }
-
+        
         /// Applies a camera pose and marks the scene as localized.
         /// - Parameters:
         ///   - pose: The resolved camera pose to apply.
         ///   - camera: The AR camera frame providing lens intrinsics.
-        /// - Returns: Whether the pose was applied; `false` until interface
-        ///   orientation is available.
-        @discardableResult
+        /// - Since: 300.3
         public func localize(
             to pose: WorldScaleCameraPose,
             from camera: ARCamera
-        ) -> Bool {
-            guard updateCamera(to: pose, from: camera) else { return false }
+        ) {
+            updateCamera(to: pose, from: camera)
             localizationOffset = nil
             isLocalized = true
-            return true
         }
-
+        
         /// Establishes a geographic origin and applies the current AR camera
         /// pose relative to it.
         /// - Parameters:
@@ -175,23 +136,20 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         ///     intrinsics.
         ///   - localizationTransformation: A provider-computed transform to apply
         ///     before subsequent AR camera poses.
-        /// - Returns: Whether the pose was applied; `false` until interface
-        ///   orientation is available.
-        @discardableResult
+        /// - Since: 300.3
         public func localize(
             to originCamera: Camera,
             from camera: ARCamera,
             localizationTransformation: TransformationMatrix? = nil
-        ) -> Bool {
-            guard interfaceOrientation != nil else { return false }
+        ) {
             self.localizationOffset = localizationTransformation
             cameraController.originCamera = originCamera
-            guard updateCamera(from: camera) else { return false }
+            updateCamera(from: camera)
             isLocalized = true
-            return true
         }
-
+        
         /// Clears the localization offset and marks the scene as not localized.
+        /// - Since: 300.3
         public func resetLocalization() {
             localizationOffset = nil
             isLocalized = false
@@ -302,7 +260,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
     /// The current camera of the scene view.
     @State private var currentCamera: Camera?
     /// The current interface orientation used by the camera feed.
-    @State private var interfaceOrientation: InterfaceOrientation?
+    @State private var interfaceOrientation: InterfaceOrientation = .portrait
     /// The offset that rebases camera poses at the current localization.
     @State private var localizationOffset: TransformationMatrix?
     /// The camera controller for this scene view.
@@ -552,18 +510,44 @@ private extension WorldScaleSceneView {
     }
 }
 
-private extension ARCamera {
+public extension ARCamera {
+    /// Returns this camera's pitch and roll adjusted for an interface orientation.
+    /// - Parameter orientation: The interface orientation used to interpret the camera transform.
+    /// - Returns: The camera's pitch and roll in degrees.
+    /// - Since: 300.3
+    @available(macCatalyst, unavailable)
+    @available(visionOS, unavailable)
+    func pitchAndRoll(
+        for orientation: InterfaceOrientation
+    ) -> (pitch: Double, roll: Double) {
+        let transform = interfaceOrientedTransform(for: orientation)
+        let forward = SIMD3<Double>(
+            x: -Double(transform.columns.2.x),
+            y: -Double(transform.columns.2.y),
+            z: -Double(transform.columns.2.z)
+        )
+        let pitch = atan2(
+            forward.y,
+            hypot(forward.x, forward.z)
+        ) * 180 / .pi
+        let roll = atan2(
+            Double(transform.columns.0.y),
+            Double(transform.columns.1.y)
+        ) * 180 / .pi
+        return (pitch, roll)
+    }
+    
     /// Returns the camera transform adjusted for the current interface orientation.
-    func interfaceOrientedTransform(
+    private func interfaceOrientedTransform(
         for orientation: InterfaceOrientation
     ) -> simd_float4x4 {
         let angle: Float? = switch orientation {
         case .landscapeLeft:
             -.pi / 2
         case .landscapeRight:
-            .pi / 2
+                .pi / 2
         case .portraitUpsideDown:
-            .pi
+                .pi
         default:
             nil
         }

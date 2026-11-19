@@ -25,16 +25,16 @@ public extension SceneViewProxy {
     ///   - cameraController: The current camera controller assigned to the
     ///   scene view.
     ///   - orientation: The interface orientation.
-    ///   - initialTransformation: The initial transformation matrix.
+    ///   - originOffset: A transformation applied before the AR camera pose.
     func updateCamera(
         camera: ARCamera,
         cameraController: TransformationMatrixCameraController,
         orientation: InterfaceOrientation,
-        initialTransformation: TransformationMatrix? = nil
+        originOffset: TransformationMatrix? = nil
     ) {
         cameraController.transformationMatrix = camera.transformationMatrix(
             for: orientation,
-            initialTransformation: initialTransformation
+            originOffset: originOffset
         )
     }
     
@@ -63,12 +63,12 @@ extension ARCamera {
     /// Creates a transformation matrix for this camera frame.
     /// - Parameters:
     ///   - orientation: The interface orientation.
-    ///   - initialTransformation: A transform to apply before the camera pose.
+    ///   - originOffset: A transform applied before the camera pose.
     /// - Returns: The camera frame transformation, combined with the optional
-    ///   initial transform.
+    ///   origin offset.
     func transformationMatrix(
         for orientation: InterfaceOrientation,
-        initialTransformation: TransformationMatrix? = nil
+        originOffset: TransformationMatrix? = nil
     ) -> TransformationMatrix {
         let transform = transform(for: orientation)
         let quaternion = simd_quatf(transform)
@@ -81,10 +81,10 @@ extension ARCamera {
             translationY: Double(transform.columns.3.y),
             translationZ: Double(transform.columns.3.z)
         )
-        return initialTransformation.map { $0.adding(cameraTransformation) }
-            ?? cameraTransformation
+        return originOffset.map { $0.adding(cameraTransformation) }
+        ?? cameraTransformation
     }
-
+    
     /// The transform rotated for a particular interface orientation.
     /// - Parameter orientation: The interface orientation that the transform is
     /// appropriate for.
@@ -105,17 +105,17 @@ extension ARCamera {
             // Rotate 180.
             return simd_float4x4(
                 -transform.columns.0,
-                -transform.columns.1,
-                transform.columns.2,
-                transform.columns.3
+                 -transform.columns.1,
+                 transform.columns.2,
+                 transform.columns.3
             )
         case .portraitUpsideDown:
             // Rotate 90 counter clockwise.
             return simd_float4x4(
                 -transform.columns.1,
-                transform.columns.0,
-                transform.columns.2,
-                transform.columns.3
+                 transform.columns.0,
+                 transform.columns.2,
+                 transform.columns.3
             )
         default:
             assertionFailure("Unrecognized interface orientation")
