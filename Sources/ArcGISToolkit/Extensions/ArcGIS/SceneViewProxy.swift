@@ -32,24 +32,10 @@ public extension SceneViewProxy {
         orientation: InterfaceOrientation,
         initialTransformation: TransformationMatrix? = nil
     ) {
-        let transform = camera.transform(for: orientation)
-        let quaternion = simd_quatf(transform)
-        let transformationMatrix = TransformationMatrix.normalized(
-            quaternionX: Double(quaternion.vector.x),
-            quaternionY: Double(quaternion.vector.y),
-            quaternionZ: Double(quaternion.vector.z),
-            quaternionW: Double(quaternion.vector.w),
-            translationX: Double(transform.columns.3.x),
-            translationY: Double(transform.columns.3.y),
-            translationZ: Double(transform.columns.3.z)
+        cameraController.transformationMatrix = camera.transformationMatrix(
+            for: orientation,
+            initialTransformation: initialTransformation
         )
-        
-        // Set the matrix on the camera controller.
-        cameraController.transformationMatrix = if let initialTransformation {
-            initialTransformation.adding(transformationMatrix)
-        } else {
-            transformationMatrix
-        }
     }
     
     /// Sets the field of view for the scene view's camera for a given augmented
@@ -73,11 +59,36 @@ public extension SceneViewProxy {
     }
 }
 
-private extension ARCamera {
+extension ARCamera {
+    /// Creates a transformation matrix for this camera frame.
+    /// - Parameters:
+    ///   - orientation: The interface orientation.
+    ///   - initialTransformation: A transform to apply before the camera pose.
+    /// - Returns: The camera frame transformation, combined with the optional
+    ///   initial transform.
+    func transformationMatrix(
+        for orientation: InterfaceOrientation,
+        initialTransformation: TransformationMatrix? = nil
+    ) -> TransformationMatrix {
+        let transform = transform(for: orientation)
+        let quaternion = simd_quatf(transform)
+        let cameraTransformation = TransformationMatrix.normalized(
+            quaternionX: Double(quaternion.vector.x),
+            quaternionY: Double(quaternion.vector.y),
+            quaternionZ: Double(quaternion.vector.z),
+            quaternionW: Double(quaternion.vector.w),
+            translationX: Double(transform.columns.3.x),
+            translationY: Double(transform.columns.3.y),
+            translationZ: Double(transform.columns.3.z)
+        )
+        return initialTransformation.map { $0.adding(cameraTransformation) }
+            ?? cameraTransformation
+    }
+
     /// The transform rotated for a particular interface orientation.
     /// - Parameter orientation: The interface orientation that the transform is
     /// appropriate for.
-    func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
+    private func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
         switch orientation {
         case .portrait:
             // Rotate camera transform 90 degrees clockwise in the XY plane.
