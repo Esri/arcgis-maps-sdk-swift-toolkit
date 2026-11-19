@@ -15,6 +15,7 @@
 #if os(iOS)
 import ArcGIS
 import ARKit
+import Foundation
 import SwiftUI
 
 /// The camera scene view corresponding to `AppleWorldTracking`.
@@ -25,30 +26,74 @@ public struct AppleWorldTrackingCameraFeedView: View {
     /// scene.
     let context: WorldScaleSceneView<AppleWorldTracking>.Context
     
-    /// Creates an instance using the provided world-scale scene context.
-    /// - Parameter context: The world-scale scene context backing this view.
-    public init(context: WorldScaleSceneView<AppleWorldTracking>.Context) {
-        self.context = context
-    }
-    
     /// The closure to perform when the camera tracking state changes.
     private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     /// The closure to perform when the geo tracking status changes.
     private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
-    
+
+    @Environment(CameraWrapper.self) private var currentCameraWrapper
+
+    @State private var feedHandler: any AppleCameraFeedHandler
+
+    public init(context: WorldScaleSceneView<AppleWorldTracking>.Context) {
+        self.context = context
+        _feedHandler = State(
+            initialValue: Self.makeHandler(
+                context: context,
+                isGeoTrackingActive: context.provider.isGeoTrackingActive
+            )
+        )
+    }
+
     public var body: some View {
-        if context.provider.isGeoTrackingActive {
-            GeoTrackingCameraFeedView(
-                context: context,
-                onCameraTrackingStateChangedAction: onCameraTrackingStateChangedAction,
-                onGeoTrackingStatusChangedAction: onGeoTrackingStatusChangedAction
-            )
+        SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
+            .onDidUpdateFrame { _, frame in
+                feedHandler.handleFrame(
+                    frame.camera,
+                    sceneCamera: currentCameraWrapper.camera
+                )
+            }
+            .onDidChangeGeoTrackingStatus { _, status in
+                guard context.provider.isGeoTrackingActive else { return }
+                feedHandler.handleStatus(status)
+                onGeoTrackingStatusChangedAction?(status)
+            }
+            .onCameraDidChangeTrackingState { _, newTrackingState in
+                onCameraTrackingStateChangedAction?(newTrackingState)
+            }
+            .task {
+                for await location in context.provider.dataSource.locations {
+                    feedHandler.updateLocation(
+                        location,
+                        sceneCamera: currentCameraWrapper.camera
+                    )
+                }
+            }
+            .task(id: context.provider.isGeoTrackingActive) {
+                guard context.provider.isGeoTrackingActive else { return }
+                for await heading in context.provider.dataSource.headings {
+                    feedHandler.updateHeading(heading)
+                }
+            }
+            .onChange(of: context.provider.mode) { _, _ in
+                context.provider.runARSession()
+            }
+            .onChange(of: context.provider.isGeoTrackingActive) { _, isGeoTrackingActive in
+                feedHandler = Self.makeHandler(
+                    context: context,
+                    isGeoTrackingActive: isGeoTrackingActive
+                )
+            }
+    }
+
+    private static func makeHandler(
+        context: WorldScaleSceneView<AppleWorldTracking>.Context,
+        isGeoTrackingActive: Bool
+    ) -> any AppleCameraFeedHandler {
+        if isGeoTrackingActive {
+            GeoTrackingCameraFeedHandler(context: context)
         } else {
-            WorldTrackingCameraFeedView(
-                context: context,
-                onCameraTrackingStateChangedAction: onCameraTrackingStateChangedAction,
-                onGeoTrackingStatusChangedAction: onGeoTrackingStatusChangedAction
-            )
+            WorldTrackingCameraFeedHandler(context: context)
         }
     }
 }
