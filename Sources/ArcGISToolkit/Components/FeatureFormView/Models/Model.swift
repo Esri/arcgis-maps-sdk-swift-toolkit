@@ -40,13 +40,10 @@ public extension FeatureFormView {
         /// template feature creation set is provided, even if no other edits have been made.
         /// - Parameter featureCreationSet: The set to create the underlying
         /// `FeatureFormGroup` with.
-        public convenience init?(
+        public convenience init(
             featureCreationSet: SharedTemplateFeatureCreationSet
         ) {
-            guard let group = FeatureFormGroup(
-                featureCreationSet: featureCreationSet
-            ) else { return nil }
-            self.init(group: group)
+            self.init(group: .init(featureCreationSet: featureCreationSet))
         }
         
         /// Adds a `FeatureForm` to the underlying `FeatureFormGroup`
