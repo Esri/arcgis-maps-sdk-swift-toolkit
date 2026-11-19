@@ -4,6 +4,10 @@ utility element (first variable) and a percentage
 an edge where a utility association is (logically) located. */
 "%@, %@" = "%@, %@";
 
+/* A label for a feature who's form has been
+visited. */
+"%@, Visited" = "%@, Visited";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld selected";
 
@@ -325,9 +329,6 @@ network element for more than one trace starting point. */
 /* The cardinal direction East. */
 "East" = "East";
 
-/* A navigation title indicating the number of features being edited in the feature form toolkit component. */
-"Editing ^[%lld features](inflect: true)" = "Editing ^[%lld features](inflect: true)";
-
 /* A message explaining that unsaved edits will be lost if the user continues to dismiss the component without saving. */
 "Edits will be lost." = "Edits will be lost.";
 
@@ -414,6 +415,9 @@ to be used as a trace starting point. */
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
 "Feature Results" = "Feature Results";
+
+/* A navigation title for a list of features. */
+"Features" = "Features";
 
 /* A field in a dataset. */
 "Field" = "Field";
@@ -1037,9 +1041,6 @@ to be imported as an attachment. */
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Unnamed Asset Type";
-
-/* A label indicating a feature form has unsaved edits. */
-"Unsaved Edits" = "Unsaved Edits";
 
 /* A label for a section in a list of possible values that contains a single value outside the list of valid values. */
 "Unsupported Value" = "Unsupported Value";
