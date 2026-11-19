@@ -25,17 +25,12 @@ struct GeoTrackingCameraFeedView: View {
     let onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     let onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
 
-    /// The current interface orientation.
-    @State private var interfaceOrientation: InterfaceOrientation?
     /// The current device location.
     @State private var currentLocation: Location?
     /// The current device heading in degrees.
     @State private var currentHeading: Double?
     /// Whether GeoTracking is localized and ready to establish a camera baseline.
     @State private var geoTrackingIsLocalized = false
-    /// The offset that rebases camera poses at localization.
-    @State private var localizationOffset: TransformationMatrix?
-
     init(
         context: WorldScaleSceneView<AppleWorldTracking>.Context,
         onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?,
@@ -49,26 +44,21 @@ struct GeoTrackingCameraFeedView: View {
     var body: some View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
+                guard context.interfaceOrientation != nil else { return }
+
                 let camera = frame.camera
-                guard let interfaceOrientation else { return }
 
                 if geoTrackingIsLocalized,
                    !context.isLocalized,
                    let currentLocation,
                    let currentHeading {
-                    localizationOffset = context.reanchor(
+                    context.reanchor(
                         to: currentLocation,
                         heading: currentHeading,
-                        camera: camera,
-                        orientation: interfaceOrientation
+                        camera: camera
                     )
-                    context.isLocalized = true
                 } else if context.isLocalized {
-                    context.updateCamera(
-                        from: camera,
-                        orientation: interfaceOrientation,
-                        initialTransformation: localizationOffset ?? .identity
-                    )
+                    context.updateCamera(from: camera)
                 }
             }
             .onDidChangeGeoTrackingStatus { _, status in
@@ -78,7 +68,6 @@ struct GeoTrackingCameraFeedView: View {
             .onCameraDidChangeTrackingState { _, newTrackingState in
                 onCameraTrackingStateChangedAction?(newTrackingState)
             }
-            .observingInterfaceOrientation($interfaceOrientation)
             .task {
                 for await location in context.provider.dataSource.locations {
                     currentLocation = location
@@ -97,8 +86,7 @@ struct GeoTrackingCameraFeedView: View {
         switch status.state {
         case .notAvailable, .initializing, .localizing:
             geoTrackingIsLocalized = false
-            localizationOffset = nil
-            context.isLocalized = false
+            context.resetLocalization()
         case .localized:
             geoTrackingIsLocalized = true
         @unknown default:

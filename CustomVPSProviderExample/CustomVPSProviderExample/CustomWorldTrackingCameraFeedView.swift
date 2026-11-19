@@ -37,16 +37,13 @@ struct CustomWorldTrackingCameraFeedView: View {
     /// The closure to perform when the camera tracking state changes.
     private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     
-    /// The current interface orientation.
-    @State private var interfaceOrientation: InterfaceOrientation?
-    
     /// A Boolean value indicating whether streetscape geometry is enabled.
     private var streetscapeGeometryEnabled = false
     
     var body: some View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
-                guard let interfaceOrientation,
+                guard let interfaceOrientation = context.interfaceOrientation,
                       let garFrame = try? context.provider.garSession.update(frame),
                       let earth = garFrame.earth else {
                     return
@@ -57,7 +54,8 @@ struct CustomWorldTrackingCameraFeedView: View {
                 if context.isLocalized {
                     updateCameraController(
                         camera: camera,
-                        geospatialTransform: earth.cameraGeospatialTransform
+                        geospatialTransform: earth.cameraGeospatialTransform,
+                        interfaceOrientation: interfaceOrientation
                     )
                     
                     context.sceneView.setFieldOfView(
@@ -75,7 +73,6 @@ struct CustomWorldTrackingCameraFeedView: View {
             .onCameraDidChangeTrackingState { _, trackingState in
                 onCameraTrackingStateChangedAction?(trackingState)
             }
-            .observingInterfaceOrientation($interfaceOrientation)
             .onChange(of: streetscapeGeometryEnabled) { _, newEnabled in
                 guard !newEnabled else { return }
                 context.provider.removeStreetscapeGeometry()
@@ -119,9 +116,13 @@ private extension CustomWorldTrackingCameraFeedView {
     /// - Parameters:
     ///   - camera: The current ARKit camera.
     ///   - geospatialTransform: The ARCore frame geospatial transform data.
-    func updateCameraController(camera: ARCamera, geospatialTransform: GARGeospatialTransform?) {
-        guard let interfaceOrientation,
-              let geospatialTransform else {
+    ///   - interfaceOrientation: The current interface orientation.
+    func updateCameraController(
+        camera: ARCamera,
+        geospatialTransform: GARGeospatialTransform?,
+        interfaceOrientation: InterfaceOrientation
+    ) {
+        guard let geospatialTransform else {
             return
         }
         

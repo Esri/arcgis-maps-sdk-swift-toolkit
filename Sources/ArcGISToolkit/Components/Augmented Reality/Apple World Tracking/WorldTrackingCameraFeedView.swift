@@ -37,14 +37,10 @@ struct WorldTrackingCameraFeedView: View {
     /// The current camera derived from the latest scene view camera wrapper.
     private var currentSceneCamera: Camera? { currentCameraWrapper.camera }
 
-    /// The current interface orientation.
-    @State private var interfaceOrientation: InterfaceOrientation?
     /// The current device location.
     @State private var currentLocation: Location?
     /// The latest location waiting to be paired with an AR frame for re-anchoring.
     @State private var pendingReanchorLocation: Location?
-    /// The offset that rebases camera poses at the current anchor.
-    @State private var localizationOffset: TransformationMatrix?
 
     init(
         context: WorldScaleSceneView<AppleWorldTracking>.Context,
@@ -59,23 +55,18 @@ struct WorldTrackingCameraFeedView: View {
     var body: some View {
         SwiftUIARView(sessionProvider: context.provider.arSessionProvider)
             .onDidUpdateFrame { _, frame in
+                guard context.interfaceOrientation != nil else { return }
+
                 let camera = frame.camera
-                guard let interfaceOrientation else { return }
 
                 if let location = pendingReanchorLocation.take() {
-                    localizationOffset = context.reanchor(
+                    context.reanchor(
                         to: location,
                         heading: camera.geographicHeading,
-                        camera: camera,
-                        orientation: interfaceOrientation
+                        camera: camera
                     )
-                    context.isLocalized = true
                 } else if context.isLocalized {
-                    context.updateCamera(
-                        from: camera,
-                        orientation: interfaceOrientation,
-                        initialTransformation: localizationOffset ?? .identity
-                    )
+                    context.updateCamera(from: camera)
                 }
             }
             .onDidChangeGeoTrackingStatus { _, status in
@@ -84,7 +75,6 @@ struct WorldTrackingCameraFeedView: View {
             .onCameraDidChangeTrackingState { _, newTrackingState in
                 onCameraTrackingStateChangedAction?(newTrackingState)
             }
-            .observingInterfaceOrientation($interfaceOrientation)
             .task {
                 for await location in context.provider.dataSource.locations {
                     currentLocation = location
@@ -100,7 +90,7 @@ struct WorldTrackingCameraFeedView: View {
               abs(location.timestamp.timeIntervalSinceNow) < maxLocationAge,
               location.horizontalAccuracy >= .zero,
               location.verticalAccuracy >= .zero,
-              !context.isLocalized || shouldUpdateCamera(),
+              !context.isLocalized || shouldReanchor(),
               !context.isLocalized || !context.isCalibrating else {
             return
         }
@@ -109,7 +99,7 @@ struct WorldTrackingCameraFeedView: View {
     }
 
     /// Determines whether the scene camera has deviated far enough to re-anchor.
-    private func shouldUpdateCamera() -> Bool {
+    private func shouldReanchor() -> Bool {
         guard let currentSceneCamera, let currentLocation,
               let result = GeometryEngine.geodeticDistance(
                 from: currentSceneCamera.location,

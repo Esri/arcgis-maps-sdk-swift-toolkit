@@ -25,12 +25,15 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
     /// Contextual information about the state of the world-scale AR scene.
     ///
     /// This context is provided to camera feed builders so they can access
-    /// calibration, scene, tracking provider, and localization state.
+    /// calibration, scene, tracking provider, interface orientation, and
+    /// localization state.
     public struct Context {
         /// The current calibration applied to the AR experience.
         public let calibration: Calibration
         /// A proxy for interacting with the underlying scene view.
         public let sceneView: SceneViewProxy
+        /// The current interface orientation, if it has been determined.
+        public let interfaceOrientation: InterfaceOrientation?
         /// The active world tracking provider.
         public let provider: Provider
         /// The camera controller used to position the scene camera.
@@ -43,6 +46,8 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         public let isCoaching: Bool
         /// A Boolean value indicating whether world tracking is localized.
         @Binding public var isLocalized: Bool
+        /// The transform offset established at the current localization.
+        @Binding var localizationOffset: TransformationMatrix?
     }
     
     /// The various ways that a world-tracking provider and camera feed can be
@@ -90,22 +95,26 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
             let context = Context(
                 calibration: calibration,
                 sceneView: sceneView,
+                interfaceOrientation: interfaceOrientation,
                 provider: provider,
                 cameraController: cameraController,
                 isCalibrating: isCalibrating,
                 isCoaching: isCoaching,
-                isLocalized: $isLocalized
+                isLocalized: $isLocalized,
+                localizationOffset: $localizationOffset
             )
             return cameraFeedView(context)
         } else {
             let context = WorldScaleSceneView<AppleWorldTracking>.Context(
                 calibration: calibration,
                 sceneView: sceneView,
+                interfaceOrientation: interfaceOrientation,
                 provider: defaultProviderStore.provider,
                 cameraController: cameraController,
                 isCalibrating: isCalibrating,
                 isCoaching: isCoaching,
-                isLocalized: $isLocalized
+                isLocalized: $isLocalized,
+                localizationOffset: $localizationOffset
             )
             return AppleWorldTrackingCameraFeedView(context: context)
                 .onCameraTrackingStateChanged { newTrackingState in
@@ -144,6 +153,10 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
     @State private var isLocalized = false
     /// The current camera of the scene view.
     @State private var currentCamera: Camera?
+    /// The current interface orientation used by the camera feed.
+    @State private var interfaceOrientation: InterfaceOrientation?
+    /// The offset that rebases camera poses at the current localization.
+    @State private var localizationOffset: TransformationMatrix?
     /// The camera controller for this scene view.
     @State private var cameraController = TransformationMatrixCameraController()
     
@@ -195,6 +208,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
                     .ignoresSafeArea()
             }
         }
+        .observingInterfaceOrientation($interfaceOrientation)
         .task {
             await provider.start()
         }
