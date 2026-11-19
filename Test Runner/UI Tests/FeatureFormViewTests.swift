@@ -1896,7 +1896,7 @@ final class FeatureFormViewTests: XCTestCase {
         unsavedChangesAlert.assertExistence()
         
         // Dismiss the alert
-        cancelButton.firstMatch.assertExistenceAndTap()
+        unsavedChangesAlert.buttons["Cancel"].assertExistenceAndTap()
         
         unsavedChangesAlert.assertNonExistence()
         
@@ -2093,7 +2093,6 @@ final class FeatureFormViewTests: XCTestCase {
         let filterButton = app.buttons["Filter Candidates"]
         let formTitle = app.staticTexts["Structure Junction"]
         let municipalButton = app.buttons["Municipal, Street Light"]
-        let popoverDismissRegion = app.otherElements["PopoverDismissRegion"].firstMatch
         let streetLightButton = app.buttons["Street Light"]
         let streetLightCandidates = app.buttons.matching(identifier: "Street Light")
         
@@ -2122,11 +2121,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         textField.assertExistenceAndTap()
         
-        textField.typeText("449")
-        
-        if popoverDismissRegion.exists {
-            popoverDismissRegion.tap()
-        }
+        textField.typeText("449\n")
         
         app.doneButton.assertExistenceAndTap()
         
@@ -2430,19 +2425,17 @@ private extension XCUIApplication {
     /// - Parameter text: The title of the form element to filter with.
     func filterElements(_ text: String) {
         filterElementsField.assertExistenceAndTap()
-        
 #if targetEnvironment(macCatalyst)
         let hasCurrentValue = !(filterElementsField.stringValue?.isEmpty ?? true)
 #else
         let hasCurrentValue = filterElementsField.stringValue != filterElementsField.placeholderValue
 #endif
-        
         if hasCurrentValue {
             clearElementFilter()
             filterElementsField.assertExistenceAndTap()
         }
-        
         filterElementsField.typeText(text)
+        filterElementsField.typeText("\n")
     }
 }
 

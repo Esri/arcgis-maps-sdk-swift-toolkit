@@ -28,6 +28,7 @@ struct LocationButtonTests {
         #expect(button.status == .stopped)
         #expect(button.autoPanMode == .off)
         #expect(button.buttonIsDisabled == false)
+        #expect(button.allowsHidingLocationDisplay)
         #expect(button.initialAutoPanMode == .recenter)
 #if os(visionOS)
         #expect(button.autoPanModes == [.recenter, .off])
@@ -66,6 +67,35 @@ struct LocationButtonTests {
     }
     
     @Test
+    func allowsHidingLocationDisplay() {
+        let locationDisplay = LocationDisplay(dataSource: MockLocationDataSource())
+
+        let buttonWithHide = LocationButton(locationDisplay: locationDisplay)
+            .autoPanModes([.navigation])
+        let buttonWithoutHide = LocationButton(locationDisplay: locationDisplay)
+            .autoPanModes([.navigation])
+            .allowsHidingLocationDisplay(false)
+        let buttonWithTwoModes = LocationButton(locationDisplay: locationDisplay)
+            .autoPanModes([.recenter, .navigation])
+            .allowsHidingLocationDisplay(false)
+        let buttonWithNoModes = LocationButton(locationDisplay: locationDisplay)
+            .autoPanModes([])
+        let buttonWithOffOnly = LocationButton(locationDisplay: locationDisplay)
+            .autoPanModes([.off])
+
+        #expect(buttonWithHide.allowsHidingLocationDisplay)
+        #expect(buttonWithHide.shouldShowContextMenu)
+        #expect(buttonWithHide.contextMenuAutoPanOptions == [.navigation])
+        #expect(!buttonWithoutHide.allowsHidingLocationDisplay)
+        #expect(!buttonWithoutHide.shouldShowContextMenu)
+        #expect(buttonWithTwoModes.shouldShowContextMenu)
+        #expect(buttonWithNoModes.shouldShowContextMenu)
+        #expect(buttonWithNoModes.contextMenuAutoPanOptions.isEmpty)
+        #expect(buttonWithOffOnly.shouldShowContextMenu)
+        #expect(buttonWithOffOnly.contextMenuAutoPanOptions == [.off])
+    }
+
+    @Test
     func hideLocationDisplay() async throws {
         let datasource = MockLocationDataSource()
         let locationDisplay = LocationDisplay(dataSource: datasource)
@@ -101,31 +131,74 @@ struct LocationButtonTests {
         @Test
         func initializer() {
             #expect(
-                Action(status: .stopped, autoPanOptions: []) == .start
+                Action(
+                    status: .stopped,
+                    autoPanMode: .off,
+                    autoPanOptions: []
+                ) == .start
             )
             #expect(
-                Action(status: .failedToStart, autoPanOptions: []) == .start
+                Action(
+                    status: .failedToStart,
+                    autoPanMode: .off,
+                    autoPanOptions: []
+                ) == .start
             )
             #expect(
-                Action(status: .started, autoPanOptions: []) == .stop
+                Action(
+                    status: .started,
+                    autoPanMode: .off,
+                    autoPanOptions: []
+                ) == nil
             )
             #expect(
-                Action(status: .started, autoPanOptions: [.off]) == .stop
+                Action(
+                    status: .started,
+                    autoPanMode: .off,
+                    autoPanOptions: [.off]
+                ) == nil
             )
             #expect(
-                Action(status: .started, autoPanOptions: [.recenter]) == .stop
+                Action(
+                    status: .started,
+                    autoPanMode: .off,
+                    autoPanOptions: [.navigation]
+                ) == .autoPanCycle
             )
             #expect(
-                Action(status: .started, autoPanOptions: [.off, .recenter]) == .autoPanCycle
+                Action(
+                    status: .started,
+                    autoPanMode: .navigation,
+                    autoPanOptions: [.navigation]
+                ) == nil
             )
             #expect(
-                Action(status: .started, autoPanOptions: [.off, .recenter, .navigation]) == .autoPanCycle
+                Action(
+                    status: .started,
+                    autoPanMode: .navigation,
+                    autoPanOptions: [.off]
+                ) == .autoPanCycle
             )
             #expect(
-                Action(status: .starting, autoPanOptions: []) == nil
+                Action(
+                    status: .started,
+                    autoPanMode: .recenter,
+                    autoPanOptions: [.recenter, .navigation]
+                ) == .autoPanCycle
             )
             #expect(
-                Action(status: .stopping, autoPanOptions: []) == nil
+                Action(
+                    status: .starting,
+                    autoPanMode: .off,
+                    autoPanOptions: []
+                ) == nil
+            )
+            #expect(
+                Action(
+                    status: .stopping,
+                    autoPanMode: .off,
+                    autoPanOptions: []
+                ) == nil
             )
         }
     }

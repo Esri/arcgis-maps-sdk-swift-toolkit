@@ -65,4 +65,35 @@ extension Button<Text> {
             Text(LocalizedStringResource.ok)
         }
     }
+    
+    /// A button that redirects the user to the application's entry in the system settings.
+    @MainActor static var settings: some View {
+        OpenURLButton(url: URL(string: UIApplication.openSettingsURLString)) {
+            Text(
+                "Settings",
+                bundle: .toolkitModule,
+                comment: "A label for a button to take the user to a contextually inferred settings page."
+            )
+        }
+    }
+}
+
+/// A button that opens the provided URL. The button is disabled when the URL is `nil`.
+@MainActor
+private struct OpenURLButton<T>: View where T: View {
+    @Environment(\.openURL) private var openURL
+    
+    let url: URL?
+    let label: () -> T
+    
+    var body: some View {
+        Button {
+            if let url {
+                openURL(url)
+            }
+        } label: {
+            label()
+        }
+        .disabled(url == nil)
+    }
 }

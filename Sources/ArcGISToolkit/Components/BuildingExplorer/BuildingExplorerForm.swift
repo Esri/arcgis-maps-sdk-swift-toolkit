@@ -67,17 +67,19 @@ struct BuildingExplorerForm: View {
     /// The overview sublayer in the building scene layer.
     @State private var overviewSublayer: BuildingSublayer?
     
-    init(
+    init?(
         items: [BuildingExplorerItem],
         selection: Binding<BuildingExplorerItem?>,
         localSceneViewProxy: LocalSceneViewProxy?
     ) {
+        guard let firstItem = items.first else { return nil }
+        
         self.items = items
         self._selection = .init {
             // If we don't have a selection then this is the first
             // time the explorer was opened and we can default to the
             // first item.
-            selection.wrappedValue ?? items.first!
+            selection.wrappedValue ?? firstItem
         } set: {
             selection.wrappedValue = $0
         }

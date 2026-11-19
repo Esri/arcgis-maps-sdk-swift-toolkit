@@ -30,27 +30,23 @@ struct Examples: View {
                 case .category(let name, let examples):
                     DisclosureGroup(name) {
                         ForEach(examples, id: \.name) { example in
-                            Text(example.name)
-                                .tag(example)
+                            NavigationLink(example.name, value: example)
                         }
                     }
                 case .example(let example):
-                    Text(example.name)
-                        .tag(example)
+                    NavigationLink(example.name, value: example)
                 }
             }
             .navigationTitle("Toolkit Examples")
         } detail: {
-            // Workaround for https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/1249 with
-            // Apple Feedback #FB19470509 "Inconsistent task(priority:_:) behavior on views shown in NavigationSplitView detail column".
-            NavigationStack {
-                if let selectedExample {
-                    selectedExample.view
-                        .navigationTitle(selectedExample.name)
-                        .navigationBarTitleDisplayMode(.inline)
-                } else {
-                    Text("Select an example")
-                }
+            // Do not wrap this in a `NavigationStack`. With `NavigationLink` rows in the sidebar
+            // it is not needed for #1249 and causes a spurious `onDisappear` in compact width (#1478).
+            if let selectedExample {
+                selectedExample.view
+                    .navigationTitle(selectedExample.name)
+                    .navigationBarTitleDisplayMode(.inline)
+            } else {
+                Text("Select an example")
             }
         }
         // visionOS doesn't provide the column visibility toggle like
