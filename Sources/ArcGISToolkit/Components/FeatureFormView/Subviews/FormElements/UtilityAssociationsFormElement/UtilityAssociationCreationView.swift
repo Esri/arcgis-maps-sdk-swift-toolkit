@@ -20,8 +20,8 @@ private import os
 extension FeatureFormView {
     /// A view to configure and add a utility network association.
     struct UtilityAssociationCreationView: View {
-        /// The model for the FeatureFormView containing the view.
-        @Environment(FeatureFormViewModel.self) var featureFormViewModel
+        /// The model for the feature form.
+        @Environment(FeatureFormView.FormModel.self) var formModel
         
         /// The error to be presented when adding an association failed.
         @State private var addAssociationError: AddAssociationError?
@@ -137,7 +137,7 @@ extension FeatureFormView {
                 // views to avoid errors here. (FB20395585)
                 // https://developer.apple.com/forums/thread/802221#802221021
                 await MainActor.run {
-                    featureFormViewModel.navigationPath.removeLast(4)
+                    formModel.navigationPath.removeLast(4)
                 }
             } catch let error as ArcGIS.InvalidArgumentError {
                 addAssociationError = .other(error.details)
@@ -164,11 +164,6 @@ extension FeatureFormView {
             @unknown default:
                 true
             }
-        }
-        
-        /// The model for the feature form containing the element to add the association to.
-        var embeddedFeatureFormViewModel: EmbeddedFeatureFormViewModel? {
-            featureFormViewModel.getModel(form)
         }
         
         /// A Boolean value indicating whether content visibility should be specified for the new association.
@@ -225,12 +220,10 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the from side of the association.
         var sectionForFromElement: some View {
             Section {
-                if let embeddedFeatureFormViewModel {
-                    LabeledContent {
-                        Text(candidateIsToElement ? embeddedFeatureFormViewModel.title : candidate.title)
-                    } label: {
-                        Text.fromElement
-                    }
+                LabeledContent {
+                    Text(candidateIsToElement ? formModel.title : candidate.title)
+                } label: {
+                    Text.fromElement
                 }
                 if supportsTerminalSelection,
                    let configuration = candidateIsToElement ? options?.formFeatureTerminalConfiguration : options?.candidateFeatureTerminalConfiguration {
@@ -249,12 +242,10 @@ extension FeatureFormView {
         /// A section which contains a label for the feature on the to side of the association.
         var sectionForToElement: some View {
             Section {
-                if let embeddedFeatureFormViewModel {
-                    LabeledContent {
-                        Text(candidateIsToElement ? candidate.title : embeddedFeatureFormViewModel.title)
-                    } label: {
-                        Text.toElement
-                    }
+                LabeledContent {
+                    Text(candidateIsToElement ? candidate.title : formModel.title)
+                } label: {
+                    Text.toElement
                 }
                 if supportsTerminalSelection,
                    let configuration = candidateIsToElement ? options?.candidateFeatureTerminalConfiguration : options?.formFeatureTerminalConfiguration {
