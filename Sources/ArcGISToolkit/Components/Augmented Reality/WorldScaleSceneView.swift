@@ -503,8 +503,11 @@ private extension WorldScaleSceneView {
         ) else {
             return nil
         }
+        let localizedOffsetMatrix = localizationOffset.map {
+            $0.adding(localOffsetMatrix)
+        } ?? localOffsetMatrix
         let originTransformationMatrix = cameraController.originCamera.transformationMatrix
-        let scenePointMatrix = originTransformationMatrix.adding(localOffsetMatrix)
+        let scenePointMatrix = originTransformationMatrix.adding(localizedOffsetMatrix)
         // Create a camera from transformationMatrix and return its location.
         return Camera(transformationMatrix: scenePointMatrix).location
     }
