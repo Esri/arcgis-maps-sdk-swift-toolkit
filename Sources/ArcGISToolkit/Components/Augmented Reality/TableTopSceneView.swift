@@ -109,7 +109,7 @@ public struct TableTopSceneView: View {
                             camera: camera,
                             cameraController: cameraController,
                             orientation: interfaceOrientation,
-                            initialTransformation: initialTransformation
+                            originOffset: initialTransformation
                         )
                         sceneViewProxy.setFieldOfView(
                             for: camera,
