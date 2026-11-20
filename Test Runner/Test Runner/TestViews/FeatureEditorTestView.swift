@@ -21,8 +21,6 @@ struct FeatureEditorTestView: View {
     @State private var errorDescription: String?
     /// The feature being edited by the feature editor.
     @State private var featureToEdit: ArcGISFeature?
-    /// The geometry editor used by the feature editor.
-    @State private var geometryEditor = GeometryEditor()
     /// The result of loading the map used by the view. When the operation
     /// succeeds, this will contain a map with features to edit.
     @State private var mapLoadResult: Result<Map, (any Error)>?
@@ -30,34 +28,23 @@ struct FeatureEditorTestView: View {
     var body: some View {
         switch mapLoadResult {
         case .success(let map):
-            MapViewReader { mapView in
-                MapView(map: map)
-                    .geometryEditor(geometryEditor)
-                    .overlay(alignment: .topTrailing) {
-                        FeatureEditor(
-                            $featureToEdit,
-                            geometryEditor: geometryEditor,
-                            map: map,
-                            mapView: mapView
-                        )
-                        .padding()
+            MapView(map: map)
+                .featureEditor($featureToEdit)
+                .task {
+                    do {
+                        if let objectID = UserDefaults.standard.objectID,
+                           let layerName = UserDefaults.standard.layerName,
+                           let layer = map.operationalLayers.first(where: { $0.name == layerName }),
+                           let featureLayer = layer as? FeatureLayer {
+                            try await startEditingFeature(withIdentifier: objectID, on: featureLayer)
+                        }
+                    } catch {
+                        errorDescription = error.localizedDescription
                     }
-            }
-            .task {
-                do {
-                    if let objectID = UserDefaults.standard.objectID,
-                       let layerName = UserDefaults.standard.layerName,
-                       let layer = map.operationalLayers.first(where: { $0.name == layerName }),
-                       let featureLayer = layer as? FeatureLayer {
-                        try await startEditingFeature(withIdentifier: objectID, on: featureLayer)
-                    }
-                } catch {
-                    errorDescription = error.localizedDescription
                 }
-            }
-            .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {
-                Text(errorDescription ?? "Unknown")
-            }
+                .alert("Error", isPresented: .init(optionalValue: $errorDescription), actions: {}) {
+                    Text(errorDescription ?? "Unknown")
+                }
         case .failure(let error):
             ContentUnavailableView {
                 Label("Failed to load map", systemImage: "exclamationmark.triangle")

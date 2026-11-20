@@ -17,7 +17,7 @@ import SwiftUI
 
 struct Tests: View {
     var body: some View {
-        NavigationStack {
+        let navigationStack = NavigationStack {
             List {
 #if !os(visionOS)
                 Section("iOS and Catalyst only") {
@@ -35,7 +35,12 @@ struct Tests: View {
             }
         }
 #if !os(visionOS)
-        .featureEditorInspector()  // For FeatureEditorTestView.
+        // For FeatureEditorTestView.
+        FeatureEditorContainer {
+            navigationStack
+        }
+#else
+        navigationStack
 #endif
     }
 }

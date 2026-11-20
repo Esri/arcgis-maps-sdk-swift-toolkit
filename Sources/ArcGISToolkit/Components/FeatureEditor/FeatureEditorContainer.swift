@@ -15,19 +15,19 @@
 import ArcGIS
 import SwiftUI
 
-public extension View {
-    /// Presents a Feature Editor view that edits a given feature. Only works
-    /// when the `FeatureEditor` view is also created.
-    /// - Since: 300.1
-    @available(visionOS, unavailable)
-    func featureEditorInspector() -> some View {
-        modifier(FeatureEditorModifier())
-    }
-}
-
-/// A view modifier that presents a `FeatureEditorFormView` in an inspector.
+/// A view that adds the feature editor component to its content.
+///
+/// For usage and more information, see <doc:FeatureEditor>.
+///
+/// - Note: This is needed to use the ``ArcGIS/MapView/featureEditor(_:)``
+/// modifier. If the view hierarchy containing the feature editor has a
+/// navigation view, such as a `NavigationStack` or `NavigationSplitView`, the
+/// `FeatureEditorContainer` must be placed above it to work properly.
 @available(visionOS, unavailable)
-private struct FeatureEditorModifier: ViewModifier {
+public struct FeatureEditorContainer<Content: View>: View {
+    /// The content to add the feature editor to.
+    private let content: Content
+    
     /// The feature editor model shared by the toolbar and inspector.
     @State private var model = FeatureEditorModel()
     /// The inspector's currently selected presentation detent.
@@ -59,7 +59,14 @@ private struct FeatureEditorModifier: ViewModifier {
         }
     }
     
-    func body(content: Content) -> some View {
+    /// Creates a feature editor container view.
+    /// - Parameter content: The content to display within the container and add
+    /// the feature editor to.
+    public init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+    
+    public var body: some View {
         @Bindable var geometryEditorModel = model.geometryEditorModel
         content
             .safeInspector(isPresented: inspectorIsPresented) {
