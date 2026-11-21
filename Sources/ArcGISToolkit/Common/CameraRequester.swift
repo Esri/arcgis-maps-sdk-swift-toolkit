@@ -46,9 +46,7 @@ private struct CameraRequesterModifier: ViewModifier {
         content
             .alert(cameraAccessAlertTitle, isPresented: $requester.alertIsPresented) {
 #if !targetEnvironment(macCatalyst)
-                Button(String.settings) {
-                    Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
-                }
+                Button.settings
 #endif
                 Button.cancel {}
             } message: {

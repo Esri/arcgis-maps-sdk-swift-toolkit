@@ -402,7 +402,7 @@ struct AttachmentImportMenu: View {
             }
 #endif // !targetEnvironment(macCatalyst) && !targetEnvironment(simulator)
             .alert(microphoneAccessWarningMessage, isPresented: $microphoneAccessAlertIsPresented) {
-                appSettingsButton
+                Button.settings
                 Button(role: .cancel) {} label: {
                     Text(
                         "Record video only",
@@ -422,13 +422,6 @@ struct AttachmentImportMenu: View {
 }
 
 private extension AttachmentImportMenu {
-    /// A button that redirects the user to the application's entry in the iOS system Settings application.
-    var appSettingsButton: some View {
-        Button(String.settings) {
-            Task { await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
-        }
-    }
-    
     /// An error message indicating the selected attachment is an empty file and not supported.
     var emptyFilesNotSupportedAlertMessage: Text {
         .init(

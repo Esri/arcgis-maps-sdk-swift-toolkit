@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
 import SwiftUI
 
 /// Prompts the user when encountering an untrusted host.
