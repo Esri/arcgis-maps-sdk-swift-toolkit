@@ -83,7 +83,7 @@ public struct FeatureFormView: View {
     /// The root feature form.
     private let rootFeatureForm: FeatureForm?
     
-    /// The feature form view customiztaion options to allow clients.
+    /// The feature form view customization options to allow clients.
     var customization: FeatureFormViewCustomization?
     /// The visibility of the "save" and "discard" buttons.
     var editingButtonsVisibility: Visibility = .automatic
@@ -101,7 +101,7 @@ public struct FeatureFormView: View {
     /// - Parameters:
     ///   - root: The feature form defining the editing experience.
     ///   - isPresented: A Boolean value indicating if the view is presented.
-    ///   - customization: Feature Form View customization options for customizing form behavior.
+    ///   - customization: Options for customizing form behavior.
     /// - Since: 200.8
     public init(
         root: FeatureForm,
@@ -293,8 +293,8 @@ public struct FeatureFormView: View {
                 }
             )
             .animation(.default, value: ObjectIdentifier(rootFeatureForm))
-            .environment(\.customization, customization)
             .environment(featureFormViewModel)
+            .environment(\.customization, customization)
             .environment(\.editingButtonVisibility, editingButtonsVisibility)
             .environment(\.isPresented, isPresented)
             .environment(\.navigationIsDisabled, navigationIsDisabled)

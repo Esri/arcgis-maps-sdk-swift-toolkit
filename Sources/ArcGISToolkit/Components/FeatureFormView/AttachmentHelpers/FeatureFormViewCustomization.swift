@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import UIKit
 public import UniformTypeIdentifiers
 
-/// A struct allowing clients to customize feature form behavior.
+/// A struct allowing clients to customize feature form view behavior.
 public struct FeatureFormViewCustomization {
     /// Creates an feature form customization structure.
     /// - Parameter action: The action called when the user selects an attachment to add.
@@ -25,10 +24,10 @@ public struct FeatureFormViewCustomization {
         self.addAttachmentAction = addAttachmentAction
     }
     
-    /// The action initiated when the user is in the process of adding a new attachment. This allows cilents access to
+    /// The action initiated when the user is in the process of adding a new attachment. This allows clients access to
     /// the attachment data prior to adding the attachment and can be used for modifying the data, such as adding a copyright
     /// notice, watermark, or blurring personally identifying information. Because attachments can be loaded
-    /// from a file, from the user's Photo Library, or taken as an image or video from the camers, the actual data representing
+    /// from a file, from the user's Photo Library, or taken as an image or video from the camera, the actual data representing
     /// that attachment can be either in the form of `Data` or an on-disk file represented by a `URL`.
     /// Adding the attachment to `AttachmentFormElement` is still handled by the `FeatureFormView` Toolkit component.
     /// - Parameters:

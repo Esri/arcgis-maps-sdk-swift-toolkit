@@ -39,7 +39,7 @@ struct AttachmentImportMenu: View {
         self.onAdd = onAdd
     }
     
-    /// The feature for view customiztion options.
+    /// The feature for view customization options.
     @Environment(\.customization) var customization
     
     /// Performs camera authorization request handling.
