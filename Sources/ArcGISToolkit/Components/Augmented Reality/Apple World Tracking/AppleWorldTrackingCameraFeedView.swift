@@ -153,7 +153,7 @@ extension WorldScaleSceneView<AppleWorldTracking>.Context {
         )
         localize(
             to: originCamera,
-            from: camera,
+            with: camera,
             localizationTransformation: camera.localizationOffset
         )
     }

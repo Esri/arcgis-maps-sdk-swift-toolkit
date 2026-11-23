@@ -82,23 +82,6 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
             _localizationOffset = localizationOffset
         }
         
-        /// Applies a provider-resolved camera pose and updates the field of view.
-        /// - Parameters:
-        ///   - pose: The resolved camera pose to apply.
-        ///   - camera: The AR camera frame providing lens intrinsics.
-        /// - Since: 300.3
-        public func updateCamera(
-            to pose: WorldScaleCameraPose,
-            from camera: ARCamera
-        ) {
-            cameraController.originCamera = pose.originCamera
-            cameraController.transformationMatrix = pose.transformationMatrix
-            sceneView.setFieldOfView(
-                for: camera,
-                orientation: interfaceOrientation
-            )
-        }
-        
         /// Applies the current AR camera pose relative to the localized origin.
         /// - Parameter camera: The AR camera frame providing the pose and lens
         ///   intrinsics.
@@ -114,17 +97,27 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
             )
         }
         
-        /// Applies a camera pose and marks the scene as localized.
+        /// Establishes or updates localization using a provider-resolved pose.
         /// - Parameters:
         ///   - pose: The resolved camera pose to apply.
-        ///   - camera: The AR camera frame providing lens intrinsics.
+        ///   - camera: The corresponding AR camera providing the session pose
+        ///     and lens intrinsics.
         /// - Since: 300.3
         public func localize(
             to pose: WorldScaleCameraPose,
-            from camera: ARCamera
+            with camera: ARCamera
         ) {
-            updateCamera(to: pose, from: camera)
-            localizationOffset = nil
+            let cameraTransformation = camera.transformationMatrix(for: interfaceOrientation)
+            let inverseCameraTransformation = TransformationMatrix.identity
+                .subtracting(cameraTransformation)
+            localizationOffset = pose.transformationMatrix
+                .adding(inverseCameraTransformation)
+            cameraController.originCamera = pose.originCamera
+            cameraController.transformationMatrix = pose.transformationMatrix
+            sceneView.setFieldOfView(
+                for: camera,
+                orientation: interfaceOrientation
+            )
             isLocalized = true
         }
         
@@ -139,7 +132,7 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         /// - Since: 300.3
         public func localize(
             to originCamera: Camera,
-            from camera: ARCamera,
+            with camera: ARCamera,
             localizationTransformation: TransformationMatrix? = nil
         ) {
             self.localizationOffset = localizationTransformation

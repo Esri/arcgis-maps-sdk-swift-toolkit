@@ -56,10 +56,8 @@ struct CustomWorldTrackingCameraFeedView: View {
                     return
                 }
                 
-                if context.isLocalized {
-                    context.updateCamera(to: pose, from: camera)
-                } else if earth.trackingState == .tracking {
-                    context.localize(to: pose, from: camera)
+                if context.isLocalized || earth.trackingState == .tracking {
+                    context.localize(to: pose, with: camera)
                 }
                 
                 if context.isLocalized && streetscapeGeometryEnabled {
