@@ -16,10 +16,6 @@ import XCTest
 
 @MainActor
 final class FeatureFormViewTests: XCTestCase {
-    override func setUp() async throws {
-        continueAfterFailure = false
-    }
-    
     func assertFormOpened(titleElement: XCUIElement) {
         XCTAssertTrue(
             titleElement.waitForExistence(timeout: 30),
