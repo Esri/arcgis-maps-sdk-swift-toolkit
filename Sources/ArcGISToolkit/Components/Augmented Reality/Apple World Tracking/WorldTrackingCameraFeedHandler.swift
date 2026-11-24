@@ -17,10 +17,12 @@ import ArcGIS
 import ARKit
 import Foundation
 
+/// Localizes and re-anchors the scene using device location and ARKit world tracking.
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 @MainActor
 final class WorldTrackingCameraFeedHandler: AppleCameraFeedHandler {
+    /// The world-scale scene context.
     private let context: WorldScaleSceneView<AppleWorldTracking>.Context
 
     /// The maximum age in seconds for a location used to re-anchor the scene.
@@ -28,9 +30,12 @@ final class WorldTrackingCameraFeedHandler: AppleCameraFeedHandler {
     /// The distance in meters that triggers a new camera anchor.
     private var reanchorDistanceThreshold: Double { 2 }
 
+    /// The latest location used to determine whether to re-anchor.
     private var currentLocation: Location?
+    /// A location to use for re-anchoring on the next camera frame.
     private var pendingReanchorLocation: Location?
 
+    /// Creates a handler for the given world-scale scene context.
     init(context: WorldScaleSceneView<AppleWorldTracking>.Context) {
         self.context = context
     }

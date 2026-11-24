@@ -16,16 +16,22 @@
 import ArcGIS
 import ARKit
 
+/// Localizes and updates the scene using ARKit geo-tracking.
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 @MainActor
 final class GeoTrackingCameraFeedHandler: AppleCameraFeedHandler {
+    /// The world-scale scene context.
     private let context: WorldScaleSceneView<AppleWorldTracking>.Context
 
+    /// The latest location used to establish the scene origin.
     private var currentLocation: Location?
+    /// The latest heading used to establish the scene origin.
     private var currentHeading: Double?
+    /// Whether ARKit reports that geo-tracking is localized.
     private var isLocalized = false
 
+    /// Creates a handler for the given world-scale scene context.
     init(context: WorldScaleSceneView<AppleWorldTracking>.Context) {
         self.context = context
     }
