@@ -76,7 +76,7 @@ public struct AppleWorldTrackingCameraFeedView: View {
                 }
             }
             .onChange(of: context.provider.mode) { _, _ in
-                context.provider.onModeChange()
+                context.provider.handleModeChange()
             }
             .onChange(of: context.provider.isGeoTrackingActive) { _, isGeoTrackingActive in
                 context.resetLocalization()
@@ -171,8 +171,8 @@ extension ARCamera {
         return normalized < 0 ? normalized + 360 : normalized
     }
     
-    /// Rebases the camera pose to the AR world position and yaw at localization.
-    /// - Returns: An offset that removes the localization position and yaw.
+    /// The transform that rebases AR poses relative to this camera's position
+    /// and yaw at localization.
     var localizationOffset: TransformationMatrix {
         let inverseYaw = simd_quatf(
             angle: Float(-geographicYaw),

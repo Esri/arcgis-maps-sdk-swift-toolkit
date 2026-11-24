@@ -89,7 +89,8 @@ extension AppleWorldTracking: WorldTrackingProvider {
         return configuration
     }
     
-    @MainActor func onModeChange() {
+    /// Updates the AR session for the selected mode if the provider is started.
+    @MainActor func handleModeChange() {
         // The next start will configure the session if the provider is stopped.
         guard startID != nil else { return }
         let configurationID = UUID()
