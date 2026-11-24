@@ -26,24 +26,28 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
     ///
     /// This context is provided to camera feed builders so they can access
     /// calibration, scene, tracking provider, interface orientation, and
-    /// localization state.
+    /// localization state. Orientation, calibration UI, and coaching UI
+    /// properties reflect the current scene state even in a retained context.
     public struct Context {
         /// The current calibration applied to the AR experience.
         public let calibration: Calibration
         /// A proxy for interacting with the underlying scene view.
         public let sceneView: SceneViewProxy
         /// The current interface orientation, initially defaulting to portrait.
-        public let interfaceOrientation: InterfaceOrientation
+        public var interfaceOrientation: InterfaceOrientation { interfaceOrientationBinding.wrappedValue }
         /// The active world tracking provider.
         public let provider: Provider
         /// The camera controller used to position the scene camera.
         public let cameraController: TransformationMatrixCameraController
         /// A Boolean value indicating whether calibration UI is currently
         /// shown.
-        public let isCalibrating: Bool
+        public var isCalibrating: Bool { isCalibratingBinding.wrappedValue }
         /// A Boolean value indicating whether coaching UI is currently
         /// active.
-        public let isCoaching: Bool
+        public var isCoaching: Bool { isCoachingBinding.wrappedValue }
+        private let interfaceOrientationBinding: Binding<InterfaceOrientation>
+        private let isCalibratingBinding: Binding<Bool>
+        private let isCoachingBinding: Binding<Bool>
         /// A Boolean value indicating whether world tracking is localized.
         @Binding public var isLocalized: Bool
         /// The transform offset established at the current localization.
@@ -63,21 +67,21 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         init(
             calibration: Calibration,
             sceneView: SceneViewProxy,
-            interfaceOrientation: InterfaceOrientation,
+            interfaceOrientation: Binding<InterfaceOrientation>,
             provider: Provider,
             cameraController: TransformationMatrixCameraController,
-            isCalibrating: Bool,
-            isCoaching: Bool,
+            isCalibrating: Binding<Bool>,
+            isCoaching: Binding<Bool>,
             isLocalized: Binding<Bool>,
             localizationOffset: Binding<TransformationMatrix?>
         ) {
             self.calibration = calibration
             self.sceneView = sceneView
-            self.interfaceOrientation = interfaceOrientation
+            self.interfaceOrientationBinding = interfaceOrientation
             self.provider = provider
             self.cameraController = cameraController
-            self.isCalibrating = isCalibrating
-            self.isCoaching = isCoaching
+            self.isCalibratingBinding = isCalibrating
+            self.isCoachingBinding = isCoaching
             _isLocalized = isLocalized
             _localizationOffset = localizationOffset
         }
@@ -194,11 +198,11 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
             let context = Context(
                 calibration: calibration,
                 sceneView: sceneView,
-                interfaceOrientation: interfaceOrientation,
+                interfaceOrientation: $interfaceOrientation,
                 provider: provider,
                 cameraController: cameraController,
-                isCalibrating: isCalibrating,
-                isCoaching: isCoaching,
+                isCalibrating: $isCalibrating,
+                isCoaching: $isCoaching,
                 isLocalized: $isLocalized,
                 localizationOffset: $localizationOffset
             )
@@ -207,11 +211,11 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
             let context = WorldScaleSceneView<AppleWorldTracking>.Context(
                 calibration: calibration,
                 sceneView: sceneView,
-                interfaceOrientation: interfaceOrientation,
+                interfaceOrientation: $interfaceOrientation,
                 provider: defaultProviderStore.provider,
                 cameraController: cameraController,
-                isCalibrating: isCalibrating,
-                isCoaching: isCoaching,
+                isCalibrating: $isCalibrating,
+                isCoaching: $isCoaching,
                 isLocalized: $isLocalized,
                 localizationOffset: $localizationOffset
             )
