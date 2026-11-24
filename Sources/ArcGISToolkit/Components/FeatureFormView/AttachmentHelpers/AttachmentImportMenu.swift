@@ -345,11 +345,11 @@ struct AttachmentImportMenu: View {
                 if let customization,
                    let result = customization.addAttachmentAction?(
                     newAttachmentImportData.contentType,
-                    data,
-                    nil
+                    FeatureFormView.Customization.AttachmentSource.data(data)
                    ) {
-                    if result.0 != nil {
-                        customizedData = result.0
+                    
+                    if case let .data(newData) = result {
+                        customizedData = newData
                     }
                 }
                 let newData = customizedData
@@ -365,11 +365,10 @@ struct AttachmentImportMenu: View {
                 if let customization,
                    let result = customization.addAttachmentAction?(
                     newAttachmentImportData.contentType,
-                    data,
-                    nil
+                    FeatureFormView.Customization.AttachmentSource.data(data)
                    ) {
-                    if result.0 != nil {
-                        customizedData = result.0
+                    if case let .data(newData) = result {
+                        customizedData = newData
                     }
                 }
                 let newData = customizedData
