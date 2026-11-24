@@ -293,7 +293,7 @@ public extension FeatureFormView {
                     reportEditingEvent(.saved)
                 } catch {
                     finishEditsError = error
-                    reportEditingEvent(.saveFailed(SaveError.failedToFinish))
+                    reportEditingEvent(.saveFailed(SaveError.failedToFinishEditing))
                     return
                 }
             }
