@@ -76,7 +76,7 @@ public struct AppleWorldTrackingCameraFeedView: View {
                 }
             }
             .onChange(of: context.provider.mode) { _, _ in
-                context.provider.runARSession()
+                context.provider.onModeChange()
             }
             .onChange(of: context.provider.isGeoTrackingActive) { _, isGeoTrackingActive in
                 feedHandler = Self.makeHandler(
