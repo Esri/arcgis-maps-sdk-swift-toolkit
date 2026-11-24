@@ -25,16 +25,16 @@ public extension SceneViewProxy {
     ///   - cameraController: The current camera controller assigned to the
     ///   scene view.
     ///   - orientation: The interface orientation.
-    ///   - originOffset: A transformation applied before the AR camera pose.
+    ///   - initialTransformation: A transformation applied before the AR camera pose.
     func updateCamera(
         camera: ARCamera,
         cameraController: TransformationMatrixCameraController,
         orientation: InterfaceOrientation,
-        originOffset: TransformationMatrix? = nil
+        initialTransformation: TransformationMatrix? = nil
     ) {
         cameraController.transformationMatrix = camera.transformationMatrix(
             for: orientation,
-            originOffset: originOffset
+            originOffset: initialTransformation
         )
     }
     
