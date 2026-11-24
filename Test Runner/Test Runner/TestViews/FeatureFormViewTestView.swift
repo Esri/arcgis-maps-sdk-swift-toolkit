@@ -37,17 +37,15 @@ struct FeatureFormTestView: View {
     @State private var testSetupTask: Task<Void, Never>?
     
     var body: some View {
-        MapViewReader { mapView in
-            if let map, let testCase {
-                MapView(map: map)
-                    .onDrawStatusChanged { drawStatus in
-                        if !initialDrawCompleted, drawStatus == .completed {
-                            initialDrawCompleted = true
-                            testSetupTask = Task {
-                                await selectObjectID(testCase.objectID, on: map, for: testCase.layerName)
-                            }
-                        }
+        Group {
+            if let featureForm, let testCase {
+                Color.blue
+                    .fullScreenCover(isPresented: .constant(true)) {
+                        FeatureFormView(root: featureForm)
+                            .editingButtons(testCase.editingButtonsVisibility)
                     }
+            } else {
+                ProgressView()
             }
         }
         .alert(
@@ -67,14 +65,9 @@ struct FeatureFormTestView: View {
         )
         .ignoresSafeArea(.keyboard)
         .navigationBarBackButtonHidden(featureForm != nil)
-        .sheet(isPresented: Binding(get: { featureForm != nil }, set: { _ in })) {
-            if let featureForm, let testCase {
-                FeatureFormView(root: featureForm)
-                    .editingButtons(testCase.editingButtonsVisibility)
-            }
-        }
         .task {
             await setup()
+            await selectObjectID(testCase!.objectID, on: map!, for: testCase!.layerName)
         }
     }
     
