@@ -79,6 +79,7 @@ public struct AppleWorldTrackingCameraFeedView: View {
                 context.provider.onModeChange()
             }
             .onChange(of: context.provider.isGeoTrackingActive) { _, isGeoTrackingActive in
+                context.resetLocalization()
                 feedHandler = Self.makeHandler(
                     context: context,
                     isGeoTrackingActive: isGeoTrackingActive
