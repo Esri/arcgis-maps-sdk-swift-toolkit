@@ -312,6 +312,8 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
                         isCoaching = false
                     }
                     .onCoachingOverlayRequestSessionReset { _ in
+                        localizationOffset = nil
+                        isLocalized = false
                         provider.reset()
                     }
                     .ignoresSafeArea()
