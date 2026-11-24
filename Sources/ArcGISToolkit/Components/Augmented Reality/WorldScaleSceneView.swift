@@ -102,6 +102,9 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         }
         
         /// Establishes or updates localization using a provider-resolved pose.
+        ///
+        /// Call this again to apply a revised pose. Each call replaces the
+        /// previous localization without requiring a reset.
         /// - Parameters:
         ///   - pose: The resolved camera pose to apply.
         ///   - camera: The corresponding AR camera providing the session pose
@@ -127,6 +130,9 @@ public struct WorldScaleSceneView<Provider: WorldTrackingProvider>: View {
         
         /// Establishes a geographic origin and applies the current AR camera
         /// pose relative to it.
+        ///
+        /// Call this again to update the origin or localization transformation.
+        /// Each call replaces the previous localization without requiring a reset.
         /// - Parameters:
         ///   - originCamera: The geographic camera at the localization origin.
         ///   - camera: The AR camera frame providing the current pose and lens
