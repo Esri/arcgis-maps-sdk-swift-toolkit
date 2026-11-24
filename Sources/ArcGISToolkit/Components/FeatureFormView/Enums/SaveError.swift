@@ -18,7 +18,7 @@ extension FeatureFormView {
     /// Represents errors that occur during saving.
     /// - Since: 300.3
     enum SaveError: LocalizedError {
-        case failedToFinish
+        case failedToFinishEditing
         case validationFailed
     }
 }
