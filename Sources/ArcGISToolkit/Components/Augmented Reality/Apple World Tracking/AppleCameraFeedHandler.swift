@@ -16,13 +16,26 @@
 import ArcGIS
 import ARKit
 
+/// Handles camera feed updates for an Apple world-tracking configuration.
 @available(macCatalyst, unavailable)
 @available(visionOS, unavailable)
 @MainActor
 protocol AppleCameraFeedHandler: AnyObject {
+    /// Processes a location update.
+    /// - Parameters:
+    ///   - location: The latest device location.
+    ///   - sceneCamera: The current scene camera, if available.
     func updateLocation(_ location: Location, sceneCamera: Camera?)
+    /// Processes a heading update.
+    /// - Parameter heading: The latest device heading, in degrees.
     func updateHeading(_ heading: Double)
+    /// Processes the AR camera for a frame.
+    /// - Parameters:
+    ///   - camera: The AR camera for the frame.
+    ///   - sceneCamera: The current scene camera, if available.
     func handleFrame(_ camera: ARCamera, sceneCamera: Camera?)
+    /// Processes a geo-tracking status update.
+    /// - Parameter status: The latest geo-tracking status.
     func handleStatus(_ status: ARGeoTrackingStatus)
 }
 
