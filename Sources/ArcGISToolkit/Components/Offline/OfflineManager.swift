@@ -356,6 +356,7 @@ public extension SwiftUI.Scene {
     ///   - preferredBackgroundStatusCheckSchedule: The preferred background status check schedule.
     ///   See ``JobManager/preferredBackgroundStatusCheckSchedule`` for more details.
     ///   - jobCompletionAction: An action to perform when a job completes.
+    @available(*, deprecated, message: "Use 'offlineManager(configuration:onJobCompletion:)' instead.")
     @MainActor
     func offlineManager(
         preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule,
