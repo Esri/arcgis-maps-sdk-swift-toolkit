@@ -114,7 +114,13 @@ final class BasemapGalleryItemTests: XCTestCase {
         // Test if basemap matches. Use a Task here so we can catch and test
         // the change to `item.isBasemapLoading` during the loading of the base layers.
         Task {
-            try await item.updateSpatialReferenceStatus(SpatialReference.webMercator)
+            do {
+                try await item.updateSpatialReferenceStatus(SpatialReference.webMercator)
+            } catch {
+                XCTFail(
+                    "Failed to update item's spatial reference status \(error.localizedDescription)"
+                )
+            }
         }
         
         // Check if `isBasemapLoading` is set to true during first call
