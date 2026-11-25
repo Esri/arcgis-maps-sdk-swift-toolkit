@@ -67,7 +67,6 @@ struct FeatureEditorFormView: View {
             .editingButtons(isMinimized ? .hidden : .automatic)
             .onFeatureFormChanged { presentedFeatureForm = $0 }
             .onFormEditingEvent { editingEvent = $0 }
-            .environment(\.externalSaveAction, saveGeometryEditsAction)
             .onAnimationChange(of: geometryEditorOpacity) { newOpacity in
                 model.geometryEditorModel.geometryEditor.tool.style.opacity = newOpacity
             }
@@ -212,6 +211,22 @@ struct FeatureEditorFormView: View {
 }
 
 // MARK: - Helpers
+
+extension FeatureFormView.EditingEvent: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        return switch (lhs, rhs) {
+        case let (.discardedEdits(lhsWillNavigate), .discardedEdits(rhsWillNavigate)),
+            let (.savedEdits(lhsWillNavigate), .savedEdits(rhsWillNavigate)):
+            lhsWillNavigate == rhsWillNavigate
+        case let (.navigationChanged(lhsPathItem), .navigationChanged(rhsPathItem)):
+            lhsPathItem == rhsPathItem
+        case let (.showOnMapRequested(lhsFeature), .showOnMapRequested(rhsFeature)):
+            lhsFeature === rhsFeature
+        default:
+            false
+        }
+    }
+}
 
 private extension Duration {
     /// The duration before a feature highlight (selection and geometry editor opacity) is cleared.

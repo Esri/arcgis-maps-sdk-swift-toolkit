@@ -18,13 +18,6 @@ import SwiftUI
 extension FeatureFormView {
     /// A view for a utility association group result.
     struct UtilityAssociationGroupResultView: View {
-        /// A closure that saves external edits. This is non-`nil` when there are external edits.
-        @Environment(\.externalSaveAction) private var externalSaveAction
-        /// The model for the FeatureFormView containing the view.
-        @Environment(FeatureFormViewModel.self) var featureFormViewModel
-        /// A Boolean which declares whether navigation to forms for features associated via utility
-        /// association form elements is disabled.
-        @Environment(\.navigationIsDisabled) var navigationIsDisabled
         /// The model for the feature form view.
         @Environment(FeatureFormView.Model.self) var groupModel
         /// The model for the feature form which presented this view.
@@ -154,21 +147,6 @@ extension FeatureFormView {
         
         func mainButton(for result: UtilityAssociationResult) -> some View {
             Button {
-                let navigationAction = {
-                    let form = FeatureForm(feature: result.associatedFeature)
-                    featureFormViewModel.addModel(form)
-                    featureFormViewModel.navigationPath.append(
-                        FeatureFormView.NavigationPathItem.form(form)
-                    )
-                }
-                if embeddedFeatureFormViewModel?.featureForm.hasEdits ?? false
-                    || externalSaveAction != nil {
-                    featureFormViewModel.navigationAlertInfo = (true, {
-                        navigationAction()
-                    })
-                } else {
-                    navigationAction()
-                }
                 groupModel.add(
                     form: FeatureForm(feature: result.associatedFeature),
                     select: true,
