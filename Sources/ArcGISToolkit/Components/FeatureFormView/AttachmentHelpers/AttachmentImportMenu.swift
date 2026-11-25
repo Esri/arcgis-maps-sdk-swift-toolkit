@@ -39,6 +39,9 @@ struct AttachmentImportMenu: View {
         self.onAdd = onAdd
     }
     
+    /// The feature for view customization options.
+    @Environment(\.customization) var customization
+    
     /// Performs camera authorization request handling.
     @State private var cameraRequester = CameraRequester()
     
@@ -186,6 +189,7 @@ struct AttachmentImportMenu: View {
             Image(systemName: "photo.on.rectangle")
         }
     }
+    
     private func attachFileButton() -> Button<some View> {
         Button {
             fileImporterIsPresented = true
@@ -337,24 +341,78 @@ struct AttachmentImportMenu: View {
             let uploadResult: Result<FormAttachment, Error>
             switch (newAttachmentImportData.fileName, newAttachmentImportData.data, newAttachmentImportData.filePath) {
             case let (.some(name), .some(data), .none):
+                var customizedData: Data?
+                if let customization,
+                   let result = customization.addAttachmentAction?(
+                    newAttachmentImportData.contentType,
+                    FeatureFormView.Customization.AttachmentSource.data(data)
+                   ) {
+                    
+                    if case let .data(newData) = result {
+                        customizedData = newData
+                    }
+                }
+                let newData = customizedData
                 uploadResult = await Result {
-                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, data: data, name: name)
+                    try await element.addAttachment(
+                        contentType: newAttachmentImportData.contentType,
+                        data: newData ?? data,
+                        name: name
+                    )
                 }
             case let (.none, .some(data), .none):
+                var customizedData: Data?
+                if let customization,
+                   let result = customization.addAttachmentAction?(
+                    newAttachmentImportData.contentType,
+                    FeatureFormView.Customization.AttachmentSource.data(data)
+                   ) {
+                    if case let .data(newData) = result {
+                        customizedData = newData
+                    }
+                }
+                let newData = customizedData
                 uploadResult = await Result {
-                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, data: data)
+                    try await element.addAttachment(
+                        contentType: newAttachmentImportData.contentType,
+                        data: newData ?? data
+                    )
                 }
             case let (.some(name), .none, .some(path)):
                 _ = path.startAccessingSecurityScopedResource()
                 defer { path.stopAccessingSecurityScopedResource() }
+                var customizedPath: URL?
+                if let customization,
+                   let result = customization.addAttachmentAction?(
+                    newAttachmentImportData.contentType,
+                    nil,
+                    path
+                   ) {
+                    if result.0 != nil {
+                        customizedPath = result.1
+                    }
+                }
+                let newPath = customizedPath ?? path
                 uploadResult = await Result {
-                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: path, name: name)
+                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: newPath, name: name)
                 }
             case let (.none, .none, .some(path)):
                 _ = path.startAccessingSecurityScopedResource()
                 defer { path.stopAccessingSecurityScopedResource() }
+                var customizedPath: URL?
+                if let customization,
+                   let result = customization.addAttachmentAction?(
+                    newAttachmentImportData.contentType,
+                    nil,
+                    path
+                   ) {
+                    if result.0 != nil {
+                        customizedPath = result.1
+                    }
+                }
+                let newPath = customizedPath ?? path
                 uploadResult = await Result {
-                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: path)
+                    try await element.addAttachment(contentType: newAttachmentImportData.contentType, fileURL: newPath)
                 }
             default:
                 uploadResult = .failure(AttachmentImportError.creationFailed)
