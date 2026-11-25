@@ -34,6 +34,18 @@ final class FeatureEditorModel {
         case stopped
     }
     
+    enum FormModelError: LocalizedError {
+        case unavailable
+        
+        var errorDescription: String? {
+            String(
+                localized: "The feature forms could not be opened.",
+                bundle: .toolkitModule,
+                comment: "An error shown when the feature editor cannot open its feature forms."
+            )
+        }
+    }
+    
     /// The current state of the feature editor.
     private(set) var state: State = .stopped
     
@@ -60,6 +72,10 @@ final class FeatureEditorModel {
     private var presentedFeatureForm: FeatureForm?
     /// The root feature form to edit with the feature editor.
     private(set) var rootFeatureForm: FeatureForm?
+    /// The model for the current form editing session.
+    private(set) var formViewModel: FeatureFormView.Model?
+    /// Original geometries for forms visited during the session, including initially empty ones.
+    private var originalFormGeometries: [ObjectIdentifier: (ArcGISFeature, Geometry?)] = [:]
     /// The result of trying to load the resources and starting editing.
     private(set) var loadResult: Result<Void, Error>?
     /// The geometry used to set the viewpoint.
@@ -103,9 +119,11 @@ final class FeatureEditorModel {
     
     /// Starts editing a new `FeatureForm` that is shown in the feature editor's `FeatureFormView`.
     /// - Parameter featureForm: The new feature form to edit.
-    func startEditingFeatureForm(_ featureForm: FeatureForm) async {
+    func startEditingFeatureForm(_ featureForm: FeatureForm?) async {
+        guard presentedFeatureForm !== featureForm else { return }
         stopGeometryEditing()
         presentedFeatureForm = featureForm
+        guard featureForm != nil else { return }
         await setUpGeometryEditing()
     }
     
@@ -141,6 +159,8 @@ final class FeatureEditorModel {
     private func resetProperties() {
         rootFeatureForm = nil
         presentedFeatureForm = nil
+        formViewModel = nil
+        originalFormGeometries.removeAll()
         viewpointGeometry = nil
         
         stopGeometryEditing()
@@ -148,20 +168,39 @@ final class FeatureEditorModel {
         loadResult = nil
     }
     
-    /// Updates the form's feature geometry using the geometry editor's current
-    /// geometry to update possible geometry-dependent form elements.
-    func updateFormGeometry() async throws {
-        guard geometryEditorModel.isStarted else { return }
-        
-        // Uses 'initialGeometry' if the geometry editor has no edits to prevent
-        // an empty geometry from being used when the geometry editor was
-        // started using a 'geometryType' (when 'feature.geometry' is 'nil').
-        let geometry = if geometryEditorModel.canUndo {
-            geometryEditorModel.geometry
-        } else {
-            geometryEditorModel.initialGeometry
+    /// The geometry to use in the form, preserving an initially absent geometry on undo.
+    var formGeometry: Geometry? {
+        let initialGeometry = geometryEditorModel.initialGeometry
+        if geometryEditorModel.canUndo,
+           let geometry = geometryEditorModel.geometry,
+           initialGeometry != nil || !geometry.isEmpty {
+            return geometry
         }
+        return initialGeometry
+    }
+    
+    /// Updates the form's feature geometry and reports its validation status to the form group.
+    func updateFormGeometry() async throws {
+        guard geometryEditorModel.isStarted,
+              let form = presentedFeatureForm,
+              formViewModel?.selectedForm === form else { return }
+        
+        let geometry = formGeometry
+        let originalGeometry = originalFormGeometries[form.id]?.1
+        let status: FeatureFormView.GeometryStatus? = if geometry == originalGeometry {
+            nil
+        } else {
+            geometry?.sketchIsValid == true ? .valid : .invalid
+        }
+        formViewModel?.setGeometryEditStatus(for: form.feature, status: status)
         try await setFormGeometry(to: geometry)
+    }
+    
+    /// Restores geometry edits when the form group is discarded.
+    func discardFormGeometries() {
+        for (feature, geometry) in originalFormGeometries.values where feature.geometry != geometry {
+            feature.geometry = geometry
+        }
     }
     
     /// Sets the form's feature geometry and reevaluates expressions to update
@@ -191,12 +230,21 @@ final class FeatureEditorModel {
     /// Performs setup needed for geometry editing and starts the geometry
     /// editor if applicable.
     private func setUpGeometryEditing() async {
-        loadResult = await Result { @MainActor in
+        let result = await Result { @MainActor in
             guard let feature else { return }
             
             // Loads the feature so canUpdateGeometry can be accessed. It is always
             // false otherwise.
             try await feature.retryLoad()
+            try Task.checkCancellation()
+            if formViewModel == nil, let rootFeatureForm {
+                guard let formModel = FeatureFormView.Model(forms: [rootFeatureForm]),
+                      formModel.selectedForm != nil else {
+                    throw FormModelError.unavailable
+                }
+                formViewModel = formModel
+                presentedFeatureForm = rootFeatureForm
+            }
             guard feature.canUpdateGeometry else { return }
             
             // Loads the feature's table so geometryType can be accessed and
@@ -212,9 +260,13 @@ final class FeatureEditorModel {
                     "Failed to create snap rules: \(error.localizedDescription)"
                 )
             }
+            try Task.checkCancellation()
             geometryEditorModel.setSnapRules(snapRules)
             
             startGeometryEditor()
+        }
+        if !Task.isCancelled {
+            loadResult = result
         }
     }
     
@@ -222,6 +274,9 @@ final class FeatureEditorModel {
     private func startGeometryEditor() {
         guard let feature else { return }
         
+        if let form = presentedFeatureForm, originalFormGeometries[form.id] == nil {
+            originalFormGeometries[form.id] = (feature, feature.geometry)
+        }
         if let geometry = feature.geometry {
             geometryEditorModel.start(withInitial: geometry)
             viewpointGeometry = geometry

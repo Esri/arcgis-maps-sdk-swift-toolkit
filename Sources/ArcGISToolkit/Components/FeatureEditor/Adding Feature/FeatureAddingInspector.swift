@@ -32,7 +32,7 @@ struct FeatureAddingInspector: View {
     /// A Boolean value indicating whether the feature form view is presented.
     var featureFormViewIsPresented: Binding<Bool> {
         .init {
-            model.featureForm != nil
+            model.featureFormModel != nil
         } set: { newValue in
             guard !newValue else { return }
             model.stop()
@@ -41,8 +41,8 @@ struct FeatureAddingInspector: View {
     
     var body: some View {
         Group {
-            if let featureForm = model.featureForm {
-                FeatureFormView(root: featureForm, isPresented: featureFormViewIsPresented)
+            if let formModel = model.featureFormModel {
+                FeatureFormView(model: formModel, isPresented: featureFormViewIsPresented)
                     .onDisappear { model.stop() }
             } else {
                 NavigationStack(path: templatePickerNavigationPath) {
@@ -50,6 +50,6 @@ struct FeatureAddingInspector: View {
                 }
             }
         }
-        .animation(.default, value: model.featureForm?.id)
+        .animation(.default, value: model.featureFormModel.map(ObjectIdentifier.init))
     }
 }

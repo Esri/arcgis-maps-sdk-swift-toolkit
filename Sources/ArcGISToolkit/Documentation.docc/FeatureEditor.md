@@ -31,7 +31,8 @@ FeatureEditorContainer {
 ## Features
 
 - Attribute, attachment, and utility network association editing via a 
-``FeatureFormView``.
+``FeatureFormView``. When editing related forms, the form view keeps their
+pending edits together so they can be saved or discarded as a group.
 - `Point`, `Multipoint`, `Polyline`, and `Polygon` geometry editing via a 
 `GeometryEditor` that is set on the `MapView` automatically.
 - Performing common geometry editing operations via UI controls in a toolbar 

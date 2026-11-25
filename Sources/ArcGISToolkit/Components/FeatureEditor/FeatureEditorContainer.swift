@@ -50,7 +50,7 @@ public struct FeatureEditorContainer<Content: View>: View {
             let featureAddingModel = model.featureAddingModel
             switch model.state {
             case .adding where featureAddingModel.selectedLayerTemplate == nil
-                && featureAddingModel.featureForm == nil:
+                && featureAddingModel.featureFormModel == nil:
                 model.featureAddingModel.stop()
             case .editing:
                 model.stopEditing()
@@ -78,11 +78,8 @@ public struct FeatureEditorContainer<Content: View>: View {
                     case .editing:
                         switch model.loadResult {
                         case .success:
-                            if let rootFeatureForm = model.rootFeatureForm {
-                                FeatureEditorFormView(
-                                    rootFeatureForm: rootFeatureForm,
-                                    isMinimized: selectedPresentationDetent == .bar
-                                )
+                            if let formModel = model.formViewModel {
+                                FeatureEditorFormView(formModel: formModel)
                             }
                         case .failure(let error):
                             NavigationStack {

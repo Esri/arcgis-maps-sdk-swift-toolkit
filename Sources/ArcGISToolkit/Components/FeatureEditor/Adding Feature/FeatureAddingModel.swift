@@ -26,8 +26,8 @@ final class FeatureAddingModel {
     private(set) var groups: [LayerTemplateGroup] = []
     /// The currently selected layer template.
     var selectedLayerTemplate: LayerTemplate?
-    /// The form for the newly added feature.
-    private(set) var featureForm: FeatureForm?
+    /// The model for the form shown after adding a feature.
+    private(set) var featureFormModel: FeatureFormView.Model?
     /// The feature editor model that owns this model.
     private unowned let featureEditorModel: FeatureEditorModel
     
@@ -53,9 +53,7 @@ final class FeatureAddingModel {
     /// Stops adding features.
     func stop() {
         stopConstruction()
-        if featureForm != nil {
-            featureForm = nil
-        }
+        featureFormModel = nil
         featureEditorModel.stopAddingFeatures()
     }
     
@@ -132,7 +130,7 @@ final class FeatureAddingModel {
                 
                 geometryConstructionState = .editing
             } else {
-                featureForm = try await makeFeatureForm(layerTemplate: layerTemplate)
+                featureFormModel = try await makeFeatureFormModel(layerTemplate: layerTemplate)
             }
         } catch {
             geometryConstructionState = .failed(error)
@@ -160,7 +158,7 @@ final class FeatureAddingModel {
         layerTemplate: LayerTemplate
     ) async {
         do {
-            featureForm = try await makeFeatureForm(
+            featureFormModel = try await makeFeatureFormModel(
                 layerTemplate: layerTemplate,
                 geometry: geometry
             )
@@ -186,19 +184,24 @@ final class FeatureAddingModel {
 }
 
 private extension FeatureAddingModel {
-    func makeFeatureForm(
+    func makeFeatureFormModel(
         layerTemplate: LayerTemplate,
         geometry: Geometry? = nil
-    ) async throws(GeometryConstructionError) -> FeatureForm {
+    ) async throws(GeometryConstructionError) -> FeatureFormView.Model {
         do {
             let featureSet = try await layerTemplate
                 .makeFeatures(geometry: geometry)
             try await layerTemplate.sharedTemplate.source
                 .addFeatures(using: featureSet)
-            return FeatureForm(
+            let form = FeatureForm(
                 // A feature set will always have at least one feature.
                 feature: featureSet.features.first!
             )
+            guard let model = FeatureFormView.Model(forms: [form]),
+                  model.selectedForm != nil else {
+                throw FeatureEditorModel.FormModelError.unavailable
+            }
+            return model
         } catch {
             throw .featureCreationFailed(error)
         }
