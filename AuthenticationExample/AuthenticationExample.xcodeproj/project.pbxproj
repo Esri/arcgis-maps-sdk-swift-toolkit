@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 110;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -40,11 +40,9 @@
 /* Begin PBXFrameworksBuildPhase section */
 		88AD13722834355000500B2E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				88AD138A2834366100500B2E /* ArcGISToolkit in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -115,8 +113,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = AuthenticationExample;
 			packageProductDependencies = (
 				88AD13892834366100500B2E /* ArcGISToolkit */,
@@ -148,7 +144,7 @@
 				Base,
 			);
 			mainGroup = 88AD136C2834355000500B2E;
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 110;
 			productRefGroup = 88AD13762834355000500B2E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -161,12 +157,10 @@
 /* Begin PBXResourcesBuildPhase section */
 		88AD13732834355000500B2E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				88AD13802834355100500B2E /* Preview Assets.xcassets in Resources */,
 				88AD137D2834355100500B2E /* Assets.xcassets in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
@@ -174,28 +168,23 @@
 		8AA526702BCF1887007D28B1 /* Lint Sources */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
 			name = "Lint Sources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint --config ../.swiftlint.yml\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = (
+				"export PATH=\"$PATH:/opt/homebrew/bin\"",
+				"if which swiftlint > /dev/null; then",
+				"  swiftlint --config ../.swiftlint.yml",
+				"else",
+				"  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"",
+				"fi",
+				"",
+			);
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		88AD13712834355000500B2E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				88AD138E283443F800500B2E /* MapItemView.swift in Sources */,
 				88AD137B2834355000500B2E /* SignInView.swift in Sources */,
@@ -206,12 +195,11 @@
 				88AD13792834355000500B2E /* AuthenticationApp.swift in Sources */,
 				88D24DF6288F5BAE007A539C /* UserView.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		88AD13812834355100500B2E /* Debug */ = {
+		88AD13812834355100500B2E /* Debug configuration for PBXProject "AuthenticationExample" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -273,7 +261,7 @@
 			};
 			name = Debug;
 		};
-		88AD13822834355100500B2E /* Release */ = {
+		88AD13822834355100500B2E /* Release configuration for PBXProject "AuthenticationExample" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -329,7 +317,7 @@
 			};
 			name = Release;
 		};
-		88AD13842834355100500B2E /* Debug */ = {
+		88AD13842834355100500B2E /* Debug configuration for PBXNativeTarget "AuthenticationExample" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -352,7 +340,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 300.1.0;
+				MARKETING_VERSION = 300.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.Authentication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -361,13 +349,15 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
-		88AD13852834355100500B2E /* Release */ = {
+		88AD13852834355100500B2E /* Release configuration for PBXNativeTarget "AuthenticationExample" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -390,7 +380,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 300.1.0;
+				MARKETING_VERSION = 300.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.Authentication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -399,6 +389,8 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.0;
@@ -411,19 +403,17 @@
 		88AD13702834355000500B2E /* Build configuration list for PBXProject "AuthenticationExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				88AD13812834355100500B2E /* Debug */,
-				88AD13822834355100500B2E /* Release */,
+				88AD13812834355100500B2E /* Debug configuration for PBXProject "AuthenticationExample" */,
+				88AD13822834355100500B2E /* Release configuration for PBXProject "AuthenticationExample" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		88AD13832834355100500B2E /* Build configuration list for PBXNativeTarget "AuthenticationExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				88AD13842834355100500B2E /* Debug */,
-				88AD13852834355100500B2E /* Release */,
+				88AD13842834355100500B2E /* Debug configuration for PBXNativeTarget "AuthenticationExample" */,
+				88AD13852834355100500B2E /* Release configuration for PBXNativeTarget "AuthenticationExample" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */

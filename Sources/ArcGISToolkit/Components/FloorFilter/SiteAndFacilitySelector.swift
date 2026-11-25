@@ -25,50 +25,71 @@ struct SiteAndFacilitySelector: View {
     /// The view model used by the `SiteAndFacilitySelector`.
     @EnvironmentObject private var model: FloorFilterViewModel
     
-    @State private var navigationPath = NavigationPath()
+    /// The navigation destinations for the view.
+    enum NavigationDestination: Hashable {
+        /// The all sites facility list.
+        case allSites
+        /// The facility list for a given site.
+        case facilityList(FloorSite?)
+    }
+    @State private var navigationPath: [NavigationDestination] = []
     
-    /// This is set to true when the view appears, allowing us to workaround
-    /// an iOS 26 bug where the allSites button is initially added to the
-    /// toolbar of the navigation stack of the presenting view, which causes
-    /// the attribution bar of the map to jump.
-    /// This delays showing the sub-views until the main view is ready to show.
-    @State private var readyToPresent = false
+    /// A Boolean value indicating whether the navigation has been initialized.
+    /// This is used to ensure the navigation path is only set when the view first appears.
+    @State private var navigationIsInitialized = false
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            if readyToPresent {
-                VStack {
-                    if model.sites.count > 1 {
-                        SiteList(isPresented: $isPresented)
-                    } else {
-                        FacilityList(isPresented: $isPresented, site: nil)
-                    }
-                }
-                .navigationDestination(for: FloorFacility.self) { facility in
-                    FacilityList(
+            Group {
+                if model.sites.count > 1 {
+                    SiteList(
                         isPresented: $isPresented,
-                        site: model.showingFacilitiesFromAllSites ? nil : facility.site
+                        showsAllSitesButton: navigationIsInitialized && navigationPath.isEmpty
                     )
-                }
-                .onAppear {
-                    // If there not multiple sites, then we go straight to the facilities list.
-                    guard model.sites.count > 1, let facility = model.selection?.facility else {
-                        return
-                    }
-                    navigationPath.append(facility)
+                } else {
+                    FacilityList(isPresented: $isPresented, site: nil)
                 }
             }
+            .navigationDestination(for: NavigationDestination.self) { destination in
+                switch destination {
+                case .allSites:
+                    FacilityList(isPresented: $isPresented, site: nil)
+                        .onAppear {
+                            model.showingFacilitiesFromAllSites = true
+                        }
+                case .facilityList(let site):
+                    FacilityList(isPresented: $isPresented, site: site)
+                        .onAppear {
+                            model.showingFacilitiesFromAllSites = false
+                        }
+                }
+            }
+            .onAppear {
+                // Shows the view with the selected facility when the floor filter reopens.
+                guard !navigationIsInitialized else { return }
+                
+                if model.sites.count > 1, let facility = model.selection?.facility {
+                    navigationPath = model.showingFacilitiesFromAllSites
+                    ? [.allSites]
+                    : [.facilityList(facility.site)]
+                }
+                
+                navigationIsInitialized = true
+            }
         }
-        .onAppear {
-            readyToPresent = true
-        }
-        .frame(minWidth: 360, minHeight: 500)
+        .frame(idealWidth: 360, idealHeight: 500)
     }
 }
 
 private struct SiteList: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isPresented: Bool
+    /// A Boolean value indicating whether the all sites button should be
+    /// displayed. This is used to work around an iOS 26 bug where the all
+    /// sites button is briefly added to the toolbar of the presenting view
+    /// when the floor filter is opened and there is a selected facility, which
+    /// causes the map view's attribution bar to jump.
+    let showsAllSitesButton: Bool
     
     /// The view model backing this view.
     @EnvironmentObject private var model: FloorFilterViewModel
@@ -85,31 +106,31 @@ private struct SiteList: View {
     }
     
     var body: some View {
-        VStack {
+        Group {
             if sites.isEmpty {
                 ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List(sites) { site in
-                    NavigationLink {
-                        FacilityList(isPresented: $isPresented, site: site)
-                            .onAppear {
-                                model.showingFacilitiesFromAllSites = false
-                            }
-                    } label: {
+                    NavigationLink(
+                        value: SiteAndFacilitySelector.NavigationDestination.facilityList(site)
+                    ) {
                         Text(site.name)
                             .lineLimit(1)
                     }
                 }
-                .searchable(
-                    text: $searchText,
-                    placement: .navigationBarDrawer(displayMode: .always),
-                    prompt: String.filterSites
-                )
 #if !os(visionOS)
                 .listStyle(.plain)
 #endif
             }
         }
+        // Prevents background flicker when navigating back from FacilityList.
+        .background(Color(.systemBackground))
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: String.filterSites
+        )
         .navigationTitle(String.sites)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -118,19 +139,17 @@ private struct SiteList: View {
                     isPresented = false
                 }
             }
-            ToolbarItem(placement: .bottomBar) {
-                allSitesButton
+            
+            if showsAllSitesButton {
+                ToolbarItem(placement: .bottomBar) {
+                    allSitesButton
+                }
             }
         }
     }
     
     @ViewBuilder var allSitesButton: some View {
-        NavigationLink {
-            FacilityList(isPresented: $isPresented, site: nil)
-                .onAppear {
-                    model.showingFacilitiesFromAllSites = true
-                }
-        } label: {
+        NavigationLink(value: SiteAndFacilitySelector.NavigationDestination.allSites) {
             Text(String.allSites)
 #if targetEnvironment(macCatalyst)
                 // This works around a catalyst bug where button text is squished.
@@ -166,7 +185,7 @@ private struct FacilityList: View {
     }
     
     var body: some View {
-        VStack {
+        Group {
             if facilities.isEmpty {
                 ContentUnavailableView(String.noMatchesFound, systemImage: "building.2")
             } else {
@@ -198,11 +217,6 @@ private struct FacilityList: View {
                         .buttonStyle(.plain)
 #endif
                     }
-                    .searchable(
-                        text: $searchText,
-                        placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: String.filterFacilities
-                    )
 #if !os(visionOS)
                     .listStyle(.plain)
 #endif
@@ -215,6 +229,11 @@ private struct FacilityList: View {
                 }
             }
         }
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: String.filterFacilities
+        )
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 DismissButton(kind: .cancel) {

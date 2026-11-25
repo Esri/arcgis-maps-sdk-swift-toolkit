@@ -27,12 +27,12 @@ final class BookmarksTests: XCTestCase {
         
         let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
         let bookmarksButton = app.buttons["Bookmarks"].firstMatch
-        let selectABookmarkText = app.staticTexts["Select a bookmark"]
         let giantSequoiasButton = app.buttons["Giant Sequoias of Willamette Blvd"].firstMatch
         let giantSequoiasLabel = app.staticTexts["Giant Sequoias of Willamette Blvd"].firstMatch
         let historicLaddsButton = app.buttons["Historic Ladd's Addition"].firstMatch
         let historicLaddsLabel = app.staticTexts["Historic Ladd's Addition"]
         let bookmarksTestCase1Button = app.buttons["Bookmarks Test Case 1"]
+        let bookmarksViewTitleLabel = app.staticTexts["Bookmarks"].firstMatch
         
         // Open the Bookmarks component test views.
         XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
@@ -46,8 +46,8 @@ final class BookmarksTests: XCTestCase {
         XCTAssertTrue(bookmarksButton.exists, "The Bookmarks button wasn't found.")
         bookmarksButton.tap()
         
-        // Verify that the directive UI label is present.
-        XCTAssertTrue(selectABookmarkText.waitForExistence(timeout: 1.0), "The Select a bookmark text wasn't found.")
+        // Verify that the Bookmarks view title label is present.
+        XCTAssertTrue(bookmarksViewTitleLabel.waitForExistence(timeout: 1.0), "The Bookmarks title label wasn't found.")
         
         // Select a bookmark and confirm the component notified the test view of the selection.
         XCTAssertTrue(giantSequoiasButton.waitForExistence(timeout: 1.0), "The Giant Sequoias button wasn't found.")
@@ -61,8 +61,8 @@ final class BookmarksTests: XCTestCase {
         
         // Verify that the bookmarks selection view is no longer present.
         XCTAssertFalse(
-            selectABookmarkText.exists,
-            "The Select a bookmark text was unexpectedly found."
+            bookmarksViewTitleLabel.exists,
+            "The Bookmarks title label was unexpectedly found."
         )
         
         // Re-open the bookmark selection view.

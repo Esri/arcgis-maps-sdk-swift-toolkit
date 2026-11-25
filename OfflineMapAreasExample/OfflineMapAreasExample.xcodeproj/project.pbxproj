@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 110;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -28,11 +28,9 @@
 /* Begin PBXFrameworksBuildPhase section */
 		1CBE20162BF2BF2B0006B55D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				1CBE20322BF2C6130006B55D /* ArcGISToolkit in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -96,8 +94,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = OfflineMapAreasExample;
 			packageProductDependencies = (
 				1CBE20312BF2C6130006B55D /* ArcGISToolkit */,
@@ -122,7 +118,6 @@
 				};
 			};
 			buildConfigurationList = 1CBE20142BF2BF2B0006B55D /* Build configuration list for PBXProject "OfflineMapAreasExample" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -132,6 +127,7 @@
 			mainGroup = 1CBE20102BF2BF2B0006B55D;
 			packageReferences = (
 			);
+			preferredProjectObjectVersion = 110;
 			productRefGroup = 1CBE201A2BF2BF2B0006B55D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -144,29 +140,25 @@
 /* Begin PBXResourcesBuildPhase section */
 		1CBE20172BF2BF2B0006B55D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				1CBE20252BF2BF2C0006B55D /* Preview Assets.xcassets in Resources */,
 				1CBE20212BF2BF2C0006B55D /* Assets.xcassets in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1CBE20152BF2BF2B0006B55D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				1CBE201F2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift in Sources */,
 				1CBE201D2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		1CBE20262BF2BF2C0006B55D /* Debug */ = {
+		1CBE20262BF2BF2C0006B55D /* Debug configuration for PBXProject "OfflineMapAreasExample" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -227,7 +219,7 @@
 			};
 			name = Debug;
 		};
-		1CBE20272BF2BF2C0006B55D /* Release */ = {
+		1CBE20272BF2BF2C0006B55D /* Release configuration for PBXProject "OfflineMapAreasExample" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -280,7 +272,7 @@
 			};
 			name = Release;
 		};
-		1CBE20292BF2BF2C0006B55D /* Debug */ = {
+		1CBE20292BF2BF2C0006B55D /* Debug configuration for PBXNativeTarget "OfflineMapAreasExample" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -307,20 +299,22 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MARKETING_VERSION = 300.1.0;
+				MARKETING_VERSION = 300.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.OfflineMapAreasExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
-		1CBE202A2BF2BF2C0006B55D /* Release */ = {
+		1CBE202A2BF2BF2C0006B55D /* Release configuration for PBXNativeTarget "OfflineMapAreasExample" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -347,13 +341,15 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MARKETING_VERSION = 300.1.0;
+				MARKETING_VERSION = 300.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.OfflineMapAreasExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.0;
@@ -366,19 +362,17 @@
 		1CBE20142BF2BF2B0006B55D /* Build configuration list for PBXProject "OfflineMapAreasExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1CBE20262BF2BF2C0006B55D /* Debug */,
-				1CBE20272BF2BF2C0006B55D /* Release */,
+				1CBE20262BF2BF2C0006B55D /* Debug configuration for PBXProject "OfflineMapAreasExample" */,
+				1CBE20272BF2BF2C0006B55D /* Release configuration for PBXProject "OfflineMapAreasExample" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		1CBE20282BF2BF2C0006B55D /* Build configuration list for PBXNativeTarget "OfflineMapAreasExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1CBE20292BF2BF2C0006B55D /* Debug */,
-				1CBE202A2BF2BF2C0006B55D /* Release */,
+				1CBE20292BF2BF2C0006B55D /* Debug configuration for PBXNativeTarget "OfflineMapAreasExample" */,
+				1CBE202A2BF2BF2C0006B55D /* Release configuration for PBXNativeTarget "OfflineMapAreasExample" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */

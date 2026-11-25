@@ -342,7 +342,7 @@ extension FileManager {
     }
 }
 
-public extension JobProtocol {
+extension JobProtocol {
     /// The id of the job.
     var id: ObjectIdentifier {
         ObjectIdentifier(self)

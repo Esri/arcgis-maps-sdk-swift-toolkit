@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// swift-tools-version: 6.2
+// swift-tools-version: 6.4
 
 import PackageDescription
 
@@ -31,7 +31,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", from: "300.1.0"),
+        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", from: "300.2.0"),
         .package(url: "https://github.com/swiftlang/swift-markdown.git", from: "0.4.0")
     ],
     targets: [
@@ -56,3 +56,9 @@ let package = Package(
         )
     ]
 )
+
+for target in package.targets where target.type != .plugin {
+    target.swiftSettings = (target.swiftSettings ?? []) + [
+        .enableUpcomingFeature("MemberImportVisibility")
+    ]
+}

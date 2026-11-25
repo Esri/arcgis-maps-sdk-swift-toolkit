@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import ArcGIS
+import ArcGISToolkit
 import SwiftUI
 
 /// A view that loads a `LoadableImage` and displays it.

@@ -414,7 +414,7 @@ class PreplannedMapModelTests: XCTestCase {
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first { $0.title == "Country Commons Area" })
         let areaID = try XCTUnwrap(area.portalItem.id)
-
+        
         let model = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,

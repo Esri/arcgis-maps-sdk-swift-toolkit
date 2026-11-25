@@ -34,11 +34,18 @@ struct GroupFormElementView<Content>: View where Content: View {
     }
     
     var body: some View {
-        // Using the header of an empty Section ensures that consecutive collapsed
-        // GroupFormElements have spacing consistent with other form elements.
-        Section {} header: {
+#if os(visionOS)
+        // An empty section prevents visual grouping in the hover effect with
+        // sequential GroupFormElements.
+        Section {}
+#endif
+        DisclosureGroup(isExpanded: $isExpanded) {} label: {
             label
         }
+        .disclosureGroupStyleOptimizedForMac()
+        // Group element headers shouldn't have a darkened background.
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
         .task {
             await withTaskGroup { group in
                 for element in element.elements {
@@ -52,11 +59,9 @@ struct GroupFormElementView<Content>: View where Content: View {
             }
         }
         
-        // GroupFormElement content is placed outside the Section above for the
-        // following reasons:
-        // 1. Avoids indentation introduced by components like a DisclosureGroup.
-        // 2. Avoids unwanted impacts on appearance from nested Sections.
-        // 3. Avoids the header receiving a pill-shaped background.
+        // GroupFormElement content is placed outside the DisclosureGroup to
+        // avoid indentation and other unwanted visual impacts from nesting
+        // elements within the group.
         if isExpanded {
             ForEach(visibleElements, id: \.self) { element in
                 Section {
@@ -66,40 +71,24 @@ struct GroupFormElementView<Content>: View where Content: View {
                 } footer: {
                     FormElementFooter(element: element)
                 }
-                .textCase(nil)
             }
         }
     }
     
     /// The label for the group element.
     private var label: some View {
-        Button {
-            withAnimation {
-                isExpanded.toggle()
-            }
-        } label: {
-            VStack(alignment: .leading) {
-                HStack {
-                    Text(element.label)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.primary)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .fontWeight(.bold)
-                        .foregroundStyle(.tertiary)
-                        .rotationEffect(.degrees(isExpanded ? 90 : 0))
-                }
-                if !element.description.isEmpty {
-                    Text(element.description)
-                        .accessibilityIdentifier("\(element.label) Description")
-                        .font(.footnote)
-                        .multilineTextAlignment(.leading)
-                }
+        VStack(alignment: .leading) {
+            Text(element.label)
+                .font(.title3)
+                .fontWeight(.semibold)
+            if !element.description.isEmpty {
+                Text(element.description)
+                    .accessibilityIdentifier("\(element.label) Description")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.leading)
             }
         }
-        .buttonStyle(.plain)
-        .foregroundStyle(.secondary)
         .textCase(nil)
     }
     

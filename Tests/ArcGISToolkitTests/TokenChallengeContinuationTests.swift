@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
+@testable import ArcGISToolkit
 import SwiftUI
 import XCTest
-@testable import ArcGISToolkit
 
 final class TokenChallengeContinuationTests: XCTestCase {
     @MainActor

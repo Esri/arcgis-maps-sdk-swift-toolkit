@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 110;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -58,13 +58,15 @@
 			inputFiles = (
 				"$(SRCROOT)/../.secrets",
 			);
-			isEditable = 1;
 			name = "Generate Swift Code from Secrets";
 			outputFiles = (
 				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)",
 			);
 			runOncePerArchitecture = 0;
-			script = "\"${SRCROOT}/../Scripts/masquerade\" -i \"${INPUT_FILE_PATH}\" -o \"${SCRIPT_OUTPUT_FILE_0}\" -s \"${SCRIPT_INPUT_FILE_0}\" -f\n";
+			script = (
+				"\"${SRCROOT}/../Scripts/masquerade\" -i \"${INPUT_FILE_PATH}\" -o \"${SCRIPT_OUTPUT_FILE_0}\" -s \"${SCRIPT_INPUT_FILE_0}\" -f",
+				"",
+			);
 		};
 /* End PBXBuildRule section */
 
@@ -127,18 +129,14 @@
 /* Begin PBXFrameworksBuildPhase section */
 		7552A74D2A573CBB0023DA5A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				7552A7762A573E900023DA5A /* ArcGISToolkit in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7552A7662A573DFB0023DA5A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -327,8 +325,6 @@
 			buildRules = (
 				8A1ED3212DFCD1860025C731 /* PBXBuildRule */,
 			);
-			dependencies = (
-			);
 			name = "Test Runner";
 			packageProductDependencies = (
 				7552A7752A573E900023DA5A /* ArcGISToolkit */,
@@ -351,8 +347,6 @@
 				7552A7702A573DFB0023DA5A /* PBXTargetDependency */,
 			);
 			name = UITests;
-			packageProductDependencies = (
-			);
 			productName = UITests;
 			productReference = 7552A7692A573DFB0023DA5A /* UITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -386,7 +380,7 @@
 			mainGroup = 7552A7472A573CBB0023DA5A;
 			packageReferences = (
 			);
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 110;
 			productRefGroup = 7552A7512A573CBB0023DA5A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -400,7 +394,6 @@
 /* Begin PBXResourcesBuildPhase section */
 		7552A74E2A573CBB0023DA5A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				8A1562F72B86896C00000DD6 /* Unit Tests.xctestplan in Resources */,
 				7552A75B2A573CBD0023DA5A /* Preview Assets.xcassets in Resources */,
@@ -408,14 +401,11 @@
 				8A1562F52B86896300000DD6 /* UI Tests.xctestplan in Resources */,
 				97E45D7F2E15A1DE0038EA8B /* TestRunner.xcconfig in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7552A7672A573DFB0023DA5A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
@@ -423,29 +413,24 @@
 		8A1ED3322DFCE4FD0025C731 /* Create .secrets File If It Does Not Exist */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
 			name = "Create .secrets File If It Does Not Exist";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(SRCROOT)/../.secrets",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ ! -e \"$SRCROOT/../.secrets\" ]\nthen\n    touch \"$SRCROOT/../.secrets\"\nfi\n";
+			shellScript = (
+				"if [ ! -e \"$SRCROOT/../.secrets\" ]",
+				"then",
+				"    touch \"$SRCROOT/../.secrets\"",
+				"fi",
+				"",
+			);
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7552A74C2A573CBB0023DA5A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				8A9419642E035FED003C7D10 /* AppSecrets.swift.masque in Sources */,
 				7552A7562A573CBB0023DA5A /* Tests.swift in Sources */,
@@ -472,11 +457,9 @@
 				D7FDFCBE2DF2090300ED91C1 /* PopupTestView.swift in Sources */,
 				75B236692A5CB49B00AEFACE /* BasemapGalleryTestView.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7552A7652A573DFB0023DA5A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				8A9845752C3F43EB001CCE22 /* AttachmentCameraControllerTests.swift in Sources */,
 				75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */,
@@ -489,7 +472,6 @@
 				8AF7DF432F52329B00174515 /* XCUIElement.swift in Sources */,
 				8A99A0B42F20578B0021819A /* XCTestCase.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -502,7 +484,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		7552A75C2A573CBD0023DA5A /* Debug */ = {
+		7552A75C2A573CBD0023DA5A /* Debug configuration for PBXProject "Test Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 97E45D7E2E15A1DE0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
@@ -570,7 +552,7 @@
 			};
 			name = Debug;
 		};
-		7552A75D2A573CBD0023DA5A /* Release */ = {
+		7552A75D2A573CBD0023DA5A /* Release configuration for PBXProject "Test Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 97E45D7E2E15A1DE0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
@@ -632,7 +614,7 @@
 			};
 			name = Release;
 		};
-		7552A75F2A573CBD0023DA5A /* Debug */ = {
+		7552A75F2A573CBD0023DA5A /* Debug configuration for PBXNativeTarget "Test Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 97E45D7E2E15A1DE0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
@@ -656,18 +638,20 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 300.1.0;
+				MARKETING_VERSION = 300.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.Test-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
-		7552A7602A573CBD0023DA5A /* Release */ = {
+		7552A7602A573CBD0023DA5A /* Release configuration for PBXNativeTarget "Test Runner" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 97E45D7E2E15A1DE0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
@@ -691,18 +675,20 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 300.1.0;
+				MARKETING_VERSION = 300.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.Test-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
-		7552A7722A573DFB0023DA5A /* Debug */ = {
+		7552A7722A573DFB0023DA5A /* Debug configuration for PBXNativeTarget "UITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 97E45D7E2E15A1DE0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
@@ -715,12 +701,14 @@
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TEST_TARGET_NAME = "Test Runner";
 			};
 			name = Debug;
 		};
-		7552A7732A573DFB0023DA5A /* Release */ = {
+		7552A7732A573DFB0023DA5A /* Release configuration for PBXNativeTarget "UITests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 97E45D7E2E15A1DE0038EA8B /* TestRunner.xcconfig */;
 			buildSettings = {
@@ -733,6 +721,8 @@
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TEST_TARGET_NAME = "Test Runner";
 			};
@@ -744,28 +734,25 @@
 		7552A74B2A573CBB0023DA5A /* Build configuration list for PBXProject "Test Runner" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7552A75C2A573CBD0023DA5A /* Debug */,
-				7552A75D2A573CBD0023DA5A /* Release */,
+				7552A75C2A573CBD0023DA5A /* Debug configuration for PBXProject "Test Runner" */,
+				7552A75D2A573CBD0023DA5A /* Release configuration for PBXProject "Test Runner" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		7552A75E2A573CBD0023DA5A /* Build configuration list for PBXNativeTarget "Test Runner" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7552A75F2A573CBD0023DA5A /* Debug */,
-				7552A7602A573CBD0023DA5A /* Release */,
+				7552A75F2A573CBD0023DA5A /* Debug configuration for PBXNativeTarget "Test Runner" */,
+				7552A7602A573CBD0023DA5A /* Release configuration for PBXNativeTarget "Test Runner" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		7552A7712A573DFB0023DA5A /* Build configuration list for PBXNativeTarget "UITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7552A7722A573DFB0023DA5A /* Debug */,
-				7552A7732A573DFB0023DA5A /* Release */,
+				7552A7722A573DFB0023DA5A /* Debug configuration for PBXNativeTarget "UITests" */,
+				7552A7732A573DFB0023DA5A /* Release configuration for PBXNativeTarget "UITests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */

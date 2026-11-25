@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 110;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -42,26 +42,26 @@
 			inputFiles = (
 				"$(SRCROOT)/../.secrets",
 			);
-			isEditable = 1;
 			name = "Generate Swift Code from Secrets";
 			outputFiles = (
 				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)",
 			);
 			runOncePerArchitecture = 0;
-			script = "\"${SRCROOT}/../Scripts/masquerade\" -i \"${INPUT_FILE_PATH}\" -o \"${SCRIPT_OUTPUT_FILE_0}\" -s \"${SCRIPT_INPUT_FILE_0}\" -f\n";
+			script = (
+				"\"${SRCROOT}/../Scripts/masquerade\" -i \"${INPUT_FILE_PATH}\" -o \"${SCRIPT_OUTPUT_FILE_0}\" -s \"${SCRIPT_INPUT_FILE_0}\" -f",
+				"",
+			);
 		};
 /* End PBXBuildRule section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		E47ABE5E2652FF1300FD2FE3 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 10;
+			dstSubfolder = Frameworks;
 			files = (
 			);
 			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -98,11 +98,9 @@
 /* Begin PBXFrameworksBuildPhase section */
 		E47ABE3D2652FE0900FD2FE3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				E4E57DC6265D8EB00077A093 /* ArcGISToolkit in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -205,8 +203,6 @@
 			buildRules = (
 				8A5BAC672DFC846400266E7A /* PBXBuildRule */,
 			);
-			dependencies = (
-			);
 			name = "Toolkit Examples";
 			packageProductDependencies = (
 				E4E57DC5265D8EB00077A093 /* ArcGISToolkit */,
@@ -238,7 +234,7 @@
 				Base,
 			);
 			mainGroup = E47ABE372652FE0900FD2FE3;
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 110;
 			productRefGroup = E47ABE412652FE0900FD2FE3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -251,12 +247,10 @@
 /* Begin PBXResourcesBuildPhase section */
 		E47ABE3E2652FE0900FD2FE3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				E47ABE4B2652FE0C00FD2FE3 /* Preview Assets.xcassets in Resources */,
 				E47ABE482652FE0C00FD2FE3 /* Assets.xcassets in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
@@ -264,48 +258,39 @@
 		4DFDB9BB29367B7F00A0AC42 /* Lint Sources */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
 			name = "Lint Sources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint --config ../.swiftlint.yml\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = (
+				"export PATH=\"$PATH:/opt/homebrew/bin\"",
+				"if which swiftlint > /dev/null; then",
+				"  swiftlint --config ../.swiftlint.yml",
+				"else",
+				"  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"",
+				"fi",
+				"",
+			);
 		};
 		8AC75EB62DFCE61300A5CC90 /* Create .secrets File If It Does Not Exist */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
 			name = "Create .secrets File If It Does Not Exist";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(SRCROOT)/../.secrets",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ ! -e \"$SRCROOT/../.secrets\" ]\nthen\n    touch \"$SRCROOT/../.secrets\"\nfi\n";
+			shellScript = (
+				"if [ ! -e \"$SRCROOT/../.secrets\" ]",
+				"then",
+				"    touch \"$SRCROOT/../.secrets\"",
+				"fi",
+				"",
+			);
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E47ABE3C2652FE0900FD2FE3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				8A9419622E035F1D003C7D10 /* AppSecrets.swift.masque in Sources */,
 				4D995CD72B5B01DB00AD45FE /* FeatureFormExampleView.swift in Sources */,
@@ -329,12 +314,11 @@
 				E4C389D526B8A12C002BC255 /* BasemapGalleryExampleView.swift in Sources */,
 				75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		E47ABE4D2652FE0C00FD2FE3 /* Debug */ = {
+		E47ABE4D2652FE0C00FD2FE3 /* Debug configuration for PBXProject "Examples" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -392,11 +376,12 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
-		E47ABE4E2652FE0C00FD2FE3 /* Release */ = {
+		E47ABE4E2652FE0C00FD2FE3 /* Release configuration for PBXProject "Examples" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -447,12 +432,13 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		E47ABE502652FE0C00FD2FE3 /* Debug */ = {
+		E47ABE502652FE0C00FD2FE3 /* Debug configuration for PBXNativeTarget "Toolkit Examples" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -471,7 +457,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 300.1.0;
+				MARKETING_VERSION = 300.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -479,13 +465,15 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
-		E47ABE512652FE0C00FD2FE3 /* Release */ = {
+		E47ABE512652FE0C00FD2FE3 /* Release configuration for PBXNativeTarget "Toolkit Examples" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -504,7 +492,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 300.1.0;
+				MARKETING_VERSION = 300.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -512,6 +500,8 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
 				XROS_DEPLOYMENT_TARGET = 2.0;
@@ -524,19 +514,17 @@
 		E47ABE3B2652FE0900FD2FE3 /* Build configuration list for PBXProject "Examples" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E47ABE4D2652FE0C00FD2FE3 /* Debug */,
-				E47ABE4E2652FE0C00FD2FE3 /* Release */,
+				E47ABE4D2652FE0C00FD2FE3 /* Debug configuration for PBXProject "Examples" */,
+				E47ABE4E2652FE0C00FD2FE3 /* Release configuration for PBXProject "Examples" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		E47ABE4F2652FE0C00FD2FE3 /* Build configuration list for PBXNativeTarget "Toolkit Examples" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E47ABE502652FE0C00FD2FE3 /* Debug */,
-				E47ABE512652FE0C00FD2FE3 /* Release */,
+				E47ABE502652FE0C00FD2FE3 /* Debug configuration for PBXNativeTarget "Toolkit Examples" */,
+				E47ABE512652FE0C00FD2FE3 /* Release configuration for PBXNativeTarget "Toolkit Examples" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
