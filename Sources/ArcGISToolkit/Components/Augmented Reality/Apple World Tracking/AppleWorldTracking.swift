@@ -18,6 +18,7 @@ public import Observation
 public import RealityKit
 
 import ARKit
+import Foundation
 
 /// A world-tracking provider that supports system-provided geo tracking and
 /// world tracking.
@@ -45,6 +46,23 @@ import ARKit
     /// A Boolean value indicating whether geo-tracking is currently available
     /// on this device and location.
     private var geoTrackingIsAvailable = false
+
+    /// Identifies the current provider start, or is nil when stopped.
+    private var startID: UUID?
+    /// Identifies the latest session configuration request.
+    private var configurationID = UUID()
+
+    /// Whether the selected tracking mode uses GeoTracking.
+    var isGeoTrackingActive: Bool {
+        switch mode {
+        case .preferGeoTracking:
+            geoTrackingIsAvailable
+        case .geoTracking:
+            true
+        case .worldTracking:
+            false
+        }
+    }
     
     /// Creates an instance with the given tracking mode.
     /// - Parameter mode: The preferred tracking mode.
@@ -59,37 +77,39 @@ extension AppleWorldTracking: WorldTrackingProvider {
     public typealias CameraFeedView = AppleWorldTrackingCameraFeedView
     
     public var arConfiguration: ARConfiguration {
-        var geoTrackingConfiguration: ARConfiguration {
-            ARGeoTrackingConfiguration()
+        if isGeoTrackingActive {
+            return ARGeoTrackingConfiguration()
         }
-        var worldTrackingConfiguration: ARConfiguration {
-            let configuration = ARWorldTrackingConfiguration()
-            // Set world alignment to 'gravityAndHeading' so the world-tracking
-            // configuration uses geographic location from the device. Geo-
-            // tracking uses it by default.
-            configuration.worldAlignment = .gravityAndHeading
-            return configuration
-        }
-        return switch mode {
-        case .preferGeoTracking:
-            if geoTrackingIsAvailable {
-                geoTrackingConfiguration
-            } else {
-                worldTrackingConfiguration
-            }
-        case .geoTracking:
-            geoTrackingConfiguration
-        case .worldTracking:
-            worldTrackingConfiguration
-        }
+
+        let configuration = ARWorldTrackingConfiguration()
+        // Set world alignment to 'gravityAndHeading' so the world-tracking
+        // configuration uses geographic location from the device. Geo-
+        // tracking uses it by default.
+        configuration.worldAlignment = .gravityAndHeading
+        return configuration
     }
     
-    public func start() async {
-        runARSession()
-        if let geoTrackingIsAvailable = try? await ARGeoTrackingConfiguration.isGeoTrackingAvailable {
-            self.geoTrackingIsAvailable = geoTrackingIsAvailable
+    /// Updates the AR session for the selected mode if the provider is started.
+    @MainActor func handleModeChange() {
+        // The next start will configure the session if the provider is stopped.
+        guard startID != nil else { return }
+        let configurationID = UUID()
+        self.configurationID = configurationID
+        let mode = mode
+        Task {
+            await updateARSession(for: mode, configurationID: configurationID)
         }
-        
+    }
+
+    public func start() async {
+        let startID = UUID()
+        self.startID = startID
+        let configurationID = UUID()
+        self.configurationID = configurationID
+        await updateARSession(for: mode, configurationID: configurationID)
+        // Do not start the data source for a stopped or superseded lifecycle.
+        guard self.startID == startID else { return }
+
         let locationManager = CLLocationManager()
         if locationManager.authorizationStatus == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
@@ -105,8 +125,29 @@ extension AppleWorldTracking: WorldTrackingProvider {
             // Do nothing.
         }
     }
+
+    /// Checks geo-tracking availability when needed and runs the AR session
+    /// if the configuration request is still current.
+    /// - Parameters:
+    ///   - mode: The tracking mode for this request.
+    ///   - configurationID: The identifier of this configuration request.
+    @MainActor private func updateARSession(for mode: Mode, configurationID: UUID) async {
+        let isAvailable: Bool?
+        if mode == .preferGeoTracking {
+            isAvailable = (try? await ARGeoTrackingConfiguration.isGeoTrackingAvailable) ?? false
+        } else {
+            isAvailable = nil
+        }
+        // Discard results if stopped, superseded, or the mode changed while awaiting.
+        guard startID != nil, self.configurationID == configurationID, self.mode == mode else { return }
+        if let isAvailable {
+            geoTrackingIsAvailable = isAvailable
+        }
+        runARSession()
+    }
     
     public func stop() {
+        startID = nil
         pauseARSession()
         Task { await dataSource.stop() }
     }
