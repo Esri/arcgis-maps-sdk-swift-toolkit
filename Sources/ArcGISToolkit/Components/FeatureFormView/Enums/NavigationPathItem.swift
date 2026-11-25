@@ -14,10 +14,14 @@
 
 import ArcGIS
 
-extension FeatureFormView {
-    /// Describes the items in feature form view's navigation stack.
+public extension FeatureFormView {
+    /// Describes the destinations a user will visit while browsing utility associations in a feature
+    /// form.
+    ///
+    /// This information can be used to do things such as keeping visualizations in a map
+    /// synchronized with what's happening in the component.
     /// - Since: 300.0
-    public enum NavigationPathItem: Hashable {
+    enum NavigationPathItem: Hashable {
         case form(FeatureForm)
         case utilityAssociationAssetTypesView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureSource)
         case utilityAssociationCreationView(FeatureForm, UtilityAssociationsFormElement, UtilityAssociationsFilter, UtilityAssociationFeatureCandidate)
@@ -80,36 +84,44 @@ extension FeatureFormView {
             switch self {
             case let .form(form):
                 hasher.combine(form.id)
+                hasher.combine(ObjectIdentifier(form))
             case let .utilityAssociationAssetTypesView(form, element, filter, source):
                 hasher.combine(form.id)
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(source))
             case let .utilityAssociationCreationView(form, element, filter, candidate):
                 hasher.combine(form.id)
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(candidate))
             case let .utilityAssociationDetailsView(form, element, result):
                 hasher.combine(form.id)
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(result))
             case let .utilityAssociationFeatureCandidatesView(form, element, filter, source, assetType):
                 hasher.combine(form.id)
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(source))
                 hasher.combine(ObjectIdentifier(assetType))
             case let .utilityAssociationFeatureSourcesView(form, element, filter):
                 hasher.combine(form.id)
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
             case let .utilityAssociationFilterResultView(form, element, filter):
                 hasher.combine(form.id)
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
             case let .utilityAssociationGroupResultView(form, element, filter, formSource):
                 hasher.combine(form.id)
+                hasher.combine(ObjectIdentifier(form))
                 hasher.combine(element)
                 hasher.combine(ObjectIdentifier(filter))
                 hasher.combine(ObjectIdentifier(formSource))

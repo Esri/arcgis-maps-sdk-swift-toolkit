@@ -1896,7 +1896,7 @@ final class FeatureFormViewTests: XCTestCase {
         unsavedChangesAlert.assertExistence()
         
         // Dismiss the alert
-        cancelButton.firstMatch.assertExistenceAndTap()
+        unsavedChangesAlert.buttons["Cancel"].assertExistenceAndTap()
         
         unsavedChangesAlert.assertNonExistence()
         

@@ -18,8 +18,8 @@ import SwiftUI
 extension FeatureFormView {
     /// A view to choose a feature source when selecting a feature to create a utility association with.
     struct UtilityAssociationFeatureCandidatesView: View {
-        /// The model for the FeatureFormView containing the view.
-        @Environment(FeatureFormViewModel.self) var featureFormViewModel
+        /// The model for the feature form which presented this view.
+        @Environment(FeatureFormView.FormModel.self) var formModel
         
         /// The candidates that can be used to create an association.
         @State private var candidates: [UtilityAssociationFeatureCandidate] = []
@@ -129,7 +129,7 @@ extension FeatureFormView {
             Section {
                 ForEach(filteredCandidates, id: \.feature.globalID) { candidate in
                     Button {
-                        featureFormViewModel.navigationPath.append(
+                        formModel.navigationPath.append(
                             FeatureFormView.NavigationPathItem.utilityAssociationCreationView(
                                 form,
                                 element,
@@ -281,9 +281,6 @@ extension FeatureFormView {
     
     /// A label for a utility association feature candidate in a set of candidates.
     private struct CandidateLabel: View {
-        /// The symbol for the candidate feature.
-        @State private var symbol: Image? = nil
-        
         /// The represented candidate.
         let candidate: UtilityAssociationFeatureCandidate
         
@@ -291,18 +288,8 @@ extension FeatureFormView {
             Label {
                 Text(candidate.title)
             } icon: {
-                if let symbol {
-                    symbol
-                        .foregroundStyle(.secondary)
-                } else {
-                    ProgressView()
-                        .task {
-                            symbol = await candidate
-                                .feature
-                                .symbol
-                            ?? Image(systemName: "questionmark.circle")
-                        }
-                }
+                FeatureSymbolView(feature: candidate.feature)
+                    .foregroundStyle(.secondary)
             }
         }
     }
