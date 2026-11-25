@@ -65,6 +65,8 @@ Supports editing existing and new features, with the following capabilities:
 Supports creating and adding features from shared templates:
 - Selecting feature, group, and preset templates queried from the operational 
 layers and feature tables on the map displayed in the `MapView`.
+- Opening the form for a single created feature, or listing all created features
+in the form group menu when a template creates more than one.
 - Creating a geometry for the selected template using the following 
 `GeometryConstructionTool.Kind`s:
     - `circle`

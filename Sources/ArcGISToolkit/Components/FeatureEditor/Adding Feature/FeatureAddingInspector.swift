@@ -14,8 +14,7 @@
 
 import SwiftUI
 
-/// An inspector that presents a template picker and feature form for adding a
-/// feature.
+/// An inspector that presents a template picker and feature forms for adding features.
 struct FeatureAddingInspector: View {
     /// The model that manages the feature-adding workflow.
     let model: FeatureAddingModel

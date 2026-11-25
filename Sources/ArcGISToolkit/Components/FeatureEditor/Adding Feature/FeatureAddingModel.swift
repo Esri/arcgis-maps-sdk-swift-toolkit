@@ -26,7 +26,7 @@ final class FeatureAddingModel {
     private(set) var groups: [LayerTemplateGroup] = []
     /// The currently selected layer template.
     var selectedLayerTemplate: LayerTemplate?
-    /// The model for the form shown after adding a feature.
+    /// The model for the forms shown after adding features.
     private(set) var featureFormModel: FeatureFormView.Model?
     /// The feature editor model that owns this model.
     private unowned let featureEditorModel: FeatureEditorModel
@@ -148,8 +148,7 @@ final class FeatureAddingModel {
         geometryConstructionState = .saving(geometry)
     }
     
-    /// Saves the constructed geometry to a feature form with the given layer
-    /// template and returns the model to a stopped state.
+    /// Creates features from the constructed geometry and layer template, then opens their forms.
     /// - Parameters:
     ///   - geometry: The geometry to save.
     ///   - layerTemplate: The layer template for the new feature.
@@ -193,13 +192,18 @@ private extension FeatureAddingModel {
                 .makeFeatures(geometry: geometry)
             try await layerTemplate.sharedTemplate.source
                 .addFeatures(using: featureSet)
-            let form = FeatureForm(
-                // A feature set will always have at least one feature.
-                feature: featureSet.features.first!
-            )
-            guard let model = FeatureFormView.Model(forms: [form]),
-                  model.selectedForm != nil else {
+            let features = featureSet.features
+            guard !features.isEmpty, let model = FeatureFormView.Model() else {
                 throw FeatureEditorModel.FormModelError.unavailable
+            }
+            for feature in features {
+                model.add(form: FeatureForm(feature: feature))
+            }
+            guard model.forms.count == features.count else {
+                throw FeatureEditorModel.FormModelError.unavailable
+            }
+            if features.count > 1 {
+                model.clearSelection()
             }
             return model
         } catch {
