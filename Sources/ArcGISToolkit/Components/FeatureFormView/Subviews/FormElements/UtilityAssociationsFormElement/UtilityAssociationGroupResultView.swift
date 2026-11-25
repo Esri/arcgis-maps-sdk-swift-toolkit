@@ -56,6 +56,7 @@ extension FeatureFormView {
         var body: some View {
             List(associationResults, id: \.associatedFeature.globalID) { utilityAssociationResult in
                 mainButton(for: utilityAssociationResult)
+                    .disabled(groupModel.groupIsFinal)
                     .swipeActions {
                         deleteButton(for: utilityAssociationResult.association)
                     }
